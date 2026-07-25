@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -144,28 +143,7 @@ class _ProfilTabState extends State<ProfilTab> {
   Future<void> _pickAvatar() async {
     final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (picked == null) return;
-
-    final cropped = await ImageCropper().cropImage(
-      sourcePath: picked.path,
-      aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
-      uiSettings: [
-        AndroidUiSettings(
-          toolbarTitle: 'Crop Foto',
-          toolbarColor: AppColors.primary,
-          toolbarWidgetColor: AppColors.onPrimary,
-          lockAspectRatio: true,
-          backgroundColor: AppColors.background,
-        ),
-        IOSUiSettings(
-          title: 'Crop Foto',
-          aspectRatioLockEnabled: true,
-          resetAspectRatioEnabled: false,
-        ),
-      ],
-    );
-    if (cropped == null) return;
-
-    final bytes = await cropped.readAsBytes();
+    final bytes = await picked.readAsBytes();
     final dir = await getApplicationDocumentsDirectory();
     final file = File('${dir.path}/avatar.jpg');
     await file.writeAsBytes(bytes);
@@ -675,15 +653,6 @@ class _ProfilTabState extends State<ProfilTab> {
                 Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    boxShadow: light
-                        ? null
-                        : [
-                            BoxShadow(
-                              color: AppColors.primary.withValues(alpha: 0.35),
-                              blurRadius: 24,
-                              spreadRadius: 4,
-                            ),
-                          ],
                   ),
                   child: TierProfileAvatar(
                     profileImagePath: _avatarPath,
