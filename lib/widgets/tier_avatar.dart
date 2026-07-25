@@ -550,14 +550,7 @@ class _TierProfileAvatarState extends State<TierProfileAvatar>
                   offset: const Offset(0, 2),
                 ),
               ],
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            p.withValues(alpha: 0.2),
-            light ? AppColors.surfaceContainerLow : AppColors.background,
-          ],
-        ),
+        color: light ? AppColors.surfaceContainerLow : AppColors.background,
       ),
       child: ClipPath(
         clipper: _FrameClipper(_frameShape, cornerRadius - bw),

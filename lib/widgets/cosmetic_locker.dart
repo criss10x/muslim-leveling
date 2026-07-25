@@ -52,7 +52,9 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
     final isPro = EntitlementService.isPro;
     final state = GameService.current;
     final equippedId = CosmeticService.resolveSlot(state, _slot, isPro: isPro);
-    final items = CosmeticCatalog.bySlot(_slot);
+    final items = CosmeticCatalog.bySlot(_slot)
+        .where((c) => c.access == CosmeticAccess.pro || CosmeticService.isAllowed(state, c.id, isPro: isPro))
+        .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

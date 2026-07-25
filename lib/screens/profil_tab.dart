@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -143,7 +144,28 @@ class _ProfilTabState extends State<ProfilTab> {
   Future<void> _pickAvatar() async {
     final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (picked == null) return;
-    final bytes = await picked.readAsBytes();
+
+    final cropped = await ImageCropper().cropImage(
+      sourcePath: picked.path,
+      aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+      uiSettings: [
+        AndroidUiSettings(
+          toolbarTitle: 'Crop Foto',
+          toolbarColor: AppColors.primary,
+          toolbarWidgetColor: AppColors.onPrimary,
+          lockAspectRatio: true,
+          backgroundColor: AppColors.background,
+        ),
+        IOSUiSettings(
+          title: 'Crop Foto',
+          aspectRatioLockEnabled: true,
+          resetAspectRatioEnabled: false,
+        ),
+      ],
+    );
+    if (cropped == null) return;
+
+    final bytes = await cropped.readAsBytes();
     final dir = await getApplicationDocumentsDirectory();
     final file = File('${dir.path}/avatar.jpg');
     await file.writeAsBytes(bytes);
@@ -163,7 +185,7 @@ class _ProfilTabState extends State<ProfilTab> {
     setState(() => _avatarPath = null);
   }
 
-  void _showAvatarOptions() {
+  void _showEditOptions() {
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.surfaceContainerHigh,
@@ -174,6 +196,14 @@ class _ProfilTabState extends State<ProfilTab> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            ListTile(
+              leading: Icon(Icons.person, color: AppColors.primary),
+              title: Text('Edit Nama', style: AppText.bodyLg()),
+              onTap: () {
+                Navigator.pop(ctx);
+                _editNickname();
+              },
+            ),
             ListTile(
               leading: Icon(Icons.photo_library, color: AppColors.primary),
               title: Text('Ganti Foto', style: AppText.bodyLg()),
@@ -642,60 +672,25 @@ class _ProfilTabState extends State<ProfilTab> {
           children: [
             Row(
               children: [
-                GestureDetector(
-                  onTap: _showAvatarOptions,
-                  child: Stack(
-                    alignment: Alignment.bottomRight,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: light
-                              ? null
-                              : [
-                                  BoxShadow(
-                                    color: AppColors.primary.withValues(alpha: 0.35),
-                                    blurRadius: 24,
-                                    spreadRadius: 4,
-                                  ),
-                                ],
-                        ),
-                        child: TierProfileAvatar(
-                          profileImagePath: _avatarPath,
-                          tierName: getTierName(_level),
-                          sizeDp: 72,
-                          showEditBadge: true,
-                          onTap: _showAvatarOptions,
-                          equippedFrameId: frameId,
-                          equippedAuraId: auraId,
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.all(2),
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: AppColors.surfaceContainerHigh,
-                          borderRadius: BorderRadius.circular(100),
-                          border: Border.all(color: AppColors.primary, width: 1),
-                          boxShadow: light
-                              ? null
-                              : [
-                                  BoxShadow(
-                                    color: AppColors.primary.withValues(alpha: 0.3),
-                                    blurRadius: 6,
-                                  ),
-                                ],
-                        ),
-                        child: Text(
-                          'LVL $_level',
-                          style: AppText.labelCapsSm().copyWith(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 0.5,
-                          ),
-                        ),
-                      ),
-                    ],
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: light
+                        ? null
+                        : [
+                            BoxShadow(
+                              color: AppColors.primary.withValues(alpha: 0.35),
+                              blurRadius: 24,
+                              spreadRadius: 4,
+                            ),
+                          ],
+                  ),
+                  child: TierProfileAvatar(
+                    profileImagePath: _avatarPath,
+                    tierName: getTierName(_level),
+                    sizeDp: 72,
+                    equippedFrameId: frameId,
+                    equippedAuraId: auraId,
                   ),
                 ),
                 const SizedBox(width: AppSpacing.md),
@@ -717,7 +712,7 @@ class _ProfilTabState extends State<ProfilTab> {
                           Padding(
                             padding: const EdgeInsets.only(top: 2),
                             child: GestureDetector(
-                              onTap: _editNickname,
+                              onTap: _showEditOptions,
                               child: Icon(
                                 Icons.edit,
                                 color: AppColors.primary,
@@ -749,6 +744,23 @@ class _ProfilTabState extends State<ProfilTab> {
                             style: AppText.labelCaps().copyWith(
                                 color: AppColors.tertiary, fontSize: 10)),
                       ],
+                      const SizedBox(height: 4),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(AppRadius.pill),
+                          border: Border.all(color: AppColors.primary.withValues(alpha: 0.35)),
+                        ),
+                        child: Text(
+                          'LVL $_level',
+                          style: AppText.labelCapsSm().copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
