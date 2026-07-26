@@ -83,6 +83,17 @@ void main() {
     expect(find.byType(TierProfileAvatar), findsOneWidget);
   });
 
+  testWidgets('full avatar uses an outer accent without MediaQuery', (tester) async {
+    await tester.pumpWidget(const Directionality(
+      textDirection: TextDirection.ltr,
+      child: TierProfileAvatar(tierName: 'Master', sizeDp: 80),
+    ));
+
+    final fullAccent = find.byKey(const ValueKey('tier-avatar-accent-full-outer'));
+    expect(fullAccent, findsOneWidget);
+    expect(tester.getSize(fullAccent), const Size(104, 104));
+  });
+
   testWidgets('Epic avatar renders its earned frame with initials fallback',
       (tester) async {
     await tester.pumpWidget(const Directionality(
@@ -112,7 +123,8 @@ void main() {
       ),
     ));
 
-    expect(find.byKey(const ValueKey('small-tier-accent')), findsOneWidget);
+    expect(find.byKey(const ValueKey('small-tier-accent-peripheral')), findsOneWidget);
+    expect(find.byKey(const ValueKey('tier-avatar-accent-full-outer')), findsNothing);
     expect(find.byType(AnimatedBuilder), findsNothing);
   });
 }

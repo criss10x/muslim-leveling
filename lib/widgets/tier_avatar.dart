@@ -324,7 +324,7 @@ class _TierProfileAvatarState extends State<TierProfileAvatar>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _reduceMotion = MediaQuery.disableAnimationsOf(context);
+    _reduceMotion = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
     _syncControllers();
   }
 
@@ -362,7 +362,7 @@ class _TierProfileAvatarState extends State<TierProfileAvatar>
   Widget build(BuildContext context) {
     final config = getTierVisualConfig(widget.tierName);
     final size = widget.sizeDp;
-    final extraSize = size + 16; // space for effects
+    final extraSize = size + 24; // reserved outer band for tier accents
     final cornerRadius = 16.0;
 
     return GestureDetector(
@@ -400,9 +400,9 @@ class _TierProfileAvatarState extends State<TierProfileAvatar>
             // Layer 3: Tier-specific static accent.
             IgnorePointer(
               child: CustomPaint(
-                key: const ValueKey('tier-avatar-accent'),
-                size: Size(size + 12, size + 12),
-                painter: _TierAccentPainter(config: config),
+                key: const ValueKey('tier-avatar-accent-full-outer'),
+                size: Size(extraSize, extraSize),
+                painter: _TierAccentPainter(config: config, avatarInset: 12),
               ),
             ),
 
@@ -647,7 +647,7 @@ class SmallTierAvatar extends StatelessWidget {
           ),
           IgnorePointer(
             child: CustomPaint(
-              key: const ValueKey('small-tier-accent'),
+              key: const ValueKey('small-tier-accent-peripheral'),
               size: Size(sizeDp, sizeDp),
               painter: _TierAccentPainter(config: config, compact: true),
             ),
@@ -665,8 +665,13 @@ class SmallTierAvatar extends StatelessWidget {
 class _TierAccentPainter extends CustomPainter {
   final TierVisualConfig config;
   final bool compact;
+  final double avatarInset;
 
-  _TierAccentPainter({required this.config, this.compact = false});
+  _TierAccentPainter({
+    required this.config,
+    this.compact = false,
+    this.avatarInset = 0,
+  });
 
   Paint _paint(Color color, {PaintingStyle style = PaintingStyle.stroke}) => Paint()
     ..color = color
@@ -677,13 +682,21 @@ class _TierAccentPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = size.shortestSide / 2 - (compact ? 2 : 4);
-    final rect = Rect.fromCircle(center: center, radius: radius);
+    final avatarRect = Rect.fromLTWH(
+      avatarInset,
+      avatarInset,
+      size.width - avatarInset * 2,
+      size.height - avatarInset * 2,
+    );
+    final center = avatarRect.center;
+    final rect = compact ? avatarRect : avatarRect.inflate(4);
     final primary = config.inkPrimary;
     final secondary = config.inkSecondary;
-    final cueCenter = Offset(center.dx, center.dy - radius * 0.86);
-    final cueRadius = radius * (compact ? 0.12 : 0.16);
+    final cueRadius = compact ? 1.5 : 6.0;
+    final cueCenter = Offset(
+      center.dx,
+      compact ? avatarRect.top : avatarRect.top - cueRadius - 1,
+    );
 
     if (compact) {
       _drawCompactCue(canvas, cueCenter, cueRadius, rect, primary, secondary);
@@ -692,7 +705,7 @@ class _TierAccentPainter extends CustomPainter {
 
     switch (config.frameCue) {
       case TierFrameCue.thinFullRing:
-        canvas.drawCircle(center, radius, _paint(primary));
+        canvas.drawOval(rect, _paint(primary));
         return;
       case TierFrameCue.jadeDiamond:
         _drawDiamond(canvas, cueCenter, cueRadius, secondary);
@@ -702,7 +715,7 @@ class _TierAccentPainter extends CustomPainter {
     }
 
     if (config.hasFullOuterRing) {
-      canvas.drawCircle(center, radius, _paint(primary));
+      canvas.drawOval(rect, _paint(primary));
       _drawImmortalCrest(canvas, cueCenter, cueRadius, secondary);
       return;
     }
@@ -849,7 +862,8 @@ class _TierAccentPainter extends CustomPainter {
       oldDelegate.config.hasFullOuterRing != config.hasFullOuterRing ||
       oldDelegate.config.inkPrimary != config.inkPrimary ||
       oldDelegate.config.inkSecondary != config.inkSecondary ||
-      oldDelegate.compact != compact;
+      oldDelegate.compact != compact ||
+      oldDelegate.avatarInset != avatarInset;
 }
 
 /// Gradient border — sweep gradient stroked around the avatar frame with a
