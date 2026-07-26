@@ -14,6 +14,12 @@ void main() {
     expect(master.primaryColor, isNot(mythic.primaryColor));
     expect(epic.primaryColor, isNot(getTierVisualConfig('Mythic Glory').primaryColor));
     expect(legend.primaryColor, isNot(immortal.primaryColor));
+    expect(getTierVisualConfig('Grandmaster').accent, TierFrameAccent.sapphire);
+    expect(getTierVisualConfig('Legend').accent, TierFrameAccent.lavender);
+    expect(getTierVisualConfig('Mythic').accent, TierFrameAccent.cyan);
+    expect(getTierVisualConfig('Mythic Honor').accent, TierFrameAccent.ultraviolet);
+    expect(getTierVisualConfig('Mythic Glory').accent, TierFrameAccent.magenta);
+    expect(immortal.accent, TierFrameAccent.obsidianOpal);
     expect(getTierVisualConfig('Elite').hasPartialOuterArcs, isTrue);
     expect(getTierVisualConfig('Mythic Honor').hasPartialOuterArcs, isTrue);
     expect(getTierVisualConfig('Warrior').hasPartialOuterArcs, isFalse);
@@ -23,9 +29,15 @@ void main() {
   test('tier thresholds retain all ten existing ranks', () {
     expect(getTierName(1), 'Warrior');
     expect(getTierName(10), 'Elite');
+    expect(getTierName(20), 'Master');
     expect(getTierName(30), 'Grandmaster');
+    expect(getTierName(40), 'Epic');
+    expect(getTierName(50), 'Epic');
     expect(getTierName(60), 'Legend');
+    expect(getTierName(70), 'Legend');
     expect(getTierName(80), 'Mythic');
+    expect(getTierName(85), 'Mythic Honor');
+    expect(getTierName(90), 'Mythic Glory');
     expect(getTierName(95), 'Mythic Immortal');
   });
 
