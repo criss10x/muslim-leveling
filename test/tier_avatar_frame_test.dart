@@ -4,7 +4,7 @@ import 'package:muslim_leveling/services/cosmetic_catalog.dart';
 import 'package:muslim_leveling/widgets/tier_avatar.dart';
 
 void main() {
-  test('tier presentation keeps free palettes and accents distinct', () {
+  test('tier presentation keeps free palettes distinct', () {
     final master = getTierVisualConfig('Master');
     final epic = getTierVisualConfig('Epic');
     final legend = getTierVisualConfig('Legend');
@@ -14,21 +14,34 @@ void main() {
     expect(master.primaryColor, isNot(mythic.primaryColor));
     expect(epic.primaryColor, isNot(getTierVisualConfig('Mythic Glory').primaryColor));
     expect(legend.primaryColor, isNot(immortal.primaryColor));
-    expect(getTierVisualConfig('Grandmaster').accent, TierFrameAccent.sapphire);
-    expect(getTierVisualConfig('Legend').accent, TierFrameAccent.lavender);
-    expect(getTierVisualConfig('Mythic').accent, TierFrameAccent.cyan);
-    expect(getTierVisualConfig('Mythic Honor').accent, TierFrameAccent.ultraviolet);
-    expect(getTierVisualConfig('Mythic Glory').accent, TierFrameAccent.magenta);
-    expect(immortal.accent, TierFrameAccent.obsidianOpal);
-    expect(getTierVisualConfig('Elite').hasPartialOuterArcs, isTrue);
-    expect(getTierVisualConfig('Mythic Honor').hasPartialOuterArcs, isTrue);
-    expect(getTierVisualConfig('Warrior').hasPartialOuterArcs, isFalse);
-    expect(immortal.hasFullOuterRing, isTrue);
   });
 
-  test('Warrior and Master define distinct earned frame cues', () {
-    expect(getTierVisualConfig('Warrior').frameCue, TierFrameCue.thinFullRing);
-    expect(getTierVisualConfig('Master').frameCue, TierFrameCue.jadeDiamond);
+  test('all ten tiers use the approved motif and outer treatment', () {
+    const expected = <String, (TierFrameAccent, TierOuterTreatment)>{
+      'Warrior': (TierFrameAccent.fullThinRing, TierOuterTreatment.none),
+      'Elite': (TierFrameAccent.doubleArc, TierOuterTreatment.partialArcs),
+      'Master': (TierFrameAccent.diamond, TierOuterTreatment.none),
+      'Grandmaster': (TierFrameAccent.facetedHex, TierOuterTreatment.none),
+      'Epic': (TierFrameAccent.rubySeal, TierOuterTreatment.none),
+      'Legend': (TierFrameAccent.crescent, TierOuterTreatment.none),
+      'Mythic': (TierFrameAccent.constellation, TierOuterTreatment.none),
+      'Mythic Honor': (
+        TierFrameAccent.orbitalArcs,
+        TierOuterTreatment.partialArcs,
+      ),
+      'Mythic Glory': (TierFrameAccent.sparkTrio, TierOuterTreatment.none),
+      'Mythic Immortal': (
+        TierFrameAccent.immortalCrest,
+        TierOuterTreatment.fullRing,
+      ),
+    };
+
+    for (final entry in expected.entries) {
+      final config = getTierVisualConfig(entry.key);
+      expect(config.accent, entry.value.$1, reason: entry.key);
+      expect(config.outerTreatment, entry.value.$2, reason: entry.key);
+    }
+    expect(expected.values.map((value) => value.$1).toSet(), hasLength(10));
   });
 
   test('tier thresholds retain all ten existing ranks', () {
@@ -105,6 +118,19 @@ void main() {
     expect(find.text('AF'), findsOneWidget);
   });
 
+  testWidgets('initials preserve non-BMP Unicode runes', (tester) async {
+    await tester.pumpWidget(const Directionality(
+      textDirection: TextDirection.ltr,
+      child: TierProfileAvatar(
+        tierName: 'Epic',
+        displayName: '😀 Ahmad',
+        sizeDp: 88,
+      ),
+    ));
+
+    expect(find.text('😀A'), findsOneWidget);
+  });
+
   testWidgets('Epic Pro avatar keeps the frame clear of its Pro finish',
       (tester) async {
     await tester.pumpWidget(const Directionality(
@@ -141,16 +167,38 @@ void main() {
     expect(find.byType(SmallTierAvatar), findsOneWidget);
   });
 
-  testWidgets('compact avatar keeps its tier cue peripheral', (tester) async {
-    await tester.pumpWidget(const Directionality(
-      textDirection: TextDirection.ltr,
-      child: SmallTierAvatar(
-        tierName: 'Master', displayName: 'Ahmad Fikri',
-      ),
-    ));
+  testWidgets('compact avatars retain every tier-specific peripheral cue',
+      (tester) async {
+    const tiers = <String>[
+      'Warrior',
+      'Elite',
+      'Master',
+      'Grandmaster',
+      'Epic',
+      'Legend',
+      'Mythic',
+      'Mythic Honor',
+      'Mythic Glory',
+      'Mythic Immortal',
+    ];
 
-    expect(find.byKey(const ValueKey('small-tier-accent-peripheral')), findsOneWidget);
-    expect(find.byKey(const ValueKey('tier-avatar-accent-full-outer')), findsNothing);
-    expect(find.byType(AnimatedBuilder), findsNothing);
+    for (final tier in tiers) {
+      final accent = getTierVisualConfig(tier).accent;
+      await tester.pumpWidget(Directionality(
+        textDirection: TextDirection.ltr,
+        child: SmallTierAvatar(
+          tierName: tier,
+          displayName: 'Ahmad Fikri',
+        ),
+      ));
+
+      expect(
+        find.byKey(ValueKey('small-tier-accent-${accent.name}')),
+        findsOneWidget,
+        reason: tier,
+      );
+      expect(find.byKey(const ValueKey('tier-avatar-accent-full-outer')), findsNothing);
+      expect(find.byType(AnimatedBuilder), findsNothing);
+    }
   });
 }

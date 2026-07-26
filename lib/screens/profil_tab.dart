@@ -654,7 +654,7 @@ class _ProfilTabState extends State<ProfilTab> {
                   color: tier.inkPrimary.withValues(alpha: light ? 0.30 : 0.40),
                 ),
               ),
-        child: Column(
+              child: Column(
           children: [
             Container(
               padding: const EdgeInsets.all(AppSpacing.sm),
@@ -873,25 +873,26 @@ class _ProfilTabState extends State<ProfilTab> {
               ],
             ),
           ],
-        ),
-      ),
-      if (isPro)
-        Positioned.fill(
-          child: ExcludeSemantics(
-            child: IgnorePointer(
-              child: Container(
-                margin: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(AppRadius.lg),
-                  border: Border.all(
-                    color: AppColors.goldFill.withValues(alpha: 0.45),
+              ),
+            ),
+          ),
+          if (isPro)
+            Positioned.fill(
+              child: ExcludeSemantics(
+                child: IgnorePointer(
+                  child: Container(
+                    margin: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(AppRadius.lg),
+                      border: Border.all(
+                        color: ProPresentation.antiqueGold.withValues(alpha: 0.45),
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ),
-      ],
+        ],
       ),
     );
   }

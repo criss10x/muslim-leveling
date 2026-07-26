@@ -32,70 +32,46 @@ Path buildFramePath(FrameShape shape, Size size, double radius) {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// TIER PROFILE AVATAR — Square rounded 16dp with progressive tier borders
-//
-// Tier progression (makin tinggi makin epik):
-//   Warrior        — Solid 2dp purple
-//   Elite          — Solid 3dp blue + corner accents
-//   Master         — Gradient teal→emerald 3dp
-//   Grandmaster    — Gradient gold→amber 4dp + soft glow
-//   Epic           — Gradient crimson 4dp + animated glow pulse
-//   Legend         — Gradient white→gold 4dp + rotating shimmer ring
-//   Mythic         — Gradient crimson→gold 5dp + rotating ring + particles
-//   Mythic Honor   — + double rotating ring (opposite directions)
-//   Mythic Glory   — + animated sparkles on border
-//   Mythic Immortal — Full legendary: crown emblem + all effects active
+// TIER PROFILE AVATAR — TierVisualConfig is the presentation source of truth.
 // ═══════════════════════════════════════════════════════════════
 
 enum TierFrameAccent {
-  none,
-  sapphire,
-  lavender,
-  cyan,
-  ultraviolet,
-  magenta,
-  obsidianOpal,
+  fullThinRing,
+  doubleArc,
+  diamond,
+  facetedHex,
+  rubySeal,
+  crescent,
+  constellation,
+  orbitalArcs,
+  sparkTrio,
+  immortalCrest,
 }
 
-enum TierFrameCue { none, thinFullRing, jadeDiamond }
+enum TierOuterTreatment { none, partialArcs, fullRing }
+
+abstract final class ProPresentation {
+  static const antiqueGold = Color(0xFFD4AF37);
+  static const deepTeal = Color(0xFF064E3B);
+}
 
 class TierVisualConfig {
   final String name;
   final Color primaryColor;
   final Color secondaryColor;
   final TierFrameAccent accent;
-  final TierFrameCue frameCue;
+  final TierOuterTreatment outerTreatment;
   final double borderWidth;
-  final bool hasCornerAccents;
   final bool hasGlow;
-  final bool hasPulsingGlow;
-  final bool hasRotatingRing;
-  final bool hasParticles;
-  final bool hasDoubleRing;
-  final bool hasSparkles;
-  final bool hasCrownEmblem;
-  final bool hasPartialOuterArcs;
-  final bool hasFullOuterRing;
-  final String? cornerEmblem;
 
   const TierVisualConfig({
     required this.name,
     required this.primaryColor,
     required this.secondaryColor,
-    this.accent = TierFrameAccent.none,
-    this.frameCue = TierFrameCue.none,
+    required this.accent,
+    this.outerTreatment = TierOuterTreatment.none,
     required this.borderWidth,
-    this.hasCornerAccents = false,
     this.hasGlow = false,
-    this.hasPulsingGlow = false,
-    this.hasRotatingRing = false,
-    this.hasParticles = false,
-    this.hasDoubleRing = false,
-    this.hasSparkles = false,
-    this.hasCrownEmblem = false,
-    this.hasPartialOuterArcs = false,
-    this.hasFullOuterRing = false,
-    this.cornerEmblem,
   });
 
   /// Light-safe ink for borders/icons on white cards. Dark keeps neon.
@@ -136,7 +112,7 @@ TierVisualConfig getTierVisualConfig(String tierName) {
         name: 'Warrior',
         primaryColor: Color(0xFF8B5CF6),
         secondaryColor: Color(0xFF6366F1),
-        frameCue: TierFrameCue.thinFullRing,
+        accent: TierFrameAccent.fullThinRing,
         borderWidth: 2,
       );
     case 'Elite':
@@ -144,17 +120,16 @@ TierVisualConfig getTierVisualConfig(String tierName) {
         name: 'Elite',
         primaryColor: Color(0xFF3B82F6),
         secondaryColor: Color(0xFF06B6D4),
-        accent: TierFrameAccent.cyan,
+        accent: TierFrameAccent.doubleArc,
+        outerTreatment: TierOuterTreatment.partialArcs,
         borderWidth: 3,
-        hasCornerAccents: true,
-        hasPartialOuterArcs: true,
       );
     case 'Master':
       return const TierVisualConfig(
         name: 'Master',
         primaryColor: Color(0xFF14B8A6),
         secondaryColor: Color(0xFF10B981),
-        frameCue: TierFrameCue.jadeDiamond,
+        accent: TierFrameAccent.diamond,
         borderWidth: 3,
       );
     case 'Grandmaster':
@@ -162,7 +137,7 @@ TierVisualConfig getTierVisualConfig(String tierName) {
         name: 'Grandmaster',
         primaryColor: Color(0xFF2563EB),
         secondaryColor: Color(0xFF60A5FA),
-        accent: TierFrameAccent.sapphire,
+        accent: TierFrameAccent.facetedHex,
         borderWidth: 4,
         hasGlow: true,
       );
@@ -171,82 +146,63 @@ TierVisualConfig getTierVisualConfig(String tierName) {
         name: 'Epic',
         primaryColor: Color(0xFFDC2626),
         secondaryColor: Color(0xFFEC4899),
+        accent: TierFrameAccent.rubySeal,
         borderWidth: 4,
         hasGlow: true,
-        hasPulsingGlow: true,
       );
     case 'Legend':
       return const TierVisualConfig(
         name: 'Legend',
         primaryColor: Color(0xFFA78BFA),
         secondaryColor: Color(0xFFE9D5FF),
-        accent: TierFrameAccent.lavender,
+        accent: TierFrameAccent.crescent,
         borderWidth: 4,
         hasGlow: true,
-        hasRotatingRing: true,
-        hasPartialOuterArcs: true,
       );
     case 'Mythic':
       return const TierVisualConfig(
         name: 'Mythic',
         primaryColor: Color(0xFF06B6D4),
         secondaryColor: Color(0xFF67E8F9),
-        accent: TierFrameAccent.cyan,
+        accent: TierFrameAccent.constellation,
         borderWidth: 5,
         hasGlow: true,
-        hasRotatingRing: true,
-        hasParticles: true,
-        hasPartialOuterArcs: true,
       );
     case 'Mythic Honor':
       return const TierVisualConfig(
         name: 'Mythic Honor',
         primaryColor: Color(0xFF7C3AED),
         secondaryColor: Color(0xFFC084FC),
-        accent: TierFrameAccent.ultraviolet,
+        accent: TierFrameAccent.orbitalArcs,
+        outerTreatment: TierOuterTreatment.partialArcs,
         borderWidth: 5,
         hasGlow: true,
-        hasRotatingRing: true,
-        hasParticles: true,
-        hasDoubleRing: true,
-        hasPartialOuterArcs: true,
       );
     case 'Mythic Glory':
       return const TierVisualConfig(
         name: 'Mythic Glory',
         primaryColor: Color(0xFFDB2777),
         secondaryColor: Color(0xFFF0ABFC),
-        accent: TierFrameAccent.magenta,
+        accent: TierFrameAccent.sparkTrio,
         borderWidth: 5,
         hasGlow: true,
-        hasRotatingRing: true,
-        hasParticles: true,
-        hasDoubleRing: true,
-        hasSparkles: true,
-        hasPartialOuterArcs: true,
       );
     case 'Mythic Immortal':
       return const TierVisualConfig(
         name: 'Mythic Immortal',
         primaryColor: Color(0xFF111827),
         secondaryColor: Color(0xFFA7F3D0),
-        accent: TierFrameAccent.obsidianOpal,
+        accent: TierFrameAccent.immortalCrest,
+        outerTreatment: TierOuterTreatment.fullRing,
         borderWidth: 5,
         hasGlow: true,
-        hasPulsingGlow: true,
-        hasRotatingRing: true,
-        hasParticles: true,
-        hasDoubleRing: true,
-        hasSparkles: true,
-        hasCrownEmblem: true,
-        hasFullOuterRing: true,
-        cornerEmblem: '👑',
       );
     default:
       return const TierVisualConfig(
         name: 'Unknown',
         primaryColor: Color(0xFF6B7280),
         secondaryColor: Color(0xFF9CA3AF),
+        accent: TierFrameAccent.fullThinRing,
         borderWidth: 2,
       );
   }
@@ -274,7 +230,11 @@ String _displayInitials(String? displayName) {
       .where((word) => word.isNotEmpty)
       .toList();
   if (words == null || words.isEmpty) return '?';
-  return words.take(2).map((word) => word[0]).join().toUpperCase();
+  return words
+      .take(2)
+      .map((word) => String.fromCharCode(word.runes.first))
+      .join()
+      .toUpperCase();
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -698,7 +658,7 @@ class SmallTierAvatar extends StatelessWidget {
           ),
           IgnorePointer(
             child: CustomPaint(
-              key: const ValueKey('small-tier-accent-peripheral'),
+              key: ValueKey('small-tier-accent-${config.accent.name}'),
               size: Size(sizeDp, sizeDp),
               painter: _TierAccentPainter(config: config, compact: true),
             ),
@@ -722,7 +682,7 @@ class _ProHaloPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = const Color(0xFF064E3B).withValues(alpha: 0.32)
+      ..color = ProPresentation.deepTeal.withValues(alpha: 0.32)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 12);
     canvas.drawCircle(
       Offset(avatarInset + avatarSize / 2, avatarInset + avatarSize / 2),
@@ -741,10 +701,9 @@ class _ProFinishPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    const antiqueGold = Color(0xFFD4AF37);
     final outer = (Offset.zero & size).deflate(3);
     final arcPaint = Paint()
-      ..color = antiqueGold.withValues(alpha: 0.82)
+      ..color = ProPresentation.antiqueGold.withValues(alpha: 0.82)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5
       ..strokeCap = StrokeCap.round;
@@ -761,20 +720,18 @@ class _ProCrestPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    const antiqueGold = Color(0xFFD4AF37);
-    const deepTeal = Color(0xFF064E3B);
     final crestCenter = Offset(size.width / 2, size.height / 2);
-    canvas.drawCircle(crestCenter, 5, Paint()..color = deepTeal);
+    canvas.drawCircle(crestCenter, 5, Paint()..color = ProPresentation.deepTeal);
     canvas.drawCircle(
       crestCenter,
       5,
       Paint()
-        ..color = antiqueGold
+        ..color = ProPresentation.antiqueGold
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1,
     );
     final crestPaint = Paint()
-      ..color = antiqueGold
+      ..color = ProPresentation.antiqueGold
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.25
       ..strokeCap = StrokeCap.round;
@@ -820,91 +777,79 @@ class _TierAccentPainter extends CustomPainter {
       size.width - avatarInset * 2,
       size.height - avatarInset * 2,
     );
-    final center = avatarRect.center;
-    final rect = compact ? avatarRect : avatarRect.inflate(4);
+    final outerRect = compact ? avatarRect.deflate(0.75) : avatarRect.inflate(4);
     final primary = config.inkPrimary;
     final secondary = config.inkSecondary;
-    final cueRadius = compact ? 1.5 : 6.0;
+    final cueRadius = compact ? 3.0 : 6.0;
     final cueCenter = Offset(
-      center.dx,
-      compact ? avatarRect.top : avatarRect.top - cueRadius - 1,
+      avatarRect.center.dx,
+      compact ? avatarRect.top + cueRadius + 0.5 : avatarRect.top - cueRadius + 1,
     );
 
-    if (compact) {
-      _drawCompactCue(canvas, cueCenter, cueRadius, rect, primary, secondary);
-      return;
-    }
-
-    switch (config.frameCue) {
-      case TierFrameCue.thinFullRing:
-        canvas.drawOval(rect, _paint(primary));
-        return;
-      case TierFrameCue.jadeDiamond:
-        _drawDiamond(canvas, cueCenter, cueRadius, secondary);
-        return;
-      case TierFrameCue.none:
+    switch (config.outerTreatment) {
+      case TierOuterTreatment.none:
         break;
-    }
-
-    if (config.hasFullOuterRing) {
-      canvas.drawOval(rect, _paint(primary));
-      _drawImmortalCrest(canvas, cueCenter, cueRadius, secondary);
-      return;
-    }
-    if (config.hasPartialOuterArcs &&
-        (config.name == 'Elite' || config.name == 'Mythic Honor')) {
-      final paint = _paint(secondary);
-      canvas.drawArc(rect, 205 * pi / 180, 55 * pi / 180, false, paint);
-      canvas.drawArc(rect, 25 * pi / 180, 55 * pi / 180, false, paint);
-      return;
+      case TierOuterTreatment.partialArcs:
+        final paint = _paint(secondary);
+        canvas.drawArc(outerRect, 205 * pi / 180, 55 * pi / 180, false, paint);
+        canvas.drawArc(outerRect, 25 * pi / 180, 55 * pi / 180, false, paint);
+        break;
+      case TierOuterTreatment.fullRing:
+        canvas.drawOval(outerRect, _paint(primary));
+        break;
     }
 
     switch (config.accent) {
-      case TierFrameAccent.sapphire:
-        _drawDiamond(canvas, cueCenter, cueRadius, primary);
+      case TierFrameAccent.fullThinRing:
+        canvas.drawOval(avatarRect.inflate(compact ? -1.5 : 1), _paint(primary));
         break;
-      case TierFrameAccent.lavender:
-        _drawSeal(canvas, cueCenter, cueRadius, primary);
+      case TierFrameAccent.doubleArc:
+        _drawDoubleArc(canvas, avatarRect, secondary);
         break;
-      case TierFrameAccent.cyan:
+      case TierFrameAccent.diamond:
+        _drawDiamond(canvas, cueCenter, cueRadius, secondary);
+        break;
+      case TierFrameAccent.facetedHex:
+        _drawFacetedHex(canvas, cueCenter, cueRadius, primary);
+        break;
+      case TierFrameAccent.rubySeal:
+        _drawRubySeal(canvas, cueCenter, cueRadius, primary);
+        break;
+      case TierFrameAccent.crescent:
         _drawCrescent(canvas, cueCenter, cueRadius, secondary);
         break;
-      case TierFrameAccent.magenta:
+      case TierFrameAccent.constellation:
         _drawConstellation(canvas, cueCenter, cueRadius, secondary);
         break;
-      case TierFrameAccent.obsidianOpal:
+      case TierFrameAccent.orbitalArcs:
+        _drawOrbitalArcs(canvas, cueCenter, cueRadius, secondary);
+        break;
+      case TierFrameAccent.sparkTrio:
+        _drawSparkTrio(canvas, cueCenter, cueRadius, secondary);
+        break;
+      case TierFrameAccent.immortalCrest:
         _drawImmortalCrest(canvas, cueCenter, cueRadius, secondary);
-        break;
-      case TierFrameAccent.none:
-        if (config.name == 'Epic') _drawHex(canvas, cueCenter, cueRadius, primary);
-        break;
-      case TierFrameAccent.ultraviolet:
-        // Mythic Honor is handled by the explicit short-arc branch above.
         break;
     }
   }
 
-  void _drawCompactCue(
-    Canvas canvas,
-    Offset cueCenter,
-    double cueRadius,
-    Rect outerRect,
-    Color primary,
-    Color secondary,
-  ) {
-    switch (config.frameCue) {
-      case TierFrameCue.thinFullRing:
-        canvas.drawArc(outerRect, 225 * pi / 180, 90 * pi / 180, false, _paint(primary));
-        return;
-      case TierFrameCue.jadeDiamond:
-        _drawDiamond(canvas, cueCenter, cueRadius, secondary);
-        return;
-      case TierFrameCue.none:
-        break;
-    }
-    if (config.hasFullOuterRing || config.hasPartialOuterArcs || config.accent != TierFrameAccent.none || config.name == 'Epic') {
-      canvas.drawCircle(cueCenter, compact ? 1.5 : 2, _paint(secondary, style: PaintingStyle.fill));
-    }
+  void _drawDoubleArc(Canvas canvas, Rect rect, Color color) {
+    final paint = _paint(color);
+    final inset = compact ? 2.5 : 3.0;
+    canvas.drawArc(
+      rect.deflate(inset),
+      200 * pi / 180,
+      48 * pi / 180,
+      false,
+      paint,
+    );
+    canvas.drawArc(
+      rect.deflate(inset * 2),
+      20 * pi / 180,
+      48 * pi / 180,
+      false,
+      paint,
+    );
   }
 
   void _drawDiamond(Canvas canvas, Offset center, double radius, Color color) {
@@ -918,40 +863,70 @@ class _TierAccentPainter extends CustomPainter {
     canvas.drawPath(path, _paint(color));
   }
 
-  void _drawHex(Canvas canvas, Offset center, double radius, Color color) {
+  void _drawFacetedHex(Canvas canvas, Offset center, double radius, Color color) {
     final path = Path();
+    final points = <Offset>[];
     final r = radius * 0.9;
     for (var i = 0; i < 6; i++) {
       final angle = (i * 60 - 90) * pi / 180;
-      final point = Offset(center.dx + r * cos(angle), center.dy + r * sin(angle));
+      final point = Offset(
+        center.dx + r * cos(angle),
+        center.dy + r * sin(angle),
+      );
+      points.add(point);
       i == 0 ? path.moveTo(point.dx, point.dy) : path.lineTo(point.dx, point.dy);
     }
-    canvas.drawPath(path..close(), _paint(color));
+    final paint = _paint(color);
+    canvas.drawPath(path..close(), paint);
+    for (var i = 0; i < points.length; i += 2) {
+      canvas.drawLine(center, points[i], paint);
+    }
   }
 
-  void _drawSeal(Canvas canvas, Offset center, double radius, Color color) {
+  void _drawRubySeal(Canvas canvas, Offset center, double radius, Color color) {
     final paint = _paint(color);
-    canvas.drawCircle(center, radius * 0.84, paint);
-    for (var i = 0; i < 8; i++) {
-      final angle = i * pi / 4;
-      final inner = Offset(
-          center.dx + radius * 0.9 * cos(angle), center.dy + radius * 0.9 * sin(angle));
-      final outer = Offset(
-          center.dx + radius * cos(angle), center.dy + radius * sin(angle));
-      canvas.drawLine(inner, outer, paint);
+    canvas.drawCircle(center, radius * 0.72, paint);
+    for (var i = 0; i < 6; i++) {
+      final angle = i * pi / 3;
+      canvas.drawLine(
+        Offset(
+          center.dx + radius * 0.78 * cos(angle),
+          center.dy + radius * 0.78 * sin(angle),
+        ),
+        Offset(
+          center.dx + radius * cos(angle),
+          center.dy + radius * sin(angle),
+        ),
+        paint,
+      );
     }
   }
 
   void _drawCrescent(Canvas canvas, Offset center, double radius, Color color) {
-    final outer = Path()..addOval(Rect.fromCircle(center: center, radius: radius * 0.8));
+    final outer = Path()
+      ..addOval(Rect.fromCircle(center: center, radius: radius * 0.8));
     final inner = Path()
-      ..addOval(Rect.fromCircle(
-          center: Offset(center.dx + radius * 0.34, center.dy - radius * 0.08),
-          radius: radius * 0.74));
-    canvas.drawPath(Path.combine(PathOperation.difference, outer, inner), _paint(color, style: PaintingStyle.fill));
+      ..addOval(
+        Rect.fromCircle(
+          center: Offset(
+            center.dx + radius * 0.34,
+            center.dy - radius * 0.08,
+          ),
+          radius: radius * 0.74,
+        ),
+      );
+    canvas.drawPath(
+      Path.combine(PathOperation.difference, outer, inner),
+      _paint(color, style: PaintingStyle.fill),
+    );
   }
 
-  void _drawConstellation(Canvas canvas, Offset center, double radius, Color color) {
+  void _drawConstellation(
+    Canvas canvas,
+    Offset center,
+    double radius,
+    Color color,
+  ) {
     final points = [
       Offset(center.dx - radius * 0.7, center.dy + radius * 0.25),
       Offset(center.dx - radius * 0.2, center.dy - radius * 0.45),
@@ -961,17 +936,74 @@ class _TierAccentPainter extends CustomPainter {
     final paint = _paint(color);
     for (var i = 0; i < points.length - 1; i++) {
       canvas.drawLine(points[i], points[i + 1], paint);
-      canvas.drawCircle(points[i], compact ? 1.5 : 2.5, _paint(color, style: PaintingStyle.fill));
+      canvas.drawCircle(
+        points[i],
+        compact ? 0.8 : 1.6,
+        _paint(color, style: PaintingStyle.fill),
+      );
     }
-    canvas.drawCircle(points.last, compact ? 1.5 : 2.5, _paint(color, style: PaintingStyle.fill));
-    for (final offset in [const Offset(-0.55, -0.7), const Offset(0, -0.82), const Offset(0.55, -0.68)]) {
-      final star = Offset(center.dx + radius * offset.dx, center.dy + radius * offset.dy);
-      canvas.drawLine(Offset(star.dx - 2, star.dy), Offset(star.dx + 2, star.dy), paint);
-      canvas.drawLine(Offset(star.dx, star.dy - 2), Offset(star.dx, star.dy + 2), paint);
+    canvas.drawCircle(
+      points.last,
+      compact ? 0.8 : 1.6,
+      _paint(color, style: PaintingStyle.fill),
+    );
+  }
+
+  void _drawOrbitalArcs(
+    Canvas canvas,
+    Offset center,
+    double radius,
+    Color color,
+  ) {
+    final paint = _paint(color);
+    final horizontal = Rect.fromCenter(
+      center: center,
+      width: radius * 2,
+      height: radius,
+    );
+    final vertical = Rect.fromCenter(
+      center: center,
+      width: radius,
+      height: radius * 2,
+    );
+    canvas.drawArc(horizontal, 20 * pi / 180, 280 * pi / 180, false, paint);
+    canvas.drawArc(vertical, 110 * pi / 180, 280 * pi / 180, false, paint);
+    canvas.drawCircle(
+      center,
+      compact ? 0.8 : 1.4,
+      _paint(color, style: PaintingStyle.fill),
+    );
+  }
+
+  void _drawSparkTrio(
+    Canvas canvas,
+    Offset center,
+    double radius,
+    Color color,
+  ) {
+    final paint = _paint(color);
+    final sparkRadius = compact ? 0.75 : 1.5;
+    for (final dx in [-radius * 0.65, 0.0, radius * 0.65]) {
+      final spark = Offset(center.dx + dx, center.dy);
+      canvas.drawLine(
+        Offset(spark.dx - sparkRadius, spark.dy),
+        Offset(spark.dx + sparkRadius, spark.dy),
+        paint,
+      );
+      canvas.drawLine(
+        Offset(spark.dx, spark.dy - sparkRadius),
+        Offset(spark.dx, spark.dy + sparkRadius),
+        paint,
+      );
     }
   }
 
-  void _drawImmortalCrest(Canvas canvas, Offset center, double radius, Color color) {
+  void _drawImmortalCrest(
+    Canvas canvas,
+    Offset center,
+    double radius,
+    Color color,
+  ) {
     final r = radius * 0.62;
     final path = Path()
       ..moveTo(center.dx - r, center.dy + r * 0.7)
@@ -987,11 +1019,8 @@ class _TierAccentPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _TierAccentPainter oldDelegate) =>
-      oldDelegate.config.name != config.name ||
       oldDelegate.config.accent != config.accent ||
-      oldDelegate.config.frameCue != config.frameCue ||
-      oldDelegate.config.hasPartialOuterArcs != config.hasPartialOuterArcs ||
-      oldDelegate.config.hasFullOuterRing != config.hasFullOuterRing ||
+      oldDelegate.config.outerTreatment != config.outerTreatment ||
       oldDelegate.config.inkPrimary != config.inkPrimary ||
       oldDelegate.config.inkSecondary != config.inkSecondary ||
       oldDelegate.compact != compact ||
