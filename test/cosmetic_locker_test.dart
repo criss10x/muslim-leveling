@@ -9,6 +9,20 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
+  testWidgets('empty free slot explains how to unlock cosmetics', (tester) async {
+    await GameService.load();
+    await EntitlementService.load();
+    await tester.pumpWidget(
+      const MaterialApp(home: Scaffold(body: CosmeticLocker())),
+    );
+    await tester.pumpAndSettle();
+
+    expect(
+      find.text('Selesaikan quest harian untuk membuka skin dari Daily Chest.'),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('tapping an owned free cosmetic equips it', (tester) async {
     await GameService.load();
     await EntitlementService.load();
@@ -24,5 +38,27 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(GameService.current.equipped['title'], 'title_crescent');
+  });
+
+  testWidgets('tapping an equipped free cosmetic unequips it', (tester) async {
+    await GameService.load();
+    await EntitlementService.load();
+    await GameService.debugSeedOwned(['title_crescent']);
+    await GameService.equipCosmetic(
+      CosmeticSlot.title,
+      'title_crescent',
+      isPro: false,
+    );
+
+    await tester.pumpWidget(
+      const MaterialApp(home: Scaffold(body: CosmeticLocker())),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Gelar'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Bulan Sabit Menyala'));
+    await tester.pumpAndSettle();
+
+    expect(GameService.current.equipped.containsKey('title'), isFalse);
   });
 }
