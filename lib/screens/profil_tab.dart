@@ -648,92 +648,110 @@ class _ProfilTabState extends State<ProfilTab> {
         ),
         child: Column(
           children: [
-            Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: TierProfileAvatar(
+            Container(
+              padding: const EdgeInsets.all(AppSpacing.sm),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceContainer,
+                borderRadius: BorderRadius.circular(AppRadius.lg),
+                border: Border.all(
+                  color: AppColors.outlineVariant.withValues(alpha: light ? 0.5 : 0.35),
+                ),
+              ),
+              child: Row(
+                children: [
+                  TierProfileAvatar(
                     profileImagePath: _avatarPath,
                     tierName: getTierName(_level),
                     sizeDp: 72,
                     equippedFrameId: frameId,
                     equippedAuraId: auraId,
                   ),
-                ),
-                const SizedBox(width: AppSpacing.md),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              _nickname,
-                              style: AppText.headlineMd().copyWith(fontSize: 22),
-                              overflow: TextOverflow.ellipsis,
+                  const SizedBox(width: AppSpacing.md),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                _nickname,
+                                style: AppText.headlineMd().copyWith(fontSize: 22),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: AppSpacing.xs),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 2),
-                            child: GestureDetector(
-                              onTap: _showEditOptions,
-                              child: Icon(
+                            const SizedBox(width: AppSpacing.xs),
+                            IconButton(
+                              onPressed: _showEditOptions,
+                              tooltip: 'Edit profil',
+                              constraints: const BoxConstraints(
+                                minWidth: 44,
+                                minHeight: 44,
+                              ),
+                              padding: EdgeInsets.zero,
+                              visualDensity: VisualDensity.compact,
+                              icon: Icon(
                                 Icons.edit,
                                 color: AppColors.primary,
                                 size: 20,
                               ),
                             ),
+                          ],
+                        ),
+                        const SizedBox(height: AppSpacing.xs),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: AppColors.secondaryFixed.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(AppRadius.pill),
+                            border: Border.all(color: AppColors.secondaryFixed.withValues(alpha: 0.35)),
+                          ),
+                          child: Text(
+                            rankTitle,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppText.labelCaps().copyWith(
+                              color: AppColors.secondaryFixed,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                        if (equippedTitle.isNotEmpty) ...[
+                          const SizedBox(height: AppSpacing.xs),
+                          Text(
+                            equippedTitle,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppText.labelCaps().copyWith(
+                              color: AppColors.tertiary,
+                              fontSize: 10,
+                            ),
                           ),
                         ],
-                      ),
-                      const SizedBox(height: 4),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: AppColors.secondaryFixed.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(AppRadius.pill),
-                          border: Border.all(color: AppColors.secondaryFixed.withValues(alpha: 0.35)),
-                        ),
-                        child: Text(
-                          rankTitle,
-                          style: AppText.labelCaps().copyWith(
-                            color: AppColors.secondaryFixed,
-                            fontSize: 10,
+                        const SizedBox(height: AppSpacing.xs),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(AppRadius.pill),
+                            border: Border.all(color: AppColors.primary.withValues(alpha: 0.35)),
+                          ),
+                          child: Text(
+                            'LVL $_level',
+                            style: AppText.labelCapsSm().copyWith(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 0.5,
+                            ),
                           ),
                         ),
-                      ),
-                      if (equippedTitle.isNotEmpty) ...[
-                        const SizedBox(height: 4),
-                        Text(equippedTitle,
-                            style: AppText.labelCaps().copyWith(
-                                color: AppColors.tertiary, fontSize: 10)),
                       ],
-                      const SizedBox(height: 4),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(AppRadius.pill),
-                          border: Border.all(color: AppColors.primary.withValues(alpha: 0.35)),
-                        ),
-                        child: Text(
-                          'LVL $_level',
-                          style: AppText.labelCapsSm().copyWith(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 0.5,
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             const SizedBox(height: AppSpacing.md),
             // XP Progress bar
@@ -820,6 +838,8 @@ class _ProfilTabState extends State<ProfilTab> {
                           ),
                           Text(
                             _cityName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: AppText.bodyLg().copyWith(color: AppColors.onSurface),
                           ),
                         ],
@@ -866,6 +886,7 @@ class _ProfilTabState extends State<ProfilTab> {
   Widget _miniStat(String label, String value) {
     return Container(
       width: double.infinity,
+      constraints: const BoxConstraints(minHeight: 64),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerHigh,
