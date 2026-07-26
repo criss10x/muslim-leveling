@@ -43,7 +43,6 @@ class _ProfilTabState extends State<ProfilTab> {
   // ignore: unused_field
   String _cityId = '';
   String? _avatarPath;
-  int _level = 1;
   bool _haidMode = false;
 
   @override
@@ -72,12 +71,10 @@ class _ProfilTabState extends State<ProfilTab> {
     final p = await SharedPreferences.getInstance();
     final loc = await PrayerService.loadLocation();
     final state = GameService.current;
-    final levelInfo = GameService.getLevelInfo(state.xp);
     if (!mounted) return;
     setState(() {
       _nickname = p.getString('nickname') ?? 'Pejuang';
       _avatarPath = p.getString('avatar_path');
-      _level = levelInfo.level;
       _haidMode = state.haidMode;
       if (loc != null) {
         _cityId = loc.id;
@@ -621,7 +618,7 @@ class _ProfilTabState extends State<ProfilTab> {
     final auraId = CosmeticService.resolveSlot(state, CosmeticSlot.aura, isPro: isPro);
     final titleId = CosmeticService.resolveSlot(state, CosmeticSlot.title, isPro: isPro);
     final equippedTitle = CosmeticCatalog.byId(titleId)?.titleText ?? '';
-    final tier = getTierVisualConfig(getTierName(_level));
+    final tier = getTierVisualConfig(getTierName(state.level));
 
     // Solid raised hero (same language as Home) — GlassPanel alpha muddies on pure black.
     final light = isLightTheme;
@@ -752,7 +749,7 @@ class _ProfilTabState extends State<ProfilTab> {
                             border: Border.all(color: AppColors.primary.withValues(alpha: 0.35)),
                           ),
                           child: Text(
-                            'LVL $_level',
+                            'LVL ${state.level}',
                             style: AppText.labelCapsSm().copyWith(
                               color: AppColors.primary,
                               fontWeight: FontWeight.bold,
