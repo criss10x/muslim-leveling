@@ -430,9 +430,28 @@ class _TierProfileAvatarState extends State<TierProfileAvatar>
                 container: true,
                 label: 'Pro signature finish',
                 child: IgnorePointer(
-                  child: CustomPaint(
-                    size: Size(extraSize, extraSize),
-                    painter: const _ProFinishPainter(),
+                  child: SizedBox(
+                    width: extraSize,
+                    height: extraSize,
+                    child: Stack(
+                      children: [
+                        CustomPaint(
+                          key: const ValueKey('tier-avatar-pro-outer-arcs'),
+                          size: Size(extraSize, extraSize),
+                          painter: const _ProFinishPainter(),
+                        ),
+                        Positioned(
+                          top: 1,
+                          right: 1,
+                          child: SizedBox(
+                            key: const ValueKey('tier-avatar-pro-crest'),
+                            width: 10,
+                            height: 10,
+                            child: const CustomPaint(painter: _ProCrestPainter()),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -531,6 +550,7 @@ class _TierProfileAvatarState extends State<TierProfileAvatar>
     );
 
     return CustomPaint(
+      key: const ValueKey('tier-avatar-frame-photo'),
       foregroundPainter: _GradientBorderPainter(
         primaryColor: p,
         secondaryColor: s,
@@ -722,7 +742,6 @@ class _ProFinishPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     const antiqueGold = Color(0xFFD4AF37);
-    const deepTeal = Color(0xFF064E3B);
     final outer = (Offset.zero & size).deflate(3);
     final arcPaint = Paint()
       ..color = antiqueGold.withValues(alpha: 0.82)
@@ -731,12 +750,24 @@ class _ProFinishPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
     canvas.drawArc(outer, 198 * pi / 180, 58 * pi / 180, false, arcPaint);
     canvas.drawArc(outer, 342 * pi / 180, 58 * pi / 180, false, arcPaint);
+  }
 
-    final crestCenter = Offset(size.width - 10, 10);
-    canvas.drawCircle(crestCenter, 7, Paint()..color = deepTeal);
+  @override
+  bool shouldRepaint(covariant _ProFinishPainter oldDelegate) => false;
+}
+
+class _ProCrestPainter extends CustomPainter {
+  const _ProCrestPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    const antiqueGold = Color(0xFFD4AF37);
+    const deepTeal = Color(0xFF064E3B);
+    final crestCenter = Offset(size.width / 2, size.height / 2);
+    canvas.drawCircle(crestCenter, 5, Paint()..color = deepTeal);
     canvas.drawCircle(
       crestCenter,
-      7,
+      5,
       Paint()
         ..color = antiqueGold
         ..style = PaintingStyle.stroke
@@ -748,19 +779,19 @@ class _ProFinishPainter extends CustomPainter {
       ..strokeWidth = 1.25
       ..strokeCap = StrokeCap.round;
     canvas.drawLine(
-      Offset(crestCenter.dx - 3, crestCenter.dy),
-      Offset(crestCenter.dx - 0.5, crestCenter.dy + 2.5),
+      Offset(crestCenter.dx - 2.25, crestCenter.dy),
+      Offset(crestCenter.dx - 0.4, crestCenter.dy + 1.9),
       crestPaint,
     );
     canvas.drawLine(
-      Offset(crestCenter.dx - 0.5, crestCenter.dy + 2.5),
-      Offset(crestCenter.dx + 3.5, crestCenter.dy - 2.5),
+      Offset(crestCenter.dx - 0.4, crestCenter.dy + 1.9),
+      Offset(crestCenter.dx + 2.7, crestCenter.dy - 2),
       crestPaint,
     );
   }
 
   @override
-  bool shouldRepaint(covariant _ProFinishPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _ProCrestPainter oldDelegate) => false;
 }
 
 class _TierAccentPainter extends CustomPainter {
