@@ -77,4 +77,25 @@ void main() {
     ));
     expect(find.byType(TierProfileAvatar), findsOneWidget);
   });
+
+  testWidgets('Epic avatar renders its earned frame with initials fallback',
+      (tester) async {
+    await tester.pumpWidget(const Directionality(
+      textDirection: TextDirection.ltr,
+      child: TierProfileAvatar(
+        tierName: 'Epic', displayName: 'Ahmad Fikri', sizeDp: 88,
+      ),
+    ));
+    expect(find.text('AF'), findsOneWidget);
+  });
+
+  testWidgets('compact avatar stays static for Mythic Immortal', (tester) async {
+    await tester.pumpWidget(const Directionality(
+      textDirection: TextDirection.ltr,
+      child: SmallTierAvatar(
+        tierName: 'Mythic Immortal', displayName: 'Ahmad Fikri',
+      ),
+    ));
+    expect(find.byType(SmallTierAvatar), findsOneWidget);
+  });
 }

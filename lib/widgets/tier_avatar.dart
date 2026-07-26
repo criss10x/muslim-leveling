@@ -260,16 +260,15 @@ String getTierName(int level) {
   return 'Warrior';
 }
 
-/// Returns default emoji avatar for a tier when no photo is set
-String _defaultEmoji(String tierName, TierVisualConfig config) {
-  if (config.hasCrownEmblem) return '🤴';
-  if (tierName.startsWith('Mythic')) return '🧙';
-  if (tierName == 'Legend') return '🌟';
-  if (tierName == 'Epic') return '🔥';
-  if (tierName == 'Grandmaster') return '👑';
-  if (tierName == 'Master') return '🎓';
-  if (tierName == 'Elite') return '🛡️';
-  return '🧕';
+/// Returns up to two uppercase initials, or a neutral fallback when absent.
+String _displayInitials(String? displayName) {
+  final words = displayName
+      ?.trim()
+      .split(RegExp(r'\s+'))
+      .where((word) => word.isNotEmpty)
+      .toList();
+  if (words == null || words.isEmpty) return '?';
+  return words.take(2).map((word) => word[0]).join().toUpperCase();
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -278,6 +277,8 @@ String _defaultEmoji(String tierName, TierVisualConfig config) {
 
 class TierProfileAvatar extends StatefulWidget {
   final String? profileImagePath;
+  final String? displayName;
+  final bool isPro;
   final String tierName;
   final double sizeDp;
   final bool showEditBadge;
@@ -288,6 +289,8 @@ class TierProfileAvatar extends StatefulWidget {
   const TierProfileAvatar({
     super.key,
     this.profileImagePath,
+    this.displayName,
+    this.isPro = false,
     required this.tierName,
     this.sizeDp = 120,
     this.showEditBadge = false,
@@ -302,36 +305,14 @@ class TierProfileAvatar extends StatefulWidget {
 
 class _TierProfileAvatarState extends State<TierProfileAvatar>
     with TickerProviderStateMixin {
-  late AnimationController _ringController;
-  late AnimationController _ringReverseController;
-  late AnimationController _pulseController;
   late AnimationController _particleController;
-  late AnimationController _sparkleController;
 
   @override
   void initState() {
     super.initState();
-    // Controllers are cheap to allocate; only *tick* the ones the current
-    // tier actually paints. Warrior/Elite/Master pay zero animation cost.
-    _ringController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 8),
-    );
-    _ringReverseController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 6),
-    );
-    _pulseController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1800),
-    );
     _particleController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 4),
-    );
-    _sparkleController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 2500),
     );
     _syncControllers();
   }
@@ -346,32 +327,16 @@ class _TierProfileAvatarState extends State<TierProfileAvatar>
   }
 
   void _syncControllers() {
-    final config = getTierVisualConfig(widget.tierName);
-    void gate(AnimationController c, bool need, {bool reverse = false}) {
-      if (need) {
-        if (!c.isAnimating) {
-          reverse ? c.repeat(reverse: true) : c.repeat();
-        }
-      } else if (c.isAnimating) {
-        c.stop();
-      }
+    if (_auraSpec != null) {
+      if (!_particleController.isAnimating) _particleController.repeat();
+    } else if (_particleController.isAnimating) {
+      _particleController.stop();
     }
-
-    gate(_ringController, config.hasRotatingRing);
-    gate(_ringReverseController, config.hasDoubleRing);
-    // Glow layer only animates when pulse is requested; static glow skips ticker.
-    gate(_pulseController, config.hasPulsingGlow, reverse: true);
-    gate(_particleController, config.hasParticles || _auraSpec != null);
-    gate(_sparkleController, config.hasSparkles);
   }
 
   @override
   void dispose() {
-    _ringController.dispose();
-    _ringReverseController.dispose();
-    _pulseController.dispose();
     _particleController.dispose();
-    _sparkleController.dispose();
     super.dispose();
   }
 
@@ -401,18 +366,6 @@ class _TierProfileAvatarState extends State<TierProfileAvatar>
             if (config.hasGlow)
               _buildGlowLayer(config, size, cornerRadius),
 
-            // Layer 2: Rotating shimmer ring (Legend+)
-            if (config.hasRotatingRing)
-              _buildRotatingRing(config, size),
-
-            // Layer 2b: Counter-rotating ring (Mythic Honor+)
-            if (config.hasDoubleRing)
-              _buildCounterRotatingRing(config, size),
-
-            // Layer 3: Particles orbit (Mythic+)
-            if (config.hasParticles)
-              _buildParticleLayer(config, size),
-
             // Equipped-aura layer (independent of tier particles)
             if (_auraSpec != null)
               AnimatedBuilder(
@@ -429,22 +382,18 @@ class _TierProfileAvatarState extends State<TierProfileAvatar>
                 ),
               ),
 
-            // Layer 4: Sparkles (Mythic Glory+)
-            if (config.hasSparkles)
-              _buildSparkleLayer(config, size),
-
-            // Layer 5: Main avatar box with border
+            // Layer 2: Main avatar with a static earned-tier frame.
             _buildMainAvatar(config, size, cornerRadius),
 
-            // Layer 6: Corner accents (Elite+)
-            if (config.hasCornerAccents)
-              _buildCornerAccents(config, size),
+            // Layer 3: Tier-specific static accent.
+            IgnorePointer(
+              child: CustomPaint(
+                size: Size(size + 12, size + 12),
+                painter: _TierAccentPainter(config: config),
+              ),
+            ),
 
-            // Layer 7: Crown emblem (Mythic Immortal)
-            if (config.hasCrownEmblem)
-              _buildCrownEmblem(size),
-
-            // Layer 8: Edit badge
+            // Layer 4: Edit badge
             if (widget.showEditBadge)
               _buildEditBadge(size),
           ],
@@ -469,85 +418,7 @@ class _TierProfileAvatarState extends State<TierProfileAvatar>
             ],
           ),
         );
-    if (!config.hasPulsingGlow) return glow(0.4);
-    return AnimatedBuilder(
-      animation: _pulseController,
-      builder: (context, child) =>
-          glow(0.3 + 0.4 * _pulseController.value),
-    );
-  }
-
-  Widget _buildRotatingRing(TierVisualConfig config, double size) {
-    return AnimatedBuilder(
-      animation: _ringController,
-      builder: (context, child) {
-        return Transform.rotate(
-          angle: _ringController.value * 2 * pi,
-          child: CustomPaint(
-            size: Size(size + 8, size + 8),
-            painter: _ArcRingPainter(
-              primaryColor: config.inkPrimary,
-              secondaryColor: config.inkSecondary,
-              strokeWidth: 2,
-              startAngle: 0,
-              sweepAngle: 300,
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildCounterRotatingRing(TierVisualConfig config, double size) {
-    return AnimatedBuilder(
-      animation: _ringReverseController,
-      builder: (context, child) {
-        return Transform.rotate(
-          angle: -_ringReverseController.value * 2 * pi,
-          child: CustomPaint(
-            size: Size(size + 4, size + 4),
-            painter: _ArcRingPainter(
-              primaryColor: config.inkSecondary,
-              secondaryColor: Colors.transparent,
-              strokeWidth: 1.5,
-              startAngle: 45,
-              sweepAngle: 270,
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildParticleLayer(TierVisualConfig config, double size) {
-    return AnimatedBuilder(
-      animation: _particleController,
-      builder: (context, child) {
-        return CustomPaint(
-          size: Size(size + 14, size + 14),
-          painter: _ParticlePainter(
-            color: config.inkSecondary,
-            phase: _particleController.value * 360,
-            particleCount: 6,
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildSparkleLayer(TierVisualConfig config, double size) {
-    return AnimatedBuilder(
-      animation: _sparkleController,
-      builder: (context, child) {
-        return CustomPaint(
-          size: Size(size + 12, size + 12),
-          painter: _SparklePainter(
-            phase: _sparkleController.value * 360,
-            sparkleCount: 8,
-          ),
-        );
-      },
-    );
+    return glow(0.4);
   }
 
   Widget _buildMainAvatar(TierVisualConfig config, double size, double cornerRadius) {
@@ -563,7 +434,12 @@ class _TierProfileAvatarState extends State<TierProfileAvatar>
       height: size,
       padding: EdgeInsets.all(bw),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(cornerRadius),
+        shape: _frameShape == FrameShape.circle
+            ? BoxShape.circle
+            : BoxShape.rectangle,
+        borderRadius: _frameShape == FrameShape.circle
+            ? null
+            : BorderRadius.circular(cornerRadius),
         // Glow: dark only (light uses solid ink border, no neon halo).
         boxShadow: light
             ? null
@@ -599,60 +475,27 @@ class _TierProfileAvatarState extends State<TierProfileAvatar>
                 color: light ? AppColors.surfaceContainerHigh : AppColors.background,
                 alignment: Alignment.center,
                 child: Text(
-                  _defaultEmoji(widget.tierName, config),
-                  style: TextStyle(fontSize: size * 0.45),
+                  _displayInitials(widget.displayName),
+                  style: TextStyle(
+                    fontSize: size * 0.32,
+                    fontWeight: FontWeight.w700,
+                    color: p,
+                  ),
                 ),
               ),
       ),
     );
 
-    // Gradient border on top of the content. Grandmaster+ gets a slowly
-    // rotating sweep so the colors shimmer around the frame; lower tiers
-    // get a static gradient (still fancier than the old solid border).
-    if (!config.hasGlow) {
-      return CustomPaint(
-        foregroundPainter: _GradientBorderPainter(
-          primaryColor: p,
-          secondaryColor: s,
-          strokeWidth: bw,
-          cornerRadius: cornerRadius,
-          rotation: 0,
-          shape: _frameShape,
-        ),
-        child: content,
-      );
-    }
-    return AnimatedBuilder(
-      animation: _ringController,
-      builder: (context, child) => CustomPaint(
-        foregroundPainter: _GradientBorderPainter(
-          primaryColor: p,
-          secondaryColor: s,
-          strokeWidth: bw,
-          cornerRadius: cornerRadius,
-          rotation: _ringController.value * 2 * pi,
-          shape: _frameShape,
-        ),
-        child: child,
+    return CustomPaint(
+      foregroundPainter: _GradientBorderPainter(
+        primaryColor: p,
+        secondaryColor: s,
+        strokeWidth: bw,
+        cornerRadius: cornerRadius,
+        rotation: 0,
+        shape: _frameShape,
       ),
       child: content,
-    );
-  }
-
-  Widget _buildCornerAccents(TierVisualConfig config, double size) {
-    return CustomPaint(
-      size: Size(size, size),
-      painter: _CornerAccentPainter(color: config.inkSecondary),
-    );
-  }
-
-  Widget _buildCrownEmblem(double size) {
-    return Positioned(
-      top: 0,
-      child: Transform.translate(
-        offset: const Offset(0, -8),
-        child: const Text('👑', style: TextStyle(fontSize: 20)),
-      ),
     );
   }
 
@@ -696,6 +539,7 @@ class _TierProfileAvatarState extends State<TierProfileAvatar>
 
 class SmallTierAvatar extends StatelessWidget {
   final String? profileImagePath;
+  final String? displayName;
   final String tierName;
   final double sizeDp;
   final String equippedFrameId;
@@ -703,6 +547,7 @@ class SmallTierAvatar extends StatelessWidget {
   const SmallTierAvatar({
     super.key,
     this.profileImagePath,
+    this.displayName,
     required this.tierName,
     this.sizeDp = 40,
     this.equippedFrameId = 'frame_default',
@@ -721,21 +566,32 @@ class SmallTierAvatar extends StatelessWidget {
     final hasPhoto = profileImagePath != null &&
         File(profileImagePath!).existsSync();
 
-    return CustomPaint(
-      foregroundPainter: _GradientBorderPainter(
-        primaryColor: config.primaryColor,
-        secondaryColor: config.secondaryColor,
-        strokeWidth: effectiveBorderWidth,
-        cornerRadius: cornerRadius,
-        rotation: 0,
-        shape: _frameShape,
-      ),
-      child: Container(
+    return SizedBox(
+      width: sizeDp,
+      height: sizeDp,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          CustomPaint(
+            foregroundPainter: _GradientBorderPainter(
+              primaryColor: config.primaryColor,
+              secondaryColor: config.secondaryColor,
+              strokeWidth: effectiveBorderWidth,
+              cornerRadius: cornerRadius,
+              rotation: 0,
+              shape: _frameShape,
+            ),
+            child: Container(
         width: sizeDp,
         height: sizeDp,
         padding: EdgeInsets.all(effectiveBorderWidth),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(cornerRadius),
+          shape: _frameShape == FrameShape.circle
+              ? BoxShape.circle
+              : BoxShape.rectangle,
+          borderRadius: _frameShape == FrameShape.circle
+              ? null
+              : BorderRadius.circular(cornerRadius),
           boxShadow: isLightTheme
               ? null
               : [
@@ -765,11 +621,24 @@ class SmallTierAvatar extends StatelessWidget {
                 )
               : Center(
                   child: Text(
-                    _defaultEmoji(tierName, config),
-                    style: TextStyle(fontSize: sizeDp * 0.5),
+                    _displayInitials(displayName),
+                    style: TextStyle(
+                      fontSize: sizeDp * 0.32,
+                      fontWeight: FontWeight.w700,
+                      color: config.inkPrimary,
+                    ),
                   ),
                 ),
         ),
+            ),
+          ),
+          IgnorePointer(
+            child: CustomPaint(
+              size: Size(sizeDp, sizeDp),
+              painter: _TierAccentPainter(config: config, compact: true),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -778,6 +647,150 @@ class SmallTierAvatar extends StatelessWidget {
 // ═══════════════════════════════════════════════════════════════
 // CUSTOM PAINTERS — Canvas effects for tiers
 // ═══════════════════════════════════════════════════════════════
+
+class _TierAccentPainter extends CustomPainter {
+  final TierVisualConfig config;
+  final bool compact;
+
+  _TierAccentPainter({required this.config, this.compact = false});
+
+  Paint _paint(Color color, {PaintingStyle style = PaintingStyle.stroke}) => Paint()
+    ..color = color
+    ..style = style
+    ..strokeWidth = compact ? 1.25 : 2
+    ..strokeCap = StrokeCap.round
+    ..strokeJoin = StrokeJoin.round;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = size.shortestSide / 2 - (compact ? 2 : 4);
+    final rect = Rect.fromCircle(center: center, radius: radius);
+    final primary = config.inkPrimary;
+    final secondary = config.inkSecondary;
+
+    if (config.hasFullOuterRing) {
+      canvas.drawCircle(center, radius, _paint(primary));
+      _drawImmortalCrest(canvas, center, radius, secondary);
+      return;
+    }
+    if (config.hasPartialOuterArcs &&
+        (config.name == 'Elite' || config.name == 'Mythic Honor')) {
+      final paint = _paint(secondary);
+      canvas.drawArc(rect, 205 * pi / 180, 55 * pi / 180, false, paint);
+      canvas.drawArc(rect, 25 * pi / 180, 55 * pi / 180, false, paint);
+      return;
+    }
+
+    switch (config.accent) {
+      case TierFrameAccent.sapphire:
+        _drawDiamond(canvas, center, radius, primary);
+        break;
+      case TierFrameAccent.lavender:
+        _drawSeal(canvas, center, radius, primary);
+        break;
+      case TierFrameAccent.cyan:
+        _drawCrescent(canvas, center, radius, secondary);
+        break;
+      case TierFrameAccent.magenta:
+        _drawConstellation(canvas, center, radius, secondary);
+        break;
+      case TierFrameAccent.obsidianOpal:
+        _drawImmortalCrest(canvas, center, radius, secondary);
+        break;
+      case TierFrameAccent.none:
+        if (config.name == 'Epic') _drawHex(canvas, center, radius, primary);
+        break;
+      case TierFrameAccent.ultraviolet:
+        // Mythic Honor is handled by the explicit short-arc branch above.
+        break;
+    }
+  }
+
+  void _drawDiamond(Canvas canvas, Offset center, double radius, Color color) {
+    final r = radius * 0.9;
+    final path = Path()
+      ..moveTo(center.dx, center.dy - r)
+      ..lineTo(center.dx + r, center.dy)
+      ..lineTo(center.dx, center.dy + r)
+      ..lineTo(center.dx - r, center.dy)
+      ..close();
+    canvas.drawPath(path, _paint(color));
+  }
+
+  void _drawHex(Canvas canvas, Offset center, double radius, Color color) {
+    final path = Path();
+    final r = radius * 0.9;
+    for (var i = 0; i < 6; i++) {
+      final angle = (i * 60 - 90) * pi / 180;
+      final point = Offset(center.dx + r * cos(angle), center.dy + r * sin(angle));
+      i == 0 ? path.moveTo(point.dx, point.dy) : path.lineTo(point.dx, point.dy);
+    }
+    canvas.drawPath(path..close(), _paint(color));
+  }
+
+  void _drawSeal(Canvas canvas, Offset center, double radius, Color color) {
+    final paint = _paint(color);
+    canvas.drawCircle(center, radius * 0.84, paint);
+    for (var i = 0; i < 8; i++) {
+      final angle = i * pi / 4;
+      final inner = Offset(
+          center.dx + radius * 0.9 * cos(angle), center.dy + radius * 0.9 * sin(angle));
+      final outer = Offset(
+          center.dx + radius * cos(angle), center.dy + radius * sin(angle));
+      canvas.drawLine(inner, outer, paint);
+    }
+  }
+
+  void _drawCrescent(Canvas canvas, Offset center, double radius, Color color) {
+    final outer = Path()..addOval(Rect.fromCircle(center: center, radius: radius * 0.8));
+    final inner = Path()
+      ..addOval(Rect.fromCircle(
+          center: Offset(center.dx + radius * 0.34, center.dy - radius * 0.08),
+          radius: radius * 0.74));
+    canvas.drawPath(Path.combine(PathOperation.difference, outer, inner), _paint(color, style: PaintingStyle.fill));
+  }
+
+  void _drawConstellation(Canvas canvas, Offset center, double radius, Color color) {
+    final points = [
+      Offset(center.dx - radius * 0.7, center.dy + radius * 0.25),
+      Offset(center.dx - radius * 0.2, center.dy - radius * 0.45),
+      Offset(center.dx + radius * 0.3, center.dy + radius * 0.12),
+      Offset(center.dx + radius * 0.72, center.dy - radius * 0.3),
+    ];
+    final paint = _paint(color);
+    for (var i = 0; i < points.length - 1; i++) {
+      canvas.drawLine(points[i], points[i + 1], paint);
+      canvas.drawCircle(points[i], compact ? 1.5 : 2.5, _paint(color, style: PaintingStyle.fill));
+    }
+    canvas.drawCircle(points.last, compact ? 1.5 : 2.5, _paint(color, style: PaintingStyle.fill));
+    for (final offset in [const Offset(-0.55, -0.7), const Offset(0, -0.82), const Offset(0.55, -0.68)]) {
+      final star = Offset(center.dx + radius * offset.dx, center.dy + radius * offset.dy);
+      canvas.drawLine(Offset(star.dx - 2, star.dy), Offset(star.dx + 2, star.dy), paint);
+      canvas.drawLine(Offset(star.dx, star.dy - 2), Offset(star.dx, star.dy + 2), paint);
+    }
+  }
+
+  void _drawImmortalCrest(Canvas canvas, Offset center, double radius, Color color) {
+    final r = radius * 0.62;
+    final path = Path()
+      ..moveTo(center.dx - r, center.dy + r * 0.7)
+      ..lineTo(center.dx - r, center.dy - r * 0.65)
+      ..lineTo(center.dx - r * 0.35, center.dy - r * 0.05)
+      ..lineTo(center.dx, center.dy - r)
+      ..lineTo(center.dx + r * 0.35, center.dy - r * 0.05)
+      ..lineTo(center.dx + r, center.dy - r * 0.65)
+      ..lineTo(center.dx + r, center.dy + r * 0.7)
+      ..close();
+    canvas.drawPath(path, _paint(color));
+  }
+
+  @override
+  bool shouldRepaint(covariant _TierAccentPainter oldDelegate) =>
+      oldDelegate.config.name != config.name ||
+      oldDelegate.config.accent != config.accent ||
+      oldDelegate.compact != compact;
+}
 
 /// Gradient border — sweep gradient stroked around the avatar frame with a
 /// thin glossy highlight on top for a metallic feel. [rotation] spins the
@@ -864,49 +877,6 @@ class _FrameClipper extends CustomClipper<Path> {
       old.shape != shape || old.radius != radius;
 }
 
-class _ArcRingPainter extends CustomPainter {
-  final Color primaryColor;
-  final Color secondaryColor;
-  final double strokeWidth;
-  final double startAngle;
-  final double sweepAngle;
-
-  _ArcRingPainter({
-    required this.primaryColor,
-    required this.secondaryColor,
-    required this.strokeWidth,
-    required this.startAngle,
-    required this.sweepAngle,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final rect = Offset.zero & size;
-    final paint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round
-      ..shader = SweepGradient(
-        colors: [
-          primaryColor.withValues(alpha: 0.9),
-          secondaryColor.withValues(alpha: 0.5),
-          primaryColor.withValues(alpha: 0.9),
-        ],
-      ).createShader(rect);
-
-    canvas.drawArc(
-      rect.deflate(strokeWidth / 2),
-      startAngle * pi / 180,
-      sweepAngle * pi / 180,
-      false,
-      paint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant _ArcRingPainter oldDelegate) => false;
-}
-
 class _ParticlePainter extends CustomPainter {
   final Color color;
   final double phase;
@@ -940,96 +910,4 @@ class _ParticlePainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _ParticlePainter oldDelegate) =>
       oldDelegate.phase != phase;
-}
-
-class _SparklePainter extends CustomPainter {
-  final double phase;
-  final int sparkleCount;
-
-  _SparklePainter({
-    required this.phase,
-    required this.sparkleCount,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    for (int i = 0; i < sparkleCount; i++) {
-      final seed = i * 45.0;
-      final angle = (seed + phase * 0.5) * pi / 180;
-      final r = size.width / 2 - 4;
-      final cx = size.width / 2 + r * cos(angle);
-      final cy = size.height / 2 + r * sin(angle);
-      final twinkle = sin((phase + seed) * pi / 180) * 0.5 + 0.5;
-
-      if (twinkle > 0.5) {
-        final starSize = 3 + 2 * twinkle;
-        final paint = Paint()
-          ..color = Colors.white.withValues(alpha: twinkle)
-          ..strokeWidth = 1;
-
-        // Horizontal line
-        canvas.drawLine(
-          Offset(cx - starSize, cy),
-          Offset(cx + starSize, cy),
-          paint,
-        );
-        // Vertical line
-        canvas.drawLine(
-          Offset(cx, cy - starSize),
-          Offset(cx, cy + starSize),
-          paint,
-        );
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant _SparklePainter oldDelegate) =>
-      oldDelegate.phase != phase;
-}
-
-class _CornerAccentPainter extends CustomPainter {
-  final Color color;
-
-  _CornerAccentPainter({required this.color});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    const cornerLen = 12.0;
-
-    // Soft glow pass under the crisp accents.
-    final glowPaint = Paint()
-      ..color = color.withValues(alpha: 0.6)
-      ..strokeWidth = 4
-      ..strokeCap = StrokeCap.round
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3);
-    final paint = Paint()
-      ..color = color
-      ..strokeWidth = 2
-      ..strokeCap = StrokeCap.round;
-
-    for (final p in [glowPaint, paint]) {
-      // Top-left
-      canvas.drawLine(const Offset(0, 0), const Offset(cornerLen, 0), p);
-      canvas.drawLine(const Offset(0, 0), const Offset(0, cornerLen), p);
-      // Top-right
-      canvas.drawLine(
-          Offset(size.width - cornerLen, 0), Offset(size.width, 0), p);
-      canvas.drawLine(
-          Offset(size.width, 0), Offset(size.width, cornerLen), p);
-      // Bottom-left
-      canvas.drawLine(
-          Offset(0, size.height - cornerLen), Offset(0, size.height), p);
-      canvas.drawLine(
-          Offset(0, size.height), Offset(cornerLen, size.height), p);
-      // Bottom-right
-      canvas.drawLine(Offset(size.width - cornerLen, size.height),
-          Offset(size.width, size.height), p);
-      canvas.drawLine(Offset(size.width, size.height - cornerLen),
-          Offset(size.width, size.height), p);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant _CornerAccentPainter oldDelegate) => false;
 }
