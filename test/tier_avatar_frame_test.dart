@@ -26,6 +26,11 @@ void main() {
     expect(immortal.hasFullOuterRing, isTrue);
   });
 
+  test('Warrior and Master define distinct earned frame cues', () {
+    expect(getTierVisualConfig('Warrior').frameCue, TierFrameCue.thinFullRing);
+    expect(getTierVisualConfig('Master').frameCue, TierFrameCue.jadeDiamond);
+  });
+
   test('tier thresholds retain all ten existing ranks', () {
     expect(getTierName(1), 'Warrior');
     expect(getTierName(10), 'Elite');
@@ -97,5 +102,17 @@ void main() {
       ),
     ));
     expect(find.byType(SmallTierAvatar), findsOneWidget);
+  });
+
+  testWidgets('compact avatar keeps its tier cue peripheral', (tester) async {
+    await tester.pumpWidget(const Directionality(
+      textDirection: TextDirection.ltr,
+      child: SmallTierAvatar(
+        tierName: 'Master', displayName: 'Ahmad Fikri',
+      ),
+    ));
+
+    expect(find.byKey(const ValueKey('small-tier-accent')), findsOneWidget);
+    expect(find.byType(AnimatedBuilder), findsNothing);
   });
 }

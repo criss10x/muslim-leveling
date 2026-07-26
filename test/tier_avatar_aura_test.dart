@@ -24,4 +24,31 @@ void main() {
     ));
     expect(find.byType(TierProfileAvatar), findsOneWidget);
   });
+
+  testWidgets('equipped aura renders only when animations are enabled', (tester) async {
+    await tester.pumpWidget(const Directionality(
+      textDirection: TextDirection.ltr,
+      child: TierProfileAvatar(
+        tierName: 'Warrior',
+        equippedAuraId: 'aura_nur_emas',
+        sizeDp: 80,
+      ),
+    ));
+    expect(find.byKey(const ValueKey('tier-avatar-aura')), findsOneWidget);
+
+    await tester.pumpWidget(
+      const MediaQuery(
+        data: MediaQueryData(disableAnimations: true),
+        child: Directionality(
+          textDirection: TextDirection.ltr,
+          child: TierProfileAvatar(
+            tierName: 'Warrior',
+            equippedAuraId: 'aura_nur_emas',
+            sizeDp: 80,
+          ),
+        ),
+      ),
+    );
+    expect(find.byKey(const ValueKey('tier-avatar-aura')), findsNothing);
+  });
 }

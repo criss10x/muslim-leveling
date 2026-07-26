@@ -57,11 +57,14 @@ enum TierFrameAccent {
   obsidianOpal,
 }
 
+enum TierFrameCue { none, thinFullRing, jadeDiamond }
+
 class TierVisualConfig {
   final String name;
   final Color primaryColor;
   final Color secondaryColor;
   final TierFrameAccent accent;
+  final TierFrameCue frameCue;
   final double borderWidth;
   final bool hasCornerAccents;
   final bool hasGlow;
@@ -80,6 +83,7 @@ class TierVisualConfig {
     required this.primaryColor,
     required this.secondaryColor,
     this.accent = TierFrameAccent.none,
+    this.frameCue = TierFrameCue.none,
     required this.borderWidth,
     this.hasCornerAccents = false,
     this.hasGlow = false,
@@ -132,6 +136,7 @@ TierVisualConfig getTierVisualConfig(String tierName) {
         name: 'Warrior',
         primaryColor: Color(0xFF8B5CF6),
         secondaryColor: Color(0xFF6366F1),
+        frameCue: TierFrameCue.thinFullRing,
         borderWidth: 2,
       );
     case 'Elite':
@@ -149,6 +154,7 @@ TierVisualConfig getTierVisualConfig(String tierName) {
         name: 'Master',
         primaryColor: Color(0xFF14B8A6),
         secondaryColor: Color(0xFF10B981),
+        frameCue: TierFrameCue.jadeDiamond,
         borderWidth: 3,
       );
     case 'Grandmaster':
@@ -278,7 +284,6 @@ String _displayInitials(String? displayName) {
 class TierProfileAvatar extends StatefulWidget {
   final String? profileImagePath;
   final String? displayName;
-  final bool isPro;
   final String tierName;
   final double sizeDp;
   final bool showEditBadge;
@@ -290,7 +295,6 @@ class TierProfileAvatar extends StatefulWidget {
     super.key,
     this.profileImagePath,
     this.displayName,
-    this.isPro = false,
     required this.tierName,
     this.sizeDp = 120,
     this.showEditBadge = false,
@@ -306,6 +310,7 @@ class TierProfileAvatar extends StatefulWidget {
 class _TierProfileAvatarState extends State<TierProfileAvatar>
     with TickerProviderStateMixin {
   late AnimationController _particleController;
+  var _reduceMotion = false;
 
   @override
   void initState() {
@@ -314,6 +319,12 @@ class _TierProfileAvatarState extends State<TierProfileAvatar>
       vsync: this,
       duration: const Duration(seconds: 4),
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _reduceMotion = MediaQuery.disableAnimationsOf(context);
     _syncControllers();
   }
 
@@ -327,7 +338,7 @@ class _TierProfileAvatarState extends State<TierProfileAvatar>
   }
 
   void _syncControllers() {
-    if (_auraSpec != null) {
+    if (_auraSpec != null && !_reduceMotion) {
       if (!_particleController.isAnimating) _particleController.repeat();
     } else if (_particleController.isAnimating) {
       _particleController.stop();
@@ -367,8 +378,9 @@ class _TierProfileAvatarState extends State<TierProfileAvatar>
               _buildGlowLayer(config, size, cornerRadius),
 
             // Equipped-aura layer (independent of tier particles)
-            if (_auraSpec != null)
+            if (_auraSpec != null && !_reduceMotion)
               AnimatedBuilder(
+                key: const ValueKey('tier-avatar-aura'),
                 animation: _particleController,
                 builder: (context, _) => CustomPaint(
                   size: Size(size + 14, size + 14),
@@ -388,6 +400,7 @@ class _TierProfileAvatarState extends State<TierProfileAvatar>
             // Layer 3: Tier-specific static accent.
             IgnorePointer(
               child: CustomPaint(
+                key: const ValueKey('tier-avatar-accent'),
                 size: Size(size + 12, size + 12),
                 painter: _TierAccentPainter(config: config),
               ),
@@ -634,6 +647,7 @@ class SmallTierAvatar extends StatelessWidget {
           ),
           IgnorePointer(
             child: CustomPaint(
+              key: const ValueKey('small-tier-accent'),
               size: Size(sizeDp, sizeDp),
               painter: _TierAccentPainter(config: config, compact: true),
             ),
@@ -668,10 +682,28 @@ class _TierAccentPainter extends CustomPainter {
     final rect = Rect.fromCircle(center: center, radius: radius);
     final primary = config.inkPrimary;
     final secondary = config.inkSecondary;
+    final cueCenter = Offset(center.dx, center.dy - radius * 0.86);
+    final cueRadius = radius * (compact ? 0.12 : 0.16);
+
+    if (compact) {
+      _drawCompactCue(canvas, cueCenter, cueRadius, rect, primary, secondary);
+      return;
+    }
+
+    switch (config.frameCue) {
+      case TierFrameCue.thinFullRing:
+        canvas.drawCircle(center, radius, _paint(primary));
+        return;
+      case TierFrameCue.jadeDiamond:
+        _drawDiamond(canvas, cueCenter, cueRadius, secondary);
+        return;
+      case TierFrameCue.none:
+        break;
+    }
 
     if (config.hasFullOuterRing) {
       canvas.drawCircle(center, radius, _paint(primary));
-      _drawImmortalCrest(canvas, center, radius, secondary);
+      _drawImmortalCrest(canvas, cueCenter, cueRadius, secondary);
       return;
     }
     if (config.hasPartialOuterArcs &&
@@ -684,26 +716,49 @@ class _TierAccentPainter extends CustomPainter {
 
     switch (config.accent) {
       case TierFrameAccent.sapphire:
-        _drawDiamond(canvas, center, radius, primary);
+        _drawDiamond(canvas, cueCenter, cueRadius, primary);
         break;
       case TierFrameAccent.lavender:
-        _drawSeal(canvas, center, radius, primary);
+        _drawSeal(canvas, cueCenter, cueRadius, primary);
         break;
       case TierFrameAccent.cyan:
-        _drawCrescent(canvas, center, radius, secondary);
+        _drawCrescent(canvas, cueCenter, cueRadius, secondary);
         break;
       case TierFrameAccent.magenta:
-        _drawConstellation(canvas, center, radius, secondary);
+        _drawConstellation(canvas, cueCenter, cueRadius, secondary);
         break;
       case TierFrameAccent.obsidianOpal:
-        _drawImmortalCrest(canvas, center, radius, secondary);
+        _drawImmortalCrest(canvas, cueCenter, cueRadius, secondary);
         break;
       case TierFrameAccent.none:
-        if (config.name == 'Epic') _drawHex(canvas, center, radius, primary);
+        if (config.name == 'Epic') _drawHex(canvas, cueCenter, cueRadius, primary);
         break;
       case TierFrameAccent.ultraviolet:
         // Mythic Honor is handled by the explicit short-arc branch above.
         break;
+    }
+  }
+
+  void _drawCompactCue(
+    Canvas canvas,
+    Offset cueCenter,
+    double cueRadius,
+    Rect outerRect,
+    Color primary,
+    Color secondary,
+  ) {
+    switch (config.frameCue) {
+      case TierFrameCue.thinFullRing:
+        canvas.drawArc(outerRect, 225 * pi / 180, 90 * pi / 180, false, _paint(primary));
+        return;
+      case TierFrameCue.jadeDiamond:
+        _drawDiamond(canvas, cueCenter, cueRadius, secondary);
+        return;
+      case TierFrameCue.none:
+        break;
+    }
+    if (config.hasFullOuterRing || config.hasPartialOuterArcs || config.accent != TierFrameAccent.none || config.name == 'Epic') {
+      canvas.drawCircle(cueCenter, compact ? 1.5 : 2, _paint(secondary, style: PaintingStyle.fill));
     }
   }
 
@@ -789,6 +844,11 @@ class _TierAccentPainter extends CustomPainter {
   bool shouldRepaint(covariant _TierAccentPainter oldDelegate) =>
       oldDelegate.config.name != config.name ||
       oldDelegate.config.accent != config.accent ||
+      oldDelegate.config.frameCue != config.frameCue ||
+      oldDelegate.config.hasPartialOuterArcs != config.hasPartialOuterArcs ||
+      oldDelegate.config.hasFullOuterRing != config.hasFullOuterRing ||
+      oldDelegate.config.inkPrimary != config.inkPrimary ||
+      oldDelegate.config.inkSecondary != config.inkSecondary ||
       oldDelegate.compact != compact;
 }
 
