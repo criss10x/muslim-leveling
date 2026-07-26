@@ -35,6 +35,25 @@ The profile hero uses an 88--96dp avatar. The compact top-bar avatar remains
 static and omits particles and decorative ambient layers. When no user photo
 exists, use a clean initials/monogram fallback rather than a tier emoji.
 
+## Tier-Tinted Profile Hero
+
+The profile hero card uses the active tier palette so the card feels like an
+extension of the avatar preview. It is not a solid coloured card:
+
+- use the tier primary and secondary colours in a low-alpha background gradient
+  (about 8--14%), a border (about 30--40%), and the XP progress fill;
+- keep the reading surface, primary text, and photo area neutral for contrast;
+- use the tier crest and avatar frame as the strong tier signals; the card tint
+  is supporting atmosphere only;
+- preserve the same structure in light theme using the existing light-safe tier
+  ink colours rather than neon fills;
+- for a Pro user, retain the tier-tinted card. Add only a thin antique-gold
+  inlay and a deep-teal membership detail; never recolour the card gold.
+
+For example, an Epic Pro user has a vermilion-tinted hero, a ruby achievement
+frame, then restrained gold and teal Pro finishing. The user reads Epic first,
+then Pro.
+
 ## Free Tier Frame System
 
 All frames use a circular photo silhouette. The tier frame is a focused,
