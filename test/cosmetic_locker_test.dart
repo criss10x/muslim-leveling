@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:muslim_leveling/widgets/cosmetic_locker.dart';
+import 'package:muslim_leveling/services/cosmetic_catalog.dart';
 import 'package:muslim_leveling/services/game_service.dart';
 import 'package:muslim_leveling/services/entitlement_service.dart';
 
