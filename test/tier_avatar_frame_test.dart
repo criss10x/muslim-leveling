@@ -4,6 +4,31 @@ import 'package:muslim_leveling/services/cosmetic_catalog.dart';
 import 'package:muslim_leveling/widgets/tier_avatar.dart';
 
 void main() {
+  test('tier presentation keeps free palettes and accents distinct', () {
+    final master = getTierVisualConfig('Master');
+    final epic = getTierVisualConfig('Epic');
+    final legend = getTierVisualConfig('Legend');
+    final mythic = getTierVisualConfig('Mythic');
+    final immortal = getTierVisualConfig('Mythic Immortal');
+
+    expect(master.primaryColor, isNot(mythic.primaryColor));
+    expect(epic.primaryColor, isNot(getTierVisualConfig('Mythic Glory').primaryColor));
+    expect(legend.primaryColor, isNot(immortal.primaryColor));
+    expect(getTierVisualConfig('Elite').hasPartialOuterArcs, isTrue);
+    expect(getTierVisualConfig('Mythic Honor').hasPartialOuterArcs, isTrue);
+    expect(getTierVisualConfig('Warrior').hasPartialOuterArcs, isFalse);
+    expect(immortal.hasFullOuterRing, isTrue);
+  });
+
+  test('tier thresholds retain all ten existing ranks', () {
+    expect(getTierName(1), 'Warrior');
+    expect(getTierName(10), 'Elite');
+    expect(getTierName(30), 'Grandmaster');
+    expect(getTierName(60), 'Legend');
+    expect(getTierName(80), 'Mythic');
+    expect(getTierName(95), 'Mythic Immortal');
+  });
+
   test('circle path fills the box and is round', () {
     final path = buildFramePath(FrameShape.circle, const Size(100, 100), 16);
     final b = path.getBounds();

@@ -47,10 +47,21 @@ Path buildFramePath(FrameShape shape, Size size, double radius) {
 //   Mythic Immortal — Full legendary: crown emblem + all effects active
 // ═══════════════════════════════════════════════════════════════
 
+enum TierFrameAccent {
+  none,
+  sapphire,
+  lavender,
+  cyan,
+  ultraviolet,
+  magenta,
+  obsidianOpal,
+}
+
 class TierVisualConfig {
   final String name;
   final Color primaryColor;
   final Color secondaryColor;
+  final TierFrameAccent accent;
   final double borderWidth;
   final bool hasCornerAccents;
   final bool hasGlow;
@@ -60,12 +71,15 @@ class TierVisualConfig {
   final bool hasDoubleRing;
   final bool hasSparkles;
   final bool hasCrownEmblem;
+  final bool hasPartialOuterArcs;
+  final bool hasFullOuterRing;
   final String? cornerEmblem;
 
   const TierVisualConfig({
     required this.name,
     required this.primaryColor,
     required this.secondaryColor,
+    this.accent = TierFrameAccent.none,
     required this.borderWidth,
     this.hasCornerAccents = false,
     this.hasGlow = false,
@@ -75,6 +89,8 @@ class TierVisualConfig {
     this.hasDoubleRing = false,
     this.hasSparkles = false,
     this.hasCrownEmblem = false,
+    this.hasPartialOuterArcs = false,
+    this.hasFullOuterRing = false,
     this.cornerEmblem,
   });
 
@@ -123,8 +139,10 @@ TierVisualConfig getTierVisualConfig(String tierName) {
         name: 'Elite',
         primaryColor: Color(0xFF3B82F6),
         secondaryColor: Color(0xFF06B6D4),
+        accent: TierFrameAccent.cyan,
         borderWidth: 3,
         hasCornerAccents: true,
+        hasPartialOuterArcs: true,
       );
     case 'Master':
       return const TierVisualConfig(
@@ -136,8 +154,9 @@ TierVisualConfig getTierVisualConfig(String tierName) {
     case 'Grandmaster':
       return const TierVisualConfig(
         name: 'Grandmaster',
-        primaryColor: Color(0xFFF59E0B),
-        secondaryColor: Color(0xFFFCD34D),
+        primaryColor: Color(0xFF2563EB),
+        secondaryColor: Color(0xFF60A5FA),
+        accent: TierFrameAccent.sapphire,
         borderWidth: 4,
         hasGlow: true,
       );
@@ -153,50 +172,59 @@ TierVisualConfig getTierVisualConfig(String tierName) {
     case 'Legend':
       return const TierVisualConfig(
         name: 'Legend',
-        primaryColor: Color(0xFFFFFFFF),
-        secondaryColor: Color(0xFFF59E0B),
+        primaryColor: Color(0xFFA78BFA),
+        secondaryColor: Color(0xFFE9D5FF),
+        accent: TierFrameAccent.lavender,
         borderWidth: 4,
         hasGlow: true,
         hasRotatingRing: true,
+        hasPartialOuterArcs: true,
       );
     case 'Mythic':
       return const TierVisualConfig(
         name: 'Mythic',
-        primaryColor: Color(0xFFDC2626),
-        secondaryColor: Color(0xFFF59E0B),
+        primaryColor: Color(0xFF06B6D4),
+        secondaryColor: Color(0xFF67E8F9),
+        accent: TierFrameAccent.cyan,
         borderWidth: 5,
         hasGlow: true,
         hasRotatingRing: true,
         hasParticles: true,
+        hasPartialOuterArcs: true,
       );
     case 'Mythic Honor':
       return const TierVisualConfig(
         name: 'Mythic Honor',
-        primaryColor: Color(0xFFF59E0B),
-        secondaryColor: Color(0xFFDC2626),
+        primaryColor: Color(0xFF7C3AED),
+        secondaryColor: Color(0xFFC084FC),
+        accent: TierFrameAccent.ultraviolet,
         borderWidth: 5,
         hasGlow: true,
         hasRotatingRing: true,
         hasParticles: true,
         hasDoubleRing: true,
+        hasPartialOuterArcs: true,
       );
     case 'Mythic Glory':
       return const TierVisualConfig(
         name: 'Mythic Glory',
-        primaryColor: Color(0xFFFFFFFF),
-        secondaryColor: Color(0xFFDC2626),
+        primaryColor: Color(0xFFDB2777),
+        secondaryColor: Color(0xFFF0ABFC),
+        accent: TierFrameAccent.magenta,
         borderWidth: 5,
         hasGlow: true,
         hasRotatingRing: true,
         hasParticles: true,
         hasDoubleRing: true,
         hasSparkles: true,
+        hasPartialOuterArcs: true,
       );
     case 'Mythic Immortal':
       return const TierVisualConfig(
         name: 'Mythic Immortal',
-        primaryColor: Color(0xFFF59E0B),
-        secondaryColor: Color(0xFFFFFFFF),
+        primaryColor: Color(0xFF111827),
+        secondaryColor: Color(0xFFA7F3D0),
+        accent: TierFrameAccent.obsidianOpal,
         borderWidth: 5,
         hasGlow: true,
         hasPulsingGlow: true,
@@ -205,6 +233,7 @@ TierVisualConfig getTierVisualConfig(String tierName) {
         hasDoubleRing: true,
         hasSparkles: true,
         hasCrownEmblem: true,
+        hasFullOuterRing: true,
         cornerEmblem: '👑',
       );
     default:
