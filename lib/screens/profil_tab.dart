@@ -661,8 +661,10 @@ class _ProfilTabState extends State<ProfilTab> {
                 children: [
                   TierProfileAvatar(
                     profileImagePath: _avatarPath,
+                    displayName: _nickname,
                     tierName: getTierName(_level),
                     sizeDp: 72,
+                    isPro: isPro,
                     equippedFrameId: frameId,
                     equippedAuraId: auraId,
                   ),

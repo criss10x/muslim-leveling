@@ -105,6 +105,18 @@ void main() {
     expect(find.text('AF'), findsOneWidget);
   });
 
+  testWidgets('Epic Pro avatar keeps the Epic frame and renders Pro finish',
+      (tester) async {
+    await tester.pumpWidget(const Directionality(
+      textDirection: TextDirection.ltr,
+      child: TierProfileAvatar(
+        tierName: 'Epic', displayName: 'Ahmad Fikri', isPro: true, sizeDp: 88,
+      ),
+    ));
+    expect(find.bySemanticsLabel('Epic achievement frame'), findsOneWidget);
+    expect(find.bySemanticsLabel('Pro signature finish'), findsOneWidget);
+  });
+
   testWidgets('compact avatar stays static for Mythic Immortal', (tester) async {
     await tester.pumpWidget(const Directionality(
       textDirection: TextDirection.ltr,

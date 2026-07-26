@@ -290,6 +290,7 @@ class TierProfileAvatar extends StatefulWidget {
   final VoidCallback? onTap;
   final String equippedFrameId;
   final String equippedAuraId;
+  final bool isPro;
 
   const TierProfileAvatar({
     super.key,
@@ -301,6 +302,7 @@ class TierProfileAvatar extends StatefulWidget {
     this.onTap,
     this.equippedFrameId = 'frame_default',
     this.equippedAuraId = 'aura_none',
+    this.isPro = false,
   });
 
   @override
@@ -373,6 +375,15 @@ class _TierProfileAvatarState extends State<TierProfileAvatar>
         child: Stack(
           alignment: Alignment.center,
           children: [
+            // Pro membership supports the earned tier rather than replacing it.
+            if (widget.isPro)
+              IgnorePointer(
+                child: CustomPaint(
+                  size: Size(extraSize, extraSize),
+                  painter: _ProHaloPainter(avatarInset: 12, avatarSize: size),
+                ),
+              ),
+
             // Layer 1: Outer glow (Grandmaster+)
             if (config.hasGlow)
               _buildGlowLayer(config, size, cornerRadius),
@@ -394,17 +405,37 @@ class _TierProfileAvatarState extends State<TierProfileAvatar>
                 ),
               ),
 
-            // Layer 2: Main avatar with a static earned-tier frame.
-            _buildMainAvatar(config, size, cornerRadius),
-
-            // Layer 3: Tier-specific static accent.
-            IgnorePointer(
-              child: CustomPaint(
-                key: const ValueKey('tier-avatar-accent-full-outer'),
-                size: Size(extraSize, extraSize),
-                painter: _TierAccentPainter(config: config, avatarInset: 12),
+            // Layer 2: Earned tier frame and accent stay central for Pro users.
+            Semantics(
+              container: true,
+              label: '${config.name} achievement frame',
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  _buildMainAvatar(config, size, cornerRadius),
+                  IgnorePointer(
+                    child: CustomPaint(
+                      key: const ValueKey('tier-avatar-accent-full-outer'),
+                      size: Size(extraSize, extraSize),
+                      painter: _TierAccentPainter(config: config, avatarInset: 12),
+                    ),
+                  ),
+                ],
               ),
             ),
+
+            // Layer 3: restrained Pro signature outside the earned frame.
+            if (widget.isPro)
+              Semantics(
+                container: true,
+                label: 'Pro signature finish',
+                child: IgnorePointer(
+                  child: CustomPaint(
+                    size: Size(extraSize, extraSize),
+                    painter: const _ProFinishPainter(),
+                  ),
+                ),
+              ),
 
             // Layer 4: Edit badge
             if (widget.showEditBadge)
@@ -661,6 +692,76 @@ class SmallTierAvatar extends StatelessWidget {
 // ═══════════════════════════════════════════════════════════════
 // CUSTOM PAINTERS — Canvas effects for tiers
 // ═══════════════════════════════════════════════════════════════
+
+class _ProHaloPainter extends CustomPainter {
+  final double avatarInset;
+  final double avatarSize;
+
+  _ProHaloPainter({required this.avatarInset, required this.avatarSize});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = const Color(0xFF064E3B).withValues(alpha: 0.32)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 12);
+    canvas.drawCircle(
+      Offset(avatarInset + avatarSize / 2, avatarInset + avatarSize / 2),
+      avatarSize / 2 + 3,
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _ProHaloPainter oldDelegate) =>
+      oldDelegate.avatarInset != avatarInset || oldDelegate.avatarSize != avatarSize;
+}
+
+class _ProFinishPainter extends CustomPainter {
+  const _ProFinishPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    const antiqueGold = Color(0xFFD4AF37);
+    const deepTeal = Color(0xFF064E3B);
+    final outer = (Offset.zero & size).deflate(3);
+    final arcPaint = Paint()
+      ..color = antiqueGold.withValues(alpha: 0.82)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.5
+      ..strokeCap = StrokeCap.round;
+    canvas.drawArc(outer, 198 * pi / 180, 58 * pi / 180, false, arcPaint);
+    canvas.drawArc(outer, 342 * pi / 180, 58 * pi / 180, false, arcPaint);
+
+    final crestCenter = Offset(size.width - 10, 10);
+    canvas.drawCircle(crestCenter, 7, Paint()..color = deepTeal);
+    canvas.drawCircle(
+      crestCenter,
+      7,
+      Paint()
+        ..color = antiqueGold
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1,
+    );
+    final crestPaint = Paint()
+      ..color = antiqueGold
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.25
+      ..strokeCap = StrokeCap.round;
+    canvas.drawLine(
+      Offset(crestCenter.dx - 3, crestCenter.dy),
+      Offset(crestCenter.dx - 0.5, crestCenter.dy + 2.5),
+      crestPaint,
+    );
+    canvas.drawLine(
+      Offset(crestCenter.dx - 0.5, crestCenter.dy + 2.5),
+      Offset(crestCenter.dx + 3.5, crestCenter.dy - 2.5),
+      crestPaint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _ProFinishPainter oldDelegate) => false;
+}
 
 class _TierAccentPainter extends CustomPainter {
   final TierVisualConfig config;
