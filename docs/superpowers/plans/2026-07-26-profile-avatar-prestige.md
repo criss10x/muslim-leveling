@@ -41,7 +41,7 @@ Introduce an exported presentation enum and configuration fields in
 
 ```dart
 enum TierFrameAccent {
-  none,
+  fullThinRing,
   doubleArc,
   diamond,
   facetedHex,
@@ -66,7 +66,7 @@ Use this approved mapping:
 
 | Tier | Primary / secondary role | Accent | Outer treatment |
 | --- | --- | --- | --- |
-| Warrior | amethyst | none | none |
+| Warrior | amethyst | `fullThinRing` | none |
 | Elite | sky azure | `doubleArc` | partial arcs |
 | Master | jade green | `diamond` | none |
 | Grandmaster | royal sapphire | `facetedHex` | none |
