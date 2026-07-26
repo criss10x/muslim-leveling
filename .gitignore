@@ -55,6 +55,9 @@ apk-output/
 app/build/
 android/app/build/
 
+# Local Git worktrees
+.worktrees/
+
 # Env / secret screenshots (never commit)
 .env
 .env.*
