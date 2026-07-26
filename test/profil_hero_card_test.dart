@@ -6,7 +6,8 @@ import 'package:muslim_leveling/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  testWidgets('hero edit action is accessible', (tester) async {
+  testWidgets('hero exposes tier identity without reducing edit target',
+      (tester) async {
     GoogleFonts.config.allowRuntimeFetching = false;
     SharedPreferences.setMockInitialValues({
       'nickname': 'Pejuang',
@@ -23,9 +24,8 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
+    expect(find.bySemanticsLabel('Profile hero — Warrior'), findsOneWidget);
     final edit = find.byTooltip('Edit profil');
-    expect(edit, findsOneWidget);
-    expect(tester.getSize(edit).width, greaterThanOrEqualTo(44));
-    expect(tester.getSize(edit).height, greaterThanOrEqualTo(44));
+    expect(tester.getSize(edit).shortestSide, greaterThanOrEqualTo(44));
   });
 }

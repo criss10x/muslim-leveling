@@ -621,31 +621,42 @@ class _ProfilTabState extends State<ProfilTab> {
     final auraId = CosmeticService.resolveSlot(state, CosmeticSlot.aura, isPro: isPro);
     final titleId = CosmeticService.resolveSlot(state, CosmeticSlot.title, isPro: isPro);
     final equippedTitle = CosmeticCatalog.byId(titleId)?.titleText ?? '';
+    final tier = getTierVisualConfig(getTierName(_level));
 
     // Solid raised hero (same language as Home) — GlassPanel alpha muddies on pure black.
     final light = isLightTheme;
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(AppRadius.xl),
-        boxShadow: light
-            ? null
-            : [
-                BoxShadow(
-                  color: AppColors.primary.withValues(alpha: 0.22),
-                  blurRadius: 28,
-                  offset: const Offset(0, 10),
+    return Semantics(
+      container: true,
+      label: 'Profile hero — ${tier.name}',
+      child: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(AppRadius.xl),
+              boxShadow: light
+                  ? null
+                  : [
+                      BoxShadow(
+                        color: tier.inkPrimary.withValues(alpha: 0.22),
+                        blurRadius: 28,
+                        offset: const Offset(0, 10),
+                      ),
+                    ],
+            ),
+            child: Container(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(AppRadius.xl),
+                gradient: LinearGradient(
+                  colors: [
+                    tier.inkPrimary.withValues(alpha: light ? 0.08 : 0.14),
+                    tier.inkSecondary.withValues(alpha: light ? 0.08 : 0.12),
+                  ],
                 ),
-              ],
-      ),
-      child: Container(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(AppRadius.xl),
-          border: Border.all(
-            color: AppColors.primary.withValues(alpha: light ? 0.35 : 0.45),
-          ),
-        ),
+                border: Border.all(
+                  color: tier.inkPrimary.withValues(alpha: light ? 0.30 : 0.40),
+                ),
+              ),
         child: Column(
           children: [
             Container(
@@ -662,8 +673,8 @@ class _ProfilTabState extends State<ProfilTab> {
                   TierProfileAvatar(
                     profileImagePath: _avatarPath,
                     displayName: _nickname,
-                    tierName: getTierName(_level),
-                    sizeDp: 72,
+                    tierName: tier.name,
+                    sizeDp: 88,
                     isPro: isPro,
                     equippedFrameId: frameId,
                     equippedAuraId: auraId,
@@ -795,14 +806,14 @@ class _ProfilTabState extends State<ProfilTab> {
                       child: Container(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
-                            colors: [AppColors.primary, AppColors.primaryFixed],
+                            colors: [tier.inkPrimary, tier.inkSecondary],
                           ),
                           borderRadius: BorderRadius.circular(AppRadius.pill),
                           boxShadow: light
                               ? null
                               : [
                                   BoxShadow(
-                                    color: AppColors.primary.withValues(alpha: 0.5),
+                                    color: tier.inkPrimary.withValues(alpha: 0.5),
                                     blurRadius: 8,
                                     spreadRadius: 1,
                                   ),
@@ -866,6 +877,24 @@ class _ProfilTabState extends State<ProfilTab> {
             ),
           ],
         ),
+      ),
+      if (isPro)
+        Positioned.fill(
+          child: ExcludeSemantics(
+            child: IgnorePointer(
+              child: Container(
+                margin: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(AppRadius.lg),
+                  border: Border.all(
+                    color: AppColors.goldFill.withValues(alpha: 0.45),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
       ),
     );
   }
