@@ -28,11 +28,13 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Test
-        run: flutter test
-
+      # Analyze lebih dulu: selama 5 test lama masih merah, menaruh Test di
+      # depan membuat Analyze tidak pernah jalan sama sekali.
       - name: Analyze
         run: flutter analyze
+
+      - name: Test
+        run: flutter test
 
       - name: Build release APK (arm64-v8a)
         run: flutter build apk --release --target-platform android-arm64
