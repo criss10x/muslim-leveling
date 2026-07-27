@@ -33,7 +33,15 @@ Script `tool/fetch_quran.dart` menarik data dari **api.alquran.cloud**, edisi
 - `assets/quran/surahs.json` — metadata 114 surat:
   `{number, nameArabic, nameLatin, meaning, ayahCount, revelation}`
   di mana `revelation` bernilai `"Makkiyah"` atau `"Madaniyah"`.
-- `assets/quran/ayahs.json` — ~6.236 entri: `{surah, ayah, arabic, translation}`
+- `assets/quran/surah/{1..114}.json` — satu file per surat, berisi daftar
+  `{ayah, arabic, translation}`.
+
+Ayat sengaja dipecah per surat, bukan satu file gabungan berisi ~6.236 entri.
+Satu file besar (~5MB) harus di-parse seluruhnya di main thread dan membuat UI
+tersendat saat tab dibuka. Dengan pemecahan per surat, hanya surat yang sedang
+dibuka yang di-parse — Al-Fatihah hanya 7 ayat — sehingga tidak perlu isolate
+maupun indikator loading. `surahs.json` tetap satu file karena ukurannya kecil
+dan memang dibutuhkan seluruhnya untuk daftar surat.
 
 Output di-commit ke repo. Build CI tidak melakukan network call. Script hanya
 dijalankan ulang bila sumber data perlu diperbarui.
@@ -49,11 +57,25 @@ Contoh: QS 2:12 → `.../002012.mp3`
 (fetch beberapa ayat di awal/tengah/akhir mushaf). Bila tidak valid, ganti ke
 CDN Quran.com; hanya fungsi pembentuk URL yang berubah, sisanya tetap.
 
+### Cache audio
+
+Setiap ayat diputar lewat `LockCachingAudioSource`, bukan URL mentah. File
+disimpan saat pertama diputar dan pemutaran berikutnya memakai salinan lokal.
+
+Ini bukan optimasi opsional melainkan syarat agar fitur pengulangan masuk akal:
+tanpa cache, "ulangi ayat 10×" berarti mengunduh berkas yang sama sepuluh kali,
+dan mode ∞ mengunduhnya tanpa henti — boros kuota dan menimbulkan jeda buffering
+di setiap pengulangan. Efek sampingnya menguntungkan: surat yang pernah diputar
+bisa didengarkan kembali tanpa internet.
+
+Cache dibiarkan dikelola sistem (direktori cache aplikasi). Tidak ada UI
+manajemen cache di versi ini.
+
 ### Komponen baru
 
 | File | Tanggung jawab | Bergantung pada |
 |---|---|---|
-| `lib/services/quran_data.dart` | Load & cache JSON assets. Query daftar surat dan ayat per surat. Murni data. | assets |
+| `lib/services/quran_data.dart` | Load metadata surat sekali; load ayat per surat sesuai permintaan lalu simpan di memori. Murni data. | assets |
 | `lib/services/quran_audio_service.dart` | Bungkus `just_audio`. Bangun playlist dari range+repeat, kontrol transport, speed, loop. Expose stream ayat aktif. | `just_audio` |
 | `lib/services/quran_settings.dart` | Persist preferensi tampilan & speed. | `shared_preferences` |
 | `lib/screens/quran_tab.dart` | Daftar 114 surat + search. | `quran_data` |
@@ -69,11 +91,24 @@ repeat) dan mengeluarkan stream posisi. UI mengikat keduanya.
 
 ### Dependency baru (`pubspec.yaml`)
 
-- `just_audio` — pemutaran & playlist
+- `just_audio` — pemutaran, playlist, dan cache (`LockCachingAudioSource`)
 - `just_audio_background` — kontrol di notifikasi/lockscreen
 - `audio_session` — perilaku audio focus (jeda saat telepon masuk, dsb)
+- `scrollable_positioned_list` — auto-scroll akurat ke ayat aktif
+- `wakelock_plus` — menahan layar tetap menyala saat murrotal berjalan
 
-Tambahan asset: `assets/quran/` didaftarkan di `flutter/assets`.
+Tambahan asset: `assets/quran/` dan `assets/fonts/` didaftarkan di `pubspec.yaml`.
+
+### Font Arab
+
+Teks Uthmani di-render dengan font mushaf yang di-bundle (**Amiri Quran**,
+lisensi OFL), bukan font sistem. Font bawaan Android tidak merender tanda baca
+Uthmani dengan benar — harakat bertumpuk atau hilang, dan sebagian tanda waqaf
+tidak tampil. Font di-bundle di `assets/fonts/` dan dideklarasikan di
+`pubspec.yaml`, bukan lewat `google_fonts`, agar tidak bergantung pada unduhan
+saat runtime.
+
+Terjemahan Indonesia tetap memakai font teks yang sudah dipakai aplikasi.
 
 ## Perilaku UI
 
@@ -91,6 +126,18 @@ memulai pemutaran dari ayat tersebut.
 
 Ayat yang sedang berbunyi diberi highlight latar warna aksen, dan daftar
 auto-scroll agar ayat itu tetap terlihat saat pemutaran berpindah.
+
+Daftar dibangun dengan `ScrollablePositionedList`, bukan `ListView.builder`.
+Auto-scroll di sini harus menuju indeks ayat tertentu, sementara tinggi tiap
+kartu berbeda-beda — panjang ayat tidak seragam dan ukuran font bisa diubah
+pengguna. `ListView` biasa tidak bisa melompat ke indeks secara akurat tanpa
+mengetahui tinggi item sebelumnya, dan hasilnya meleset pada surat panjang
+seperti Al-Baqarah.
+
+Selama audio berjalan di reader, layar ditahan tetap menyala lewat
+`wakelock_plus`. Wakelock dilepas saat audio dijeda, dihentikan, atau reader
+ditutup — pengguna membaca sambil mendengarkan, dan layar yang mati sendiri di
+tengah bacaan mengganggu.
 
 App bar memuat ikon "Aa" yang membuka sheet setelan tampilan.
 
@@ -170,7 +217,8 @@ Setiap kali surat dibuka, range kembali ke penuh dan repeat kembali ke 1×.
 
 - Gagal memuat audio (koneksi mati/terputus): pemutaran berhenti, muncul
   snackbar "Gagal memuat audio, periksa koneksi" dengan aksi "Coba lagi". Teks
-  dan terjemahan tetap terbaca karena tersimpan offline.
+  dan terjemahan tetap terbaca karena tersimpan offline, dan ayat yang sudah
+  pernah diputar tetap berbunyi karena diambil dari cache.
 - Mengubah setelan saat audio berjalan: perubahan speed dan setelan tampilan
   tidak menghentikan audio. Perubahan range atau repeat count membangun ulang
   playlist dan memulai dari awal range.
@@ -185,8 +233,9 @@ Unit test, untuk logika yang tidak butuh device:
   urutan URL yang benar, termasuk kasus repeat 1, repeat N, dan mode ∞
 - Validasi range: "dari" > "sampai" terkoreksi otomatis; batas atas mengikuti
   jumlah ayat surat
-- Parsing `surahs.json` dan `ayahs.json`: jumlah surat 114, jumlah ayat sesuai
-  metadata tiap surat
+- Parsing `surahs.json` dan file surat: jumlah surat 114, dan jumlah ayat tiap
+  file cocok dengan `ayahCount` di metadata (menangkap data yang tidak lengkap
+  sejak awal, bukan saat pengguna membukanya)
 - Round-trip persistensi setelan
 
 Widget test: daftar surat merender dan memfilter; kartu ayat merespons
@@ -199,6 +248,10 @@ untuk membuktikan audio berbunyi tidak membuktikan apa pun yang berguna.
 
 - Integrasi EXP / leveling / target harian
 - Pilihan qari selain Alafasy
-- Cache audio untuk pemakaian offline
+- UI manajemen cache (lihat/hapus audio tersimpan); cache tetap ada, hanya
+  pengelolaannya yang diserahkan ke sistem
 - Bookmark, last-read position, tafsir, transliterasi
 - Pemutaran lintas surat
+
+Semuanya berguna, tetapi menambah permukaan sebelum fitur inti terbukti jalan.
+Kandidat untuk iterasi berikutnya.
