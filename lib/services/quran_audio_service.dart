@@ -70,6 +70,10 @@ class QuranAudioService extends ChangeNotifier {
           children: _queue
               // LockCachingAudioSource menyimpan berkas saat pertama diputar.
               // Tanpa ini, "ulangi 10x" mengunduh berkas yang sama 10 kali.
+              // Ditandai eksperimental oleh just_audio, tapi tidak ada
+              // penggantinya untuk cache-sambil-stream; bila kelak dihapus,
+              // hanya baris ini yang perlu diganti.
+              // ignore: experimental_member_use
               .map((a) => LockCachingAudioSource(Uri.parse(a.audioUrl)))
               .toList(),
         ),

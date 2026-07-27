@@ -1,5 +1,5 @@
-/// Logika murrotal yang tidak bergantung pada pemutar audio maupun widget,
-/// supaya seluruh aturan range dan pengulangan bisa diuji tanpa device.
+// Logika murrotal yang tidak bergantung pada pemutar audio maupun widget,
+// supaya seluruh aturan range dan pengulangan bisa diuji tanpa device.
 
 /// Menandai pengulangan tanpa batas. Dijalankan lewat LoopMode.one di player,
 /// bukan dengan membangun playlist tak-hingga.
