@@ -158,7 +158,9 @@ main().catch((e) => {
 node tool/fetch_quran.mjs
 ```
 
-Expected: 115 baris progres, diakhiri "Selesai. 114 surat tertulis ke assets/quran/". Butuh koneksi internet dan berlangsung sekitar 1–3 menit.
+Expected: 115 baris progres, diakhiri "Selesai. 114 surat tertulis ke assets/quran/". Butuh koneksi internet dan berlangsung sekitar 3–6 menit.
+
+**Catatan dari eksekusi sebenarnya:** api.alquran.cloud membatasi laju dan menjawab HTTP 429 sekitar surat ke-36 bila permintaan dikirim tanpa jeda. Versi script yang ter-commit karena itu memuat jeda 400 ms antar surat, mundur bertahap saat 429 atau 5xx, dan pelewatan surat yang berkasnya sudah utuh sehingga unduhan yang terputus bisa dilanjutkan tanpa mengulang dari awal. Rujuk `tool/fetch_quran.mjs` di repo sebagai sumber kebenaran, bukan cuplikan di Step 2.
 
 Verifikasi hasilnya tanpa Flutter:
 

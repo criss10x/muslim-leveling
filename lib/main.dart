@@ -12,6 +12,7 @@ import 'services/supabase_sync.dart';
 import 'services/auth_service.dart';
 import 'services/entitlement_service.dart';
 import 'services/game_service.dart';
+import 'services/quran_settings.dart';
 
 // ponytail: runApp dulu, init setelah — apapun error di init, UI tetap muncul
 void main() {
@@ -42,6 +43,10 @@ Future<void> _initAsync() async {
     } else {
       SupabaseSync.init(deviceId);
     }
+  } catch (_) {}
+
+  try {
+    await quranSettings.load();
   } catch (_) {}
 
   try {
