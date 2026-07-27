@@ -27,7 +27,6 @@ import '../../services/entitlement_service.dart';
 import 'achievements_screen.dart';
 import 'welcome_pejuang.dart';
 
-
 /// Profil Pejuang — hero header, stats grid, achievements, settings rows.
 class ProfilTab extends StatefulWidget {
   const ProfilTab({super.key});
@@ -100,9 +99,13 @@ class _ProfilTabState extends State<ProfilTab> {
           style: AppText.bodyLg(),
           decoration: InputDecoration(
             hintText: 'Nama panggilan',
-            hintStyle: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
+            hintStyle: AppText.bodyMd().copyWith(
+              color: AppColors.onSurfaceVariant,
+            ),
             enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: AppColors.primary.withValues(alpha: 0.4)),
+              borderSide: BorderSide(
+                color: AppColors.primary.withValues(alpha: 0.4),
+              ),
             ),
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: AppColors.primary),
@@ -112,11 +115,19 @@ class _ProfilTabState extends State<ProfilTab> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: Text('Batal', style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant)),
+            child: Text(
+              'Batal',
+              style: AppText.bodyMd().copyWith(
+                color: AppColors.onSurfaceVariant,
+              ),
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, ctrl.text.trim()),
-            child: Text('Simpan', style: AppText.bodyMd().copyWith(color: AppColors.primary)),
+            child: Text(
+              'Simpan',
+              style: AppText.bodyMd().copyWith(color: AppColors.primary),
+            ),
           ),
         ],
       ),
@@ -190,7 +201,10 @@ class _ProfilTabState extends State<ProfilTab> {
             if (_avatarPath != null)
               ListTile(
                 leading: Icon(Icons.delete, color: AppColors.error),
-                title: Text('Hapus Foto', style: AppText.bodyLg().copyWith(color: AppColors.error)),
+                title: Text(
+                  'Hapus Foto',
+                  style: AppText.bodyLg().copyWith(color: AppColors.error),
+                ),
                 onTap: () {
                   Navigator.pop(ctx);
                   _removeAvatar();
@@ -205,10 +219,15 @@ class _ProfilTabState extends State<ProfilTab> {
   void _showSettingSnackbar(String text) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(text, style: AppText.bodyMd().copyWith(color: AppColors.onSurface)),
+        content: Text(
+          text,
+          style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
+        ),
         backgroundColor: AppColors.surfaceContainerLowest,
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.md)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.md),
+        ),
       ),
     );
   }
@@ -219,15 +238,24 @@ class _ProfilTabState extends State<ProfilTab> {
     return s.length > 110 ? '${s.substring(0, 110)}…' : s;
   }
 
-  Future<void> _applyNotifSettings(bool enabled, String mode, String soundMode) async {
+  Future<void> _applyNotifSettings(
+    bool enabled,
+    String mode,
+    String soundMode,
+  ) async {
     try {
       if (enabled) {
-        await NotificationService.applyNotifSettings(mode: mode, soundMode: soundMode);
+        await NotificationService.applyNotifSettings(
+          mode: mode,
+          soundMode: soundMode,
+        );
         final n = await NotificationService.pendingCount();
         if (!mounted) return;
-        _showSettingSnackbar(n > 0
-            ? 'Pengingat adzan aktif: mode ${mode[0].toUpperCase()}${mode.substring(1)} — $n pengingat terjadwal 🔔'
-            : 'Mode tersimpan, tapi belum ada pengingat terjadwal — cek izin notifikasi & alarm di pengaturan HP.');
+        _showSettingSnackbar(
+          n > 0
+              ? 'Pengingat adzan aktif: mode ${mode[0].toUpperCase()}${mode.substring(1)} — $n pengingat terjadwal 🔔'
+              : 'Mode tersimpan, tapi belum ada pengingat terjadwal — cek izin notifikasi & alarm di pengaturan HP.',
+        );
       } else {
         _showSettingSnackbar('Pengingat adzan dimatikan');
       }
@@ -253,182 +281,300 @@ class _ProfilTabState extends State<ProfilTab> {
         builder: (ctx, setSt) {
           return AlertDialog(
             backgroundColor: AppColors.surfaceContainerHigh,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.xl)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppRadius.xl),
+            ),
             title: Row(
               children: [
-                Icon(Icons.notifications_active, color: AppColors.primary, size: 24),
+                Icon(
+                  Icons.notifications_active,
+                  color: AppColors.primary,
+                  size: 24,
+                ),
                 const SizedBox(width: AppSpacing.sm),
-                Text('Pengingat Adzan', style: AppText.bodyLg().copyWith(color: AppColors.onSurface)),
+                Text(
+                  'Pengingat Adzan',
+                  style: AppText.bodyLg().copyWith(color: AppColors.onSurface),
+                ),
               ],
             ),
             content: SingleChildScrollView(
               child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Toggle enable
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'Aktifkan pengingat',
-                        style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Toggle enable
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Aktifkan pengingat',
+                          style: AppText.bodyMd().copyWith(
+                            color: AppColors.onSurface,
+                          ),
+                        ),
                       ),
-                    ),
-                    Switch(
-                      value: enabled,
-                      onChanged: (v) async {
-                        try {
-                          if (v) {
-                            // Request permission first
-                            final granted = await NotificationService.requestPermission();
-                            if (!granted) {
-                              _showSettingSnackbar('Izin notifikasi ditolak. Aktifkan manual di pengaturan HP.');
-                              return;
-                            }
-                            // Tanpa izin "Alarm & pengingat" (Android 12+),
-                            // penjadwalan exact gagal total — minta dulu.
-                            final exactOk = await NotificationService.ensureExactAlarmPermission();
-                            if (!exactOk) {
-                              _showSettingSnackbar('Izin "Alarm & pengingat" belum aktif — pengingat bisa telat beberapa menit.');
-                            }
-                            // Battery optimization = penyebab #1 notif
-                            // terjadwal tak pernah muncul saat app ditutup.
-                            final battOk = await NotificationService.ensureBatteryUnrestricted();
-                            if (!battOk) {
-                              _showSettingSnackbar('Izinkan "Tanpa batasan baterai" supaya pengingat tetap bunyi saat app ditutup.');
-                            }
-                            await NotificationService.setRemindersEnabled(true);
-                            // Enable pertama kali belum punya timing tersimpan di
-                            // prefs — jadwalkan langsung dari jadwal kota tersimpan.
-                            final loc = await PrayerService.loadLocation();
-                            if (loc != null) {
-                              final j = await PrayerService.fetchSchedule(
-                                  cityId: loc.id, cityName: loc.name);
-                              if (j != null) {
-                                await NotificationService.scheduleAdhanReminders(loc.name, {
-                                  'subuh': j['subuh'] ?? '',
-                                  'dzuhur': j['dzuhur'] ?? '',
-                                  'ashar': j['ashar'] ?? '',
-                                  'maghrib': j['maghrib'] ?? '',
-                                  'isya': j['isya'] ?? '',
-                                });
+                      Switch(
+                        value: enabled,
+                        onChanged: (v) async {
+                          try {
+                            if (v) {
+                              // Request permission first
+                              final granted =
+                                  await NotificationService.requestPermission();
+                              if (!granted) {
+                                _showSettingSnackbar(
+                                  'Izin notifikasi ditolak. Aktifkan manual di pengaturan HP.',
+                                );
+                                return;
                               }
-                            }
-                            // Verifikasi hasil nyata di sistem, bukan cuma
-                            // status toggle.
-                            final n = await NotificationService.pendingCount();
-                            _showSettingSnackbar(n > 0
-                                ? '$n pengingat adzan terjadwal 🔔'
-                                : 'Gagal menjadwalkan pengingat — cek izin notifikasi & alarm di pengaturan HP.');
-                          } else {
-                            await NotificationService.setRemindersEnabled(false);
-                          }
-                          setSt(() => enabled = v);
-                        } catch (e, st) {
-                          // Jangan pernah diam — tampilkan error asli
-                          // (dipendekkan), full stacktrace ke Sentry.
-                          debugPrint('[Profil] gagal ubah pengingat: $e');
-                          await Sentry.captureException(e, stackTrace: st);
-                          _showSettingSnackbar('Gagal mengubah pengingat: ${_shortError(e)}');
-                        }
-                      },
-                      activeThumbColor: AppColors.primary,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.md),
-                // Mode selection
-                AnimatedOpacity(
-                  opacity: enabled ? 1.0 : 0.4,
-                  duration: const Duration(milliseconds: 200),
-                  child: AbsorbPointer(
-                    absorbing: !enabled,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Mode Pengingat', style: AppText.bodyMd().copyWith(
-                          color: AppColors.onSurfaceVariant,
-                          fontWeight: FontWeight.w600,
-                        )),
-                        const SizedBox(height: AppSpacing.sm),
-                        _notifModeOption('fokus', '🎯 Fokus', 'Hanya pengingat utama di waktu adzan', mode, (m) => setSt(() => mode = m)),
-                        _notifModeOption('seimbang', '⚖️ Seimbang', 'Diingetin 15 menit sebelum & saat adzan', mode, (m) => setSt(() => mode = m)),
-                        _notifModeOption('intensif', '🔥 Intensif', '30 menit, 5 menit sebelum & saat adzan', mode, (m) => setSt(() => mode = m)),
-                        const SizedBox(height: AppSpacing.md),
-                        Text('Suara Notifikasi', style: AppText.bodyMd().copyWith(
-                          color: AppColors.onSurfaceVariant,
-                          fontWeight: FontWeight.w600,
-                        )),
-                        const SizedBox(height: AppSpacing.sm),
-                        _notifModeOption('senyap', '🔕 Senyap', 'Hanya muncul notifikasi, tanpa suara', soundMode, (m) => setSt(() => soundMode = m)),
-                        _notifModeOption('suara', '🔔 Suara', 'Notifikasi dengan suara standar HP', soundMode, (m) => setSt(() => soundMode = m)),
-                        _notifModeOption('adzan', '🕌 Adzan', 'Suara adzan penuh saat masuk waktu sholat', soundMode, (m) => setSt(() => soundMode = m)),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.md),
-                // Test buttons
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextButton.icon(
-                        onPressed: enabled
-                            ? () async {
-                                // Tes = preview murni; tidak menyimpan/
-                                // reschedule (itu tugas Simpan). Dulu tombol
-                                // ini mati diam-diam saat reschedule throw.
-                                try {
-                                  await NotificationService.sendTestNotification(
-                                      mode, soundModeOverride: soundMode);
-                                } catch (e, st) {
-                                  debugPrint('[Profil] tes notif gagal: $e');
-                                  await Sentry.captureException(e, stackTrace: st);
-                                  _showSettingSnackbar('Tes notifikasi gagal: ${_shortError(e)}');
+                              // Tanpa izin "Alarm & pengingat" (Android 12+),
+                              // penjadwalan exact gagal total — minta dulu.
+                              final exactOk =
+                                  await NotificationService.ensureExactAlarmPermission();
+                              if (!exactOk) {
+                                _showSettingSnackbar(
+                                  'Izin "Alarm & pengingat" belum aktif — pengingat bisa telat beberapa menit.',
+                                );
+                              }
+                              // Battery optimization = penyebab #1 notif
+                              // terjadwal tak pernah muncul saat app ditutup.
+                              final battOk =
+                                  await NotificationService.ensureBatteryUnrestricted();
+                              if (!battOk) {
+                                _showSettingSnackbar(
+                                  'Izinkan "Tanpa batasan baterai" supaya pengingat tetap bunyi saat app ditutup.',
+                                );
+                              }
+                              await NotificationService.setRemindersEnabled(
+                                true,
+                              );
+                              // Enable pertama kali belum punya timing tersimpan di
+                              // prefs — jadwalkan langsung dari jadwal kota tersimpan.
+                              final loc = await PrayerService.loadLocation();
+                              if (loc != null) {
+                                final j = await PrayerService.fetchSchedule(
+                                  cityId: loc.id,
+                                  cityName: loc.name,
+                                );
+                                if (j != null) {
+                                  await NotificationService.scheduleAdhanReminders(
+                                    loc.name,
+                                    {
+                                      'subuh': j['subuh'] ?? '',
+                                      'dzuhur': j['dzuhur'] ?? '',
+                                      'ashar': j['ashar'] ?? '',
+                                      'maghrib': j['maghrib'] ?? '',
+                                      'isya': j['isya'] ?? '',
+                                    },
+                                  );
                                 }
                               }
-                            : null,
-                        icon: Icon(Icons.send, size: 16, color: enabled ? AppColors.primary : AppColors.onSurfaceVariant),
-                        label: Text('Tes Notifikasi', style: AppText.bodyMd().copyWith(
-                          color: enabled ? AppColors.primary : AppColors.onSurfaceVariant,
-                        )),
+                              // Verifikasi hasil nyata di sistem, bukan cuma
+                              // status toggle.
+                              final n =
+                                  await NotificationService.pendingCount();
+                              _showSettingSnackbar(
+                                n > 0
+                                    ? '$n pengingat adzan terjadwal 🔔'
+                                    : 'Gagal menjadwalkan pengingat — cek izin notifikasi & alarm di pengaturan HP.',
+                              );
+                            } else {
+                              await NotificationService.setRemindersEnabled(
+                                false,
+                              );
+                            }
+                            setSt(() => enabled = v);
+                          } catch (e, st) {
+                            // Jangan pernah diam — tampilkan error asli
+                            // (dipendekkan), full stacktrace ke Sentry.
+                            debugPrint('[Profil] gagal ubah pengingat: $e');
+                            await Sentry.captureException(e, stackTrace: st);
+                            _showSettingSnackbar(
+                              'Gagal mengubah pengingat: ${_shortError(e)}',
+                            );
+                          }
+                        },
+                        activeThumbColor: AppColors.primary,
                       ),
-                    ),
-                    Expanded(
-                      child: TextButton.icon(
-                        onPressed: enabled
-                            ? () async {
-                                await NotificationService.sendTestAdzanSound();
-                              }
-                            : null,
-                        icon: Icon(Icons.volume_up, size: 16, color: enabled ? AppColors.secondaryFixed : AppColors.onSurfaceVariant),
-                        label: Text('Tes Adzan', style: AppText.bodyMd().copyWith(
-                          color: enabled ? AppColors.secondaryFixed : AppColors.onSurfaceVariant,
-                        )),
-                      ),
-                    ),
-                  ],
-                ),
-                // Jalan pintas ke pengaturan channel notifikasi Android —
-                // suara channel cuma bisa diubah user lewat sistem.
-                SizedBox(
-                  width: double.infinity,
-                  child: TextButton.icon(
-                    onPressed: () => NotificationService.openChannelSettings(),
-                    icon: Icon(Icons.settings, size: 16, color: AppColors.onSurfaceVariant),
-                    label: Text('Pengaturan Notifikasi Android', style: AppText.bodyMd().copyWith(
-                      color: AppColors.onSurfaceVariant,
-                    )),
+                    ],
                   ),
-                ),
-              ],
+                  const SizedBox(height: AppSpacing.md),
+                  // Mode selection
+                  AnimatedOpacity(
+                    opacity: enabled ? 1.0 : 0.4,
+                    duration: const Duration(milliseconds: 200),
+                    child: AbsorbPointer(
+                      absorbing: !enabled,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Mode Pengingat',
+                            style: AppText.bodyMd().copyWith(
+                              color: AppColors.onSurfaceVariant,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: AppSpacing.sm),
+                          _notifModeOption(
+                            'fokus',
+                            '🎯 Fokus',
+                            'Hanya pengingat utama di waktu adzan',
+                            mode,
+                            (m) => setSt(() => mode = m),
+                          ),
+                          _notifModeOption(
+                            'seimbang',
+                            '⚖️ Seimbang',
+                            'Diingetin 15 menit sebelum & saat adzan',
+                            mode,
+                            (m) => setSt(() => mode = m),
+                          ),
+                          _notifModeOption(
+                            'intensif',
+                            '🔥 Intensif',
+                            '30 menit, 5 menit sebelum & saat adzan',
+                            mode,
+                            (m) => setSt(() => mode = m),
+                          ),
+                          const SizedBox(height: AppSpacing.md),
+                          Text(
+                            'Suara Notifikasi',
+                            style: AppText.bodyMd().copyWith(
+                              color: AppColors.onSurfaceVariant,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: AppSpacing.sm),
+                          _notifModeOption(
+                            'senyap',
+                            '🔕 Senyap',
+                            'Hanya muncul notifikasi, tanpa suara',
+                            soundMode,
+                            (m) => setSt(() => soundMode = m),
+                          ),
+                          _notifModeOption(
+                            'suara',
+                            '🔔 Suara',
+                            'Notifikasi dengan suara standar HP',
+                            soundMode,
+                            (m) => setSt(() => soundMode = m),
+                          ),
+                          _notifModeOption(
+                            'adzan',
+                            '🕌 Adzan',
+                            'Suara adzan penuh saat masuk waktu sholat',
+                            soundMode,
+                            (m) => setSt(() => soundMode = m),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  // Test buttons
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextButton.icon(
+                          onPressed: enabled
+                              ? () async {
+                                  // Tes = preview murni; tidak menyimpan/
+                                  // reschedule (itu tugas Simpan). Dulu tombol
+                                  // ini mati diam-diam saat reschedule throw.
+                                  try {
+                                    await NotificationService.sendTestNotification(
+                                      mode,
+                                      soundModeOverride: soundMode,
+                                    );
+                                  } catch (e, st) {
+                                    debugPrint('[Profil] tes notif gagal: $e');
+                                    await Sentry.captureException(
+                                      e,
+                                      stackTrace: st,
+                                    );
+                                    _showSettingSnackbar(
+                                      'Tes notifikasi gagal: ${_shortError(e)}',
+                                    );
+                                  }
+                                }
+                              : null,
+                          icon: Icon(
+                            Icons.send,
+                            size: 16,
+                            color: enabled
+                                ? AppColors.primary
+                                : AppColors.onSurfaceVariant,
+                          ),
+                          label: Text(
+                            'Tes Notifikasi',
+                            style: AppText.bodyMd().copyWith(
+                              color: enabled
+                                  ? AppColors.primary
+                                  : AppColors.onSurfaceVariant,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: TextButton.icon(
+                          onPressed: enabled
+                              ? () async {
+                                  await NotificationService.sendTestAdzanSound();
+                                }
+                              : null,
+                          icon: Icon(
+                            Icons.volume_up,
+                            size: 16,
+                            color: enabled
+                                ? AppColors.secondaryFixed
+                                : AppColors.onSurfaceVariant,
+                          ),
+                          label: Text(
+                            'Tes Adzan',
+                            style: AppText.bodyMd().copyWith(
+                              color: enabled
+                                  ? AppColors.secondaryFixed
+                                  : AppColors.onSurfaceVariant,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  // Jalan pintas ke pengaturan channel notifikasi Android —
+                  // suara channel cuma bisa diubah user lewat sistem.
+                  SizedBox(
+                    width: double.infinity,
+                    child: TextButton.icon(
+                      onPressed: () =>
+                          NotificationService.openChannelSettings(),
+                      icon: Icon(
+                        Icons.settings,
+                        size: 16,
+                        color: AppColors.onSurfaceVariant,
+                      ),
+                      label: Text(
+                        'Pengaturan Notifikasi Android',
+                        style: AppText.bodyMd().copyWith(
+                          color: AppColors.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx),
-                child: Text('Tutup', style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant)),
+                child: Text(
+                  'Tutup',
+                  style: AppText.bodyMd().copyWith(
+                    color: AppColors.onSurfaceVariant,
+                  ),
+                ),
               ),
               FilledButton(
                 onPressed: () {
@@ -438,8 +584,13 @@ class _ProfilTabState extends State<ProfilTab> {
                   Navigator.pop(ctx);
                   _applyNotifSettings(enabled, mode, soundMode);
                 },
-                style: FilledButton.styleFrom(backgroundColor: AppColors.primary),
-                child: Text('Simpan', style: AppText.bodyMd().copyWith(color: AppColors.onPrimary)),
+                style: FilledButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                ),
+                child: Text(
+                  'Simpan',
+                  style: AppText.bodyMd().copyWith(color: AppColors.onPrimary),
+                ),
               ),
             ],
           );
@@ -448,22 +599,33 @@ class _ProfilTabState extends State<ProfilTab> {
     );
   }
 
-  Widget _notifModeOption(String value, String label, String desc, String current, ValueChanged<String> onTap) {
+  Widget _notifModeOption(
+    String value,
+    String label,
+    String desc,
+    String current,
+    ValueChanged<String> onTap,
+  ) {
     final selected = value == current;
     return InkWell(
       onTap: () => onTap(value),
       borderRadius: BorderRadius.circular(AppRadius.md),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.sm),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.sm,
+          vertical: AppSpacing.sm,
+        ),
         decoration: BoxDecoration(
           color: selected
               ? (isLightTheme
-                  ? AppColors.primaryContainer
-                  : AppColors.primaryContainer.withValues(alpha: 0.15))
+                    ? AppColors.primaryContainer
+                    : AppColors.primaryContainer.withValues(alpha: 0.15))
               : Colors.transparent,
           borderRadius: BorderRadius.circular(AppRadius.md),
           border: Border.all(
-            color: selected ? AppColors.primary.withValues(alpha: 0.5) : AppColors.outlineVariant.withValues(alpha: 0.3),
+            color: selected
+                ? AppColors.primary.withValues(alpha: 0.5)
+                : AppColors.outlineVariant.withValues(alpha: 0.3),
           ),
         ),
         child: Row(
@@ -478,14 +640,22 @@ class _ProfilTabState extends State<ProfilTab> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(label, style: AppText.bodyMd().copyWith(
-                    color: AppColors.onSurface,
-                    fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
-                  )),
-                  Text(desc, style: AppText.bodyMd().copyWith(
-                    color: AppColors.onSurfaceVariant,
-                    fontSize: 12,
-                  )),
+                  Text(
+                    label,
+                    style: AppText.bodyMd().copyWith(
+                      color: AppColors.onSurface,
+                      fontWeight: selected
+                          ? FontWeight.w600
+                          : FontWeight.normal,
+                    ),
+                  ),
+                  Text(
+                    desc,
+                    style: AppText.bodyMd().copyWith(
+                      color: AppColors.onSurfaceVariant,
+                      fontSize: 12,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -509,7 +679,10 @@ class _ProfilTabState extends State<ProfilTab> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: Text('Oke', style: AppText.bodyMd().copyWith(color: AppColors.primary)),
+            child: Text(
+              'Oke',
+              style: AppText.bodyMd().copyWith(color: AppColors.primary),
+            ),
           ),
         ],
       ),
@@ -526,15 +699,26 @@ class _ProfilTabState extends State<ProfilTab> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Muslim Leveling', style: AppText.headlineMd().copyWith(color: AppColors.primary)),
+            Text(
+              'Muslim Leveling',
+              style: AppText.headlineMd().copyWith(color: AppColors.primary),
+            ),
             const SizedBox(height: 8),
-            Text('Versi 1.0.0\nDibangun untuk membantu menjaga ibadah harian dengan gamifikasi.', style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant)),
+            Text(
+              'Versi 1.0.0\nDibangun untuk membantu menjaga ibadah harian dengan gamifikasi.',
+              style: AppText.bodyMd().copyWith(
+                color: AppColors.onSurfaceVariant,
+              ),
+            ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: Text('Tutup', style: AppText.bodyMd().copyWith(color: AppColors.primary)),
+            child: Text(
+              'Tutup',
+              style: AppText.bodyMd().copyWith(color: AppColors.primary),
+            ),
           ),
         ],
       ),
@@ -547,15 +731,26 @@ class _ProfilTabState extends State<ProfilTab> {
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.surfaceContainerHigh,
         title: Text('Keluar', style: AppText.titleLg()),
-        content: Text('Hapus data lokal dan kembali ke layar awal?', style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant)),
+        content: Text(
+          'Hapus data lokal dan kembali ke layar awal?',
+          style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text('Batal', style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant)),
+            child: Text(
+              'Batal',
+              style: AppText.bodyMd().copyWith(
+                color: AppColors.onSurfaceVariant,
+              ),
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text('Keluar', style: AppText.bodyMd().copyWith(color: AppColors.error)),
+            child: Text(
+              'Keluar',
+              style: AppText.bodyMd().copyWith(color: AppColors.error),
+            ),
           ),
         ],
       ),
@@ -581,14 +776,16 @@ class _ProfilTabState extends State<ProfilTab> {
           color: AppColors.primary,
           backgroundColor: AppColors.surfaceContainerHigh,
           child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md).copyWith(top: AppSpacing.md, bottom: 100),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.md,
+            ).copyWith(top: AppSpacing.md, bottom: 100),
             children: [
               _hero(context),
               const SizedBox(height: AppSpacing.lg),
               _cosmeticLocker(),
               const SizedBox(height: AppSpacing.lg),
               _stats(),
-              const SizedBox(height: AppSpacing.md),
+              const SizedBox(height: AppSpacing.sm),
               _haidModeToggle(),
               const SizedBox(height: AppSpacing.md),
               _prayerStreaks(),
@@ -614,9 +811,21 @@ class _ProfilTabState extends State<ProfilTab> {
     // Locker taps and Pro toggles (this state listens to GameService.stateVersion
     // and EntitlementService.proStatus directly and calls setState on change).
     final isPro = EntitlementService.isPro;
-    final frameId = CosmeticService.resolveSlot(state, CosmeticSlot.frame, isPro: isPro);
-    final auraId = CosmeticService.resolveSlot(state, CosmeticSlot.aura, isPro: isPro);
-    final titleId = CosmeticService.resolveSlot(state, CosmeticSlot.title, isPro: isPro);
+    final frameId = CosmeticService.resolveSlot(
+      state,
+      CosmeticSlot.frame,
+      isPro: isPro,
+    );
+    final auraId = CosmeticService.resolveSlot(
+      state,
+      CosmeticSlot.aura,
+      isPro: isPro,
+    );
+    final titleId = CosmeticService.resolveSlot(
+      state,
+      CosmeticSlot.title,
+      isPro: isPro,
+    );
     final equippedTitle = CosmeticCatalog.byId(titleId)?.titleText ?? '';
     final tier = getTierVisualConfig(getTierName(state.level));
 
@@ -624,6 +833,7 @@ class _ProfilTabState extends State<ProfilTab> {
     final light = isLightTheme;
     return Semantics(
       container: true,
+      explicitChildNodes: true,
       label: 'Profile hero — ${tier.name}',
       child: Stack(
         children: [
@@ -655,224 +865,285 @@ class _ProfilTabState extends State<ProfilTab> {
                 ),
               ),
               child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(AppSpacing.sm),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceContainer,
-                borderRadius: BorderRadius.circular(AppRadius.lg),
-                border: Border.all(
-                  color: AppColors.outlineVariant.withValues(alpha: light ? 0.5 : 0.35),
-                ),
-              ),
-              child: Row(
                 children: [
-                  TierProfileAvatar(
-                    profileImagePath: _avatarPath,
-                    displayName: _nickname,
-                    tierName: tier.name,
-                    sizeDp: 88,
-                    isPro: isPro,
-                    equippedFrameId: frameId,
-                    equippedAuraId: auraId,
-                  ),
-                  const SizedBox(width: AppSpacing.md),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  Container(
+                    padding: const EdgeInsets.all(AppSpacing.sm),
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceContainer,
+                      borderRadius: BorderRadius.circular(AppRadius.lg),
+                      border: Border.all(
+                        color: AppColors.outlineVariant.withValues(
+                          alpha: light ? 0.5 : 0.35,
+                        ),
+                      ),
+                    ),
+                    child: Row(
                       children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                _nickname,
-                                style: AppText.headlineMd().copyWith(fontSize: 22),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            const SizedBox(width: AppSpacing.xs),
-                            IconButton(
-                              onPressed: _showEditOptions,
-                              tooltip: 'Edit profil',
-                              constraints: const BoxConstraints(
-                                minWidth: 44,
-                                minHeight: 44,
-                              ),
-                              padding: EdgeInsets.zero,
-                              visualDensity: VisualDensity.compact,
-                              icon: Icon(
-                                Icons.edit,
-                                color: AppColors.primary,
-                                size: 20,
-                              ),
-                            ),
-                          ],
+                        TierProfileAvatar(
+                          profileImagePath: _avatarPath,
+                          displayName: _nickname,
+                          tierName: tier.name,
+                          sizeDp: 88,
+                          isPro: isPro,
+                          equippedFrameId: frameId,
+                          equippedAuraId: auraId,
                         ),
-                        const SizedBox(height: AppSpacing.xs),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: AppColors.secondaryFixed.withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(AppRadius.pill),
-                            border: Border.all(color: AppColors.secondaryFixed.withValues(alpha: 0.35)),
-                          ),
-                          child: Text(
-                            rankTitle,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppText.labelCaps().copyWith(
-                              color: AppColors.secondaryFixed,
-                              fontSize: 10,
-                            ),
-                          ),
-                        ),
-                        if (equippedTitle.isNotEmpty) ...[
-                          const SizedBox(height: AppSpacing.xs),
-                          Text(
-                            equippedTitle,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppText.labelCaps().copyWith(
-                              color: AppColors.tertiary,
-                              fontSize: 10,
-                            ),
-                          ),
-                        ],
-                        const SizedBox(height: AppSpacing.xs),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(AppRadius.pill),
-                            border: Border.all(color: AppColors.primary.withValues(alpha: 0.35)),
-                          ),
-                          child: Text(
-                            'LVL ${state.level}',
-                            style: AppText.labelCapsSm().copyWith(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 0.5,
-                            ),
+                        const SizedBox(width: AppSpacing.md),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      _nickname,
+                                      style: AppText.headlineMd().copyWith(
+                                        fontSize: 22,
+                                        color: AppColors.onSurface,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  const SizedBox(width: AppSpacing.xs),
+                                  IconButton(
+                                    onPressed: _showEditOptions,
+                                    tooltip: 'Edit profil',
+                                    constraints: const BoxConstraints(
+                                      minWidth: 44,
+                                      minHeight: 44,
+                                    ),
+                                    padding: EdgeInsets.zero,
+                                    icon: Icon(
+                                      Icons.edit,
+                                      color: AppColors.primary,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: AppSpacing.xs),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.secondaryFixed.withValues(
+                                    alpha: 0.12,
+                                  ),
+                                  borderRadius: BorderRadius.circular(
+                                    AppRadius.pill,
+                                  ),
+                                  border: Border.all(
+                                    color: AppColors.secondaryFixed.withValues(
+                                      alpha: 0.35,
+                                    ),
+                                  ),
+                                ),
+                                child: Text(
+                                  rankTitle,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppText.labelCaps().copyWith(
+                                    color: AppColors.secondaryFixed,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              ),
+                              if (equippedTitle.isNotEmpty) ...[
+                                const SizedBox(height: AppSpacing.xs),
+                                Text(
+                                  equippedTitle,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppText.labelCaps().copyWith(
+                                    color: AppColors.tertiary,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              ],
+                              const SizedBox(height: AppSpacing.xs),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary.withValues(
+                                    alpha: 0.12,
+                                  ),
+                                  borderRadius: BorderRadius.circular(
+                                    AppRadius.pill,
+                                  ),
+                                  border: Border.all(
+                                    color: AppColors.primary.withValues(
+                                      alpha: 0.35,
+                                    ),
+                                  ),
+                                ),
+                                child: Text(
+                                  'LVL ${state.level}',
+                                  style: AppText.labelCapsSm().copyWith(
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 0.5,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(height: AppSpacing.md),
-            // XP Progress bar
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'XP Progress',
-                      style: AppText.labelCaps().copyWith(
-                        color: AppColors.onSurfaceVariant,
-                        fontSize: 10,
-                      ),
-                    ),
-                    Text(
-                      '${levelInfo.xpInCurrentLevel}/${levelInfo.xpNeededForNextLevel} XP',
-                      style: AppText.bodyMd().copyWith(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.xs),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(AppRadius.pill),
-                  child: Container(
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: AppColors.surfaceContainerHigh,
-                      borderRadius: BorderRadius.circular(AppRadius.pill),
-                    ),
-                    child: FractionallySizedBox(
-                      alignment: Alignment.centerLeft,
-                      widthFactor: levelInfo.progress.clamp(0.0, 1.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [tier.inkPrimary, tier.inkSecondary],
-                          ),
-                          borderRadius: BorderRadius.circular(AppRadius.pill),
-                          boxShadow: light
-                              ? null
-                              : [
-                                  BoxShadow(
-                                    color: tier.inkPrimary.withValues(alpha: 0.5),
-                                    blurRadius: 8,
-                                    spreadRadius: 1,
-                                  ),
-                                ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.md),
-            Divider(color: AppColors.outlineVariant),
-            const SizedBox(height: AppSpacing.md),
-            // Location row — editable
-            InkWell(
-              onTap: _editLocation,
-              borderRadius: BorderRadius.circular(AppRadius.md),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs, horizontal: AppSpacing.sm),
-                child: Row(
-                  children: [
-                    Icon(Icons.location_on, color: AppColors.primary, size: 18),
-                    const SizedBox(width: AppSpacing.sm),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                  const SizedBox(height: AppSpacing.md),
+                  // XP Progress bar
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'LOKASI',
+                            'XP Progress',
                             style: AppText.labelCaps().copyWith(
                               color: AppColors.onSurfaceVariant,
                               fontSize: 10,
                             ),
                           ),
                           Text(
-                            _cityName,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppText.bodyLg().copyWith(color: AppColors.onSurface),
+                            '${levelInfo.xpInCurrentLevel}/${levelInfo.xpNeededForNextLevel} XP',
+                            style: AppText.bodyMd().copyWith(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: AppSpacing.xs),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(AppRadius.pill),
+                        child: Container(
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: AppColors.surfaceContainerHigh,
+                            borderRadius: BorderRadius.circular(AppRadius.pill),
+                          ),
+                          child: FractionallySizedBox(
+                            alignment: Alignment.centerLeft,
+                            widthFactor: levelInfo.progress.clamp(0.0, 1.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [tier.inkPrimary, tier.inkSecondary],
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                  AppRadius.pill,
+                                ),
+                                boxShadow: light
+                                    ? null
+                                    : [
+                                        BoxShadow(
+                                          color: tier.inkPrimary.withValues(
+                                            alpha: 0.5,
+                                          ),
+                                          blurRadius: 8,
+                                          spreadRadius: 1,
+                                        ),
+                                      ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  Divider(color: AppColors.outlineVariant),
+                  const SizedBox(height: AppSpacing.md),
+                  // Location row — editable
+                  InkWell(
+                    onTap: _editLocation,
+                    borderRadius: BorderRadius.circular(AppRadius.md),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: AppSpacing.xs,
+                        horizontal: AppSpacing.sm,
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.location_on,
+                            color: AppColors.primary,
+                            size: 18,
+                          ),
+                          const SizedBox(width: AppSpacing.sm),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'LOKASI',
+                                  style: AppText.labelCaps().copyWith(
+                                    color: AppColors.onSurfaceVariant,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                                Text(
+                                  _cityName,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppText.bodyLg().copyWith(
+                                    color: AppColors.onSurface,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Icon(
+                            Icons.chevron_right,
+                            color: AppColors.onSurfaceVariant,
+                            size: 20,
                           ),
                         ],
                       ),
                     ),
-                    Icon(Icons.chevron_right, color: AppColors.onSurfaceVariant, size: 20),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: AppSpacing.md),
-            Row(
-              children: [
-                Expanded(child: _miniStat('Level', '${GameService.current.level}')),
-                const SizedBox(width: AppSpacing.sm),
-                Expanded(child: _miniStat('XP', '${GameService.current.xp}')),
-                const SizedBox(width: AppSpacing.sm),
-                Expanded(child: _miniStat('Streak', '${GameService.current.heroStreak.current}🔥')),
-                const SizedBox(width: AppSpacing.sm),
-                Expanded(child: _miniStat('Rank', GameService.getRankTitle(GameService.current.level))),
-              ],
-            ),
-          ],
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _miniStat(
+                          'Level',
+                          '${GameService.current.level}',
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
+                      Expanded(
+                        child: _miniStat('XP', '${GameService.current.xp}'),
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
+                      Expanded(
+                        child: _miniStat(
+                          'Streak',
+                          '${GameService.current.heroStreak.current}🔥',
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
+                      Expanded(
+                        child: _miniStat(
+                          'Rank',
+                          tier.name,
+                          color: tier.inkPrimary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
@@ -885,7 +1156,9 @@ class _ProfilTabState extends State<ProfilTab> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(AppRadius.lg),
                       border: Border.all(
-                        color: ProPresentation.antiqueGold.withValues(alpha: 0.45),
+                        color: ProPresentation.antiqueGold.withValues(
+                          alpha: 0.45,
+                        ),
                       ),
                     ),
                   ),
@@ -912,7 +1185,8 @@ class _ProfilTabState extends State<ProfilTab> {
     );
   }
 
-  Widget _miniStat(String label, String value) {
+  Widget _miniStat(String label, String value, {Color? color}) {
+    final accent = color ?? AppColors.primary;
     return Container(
       width: double.infinity,
       constraints: const BoxConstraints(minHeight: 64),
@@ -930,7 +1204,7 @@ class _ProfilTabState extends State<ProfilTab> {
               value,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: AppText.titleLg().copyWith(color: AppColors.primary),
+              style: AppText.titleLg().copyWith(color: accent),
             ),
           ),
           Text(
@@ -950,8 +1224,12 @@ class _ProfilTabState extends State<ProfilTab> {
 
   Widget _stats() {
     final logs = GameService.current.prayerLog;
-    final wajibTotal = logs.where((l) => GameService.wajibList.contains(l.prayer)).length;
-    final sunnahTotal = logs.where((l) => l.type == 'sunnah' || l.prayer.startsWith('rawatib')).length;
+    final wajibTotal = logs
+        .where((l) => GameService.wajibList.contains(l.prayer))
+        .length;
+    final sunnahTotal = logs
+        .where((l) => l.type == 'sunnah' || l.prayer.startsWith('rawatib'))
+        .length;
     final tilawahTotal = logs.where((l) => l.prayer == 'tilawah').length;
 
     return Column(
@@ -966,17 +1244,47 @@ class _ProfilTabState extends State<ProfilTab> {
           crossAxisSpacing: AppSpacing.sm,
           childAspectRatio: 1.5,
           children: [
-            _statCard('Sholat Selesai', '$wajibTotal', 'total', Icons.mosque, AppColors.primary),
-            _statCard('Tilawah', '$tilawahTotal', 'kali', Icons.menu_book, AppColors.tertiary),
-            _statCard('Sunnah', '$sunnahTotal', 'total', Icons.volunteer_activism, AppColors.secondaryFixed),
-            _statCard('Hero Streak', '${GameService.current.heroStreak.current}', 'hari', Icons.local_fire_department, AppColors.secondaryFixed),
+            _statCard(
+              'Sholat Selesai',
+              '$wajibTotal',
+              'total',
+              Icons.mosque,
+              AppColors.primary,
+            ),
+            _statCard(
+              'Tilawah',
+              '$tilawahTotal',
+              'kali',
+              Icons.menu_book,
+              AppColors.tertiary,
+            ),
+            _statCard(
+              'Sunnah',
+              '$sunnahTotal',
+              'total',
+              Icons.volunteer_activism,
+              AppColors.secondaryFixed,
+            ),
+            _statCard(
+              'Hero Streak',
+              '${GameService.current.heroStreak.current}',
+              'hari',
+              Icons.local_fire_department,
+              AppColors.secondaryFixed,
+            ),
           ],
         ),
       ],
     );
   }
 
-  Widget _statCard(String title, String value, String sub, IconData icon, Color color) {
+  Widget _statCard(
+    String title,
+    String value,
+    String sub,
+    IconData icon,
+    Color color,
+  ) {
     return FlatCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1077,29 +1385,44 @@ class _ProfilTabState extends State<ProfilTab> {
             }).toList(),
           ),
         ),
-        if (streaks['jumat']?.current != null && streaks['jumat']!.current > 0) ...[
+        if (streaks['jumat']?.current != null &&
+            streaks['jumat']!.current > 0) ...[
           const SizedBox(height: AppSpacing.sm),
           FlatCard(
             padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.md, vertical: AppSpacing.sm),
+              horizontal: AppSpacing.md,
+              vertical: AppSpacing.sm,
+            ),
             child: Row(
               children: [
                 Icon(Icons.mosque, size: 18, color: AppColors.primary),
                 const SizedBox(width: AppSpacing.sm),
-                Text('Jumat',
-                    style: AppText.bodyLg()
-                        .copyWith(color: AppColors.onSurface)),
+                Text(
+                  'Jumat',
+                  style: AppText.bodyLg().copyWith(color: AppColors.onSurface),
+                ),
                 const Spacer(),
-                Icon(Icons.local_fire_department,
-                    size: 14, color: AppColors.secondaryFixed),
+                Icon(
+                  Icons.local_fire_department,
+                  size: 14,
+                  color: AppColors.secondaryFixed,
+                ),
                 const SizedBox(width: 3),
-                Text('${streaks['jumat']!.current}',
-                    style: AppText.titleLg().copyWith(
-                        fontSize: 16, color: AppColors.secondaryFixed)),
+                Text(
+                  '${streaks['jumat']!.current}',
+                  style: AppText.titleLg().copyWith(
+                    fontSize: 16,
+                    color: AppColors.secondaryFixed,
+                  ),
+                ),
                 const SizedBox(width: 3),
-                Text('minggu',
-                    style: AppText.bodyMd().copyWith(
-                        color: AppColors.onSurfaceVariant, fontSize: 12)),
+                Text(
+                  'minggu',
+                  style: AppText.bodyMd().copyWith(
+                    color: AppColors.onSurfaceVariant,
+                    fontSize: 12,
+                  ),
+                ),
               ],
             ),
           ),
@@ -1126,9 +1449,11 @@ class _ProfilTabState extends State<ProfilTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        HudHeader('ACHIEVEMENTS',
-            meta: '$unlockedCount/${defs.length}',
-            accent: AppColors.secondaryFixed),
+        HudHeader(
+          'ACHIEVEMENTS',
+          meta: '$unlockedCount/${defs.length}',
+          accent: AppColors.secondaryFixed,
+        ),
         PressableScale(
           onTap: () async {
             await Navigator.push(
@@ -1140,12 +1465,15 @@ class _ProfilTabState extends State<ProfilTab> {
           },
           child: Container(
             padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.md, vertical: AppSpacing.sm),
+              horizontal: AppSpacing.md,
+              vertical: AppSpacing.sm,
+            ),
             decoration: BoxDecoration(
               color: AppColors.surfaceContainer,
               borderRadius: BorderRadius.circular(AppRadius.xxl),
               border: Border.all(
-                  color: AppColors.outlineVariant.withValues(alpha: 0.3)),
+                color: AppColors.outlineVariant.withValues(alpha: 0.3),
+              ),
             ),
             child: Row(
               children: [
@@ -1166,12 +1494,17 @@ class _ProfilTabState extends State<ProfilTab> {
                     textAlign: TextAlign.right,
                     overflow: TextOverflow.ellipsis,
                     style: AppText.bodyMd().copyWith(
-                        color: AppColors.onSurfaceVariant, fontSize: 12),
+                      color: AppColors.onSurfaceVariant,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
                 const SizedBox(width: AppSpacing.base),
-                Icon(Icons.arrow_forward_ios,
-                    size: 14, color: AppColors.secondaryFixed),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: 14,
+                  color: AppColors.secondaryFixed,
+                ),
               ],
             ),
           ),
@@ -1182,7 +1515,10 @@ class _ProfilTabState extends State<ProfilTab> {
 
   Widget _haidModeToggle() {
     return GlassPanel(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.sm,
+      ),
       child: Row(
         children: [
           Container(
@@ -1191,16 +1527,21 @@ class _ProfilTabState extends State<ProfilTab> {
               color: AppColors.error.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(AppRadius.md),
             ),
-            child: Icon(Icons.bloodtype_outlined, color: AppColors.error, size: 20),
+            child: Icon(
+              Icons.bloodtype_outlined,
+              color: AppColors.error,
+              size: 20,
+            ),
           ),
           const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Mode Haid',
-                    style: AppText.bodyLg()
-                        .copyWith(color: AppColors.onSurface)),
+                Text(
+                  'Mode Haid',
+                  style: AppText.bodyLg().copyWith(color: AppColors.onSurface),
+                ),
                 Text(
                   _haidMode ? 'Streak dijaga — tidak ada penalti' : 'Nonaktif',
                   style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
@@ -1226,7 +1567,8 @@ class _ProfilTabState extends State<ProfilTab> {
   Future<void> _handleGoogleLogin() async {
     final uid = await AuthService.signInWithGoogle();
     if (uid == null) {
-      final err = AuthService.lastError ?? 'Login Google dibatalkan atau gagal.';
+      final err =
+          AuthService.lastError ?? 'Login Google dibatalkan atau gagal.';
       _showSettingSnackbar('❌ $err');
       return;
     }
@@ -1250,14 +1592,12 @@ class _ProfilTabState extends State<ProfilTab> {
 
     final remote = await SupabaseSync.load();
     final hasRemote = remote != null;
-    final remoteGame =
-        remote != null && remote['game'] is Map
-            ? Map<String, dynamic>.from(remote['game'] as Map)
-            : null;
-    final remoteLearning =
-        remote != null && remote['learning'] is Map
-            ? Map<String, dynamic>.from(remote['learning'] as Map)
-            : null;
+    final remoteGame = remote != null && remote['game'] is Map
+        ? Map<String, dynamic>.from(remote['game'] as Map)
+        : null;
+    final remoteLearning = remote != null && remote['learning'] is Map
+        ? Map<String, dynamic>.from(remote['learning'] as Map)
+        : null;
     Map<String, dynamic> remoteAch = {};
     if (remote != null && remote['achievements'] is Map) {
       final ach = remote['achievements'] as Map;
@@ -1268,8 +1608,9 @@ class _ProfilTabState extends State<ProfilTab> {
     }
 
     // ponytail: max-XP / union merge. Dialog Cloud|Device when users need control.
-    final mergedGame =
-        remoteGame == null ? localGame : pickRicherGame(localGame, remoteGame);
+    final mergedGame = remoteGame == null
+        ? localGame
+        : pickRicherGame(localGame, remoteGame);
     final mergedLearning = remoteLearning == null
         ? localLearning
         : mergeLearning(localLearning, remoteLearning);
@@ -1327,7 +1668,9 @@ class _ProfilTabState extends State<ProfilTab> {
                 children: [
                   Icon(
                     signedIn ? Icons.cloud_done : Icons.cloud_off,
-                    color: signedIn ? AppColors.primary : AppColors.onSurfaceVariant,
+                    color: signedIn
+                        ? AppColors.primary
+                        : AppColors.onSurfaceVariant,
                     size: 20,
                   ),
                   const SizedBox(width: AppSpacing.sm),
@@ -1337,7 +1680,9 @@ class _ProfilTabState extends State<ProfilTab> {
                           ? 'Backup cloud aktif (akun Google)'
                           : 'Belum login — backup cloud mati (hanya di HP ini)',
                       style: AppText.bodyMd().copyWith(
-                        color: signedIn ? AppColors.primary : AppColors.onSurfaceVariant,
+                        color: signedIn
+                            ? AppColors.primary
+                            : AppColors.onSurfaceVariant,
                       ),
                     ),
                   ),
@@ -1351,7 +1696,9 @@ class _ProfilTabState extends State<ProfilTab> {
                   label: const Text('Keluar dari Akun'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppColors.error,
-                    side: BorderSide(color: AppColors.error.withValues(alpha: 0.5)),
+                    side: BorderSide(
+                      color: AppColors.error.withValues(alpha: 0.5),
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(AppRadius.md),
                     ),
@@ -1390,12 +1737,37 @@ class _ProfilTabState extends State<ProfilTab> {
 
   Widget _settings() {
     final rows = <_SettingRow>[
-      _SettingRow('Pengaturan Akun', Icons.person_outline, onTap: _editNickname),
-      _SettingRow('Notifikasi', Icons.notifications_outlined, onTap: _showNotifDialog),
-      _SettingRow('Tema Terang', Icons.light_mode_outlined, trailing: _ThemeToggle()),
-      _SettingRow('Privasi & Data', Icons.lock_outline, onTap: _showPrivacyDialog),
-      _SettingRow('Tentang Aplikasi', Icons.info_outline, onTap: _showAboutDialog),
-      _SettingRow('Keluar', Icons.logout, color: AppColors.error, onTap: _confirmLogout),
+      _SettingRow(
+        'Pengaturan Akun',
+        Icons.person_outline,
+        onTap: _editNickname,
+      ),
+      _SettingRow(
+        'Notifikasi',
+        Icons.notifications_outlined,
+        onTap: _showNotifDialog,
+      ),
+      _SettingRow(
+        'Tema Terang',
+        Icons.light_mode_outlined,
+        trailing: _ThemeToggle(),
+      ),
+      _SettingRow(
+        'Privasi & Data',
+        Icons.lock_outline,
+        onTap: _showPrivacyDialog,
+      ),
+      _SettingRow(
+        'Tentang Aplikasi',
+        Icons.info_outline,
+        onTap: _showAboutDialog,
+      ),
+      _SettingRow(
+        'Keluar',
+        Icons.logout,
+        color: AppColors.error,
+        onTap: _confirmLogout,
+      ),
     ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1431,9 +1803,9 @@ class _ProfilTabState extends State<ProfilTab> {
                               ),
                             ),
                             r.trailing ??
-                              Icon(
-                                Icons.chevron_right,
-                                color: AppColors.onSurfaceVariant,
+                                Icon(
+                                  Icons.chevron_right,
+                                  color: AppColors.onSurfaceVariant,
                                   size: 20,
                                 ),
                           ],

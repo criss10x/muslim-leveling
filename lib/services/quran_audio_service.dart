@@ -3,6 +3,13 @@ import 'package:just_audio/just_audio.dart';
 import 'quran_playlist.dart';
 import 'quran_settings.dart';
 
+AudioSource audioSourceForAyah(AyahRef ayah, {bool? isWeb}) {
+  final uri = Uri.parse(ayah.audioUrl);
+  if (isWeb ?? kIsWeb) return AudioSource.uri(uri);
+  // ignore: experimental_member_use
+  return LockCachingAudioSource(uri);
+}
+
 /// Membungkus just_audio. Menerima angka (surat, range, repeat) dan
 /// mengeluarkan posisi — tidak tahu apa pun soal widget.
 class QuranAudioService extends ChangeNotifier {
@@ -74,7 +81,7 @@ class QuranAudioService extends ChangeNotifier {
               // penggantinya untuk cache-sambil-stream; bila kelak dihapus,
               // hanya baris ini yang perlu diganti.
               // ignore: experimental_member_use
-              .map((a) => LockCachingAudioSource(Uri.parse(a.audioUrl)))
+              .map(audioSourceForAyah)
               .toList(),
         ),
         initialIndex: index < 0 ? 0 : index,

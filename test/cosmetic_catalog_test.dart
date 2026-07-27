@@ -19,11 +19,16 @@ void main() {
   });
 
   test('every legacyRewardName maps to a real free cosmetic', () {
-    final withLegacy = CosmeticCatalog.all.where((c) => c.legacyRewardName != null);
+    final withLegacy = CosmeticCatalog.all.where(
+      (c) => c.legacyRewardName != null,
+    );
     expect(withLegacy, isNotEmpty);
     for (final c in withLegacy) {
-      expect(c.access, CosmeticAccess.free,
-          reason: 'earned (legacy) cosmetics must be free');
+      expect(
+        c.access,
+        CosmeticAccess.free,
+        reason: 'earned (legacy) cosmetics must be free',
+      );
     }
   });
 
@@ -31,5 +36,14 @@ void main() {
     for (final c in CosmeticCatalog.bySlot(CosmeticSlot.frame)) {
       expect(c.frameShape, isNotNull, reason: '${c.id} missing frameShape');
     }
+  });
+
+  test('auras have distinct effects and rarity labels', () {
+    final auras = CosmeticCatalog.bySlot(
+      CosmeticSlot.aura,
+    ).where((c) => !CosmeticCatalog.isDefault(c.id)).toList();
+
+    expect(auras.map((c) => c.auraSpec!.effect).toSet().length, auras.length);
+    expect(auras.map((c) => c.rarity), contains(CosmeticRarity.proSignature));
   });
 }

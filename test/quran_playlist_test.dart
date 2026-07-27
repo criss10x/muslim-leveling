@@ -1,4 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:muslim_leveling/services/quran_audio_service.dart';
 import 'package:muslim_leveling/services/quran_playlist.dart';
 
 void main() {
@@ -11,6 +13,12 @@ void main() {
       expect(ayahAudioUrl(114, 6),
           'https://verses.quran.com/Alafasy/mp3/114006.mp3');
     });
+  });
+
+  test('web streams audio directly instead of using filesystem cache', () {
+    final source = audioSourceForAyah(const AyahRef(1, 1), isWeb: true);
+
+    expect(source, isA<UriAudioSource>());
   });
 
   group('PlaybackRange', () {

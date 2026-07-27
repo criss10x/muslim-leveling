@@ -9,7 +9,13 @@ import '../screens/pro_paywall_screen.dart';
 const _slotLabels = {
   CosmeticSlot.frame: 'Bingkai',
   CosmeticSlot.aura: 'Aura',
-  CosmeticSlot.title: 'Gelar',
+  CosmeticSlot.title: 'Title',
+};
+
+const _slotIcons = {
+  CosmeticSlot.frame: Icons.crop_square_rounded,
+  CosmeticSlot.aura: Icons.auto_awesome,
+  CosmeticSlot.title: Icons.workspace_premium_outlined,
 };
 
 class CosmeticLocker extends StatefulWidget {
@@ -43,9 +49,9 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
   Future<void> _onTap(Cosmetic c) async {
     final isPro = EntitlementService.isPro;
     if (c.access == CosmeticAccess.pro && !isPro) {
-      await Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const ProPaywallScreen()),
-      );
+      await Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => const ProPaywallScreen()));
       return;
     }
 
@@ -60,6 +66,29 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
       return;
     }
     await GameService.equipCosmetic(c.slot, c.id, isPro: isPro);
+  }
+
+  Color _rarityColor(CosmeticRarity rarity) => switch (rarity) {
+    CosmeticRarity.normal => AppColors.onSurfaceVariant,
+    CosmeticRarity.rare => AppColors.tertiary,
+    CosmeticRarity.epic => const Color(0xFF7C3AED),
+    CosmeticRarity.legendary => AppColors.goldInk,
+    CosmeticRarity.proSignature => AppColors.primary,
+  };
+
+  Widget _previewGlyph(Cosmetic cosmetic, Color color) {
+    if (cosmetic.slot != CosmeticSlot.aura) {
+      return Text(cosmetic.emoji, style: const TextStyle(fontSize: 26));
+    }
+    final icon = switch (cosmetic.auraSpec?.effect) {
+      AuraEffect.halo => Icons.brightness_1_outlined,
+      AuraEffect.crescent => Icons.dark_mode_outlined,
+      AuraEffect.drift => Icons.blur_on_outlined,
+      AuraEffect.orbit => Icons.all_inclusive,
+      AuraEffect.goldOrbit => Icons.auto_awesome,
+      null => Icons.do_not_disturb_alt_outlined,
+    };
+    return Icon(icon, color: color, size: 28);
   }
 
   @override
@@ -117,9 +146,26 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
                               : AppColors.outlineVariant,
                         ),
                       ),
-                      child: Text(
-                        _slotLabels[s]!,
-                        style: AppText.labelCapsSm(),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            _slotIcons[s],
+                            size: 14,
+                            color: selected
+                                ? AppColors.primary
+                                : AppColors.onSurfaceVariant,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            _slotLabels[s]!,
+                            style: AppText.labelCapsSm().copyWith(
+                              color: selected
+                                  ? AppColors.primary
+                                  : AppColors.onSurface,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -132,7 +178,10 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('KOLEKSI', style: AppText.labelCapsSm()),
+            Text(
+              'KOLEKSI',
+              style: AppText.labelCapsSm().copyWith(color: AppColors.onSurface),
+            ),
             Text(
               '${unlockedFree.length} TERBUKA',
               style: AppText.labelCapsSm().copyWith(
@@ -148,27 +197,37 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
           physics: const NeverScrollableScrollPhysics(),
           mainAxisSpacing: AppSpacing.sm,
           crossAxisSpacing: AppSpacing.sm,
+          childAspectRatio: 0.65,
           children: items.map((c) {
-            final allowed = CosmeticService.isAllowed(state, c.id, isPro: isPro);
+            final allowed = CosmeticService.isAllowed(
+              state,
+              c.id,
+              isPro: isPro,
+            );
             final locked = c.access == CosmeticAccess.pro && !isPro;
             final owned = allowed || CosmeticCatalog.isDefault(c.id);
             final selected = c.id == equippedId;
             final stateLabel = selected
                 ? 'DIPAKAI'
                 : locked
-                    ? 'PRO'
-                    : null;
+                ? 'PRO SIGNATURE'
+                : null;
+            final rarityColor = _rarityColor(c.rarity);
 
             return Semantics(
               button: true,
               selected: selected,
               label:
-                  '${c.name}, ${selected ? 'dipakai' : locked ? 'Pro terkunci' : 'tersedia'}',
+                  '${c.name}, ${selected
+                      ? 'dipakai'
+                      : locked
+                      ? 'Pro terkunci'
+                      : 'tersedia'}',
               child: InkWell(
                 onTap: () => _onTap(c),
                 borderRadius: BorderRadius.circular(AppRadius.lg),
                 child: Container(
-                  constraints: const BoxConstraints(minHeight: 88),
+                  constraints: const BoxConstraints(minHeight: 112),
                   padding: const EdgeInsets.all(AppSpacing.sm),
                   decoration: BoxDecoration(
                     color: locked
@@ -179,17 +238,17 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
                       color: selected
                           ? AppColors.primary
                           : locked
-                              ? AppColors.goldInk
-                              : AppColors.outlineVariant,
+                          ? AppColors.goldInk
+                          : AppColors.outlineVariant,
                       width: selected ? 2 : 1,
                     ),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        locked ? '🔒' : c.emoji,
-                        style: const TextStyle(fontSize: 26),
+                      _previewGlyph(
+                        c,
+                        locked ? AppColors.goldInk : rarityColor,
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -204,12 +263,25 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
+                      const SizedBox(height: 3),
+                      Text(
+                        c.rarity.label,
+                        style: AppText.labelCapsSm().copyWith(
+                          color: rarityColor,
+                          fontSize: 8,
+                          letterSpacing: 0.6,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                       if (stateLabel != null) ...[
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 3),
                         Text(
                           stateLabel,
                           style: AppText.labelCapsSm().copyWith(
-                            color: locked ? AppColors.goldInk : AppColors.primary,
+                            color: locked
+                                ? AppColors.goldInk
+                                : AppColors.primary,
                             fontSize: 9,
                           ),
                         ),
@@ -228,7 +300,9 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
             decoration: BoxDecoration(
               color: AppColors.primary.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(AppRadius.lg),
-              border: Border.all(color: AppColors.primary.withValues(alpha: 0.28)),
+              border: Border.all(
+                color: AppColors.primary.withValues(alpha: 0.28),
+              ),
             ),
             child: Row(
               children: [
