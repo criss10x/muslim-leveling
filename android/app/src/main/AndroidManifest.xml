@@ -8,10 +8,16 @@
     <!-- Minta pengecualian battery optimization — tanpa ini banyak OEM
          (Xiaomi/Oppo/Vivo dkk) membunuh alarm terjadwal saat app ditutup. -->
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
+    <!-- Murrotal: layar tetap menyala saat memutar, dan audio lanjut di
+         background lewat foreground service. -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
     <application
         android:label="Muslim Leveling"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"
             android:exported="true"

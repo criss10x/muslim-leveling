@@ -4,6 +4,7 @@ import '../../services/theme_service.dart';
 import '../../widgets/common.dart';
 import 'home_tab.dart';
 import 'jadwal_tab.dart';
+import 'quran_tab.dart';
 import 'belajar_tab.dart';
 import 'profil_tab.dart';
 
@@ -28,9 +29,14 @@ class _DashboardShellState extends State<DashboardShell> {
   static const _items = [
     (Icons.home_outlined, Icons.home, 'HOME'),
     (Icons.schedule_outlined, Icons.schedule, 'JADWAL'),
+    (Icons.auto_stories_outlined, Icons.auto_stories, 'QURAN'),
     (Icons.menu_book_outlined, Icons.menu_book, 'BELAJAR'),
     (Icons.person_outline, Icons.person, 'PROFIL'),
   ];
+
+  // Indeks bernama, bukan angka telanjang: Profil bergeser dari 3 ke 4 saat
+  // tab Quran disisipkan, dan lompatan dari Home diam-diam salah sasaran.
+  static const _profilTab = 4;
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +53,11 @@ class _DashboardShellState extends State<DashboardShell> {
             child: IndexedStack(
               index: _tab,
               children: [
-                HomeTab(onSettingsPressed: () => setState(() => _tab = 3)),
+                HomeTab(
+                    onSettingsPressed: () =>
+                        setState(() => _tab = _profilTab)),
                 JadwalTab(),
+                QuranTab(),
                 BelajarTab(),
                 ProfilTab(),
               ],
