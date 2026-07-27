@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:just_audio_background/just_audio_background.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -22,21 +21,7 @@ void main() {
   _initAsync();
 }
 
-/// Harus jalan sebelum pemutar murrotal dipakai, tapi tetap tidak boleh
-/// menahan tampilnya UI — karena itu ia hidup di dalam _initAsync.
-Future<void> _initAudio() async {
-  try {
-    await JustAudioBackground.init(
-      androidNotificationChannelId: 'com.muslimleveling.audio',
-      androidNotificationChannelName: 'Murrotal',
-      androidNotificationOngoing: true,
-    );
-  } catch (_) {}
-}
-
 Future<void> _initAsync() async {
-  await _initAudio();
-
   try {
     await Supabase.initialize(
       url: 'https://hiywlsqaurqvbwwuutbo.supabase.co',

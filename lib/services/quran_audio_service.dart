@@ -5,9 +5,7 @@ import 'quran_settings.dart';
 
 AudioSource audioSourceForAyah(AyahRef ayah, {bool? isWeb}) {
   final uri = Uri.parse(ayah.audioUrl);
-  if (isWeb ?? kIsWeb) return AudioSource.uri(uri);
-  // ignore: experimental_member_use
-  return LockCachingAudioSource(uri);
+  return AudioSource.uri(uri);
 }
 
 /// Membungkus just_audio. Menerima angka (surat, range, repeat) dan
@@ -28,7 +26,8 @@ class QuranAudioService extends ChangeNotifier {
     _player.playbackEventStream.listen(
       (_) {},
       onError: (Object e, StackTrace _) {
-        _error = 'Gagal memuat audio, periksa koneksi';
+        _error = 'Gagal memuat audio: $e';
+        debugPrint('QuranAudio playback error: $e');
         notifyListeners();
       },
     );
@@ -75,12 +74,6 @@ class QuranAudioService extends ChangeNotifier {
       await _player.setAudioSource(
         ConcatenatingAudioSource(
           children: _queue
-              // LockCachingAudioSource menyimpan berkas saat pertama diputar.
-              // Tanpa ini, "ulangi 10x" mengunduh berkas yang sama 10 kali.
-              // Ditandai eksperimental oleh just_audio, tapi tidak ada
-              // penggantinya untuk cache-sambil-stream; bila kelak dihapus,
-              // hanya baris ini yang perlu diganti.
-              // ignore: experimental_member_use
               .map(audioSourceForAyah)
               .toList(),
         ),
@@ -89,8 +82,9 @@ class QuranAudioService extends ChangeNotifier {
       await _player.setLoopMode(_loopMode);
       await _player.setSpeed(quranSettings.speed);
       _error = null;
-    } catch (_) {
-      _error = 'Gagal memuat audio, periksa koneksi';
+    } catch (e) {
+      _error = 'Gagal memuat audio: $e';
+      debugPrint('QuranAudio _rebuild error: $e');
     }
     notifyListeners();
   }

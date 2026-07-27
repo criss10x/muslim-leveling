@@ -15,8 +15,8 @@ void main() {
     });
   });
 
-  test('web streams audio directly instead of using filesystem cache', () {
-    final source = audioSourceForAyah(const AyahRef(1, 1), isWeb: true);
+  test('creates UriAudioSource for direct playback', () {
+    final source = audioSourceForAyah(const AyahRef(1, 1));
 
     expect(source, isA<UriAudioSource>());
   });
