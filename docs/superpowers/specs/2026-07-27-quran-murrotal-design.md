@@ -27,8 +27,21 @@ dalam scope dan akan dirancang terpisah setelah modul ini selesai.
 
 ### Pipeline data (development-time, sekali jalan)
 
-Script `tool/fetch_quran.dart` menarik data dari **api.alquran.cloud**, edisi
-`quran-uthmani` (Arab) dan `id.indonesian` (terjemahan Kemenag), lalu menulis:
+Script `tool/fetch_quran.dart` menarik dari dua sumber:
+
+- **api.alquran.cloud** — teks ayat, edisi `quran-uthmani` (Arab) dan
+  `id.indonesian` (terjemahan). Satu permintaan per surat mengambil kedua edisi
+  sekaligus.
+- **equran.id** (`/api/v2/surat`) — metadata surat berbahasa Indonesia dalam satu
+  permintaan. Dipakai karena alquran.cloud hanya menyediakan arti nama surat
+  dalam bahasa Inggris (`"The Opening"`), sedangkan aplikasi ini berbahasa
+  Indonesia (`"Pembukaan"`).
+
+Teks Arab dari alquran.cloud diawali karakter BOM (`﻿`) pada sebagian ayat.
+Script wajib membuangnya, karena bila lolos ia tampil sebagai glyph liar di awal
+ayat.
+
+Keluarannya:
 
 - `assets/quran/surahs.json` — metadata 114 surat:
   `{number, nameArabic, nameLatin, meaning, ayahCount, revelation}`
@@ -48,14 +61,27 @@ dijalankan ulang bila sumber data perlu diperbarui.
 
 ### Sumber audio
 
-Pola URL EveryAyah:
-`https://everyayah.com/data/Alafasy_128kbps/{surah:03d}{ayah:03d}.mp3`
+CDN Quran.com:
+`https://verses.quran.com/Alafasy/mp3/{surah:03d}{ayah:03d}.mp3`
 
 Contoh: QS 2:12 → `.../002012.mp3`
 
-**Langkah pertama implementasi adalah memverifikasi pola URL ini masih valid**
-(fetch beberapa ayat di awal/tengah/akhir mushaf). Bila tidak valid, ganti ke
-CDN Quran.com; hanya fungsi pembentuk URL yang berubah, sisanya tetap.
+**Diverifikasi 2026-07-27** pada tiga titik ekstrem mushaf (QS 1:1, QS 2:286
+sebagai ayat terpanjang, QS 114:6 sebagai ayat terakhir). Ketiganya menjawab
+HTTP 206 `audio/mpeg` dalam 0,15–0,36 detik. Dukungan range request (206)
+penting karena `LockCachingAudioSource` membutuhkannya untuk seek dan cache.
+
+Rencana awal memakai EveryAyah dengan pola nama berkas yang sama, tetapi pada
+verifikasi host itu tidak menjawab sama sekali (timeout 21 detik, dua kali
+percobaan) sementara CDN lain di jaringan yang sama merespons normal. Karena
+Quran.com memakai format nama berkas identik, perpindahan hanya menyentuh
+konstanta base URL.
+
+Fallback bila Quran.com bermasalah di kemudian hari:
+`https://cdn.islamic.network/quran/audio/128/ar.alafasy/{n}.mp3`, juga
+terverifikasi bekerja. Perhatikan `{n}` di sini adalah nomor ayat global 1–6236,
+bukan pasangan surah+ayah, sehingga perlu tabel offset kumulatif — karena itu ia
+fallback, bukan pilihan utama.
 
 ### Cache audio
 
