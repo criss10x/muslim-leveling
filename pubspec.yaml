@@ -35,3 +35,5 @@ flutter:
     - assets/images/mosque_bg.jpg
     - assets/images/logo.png
     - assets/google_fonts/
+    - assets/quran/
+    - assets/quran/surah/
