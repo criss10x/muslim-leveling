@@ -209,23 +209,18 @@ class _SurahRow extends StatelessWidget {
                         ),
                         const SizedBox(height: AppSpacing.base),
                         Text(
-                          surah.meaning,
+                          '${surah.meaning} · ${surah.ayahCount} ayat',
                           style: AppText.bodyMd().copyWith(
                             color: AppColors.onSurfaceVariant,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.xs),
-                        Row(
-                          children: [
-                            _RevelationChip(label: surah.revelation),
-                            const SizedBox(width: AppSpacing.xs),
-                            Text(
-                              '${surah.ayahCount} ayat',
-                              style: AppText.labelCapsSm().copyWith(
-                                color: AppColors.onSurfaceVariant,
-                              ),
-                            ),
-                          ],
+                        // Jumlah ayat digabung ke baris arti, bukan di sini:
+                        // chip + jumlah ayat berdampingan melebihi lebar yang
+                        // tersedia di layar 360dp dan memicu RenderFlex overflow.
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: _RevelationChip(label: surah.revelation),
                         ),
                       ],
                     ),

@@ -57,9 +57,9 @@ void main() {
     // Al-Fatihah Makkiyah, Al-Baqarah Madaniyah — keduanya di layar pertama.
     expect(find.text('Makkiyah'), findsWidgets);
     expect(find.text('Madaniyah'), findsWidgets);
-    expect(find.text('7 ayat'), findsOneWidget);
-    // Subtitle gabungan lama tidak boleh ada lagi.
-    expect(find.textContaining('Pembukaan · '), findsNothing);
+    expect(find.text('Pembukaan · 7 ayat'), findsOneWidget);
+    // Tempat turun sudah pindah ke chip, tidak lagi menempel di subtitle.
+    expect(find.textContaining('· Makkiyah ·'), findsNothing);
   });
 
   testWidgets('baris surat tidak lagi memakai chevron', (tester) async {
@@ -95,5 +95,20 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Surat tidak ditemukan'), findsOneWidget);
+  });
+
+  testWidgets('baris surat tidak overflow di layar sempit', (tester) async {
+    // Viewport default flutter_test 800px jauh lebih lebar dari HP asli;
+    // 320x640 adalah lebar tersempit yang masih ditemui di lapangan.
+    tester.view.physicalSize = const Size(320, 640);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(wrap(QuranTab()));
+    await tester.pumpAndSettle();
+
+    // Al-Baqarah: chip "Madaniyah" + 286 ayat, kombinasi terlebar.
+    expect(find.text('Al-Baqarah'), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 }
