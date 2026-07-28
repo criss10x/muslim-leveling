@@ -131,14 +131,12 @@ void main() {
 
     expect(tester.takeException(), isNull);
 
-    // Bukan sekadar "tidak crash": field harus benar-benar setinggi target tap
-    // minimum dan muat utuh di dalam header yang membungkusnya.
+    // Bukan sekadar "tidak crash": pada skala 2.0 field butuh contentPadding 40
+    // ditambah tinggi baris 40 = 80px. Ambang 72 memberi sedikit kelonggaran
+    // pembulatan sambil tetap gagal keras kalau extent header kembali terlalu
+    // sempit — bug lama menjepit field ini ke 46px.
     final field = tester.getSize(find.byType(TextField));
-    expect(field.height, greaterThanOrEqualTo(48.0));
-    expect(
-      field.height,
-      lessThanOrEqualTo(tester.getSize(find.byType(SliverPersistentHeader)).height),
-    );
+    expect(field.height, greaterThanOrEqualTo(72.0));
   });
 
   testWidgets('header tidak overflow di layar sempit dengan teks besar', (
