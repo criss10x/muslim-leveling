@@ -1802,12 +1802,11 @@ class _ProfilTabState extends State<ProfilTab> {
                                 style: AppText.bodyLg().copyWith(color: color),
                               ),
                             ),
-                            r.trailing ??
-                                Icon(
-                                  Icons.chevron_right,
-                                  color: AppColors.onSurfaceVariant,
-                                  size: 20,
-                                ),
+                            Icon(
+                              Icons.chevron_right,
+                              color: AppColors.onSurfaceVariant,
+                              size: 20,
+                            ),
                           ],
                         ),
                       ),
@@ -1835,6 +1834,5 @@ class _SettingRow {
   final IconData icon;
   final Color? color;
   final VoidCallback? onTap;
-  final Widget? trailing;
-  _SettingRow(this.title, this.icon, {this.color, this.onTap, this.trailing});
+  _SettingRow(this.title, this.icon, {this.color, this.onTap});
 }
