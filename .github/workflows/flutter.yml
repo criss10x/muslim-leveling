@@ -42,6 +42,13 @@ jobs:
   analyze-build:
     if: ${{ !inputs.update_goldens }}
     runs-on: ubuntu-latest
+    # Di level job, bukan step: konteks `secrets` tidak tersedia di `if:` step,
+    # dan step-level env belum terlihat oleh `if:` step itu sendiri.
+    env:
+      KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+      KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
 
@@ -72,12 +79,7 @@ jobs:
       # pun, sehingga Google Sign-In selalu DEVELOPER_ERROR (10). Kalau secret
       # belum diisi, langkah ini dilewati dan build tetap jalan seperti semula.
       - name: Prepare release keystore
-        if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
-        env:
-          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        if: env.KEYSTORE_BASE64 != ''
         run: |
           printf '%s' "$KEYSTORE_BASE64" | base64 -d > android/release.jks
           umask 077
