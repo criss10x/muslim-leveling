@@ -162,4 +162,21 @@ void main() {
 
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('baris surat tetap satu tinggi di layar sempit', (tester) async {
+    tester.view.physicalSize = const Size(360, 800);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(wrap(QuranTab()));
+    await tester.pumpAndSettle();
+
+    // Al-Fatihah artinya pendek, Al-Baqarah panjang. Sebelum kolom Arab dibuat
+    // proporsional, arti panjang membungkus dan kartunya ikut memanjang.
+    Size kartu(String nama) => tester.getSize(
+      find.ancestor(of: find.text(nama), matching: find.byType(Material)).first,
+    );
+
+    expect(kartu('Al-Fatihah').height, kartu('Al-Baqarah').height);
+  });
 }

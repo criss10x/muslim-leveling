@@ -199,61 +199,75 @@ class _SurahRow extends StatelessWidget {
             ),
             child: Padding(
               padding: const EdgeInsets.all(AppSpacing.md),
-              child: Row(
-                children: [
-                  RubElHizbBadge(number: surah.number),
-                  const SizedBox(width: AppSpacing.md),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          surah.nameLatin,
-                          style: AppText.titleLg().copyWith(
-                            color: AppColors.onSurface,
-                          ),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  // Proporsional, bukan angka mati: patokan 108px menyisakan
+                  // terlalu sedikit untuk kolom arti di layar 360dp sehingga
+                  // artinya membungkus dan tinggi baris berayun antar surat.
+                  final arabicWidth =
+                      (constraints.maxWidth * 0.3).clamp(0.0, 108.0);
+
+                  return Row(
+                    children: [
+                      RubElHizbBadge(number: surah.number),
+                      const SizedBox(width: AppSpacing.md),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              surah.nameLatin,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppText.titleLg().copyWith(
+                                color: AppColors.onSurface,
+                              ),
+                            ),
+                            const SizedBox(height: AppSpacing.base),
+                            Text(
+                              '${surah.meaning} · ${surah.ayahCount} ayat',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppText.bodyMd().copyWith(
+                                color: AppColors.onSurfaceVariant,
+                              ),
+                            ),
+                            const SizedBox(height: AppSpacing.xs),
+                            // Jumlah ayat digabung ke baris arti, bukan di sini:
+                            // chip + jumlah ayat berdampingan melebihi lebar
+                            // yang tersedia di 360dp dan memicu overflow.
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: _RevelationChip(label: surah.revelation),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: AppSpacing.base),
-                        Text(
-                          '${surah.meaning} · ${surah.ayahCount} ayat',
-                          style: AppText.bodyMd().copyWith(
-                            color: AppColors.onSurfaceVariant,
-                          ),
-                        ),
-                        const SizedBox(height: AppSpacing.xs),
-                        // Jumlah ayat digabung ke baris arti, bukan di sini:
-                        // chip + jumlah ayat berdampingan melebihi lebar yang
-                        // tersedia di layar 360dp dan memicu RenderFlex overflow.
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: _RevelationChip(label: surah.revelation),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: AppSpacing.sm),
-                  // Lebar dikunci lalu diciutkan bila perlu: nama Arab terpanjang
-                  // (mis. المنافقون) sebelumnya kena ellipsis karena berebut
-                  // ruang dengan chevron.
-                  SizedBox(
-                    width: 108,
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          surah.nameArabic,
-                          textDirection: TextDirection.rtl,
-                          maxLines: 1,
-                          style: AppText.titleLg().copyWith(
-                            color: AppColors.primary,
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
+                      // Diciutkan bila perlu, bukan dipotong: nama Arab
+                      // terpanjang (mis. المنافقون) dulu kena ellipsis karena
+                      // berebut ruang dengan chevron.
+                      SizedBox(
+                        width: arabicWidth,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              surah.nameArabic,
+                              textDirection: TextDirection.rtl,
+                              maxLines: 1,
+                              style: AppText.titleLg().copyWith(
+                                color: AppColors.primary,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                ],
+                    ],
+                  );
+                },
               ),
             ),
           ),
