@@ -4,15 +4,42 @@ Kode app sudah siap. Login Google dipakai **hanya** untuk backup progress ke Sup
 
 ## Root cause yang sering bikin gagal
 
-APK release di-sign dengan keystore `muslim-leveling-release.jks`.  
-`google-services.json` / OAuth Android client **hanya** punya SHA-1 **debug**:
+Native Google Sign-In mencocokkan **package name + SHA-1 sertifikat penanda tangan APK**
+dengan OAuth Android client di Google Cloud. Kalau SHA-1 APK yang terpasang tidak
+terdaftar → `ApiException: 10` (DEVELOPER_ERROR) / idToken kosong.
 
-| Keystore | SHA-1 |
+| Keystore | SHA-1 | Status |
+|---|---|---|
+| Debug lokal (`~/.android/debug.keystore`) | `A4:26:1B:D1:DF:E4:AA:AB:AE:20:C3:D9:70:5F:A1:22:18:21:EE:2C` | ✅ terdaftar |
+| Release (`~/muslim-leveling-release.jks`) | `DF:2C:7E:72:5A:29:A7:1B:6F:66:FA:A6:FA:04:78:77:5B:46:F7:23` | ❌ belum |
+| Debug runner GitHub | **berubah tiap build** | ❌ tidak mungkin didaftarkan |
+
+**Jangan berasumsi APK sudah di-sign release.** `android/app/build.gradle.kts`
+memakai keystore release hanya bila `android/key.properties` ada; kalau tidak, ia
+jatuh ke signing config **debug**. Di runner GitHub, `debug.keystore` dibuat ulang
+setiap kali sehingga SHA-1-nya acak — APK dari CI tanpa secret keystore **tidak akan
+pernah** bisa native sign-in, berapa kali pun SHA didaftarkan.
+
+Selalu baca sidik jari APK yang benar-benar kamu pasang:
+```bash
+apksigner verify --print-certs app-release.apk | grep -E "certificate DN|SHA-1"
+```
+
+Supaya APK CI punya SHA-1 tetap, isi 4 GitHub Secrets berikut di
+**Settings → Secrets and variables → Actions**:
+
+| Secret | Isi |
 |---|---|
-| Debug (`~/.android/debug.keystore`) | `A4:26:1B:D1:DF:E4:AA:AB:AE:20:C3:D9:70:5F:A1:22:18:21:EE:2C` ✅ terdaftar |
-| **Release** (`~/muslim-leveling-release.jks`) | `DF:2C:7E:72:5A:29:A7:1B:6F:66:FA:A6:FA:04:78:77:5B:46:F7:23` ❌ **belum** |
+| `ANDROID_KEYSTORE_BASE64` | `base64 -w0 ~/muslim-leveling-release.jks` |
+| `ANDROID_KEYSTORE_PASSWORD` | password keystore |
+| `ANDROID_KEY_ALIAS` | `muslim-leveling` |
+| `ANDROID_KEY_PASSWORD` | password key |
 
-Tanpa release SHA-1 → native Google Sign-In return `ApiException: 10` / idToken kosong.
+Workflow `flutter.yml` akan menyusun `key.properties` sendiri saat build, dan
+mencetak SHA-1 hasilnya di log step **Report APK signing certificate**.
+
+App juga **auto-fallback** ke login browser kalau native gagal — jalur itu tidak
+butuh SHA-1 sama sekali.
 
 App sekarang **auto-fallback** ke login browser (Supabase OAuth) kalau native gagal.  
 Browser path **tidak** butuh Android SHA-1 — tapi butuh Web client + redirect URL di Supabase.

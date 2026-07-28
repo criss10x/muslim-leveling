@@ -66,8 +66,39 @@ jobs:
       - name: Test
         run: flutter test
 
+      # Tanpa langkah ini, build.gradle.kts jatuh ke signing config debug dan
+      # runner GitHub memakai debug.keystore yang dibuat ulang tiap kali — SHA-1
+      # APK berubah-ubah dan tidak akan pernah cocok dengan OAuth client mana
+      # pun, sehingga Google Sign-In selalu DEVELOPER_ERROR (10). Kalau secret
+      # belum diisi, langkah ini dilewati dan build tetap jalan seperti semula.
+      - name: Prepare release keystore
+        if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          printf '%s' "$KEYSTORE_BASE64" | base64 -d > android/release.jks
+          umask 077
+          cat > android/key.properties <<PROPS
+          storeFile=release.jks
+          storePassword=$KEYSTORE_PASSWORD
+          keyAlias=$KEY_ALIAS
+          keyPassword=$KEY_PASSWORD
+          PROPS
+
       - name: Build release APK (arm64-v8a)
         run: flutter build apk --release --target-platform android-arm64
+
+      # Dicetak supaya SHA-1 yang harus didaftarkan di Google Cloud bisa dibaca
+      # dari log, tanpa perlu memasang APK-nya dulu.
+      - name: Report APK signing certificate
+        run: |
+          APKSIGNER=$(ls -d "$ANDROID_HOME"/build-tools/*/apksigner | tail -1)
+          "$APKSIGNER" verify --print-certs \
+            build/app/outputs/flutter-apk/app-release.apk \
+            | grep -E "certificate DN|SHA-1"
 
       - uses: actions/upload-artifact@v4
         with:

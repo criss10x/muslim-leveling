@@ -204,9 +204,14 @@ class AuthService {
     final s = e.toString();
     // Common Google Play Services / Sign-In codes
     if (s.contains('ApiException: 10') || s.contains('DEVELOPER_ERROR')) {
-      return 'Google DEVELOPER_ERROR (10): SHA-1 release belum terdaftar di '
-          'Google Cloud OAuth Android client. '
-          'Release SHA-1: DF:2C:7E:72:5A:29:A7:1B:6F:66:FA:A6:FA:04:78:77:5B:46:F7:23';
+      // Sengaja tidak menyebut SHA-1 tertentu: APK bisa saja di-sign keystore
+      // debug (mis. build CI tanpa secret keystore), dan menyebut SHA release
+      // di situ menuntun orang mendaftarkan sidik jari yang salah lalu tetap
+      // gagal. SHA yang benar hanya bisa dibaca dari APK yang terpasang.
+      return 'Google DEVELOPER_ERROR (10): SHA-1 APK ini belum terdaftar di '
+          'OAuth Android client. Cek sidik jari APK-nya dengan '
+          '"apksigner verify --print-certs", lalu daftarkan yang itu. '
+          'Mencoba login browser…';
     }
     if (s.contains('ApiException: 12500')) {
       return 'Google Sign-In misconfigured (12500). Cek OAuth consent + '
