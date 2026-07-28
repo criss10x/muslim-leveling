@@ -37,7 +37,9 @@ Subtitle `arti · tempat turun · jumlah ayat` yang sekarang menumpuk dalam satu
 Chip tempat turun:
 
 - Makkiyah — latar `AppColors.surfaceContainerHigh`, teks `AppColors.onSurfaceVariant`.
-- Madaniyah — latar `AppColors.secondaryContainer`, teks `AppColors.goldInk`.
+- Madaniyah — latar `AppColors.secondaryContainer`, teks `AppColors.onSecondaryContainer`.
+
+Pasangan `secondaryContainer`/`onSecondaryContainer` dipakai, bukan `goldInk`, karena di preset Dark `goldInk` (#FFE16D) di atas `secondaryContainer` (#FFDB3C) praktis tak terbaca. Pasangan container/on-container sudah dikalibrasi di keempat preset.
 
 Perbedaan warna ini membuat asal turunnya surat bisa dipindai tanpa membaca teks. Nilai `revelation` di `assets/quran/surahs.json` hanya berisi dua nilai tersebut; nilai lain di luar keduanya jatuh ke gaya netral Makkiyah, bukan error.
 
