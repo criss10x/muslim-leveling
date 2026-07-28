@@ -323,24 +323,33 @@ class _SearchHeader extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.background,
-        border: Border(
-          bottom: BorderSide(
-            color: overlapsContent
-                ? AppColors.outlineVariant
-                : Colors.transparent,
+    // SizedBox wajib: SliverPersistentHeader melayout anaknya dengan tinggi
+    // maksimum, bukan tight. Kalau anaknya lebih pendek dari extent yang
+    // dideklarasikan, paintExtent jadi lebih kecil dari layoutExtent dan
+    // Flutter meng-assert. alignment memusatkan field supaya sisa ruangnya
+    // terbagi rata, bukan menumpuk di bawah.
+    return SizedBox(
+      height: extent,
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: AppColors.background,
+          border: Border(
+            bottom: BorderSide(
+              color: overlapsContent
+                  ? AppColors.outlineVariant
+                  : Colors.transparent,
+            ),
           ),
         ),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.md,
+          AppSpacing.sm,
+          AppSpacing.md,
+          AppSpacing.sm,
+        ),
+        child: child,
       ),
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.md,
-        AppSpacing.sm,
-        AppSpacing.md,
-        AppSpacing.sm,
-      ),
-      child: child,
     );
   }
 
