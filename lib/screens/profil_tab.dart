@@ -17,10 +17,10 @@ import '../../services/learning_content.dart';
 import '../../services/supabase_sync.dart';
 import '../../services/backup_merge.dart';
 import '../../services/auth_service.dart';
-import '../../services/theme_service.dart';
 import '../../widgets/achievement_medal.dart';
 import '../../widgets/tier_avatar.dart';
 import '../../widgets/cosmetic_locker.dart';
+import '../../widgets/theme_preset_picker.dart';
 import '../../services/cosmetic_service.dart';
 import '../../services/cosmetic_catalog.dart';
 import '../../services/entitlement_service.dart';
@@ -1748,9 +1748,9 @@ class _ProfilTabState extends State<ProfilTab> {
         onTap: _showNotifDialog,
       ),
       _SettingRow(
-        'Tema Terang',
-        Icons.light_mode_outlined,
-        trailing: _ThemeToggle(),
+        'Tema aplikasi',
+        Icons.palette_outlined,
+        onTap: () => showThemePresetPicker(context),
       ),
       _SettingRow(
         'Privasi & Data',
@@ -1837,34 +1837,4 @@ class _SettingRow {
   final VoidCallback? onTap;
   final Widget? trailing;
   _SettingRow(this.title, this.icon, {this.color, this.onTap, this.trailing});
-}
-
-class _ThemeToggle extends StatefulWidget {
-  @override
-  State<_ThemeToggle> createState() => _ThemeToggleState();
-}
-
-class _ThemeToggleState extends State<_ThemeToggle> {
-  @override
-  void initState() {
-    super.initState();
-    themeNotifier.addListener(_onChanged);
-  }
-
-  @override
-  void dispose() {
-    themeNotifier.removeListener(_onChanged);
-    super.dispose();
-  }
-
-  void _onChanged() => setState(() {});
-
-  @override
-  Widget build(BuildContext context) {
-    return Switch.adaptive(
-      value: themeNotifier.isLight,
-      onChanged: (_) => themeNotifier.toggle(),
-      activeThumbColor: AppColors.primary,
-    );
-  }
 }
