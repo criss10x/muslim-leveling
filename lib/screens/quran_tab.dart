@@ -118,6 +118,7 @@ class _QuranTabState extends State<QuranTab> {
           SliverPersistentHeader(
             pinned: true,
             delegate: _SearchHeader(
+              extent: _SearchHeader.extentFor(context),
               child: TextField(
                 controller: _searchController,
                 onChanged: (v) => setState(() => _query = v),
@@ -292,19 +293,33 @@ class _RevelationChip extends StatelessWidget {
   }
 }
 
-/// Search field yang menempel di atas saat daftar di-scroll. minExtent sama
-/// dengan maxExtent karena tingginya tetap; garis bawah hanya muncul ketika
-/// ada konten yang lewat di belakangnya, supaya header tidak terlihat
-/// mengambang saat daftar masih di puncak.
+/// Search field yang menempel di atas saat daftar di-scroll. Tingginya dihitung
+/// dari skala teks aktif, bukan angka mati: contentPadding TextField tidak ikut
+/// membesar saat pengguna menaikkan ukuran teks sistem, tapi tinggi barisnya
+/// iya — extent tetap akan menjepit field. Garis bawah hanya muncul ketika ada
+/// konten yang lewat di belakangnya, supaya header tidak terlihat mengambang
+/// saat daftar masih di puncak.
 class _SearchHeader extends SliverPersistentHeaderDelegate {
   final Widget child;
-  const _SearchHeader({required this.child});
+  final double extent;
+
+  const _SearchHeader({required this.child, required this.extent});
+
+  /// Tinggi yang dibutuhkan header pada skala teks aktif: padding vertikal
+  /// Container + contentPadding bawaan OutlineInputBorder (20 atas, 20 bawah)
+  /// + tinggi satu baris bodyMd yang ikut diskalakan.
+  static double extentFor(BuildContext context) {
+    const containerPadding = AppSpacing.sm * 2;
+    const contentPadding = 40.0;
+    final lineHeight = MediaQuery.textScalerOf(context).scale(14) * (20 / 14);
+    return containerPadding + contentPadding + lineHeight;
+  }
 
   @override
-  double get minExtent => 70;
+  double get minExtent => extent;
 
   @override
-  double get maxExtent => 70;
+  double get maxExtent => extent;
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -330,5 +345,6 @@ class _SearchHeader extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  bool shouldRebuild(covariant _SearchHeader oldDelegate) => true;
+  bool shouldRebuild(covariant _SearchHeader oldDelegate) =>
+      oldDelegate.extent != extent || oldDelegate.child != child;
 }

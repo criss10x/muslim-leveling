@@ -34,9 +34,11 @@ void main() {
     await tester.drag(find.byType(CustomScrollView), const Offset(0, -1200));
     await tester.pumpAndSettle();
 
-    // Judul ikut ter-scroll hilang, search field-nya yang dipin.
+    // Judul ikut ter-scroll hilang, search field-nya yang dipin — dan posisinya
+    // benar-benar di dekat puncak, bukan sekadar masih ada di widget tree.
     expect(find.text('Al-Quran'), findsNothing);
     expect(find.byType(TextField), findsOneWidget);
+    expect(tester.getTopLeft(find.byType(TextField)).dy, lessThan(40));
   });
 
   testWidgets('menampilkan daftar surat', (tester) async {
@@ -109,6 +111,24 @@ void main() {
 
     // Al-Baqarah: chip "Madaniyah" + 286 ayat, kombinasi terlebar.
     expect(find.text('Al-Baqarah'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('search field tidak terjepit saat teks sistem diperbesar', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: MediaQuery(
+            data: const MediaQueryData(textScaler: TextScaler.linear(2.0)),
+            child: QuranTab(),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
     expect(tester.takeException(), isNull);
   });
 }
