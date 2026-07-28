@@ -84,19 +84,24 @@ class _QuranTabState extends State<QuranTab> {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        'Al-Quran',
-                        style: AppText.headlineMd().copyWith(
-                          color: AppColors.onSurface,
+                      Expanded(
+                        child: Text(
+                          'Al-Quran',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppText.headlineMd().copyWith(
+                            color: AppColors.onSurface,
+                          ),
                         ),
                       ),
-                      const Spacer(),
+                      const SizedBox(width: AppSpacing.xs),
                       // Kaligrafi sebagai aksen, bukan informasi — karena itu
                       // diredupkan dan tidak diberi semantik.
                       ExcludeSemantics(
                         child: Text(
                           'القرآن',
                           textDirection: TextDirection.rtl,
+                          maxLines: 1,
                           style: AppText.headlineMd().copyWith(
                             color: AppColors.goldInk.withValues(alpha: 0.75),
                           ),
@@ -311,7 +316,11 @@ class _SearchHeader extends SliverPersistentHeaderDelegate {
   static double extentFor(BuildContext context) {
     const containerPadding = AppSpacing.sm * 2;
     const contentPadding = 40.0;
-    final lineHeight = MediaQuery.textScalerOf(context).scale(14) * (20 / 14);
+    // Diturunkan dari bodyMd, bukan angka salinan: kalau gaya teksnya berubah,
+    // extent ikut menyesuaikan dan field tidak diam-diam terjepit lagi.
+    final base = AppText.bodyMd();
+    final lineHeight =
+        MediaQuery.textScalerOf(context).scale(base.fontSize!) * base.height!;
     return containerPadding + contentPadding + lineHeight;
   }
 
@@ -323,6 +332,10 @@ class _SearchHeader extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    // overlapsContent hanya true kalau sliver lain menimpa header ini, bukan
+    // saat header menimpa konten — untuk pinned header, shrinkOffset > 0 adalah
+    // sinyal "sudah menempel di atas daftar" yang benar.
+    final menempel = overlapsContent || shrinkOffset > 0;
     // SizedBox wajib: SliverPersistentHeader melayout anaknya dengan tinggi
     // maksimum, bukan tight. Kalau anaknya lebih pendek dari extent yang
     // dideklarasikan, paintExtent jadi lebih kecil dari layoutExtent dan
@@ -335,11 +348,9 @@ class _SearchHeader extends SliverPersistentHeaderDelegate {
         decoration: BoxDecoration(
           color: AppColors.background,
           border: Border(
-            bottom: BorderSide(
-              color: overlapsContent
-                  ? AppColors.outlineVariant
-                  : Colors.transparent,
-            ),
+            bottom: menempel
+                ? BorderSide(color: AppColors.outlineVariant)
+                : BorderSide.none,
           ),
         ),
         padding: const EdgeInsets.fromLTRB(

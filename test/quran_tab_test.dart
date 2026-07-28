@@ -130,5 +130,36 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(tester.takeException(), isNull);
+
+    // Bukan sekadar "tidak crash": field harus benar-benar setinggi target tap
+    // minimum dan muat utuh di dalam header yang membungkusnya.
+    final field = tester.getSize(find.byType(TextField));
+    expect(field.height, greaterThanOrEqualTo(48.0));
+    expect(
+      field.height,
+      lessThanOrEqualTo(tester.getSize(find.byType(SliverPersistentHeader)).height),
+    );
+  });
+
+  testWidgets('header tidak overflow di layar sempit dengan teks besar', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(320, 640);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: MediaQuery(
+            data: const MediaQueryData(textScaler: TextScaler.linear(2.0)),
+            child: QuranTab(),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
   });
 }
