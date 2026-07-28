@@ -455,8 +455,9 @@ class GameService {
     }
     if (level <= 19) return 'Muslim Elite ${roman(5 - ((level - 10) ~/ 2))}';
     if (level <= 29) return 'Muslim Master ${roman(5 - ((level - 20) ~/ 2))}';
-    if (level <= 39)
+    if (level <= 39) {
       return 'Muslim Grandmaster ${roman(5 - ((level - 30) ~/ 2))}';
+    }
     if (level <= 59) return 'Muslim Epic ${roman(5 - ((level - 40) ~/ 4))}';
     if (level <= 79) return 'Muslim Legend ${roman(5 - ((level - 60) ~/ 4))}';
     if (level < 85) return 'Muslim Mythic';
@@ -893,15 +894,17 @@ class GameService {
     final yest = yesterdayStr();
     final now = nowHHmm();
 
-    if (state.prayerLog.any((l) => l.date == today && l.prayer == prayer))
+    if (state.prayerLog.any((l) => l.date == today && l.prayer == prayer)) {
       return null;
+    }
 
     if (type == 'sunnah' && !isSunnahOnTime(prayer, state.timings)) return null;
 
     if (type == 'wajib' &&
         !_testSkipTimeWindow &&
-        !isPrayerWindowOpen(prayer, state.timings))
+        !isPrayerWindowOpen(prayer, state.timings)) {
       return null;
+    }
 
     final newLog = PrayerLog(
       date: today,
@@ -1599,8 +1602,9 @@ class GameService {
   }
 
   static Future<GameState> ensureDailyQuests() async {
-    if (_cache.questDate == todayStr() && _cache.quests.isNotEmpty)
+    if (_cache.questDate == todayStr() && _cache.quests.isNotEmpty) {
       return _cache;
+    }
     final quests = generateQuestPool();
     final newState = _cache.copyWith(quests: quests, questDate: todayStr());
     await _save(newState);
