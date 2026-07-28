@@ -33,50 +33,13 @@ class _DisplaySheet extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text('Tampilan',
+                  Text('Pengaturan Tampilan',
                       style: AppText.headlineMd()
                           .copyWith(color: AppColors.onSurface)),
                   const SizedBox(height: 16),
-
-                  // Pratinjau ikut berubah saat slider digeser.
-                  Container(
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: AppColors.surfaceContainerLow,
-                      borderRadius: BorderRadius.circular(AppRadius.xl),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ',
-                          textAlign: TextAlign.right,
-                          textDirection: TextDirection.rtl,
-                          style: GoogleFonts.amiriQuran(
-                            fontSize: quranSettings.arabicFontSize,
-                            height: 2.0,
-                            color: AppColors.onSurface,
-                          ),
-                        ),
-                        if (quranSettings.showTranslation) ...[
-                          const SizedBox(height: 8),
-                          Text(
-                            'Dengan menyebut nama Allah Yang Maha Pemurah lagi '
-                            'Maha Penyayang.',
-                            style: AppText.bodyMd().copyWith(
-                              fontSize: quranSettings.translationFontSize,
-                              color: AppColors.onSurfaceVariant,
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
+                  _preview(),
                   const SizedBox(height: 20),
-
-                  Text('Ukuran teks Arab',
-                      style: AppText.labelCaps()
-                          .copyWith(color: AppColors.onSurfaceVariant)),
+                  _label('Ukuran teks Arab'),
                   Slider(
                     value: quranSettings.arabicFontSize,
                     min: kArabicFontMin,
@@ -85,10 +48,7 @@ class _DisplaySheet extends StatelessWidget {
                     label: quranSettings.arabicFontSize.round().toString(),
                     onChanged: (v) => quranSettings.setArabicFontSize(v),
                   ),
-
-                  Text('Ukuran terjemahan',
-                      style: AppText.labelCaps()
-                          .copyWith(color: AppColors.onSurfaceVariant)),
+                  _label('Ukuran terjemahan'),
                   Slider(
                     value: quranSettings.translationFontSize,
                     min: kTranslationFontMin,
@@ -98,14 +58,24 @@ class _DisplaySheet extends StatelessWidget {
                     label: quranSettings.translationFontSize.round().toString(),
                     onChanged: (v) => quranSettings.setTranslationFontSize(v),
                   ),
-
-                  SwitchListTile(
-                    contentPadding: EdgeInsets.zero,
+                  const Divider(height: 24),
+                  _switchTile(
                     value: quranSettings.showTranslation,
                     onChanged: (v) => quranSettings.setShowTranslation(v),
-                    title: Text('Tampilkan terjemahan',
-                        style: AppText.bodyLg()
-                            .copyWith(color: AppColors.onSurface)),
+                    title: 'Terjemahan Indonesia',
+                  ),
+                  _switchTile(
+                    value: quranSettings.showLatin,
+                    onChanged: (v) => quranSettings.setShowLatin(v),
+                    title: 'Transliterasi Latin',
+                    subtitle: 'Bacaan latin untuk membantu membaca Arab',
+                  ),
+                  _switchTile(
+                    value: quranSettings.showTajweed,
+                    onChanged: (v) => quranSettings.setShowTajweed(v),
+                    title: 'Warna Tajwid',
+                    subtitle: 'Merah=Ghunnah, Biru=Qalqalah/Idgham, '
+                        'Hijau=Mad',
                   ),
                 ],
               ),
@@ -113,6 +83,80 @@ class _DisplaySheet extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  Widget _label(String t) => Padding(
+        padding: const EdgeInsets.only(bottom: 2),
+        child: Text(t,
+            style: AppText.labelCaps()
+                .copyWith(color: AppColors.onSurfaceVariant)),
+      );
+
+  Widget _switchTile({
+    required bool value,
+    required ValueChanged<bool> onChanged,
+    required String title,
+    String? subtitle,
+  }) =>
+      SwitchListTile(
+        contentPadding: EdgeInsets.zero,
+        value: value,
+        onChanged: onChanged,
+        title: Text(title,
+            style: AppText.bodyLg().copyWith(color: AppColors.onSurface)),
+        subtitle: subtitle == null
+            ? null
+            : Text(subtitle,
+                style: AppText.bodyMd().copyWith(
+                    fontSize: 12,
+                    color: AppColors.onSurfaceVariant)),
+      );
+
+  Widget _preview() {
+    final s = quranSettings;
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ',
+            textAlign: TextAlign.right,
+            textDirection: TextDirection.rtl,
+            style: GoogleFonts.amiriQuran(
+              fontSize: s.arabicFontSize,
+              height: 2.0,
+              color: AppColors.onSurface,
+            ),
+          ),
+          if (s.showLatin) ...[
+            const SizedBox(height: 4),
+            Text(
+              'Bismillaahir Rahmaanir Raheem',
+              style: AppText.bodyMd().copyWith(
+                fontStyle: FontStyle.italic,
+                color: AppColors.onSurfaceVariant.withValues(alpha: 0.8),
+              ),
+            ),
+          ],
+          if (s.showTranslation) ...[
+            const SizedBox(height: 8),
+            Text(
+              'Dengan menyebut nama Allah Yang Maha Pemurah lagi '
+              'Maha Penyayang.',
+              style: AppText.bodyMd().copyWith(
+                fontSize: s.translationFontSize,
+                color: AppColors.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ],
+      ),
     );
   }
 }

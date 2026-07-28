@@ -4,7 +4,6 @@ import '../services/cosmetic_catalog.dart';
 import '../services/cosmetic_service.dart';
 import '../services/game_service.dart';
 import '../services/entitlement_service.dart';
-import '../screens/pro_paywall_screen.dart';
 
 const _slotLabels = {
   CosmeticSlot.frame: 'Bingkai',
@@ -32,13 +31,11 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
   void initState() {
     super.initState();
     GameService.stateVersion.addListener(_rebuild);
-    EntitlementService.proStatus.addListener(_rebuild);
   }
 
   @override
   void dispose() {
     GameService.stateVersion.removeListener(_rebuild);
-    EntitlementService.proStatus.removeListener(_rebuild);
     super.dispose();
   }
 
@@ -47,25 +44,17 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
   }
 
   Future<void> _onTap(Cosmetic c) async {
-    final isPro = EntitlementService.isPro;
-    if (c.access == CosmeticAccess.pro && !isPro) {
-      await Navigator.of(
-        context,
-      ).push(MaterialPageRoute(builder: (_) => const ProPaywallScreen()));
-      return;
-    }
-
     final equippedId = CosmeticService.resolveSlot(
       GameService.current,
       c.slot,
-      isPro: isPro,
+      isPro: true,
     );
     if (c.id == equippedId &&
-        CosmeticService.isAllowed(GameService.current, c.id, isPro: isPro)) {
+        CosmeticService.isAllowed(GameService.current, c.id, isPro: true)) {
       await GameService.unequipCosmetic(c.slot);
       return;
     }
-    await GameService.equipCosmetic(c.slot, c.id, isPro: isPro);
+    await GameService.equipCosmetic(c.slot, c.id, isPro: true);
   }
 
   Color _rarityColor(CosmeticRarity rarity) => switch (rarity) {

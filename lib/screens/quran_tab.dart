@@ -223,22 +223,31 @@ class _SurahRow extends StatelessWidget {
                                 color: AppColors.onSurface,
                               ),
                             ),
-                            const SizedBox(height: AppSpacing.base),
+                            const SizedBox(height: AppSpacing.xs),
                             Text(
-                              '${surah.meaning} · ${surah.ayahCount} ayat',
+                              surah.meaning,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: AppText.bodyMd().copyWith(
+                                fontSize: 12,
                                 color: AppColors.onSurfaceVariant,
                               ),
                             ),
                             const SizedBox(height: AppSpacing.xs),
-                            // Jumlah ayat digabung ke baris arti, bukan di sini:
-                            // chip + jumlah ayat berdampingan melebihi lebar
-                            // yang tersedia di 360dp dan memicu overflow.
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: _RevelationChip(label: surah.revelation),
+                            Row(
+                              children: [
+                                _RevelationChip(label: surah.revelation),
+                                const SizedBox(width: AppSpacing.sm),
+                                Text(
+                                  '📄 ${surah.ayahCount} ayat',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppText.bodyMd().copyWith(
+                                    fontSize: 12,
+                                    color: AppColors.onSurfaceVariant,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),

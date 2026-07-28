@@ -4,6 +4,7 @@ import '../services/quran_data.dart';
 import '../services/quran_audio_service.dart';
 import '../services/quran_playlist.dart';
 import '../services/quran_settings.dart';
+import '../services/quran_qari.dart';
 
 Future<void> showQuranPlaybackSheet(
   BuildContext context, {
@@ -31,7 +32,6 @@ class _PlaybackSheet extends StatelessWidget {
       builder: (context, _) {
         final range = quranAudio.range ??
             PlaybackRange.full(surah: surah.number, ayahCount: surah.ayahCount);
-        final infinite = quranAudio.repeat == kRepeatInfinite;
 
         return SafeArea(
           child: SingleChildScrollView(
@@ -76,29 +76,6 @@ class _PlaybackSheet extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
 
-                  // ── Ulangi per ayat ──
-                  Text('Ulangi tiap ayat',
-                      style: AppText.labelCaps()
-                          .copyWith(color: AppColors.onSurfaceVariant)),
-                  const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 8,
-                    children: [
-                      for (final n in [1, 2, 3, 5, 7, 10])
-                        ChoiceChip(
-                          label: Text('${n}x'),
-                          selected: quranAudio.repeat == n,
-                          onSelected: (_) => quranAudio.setRepeat(n),
-                        ),
-                      ChoiceChip(
-                        label: const Text('∞'),
-                        selected: infinite,
-                        onSelected: (_) => quranAudio.setRepeat(kRepeatInfinite),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-
                   // ── Ulangi semua ──
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
@@ -108,12 +85,8 @@ class _PlaybackSheet extends StatelessWidget {
                         style: AppText.bodyLg()
                             .copyWith(color: AppColors.onSurface)),
                     subtitle: Text(
-                      infinite
-                          // Presedensi: ∞ per ayat menahan pemutaran sehingga
-                          // akhir rentang tidak pernah tercapai.
-                          ? 'Berlaku setelah pengulangan ∞ dimatikan'
-                          : 'Kembali ke ayat ${range.from} setelah ayat '
-                              '${range.to} selesai',
+                      'Kembali ke ayat ${range.from} setelah ayat '
+                      '${range.to} selesai',
                       style: AppText.bodyMd()
                           .copyWith(color: AppColors.onSurfaceVariant),
                     ),
@@ -133,6 +106,39 @@ class _PlaybackSheet extends StatelessWidget {
                           label: Text('${s}x'),
                           selected: quranSettings.speed == s,
                           onSelected: (_) => quranAudio.setSpeed(s),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+
+                  // ── Qari ──
+                  Text('Qari',
+                      style: AppText.labelCaps()
+                          .copyWith(color: AppColors.onSurfaceVariant)),
+                  const SizedBox(height: 8),
+                  _QariDropdown(),
+                  const SizedBox(height: 20),
+
+                  // ── Sleep timer ──
+                  Text('Tidur otomatis',
+                      style: AppText.labelCaps()
+                          .copyWith(color: AppColors.onSurfaceVariant)),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    children: [
+                      for (final m in kSleepOptions)
+                        ChoiceChip(
+                          label: Text(m == -1
+                              ? 'Akhir surat'
+                              : m == 0
+                                  ? 'Off'
+                                  : '${m}m'),
+                          selected: quranSettings.sleepMinutes == m,
+                          onSelected: (_) {
+                            quranSettings.setSleepMinutes(m);
+                            quranAudio.rescheduleSleep();
+                          },
                         ),
                     ],
                   ),
@@ -184,6 +190,40 @@ class _AyahDropdown extends StatelessWidget {
           ],
           onChanged: (v) {
             if (v != null) onChanged(v);
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _QariDropdown extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return InputDecorator(
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: AppColors.surfaceContainerLow,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppRadius.xl),
+          borderSide: BorderSide.none,
+        ),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: quranSettings.qariId,
+          isExpanded: true,
+          dropdownColor: AppColors.surfaceContainerHigh,
+          style: AppText.bodyLg().copyWith(color: AppColors.onSurface),
+          items: [
+            for (final q in kQariList)
+              DropdownMenuItem(value: q.id, child: Text(q.name)),
+          ],
+          onChanged: (v) {
+            if (v != null) {
+              quranSettings.setQari(v);
+              quranAudio.rebuildQueue();
+            }
           },
         ),
       ),

@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:muslim_leveling/services/quran_audio_service.dart';
 import 'package:muslim_leveling/services/quran_playlist.dart';
+import 'package:muslim_leveling/services/quran_qari.dart' hide ayahAudioUrl;
 
 void main() {
   group('ayahAudioUrl', () {
@@ -16,8 +17,7 @@ void main() {
   });
 
   test('creates UriAudioSource for direct playback', () {
-    final source = audioSourceForAyah(const AyahRef(1, 1));
-
+    final source = audioSourceForAyah(const AyahRef(1, 1), kQariList.first.urlPattern);
     expect(source, isA<UriAudioSource>());
   });
 
@@ -50,41 +50,16 @@ void main() {
   });
 
   group('buildQueue', () {
-    test('repeat 1 menghasilkan tiap ayat sekali', () {
-      final r = PlaybackRange.full(surah: 1, ayahCount: 7).withFrom(1).withTo(3);
-      final q = buildQueue(range: r, repeat: 1);
-      expect(q, [
-        const AyahRef(1, 1),
-        const AyahRef(1, 2),
-        const AyahRef(1, 3),
-      ]);
-    });
-
-    test('repeat N menggandakan tiap ayat berurutan', () {
-      final r = PlaybackRange.full(surah: 1, ayahCount: 7).withFrom(1).withTo(2);
-      final q = buildQueue(range: r, repeat: 3);
-      expect(q, [
-        const AyahRef(1, 1),
-        const AyahRef(1, 1),
-        const AyahRef(1, 1),
-        const AyahRef(1, 2),
-        const AyahRef(1, 2),
-        const AyahRef(1, 2),
-      ]);
-    });
-
-    test('repeat tak terbatas menghasilkan tiap ayat sekali', () {
-      // Mode tak terbatas dijalankan LoopMode.one di player, bukan lewat
-      // playlist — playlist tak-hingga tidak mungkin dibangun.
-      final r = PlaybackRange.full(surah: 1, ayahCount: 7).withFrom(1).withTo(3);
-      final q = buildQueue(range: r, repeat: kRepeatInfinite);
-      expect(q.length, 3);
+    test('full surat', () {
+      final r = PlaybackRange.full(surah: 2, ayahCount: 286);
+      final q = buildQueue(r);
+      expect(q.length, 286);
     });
 
     test('range di tengah surat tidak menyertakan ayat sebelumnya', () {
       final r =
           PlaybackRange.full(surah: 2, ayahCount: 286).withFrom(5).withTo(10);
-      final q = buildQueue(range: r, repeat: 1);
+      final q = buildQueue(r);
       expect(q.first, const AyahRef(2, 5));
       expect(q.last, const AyahRef(2, 10));
       expect(q.length, 6);

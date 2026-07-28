@@ -10,7 +10,6 @@ import 'screens/splash_screen.dart';
 import 'services/notification_service.dart';
 import 'services/supabase_sync.dart';
 import 'services/auth_service.dart';
-import 'services/entitlement_service.dart';
 import 'services/game_service.dart';
 import 'services/quran_settings.dart';
 
@@ -62,9 +61,8 @@ Future<void> _initAsync() async {
   } catch (_) {}
 
   try {
-    await EntitlementService.load();
     await GameService.load();
-    await GameService.reconcileCosmeticLapse(isPro: EntitlementService.isPro);
+    await GameService.reconcileCosmeticLapse(isPro: true);
   } catch (_) {}
 
   try {

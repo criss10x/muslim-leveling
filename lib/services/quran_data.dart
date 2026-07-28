@@ -28,17 +28,20 @@ class QuranSurah {
 class QuranAyah {
   final int ayah;
   final String arabic, translation;
+  final String? latin; // optional, diisi dari transliterasi API
 
   const QuranAyah({
     required this.ayah,
     required this.arabic,
     required this.translation,
+    this.latin,
   });
 
   factory QuranAyah.fromJson(Map<String, dynamic> j) => QuranAyah(
         ayah: j['ayah'] as int,
         arabic: j['arabic'] as String,
         translation: j['translation'] as String,
+        latin: j['latin'] as String?,
       );
 }
 
@@ -88,6 +91,13 @@ class QuranData {
           s.number.toString() == q;
     }).toList(growable: false);
   }
+}
+
+class QuranTafsir {
+  final int ayah;
+  final String text;
+
+  const QuranTafsir({required this.ayah, required this.text});
 }
 
 final QuranData quranData = QuranData();

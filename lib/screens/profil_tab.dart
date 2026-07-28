@@ -23,7 +23,6 @@ import '../../widgets/cosmetic_locker.dart';
 import '../../widgets/theme_preset_picker.dart';
 import '../../services/cosmetic_service.dart';
 import '../../services/cosmetic_catalog.dart';
-import '../../services/entitlement_service.dart';
 import 'achievements_screen.dart';
 import 'welcome_pejuang.dart';
 
@@ -48,15 +47,13 @@ class _ProfilTabState extends State<ProfilTab> {
   void initState() {
     super.initState();
     _loadProfile();
-    // Rebuild avatar/title live when cosmetics equip or Pro status changes.
+    // Rebuild avatar/title live when cosmetics equip changes.
     GameService.stateVersion.addListener(_onGameOrEntitlementChanged);
-    EntitlementService.proStatus.addListener(_onGameOrEntitlementChanged);
   }
 
   @override
   void dispose() {
     GameService.stateVersion.removeListener(_onGameOrEntitlementChanged);
-    EntitlementService.proStatus.removeListener(_onGameOrEntitlementChanged);
     super.dispose();
   }
 
@@ -808,23 +805,22 @@ class _ProfilTabState extends State<ProfilTab> {
     final rankTitle = GameService.getRankTitle(state.level);
 
     // Equipped cosmetics — resolved fresh each build so they react to
-    // Locker taps and Pro toggles (this state listens to GameService.stateVersion
-    // and EntitlementService.proStatus directly and calls setState on change).
-    final isPro = EntitlementService.isPro;
+    // Locker taps (this state listens to GameService.stateVersion
+    // and calls setState on change).
     final frameId = CosmeticService.resolveSlot(
       state,
       CosmeticSlot.frame,
-      isPro: isPro,
+      isPro: true,
     );
     final auraId = CosmeticService.resolveSlot(
       state,
       CosmeticSlot.aura,
-      isPro: isPro,
+      isPro: true,
     );
     final titleId = CosmeticService.resolveSlot(
       state,
       CosmeticSlot.title,
-      isPro: isPro,
+      isPro: true,
     );
     final equippedTitle = CosmeticCatalog.byId(titleId)?.titleText ?? '';
     final tier = getTierVisualConfig(getTierName(state.level));
@@ -884,7 +880,7 @@ class _ProfilTabState extends State<ProfilTab> {
                           displayName: _nickname,
                           tierName: tier.name,
                           sizeDp: 88,
-                          isPro: isPro,
+                          isPro: true,
                           equippedFrameId: frameId,
                           equippedAuraId: auraId,
                         ),
@@ -1147,7 +1143,7 @@ class _ProfilTabState extends State<ProfilTab> {
               ),
             ),
           ),
-          if (isPro)
+          if (true) // ponytail: semua gratis. Selalu tampilkan border
             Positioned.fill(
               child: ExcludeSemantics(
                 child: IgnorePointer(

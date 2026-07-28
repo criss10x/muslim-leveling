@@ -1,17 +1,1 @@
-[
-  {
-    "ayah": 1,
-    "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ وَٱلْعَصْرِ",
-    "translation": "Demi masa."
-  },
-  {
-    "ayah": 2,
-    "arabic": "إِنَّ ٱلْإِنسَٰنَ لَفِى خُسْرٍ",
-    "translation": "Sesungguhnya manusia itu benar-benar dalam kerugian,"
-  },
-  {
-    "ayah": 3,
-    "arabic": "إِلَّا ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّٰلِحَٰتِ وَتَوَاصَوْا۟ بِٱلْحَقِّ وَتَوَاصَوْا۟ بِٱلصَّبْرِ",
-    "translation": "kecuali orang-orang yang beriman dan mengerjakan amal saleh dan nasehat menasehati supaya mentaati kebenaran dan nasehat menasehati supaya menetapi kesabaran."
-  }
-]
+[{"ayah": 1, "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ وَٱلْعَصْرِ", "translation": "Demi masa.", "latin": "Wal' asr"}, {"ayah": 2, "arabic": "إِنَّ ٱلْإِنسَٰنَ لَفِى خُسْرٍ", "translation": "Sesungguhnya manusia itu benar-benar dalam kerugian,", "latin": "Innal insaana lafee khusr"}, {"ayah": 3, "arabic": "إِلَّا ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّٰلِحَٰتِ وَتَوَاصَوْا۟ بِٱلْحَقِّ وَتَوَاصَوْا۟ بِٱلصَّبْرِ", "translation": "kecuali orang-orang yang beriman dan mengerjakan amal saleh dan nasehat menasehati supaya mentaati kebenaran dan nasehat menasehati supaya menetapi kesabaran.", "latin": "Il lal lazeena aamanu wa 'amilus saali haati wa tawa saw bil haqqi wa tawa saw bis sabr"}]

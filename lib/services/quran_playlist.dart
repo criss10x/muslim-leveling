@@ -1,16 +1,19 @@
 // Logika murrotal yang tidak bergantung pada pemutar audio maupun widget,
 // supaya seluruh aturan range dan pengulangan bisa diuji tanpa device.
 
-/// Menandai pengulangan tanpa batas. Dijalankan lewat LoopMode.one di player,
-/// bukan dengan membangun playlist tak-hingga.
-const int kRepeatInfinite = -1;
-
-const String kQuranAudioBase = 'https://verses.quran.com/Alafasy/mp3';
+import 'quran_qari.dart';
 
 String _pad3(int n) => n.toString().padLeft(3, '0');
 
 String ayahAudioUrl(int surah, int ayah) =>
-    '$kQuranAudioBase/${_pad3(surah)}${_pad3(ayah)}.mp3';
+    ayahAudioUrlWithPattern(surah, ayah, kQariList.first.urlPattern);
+
+/// URL dari pola qari aktif. Dipanggil waktu build queue.
+String ayahAudioUrlWithPattern(int surah, int ayah, String pattern) {
+  final s = _pad3(surah);
+  final a = _pad3(ayah);
+  return pattern.replaceAll('{surah}', s).replaceAll('{ayah}', a);
+}
 
 class AyahRef {
   final int surah, ayah;
@@ -72,18 +75,11 @@ class PlaybackRange {
   int get length => to - from + 1;
 }
 
-/// Membangun antrean ayat. Untuk repeat 1..N tiap ayat digandakan di tempat,
-/// supaya hitungan berhenti tepat lalu maju sendiri ke ayat berikutnya.
-List<AyahRef> buildQueue({
-  required PlaybackRange range,
-  required int repeat,
-}) {
-  final times = repeat == kRepeatInfinite ? 1 : repeat;
+/// Membangun antrean ayat — satu tiap ayat, tanpa pengulangan.
+List<AyahRef> buildQueue(PlaybackRange range) {
   final out = <AyahRef>[];
   for (var a = range.from; a <= range.to; a++) {
-    for (var i = 0; i < times; i++) {
-      out.add(AyahRef(range.surah, a));
-    }
+    out.add(AyahRef(range.surah, a));
   }
   return out;
 }
