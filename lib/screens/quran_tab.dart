@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../services/quran_data.dart';
 import 'quran_reader.dart';
+import '../widgets/rub_el_hizb_badge.dart';
 
 class QuranTab extends StatefulWidget {
   const QuranTab({super.key});
@@ -176,21 +177,7 @@ class _SurahRow extends StatelessWidget {
               padding: const EdgeInsets.all(AppSpacing.md),
               child: Row(
                 children: [
-                  Container(
-                    width: AppSpacing.xxl,
-                    height: AppSpacing.xxl,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryContainer,
-                      borderRadius: BorderRadius.circular(AppRadius.pill),
-                    ),
-                    child: Text(
-                      '${surah.number}',
-                      style: AppText.labelCapsSm().copyWith(
-                        color: AppColors.onPrimaryContainer,
-                      ),
-                    ),
-                  ),
+                  RubElHizbBadge(number: surah.number),
                   const SizedBox(width: AppSpacing.md),
                   Expanded(
                     child: Column(
@@ -202,32 +189,90 @@ class _SurahRow extends StatelessWidget {
                             color: AppColors.onSurface,
                           ),
                         ),
-                        const SizedBox(height: AppSpacing.xs),
+                        const SizedBox(height: AppSpacing.base),
                         Text(
-                          '${surah.meaning} · ${surah.revelation} · ${surah.ayahCount} ayat',
+                          surah.meaning,
                           style: AppText.bodyMd().copyWith(
                             color: AppColors.onSurfaceVariant,
                           ),
+                        ),
+                        const SizedBox(height: AppSpacing.xs),
+                        Row(
+                          children: [
+                            _RevelationChip(label: surah.revelation),
+                            const SizedBox(width: AppSpacing.xs),
+                            Text(
+                              '${surah.ayahCount} ayat',
+                              style: AppText.labelCapsSm().copyWith(
+                                color: AppColors.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(width: AppSpacing.sm),
-                  Flexible(
-                    child: Text(
-                      surah.nameArabic,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppText.titleLg().copyWith(
-                        color: AppColors.primary,
+                  // Lebar dikunci lalu diciutkan bila perlu: nama Arab terpanjang
+                  // (mis. المنافقون) sebelumnya kena ellipsis karena berebut
+                  // ruang dengan chevron.
+                  SizedBox(
+                    width: 108,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          surah.nameArabic,
+                          textDirection: TextDirection.rtl,
+                          maxLines: 1,
+                          style: AppText.titleLg().copyWith(
+                            color: AppColors.primary,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: AppSpacing.xs),
-                  Icon(Icons.chevron_right, color: AppColors.onSurfaceVariant),
                 ],
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Chip tempat turun surat. Madaniyah memakai pasangan warna sekunder (emas)
+/// supaya asal turunnya bisa dipindai tanpa membaca teks. Pasangan
+/// container/on-container dipakai, bukan goldInk, karena di preset Dark
+/// goldInk di atas secondaryContainer praktis tidak terbaca.
+class _RevelationChip extends StatelessWidget {
+  final String label;
+  const _RevelationChip({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    final madaniyah = label.toLowerCase() == 'madaniyah';
+
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.xs,
+        vertical: 2,
+      ),
+      decoration: BoxDecoration(
+        color: madaniyah
+            ? AppColors.secondaryContainer
+            : AppColors.surfaceContainerHigh,
+        borderRadius: BorderRadius.circular(AppRadius.pill),
+      ),
+      child: Text(
+        label,
+        style: AppText.labelCapsSm().copyWith(
+          color: madaniyah
+              ? AppColors.onSecondaryContainer
+              : AppColors.onSurfaceVariant,
         ),
       ),
     );
