@@ -16,11 +16,20 @@ class _QuranTabState extends State<QuranTab> {
   String _query = '';
   bool _loading = true;
   bool _failed = false;
+  // Controller eksplisit: SliverPersistentHeader membangun ulang child-nya
+  // saat scroll, dan TextField tanpa controller berisiko kehilangan isinya.
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _load();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   Future<void> _load() async {
@@ -60,94 +69,103 @@ class _QuranTabState extends State<QuranTab> {
     final list = quranData.search(_all, _query);
 
     return SafeArea(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.md,
-              AppSpacing.md,
-              AppSpacing.md,
-              AppSpacing.sm,
+      child: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.md,
+                AppSpacing.md,
+                AppSpacing.md,
+                0,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'Al-Quran',
+                        style: AppText.headlineMd().copyWith(
+                          color: AppColors.onSurface,
+                        ),
+                      ),
+                      const Spacer(),
+                      // Kaligrafi sebagai aksen, bukan informasi — karena itu
+                      // diredupkan dan tidak diberi semantik.
+                      ExcludeSemantics(
+                        child: Text(
+                          'القرآن',
+                          textDirection: TextDirection.rtl,
+                          style: AppText.headlineMd().copyWith(
+                            color: AppColors.goldInk.withValues(alpha: 0.75),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    '114 surat · 30 juz',
+                    style: AppText.bodyMd().copyWith(
+                      color: AppColors.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Al-Quran',
-                  style: AppText.headlineMd().copyWith(
-                    color: AppColors.onSurface,
+          ),
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: _SearchHeader(
+              child: TextField(
+                controller: _searchController,
+                onChanged: (v) => setState(() => _query = v),
+                style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
+                decoration: InputDecoration(
+                  hintText: 'Cari surat, arti, atau nomor',
+                  hintStyle: AppText.bodyMd().copyWith(
+                    color: AppColors.onSurfaceVariant,
+                  ),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: AppColors.onSurfaceVariant,
+                  ),
+                  filled: true,
+                  fillColor: AppColors.surfaceContainerLow,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppRadius.pill),
+                    borderSide: BorderSide.none,
                   ),
                 ),
-                const SizedBox(height: AppSpacing.xs),
-                Text(
-                  '114 surat',
+              ),
+            ),
+          ),
+          if (list.isEmpty)
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Center(
+                child: Text(
+                  'Surat tidak ditemukan',
                   style: AppText.bodyMd().copyWith(
                     color: AppColors.onSurfaceVariant,
                   ),
                 ),
-                const SizedBox(height: AppSpacing.lg),
-                Row(
-                  children: [
-                    Text(
-                      'Pilih surat',
-                      style: AppText.labelCaps().copyWith(
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    const Spacer(),
-                    Text(
-                      '${list.length}',
-                      style: AppText.bodyMd().copyWith(
-                        color: AppColors.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                TextField(
-                  onChanged: (v) => setState(() => _query = v),
-                  style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
-                  decoration: InputDecoration(
-                    hintText: 'Cari surat, arti, atau nomor',
-                    hintStyle: AppText.bodyMd().copyWith(
-                      color: AppColors.onSurfaceVariant,
-                    ),
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: AppColors.onSurfaceVariant,
-                    ),
-                    filled: true,
-                    fillColor: AppColors.surfaceContainerLow,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.pill),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-              ],
+              ),
+            )
+          else
+            SliverPadding(
+              padding: const EdgeInsets.only(
+                left: AppSpacing.md,
+                right: AppSpacing.md,
+                top: AppSpacing.xs,
+                bottom: AppSpacing.xxl * 2,
+              ),
+              sliver: SliverList.builder(
+                itemCount: list.length,
+                itemBuilder: (_, i) => _SurahRow(surah: list[i]),
+              ),
             ),
-          ),
-          Expanded(
-            child: list.isEmpty
-                ? Center(
-                    child: Text(
-                      'Surat tidak ditemukan',
-                      style: AppText.bodyMd().copyWith(
-                        color: AppColors.onSurfaceVariant,
-                      ),
-                    ),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.only(
-                      left: AppSpacing.md,
-                      right: AppSpacing.md,
-                      top: AppSpacing.xs,
-                      bottom: AppSpacing.xxl * 2,
-                    ),
-                    itemCount: list.length,
-                    itemBuilder: (_, i) => _SurahRow(surah: list[i]),
-                  ),
-          ),
         ],
       ),
     );
@@ -277,4 +295,45 @@ class _RevelationChip extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Search field yang menempel di atas saat daftar di-scroll. minExtent sama
+/// dengan maxExtent karena tingginya tetap; garis bawah hanya muncul ketika
+/// ada konten yang lewat di belakangnya, supaya header tidak terlihat
+/// mengambang saat daftar masih di puncak.
+class _SearchHeader extends SliverPersistentHeaderDelegate {
+  final Widget child;
+  const _SearchHeader({required this.child});
+
+  @override
+  double get minExtent => 70;
+
+  @override
+  double get maxExtent => 70;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.background,
+        border: Border(
+          bottom: BorderSide(
+            color: overlapsContent
+                ? AppColors.outlineVariant
+                : Colors.transparent,
+          ),
+        ),
+      ),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.md,
+        AppSpacing.sm,
+        AppSpacing.md,
+        AppSpacing.sm,
+      ),
+      child: child,
+    );
+  }
+
+  @override
+  bool shouldRebuild(covariant _SearchHeader oldDelegate) => true;
 }

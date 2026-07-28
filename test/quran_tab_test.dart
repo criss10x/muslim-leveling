@@ -16,13 +16,27 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Al-Quran'), findsOneWidget);
-    expect(find.text('114 surat'), findsOneWidget);
-    expect(find.text('Pilih surat'), findsOneWidget);
+    expect(find.text('114 surat · 30 juz'), findsOneWidget);
+    // Label "Pilih surat" dihapus: daftar di bawah search sudah jelas
+    // isinya, dan angka jumlah hasil tersirat dari isi daftar.
+    expect(find.text('Pilih surat'), findsNothing);
 
     await tester.tap(find.text('Al-Fatihah'));
     await tester.pumpAndSettle();
 
     expect(find.byType(QuranReader), findsOneWidget);
+  });
+
+  testWidgets('search tetap terlihat setelah daftar di-scroll', (tester) async {
+    await tester.pumpWidget(wrap(QuranTab()));
+    await tester.pumpAndSettle();
+
+    await tester.drag(find.byType(CustomScrollView), const Offset(0, -1200));
+    await tester.pumpAndSettle();
+
+    // Judul ikut ter-scroll hilang, search field-nya yang dipin.
+    expect(find.text('Al-Quran'), findsNothing);
+    expect(find.byType(TextField), findsOneWidget);
   });
 
   testWidgets('menampilkan daftar surat', (tester) async {
