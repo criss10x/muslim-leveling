@@ -75,7 +75,16 @@ class AuthService {
   }
 
   /// Return Supabase auth.uid, atau null kalau batal/gagal.
-  /// [preferNative] false → langsung browser OAuth (debug SHA mismatch).
+  /// [preferNative] true → native Google Sign-In popup (pilih akun, bukan browser).
+  ///
+  /// ## Persyaratan Native Popup
+  /// Di Google Cloud Console → APIs & Services → Credentials, pastikan ada
+  /// **Android OAuth client** dengan:
+  /// - Package name: `id.muslimleveling.muslim_leveling`
+  /// - SHA-1: `DF:2C:7E:72:5A:29:A7:1B:6F:66:FA:A6:FA:04:78:77:5B:46:F7:23`
+  ///
+  /// Kalau belum ada, native akan gagal (ApiException 10) dan fallback ke login browser.
+  /// Web Client ID (serverClientId): ${_webClientId}
   static Future<String?> signInWithGoogle({bool preferNative = true}) async {
     _lastError = null;
 
@@ -153,6 +162,10 @@ class AuthService {
       }
 
       // Wait for deep-link callback to establish a session (max 3 min).
+      // Catatan: Jika tidak kembali ke apps setelah login browser,
+      // pastikan URL berikut sudah terdaftar di Supabase Auth →
+      // External OAuth Providers → Google → Authorized redirect URLs:
+      //   $redirectUrl
       final Session session;
       try {
         session = await Supabase.instance.client.auth.onAuthStateChange
@@ -163,8 +176,9 @@ class AuthService {
             .timeout(const Duration(minutes: 3));
       } on TimeoutException {
         _lastError =
-            'Login browser timeout / dibatalkan. '
-            'Pastikan Redirect URL di Supabase: $redirectUrl';
+            'Login browser timeout — tidak kembali ke apps. '
+            'Pastikan Redirect URL di Supabase Auth → Google: $redirectUrl. '
+            'Atau coba login lewat perangkat lain / pastikan Chrome default.';
         return null;
       }
 
