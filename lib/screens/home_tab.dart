@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:math' as math;
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../widgets/tier_avatar.dart';
@@ -25,7 +24,7 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   GameState _state = GameState();
-  String _nickname = 'Pejuang';
+  String _nickname = 'Muslim Warrior';
   String _claimingQuestId = '';
   String _error = '';
 
@@ -77,7 +76,7 @@ class _HomeTabState extends State<HomeTab> {
       if (mounted) {
         setState(() {
           _state = GameService.current;
-          _nickname = p.getString('nickname') ?? 'Pejuang';
+          _nickname = p.getString('nickname') ?? 'Muslim Warrior';
         });
       }
     } catch (e, st) {
@@ -262,14 +261,11 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  /// Staggered entrance wrapper — each home section fades/slides in sequence.
+  /// Wrapper — langsung tanpa Entrance.
   Widget _section(int index, Widget child) {
-    return Entrance(
-      delay: Duration(milliseconds: 60 * index),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-        child: child,
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+      child: child,
     );
   }
 
@@ -311,176 +307,139 @@ class _HomeTabState extends State<HomeTab> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(AppRadius.xl),
-        // Outer glow: dark only — light uses solid surface + border.
         boxShadow: light
             ? null
             : [
                 BoxShadow(
-                  // pure black canvas: slightly stronger tier glow
-                  color: tier.primaryColor.withValues(alpha: 0.25),
+                  color: AppColors.primary.withValues(alpha: 0.22),
                   blurRadius: 28,
                   offset: const Offset(0, 10),
                 ),
               ],
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppRadius.xl),
-        child: Container(
-          padding: const EdgeInsets.all(AppSpacing.lg),
-          decoration: BoxDecoration(
-            // Light: solid raised. Dark: surfaceContainerLow + primary tint (matching jadwal hero).
-            color: light
-                ? AppColors.surfaceContainerLow
-                : AppColors.surfaceContainerLow,
-            gradient: light
-                ? null
-                : LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      AppColors.primary.withValues(alpha: 0.14),
-                      AppColors.surfaceContainerLow,
-                    ],
-                  ),
-            borderRadius: BorderRadius.circular(AppRadius.xl),
-            border: Border.all(
-              color: tierP.withValues(alpha: light ? 0.55 : 0.45),
-              width: light ? 1.0 : 1.5,
-            ),
+      child: Container(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceContainerLow,
+          gradient: light
+              ? null
+              : LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    AppColors.primary.withValues(alpha: 0.14),
+                    AppColors.surfaceContainerLow,
+                  ],
+                ),
+          borderRadius: BorderRadius.circular(AppRadius.xl),
+          border: Border.all(
+            color: AppColors.primary.withValues(alpha: light ? 0.35 : 0.45),
+            width: light ? 1.0 : 1.5,
           ),
-          child: Stack(
-            children: [
-              // subtle Islamic geometric lattice, tinted by tier
-              Positioned.fill(
-                child: IgnorePointer(
-                  child: CustomPaint(painter: _GeoPatternPainter(tierP)),
-                ),
-              ),
-              if (!light)
-                Positioned(
-                  top: -40,
-                  right: -40,
-                  child: Container(
-                    width: 160,
-                    height: 160,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: tier.primaryColor.withValues(alpha: 0.10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: tier.secondaryColor.withValues(alpha: 0.12),
-                          blurRadius: 60,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'CURRENT RANK',
-                              style: AppText.labelCaps().copyWith(
-                                color: AppColors.onSurfaceVariant,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            // Light: bright tier colors (some are white/gold)
-                            // vanish on the near-white card — use solid ink.
-                            // Dark: keep the tier gradient (gaming identity).
-                            isLightTheme
-                                ? Text(
-                                    GameService.getRankTitle(info.level),
-                                    style: AppText.headlineMd().copyWith(
-                                      color: AppColors.onSurface,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  )
-                                : ShaderMask(
-                                    shaderCallback: (rect) => LinearGradient(
-                                      colors: [tierP, tierS],
-                                    ).createShader(rect),
-                                    child: Text(
-                                      GameService.getRankTitle(info.level),
-                                      style: AppText.headlineMd().copyWith(
-                                        color: Colors.white,
-                                        shadows: [
-                                          Shadow(
-                                            color: tierP.withValues(alpha: 0.5),
-                                            blurRadius: 12,
-                                          ),
-                                        ],
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                            Text(
-                              '$_nickname • Lv ${info.level}',
-                              style: AppText.bodyMd().copyWith(
-                                color: AppColors.onSurfaceVariant,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
+                      Text(
+                        'CURRENT RANK',
+                        style: AppText.labelCaps().copyWith(
+                          color: AppColors.onSurfaceVariant,
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'XP PROGRESS',
-                          style: AppText.labelCaps().copyWith(
-                            color: AppColors.onSurfaceVariant,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      AnimatedCount(
-                        value: info.xpInCurrentLevel,
-                        suffix: ' / ${info.xpNeededForNextLevel}',
+                      const SizedBox(height: 4),
+                      // Light: bright tier colors (some are white/gold)
+                      // vanish on the near-white card — use solid ink.
+                      // Dark: keep the tier gradient (gaming identity).
+                      isLightTheme
+                          ? Text(
+                              GameService.getRankTitle(info.level),
+                              style: AppText.headlineMd().copyWith(
+                                color: AppColors.onSurface,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            )
+                          : ShaderMask(
+                              shaderCallback: (rect) => LinearGradient(
+                                colors: [tierP, tierS],
+                              ).createShader(rect),
+                              child: Text(
+                                GameService.getRankTitle(info.level),
+                                style: AppText.headlineMd().copyWith(
+                                  color: Colors.white,
+                                  shadows: [
+                                    Shadow(
+                                      color: tierP.withValues(alpha: 0.5),
+                                      blurRadius: 12,
+                                    ),
+                                  ],
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                      Text(
+                        '$_nickname • Lv ${info.level}',
                         style: AppText.bodyMd().copyWith(
-                          color: AppColors.primary,
+                          color: AppColors.onSurfaceVariant,
+                          fontSize: 12,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: AppSpacing.xs),
-                  NeonProgressBar(
-                    progress: info.progress,
-                    leadingGlow: true,
-                    height: 10,
-                  ),
-                  const SizedBox(height: 6),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: AnimatedCount(
-                      value: info.xpNeededForNextLevel - info.xpInCurrentLevel,
-                      suffix: ' XP TO NEXT RANK',
-                      style: AppText.labelCaps().copyWith(
-                        color: AppColors.onSurfaceVariant,
-                      ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.md),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Text(
+                    'XP PROGRESS',
+                    style: AppText.labelCaps().copyWith(
+                      color: AppColors.onSurfaceVariant,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ],
+                ),
+                AnimatedCount(
+                  value: info.xpInCurrentLevel,
+                  suffix: ' / ${info.xpNeededForNextLevel}',
+                  style: AppText.bodyMd().copyWith(
+                    color: AppColors.primary,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.xs),
+            NeonProgressBar(
+              progress: info.progress,
+              leadingGlow: true,
+              height: 10,
+            ),
+            const SizedBox(height: 6),
+            Align(
+              alignment: Alignment.centerRight,
+              child: AnimatedCount(
+                value: info.xpNeededForNextLevel - info.xpInCurrentLevel,
+                suffix: ' XP TO NEXT RANK',
+                style: AppText.labelCaps().copyWith(
+                  color: AppColors.onSurfaceVariant,
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -1799,43 +1758,3 @@ class _RingsPainter extends CustomPainter {
 }
 
 /// Faint 8-pointed star lattice (khatam pattern) for the hero rank card.
-class _GeoPatternPainter extends CustomPainter {
-  final Color color;
-  _GeoPatternPainter(this.color);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color.withValues(alpha: 0.05)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1;
-    const cell = 44.0;
-    for (var y = 0.0; y < size.height + cell; y += cell) {
-      for (var x = 0.0; x < size.width + cell; x += cell) {
-        _star(canvas, Offset(x, y), cell * 0.36, paint);
-      }
-    }
-  }
-
-  void _star(Canvas canvas, Offset c, double r, Paint paint) {
-    final path = Path();
-    for (var i = 0; i < 16; i++) {
-      final angle = i * math.pi / 8;
-      final radius = i.isEven ? r : r * 0.45;
-      final p = Offset(
-        c.dx + radius * math.cos(angle),
-        c.dy + radius * math.sin(angle),
-      );
-      if (i == 0) {
-        path.moveTo(p.dx, p.dy);
-      } else {
-        path.lineTo(p.dx, p.dy);
-      }
-    }
-    path.close();
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant _GeoPatternPainter old) => old.color != color;
-}

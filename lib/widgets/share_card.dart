@@ -312,7 +312,7 @@ Future<void> showShareCard(BuildContext context, AchievementDef def) async {
   final state = GameService.current;
   final rankTitle = GameService.getRankTitle(state.level);
   final prefs = await SharedPreferences.getInstance();
-  final username = prefs.getString('nickname') ?? 'Pejuang';
+  final username = prefs.getString('nickname') ?? 'Muslim Warrior';
   final level = state.level;
   final heroStreak = max(state.heroStreak.current, state.heroStreak.best);
 

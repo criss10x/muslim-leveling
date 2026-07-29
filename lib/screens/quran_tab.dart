@@ -209,6 +209,8 @@ class _SurahRow extends StatelessWidget {
 
                   return Row(
                     children: [
+                      RubElHizbBadge(number: surah.number),
+                      const SizedBox(width: AppSpacing.md),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,12 +237,14 @@ class _SurahRow extends StatelessWidget {
                             Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                RubElHizbBadge(number: surah.number),
-                                const SizedBox(width: AppSpacing.sm),
                                 _RevelationChip(label: surah.revelation),
                                 const SizedBox(width: AppSpacing.sm),
+                                Icon(Icons.auto_stories,
+                                    size: 14,
+                                    color: AppColors.onSurfaceVariant),
+                                const SizedBox(width: 2),
                                 Text(
-                                  '📄',
+                                  '${surah.ayahCount}',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: AppText.bodyMd().copyWith(
@@ -297,7 +301,7 @@ class _RevelationChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final madaniyah = label.toLowerCase() == 'madaniyah';
+    final isMakkiyah = label.toLowerCase() == 'makkiyah';
 
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -305,17 +309,17 @@ class _RevelationChip extends StatelessWidget {
         vertical: 2,
       ),
       decoration: BoxDecoration(
-        color: madaniyah
-            ? AppColors.secondaryContainer
-            : AppColors.surfaceContainerHigh,
+        color: isMakkiyah
+            ? AppColors.tertiaryContainer
+            : AppColors.secondaryContainer,
         borderRadius: BorderRadius.circular(AppRadius.pill),
       ),
       child: Text(
         label,
         style: AppText.labelCapsSm().copyWith(
-          color: madaniyah
-              ? AppColors.onSecondaryContainer
-              : AppColors.onSurfaceVariant,
+          color: isMakkiyah
+              ? AppColors.onTertiaryContainer
+              : AppColors.onSecondaryContainer,
         ),
       ),
     );

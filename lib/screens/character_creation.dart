@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
-import '../../widgets/city_picker.dart';
-import '../../services/prayer_service.dart';
+import '../../services/notification_service.dart';
 import 'dashboard_shell.dart';
 
-/// Character creation form — nickname + city, with hero CTA.
+/// Onboarding card — fitur introduction, tanpa form.
 class CharacterCreationScreen extends StatefulWidget {
   const CharacterCreationScreen({super.key});
 
@@ -16,23 +15,40 @@ class CharacterCreationScreen extends StatefulWidget {
 }
 
 class _CharacterCreationScreenState extends State<CharacterCreationScreen> {
-  final _nickname = TextEditingController();
-  String? _cityId;
-  String? _cityName;
+  bool _saving = false;
 
-  @override
-  void dispose() {
-    _nickname.dispose();
-    super.dispose();
-  }
+  Future<void> _start() async {
+    setState(() => _saving = true);
+    try {
+      // Init notifikasi di background, tidak blocking
+      await NotificationService.init();
+      await NotificationService.requestPermission();
 
-  Future<void> _pickCity() async {
-    final picked = await CityPicker.show(context);
-    if (picked == null) return;
-    setState(() {
-      _cityId = picked.id;
-      _cityName = picked.name;
-    });
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('onboarding_done', true);
+      await prefs.setString('nickname', 'Muslim Warrior');
+
+      if (!mounted) return;
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => const DashboardShell(),
+        ),
+        (route) => false,
+      );
+    } catch (_) {
+      // ponytail: gagal init notif tetap lanjut
+      if (!mounted) return;
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('onboarding_done', true);
+      await prefs.setString('nickname', 'Muslim Warrior');
+      if (!mounted) return;
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => const DashboardShell(),
+        ),
+        (route) => false,
+      );
+    }
   }
 
   @override
@@ -42,104 +58,52 @@ class _CharacterCreationScreenState extends State<CharacterCreationScreen> {
       body: SafeArea(
         child: AmbientBackground(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height -
-                    MediaQuery.of(context).padding.vertical,
-              ),
-              child: IntrinsicHeight(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(height: AppSpacing.xl),
-                    _header(),
-                    const SizedBox(height: AppSpacing.xl),
-                    _field(
-                      label: 'Nickname Gamer',
-                      icon: Icons.person_outline,
-                      child: TextField(
-                        controller: _nickname,
-                        style: AppText.bodyLg(),
-                        decoration: InputDecoration(
-                          hintText: 'Masukkan Nickname',
-                          hintStyle: TextStyle(color: AppColors.onSurfaceVariant),
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(vertical: 16),
-                        ),
-                        onChanged: (_) => setState(() {}),
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
-                    _field(
-                      label: 'Kota Asal',
-                      icon: Icons.location_on_outlined,
-                      child: InkWell(
-                        onTap: _pickCity,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  _cityName ?? 'Pilih kota/kabupaten...',
-                                  style: AppText.bodyLg().copyWith(
-                                    color: _cityName == null
-                                        ? AppColors.onSurfaceVariant
-                                        : AppColors.onSurface,
-                                  ),
-                                ),
-                              ),
-                              Icon(Icons.search, color: AppColors.primary, size: 20),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: AppSpacing.xs),
-                      child: Text(
-                        '*Untuk menyesuaikan jadwal sholat harian',
-                        style: AppText.bodyMd().copyWith(
-                          color: AppColors.onSurfaceVariant.withValues(alpha: 0.7),
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                    const Spacer(),
-                    const SizedBox(height: AppSpacing.xl),
-                    HeroButton(
-                      label: 'SIMPAN & LANJUT',
-                      trailingIcon: Icons.arrow_forward,
-                      onPressed: _cityId == null || _nickname.text.trim().isEmpty
-                          ? null
-                          : () async {
-                              final prefs =
-                                  await SharedPreferences.getInstance();
-                              await prefs.setBool('onboarding_done', true);
-                              await prefs.setString(
-                                  'nickname', _nickname.text.trim());
-                              await PrayerService.saveLocation(
-                                  _cityId!, _cityName ?? '');
-                              if (!context.mounted) return;
-                              Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                  builder: (_) => const DashboardShell(),
-                                ),
-                                (route) => false,
-                              );
-                            },
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    GhostButton(
-                      label: 'Kembali',
-                      icon: Icons.arrow_back,
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
-                  ],
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: AppSpacing.lg),
+                _header(),
+                const SizedBox(height: AppSpacing.xl),
+                _featureCard(
+                  icon: Icons.mosque_outlined,
+                  title: 'Quest Sholat',
+                  description:
+                      'Selesaikan quest sholat wajib & sunnah setiap hari untuk dapat XP dan menjaga streak.',
+                  accent: AppColors.primary,
                 ),
-              ),
+                const SizedBox(height: AppSpacing.sm),
+                _featureCard(
+                  icon: Icons.menu_book_outlined,
+                  title: 'Belajar yang Fun',
+                  description:
+                      'Pelajari materi Islam melalui artikel & quiz interaktif yang menyenangkan.',
+                  accent: AppColors.tertiary,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                _featureCard(
+                  icon: Icons.military_tech_outlined,
+                  title: 'Badge & Achievement',
+                  description:
+                      'Kumpulkan badge dan capai rank tertinggi sebagai pejuang muslim.',
+                  accent: AppColors.secondaryContainer,
+                ),
+                const SizedBox(height: AppSpacing.xl),
+                HeroButton(
+                  label: _saving ? 'MEMULAI...' : 'MULAI PETUALANGAN',
+                  trailingIcon: Icons.arrow_forward,
+                  onPressed: _saving ? null : _start,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                Text(
+                  'Fun way to 100% fokus istiqomah.',
+                  style: AppText.bodyMd().copyWith(
+                    color: AppColors.onSurfaceVariant,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: AppSpacing.lg),
+              ],
             ),
           ),
         ),
@@ -148,67 +112,137 @@ class _CharacterCreationScreenState extends State<CharacterCreationScreen> {
   }
 
   Widget _header() {
+    final light = isLightTheme;
     return Column(
       children: [
-        isLightTheme
-            ? Text(
-                'BUAT KARAKTERMU',
-                textAlign: TextAlign.center,
-                style: AppText.displayHero(32).copyWith(color: AppColors.primary),
-              )
-            : ShaderMask(
-                shaderCallback: (rect) => LinearGradient(
-                  colors: [AppColors.primary, AppColors.tertiary],
-                ).createShader(rect),
-                child: Text(
-                  'BUAT KARAKTERMU',
-                  textAlign: TextAlign.center,
-                  style: AppText.displayHero(32).copyWith(color: Colors.white),
-                ),
-              ),
-        const SizedBox(height: AppSpacing.xs),
-        Text(
-          'Tentukan identitas perjalanan spiritualmu di alam Ascension.',
-          textAlign: TextAlign.center,
-          style: AppText.bodyMd().copyWith(
-            color: AppColors.onSurfaceVariant,
+        Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+            color: AppColors.surfaceContainer,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: AppColors.primary.withValues(alpha: 0.3),
+              width: 2,
+            ),
+            boxShadow: light
+                ? null
+                : [
+                    BoxShadow(
+                      color: AppColors.primary.withValues(alpha: 0.15),
+                      blurRadius: 30,
+                    ),
+                  ],
+          ),
+          child: Image.asset(
+            'assets/images/logo.png',
+            width: 48,
+            height: 48,
           ),
         ),
+        const SizedBox(height: AppSpacing.md),
+        if (light) ...[
+          Text(
+            'MUSLIM',
+            style: AppText.displayHero(32).copyWith(
+              color: AppColors.onSurface,
+              height: 38 / 32,
+            ),
+          ),
+          Text(
+            'LEVELING',
+            style: AppText.displayHero(32).copyWith(
+              color: AppColors.primary,
+              height: 38 / 32,
+            ),
+          ),
+        ] else ...[
+          ShaderMask(
+            shaderCallback: (rect) => LinearGradient(
+              colors: [AppColors.onSurface, AppColors.onSurfaceVariant],
+            ).createShader(rect),
+            child: Text(
+              'MUSLIM',
+              style: AppText.displayHero(32).copyWith(
+                color: Colors.white,
+                height: 38 / 32,
+              ),
+            ),
+          ),
+          ShaderMask(
+            shaderCallback: (rect) => LinearGradient(
+              colors: [AppColors.primary, AppColors.tertiary],
+            ).createShader(rect),
+            child: Text(
+              'LEVELING',
+              style: AppText.displayHero(32).copyWith(
+                color: Colors.white,
+                height: 38 / 32,
+              ),
+            ),
+          ),
+        ],
       ],
     );
   }
 
-  Widget _field({
-    required String label,
+  Widget _featureCard({
     required IconData icon,
-    required Widget child,
+    required String title,
+    required String description,
+    required Color accent,
   }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label.toUpperCase(),
-          style: AppText.labelCaps().copyWith(color: AppColors.primary),
-        ),
-        const SizedBox(height: AppSpacing.xs),
-        Container(
-          decoration: BoxDecoration(
-            color: AppColors.surfaceContainerHigh,
-            borderRadius: BorderRadius.circular(AppRadius.xl),
-            border: Border.all(
-              color: AppColors.outlineVariant.withValues(alpha: 0.3),
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainer.withValues(alpha: 0.6),
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        border: Border.all(color: accent.withValues(alpha: 0.2)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 4,
+            height: 36,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [accent, accent.withValues(alpha: 0)],
+              ),
+              borderRadius: BorderRadius.circular(2),
             ),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-          child: Row(
-            children: [
-              Icon(icon, color: AppColors.outline, size: 20),
-              const SizedBox(width: AppSpacing.md),
-              Expanded(child: child),
-            ],
+          const SizedBox(width: AppSpacing.md),
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+              border: Border.all(color: AppColors.outlineVariant),
+            ),
+            child: Icon(icon, color: accent, size: 24),
           ),
-        ),
-      ],
+          const SizedBox(width: AppSpacing.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: AppText.titleLg()),
+                const SizedBox(height: AppSpacing.xs),
+                Text(
+                  description,
+                  style: AppText.bodyMd().copyWith(
+                    color: AppColors.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -35,7 +35,7 @@ class ProfilTab extends StatefulWidget {
 }
 
 class _ProfilTabState extends State<ProfilTab> {
-  String _nickname = 'Pejuang';
+  String _nickname = 'Muslim Warrior';
   String _cityName = 'Jakarta';
   // ponytail: cityId kept for future "show on map" feature
   // ignore: unused_field
@@ -69,7 +69,7 @@ class _ProfilTabState extends State<ProfilTab> {
     final state = GameService.current;
     if (!mounted) return;
     setState(() {
-      _nickname = p.getString('nickname') ?? 'Pejuang';
+      _nickname = p.getString('nickname') ?? 'Muslim Warrior';
       _avatarPath = p.getString('avatar_path');
       _haidMode = state.haidMode;
       if (loc != null) {
