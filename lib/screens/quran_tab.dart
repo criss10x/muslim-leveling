@@ -209,8 +209,6 @@ class _SurahRow extends StatelessWidget {
 
                   return Row(
                     children: [
-                      RubElHizbBadge(number: surah.number),
-                      const SizedBox(width: AppSpacing.md),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,10 +235,12 @@ class _SurahRow extends StatelessWidget {
                             Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
+                                RubElHizbBadge(number: surah.number),
+                                const SizedBox(width: AppSpacing.sm),
                                 _RevelationChip(label: surah.revelation),
                                 const SizedBox(width: AppSpacing.sm),
                                 Text(
-                                  '📄 ${surah.ayahCount}',
+                                  '📄',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: AppText.bodyMd().copyWith(
