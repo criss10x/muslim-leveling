@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hijri/hijri_calendar.dart';
 import '../../theme/app_theme.dart';
@@ -7,7 +5,7 @@ import '../../widgets/common.dart';
 import '../../services/prayer_service.dart';
 
 /// Calendar view for jadwal sholat with Hijri date + Gregorian date.
-/// Uses Aladhan API (reuses PrayerService client).
+/// Uses Equran API via PrayerService.
 class JadwalKalenderScreen extends StatefulWidget {
   const JadwalKalenderScreen({super.key});
 
@@ -36,82 +34,24 @@ class _JadwalKalenderScreenState extends State<JadwalKalenderScreen> {
       return;
     }
 
-    try {
-      // EQuran API v2: POST /shalat
-      // Body: {"provinsi": "Jawa Barat", "kabkota": "Kota Bogor", "bulan": 7, "tahun": 2026}
-      final year = month.year;
-      final monthNum = month.month;
-      final city = loc.name;
+    final data = await PrayerService.fetchMonthlySchedule(
+      cityName: loc.name,
+      year: month.year,
+      month: month.month,
+    );
 
-      final uri = Uri.parse('https://equran.id/api/v2/shalat');
-      final httpClient = HttpClient();
-      try {
-        final req = await httpClient.postUrl(uri);
-        req.headers.contentType = ContentType.json;
-        req.write(jsonEncode({
-          'provinsi': _extractProvinsi(city),
-          'kabkota': _extractKabkota(city),
-          'bulan': monthNum,
-          'tahun': year,
-        }));
-
-        final res = await req.close();
-        if (res.statusCode != 200) {
-          throw Exception('HTTP ${res.statusCode}');
-        }
-
-        final body = await res.transform(utf8.decoder).join();
-        final json = jsonDecode(body) as Map<String, dynamic>;
-        if ((json['code'] as int?) != 200) {
-          throw Exception(json['message'] as String? ?? 'API error');
-        }
-
-        final list = json['data'] as List;
-        final entries = list.map((j) => _DayEntry.fromApi(j)).toList();
-        setState(() {
-          _calendarData = entries;
-          _loading = false;
-        });
-      } finally {
-        httpClient.close();
-      }
-    } catch (e) {
+    if (!mounted) return;
+    if (data != null) {
+      setState(() {
+        _calendarData = data.map((j) => _DayEntry.fromApi(j, year: month.year, month: month.month)).toList();
+        _loading = false;
+      });
+    } else {
       setState(() {
         _loading = false;
-        _error = e.toString();
+        _error = 'Gagal memuat jadwal. Periksa koneksi.';
       });
     }
-  }
-
-  String _extractProvinsi(String city) {
-    final provs = ['Aceh', 'Sumatera Utara', 'Sumatera Barat', 'Riau', 'Kepulauan Riau',
-      'Jambi', 'Bengkulu', 'Sumatera Selatan', 'Bangka Belitung', 'Lampung',
-      'DKI Jakarta', 'Jawa Barat', 'Banten', 'Jawa Tengah', 'DI Yogyakarta', 'Jawa Timur',
-      'Bali', 'Nusa Tenggara Barat', 'Nusa Tenggara Timur', 'Kalimantan Barat', 'Kalimantan Tengah',
-      'Kalimantan Selatan', 'Kalimantan Timur', 'Kalimantan Utara', 'Sulawesi Utara', 'Gorontalo',
-      'Sulawesi Tengah', 'Sulawesi Barat', 'Sulawesi Selatan', 'Sulawesi Tenggara', 'Maluku',
-      'Maluku Utara', 'Papua', 'Papua Barat'];
-    for (final p in provs) {
-      if (city.contains(p)) return p;
-    }
-    return 'DKI Jakarta';
-  }
-
-  String _extractKabkota(String city) {
-    final provs = ['Aceh', 'Sumatera Utara', 'Sumatera Barat', 'Riau', 'Kepulauan Riau',
-      'Jambi', 'Bengkulu', 'Sumatera Selatan', 'Bangka Belitung', 'Lampung',
-      'DKI Jakarta', 'Jawa Barat', 'Banten', 'Jawa Tengah', 'DI Yogyakarta', 'Jawa Timur',
-      'Bali', 'Nusa Tenggara Barat', 'Nusa Tenggara Timur', 'Kalimantan Barat', 'Kalimantan Tengah',
-      'Kalimantan Selatan', 'Kalimantan Timur', 'Kalimantan Utara', 'Sulawesi Utara', 'Gorontalo',
-      'Sulawesi Tengah', 'Sulawesi Barat', 'Sulawesi Selatan', 'Sulawesi Tenggara', 'Maluku',
-      'Maluku Utara', 'Papua', 'Papua Barat'];
-    for (final p in provs) {
-      if (city.contains(p)) {
-        final rest = city.replaceAll(p, '').trim();
-        return rest.isEmpty ? city : rest;
-      }
-    }
-    return city;
   }
 
   @override
@@ -123,9 +63,6 @@ class _JadwalKalenderScreenState extends State<JadwalKalenderScreen> {
   void _prevMonth() {
     setState(() {
       _currentMonth = DateTime(_currentMonth.year, _currentMonth.month - 1);
-      if (_currentMonth.month < 1) {
-        _currentMonth = DateTime(_currentMonth.year - 1, 12);
-      }
     });
     _loadCalendar(_currentMonth);
   }
@@ -202,10 +139,10 @@ class _JadwalKalenderScreenState extends State<JadwalKalenderScreen> {
             ),
             const SizedBox(height: AppSpacing.lg),
             if (_loading)
-              Center(
+              const Center(
                 child: Padding(
-                  padding: const EdgeInsets.all(32),
-                  child: CircularProgressIndicator(color: AppColors.primary),
+                  padding: EdgeInsets.all(32),
+                  child: CircularProgressIndicator(),
                 ),
               )
             else if (_error != null)
@@ -214,14 +151,12 @@ class _JadwalKalenderScreenState extends State<JadwalKalenderScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 48),
                   child: Column(
                     children: [
-                      Icon(Icons.error_outline,
-                          size: 48, color: AppColors.error),
+                      Icon(Icons.error_outline, size: 48, color: AppColors.error),
                       const SizedBox(height: 12),
                       Text(
                         _error!,
                         textAlign: TextAlign.center,
-                        style: AppText.bodyMd()
-                            .copyWith(color: AppColors.onSurfaceVariant),
+                        style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
                       ),
                     ],
                   ),
@@ -276,24 +211,20 @@ class _DayCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header: Gregorian & Hijri
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     entry.gregorianDate,
-                    style: AppText.titleLg()
-                        .copyWith(color: AppColors.onSurface),
+                    style: AppText.titleLg().copyWith(color: AppColors.onSurface),
                   ),
                   Row(
                     children: [
-                      Icon(Icons.calendar_today,
-                          size: 16, color: AppColors.primary),
+                      Icon(Icons.calendar_today, size: 16, color: AppColors.primary),
                       const SizedBox(width: 4),
                       Text(
                         entry.hijriDate,
-                        style: AppText.bodyMd()
-                            .copyWith(color: AppColors.primary),
+                        style: AppText.bodyMd().copyWith(color: AppColors.primary),
                       ),
                     ],
                   ),
@@ -305,7 +236,6 @@ class _DayCard extends StatelessWidget {
                 thickness: 1,
               ),
               const SizedBox(height: AppSpacing.xs),
-              // Jadwal sholat grid
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
@@ -346,8 +276,7 @@ class _PrayerChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Chip(
-      avatar: Icon(Icons.circle,
-          size: 8, color: AppColors.primaryFixed),
+      avatar: Icon(Icons.circle, size: 8, color: AppColors.primaryFixed),
       label: Text(
         '$label $time',
         style: AppText.labelCaps().copyWith(color: AppColors.onSurface),
@@ -380,26 +309,33 @@ class _DayEntry {
     required this.isToday,
   });
 
-  factory _DayEntry.fromApi(Map<String, dynamic> j) {
+  factory _DayEntry.fromApi(Map<String, dynamic> j, {int? year, int? month}) {
     final tanggal = j['tanggal'] as int;
     final hari = j['hari'] as String? ?? '';
     final today = DateTime.now();
-    
-    // Parse Gregorian date from EQuran format
-    final gregStr = '${j['tahun']}-${j['bulan'].toString().padLeft(2, '0')}-$tanggal';
-    final entryDate = DateTime.tryParse(gregStr) ?? DateTime.now();
-    
-    // Convert to Hijri using hijri package
+
+    // Parse tanggal_lengkap (e.g. "2026-07-01") which is always present
+    DateTime parseDate() {
+      final full = j['tanggal_lengkap'] as String?;
+      if (full != null) {
+        final d = DateTime.tryParse(full);
+        if (d != null) return d;
+      }
+      return DateTime(year ?? today.year, month ?? today.month, tanggal);
+    }
+
+    final entryDate = parseDate();
+
     final hijriDate = HijriCalendar.fromDate(entryDate);
-    
+
     return _DayEntry(
       gregorianDate: '$tanggal $hari ${entryDate.year}',
       hijriDate: '${hijriDate.hDay} ${hijriDate.getLongMonthName()} ${hijriDate.hYear}',
-      subuh: j['subuh']?.replaceAll(RegExp(r' \([A-Z]+\)'), '') ?? '--:--',
-      dzuhur: j['dzuhur']?.replaceAll(RegExp(r' \([A-Z]+\)'), '') ?? '--:--',
-      ashar: j['ashar']?.replaceAll(RegExp(r' \([A-Z]+\)'), '') ?? '--:--',
-      maghrib: j['maghrib']?.replaceAll(RegExp(r' \([A-Z]+\)'), '') ?? '--:--',
-      isya: j['isya']?.replaceAll(RegExp(r' \([A-Z]+\)'), '') ?? '--:--',
+      subuh: j['subuh']?.replaceAll(RegExp(r' \\([A-Z]+\\)'), '') ?? '--:--',
+      dzuhur: j['dzuhur']?.replaceAll(RegExp(r' \\([A-Z]+\\)'), '') ?? '--:--',
+      ashar: j['ashar']?.replaceAll(RegExp(r' \\([A-Z]+\\)'), '') ?? '--:--',
+      maghrib: j['maghrib']?.replaceAll(RegExp(r' \\([A-Z]+\\)'), '') ?? '--:--',
+      isya: j['isya']?.replaceAll(RegExp(r' \\([A-Z]+\\)'), '') ?? '--:--',
       isToday:
           entryDate.year == today.year &&
           entryDate.month == today.month &&
