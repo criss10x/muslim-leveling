@@ -16,8 +16,7 @@ val keystoreProperties = Properties().apply {
     }
 }
 
-val useReleaseKeystore = keystoreProperties.getProperty("storeFile", "").isNotBlank()
-    && java.io.File(keystoreProperties.getProperty("storeFile", "")).exists()
+val useReleaseKeystore = keystoreProperties.getProperty("storeFile")?.let { file(it).exists() } == true
 
 android {
     namespace = "id.muslimleveling.muslim_leveling"
