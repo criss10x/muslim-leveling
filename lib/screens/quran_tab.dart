@@ -235,11 +235,12 @@ class _SurahRow extends StatelessWidget {
                             ),
                             const SizedBox(height: AppSpacing.xs),
                             Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
                                 _RevelationChip(label: surah.revelation),
                                 const SizedBox(width: AppSpacing.sm),
                                 Text(
-                                  '📄 ${surah.ayahCount} ayat',
+                                  '📄 ${surah.ayahCount}',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: AppText.bodyMd().copyWith(
