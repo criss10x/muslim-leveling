@@ -6,13 +6,13 @@ Replace every Muslim Leveling logo mark with the supplied mosque-M artwork while
 
 ## Asset Roles
 
-- **Launcher and native Android startup:** the supplied jade-on-black mark. These are static Android resources because the OS renders them before Flutter can load application theme state.
+- **Launcher and native Android startup:** the supplied jade-on-black mark. These are static Android resources because the OS renders them before Flutter can load application theme state. The native splash uses density-specific 128dp resources so its size remains stable across devices.
 - **Flutter marks (splash, onboarding, and Home header):** the supplied black mark on a transparent background. `ColorFiltered` applies `AppColors.primary`, so every existing light and dark preset renders its correct primary color.
 
 ## Implementation
 
 1. Preserve the jade launcher artwork's square composition and generate Android density-specific `mipmap-*` launcher PNGs.
-2. Add the jade asset to the native launch `layer-list` on a black background.
+2. Add the jade asset to the native launch `layer-list` on a black background, using 128/192/256/384/512px copies in the mdpi through xxxhdpi drawable buckets.
 3. Create a transparent in-app mosque-M asset from the black-on-white reference without text, border, or extra imagery.
 4. Replace every existing Flutter `logo.png` use with the transparent mark and wrap each in `ColorFiltered(mode: AppColors.primary, BlendMode.srcIn)`.
 

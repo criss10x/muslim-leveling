@@ -139,6 +139,8 @@ Expected: PASS.
 
 Apply the same layer-list to both API variants. Replace every remaining `assets/images/logo.png` image with the transparent `logo_mark.png` wrapped in `ColorFiltered(mode: AppColors.primary, BlendMode.srcIn)`, then remove the old `assets/images/logo.png` declaration from `pubspec.yaml`.
 
+Store the native `launch_logo.png` in density-specific `drawable-mdpi` (128px), `drawable-hdpi` (192px), `drawable-xhdpi` (256px), `drawable-xxhdpi` (384px), and `drawable-xxxhdpi` (512px) folders. Remove the density-neutral `drawable/launch_logo.png` after those copies exist, so Android renders a stable 128dp canvas instead of a 512dp bitmap.
+
 - [ ] **Step 2: Run native-resource and asset reference checks**
 
 Run: `rg -n "launch_logo|@android:color/black" android/app/src/main/res/drawable android/app/src/main/res/drawable-v21`
