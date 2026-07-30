@@ -758,11 +758,11 @@ class _ProfilTabState extends State<ProfilTab> {
             ).copyWith(top: AppSpacing.md, bottom: 100),
             children: [
               _hero(context),
-              const SizedBox(height: AppSpacing.lg),
+              const SizedBox(height: AppSpacing.md),
               _cosmeticLocker(),
-              const SizedBox(height: AppSpacing.lg),
+              const SizedBox(height: AppSpacing.md),
               _stats(),
-              const SizedBox(height: AppSpacing.sm),
+              const SizedBox(height: AppSpacing.xs),
               _haidModeToggle(),
               const SizedBox(height: AppSpacing.md),
               _prayerStreaks(),
@@ -1098,7 +1098,7 @@ class _ProfilTabState extends State<ProfilTab> {
       children: [
         const HudHeader('LOKER SKIN'),
         FlatCard(
-          padding: const EdgeInsets.all(AppSpacing.md),
+          padding: const EdgeInsets.all(AppSpacing.sm),
           child: const CosmeticLocker(),
         ),
       ],
@@ -1162,7 +1162,7 @@ class _ProfilTabState extends State<ProfilTab> {
           physics: const NeverScrollableScrollPhysics(),
           mainAxisSpacing: AppSpacing.sm,
           crossAxisSpacing: AppSpacing.sm,
-          childAspectRatio: 1.5,
+          childAspectRatio: 1.8,
           children: [
             _statCard(
               'Sholat Selesai',
@@ -1206,6 +1206,7 @@ class _ProfilTabState extends State<ProfilTab> {
     Color color,
   ) {
     return FlatCard(
+      padding: const EdgeInsets.all(AppSpacing.sm),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -1227,7 +1228,7 @@ class _ProfilTabState extends State<ProfilTab> {
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.sm),
+          const SizedBox(height: AppSpacing.xs),
           Text(
             value,
             style: AppText.displayHero(28).copyWith(color: color, height: 1.1),

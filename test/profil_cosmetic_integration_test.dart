@@ -18,7 +18,9 @@ void main() {
 
     await GameService.load();
     await EntitlementService.load();
-    await tester.pumpWidget(const MaterialApp(home: Scaffold(body: ProfilTab())));
+    await tester.pumpWidget(
+      const MaterialApp(home: Scaffold(body: ProfilTab())),
+    );
     await tester.pumpAndSettle();
     await tester.scrollUntilVisible(
       find.byType(CosmeticLocker),
@@ -27,5 +29,26 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.byType(CosmeticLocker), findsOneWidget);
+  });
+
+  testWidgets('Profil keeps locker and statistics compact on a phone', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(412, 2000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await GameService.load();
+    await EntitlementService.load();
+    await tester.pumpWidget(
+      const MaterialApp(home: Scaffold(body: ProfilTab())),
+    );
+    await tester.pumpAndSettle();
+
+    final grids = find.byType(GridView);
+    expect(grids, findsNWidgets(2));
+    expect(tester.getSize(grids.at(0)).height, lessThan(150));
+    expect(tester.getSize(grids.at(1)).height, lessThan(220));
   });
 }

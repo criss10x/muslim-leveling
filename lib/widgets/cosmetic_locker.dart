@@ -183,7 +183,7 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
           physics: const NeverScrollableScrollPhysics(),
           mainAxisSpacing: AppSpacing.sm,
           crossAxisSpacing: AppSpacing.sm,
-          childAspectRatio: 0.65,
+          childAspectRatio: 0.8,
           children: items.map((c) {
             final allowed = CosmeticService.isAllowed(
               state,
