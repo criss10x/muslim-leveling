@@ -78,7 +78,7 @@ testWidgets('splash tints the mosque mark with the active primary color', (teste
   final filter = tester.widget<ColorFiltered>(find.byType(ColorFiltered));
   expect(
     filter.colorFilter,
-    const ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
+    ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
   );
   expect(find.byType(Image), findsOneWidget);
 });
@@ -94,7 +94,7 @@ Expected: FAIL because the current splash image is not wrapped in `ColorFiltered
 
 ```dart
 child: ColorFiltered(
-  colorFilter: const ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
+  colorFilter: ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
   child: Image.asset(
     'assets/images/logo_mark.png',
     width: 64,
