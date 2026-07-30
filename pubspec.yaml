@@ -39,6 +39,7 @@ flutter:
   assets:
     - assets/images/mosque_bg.jpg
     - assets/images/logo.png
+    - assets/images/logo_mark.png
     - assets/google_fonts/
     - assets/quran/
     - assets/quran/surah/

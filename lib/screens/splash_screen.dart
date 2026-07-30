@@ -115,10 +115,16 @@ class _SplashScreenState extends State<SplashScreen>
                                 ),
                               ],
                       ),
-                      child: Image.asset(
-                        'assets/images/logo.png',
-                        width: 64,
-                        height: 64,
+                      child: ColorFiltered(
+                        colorFilter: ColorFilter.mode(
+                          AppColors.primary,
+                          BlendMode.srcIn,
+                        ),
+                        child: Image.asset(
+                          'assets/images/logo_mark.png',
+                          width: 64,
+                          height: 64,
+                        ),
                       ),
                     );
                   },
