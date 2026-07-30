@@ -416,7 +416,12 @@ class _JadwalTabState extends State<JadwalTab> {
                               Text('SHOLAT BERIKUTNYA',
                                   style: AppText.labelCaps().copyWith(color: AppColors.primary)),
                               const SizedBox(height: 2),
-                              Text(next.name, style: AppText.headlineLg()),
+                              Text(
+                                next.name,
+                                style: AppText.headlineLg().copyWith(
+                                  color: AppColors.onSurface,
+                                ),
+                              ),
                             ],
                           ),
                           Container(
