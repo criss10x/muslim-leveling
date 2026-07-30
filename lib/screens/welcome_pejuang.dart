@@ -96,10 +96,13 @@ class WelcomePejuangScreen extends StatelessWidget {
                     ),
                   ],
           ),
-          child: Image.asset(
-            'assets/images/logo.png',
-            width: 48,
-            height: 48,
+          child: ColorFiltered(
+            colorFilter: ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
+            child: Image.asset(
+              'assets/images/logo_mark.png',
+              width: 48,
+              height: 48,
+            ),
           ),
         ),
         const SizedBox(height: AppSpacing.md),
