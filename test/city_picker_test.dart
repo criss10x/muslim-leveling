@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:muslim_leveling/widgets/city_picker.dart';
@@ -38,5 +40,47 @@ void main() {
     await tester.pump();
     await tester.tap(find.text('Kab. Badung'));
     expect(await selection, (id: 'Bali/Kab. Badung', name: 'Kab. Badung'));
+  });
+
+  testWidgets('picker ignores a stale city result after changing province', (
+    tester,
+  ) async {
+    final bali = Completer<List<String>>();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) => TextButton(
+            onPressed: () {
+              CityPicker.show(
+                context,
+                cityLoader: (province) => province == 'Bali'
+                    ? bali.future
+                    : Future.value(['Kota Serang']),
+              );
+            },
+            child: const Text('Buka'),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Buka'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'bali');
+    await tester.pump();
+    await tester.tap(find.text('Bali'));
+    await tester.pump();
+    await tester.tap(find.byIcon(Icons.arrow_back));
+    await tester.pump();
+    await tester.enterText(find.byType(TextField), 'banten');
+    await tester.pump();
+    await tester.tap(find.text('Banten'));
+    await tester.pumpAndSettle();
+    expect(find.text('Kota Serang'), findsOneWidget);
+
+    bali.complete(['Kab. Badung']);
+    await tester.pumpAndSettle();
+    expect(find.text('Kota Serang'), findsOneWidget);
+    expect(find.text('Kab. Badung'), findsNothing);
   });
 }

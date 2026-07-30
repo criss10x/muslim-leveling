@@ -38,7 +38,7 @@ class CityPicker {
             });
             setState(() => loading = true);
             final loaded = await loadCities(province);
-            if (!ctx.mounted) return;
+            if (!ctx.mounted || selectedProvince != province) return;
             setState(() {
               cities = loaded;
               loading = false;
