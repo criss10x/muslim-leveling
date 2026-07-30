@@ -95,7 +95,8 @@ void main() {
     SharedPreferences.setMockInitialValues({
       'nickname': 'Pejuang',
       'onboarding_done': true,
-      'game_state_v1': '{"xp":0,"level":1,"equipped":{"frame":"shield_classic"}}',
+      'game_state_v1':
+          '{"xp":0,"level":1,"equipped":{"frame":"shield_classic"}}',
       'city_id': '1301',
       'city_name': 'Jakarta',
     });
@@ -111,7 +112,8 @@ void main() {
     expect(find.text('LOKASI'), findsNothing);
     expect(find.text('Jakarta'), findsNothing);
     expect(
-      tester.widget<TierProfileAvatar>(find.byType(TierProfileAvatar))
+      tester
+          .widget<TierProfileAvatar>(find.byType(TierProfileAvatar))
           .equippedFrameId,
       'frame_default',
     );

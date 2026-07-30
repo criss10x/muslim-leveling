@@ -12,7 +12,10 @@ void main() {
     final immortal = getTierVisualConfig('Mythic Immortal');
 
     expect(master.primaryColor, isNot(mythic.primaryColor));
-    expect(epic.primaryColor, isNot(getTierVisualConfig('Mythic Glory').primaryColor));
+    expect(
+      epic.primaryColor,
+      isNot(getTierVisualConfig('Mythic Glory').primaryColor),
+    );
     expect(legend.primaryColor, isNot(immortal.primaryColor));
   });
 
@@ -70,13 +73,21 @@ void main() {
   });
 
   test('squareRounded path stays within bounds', () {
-    final path = buildFramePath(FrameShape.squareRounded, const Size(100, 100), 16);
+    final path = buildFramePath(
+      FrameShape.squareRounded,
+      const Size(100, 100),
+      16,
+    );
     expect(path.getBounds().width, closeTo(100, 0.5));
     expect(path.getBounds().height, closeTo(100, 0.5));
   });
 
   test('shield path is non-empty and bounded by the box', () {
-    final path = buildFramePath(FrameShape.shieldClassic, const Size(100, 100), 16);
+    final path = buildFramePath(
+      FrameShape.shieldClassic,
+      const Size(100, 100),
+      16,
+    );
     final b = path.getBounds();
     expect(b.width, greaterThan(0));
     expect(b.height, lessThanOrEqualTo(100.5));
@@ -84,65 +95,85 @@ void main() {
     expect(path.contains(const Offset(50, 96)), isTrue);
   });
 
-  testWidgets('avatar renders with a shield frame without throwing', (tester) async {
-    await tester.pumpWidget(const Directionality(
-      textDirection: TextDirection.ltr,
-      child: TierProfileAvatar(
-        tierName: 'Warrior',
-        equippedFrameId: 'shield_classic',
-        sizeDp: 80,
+  testWidgets('avatar renders with a shield frame without throwing', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const Directionality(
+        textDirection: TextDirection.ltr,
+        child: TierProfileAvatar(
+          tierName: 'Warrior',
+          equippedFrameId: 'shield_classic',
+          sizeDp: 80,
+        ),
       ),
-    ));
+    );
     expect(find.byType(TierProfileAvatar), findsOneWidget);
   });
 
-  testWidgets('full avatar uses an outer accent without MediaQuery', (tester) async {
-    await tester.pumpWidget(const Directionality(
-      textDirection: TextDirection.ltr,
-      child: TierProfileAvatar(tierName: 'Master', sizeDp: 80),
-    ));
+  testWidgets('full avatar uses an outer accent without MediaQuery', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const Directionality(
+        textDirection: TextDirection.ltr,
+        child: TierProfileAvatar(tierName: 'Master', sizeDp: 80),
+      ),
+    );
 
-    final fullAccent = find.byKey(const ValueKey('tier-avatar-accent-full-outer'));
+    final fullAccent = find.byKey(
+      const ValueKey('tier-avatar-accent-full-outer'),
+    );
     expect(fullAccent, findsOneWidget);
     expect(tester.getSize(fullAccent), const Size(104, 104));
   });
 
-  testWidgets('Epic avatar renders its earned frame with initials fallback',
-      (tester) async {
-    await tester.pumpWidget(const Directionality(
-      textDirection: TextDirection.ltr,
-      child: TierProfileAvatar(
-        tierName: 'Epic', displayName: 'Ahmad Fikri', sizeDp: 88,
+  testWidgets('Epic avatar renders its earned frame with initials fallback', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const Directionality(
+        textDirection: TextDirection.ltr,
+        child: TierProfileAvatar(
+          tierName: 'Epic',
+          displayName: 'Ahmad Fikri',
+          sizeDp: 88,
+        ),
       ),
-    ));
+    );
     expect(find.text('AF'), findsOneWidget);
   });
 
   testWidgets('initials preserve non-BMP Unicode runes', (tester) async {
-    await tester.pumpWidget(const Directionality(
-      textDirection: TextDirection.ltr,
-      child: TierProfileAvatar(
-        tierName: 'Epic',
-        displayName: '😀 Ahmad',
-        sizeDp: 88,
+    await tester.pumpWidget(
+      const Directionality(
+        textDirection: TextDirection.ltr,
+        child: TierProfileAvatar(
+          tierName: 'Epic',
+          displayName: '😀 Ahmad',
+          sizeDp: 88,
+        ),
       ),
-    ));
+    );
 
     expect(find.text('😀A'), findsOneWidget);
   });
 
-  testWidgets('Epic Pro avatar keeps the frame clear of its Pro finish',
-      (tester) async {
-    await tester.pumpWidget(const Directionality(
-      textDirection: TextDirection.ltr,
-      child: TierProfileAvatar(
-        tierName: 'Epic',
-        displayName: 'Ahmad Fikri',
-        equippedFrameId: 'frame_subuh',
-        isPro: true,
-        sizeDp: 88,
+  testWidgets('Epic Pro avatar keeps the frame clear of its Pro finish', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const Directionality(
+        textDirection: TextDirection.ltr,
+        child: TierProfileAvatar(
+          tierName: 'Epic',
+          displayName: 'Ahmad Fikri',
+          equippedFrameId: 'frame_subuh',
+          isPro: true,
+          sizeDp: 88,
+        ),
       ),
-    ));
+    );
     expect(find.bySemanticsLabel('Epic achievement frame'), findsOneWidget);
     expect(find.bySemanticsLabel('Pro signature finish'), findsOneWidget);
 
@@ -157,18 +188,24 @@ void main() {
     expect(crestRect.left, greaterThan(frameRect.right));
   });
 
-  testWidgets('compact avatar stays static for Mythic Immortal', (tester) async {
-    await tester.pumpWidget(const Directionality(
-      textDirection: TextDirection.ltr,
-      child: SmallTierAvatar(
-        tierName: 'Mythic Immortal', displayName: 'Ahmad Fikri',
+  testWidgets('compact avatar stays static for Mythic Immortal', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const Directionality(
+        textDirection: TextDirection.ltr,
+        child: SmallTierAvatar(
+          tierName: 'Mythic Immortal',
+          displayName: 'Ahmad Fikri',
+        ),
       ),
-    ));
+    );
     expect(find.byType(SmallTierAvatar), findsOneWidget);
   });
 
-  testWidgets('compact avatars retain every tier-specific peripheral cue',
-      (tester) async {
+  testWidgets('compact avatars retain every tier-specific peripheral cue', (
+    tester,
+  ) async {
     const tiers = <String>[
       'Warrior',
       'Elite',
@@ -184,20 +221,22 @@ void main() {
 
     for (final tier in tiers) {
       final accent = getTierVisualConfig(tier).accent;
-      await tester.pumpWidget(Directionality(
-        textDirection: TextDirection.ltr,
-        child: SmallTierAvatar(
-          tierName: tier,
-          displayName: 'Ahmad Fikri',
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: SmallTierAvatar(tierName: tier, displayName: 'Ahmad Fikri'),
         ),
-      ));
+      );
 
       expect(
         find.byKey(ValueKey('small-tier-accent-${accent.name}')),
         findsOneWidget,
         reason: tier,
       );
-      expect(find.byKey(const ValueKey('tier-avatar-accent-full-outer')), findsNothing);
+      expect(
+        find.byKey(const ValueKey('tier-avatar-accent-full-outer')),
+        findsNothing,
+      );
       expect(find.byType(AnimatedBuilder), findsNothing);
     }
   });

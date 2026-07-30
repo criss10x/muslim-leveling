@@ -69,7 +69,9 @@ void main() {
     expect(GameService.current.equipped.containsKey('title'), isFalse);
   });
 
-  testWidgets('locker offers Aura and Title without a frame tab', (tester) async {
+  testWidgets('locker offers Aura and Title without a frame tab', (
+    tester,
+  ) async {
     await GameService.load();
     await EntitlementService.load();
     await tester.pumpWidget(
@@ -94,7 +96,10 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(tester.widget<Text>(find.text('Aura')).style?.color, AppColors.primary);
+    expect(
+      tester.widget<Text>(find.text('Aura')).style?.color,
+      AppColors.primary,
+    );
     for (final label in ['Title', 'KOLEKSI']) {
       expect(
         tester.widget<Text>(find.text(label)).style?.color,

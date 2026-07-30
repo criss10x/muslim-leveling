@@ -5,10 +5,7 @@ import '../services/cosmetic_service.dart';
 import '../services/game_service.dart';
 import '../services/entitlement_service.dart';
 
-const _slotLabels = {
-  CosmeticSlot.aura: 'Aura',
-  CosmeticSlot.title: 'Title',
-};
+const _slotLabels = {CosmeticSlot.aura: 'Aura', CosmeticSlot.title: 'Title'};
 
 const _slotIcons = {
   CosmeticSlot.aura: Icons.auto_awesome,

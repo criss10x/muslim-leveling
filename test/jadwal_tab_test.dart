@@ -16,7 +16,8 @@ void main() {
     GoogleFonts.config.allowRuntimeFetching = false;
     activeThemePreset = AppThemePreset.lightEmerald;
     final now = DateTime.now();
-    final date = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+    final date =
+        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
     SharedPreferences.setMockInitialValues({
       'city_id': '1301',
       'city_name': 'Jakarta',
@@ -46,10 +47,18 @@ void main() {
       (widget) =>
           widget is Text &&
           widget.style?.fontSize == 32 &&
-          const {'Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'}
-              .contains(widget.data),
+          const {
+            'Subuh',
+            'Dzuhur',
+            'Ashar',
+            'Maghrib',
+            'Isya',
+          }.contains(widget.data),
     );
     expect(nextPrayerName, findsOneWidget);
-    expect(tester.widget<Text>(nextPrayerName).style?.color, AppColors.onSurface);
+    expect(
+      tester.widget<Text>(nextPrayerName).style?.color,
+      AppColors.onSurface,
+    );
   });
 }

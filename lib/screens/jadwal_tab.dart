@@ -54,7 +54,8 @@ class _JadwalTabState extends State<JadwalTab> {
       if (mounted) {
         setState(() {
           _loading = false;
-          _error = 'Belum ada lokasi tersimpan. Tap ikon lokasi untuk pilih kota.';
+          _error =
+              'Belum ada lokasi tersimpan. Tap ikon lokasi untuk pilih kota.';
         });
       }
       return;
@@ -78,19 +79,24 @@ class _JadwalTabState extends State<JadwalTab> {
       _loading = true;
       _error = null;
     });
-    final j = await PrayerService.fetchSchedule(cityId: _cityId, cityName: _cityName);
+    final j = await PrayerService.fetchSchedule(
+      cityId: _cityId,
+      cityName: _cityName,
+    );
     if (!mounted) return;
     if (j != null) {
-      await GameService.setTimings(Timings(
-        imsak: j['imsak'] ?? '04:30',
-        subuh: j['subuh'] ?? '04:42',
-        terbit: j['terbit'] ?? '05:55',
-        dhuha: j['dhuha'] ?? '06:20',
-        dzuhur: j['dzuhur'] ?? '12:01',
-        ashar: j['ashar'] ?? '15:20',
-        maghrib: j['maghrib'] ?? '17:55',
-        isya: j['isya'] ?? '19:08',
-      ));
+      await GameService.setTimings(
+        Timings(
+          imsak: j['imsak'] ?? '04:30',
+          subuh: j['subuh'] ?? '04:42',
+          terbit: j['terbit'] ?? '05:55',
+          dhuha: j['dhuha'] ?? '06:20',
+          dzuhur: j['dzuhur'] ?? '12:01',
+          ashar: j['ashar'] ?? '15:20',
+          maghrib: j['maghrib'] ?? '17:55',
+          isya: j['isya'] ?? '19:08',
+        ),
+      );
     }
     setState(() {
       _loading = false;
@@ -105,8 +111,29 @@ class _JadwalTabState extends State<JadwalTab> {
 
   String _todayLabel() {
     final d = DateTime.now();
-    const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-    const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+    const months = [
+      'Januari',
+      'Februari',
+      'Maret',
+      'April',
+      'Mei',
+      'Juni',
+      'Juli',
+      'Agustus',
+      'September',
+      'Oktober',
+      'November',
+      'Desember',
+    ];
+    const days = [
+      'Senin',
+      'Selasa',
+      'Rabu',
+      'Kamis',
+      'Jumat',
+      'Sabtu',
+      'Minggu',
+    ];
     return '${days[d.weekday - 1]}, ${d.day} ${months[d.month - 1]} ${d.year}';
   }
 
@@ -196,11 +223,15 @@ class _JadwalTabState extends State<JadwalTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Waktu Sholat',
-              style: AppText.displayHero(32)
-                  .copyWith(color: AppColors.onSurface)),
+          Text(
+            'Waktu Sholat',
+            style: AppText.displayHero(32).copyWith(color: AppColors.onSurface),
+          ),
           const SizedBox(height: 4),
-          Text(_todayLabel(), style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant)),
+          Text(
+            _todayLabel(),
+            style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
+          ),
           const SizedBox(height: AppSpacing.sm),
           Row(
             children: [
@@ -256,7 +287,9 @@ class _JadwalTabState extends State<JadwalTab> {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.sm, vertical: AppSpacing.sm + 2),
+          horizontal: AppSpacing.sm,
+          vertical: AppSpacing.sm + 2,
+        ),
         decoration: BoxDecoration(
           color: AppColors.surfaceContainerLow,
           borderRadius: BorderRadius.circular(AppRadius.xl),
@@ -310,15 +343,15 @@ class _JadwalTabState extends State<JadwalTab> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (_) => QiblaScreen(cityName: _cityName),
-          ),
+          MaterialPageRoute(builder: (_) => QiblaScreen(cityName: _cityName)),
         );
       },
       // Tint gold tenang — kiblat = item spesial tab ini, tapi bukan hero.
       child: Container(
         padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.md, vertical: AppSpacing.sm + 2),
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.sm + 2,
+        ),
         decoration: BoxDecoration(
           color: AppColors.secondaryContainer.withValues(alpha: 0.10),
           borderRadius: BorderRadius.circular(AppRadius.xxl),
@@ -327,12 +360,19 @@ class _JadwalTabState extends State<JadwalTab> {
           children: [
             Icon(Icons.explore, size: 22, color: AppColors.secondaryFixed),
             const SizedBox(width: AppSpacing.sm),
-            Text('Kompas Kiblat',
-                style: AppText.titleLg()
-                    .copyWith(fontSize: 15, color: AppColors.onSurface)),
+            Text(
+              'Kompas Kiblat',
+              style: AppText.titleLg().copyWith(
+                fontSize: 15,
+                color: AppColors.onSurface,
+              ),
+            ),
             const Spacer(),
-            Icon(Icons.arrow_forward_ios,
-                size: 14, color: AppColors.secondaryFixed),
+            Icon(
+              Icons.arrow_forward_ios,
+              size: 14,
+              color: AppColors.secondaryFixed,
+            ),
           ],
         ),
       ),
@@ -383,106 +423,138 @@ class _JadwalTabState extends State<JadwalTab> {
                 ),
               )
             : _error != null
-                ? Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          Icon(Icons.cloud_off, color: AppColors.error, size: 32),
-                          const SizedBox(height: 8),
-                          Text(
-                            _error!,
-                            textAlign: TextAlign.center,
-                            style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
-                          ),
-                          const SizedBox(height: 8),
-                          TextButton(
-                            onPressed: _fetch,
-                            child: Text('Coba lagi', style: AppText.bodyMd().copyWith(color: AppColors.primary)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            ? Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('SHOLAT BERIKUTNYA',
-                                  style: AppText.labelCaps().copyWith(color: AppColors.primary)),
-                              const SizedBox(height: 2),
-                              Text(
-                                next.name,
-                                style: AppText.headlineLg().copyWith(
-                                  color: AppColors.onSurface,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: AppSpacing.sm, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: AppColors.secondaryFixed.withValues(alpha: 0.12),
-                              borderRadius: BorderRadius.circular(AppRadius.pill),
-                              border: Border.all(
-                                color: AppColors.secondaryFixed.withValues(alpha: 0.35),
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                Icon(Icons.timer, size: 14, color: AppColors.secondaryFixed),
-                                const SizedBox(width: 4),
-                                Text(next.countdown,
-                                    style: AppText.labelCaps()
-                                        .copyWith(color: AppColors.secondaryFixed)),
-                              ],
-                            ),
-                          ),
-                        ],
+                      Icon(Icons.cloud_off, color: AppColors.error, size: 32),
+                      const SizedBox(height: 8),
+                      Text(
+                        _error!,
+                        textAlign: TextAlign.center,
+                        style: AppText.bodyMd().copyWith(
+                          color: AppColors.onSurfaceVariant,
+                        ),
                       ),
-                      const SizedBox(height: AppSpacing.md),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          light
-                              ? Text(
-                                  next.time,
-                                  style: AppText.displayHero(40)
-                                      .copyWith(color: AppColors.primary),
-                                )
-                              : ShaderMask(
-                                  shaderCallback: (rect) => LinearGradient(
-                                    colors: [AppColors.primary, AppColors.primaryFixed],
-                                  ).createShader(rect),
-                                  child: Text(
-                                    next.time,
-                                    style: AppText.displayHero(40)
-                                        .copyWith(color: Colors.white),
-                                  ),
-                                ),
-                          Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: AppColors.primary.withValues(alpha: 0.15),
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: AppColors.primary.withValues(alpha: 0.45),
-                              ),
-                            ),
-                            child: Icon(Icons.notifications_active,
-                                color: AppColors.primary, size: 20),
+                      const SizedBox(height: 8),
+                      TextButton(
+                        onPressed: _fetch,
+                        child: Text(
+                          'Coba lagi',
+                          style: AppText.bodyMd().copyWith(
+                            color: AppColors.primary,
                           ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
+                ),
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'SHOLAT BERIKUTNYA',
+                            style: AppText.labelCaps().copyWith(
+                              color: AppColors.primary,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            next.name,
+                            style: AppText.headlineLg().copyWith(
+                              color: AppColors.onSurface,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.sm,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.secondaryFixed.withValues(
+                            alpha: 0.12,
+                          ),
+                          borderRadius: BorderRadius.circular(AppRadius.pill),
+                          border: Border.all(
+                            color: AppColors.secondaryFixed.withValues(
+                              alpha: 0.35,
+                            ),
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.timer,
+                              size: 14,
+                              color: AppColors.secondaryFixed,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              next.countdown,
+                              style: AppText.labelCaps().copyWith(
+                                color: AppColors.secondaryFixed,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      light
+                          ? Text(
+                              next.time,
+                              style: AppText.displayHero(
+                                40,
+                              ).copyWith(color: AppColors.primary),
+                            )
+                          : ShaderMask(
+                              shaderCallback: (rect) => LinearGradient(
+                                colors: [
+                                  AppColors.primary,
+                                  AppColors.primaryFixed,
+                                ],
+                              ).createShader(rect),
+                              child: Text(
+                                next.time,
+                                style: AppText.displayHero(
+                                  40,
+                                ).copyWith(color: Colors.white),
+                              ),
+                            ),
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withValues(alpha: 0.15),
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColors.primary.withValues(alpha: 0.45),
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.notifications_active,
+                          color: AppColors.primary,
+                          size: 20,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
       ),
     );
   }
@@ -493,21 +565,49 @@ class _JadwalTabState extends State<JadwalTab> {
     final next = _nextPrayer();
     final minsNow = now.hour * 60 + now.minute;
 
-    ({String name, String id, String time, IconData icon, bool isNext, bool isLogged}) row(
+    ({
       String name,
       String id,
       String time,
       IconData icon,
-    ) {
-      if (time.isEmpty) return (name: name, id: id, time: '--:--', icon: icon, isNext: false, isLogged: false);
+      bool isNext,
+      bool isLogged,
+    })
+    row(String name, String id, String time, IconData icon) {
+      if (time.isEmpty) {
+        return (
+          name: name,
+          id: id,
+          time: '--:--',
+          icon: icon,
+          isNext: false,
+          isLogged: false,
+        );
+      }
       final parts = time.split(':');
-      if (parts.length != 2) return (name: name, id: id, time: time, icon: icon, isNext: false, isLogged: false);
+      if (parts.length != 2) {
+        return (
+          name: name,
+          id: id,
+          time: time,
+          icon: icon,
+          isNext: false,
+          isLogged: false,
+        );
+      }
       final h = int.tryParse(parts[0]) ?? 0;
       final m = int.tryParse(parts[1]) ?? 0;
       final mins = h * 60 + m;
       final isNext = name == next.name && mins > minsNow;
       final isLogged = GameService.isPrayerCheckedToday(id);
-      return (name: name, id: id, time: time, icon: icon, isNext: isNext, isLogged: isLogged);
+      return (
+        name: name,
+        id: id,
+        time: time,
+        icon: icon,
+        isNext: isNext,
+        isLogged: isLogged,
+      );
     }
 
     final items = [
@@ -522,28 +622,46 @@ class _JadwalTabState extends State<JadwalTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        HudHeader('5 WAKTU SHOLAT',
-            meta: '$logged/5',
-            accent: logged == 5 ? AppColors.primary : null),
-        ...items.map((it) => Padding(
-              padding: const EdgeInsets.only(bottom: AppSpacing.xs),
-              child: _scheduleRow(it.name, it.time, it.icon, it.isNext, it.isLogged),
-            )),
+        HudHeader(
+          '5 WAKTU SHOLAT',
+          meta: '$logged/5',
+          accent: logged == 5 ? AppColors.primary : null,
+        ),
+        ...items.map(
+          (it) => Padding(
+            padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+            child: _scheduleRow(
+              it.name,
+              it.time,
+              it.icon,
+              it.isNext,
+              it.isLogged,
+            ),
+          ),
+        ),
       ],
     );
   }
 
-  Widget _scheduleRow(String name, String time, IconData icon, bool isNext, bool isLogged) {
+  Widget _scheduleRow(
+    String name,
+    String time,
+    IconData icon,
+    bool isNext,
+    bool isLogged,
+  ) {
     // Disiplin warna redesign: cyan = berikutnya/sekarang, primary = selesai.
     final iconColor = isNext
         ? AppColors.tertiary
         : isLogged
-            ? AppColors.primary
-            : AppColors.onSurfaceVariant;
+        ? AppColors.primary
+        : AppColors.onSurfaceVariant;
 
     return Container(
       padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.md, vertical: AppSpacing.sm),
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.sm,
+      ),
       decoration: BoxDecoration(
         color: isNext
             ? AppColors.tertiary.withValues(alpha: 0.06)
