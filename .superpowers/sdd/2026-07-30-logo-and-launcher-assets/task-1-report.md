@@ -27,4 +27,4 @@
 
 ## Commit
 
-`PENDING_COMMIT_SHA`
+`d728ae6626270b81694a85bdc8669b7ff326013c` (amended below to include this report entry)
