@@ -117,7 +117,10 @@ Expected: PASS.
 **Files:**
 - Modify: `android/app/src/main/res/drawable/launch_background.xml`
 - Modify: `android/app/src/main/res/drawable-v21/launch_background.xml`
-- Modify: `test/widget_test.dart` only if formatter output is required
+- Modify: `pubspec.yaml:assets`
+- Modify: `lib/screens/welcome_pejuang.dart:99-104`
+- Modify: `lib/screens/character_creation.dart:137-142`
+- Modify: `lib/screens/home_tab.dart:280`
 
 **Interfaces:**
 - Consumes: `@drawable/launch_logo` and Android's `layer-list` launch window.
@@ -134,7 +137,7 @@ Expected: PASS.
 </item>
 ```
 
-Apply the same layer-list to both API variants. Remove the old `assets/images/logo.png` declaration from `pubspec.yaml` after the splash reference has changed.
+Apply the same layer-list to both API variants. Replace every remaining `assets/images/logo.png` image with the transparent `logo_mark.png` wrapped in `ColorFiltered(mode: AppColors.primary, BlendMode.srcIn)`, then remove the old `assets/images/logo.png` declaration from `pubspec.yaml`.
 
 - [ ] **Step 2: Run native-resource and asset reference checks**
 
