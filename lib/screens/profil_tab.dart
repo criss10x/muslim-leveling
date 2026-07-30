@@ -8,7 +8,6 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
-import '../../widgets/city_picker.dart';
 import '../../services/prayer_service.dart';
 import '../../services/game_service.dart';
 import '../../services/notification_service.dart';
@@ -36,10 +35,6 @@ class ProfilTab extends StatefulWidget {
 
 class _ProfilTabState extends State<ProfilTab> {
   String _nickname = 'Muslim Warrior';
-  String _cityName = 'Jakarta';
-  // ponytail: cityId kept for future "show on map" feature
-  // ignore: unused_field
-  String _cityId = '';
   String? _avatarPath;
   bool _haidMode = false;
 
@@ -65,17 +60,12 @@ class _ProfilTabState extends State<ProfilTab> {
     await GameService.load();
     await AchievementService.refresh(); // sinkron medali dengan state terkini
     final p = await SharedPreferences.getInstance();
-    final loc = await PrayerService.loadLocation();
     final state = GameService.current;
     if (!mounted) return;
     setState(() {
       _nickname = p.getString('nickname') ?? 'Muslim Warrior';
       _avatarPath = p.getString('avatar_path');
       _haidMode = state.haidMode;
-      if (loc != null) {
-        _cityId = loc.id;
-        _cityName = loc.name;
-      }
     });
   }
 
@@ -133,16 +123,6 @@ class _ProfilTabState extends State<ProfilTab> {
     final p = await SharedPreferences.getInstance();
     await p.setString('nickname', result);
     setState(() => _nickname = result);
-  }
-
-  Future<void> _editLocation() async {
-    final picked = await CityPicker.show(context);
-    if (picked == null) return;
-    await PrayerService.saveLocation(picked.id, picked.name);
-    setState(() {
-      _cityId = picked.id;
-      _cityName = picked.name;
-    });
   }
 
   Future<void> _pickAvatar() async {
@@ -807,11 +787,6 @@ class _ProfilTabState extends State<ProfilTab> {
     // Equipped cosmetics — resolved fresh each build so they react to
     // Locker taps (this state listens to GameService.stateVersion
     // and calls setState on change).
-    final frameId = CosmeticService.resolveSlot(
-      state,
-      CosmeticSlot.frame,
-      isPro: true,
-    );
     final auraId = CosmeticService.resolveSlot(
       state,
       CosmeticSlot.aura,
@@ -881,7 +856,7 @@ class _ProfilTabState extends State<ProfilTab> {
                           tierName: tier.name,
                           sizeDp: 88,
                           isPro: true,
-                          equippedFrameId: frameId,
+                          equippedFrameId: 'frame_default',
                           equippedAuraId: auraId,
                         ),
                         const SizedBox(width: AppSpacing.md),
@@ -1057,57 +1032,6 @@ class _ProfilTabState extends State<ProfilTab> {
                         ),
                       ),
                     ],
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  Divider(color: AppColors.outlineVariant),
-                  const SizedBox(height: AppSpacing.md),
-                  // Location row — editable
-                  InkWell(
-                    onTap: _editLocation,
-                    borderRadius: BorderRadius.circular(AppRadius.md),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: AppSpacing.xs,
-                        horizontal: AppSpacing.sm,
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.location_on,
-                            color: AppColors.primary,
-                            size: 18,
-                          ),
-                          const SizedBox(width: AppSpacing.sm),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'LOKASI',
-                                  style: AppText.labelCaps().copyWith(
-                                    color: AppColors.onSurfaceVariant,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                                Text(
-                                  _cityName,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: AppText.bodyLg().copyWith(
-                                    color: AppColors.onSurface,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Icon(
-                            Icons.chevron_right,
-                            color: AppColors.onSurfaceVariant,
-                            size: 20,
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
                   const SizedBox(height: AppSpacing.md),
                   Row(
