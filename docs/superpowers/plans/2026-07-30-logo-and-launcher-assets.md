@@ -61,6 +61,7 @@ Open `assets/images/logo_mark.png`, `drawable/launch_logo.png`, and `mipmap-xxxh
 **Files:**
 - Modify: `lib/screens/splash_screen.dart:79-113`
 - Modify: `test/widget_test.dart:1-11`
+- Modify: `pubspec.yaml:assets`
 
 **Interfaces:**
 - Consumes: `assets/images/logo_mark.png`, `AppColors.primary`, `SplashScreen`.
@@ -78,7 +79,7 @@ testWidgets('splash tints the mosque mark with the active primary color', (teste
   final filter = tester.widget<ColorFiltered>(find.byType(ColorFiltered));
   expect(
     filter.colorFilter,
-    const ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
+    ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
   );
   expect(find.byType(Image), findsOneWidget);
 });
@@ -94,7 +95,7 @@ Expected: FAIL because the current splash image is not wrapped in `ColorFiltered
 
 ```dart
 child: ColorFiltered(
-  colorFilter: const ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
+  colorFilter: ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
   child: Image.asset(
     'assets/images/logo_mark.png',
     width: 64,
@@ -103,7 +104,7 @@ child: ColorFiltered(
 ),
 ```
 
-Keep the existing 120dp container, pulse, border, shadow, title, timing, and layout unchanged.
+Keep the existing 120dp container, pulse, border, shadow, title, timing, and layout unchanged. Register `assets/images/logo_mark.png` in `pubspec.yaml` before the green run, run `flutter pub get`, and retain the old `assets/images/logo.png` declaration until Task 3 removes it.
 
 - [ ] **Step 4: Run the test to verify it passes**
 
@@ -117,7 +118,9 @@ Expected: PASS.
 - Modify: `android/app/src/main/res/drawable/launch_background.xml`
 - Modify: `android/app/src/main/res/drawable-v21/launch_background.xml`
 - Modify: `pubspec.yaml:assets`
-- Modify: `test/widget_test.dart` only if formatter output is required
+- Modify: `lib/screens/welcome_pejuang.dart:99-104`
+- Modify: `lib/screens/character_creation.dart:137-142`
+- Modify: `lib/screens/home_tab.dart:280`
 
 **Interfaces:**
 - Consumes: `@drawable/launch_logo` and Android's `layer-list` launch window.
@@ -134,7 +137,9 @@ Expected: PASS.
 </item>
 ```
 
-Apply the same layer-list to both API variants. Add `assets/images/logo_mark.png` to `pubspec.yaml`; remove the old `assets/images/logo.png` entry only after the splash reference has changed.
+Apply the same layer-list to both API variants. Replace every remaining `assets/images/logo.png` image with the transparent `logo_mark.png` wrapped in `ColorFiltered(mode: AppColors.primary, BlendMode.srcIn)`, then remove the old `assets/images/logo.png` declaration from `pubspec.yaml`.
+
+Store the native `launch_logo.png` in density-specific `drawable-mdpi` (128px), `drawable-hdpi` (192px), `drawable-xhdpi` (256px), `drawable-xxhdpi` (384px), and `drawable-xxxhdpi` (512px) folders. Remove the density-neutral `drawable/launch_logo.png` after those copies exist, so Android renders a stable 128dp canvas instead of a 512dp bitmap.
 
 - [ ] **Step 2: Run native-resource and asset reference checks**
 
