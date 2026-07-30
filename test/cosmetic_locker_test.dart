@@ -69,6 +69,21 @@ void main() {
     expect(GameService.current.equipped.containsKey('title'), isFalse);
   });
 
+  testWidgets('locker offers Aura and Title without a frame tab', (
+    tester,
+  ) async {
+    await GameService.load();
+    await EntitlementService.load();
+    await tester.pumpWidget(
+      const MaterialApp(home: Scaffold(body: CosmeticLocker())),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Aura'), findsOneWidget);
+    expect(find.text('Title'), findsOneWidget);
+    expect(find.text('Bingkai'), findsNothing);
+  });
+
   testWidgets('locker labels use explicit light-theme ink', (tester) async {
     isLightTheme = true;
     await GameService.load();
@@ -82,10 +97,10 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(
-      tester.widget<Text>(find.text('Bingkai')).style?.color,
+      tester.widget<Text>(find.text('Aura')).style?.color,
       AppColors.primary,
     );
-    for (final label in ['Aura', 'Title', 'KOLEKSI']) {
+    for (final label in ['Title', 'KOLEKSI']) {
       expect(
         tester.widget<Text>(find.text(label)).style?.color,
         AppColors.onSurface,

@@ -5,17 +5,14 @@ import '../services/cosmetic_service.dart';
 import '../services/game_service.dart';
 import '../services/entitlement_service.dart';
 
-const _slotLabels = {
-  CosmeticSlot.frame: 'Bingkai',
-  CosmeticSlot.aura: 'Aura',
-  CosmeticSlot.title: 'Title',
-};
+const _slotLabels = {CosmeticSlot.aura: 'Aura', CosmeticSlot.title: 'Title'};
 
 const _slotIcons = {
-  CosmeticSlot.frame: Icons.crop_square_rounded,
   CosmeticSlot.aura: Icons.auto_awesome,
   CosmeticSlot.title: Icons.workspace_premium_outlined,
 };
+
+const _visibleSlots = [CosmeticSlot.aura, CosmeticSlot.title];
 
 class CosmeticLocker extends StatefulWidget {
   const CosmeticLocker({super.key});
@@ -25,7 +22,7 @@ class CosmeticLocker extends StatefulWidget {
 }
 
 class _CosmeticLockerState extends State<CosmeticLocker> {
-  CosmeticSlot _slot = CosmeticSlot.frame;
+  CosmeticSlot _slot = CosmeticSlot.aura;
 
   @override
   void initState() {
@@ -107,12 +104,12 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          children: CosmeticSlot.values.map((s) {
+          children: _visibleSlots.map((s) {
             final selected = s == _slot;
             return Expanded(
               child: Padding(
                 padding: EdgeInsets.only(
-                  right: s == CosmeticSlot.values.last ? 0 : AppSpacing.sm,
+                  right: s == _visibleSlots.last ? 0 : AppSpacing.sm,
                 ),
                 child: Semantics(
                   button: true,

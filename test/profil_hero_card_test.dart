@@ -88,6 +88,37 @@ void main() {
     );
   });
 
+  testWidgets('hero uses the circular fallback and omits location', (
+    tester,
+  ) async {
+    GoogleFonts.config.allowRuntimeFetching = false;
+    SharedPreferences.setMockInitialValues({
+      'nickname': 'Pejuang',
+      'onboarding_done': true,
+      'game_state_v1':
+          '{"xp":0,"level":1,"equipped":{"frame":"shield_classic"}}',
+      'city_id': '1301',
+      'city_name': 'Jakarta',
+    });
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.dark(),
+        home: const Scaffold(body: ProfilTab()),
+      ),
+    );
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.text('LOKASI'), findsNothing);
+    expect(find.text('Jakarta'), findsNothing);
+    expect(
+      tester
+          .widget<TierProfileAvatar>(find.byType(TierProfileAvatar))
+          .equippedFrameId,
+      'frame_default',
+    );
+  });
+
   testWidgets('rank bento uses the rank accent', (tester) async {
     GoogleFonts.config.allowRuntimeFetching = false;
     isLightTheme = true;
