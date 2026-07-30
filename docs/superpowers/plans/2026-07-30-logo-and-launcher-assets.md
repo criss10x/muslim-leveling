@@ -61,6 +61,7 @@ Open `assets/images/logo_mark.png`, `drawable/launch_logo.png`, and `mipmap-xxxh
 **Files:**
 - Modify: `lib/screens/splash_screen.dart:79-113`
 - Modify: `test/widget_test.dart:1-11`
+- Modify: `pubspec.yaml:assets`
 
 **Interfaces:**
 - Consumes: `assets/images/logo_mark.png`, `AppColors.primary`, `SplashScreen`.
@@ -103,7 +104,7 @@ child: ColorFiltered(
 ),
 ```
 
-Keep the existing 120dp container, pulse, border, shadow, title, timing, and layout unchanged.
+Keep the existing 120dp container, pulse, border, shadow, title, timing, and layout unchanged. Register `assets/images/logo_mark.png` in `pubspec.yaml` before the green run, run `flutter pub get`, and retain the old `assets/images/logo.png` declaration until Task 3 removes it.
 
 - [ ] **Step 4: Run the test to verify it passes**
 
@@ -116,7 +117,6 @@ Expected: PASS.
 **Files:**
 - Modify: `android/app/src/main/res/drawable/launch_background.xml`
 - Modify: `android/app/src/main/res/drawable-v21/launch_background.xml`
-- Modify: `pubspec.yaml:assets`
 - Modify: `test/widget_test.dart` only if formatter output is required
 
 **Interfaces:**
@@ -134,7 +134,7 @@ Expected: PASS.
 </item>
 ```
 
-Apply the same layer-list to both API variants. Add `assets/images/logo_mark.png` to `pubspec.yaml`; remove the old `assets/images/logo.png` entry only after the splash reference has changed.
+Apply the same layer-list to both API variants. Remove the old `assets/images/logo.png` declaration from `pubspec.yaml` after the splash reference has changed.
 
 - [ ] **Step 2: Run native-resource and asset reference checks**
 
