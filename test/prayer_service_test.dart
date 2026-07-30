@@ -13,8 +13,19 @@ void main() {
   });
 
   test('prayer area falls back through city, town, and village', () {
-    expect(PrayerService.prayerAreaFromAddress({'city': 'Denpasar'}), 'Denpasar');
-    expect(PrayerService.prayerAreaFromAddress({'town': 'Singaraja'}), 'Singaraja');
+    expect(
+      PrayerService.prayerAreaFromAddress({'city': 'Denpasar'}),
+      'Denpasar',
+    );
+    expect(
+      PrayerService.prayerAreaFromAddress({'town': 'Singaraja'}),
+      'Singaraja',
+    );
     expect(PrayerService.prayerAreaFromAddress({'village': 'Kuta'}), 'Kuta');
+  });
+
+  test('province catalog includes Bali and all Equran provinces', () {
+    expect(PrayerService.provinces, contains('Bali'));
+    expect(PrayerService.provinces, hasLength(34));
   });
 }

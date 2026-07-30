@@ -34,30 +34,61 @@ class PrayerService {
   static const _equranBase = 'https://equran.id/api/v2/shalat';
   static const _myquranBase = 'https://api.myquran.com/v3/sholat';
   static const _cacheKey = 'prayer_cache_v2';
-  static final _client = HttpClient()..connectionTimeout = const Duration(seconds: 8);
+  static final _client = HttpClient()
+    ..connectionTimeout = const Duration(seconds: 8);
   // ponytail: shorter timeout for province discovery calls
-  static final _discoveryClient = HttpClient()..connectionTimeout = const Duration(seconds: 3);
+  static final _discoveryClient = HttpClient()
+    ..connectionTimeout = const Duration(seconds: 3);
 
   /// Provinsi names matching Equran API. Ordered by population density
   /// (most likely first) so discovery exits fast for Java users.
   static const _equranProvinsi = [
-    'Jawa Barat', 'Jawa Timur', 'Jawa Tengah', 'DKI Jakarta', 'Banten',
-    'Sumatera Utara', 'Sumatera Selatan', 'Lampung', 'Riau',
-    'Kepulauan Riau', 'Sumatera Barat', 'Aceh', 'Jambi', 'Bengkulu',
-    'Kepulauan Bangka Belitung', 'Kalimantan Barat', 'Kalimantan Timur',
-    'Kalimantan Selatan', 'Kalimantan Tengah', 'Kalimantan Utara',
-    'Sulawesi Selatan', 'Sulawesi Utara', 'Sulawesi Tengah',
-    'Sulawesi Tenggara', 'Sulawesi Barat', 'Gorontalo', 'Bali',
-    'Nusa Tenggara Barat', 'Nusa Tenggara Timur', 'Maluku', 'Maluku Utara',
-    'Papua', 'Papua Barat', 'D.I. Yogyakarta',
+    'Jawa Barat',
+    'Jawa Timur',
+    'Jawa Tengah',
+    'DKI Jakarta',
+    'Banten',
+    'Sumatera Utara',
+    'Sumatera Selatan',
+    'Lampung',
+    'Riau',
+    'Kepulauan Riau',
+    'Sumatera Barat',
+    'Aceh',
+    'Jambi',
+    'Bengkulu',
+    'Kepulauan Bangka Belitung',
+    'Kalimantan Barat',
+    'Kalimantan Timur',
+    'Kalimantan Selatan',
+    'Kalimantan Tengah',
+    'Kalimantan Utara',
+    'Sulawesi Selatan',
+    'Sulawesi Utara',
+    'Sulawesi Tengah',
+    'Sulawesi Tenggara',
+    'Sulawesi Barat',
+    'Gorontalo',
+    'Bali',
+    'Nusa Tenggara Barat',
+    'Nusa Tenggara Timur',
+    'Maluku',
+    'Maluku Utara',
+    'Papua',
+    'Papua Barat',
+    'D.I. Yogyakarta',
   ];
+
+  static List<String> get provinces => _equranProvinsi;
 
   // ponytail: in-memory city→provinsi cache
   static final Map<String, String> _provCache = {};
 
   static Future<List<Map<String, dynamic>>> searchCities(String q) async {
     if (q.trim().isEmpty) return const [];
-    final uri = Uri.parse('$_myquranBase/kabkota/cari/${Uri.encodeComponent(q.trim())}');
+    final uri = Uri.parse(
+      '$_myquranBase/kabkota/cari/${Uri.encodeComponent(q.trim())}',
+    );
     try {
       final req = await _client.getUrl(uri);
       final res = await req.close();
@@ -109,12 +140,14 @@ class PrayerService {
       final uri = Uri.parse(_equranBase);
       final req = await _client.postUrl(uri);
       req.headers.contentType = ContentType.json;
-      req.write(jsonEncode({
-        'provinsi': prov,
-        'kabkota': kota,
-        'bulan': month,
-        'tahun': year,
-      }));
+      req.write(
+        jsonEncode({
+          'provinsi': prov,
+          'kabkota': kota,
+          'bulan': month,
+          'tahun': year,
+        }),
+      );
       final res = await req.close();
       if (res.statusCode != 200) return null;
       final body = await res.transform(utf8.decoder).join();
@@ -140,12 +173,14 @@ class PrayerService {
       final uri = Uri.parse(_equranBase);
       final req = await _client.postUrl(uri);
       req.headers.contentType = ContentType.json;
-      req.write(jsonEncode({
-        'provinsi': prov,
-        'kabkota': kota,
-        'bulan': date.month,
-        'tahun': date.year,
-      }));
+      req.write(
+        jsonEncode({
+          'provinsi': prov,
+          'kabkota': kota,
+          'bulan': date.month,
+          'tahun': date.year,
+        }),
+      );
       final res = await req.close();
       if (res.statusCode != 200) return null;
       final body = await res.transform(utf8.decoder).join();
@@ -164,7 +199,8 @@ class PrayerService {
         }
       }
       entry ??= list.first as Map<String, dynamic>;
-      String clean(String v) => (v as String?)?.replaceAll(RegExp(r' \\(WIB\\)'), '') ?? '--:--';
+      String clean(String v) =>
+          (v as String?)?.replaceAll(RegExp(r' \\(WIB\\)'), '') ?? '--:--';
       return {
         'imsak': clean(entry['imsak']),
         'subuh': clean(entry['subuh']),
@@ -174,7 +210,8 @@ class PrayerService {
         'ashar': clean(entry['ashar']),
         'maghrib': clean(entry['maghrib']),
         'isya': clean(entry['isya']),
-        'tanggal': '${date.year}-${date.month.toString().padLeft(2, '0')}-${day.toString().padLeft(2, '0')}',
+        'tanggal':
+            '${date.year}-${date.month.toString().padLeft(2, '0')}-${day.toString().padLeft(2, '0')}',
         'lokasi': cityName,
         'daerah': prov,
       };
@@ -227,24 +264,30 @@ class PrayerService {
     return 'DKI Jakarta';
   }
 
-  /// Check if [city] belongs to [provinsi] via Equran's kabkota list.
-  static Future<bool> _cityInProvinsi(String provinsi, String city) async {
+  static Future<List<String>> citiesForProvince(String province) async {
+    if (province.trim().isEmpty) return const [];
     try {
       final uri = Uri.parse('$_equranBase/kabkota');
       final req = await _discoveryClient.postUrl(uri);
       req.headers.contentType = ContentType.json;
-      req.write(jsonEncode({'provinsi': provinsi}));
+      req.write(jsonEncode({'provinsi': province}));
       final res = await req.close();
-      if (res.statusCode != 200) return false;
+      if (res.statusCode != 200) return const [];
       final body = await res.transform(utf8.decoder).join();
       final json = jsonDecode(body) as Map<String, dynamic>;
       final list = json['data'] as List?;
-      if (list == null || list.isEmpty) return false;
-      final q = city.toLowerCase().trim();
-      return list.any((k) => (k as String).toLowerCase().trim() == q);
+      return list?.whereType<String>().toList() ?? const [];
     } catch (_) {
-      return false;
+      return const [];
     }
+  }
+
+  /// Check if [city] belongs to [provinsi] via Equran's kabkota list.
+  static Future<bool> _cityInProvinsi(String provinsi, String city) async {
+    final q = city.toLowerCase().trim();
+    return (await citiesForProvince(
+      provinsi,
+    )).any((name) => name.toLowerCase().trim() == q);
   }
 
   /// Normalize MyQuran city name ("KOTA BOGOR") to Equran format ("Kota Bogor").
@@ -260,14 +303,18 @@ class PrayerService {
     s = _removeProvName(s, 'Yogyakarta');
     if (s.trim().isEmpty) s = city;
     // Title case
-    return s.split(' ').map((w) {
-      if (w.isEmpty) return w;
-      if (w == w.toUpperCase() && w.length > 2) {
-        // All-caps word like "KOTA" → "Kota"
-        return w[0].toUpperCase() + w.substring(1).toLowerCase();
-      }
-      return w[0].toUpperCase() + w.substring(1).toLowerCase();
-    }).join(' ').trim();
+    return s
+        .split(' ')
+        .map((w) {
+          if (w.isEmpty) return w;
+          if (w == w.toUpperCase() && w.length > 2) {
+            // All-caps word like "KOTA" → "Kota"
+            return w[0].toUpperCase() + w.substring(1).toLowerCase();
+          }
+          return w[0].toUpperCase() + w.substring(1).toLowerCase();
+        })
+        .join(' ')
+        .trim();
   }
 
   static String _removeProvName(String s, String name) {
@@ -294,7 +341,10 @@ class PrayerService {
   static String _dateKey(DateTime d) =>
       '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
 
-  static Future<Map<String, String>?> _loadCache(String cityId, String date) async {
+  static Future<Map<String, String>?> _loadCache(
+    String cityId,
+    String date,
+  ) async {
     final p = await SharedPreferences.getInstance();
     final raw = p.getString(_cacheKey);
     if (raw == null) return null;
@@ -320,13 +370,16 @@ class PrayerService {
     }
   }
 
-  static Future<void> _saveCache(String cityId, String date, Map<String, String> timings) async {
+  static Future<void> _saveCache(
+    String cityId,
+    String date,
+    Map<String, String> timings,
+  ) async {
     final p = await SharedPreferences.getInstance();
-    await p.setString(_cacheKey, jsonEncode({
-      'cityId': cityId,
-      'date': date,
-      'timings': timings,
-    }));
+    await p.setString(
+      _cacheKey,
+      jsonEncode({'cityId': cityId, 'date': date, 'timings': timings}),
+    );
   }
 
   // --- SharedPreferences helpers ---
@@ -444,15 +497,41 @@ class PrayerService {
   /// Legacy alias list for heuristic province extraction.
   /// Order matters: more specific names first to avoid false matches.
   static final _aliasProvinsi = [
-    'Kepulauan Bangka Belitung', 'Kepulauan Riau', 'Nusa Tenggara Barat',
-    'Nusa Tenggara Timur', 'Kalimantan Barat', 'Kalimantan Tengah',
-    'Kalimantan Selatan', 'Kalimantan Timur', 'Kalimantan Utara',
-    'Sulawesi Utara', 'Sulawesi Tengah', 'Sulawesi Barat',
-    'Sulawesi Selatan', 'Sulawesi Tenggara', 'Sumatera Utara',
-    'Sumatera Barat', 'Sumatera Selatan', 'DKI Jakarta', 'DI Yogyakarta',
-    'Jawa Barat', 'Jawa Tengah', 'Jawa Timur', 'Bangka Belitung',
-    'Aceh', 'Bali', 'Banten', 'Bengkulu', 'Gorontalo', 'Jambi',
-    'Lampung', 'Maluku', 'Papua', 'Riau', 'Yogyakarta', 'Jakarta',
+    'Kepulauan Bangka Belitung',
+    'Kepulauan Riau',
+    'Nusa Tenggara Barat',
+    'Nusa Tenggara Timur',
+    'Kalimantan Barat',
+    'Kalimantan Tengah',
+    'Kalimantan Selatan',
+    'Kalimantan Timur',
+    'Kalimantan Utara',
+    'Sulawesi Utara',
+    'Sulawesi Tengah',
+    'Sulawesi Barat',
+    'Sulawesi Selatan',
+    'Sulawesi Tenggara',
+    'Sumatera Utara',
+    'Sumatera Barat',
+    'Sumatera Selatan',
+    'DKI Jakarta',
+    'DI Yogyakarta',
+    'Jawa Barat',
+    'Jawa Tengah',
+    'Jawa Timur',
+    'Bangka Belitung',
+    'Aceh',
+    'Bali',
+    'Banten',
+    'Bengkulu',
+    'Gorontalo',
+    'Jambi',
+    'Lampung',
+    'Maluku',
+    'Papua',
+    'Riau',
+    'Yogyakarta',
+    'Jakarta',
   ];
 
   static String _extractProvinsi(String city) {
