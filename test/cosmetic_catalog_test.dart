@@ -38,6 +38,14 @@ void main() {
     }
   });
 
+  test('frame slot keeps only the circular default', () {
+    final frames = CosmeticCatalog.bySlot(CosmeticSlot.frame);
+
+    expect(frames.map((c) => c.id), ['frame_default']);
+    expect(frames.single.frameShape, FrameShape.circle);
+    expect(CosmeticCatalog.byId('shield_classic'), isNull);
+  });
+
   test('auras have distinct effects and rarity labels', () {
     final auras = CosmeticCatalog.bySlot(
       CosmeticSlot.aura,

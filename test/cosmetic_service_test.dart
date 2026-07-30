@@ -26,12 +26,17 @@ void main() {
     expect(r, isNull);
   });
 
-  test('equip pro without entitlement is rejected; with entitlement succeeds', () {
+  test('retired frames cannot be equipped', () {
     final s = GameState();
-    expect(CosmeticService.equip(s, slot: CosmeticSlot.frame, id: 'shield_classic', isPro: false), isNull);
-    final r = CosmeticService.equip(s, slot: CosmeticSlot.frame, id: 'shield_classic', isPro: true);
-    expect(r, isNotNull);
-    expect(r!.equipped['frame'], 'shield_classic');
+    expect(
+      CosmeticService.equip(
+        s,
+        slot: CosmeticSlot.frame,
+        id: 'shield_classic',
+        isPro: true,
+      ),
+      isNull,
+    );
   });
 
   test('default cosmetics are always allowed (no ownership needed)', () {
@@ -40,10 +45,10 @@ void main() {
     expect(r, isNotNull);
   });
 
-  test('resolveSlot falls back to default when pro item not entitled', () {
+  test('resolveSlot falls back to default when saved frame is retired', () {
     final s = GameState(equipped: const {'frame': 'shield_classic'});
     expect(CosmeticService.resolveSlot(s, CosmeticSlot.frame, isPro: false), 'frame_default');
-    expect(CosmeticService.resolveSlot(s, CosmeticSlot.frame, isPro: true), 'shield_classic');
+    expect(CosmeticService.resolveSlot(s, CosmeticSlot.frame, isPro: true), 'frame_default');
   });
 
   test('reconcileLapse clears pro-equipped slots but keeps free ones', () {

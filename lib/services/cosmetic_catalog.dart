@@ -16,9 +16,7 @@ extension CosmeticRarityLabel on CosmeticRarity {
   };
 }
 
-/// Silhouette of the avatar frame. The free default uses [circle];
-/// [squareRounded] is a free earned frame; [shieldClassic] is the one
-/// premium shield (tier colors still show through).
+/// Silhouette of the avatar's default frame.
 enum FrameShape { circle, squareRounded, shieldClassic }
 
 enum AuraEffect { halo, crescent, drift, orbit, goldOrbit }
@@ -80,26 +78,6 @@ class CosmeticCatalog {
       access: CosmeticAccess.free,
       frameShape: FrameShape.circle,
     ),
-    Cosmetic(
-      id: 'frame_subuh',
-      slot: CosmeticSlot.frame,
-      name: 'Bingkai Penjelajah Subuh',
-      emoji: '🖼️',
-      access: CosmeticAccess.free,
-      rarity: CosmeticRarity.rare,
-      frameShape: FrameShape.squareRounded,
-      legacyRewardName: 'Bingkai Penjelajah Subuh',
-    ),
-    Cosmetic(
-      id: 'shield_classic',
-      slot: CosmeticSlot.frame,
-      name: 'Perisai Klasik',
-      emoji: '🛡️',
-      access: CosmeticAccess.pro,
-      rarity: CosmeticRarity.proSignature,
-      frameShape: FrameShape.shieldClassic,
-    ),
-
     // ── Auras ──
     Cosmetic(
       id: 'aura_none',
