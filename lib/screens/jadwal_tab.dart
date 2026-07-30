@@ -5,7 +5,6 @@ import '../../widgets/city_picker.dart';
 import '../../services/prayer_service.dart';
 import '../../services/game_service.dart';
 import 'qibla_screen.dart';
-import 'jadwal_kalender_screen.dart';
 
 /// Jadwal Sholat — V3 logic ported to V1 design.
 /// Shows next prayer countdown, 5 daily prayers with logged status,
@@ -235,32 +234,13 @@ class _JadwalTabState extends State<JadwalTab> {
           const SizedBox(height: AppSpacing.sm),
           Row(
             children: [
-              Expanded(
-                child: _locationButton(
-                  icon: Icons.my_location,
-                  label: 'Lokasi Saat Ini',
-                  onTap: _currentLocation,
-                ),
-              ),
+              _locationIconButton(onTap: _currentLocation),
               const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: _locationButton(
                   icon: Icons.search,
                   label: 'Cari Kota',
                   onTap: _changeLocation,
-                ),
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: _locationButton(
-                  icon: Icons.calendar_month,
-                  label: 'Kalender',
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const JadwalKalenderScreen(),
-                    ),
-                  ),
                 ),
               ),
             ],
@@ -319,15 +299,34 @@ class _JadwalTabState extends State<JadwalTab> {
     );
   }
 
+  Widget _locationIconButton({required VoidCallback onTap}) {
+    return PressableScale(
+      onTap: onTap,
+      child: SizedBox.square(
+        dimension: 44,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: AppColors.surfaceContainerLow,
+            borderRadius: BorderRadius.circular(AppRadius.xl),
+            border: Border.all(
+              color: AppColors.outlineVariant.withValues(alpha: 0.3),
+            ),
+          ),
+          child: Icon(Icons.my_location, size: 18, color: AppColors.primary),
+        ),
+      ),
+    );
+  }
+
   Future<void> _currentLocation() async {
     // GPS → save → auto-refresh via listener
-    final loc = await PrayerService.getCurrentLocation();
-    if (loc == null) {
+    final result = await PrayerService.getCurrentLocation();
+    if (result.failure != null) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Gagal deteksi lokasi. Pastikan GPS aktif.',
+            result.failure!.message,
             style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
           ),
           backgroundColor: AppColors.surfaceContainerLowest,
@@ -335,7 +334,7 @@ class _JadwalTabState extends State<JadwalTab> {
       );
       return;
     }
-    await PrayerService.saveLocation(loc.id, loc.name);
+    await PrayerService.saveLocation(result.id!, result.name!);
   }
 
   Widget _qiblaButton() {

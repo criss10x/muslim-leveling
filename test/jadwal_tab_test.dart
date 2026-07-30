@@ -4,12 +4,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:muslim_leveling/screens/jadwal_tab.dart';
+import 'package:muslim_leveling/services/prayer_service.dart';
 import 'package:muslim_leveling/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   tearDown(() {
     activeThemePreset = AppThemePreset.darkEmerald;
+  });
+
+  test('location failure messages identify the blocked step', () {
+    expect(
+      CurrentLocationFailure.permissionDenied.message,
+      'Izinkan akses lokasi untuk menggunakan lokasi saat ini.',
+    );
+    expect(
+      CurrentLocationFailure.serviceDisabled.message,
+      'Aktifkan layanan lokasi perangkat, lalu coba lagi.',
+    );
+  });
+
+  testWidgets('Jadwal header keeps location compact without calendar', (
+    tester,
+  ) async {
+    GoogleFonts.config.allowRuntimeFetching = false;
+    SharedPreferences.setMockInitialValues({});
+
+    await tester.pumpWidget(
+      MaterialApp(theme: AppTheme.dark(), home: const JadwalTab()),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byIcon(Icons.my_location), findsOneWidget);
+    expect(find.text('Lokasi Saat Ini'), findsNothing);
+    expect(find.text('Cari Kota'), findsOneWidget);
+    expect(find.byIcon(Icons.calendar_month), findsNothing);
+    expect(find.text('Kalender'), findsNothing);
   });
 
   testWidgets('next-prayer name uses light-theme foreground', (tester) async {

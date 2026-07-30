@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
@@ -6,6 +7,29 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// ponytail: stdlib HttpClient + SharedPreferences. No dio, no riverpod.
 /// Primary API: equran.id/api/v2/shalat (Kemenag proxy).
+enum CurrentLocationFailure {
+  serviceDisabled,
+  permissionDenied,
+  permissionDeniedForever,
+  timeout,
+  lookupFailed,
+}
+
+extension CurrentLocationFailureMessage on CurrentLocationFailure {
+  String get message => switch (this) {
+    CurrentLocationFailure.serviceDisabled =>
+      'Aktifkan layanan lokasi perangkat, lalu coba lagi.',
+    CurrentLocationFailure.permissionDenied =>
+      'Izinkan akses lokasi untuk menggunakan lokasi saat ini.',
+    CurrentLocationFailure.permissionDeniedForever =>
+      'Izin lokasi diblokir. Buka Pengaturan untuk mengizinkannya.',
+    CurrentLocationFailure.timeout =>
+      'Lokasi terlalu lama ditemukan. Coba lagi di area terbuka.',
+    CurrentLocationFailure.lookupFailed =>
+      'Kota tidak dapat ditemukan. Periksa koneksi atau pilih kota manual.',
+  };
+}
+
 class PrayerService {
   static const _equranBase = 'https://equran.id/api/v2/shalat';
   static const _myquranBase = 'https://api.myquran.com/v3/sholat';
@@ -308,14 +332,36 @@ class PrayerService {
   // --- SharedPreferences helpers ---
   static final ValueNotifier<int> locationVersion = ValueNotifier(0);
 
-  static Future<({String id, String name})?> getCurrentLocation() async {
+  static Future<({String? id, String? name, CurrentLocationFailure? failure})>
+  getCurrentLocation() async {
+    if (!await Geolocator.isLocationServiceEnabled()) {
+      return (
+        id: null,
+        name: null,
+        failure: CurrentLocationFailure.serviceDisabled,
+      );
+    }
+
+    var permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+    }
+    if (permission == LocationPermission.denied) {
+      return (
+        id: null,
+        name: null,
+        failure: CurrentLocationFailure.permissionDenied,
+      );
+    }
+    if (permission == LocationPermission.deniedForever) {
+      return (
+        id: null,
+        name: null,
+        failure: CurrentLocationFailure.permissionDeniedForever,
+      );
+    }
+
     try {
-      final perm = await Geolocator.checkPermission();
-      if (perm == LocationPermission.denied) {
-        final req = await Geolocator.requestPermission();
-        if (req == LocationPermission.denied) return null;
-      }
-      if (perm == LocationPermission.deniedForever) return null;
       final pos = await Geolocator.getCurrentPosition(
         locationSettings: const LocationSettings(
           accuracy: LocationAccuracy.high,
@@ -331,7 +377,13 @@ class PrayerService {
       final geoReq = await _client.getUrl(geoUri);
       geoReq.headers.set('User-Agent', 'MuslimLeveling/1.0');
       final geoRes = await geoReq.close();
-      if (geoRes.statusCode != 200) return null;
+      if (geoRes.statusCode != 200) {
+        return (
+          id: null,
+          name: null,
+          failure: CurrentLocationFailure.lookupFailed,
+        );
+      }
       final geoBody = await geoRes.transform(utf8.decoder).join();
       final geoJson = jsonDecode(geoBody) as Map<String, dynamic>;
       final address = geoJson['address'] as Map<String, dynamic>?;
@@ -340,17 +392,33 @@ class PrayerService {
               address?['village'] ??
               address?['county']);
       final String? rawCity = raw as String?;
-      if (rawCity == null || rawCity.trim().isEmpty) return null;
+      if (rawCity == null || rawCity.trim().isEmpty) {
+        return (
+          id: null,
+          name: null,
+          failure: CurrentLocationFailure.lookupFailed,
+        );
+      }
 
       final searchResult = await searchCities(rawCity);
       if (searchResult.isNotEmpty) {
         final first = searchResult.first;
-        return (id: first['id'] as String, name: first['lokasi'] as String);
+        return (
+          id: first['id'] as String,
+          name: first['lokasi'] as String,
+          failure: null,
+        );
       }
 
-      return (id: rawCity, name: rawCity);
+      return (id: rawCity, name: rawCity, failure: null);
+    } on TimeoutException {
+      return (id: null, name: null, failure: CurrentLocationFailure.timeout);
     } catch (_) {
-      return null;
+      return (
+        id: null,
+        name: null,
+        failure: CurrentLocationFailure.lookupFailed,
+      );
     }
   }
 
