@@ -7,24 +7,24 @@ void main() {
 
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
-  test('defaults to not Pro', () async {
+  test('all features are available without entitlement state', () async {
     await EntitlementService.load();
-    expect(EntitlementService.isPro, isFalse);
+    expect(EntitlementService.isPro, isTrue);
+    expect(EntitlementService.proStatus.value, isTrue);
   });
 
-  test('setProDev(true) persists and notifies', () async {
+  test('deprecated dev toggle retains free access', () async {
     await EntitlementService.load();
     var fired = false;
     void listener() => fired = true;
     EntitlementService.proStatus.addListener(listener);
 
-    await EntitlementService.setProDev(true);
+    await EntitlementService.setProDev(false);
     expect(EntitlementService.isPro, isTrue);
-    expect(fired, isTrue);
+    expect(fired, isFalse);
 
     EntitlementService.proStatus.removeListener(listener);
 
-    // Re-load from a fresh read simulates app restart with same prefs.
     await EntitlementService.load();
     expect(EntitlementService.isPro, isTrue);
   });

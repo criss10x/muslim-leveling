@@ -8,10 +8,10 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
-  testWidgets('dev activate button flips Pro on', (tester) async {
+  testWidgets('dev activate button retains free access', (tester) async {
     await EntitlementService.load();
     await tester.pumpWidget(const MaterialApp(home: ProPaywallScreen()));
-    expect(EntitlementService.isPro, isFalse);
+    expect(EntitlementService.isPro, isTrue);
 
     await tester.tap(find.text('Aktifkan Pro (dev)'));
     await tester.pumpAndSettle();
