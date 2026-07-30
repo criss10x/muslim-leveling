@@ -332,6 +332,14 @@ class PrayerService {
   // --- SharedPreferences helpers ---
   static final ValueNotifier<int> locationVersion = ValueNotifier(0);
 
+  static String? prayerAreaFromAddress(Map<String, dynamic>? address) {
+    for (final key in const ['county', 'city', 'town', 'village']) {
+      final value = address?[key] as String?;
+      if (value != null && value.trim().isNotEmpty) return value.trim();
+    }
+    return null;
+  }
+
   static Future<({String? id, String? name, CurrentLocationFailure? failure})>
   getCurrentLocation() async {
     if (!await Geolocator.isLocationServiceEnabled()) {
@@ -387,11 +395,7 @@ class PrayerService {
       final geoBody = await geoRes.transform(utf8.decoder).join();
       final geoJson = jsonDecode(geoBody) as Map<String, dynamic>;
       final address = geoJson['address'] as Map<String, dynamic>?;
-      final raw = (address?['city'] ??
-              address?['town'] ??
-              address?['village'] ??
-              address?['county']);
-      final String? rawCity = raw as String?;
+      final rawCity = prayerAreaFromAddress(address);
       if (rawCity == null || rawCity.trim().isEmpty) {
         return (
           id: null,
