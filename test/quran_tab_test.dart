@@ -59,7 +59,8 @@ void main() {
     // Al-Fatihah Makkiyah, Al-Baqarah Madaniyah — keduanya di layar pertama.
     expect(find.text('Makkiyah'), findsWidgets);
     expect(find.text('Madaniyah'), findsWidgets);
-    expect(find.text('Pembukaan · 7 ayat'), findsOneWidget);
+    expect(find.text('Pembukaan'), findsOneWidget);
+    expect(find.text('7'), findsWidgets);
     // Tempat turun sudah pindah ke chip, tidak lagi menempel di subtitle.
     expect(find.textContaining('· Makkiyah ·'), findsNothing);
   });

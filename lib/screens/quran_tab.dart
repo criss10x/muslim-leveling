@@ -204,8 +204,10 @@ class _SurahRow extends StatelessWidget {
                   // Proporsional, bukan angka mati: patokan 108px menyisakan
                   // terlalu sedikit untuk kolom arti di layar 360dp sehingga
                   // artinya membungkus dan tinggi baris berayun antar surat.
-                  final arabicWidth =
-                      (constraints.maxWidth * 0.3).clamp(0.0, 108.0);
+                  final arabicWidth = (constraints.maxWidth * 0.3).clamp(
+                    0.0,
+                    108.0,
+                  );
 
                   return Row(
                     children: [
@@ -234,25 +236,29 @@ class _SurahRow extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: AppSpacing.xs),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                _RevelationChip(label: surah.revelation),
-                                const SizedBox(width: AppSpacing.sm),
-                                Icon(Icons.auto_stories,
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.centerLeft,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  _RevelationChip(label: surah.revelation),
+                                  const SizedBox(width: AppSpacing.sm),
+                                  Icon(
+                                    Icons.auto_stories,
                                     size: 14,
-                                    color: AppColors.onSurfaceVariant),
-                                const SizedBox(width: 2),
-                                Text(
-                                  '${surah.ayahCount}',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: AppText.bodyMd().copyWith(
-                                    fontSize: 12,
                                     color: AppColors.onSurfaceVariant,
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(width: 2),
+                                  Text(
+                                    '${surah.ayahCount}',
+                                    style: AppText.bodyMd().copyWith(
+                                      fontSize: 12,
+                                      color: AppColors.onSurfaceVariant,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -359,7 +365,11 @@ class _SearchHeader extends SliverPersistentHeaderDelegate {
   double get maxExtent => extent;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     // overlapsContent hanya true kalau sliver lain menimpa header ini, bukan
     // saat header menimpa konten — untuk pinned header, shrinkOffset > 0 adalah
     // sinyal "sudah menempel di atas daftar" yang benar.
