@@ -648,10 +648,28 @@ class _ProfilTabState extends State<ProfilTab> {
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.surfaceContainerHigh,
         title: Text('Privasi & Data', style: AppText.titleLg()),
-        content: Text(
-          'Data sholat, lokasi, dan profil kamu disimpan hanya di perangkat ini. '
-          'Kami tidak mengirim data pribadi ke server pihak ketiga.',
-          style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _privacyItem(Icons.phone_android, 'Tersimpan di perangkat',
+                  'Semua data — sholat, bacaan Quran, statistik, dan preferensi — '
+                  'hanya tinggal di HP kamu. Tidak ada server, tidak ada cloud.'),
+              const SizedBox(height: 12),
+              _privacyItem(Icons.wifi_off, 'Tanpa jejak online',
+                  'Aplikasi tidak mengirim aktivitas kamu ke pihak ketiga '
+                  'dan tidak memantau perilaku.'),
+              const SizedBox(height: 12),
+              _privacyItem(Icons.location_off, 'Lokasi privat',
+                  'Lokasi hanya dipakai sekali untuk menentukan jadwal sholat '
+                  'daerahmu. Lokasi tidak disimpan atau dibagikan.'),
+              const SizedBox(height: 12),
+              _privacyItem(Icons.delete_outline, 'Hapus kapan saja',
+                  'Masuk Profil → Keluar untuk menghapus semua data lokal '
+                  'sekaligus. Tidak ada yang tersisa di perangkat.'),
+            ],
+          ),
         ),
         actions: [
           TextButton(
@@ -666,28 +684,101 @@ class _ProfilTabState extends State<ProfilTab> {
     );
   }
 
+  Widget _privacyItem(IconData icon, String title, String desc) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, size: 20, color: AppColors.primary),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: AppText.bodyMd().copyWith(
+                  color: AppColors.onSurface,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                desc,
+                style: AppText.bodyMd().copyWith(
+                  color: AppColors.onSurfaceVariant,
+                  fontSize: 13,
+                  height: 1.4,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   void _showAboutDialog() {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.surfaceContainerHigh,
         title: Text('Tentang Aplikasi', style: AppText.titleLg()),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Muslim Leveling',
-              style: AppText.headlineMd().copyWith(color: AppColors.primary),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Versi 1.0.0\nDibangun untuk membantu menjaga ibadah harian dengan gamifikasi.',
-              style: AppText.bodyMd().copyWith(
-                color: AppColors.onSurfaceVariant,
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Muslim Leveling',
+                style: AppText.headlineMd().copyWith(color: AppColors.primary),
               ),
-            ),
-          ],
+              const SizedBox(height: 4),
+              Text(
+                'Versi 1.0.0',
+                style: AppText.bodyMd().copyWith(
+                  color: AppColors.onSurfaceVariant,
+                  fontSize: 13,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Ibadah itu konsisten, bukan sempurna. '
+                'Muslim Leveling membantu kamu membangun kebiasaan sholat lima waktu '
+                'dan membaca Quran dengan cara yang seru — setiap sholat yang dicatat '
+                'memberi XP, setiap hari tanpa putus menambah streak, dan setiap '
+                'pencapaian membuka skin avatar baru.',
+                style: AppText.bodyMd().copyWith(
+                  color: AppColors.onSurfaceVariant,
+                  height: 1.45,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Tidak ada server, tidak ada iklan, tidak ada langganan. '
+                'Semua datamu tinggal di perangkat — milikmu sepenuhnya.',
+                style: AppText.bodyMd().copyWith(
+                  color: AppColors.onSurface,
+                  fontWeight: FontWeight.w500,
+                  height: 1.45,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Divider(
+                height: 1,
+                thickness: 1,
+                color: AppColors.outlineVariant.withValues(alpha: 0.35),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Dibuat dengan penuh doa untuk setiap pejuang akhirat.',
+                style: AppText.bodyMd().copyWith(
+                  color: AppColors.onSurfaceVariant,
+                  fontStyle: FontStyle.italic,
+                  fontSize: 13,
+                ),
+              ),
+            ],
+          ),
         ),
         actions: [
           TextButton(
