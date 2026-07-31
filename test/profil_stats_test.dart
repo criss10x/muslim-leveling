@@ -41,6 +41,9 @@ void main() {
   }
 
   Future<void> pumpProfil(WidgetTester tester) async {
+    // GameService.current statis dan bertahan antar test — tanpa load ulang,
+    // sebuah test bisa lolos karena data yang ditinggalkan test sebelumnya.
+    await GameService.load();
     GoogleFonts.config.allowRuntimeFetching = false;
     tester.view.physicalSize = const Size(412, 915);
     tester.view.devicePixelRatio = 1.0;
@@ -107,7 +110,11 @@ void main() {
   testWidgets('Statistik membuka sheet mingguan yang sebelumnya tak terjangkau', (
     tester,
   ) async {
-    SharedPreferences.setMockInitialValues(basePrefs());
+    // Sengaja diisi: saat kosong, link ini memang tidak ditampilkan karena
+    // sheet mingguannya juga akan kosong.
+    seedLogs([
+      {'date': dayOffset(0), 'prayer': 'subuh', 'time': '05:00', 'type': 'wajib'},
+    ]);
     await pumpProfil(tester);
 
     final link = find.text('Lihat statistik mingguan');
