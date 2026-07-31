@@ -107,6 +107,53 @@ void main() {
     expect(find.textContaining('/35'), findsOneWidget);
   });
 
+  testWidgets('golden: Statistik dengan data tujuh hari', (tester) async {
+    // Pola sengaja tidak rata: ada hari penuh, hari separuh, dan hari bolong,
+    // supaya sparkline benar-benar diuji, bukan tujuh batang seragam.
+    final logs = <Map<String, String>>[];
+    void wajib(int daysAgo, List<String> prayers) {
+      for (final p in prayers) {
+        logs.add({
+          'date': dayOffset(daysAgo),
+          'prayer': p,
+          'time': '05:00',
+          'type': 'wajib',
+        });
+      }
+    }
+
+    wajib(6, ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya']);
+    wajib(5, ['subuh', 'dzuhur', 'ashar']);
+    wajib(4, ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya']);
+    wajib(3, ['subuh']);
+    wajib(1, ['subuh', 'dzuhur', 'ashar', 'maghrib']);
+    wajib(0, ['subuh', 'dzuhur']);
+    for (final d in [6, 4, 1]) {
+      logs.add({
+        'date': dayOffset(d),
+        'prayer': 'rawatib_subuh',
+        'time': '05:10',
+        'type': 'sunnah',
+      });
+    }
+    for (final d in [5, 4, 0]) {
+      logs.add({
+        'date': dayOffset(d),
+        'prayer': 'tilawah',
+        'time': '20:00',
+        'type': 'tilawah',
+      });
+    }
+
+    seedLogs(logs);
+    await pumpProfil(tester);
+
+    await expectLater(
+      find.byKey(const Key('profil-stats-card')),
+      matchesGoldenFile('goldens/profil_stats_populated.png'),
+    );
+  });
+
   testWidgets('Statistik membuka sheet mingguan yang sebelumnya tak terjangkau', (
     tester,
   ) async {

@@ -31,8 +31,10 @@ jobs:
 
       - run: flutter pub get
 
+      # Seluruh suite, bukan satu file: tiap golden baru yang ditambahkan
+      # nanti ikut terurus tanpa perlu menyunting workflow lagi.
       - name: Regenerate goldens
-        run: flutter test --update-goldens test/profil_tab_golden_test.dart
+        run: flutter test --update-goldens
 
       - uses: actions/upload-artifact@v4
         with:
