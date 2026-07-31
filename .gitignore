@@ -58,6 +58,9 @@ android/app/build/
 # Local Git worktrees
 .worktrees/
 
+# Local design companion sessions
+.superpowers/
+
 # Env / secret screenshots (never commit)
 .env
 .env.*
