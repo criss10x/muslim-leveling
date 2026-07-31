@@ -386,12 +386,25 @@ class PrayerService {
   static final ValueNotifier<int> locationVersion = ValueNotifier(0);
 
   static String _normalizedAreaName(String value) {
-    return value
+    final normalized = value
         .trim()
         .toLowerCase()
-        .replaceFirst(RegExp(r'^(kabupaten|kab\.?|kota)\s+'), '')
         .replaceAll(RegExp(r'[^a-z0-9]+'), ' ')
         .trim();
+    return normalized
+        .replaceFirst(RegExp(r'^(kabupaten|kab|kota)\s+'), '')
+        .trim();
+  }
+
+  static String? _areaType(String value) {
+    final normalized = value
+        .trim()
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^a-z0-9]+'), ' ')
+        .trim();
+    final match = RegExp(r'^(kabupaten|kab|kota)\s+').firstMatch(normalized);
+    if (match == null) return null;
+    return match.group(1) == 'kota' ? 'kota' : 'kab';
   }
 
   static String? prayerAreaFromAddress(
@@ -409,8 +422,16 @@ class PrayerService {
       final value = address?[key] as String?;
       if (value == null || value.trim().isEmpty) continue;
       final candidate = _normalizedAreaName(value);
-      for (final area in validAreas) {
-        if (_normalizedAreaName(area) == candidate) return area.trim();
+      final matches = validAreas
+          .where((area) => _normalizedAreaName(area) == candidate)
+          .toList();
+      final type = _areaType(value);
+      if (type != null) {
+        for (final area in matches) {
+          if (_areaType(area) == type) return area.trim();
+        }
+      } else if (matches.length == 1) {
+        return matches.single.trim();
       }
     }
     return null;
@@ -472,7 +493,7 @@ class PrayerService {
       final geoJson = jsonDecode(geoBody) as Map<String, dynamic>;
       final address = geoJson['address'] as Map<String, dynamic>?;
       final state = address?['state'] as String? ?? '';
-      final province = _extractProvinsi(state);
+      final province = provinceFromState(state);
       if (province.isEmpty) {
         return (
           id: null,
@@ -555,7 +576,9 @@ class PrayerService {
     'Gorontalo',
     'Jambi',
     'Lampung',
+    'Maluku Utara',
     'Maluku',
+    'Papua Barat',
     'Papua',
     'Riau',
     'Yogyakarta',
@@ -574,4 +597,6 @@ class PrayerService {
     }
     return '';
   }
+
+  static String provinceFromState(String state) => _extractProvinsi(state);
 }
