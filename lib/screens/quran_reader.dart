@@ -7,6 +7,7 @@ import '../services/quran_data.dart';
 import '../services/quran_api.dart';
 import '../services/quran_audio_service.dart';
 import '../services/quran_playlist.dart';
+import '../services/quran_progress.dart';
 import '../services/quran_settings.dart';
 import '../widgets/quran_ayah_card.dart';
 import '../widgets/quran_display_sheet.dart';
@@ -15,7 +16,9 @@ import '../widgets/quran_tafsir_sheet.dart';
 
 class QuranReader extends StatefulWidget {
   final QuranSurah surah;
-  const QuranReader({super.key, required this.surah});
+  /// Posisi baca terakhir (1-based). Di-scroll setelah ayat dimuat.
+  final int? initialAyah;
+  const QuranReader({super.key, required this.surah, this.initialAyah});
 
   @override
   State<QuranReader> createState() => _QuranReaderState();
@@ -23,6 +26,7 @@ class QuranReader extends StatefulWidget {
 
 class _QuranReaderState extends State<QuranReader> {
   final ItemScrollController _scrollController = ItemScrollController();
+  final ItemPositionsListener _positionsListener = ItemPositionsListener.create();
 
   List<QuranAyah> _ayahs = const [];
   bool _loading = true;
@@ -39,6 +43,16 @@ class _QuranReaderState extends State<QuranReader> {
     super.initState();
     _load();
     quranAudio.addListener(_onAudioChanged);
+    // Catat surat yang dibuka sebagai bacaan terakhir. Ditunda ke post-frame
+    // karena notifyListeners dari save() memicu setState di QuranTab, padahal
+    // initState route baru berjalan saat Navigator masih membangun pohon.
+    // Surat yang sama tidak menimpa ayat tersimpan — posisinya diperbarui
+    // saat keluar dari reader atau saat murattal berjalan.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (quranProgress.surahNumber != widget.surah.number) {
+        quranProgress.save(widget.surah.number, 1);
+      }
+    });
   }
 
   @override
@@ -46,7 +60,26 @@ class _QuranReaderState extends State<QuranReader> {
     quranAudio.removeListener(_onAudioChanged);
     quranAudio.stop();
     WakelockPlus.disable();
+    // Simpan posisi terakhir setelah frame selesai: dispose berjalan saat
+    // Navigator memfinalisasi transisi pop, dan save() memicu notifyListeners
+    // yang bisa menyentuh QuranTab di tengah build.
+    final pos = _topVisibleAyah();
+    if (pos != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        quranProgress.save(widget.surah.number, pos);
+      });
+    }
     super.dispose();
+  }
+
+  /// Ayat teratas yang terlihat, atau null kalau belum ada posisi yang valid.
+  int? _topVisibleAyah() {
+    final positions = _positionsListener.itemPositions.value;
+    if (positions.isEmpty) return null;
+    final first = positions.reduce((a, b) => a.index < b.index ? a : b);
+    final ayah = first.index - _basmalahOffset + 1;
+    if (ayah < 1 || ayah > widget.surah.ayahCount) return null;
+    return ayah;
   }
 
   Future<void> _load() async {
@@ -63,6 +96,7 @@ class _QuranReaderState extends State<QuranReader> {
         _tafsir = results[1] as List<QuranTafsir>;
         _loading = false;
       });
+      _restoreScroll();
     } catch (_) {
       // Fallback ke aset lokal
       try {
@@ -73,11 +107,28 @@ class _QuranReaderState extends State<QuranReader> {
           _tafsir = const [];
           _loading = false;
         });
+        _restoreScroll();
       } catch (fallbackErr) {
         if (!mounted) return;
         setState(() => _loading = false);
       }
     }
+  }
+
+  /// Kembali ke ayat terakhir yang dibaca, kalau reader dibuka lewat tombol
+  /// "Lanjutkan membaca".
+  void _restoreScroll() {
+    final target = widget.initialAyah;
+    if (target == null || _ayahs.isEmpty) return;
+    if (target < 1 || target > widget.surah.ayahCount) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_scrollController.isAttached) return;
+      _scrollController.scrollTo(
+        index: target - 1 + _basmalahOffset,
+        duration: Duration.zero,
+        alignment: 0.25,
+      );
+    });
   }
 
   void _onAudioChanged() {
@@ -93,6 +144,7 @@ class _QuranReaderState extends State<QuranReader> {
     if (current != null &&
         current.surah == widget.surah.number &&
         current.ayah != _lastScrolledAyah) {
+      quranProgress.save(widget.surah.number, current.ayah);
       _lastScrolledAyah = current.ayah;
       if (_scrollController.isAttached) {
         _scrollController.scrollTo(
@@ -158,6 +210,7 @@ class _QuranReaderState extends State<QuranReader> {
           ? const Center(child: CircularProgressIndicator())
           : ScrollablePositionedList.builder(
               itemScrollController: _scrollController,
+              itemPositionsListener: _positionsListener,
               padding: const EdgeInsets.only(bottom: 120, top: 8),
               itemCount: _ayahs.length + _basmalahOffset,
               itemBuilder: (_, i) {

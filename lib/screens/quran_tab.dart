@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../services/quran_data.dart';
+import '../services/quran_progress.dart';
 import 'quran_reader.dart';
 import '../widgets/rub_el_hizb_badge.dart';
 
@@ -24,12 +25,19 @@ class _QuranTabState extends State<QuranTab> {
   void initState() {
     super.initState();
     _load();
+    quranProgress.addListener(_onProgressChanged);
+    quranProgress.load();
   }
 
   @override
   void dispose() {
+    quranProgress.removeListener(_onProgressChanged);
     _searchController.dispose();
     super.dispose();
+  }
+
+  void _onProgressChanged() {
+    if (mounted) setState(() {});
   }
 
   Future<void> _load() async {
@@ -116,6 +124,22 @@ class _QuranTabState extends State<QuranTab> {
                       color: AppColors.onSurfaceVariant,
                     ),
                   ),
+                  if (_lastSurah case final surah?)
+                    ...[
+                      const SizedBox(height: AppSpacing.md),
+                      _ResumeReadingCard(
+                        surah: surah,
+                        ayah: quranProgress.ayah!,
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => QuranReader(
+                              surah: surah,
+                              initialAyah: quranProgress.ayah,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                 ],
               ),
             ),
@@ -173,6 +197,87 @@ class _QuranTabState extends State<QuranTab> {
               ),
             ),
         ],
+      ),
+    );
+  }
+
+  /// Surat dari posisi baca terakhir, kalau masih ada di daftar.
+  QuranSurah? get _lastSurah {
+    final n = quranProgress.surahNumber;
+    if (n == null || !quranProgress.hasProgress) return null;
+    for (final s in _all) {
+      if (s.number == n) return s;
+    }
+    return null;
+  }
+}
+
+/// Kartu aksi "kembali ke bacaan terakhir". Menempel di atas daftar surat
+/// selama ada posisi yang tersimpan.
+class _ResumeReadingCard extends StatelessWidget {
+  final QuranSurah surah;
+  final int ayah;
+  final VoidCallback onTap;
+
+  const _ResumeReadingCard({
+    required this.surah,
+    required this.ayah,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: 'Lanjutkan membaca ${surah.nameLatin} ayat $ayah',
+      child: Material(
+        color: AppColors.primary.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(AppRadius.xxl),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(AppRadius.xxl),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            child: Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.play_arrow,
+                    color: AppColors.onPrimary,
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Lanjutkan membaca',
+                        style: AppText.bodyLg().copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        '${surah.nameLatin} · Ayat $ayah',
+                        style: AppText.bodyMd().copyWith(
+                          color: AppColors.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
