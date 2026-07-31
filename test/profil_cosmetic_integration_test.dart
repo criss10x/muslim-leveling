@@ -36,7 +36,9 @@ void main() {
       RegExp('Profile hero'),
       skipOffstage: false,
     );
-    final stats = find.text('STATISTIK', skipOffstage: false);
+    double top(String label) => tester.getTopLeft(
+      find.text(label, skipOffstage: false),
+    ).dy;
     expect(locker, findsOneWidget);
     expect(
       tester
@@ -46,14 +48,11 @@ void main() {
       isTrue,
     );
     expect(tester.getSize(locker).height, greaterThanOrEqualTo(44));
-    expect(
-      tester.getTopLeft(stats).dy,
-      greaterThan(tester.getBottomRight(hero).dy),
-    );
-    expect(
-      tester.getTopLeft(locker).dy,
-      greaterThan(tester.getBottomRight(stats).dy),
-    );
+    expect(top('STREAK PER SHOLAT'), greaterThan(tester.getBottomRight(hero).dy));
+    expect(top('STATISTIK'), greaterThan(top('STREAK PER SHOLAT')));
+    expect(tester.getTopLeft(locker).dy, greaterThan(top('STATISTIK')));
+    expect(top('ACHIEVEMENTS'), greaterThan(tester.getTopLeft(locker).dy));
+    expect(top('Mode Haid'), greaterThan(top('ACHIEVEMENTS')));
     expect(find.byType(CosmeticLocker), findsNothing);
 
     await tester.tap(locker);
