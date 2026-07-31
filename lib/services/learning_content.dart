@@ -7,6 +7,7 @@ import 'supabase_sync.dart';
 
 // Auto-generated from V3 BelajarScreen.kt — do not edit manually.
 // 19 modules, +3 modul akidah tambahan (keajaiban angka & bukti lain).
+// Topik Al-Quran (1.3, 1.6–1.8) dipisah dari Akidah ke kategori sendiri (alquran).
 
 // ─── Data classes ───
 
@@ -96,14 +97,6 @@ class LearningContent {
           xpReward: 200,
         ),
         LearningModule(
-          id: 'akidah_1.3',
-          categoryId: 'akidah',
-          title: 'Al-Quran: Firman Tuhan, Bukan Karangan Manusia',
-          icon: '📖',
-          estimatedMinutes: 6,
-          xpReward: 200,
-        ),
-        LearningModule(
           id: 'akidah_1.4',
           categoryId: 'akidah',
           title: 'Siapa Itu Nabi Muhammad ﷺ?',
@@ -119,9 +112,24 @@ class LearningContent {
           estimatedMinutes: 5,
           xpReward: 200,
         ),
+      ],
+    ),
+    LearningCategory(
+      id: 'alquran',
+      label: 'Al-Quran',
+      icon: '📖',
+      modules: [
+        LearningModule(
+          id: 'akidah_1.3',
+          categoryId: 'alquran',
+          title: 'Al-Quran: Firman Tuhan, Bukan Karangan Manusia',
+          icon: '📖',
+          estimatedMinutes: 6,
+          xpReward: 200,
+        ),
         LearningModule(
           id: 'akidah_1.6',
-          categoryId: 'akidah',
+          categoryId: 'alquran',
           title: 'Keajaiban Angka dalam Al-Quran (Bagian 1)',
           icon: '🔢',
           estimatedMinutes: 7,
@@ -129,7 +137,7 @@ class LearningContent {
         ),
         LearningModule(
           id: 'akidah_1.7',
-          categoryId: 'akidah',
+          categoryId: 'alquran',
           title: 'Keajaiban Angka dalam Al-Quran (Bagian 2)',
           icon: '🧮',
           estimatedMinutes: 7,
@@ -137,7 +145,7 @@ class LearningContent {
         ),
         LearningModule(
           id: 'akidah_1.8',
-          categoryId: 'akidah',
+          categoryId: 'alquran',
           title: 'Masih Banyak Bukti Lain: Al-Quran Benar Firman Allah',
           icon: '🔬',
           estimatedMinutes: 8,
