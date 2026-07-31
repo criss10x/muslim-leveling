@@ -1261,20 +1261,18 @@ class _ProfilTabState extends State<ProfilTab> {
                       // jadi pencapaian yang bisa dinilai sendiri.
                       denom: '/35',
                       counts: wajib,
-                      maxPerDay: 5,
+                      dailyTarget: 5,
                     ),
                     _statRow(
                       label: 'Sunnah & rawatib',
                       value: '${sum(sunnah)}',
                       counts: sunnah,
-                      maxPerDay: _peak(sunnah),
                     ),
                     _statRow(
                       label: 'Tilawah',
                       value: '${sum(tilawah)}',
                       denom: ' kali',
                       counts: tilawah,
-                      maxPerDay: _peak(tilawah),
                       last: true,
                     ),
                     _weeklyLink(),
@@ -1285,10 +1283,12 @@ class _ProfilTabState extends State<ProfilTab> {
     );
   }
 
-  /// Puncak harian sebagai skala batang — untuk metrik tanpa target harian
-  /// yang jelas, pembandingnya adalah hari terbaik pengguna sendiri.
+  /// Skala batang untuk metrik tanpa target harian. Lantai 3 disengaja:
+  /// dengan skala murni relatif, satu kejadian saja sudah menghasilkan batang
+  /// penuh, sehingga "3 sunnah seminggu" terbaca sekuat sholat wajib yang
+  /// sempurna. Lantai ini menjaga proporsinya jujur.
   static int _peak(List<int> counts) =>
-      counts.fold(1, (a, b) => b > a ? b : a);
+      counts.fold(3, (a, b) => b > a ? b : a);
 
   Widget _statsEmpty() {
     return Column(
@@ -1311,7 +1311,7 @@ class _ProfilTabState extends State<ProfilTab> {
     required String label,
     required String value,
     required List<int> counts,
-    required int maxPerDay,
+    int? dailyTarget,
     String? denom,
     bool last = false,
   }) {
@@ -1356,7 +1356,7 @@ class _ProfilTabState extends State<ProfilTab> {
                   ),
                 ),
                 const SizedBox(width: AppSpacing.sm),
-                _sparkline(counts, maxPerDay),
+                _sparkline(counts, dailyTarget),
               ],
             ),
             if (!last) ...[
@@ -1376,9 +1376,15 @@ class _ProfilTabState extends State<ProfilTab> {
   /// Tujuh batang untuk tujuh hari. Hari kosong tetap digambar sebagai
   /// batang redup, bukan dihilangkan — bolong harus terbaca sebagai bolong,
   /// bukan sebagai data yang hilang.
-  Widget _sparkline(List<int> counts, int maxPerDay) {
+  ///
+  /// [dailyTarget] hanya diisi untuk metrik yang punya target harian nyata
+  /// (sholat wajib = 5). Di situ batang penuh berarti "target tercapai" dan
+  /// boleh terang. Metrik tanpa target tidak pernah mendapat perlakuan itu:
+  /// tidak ada yang bisa disebut tercapai kalau tidak ada yang ditargetkan.
+  Widget _sparkline(List<int> counts, int? dailyTarget) {
     const barMax = 16.0;
     const barMin = 4.0;
+    final scale = dailyTarget ?? _peak(counts);
 
     return SizedBox(
       height: barMax,
@@ -1392,12 +1398,14 @@ class _ProfilTabState extends State<ProfilTab> {
               width: 7,
               height: counts[i] == 0
                   ? barMin
-                  : (barMax * (counts[i] / maxPerDay)).clamp(7.0, barMax),
+                  : (barMax * (counts[i] / scale)).clamp(7.0, barMax),
               decoration: BoxDecoration(
                 color: counts[i] == 0
                     ? AppColors.outlineVariant.withValues(alpha: 0.45)
                     : AppColors.primary.withValues(
-                        alpha: counts[i] >= maxPerDay ? 1 : 0.55,
+                        alpha: (dailyTarget != null && counts[i] >= dailyTarget)
+                            ? 1
+                            : 0.55,
                       ),
                 borderRadius: BorderRadius.circular(2),
               ),
