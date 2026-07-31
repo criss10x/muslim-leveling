@@ -2,39 +2,48 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:muslim_leveling/services/prayer_service.dart';
 
 void main() {
-  test('prayer area prefers county over a Bali kecamatan', () {
+  const baliAreas = [
+    'Kab. Badung',
+    'Kab. Bangli',
+    'Kab. Buleleng',
+    'Kota Denpasar',
+  ];
+
+  test('prayer area matches Badung region over Kuta Selatan town', () {
     expect(
       PrayerService.prayerAreaFromAddress({
-        'county': 'Kabupaten Badung',
-        'village': 'Kuta',
-      }),
-      'Kabupaten Badung',
+        'town': 'Kuta Selatan',
+        'region': 'Badung',
+        'state': 'Bali',
+      }, baliAreas),
+      'Kab. Badung',
     );
   });
 
-  test('prayer area skips a kecamatan in favour of kabupaten kota', () {
+  test('prayer area matches Denpasar city to the catalog', () {
+    expect(
+      PrayerService.prayerAreaFromAddress({'city': 'Denpasar'}, baliAreas),
+      'Kota Denpasar',
+    );
+  });
+
+  test('prayer area normalizes kabupaten county labels', () {
     expect(
       PrayerService.prayerAreaFromAddress({
-        'county': 'Kecamatan Kuta',
-        'city': 'Kabupaten Badung',
-      }),
-      'Kabupaten Badung',
+        'county': 'KABUPATEN BADUNG',
+      }, baliAreas),
+      'Kab. Badung',
     );
   });
 
-  test('prayer area falls back through city and town', () {
+  test('prayer area rejects unmatched kecamatan labels', () {
     expect(
-      PrayerService.prayerAreaFromAddress({'city': 'Denpasar'}),
-      'Denpasar',
+      PrayerService.prayerAreaFromAddress({
+        'town': 'Kuta Selatan',
+        'village': 'Jimbaran',
+      }, baliAreas),
+      isNull,
     );
-    expect(
-      PrayerService.prayerAreaFromAddress({'town': 'Singaraja'}),
-      'Singaraja',
-    );
-  });
-
-  test('prayer area rejects village-only reverse geocoding', () {
-    expect(PrayerService.prayerAreaFromAddress({'village': 'Kuta'}), isNull);
   });
 
   test('province catalog includes Bali and all Equran provinces', () {
