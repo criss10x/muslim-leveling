@@ -10,7 +10,10 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
-  testWidgets('Profil shows the cosmetic locker', (tester) async {
+  testWidgets('Profil keeps skin locker compact and opens it on demand', (
+    tester,
+  ) async {
+    final semantics = tester.ensureSemantics();
     tester.view.physicalSize = const Size(412, 2000);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
@@ -22,19 +25,36 @@ void main() {
       const MaterialApp(home: Scaffold(body: ProfilTab())),
     );
     await tester.pumpAndSettle();
-    await tester.scrollUntilVisible(
-      find.byType(CosmeticLocker),
-      300,
-      scrollable: find.byType(Scrollable).first,
+
+    final locker = find.bySemanticsLabel(
+      'Buka loker skin',
+      skipOffstage: false,
     );
+    final hero = find.bySemanticsLabel(
+      RegExp('Profile hero'),
+      skipOffstage: false,
+    );
+    final stats = find.text('STATISTIK', skipOffstage: false);
+    expect(locker, findsOneWidget);
+    expect(tester.getSize(locker).height, greaterThanOrEqualTo(44));
+    expect(
+      tester.getTopLeft(stats).dy,
+      greaterThan(tester.getBottomRight(hero).dy),
+    );
+    expect(
+      tester.getTopLeft(locker).dy,
+      greaterThan(tester.getBottomRight(stats).dy),
+    );
+    expect(find.byType(CosmeticLocker), findsNothing);
+
+    await tester.tap(locker);
     await tester.pumpAndSettle();
     expect(find.byType(CosmeticLocker), findsOneWidget);
+    semantics.dispose();
   });
 
-  testWidgets('Profil keeps locker and statistics compact on a phone', (
-    tester,
-  ) async {
-    tester.view.physicalSize = const Size(412, 2000);
+  testWidgets('Profil keeps statistics compact on a phone', (tester) async {
+    tester.view.physicalSize = const Size(412, 915);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
@@ -47,8 +67,7 @@ void main() {
     await tester.pumpAndSettle();
 
     final grids = find.byType(GridView);
-    expect(grids, findsNWidgets(2));
-    expect(tester.getSize(grids.at(0)).height, lessThan(150));
-    expect(tester.getSize(grids.at(1)).height, lessThan(220));
+    expect(grids, findsOneWidget);
+    expect(tester.getSize(grids).height, lessThan(240));
   });
 }
