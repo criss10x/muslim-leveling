@@ -1,5 +1,3 @@
-import 'dart:ui' show Color;
-
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
