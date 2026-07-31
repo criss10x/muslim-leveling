@@ -759,10 +759,10 @@ class _ProfilTabState extends State<ProfilTab> {
             children: [
               _hero(context),
               const SizedBox(height: AppSpacing.md),
+              _stats(),
+              const SizedBox(height: AppSpacing.md),
               _cosmeticLocker(),
               const SizedBox(height: AppSpacing.md),
-              _stats(),
-              const SizedBox(height: AppSpacing.xs),
               _haidModeToggle(),
               const SizedBox(height: AppSpacing.md),
               _prayerStreaks(),
@@ -1092,16 +1092,85 @@ class _ProfilTabState extends State<ProfilTab> {
 
   /// "Loker Skin" — cosmetic locker (frame/aura/title tabs) reusing the
   /// same HudHeader + FlatCard shell as the other Profil sections.
-  Widget _cosmeticLocker() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const HudHeader('LOKER SKIN'),
-        FlatCard(
-          padding: const EdgeInsets.all(AppSpacing.sm),
-          child: const CosmeticLocker(),
+  void _showCosmeticLocker() {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.surfaceContainerHigh,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xl)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: FractionallySizedBox(
+          heightFactor: 0.86,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            child: const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                HudHeader('LOKER SKIN'),
+                SizedBox(height: AppSpacing.sm),
+                CosmeticLocker(),
+              ],
+            ),
+          ),
         ),
-      ],
+      ),
+    );
+  }
+
+  Widget _cosmeticLocker() {
+    return Semantics(
+      button: true,
+      container: true,
+      excludeSemantics: true,
+      label: 'Buka loker skin',
+      onTap: _showCosmeticLocker,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: _showCosmeticLocker,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          child: Container(
+            constraints: const BoxConstraints(minHeight: 56),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.md,
+              vertical: AppSpacing.sm,
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+              border: Border.all(color: AppColors.outlineVariant),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.inventory_2_outlined,
+                  color: AppColors.primary,
+                  size: 22,
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('LOKER SKIN', style: AppText.labelCaps()),
+                      Text(
+                        'Atur aura dan gelar aktif',
+                        style: AppText.bodyMd().copyWith(
+                          color: AppColors.onSurfaceVariant,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(Icons.chevron_right, color: AppColors.primary, size: 24),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 
