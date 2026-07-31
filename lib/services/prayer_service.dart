@@ -385,10 +385,20 @@ class PrayerService {
   // --- SharedPreferences helpers ---
   static final ValueNotifier<int> locationVersion = ValueNotifier(0);
 
+  static bool _isKecamatan(String value) {
+    final normalized = value.trim().toLowerCase();
+    return normalized.startsWith('kecamatan ') ||
+        normalized.startsWith('kec. ');
+  }
+
   static String? prayerAreaFromAddress(Map<String, dynamic>? address) {
-    for (final key in const ['county', 'city', 'town', 'village']) {
+    for (final key in const ['county', 'city', 'municipality', 'town']) {
       final value = address?[key] as String?;
-      if (value != null && value.trim().isNotEmpty) return value.trim();
+      if (value != null &&
+          value.trim().isNotEmpty &&
+          !_isKecamatan(value)) {
+        return value.trim();
+      }
     }
     return null;
   }
