@@ -98,7 +98,8 @@ class _BelajarArticleScreenState extends State<BelajarArticleScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('${module.icon}  ${module.title}',
-                    style: AppText.titleLg().copyWith(fontSize: 16),
+                    style: AppText.titleLg().copyWith(
+                        fontSize: 16, color: AppColors.primary),
                     maxLines: 1, overflow: TextOverflow.ellipsis),
                 Text('${module.estimatedMinutes} min baca • +${module.xpReward} XP',
                     style: AppText.labelCaps().copyWith(

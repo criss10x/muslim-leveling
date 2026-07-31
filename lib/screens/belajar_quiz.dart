@@ -127,7 +127,8 @@ class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
                         style: AppText.labelCaps().copyWith(color: AppColors.tertiary)),
                     const SizedBox(height: AppSpacing.sm),
                     Text(q.question,
-                        style: AppText.headlineMd().copyWith(fontSize: 20, height: 1.4)),
+                        style: AppText.headlineMd().copyWith(
+                            fontSize: 20, height: 1.4, color: AppColors.primary)),
                     const SizedBox(height: AppSpacing.lg),
                     ...List.generate(q.options.length, (i) => _optionCard(q, i)),
                     if (_answered) ...[
@@ -156,7 +157,8 @@ class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
           ),
           Expanded(
             child: Text(module.title,
-                style: AppText.titleLg().copyWith(fontSize: 15),
+                style: AppText.titleLg().copyWith(
+                    fontSize: 15, color: AppColors.primary),
                 maxLines: 1, overflow: TextOverflow.ellipsis),
           ),
         ],
