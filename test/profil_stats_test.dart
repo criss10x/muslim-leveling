@@ -163,23 +163,17 @@ void main() {
     );
   });
 
-  testWidgets('Statistik membuka sheet mingguan yang sebelumnya tak terjangkau', (
+  testWidgets('tombol Mingguan sudah tidak muncul di Statistik', (
     tester,
   ) async {
-    // Sengaja diisi: saat kosong, link ini memang tidak ditampilkan karena
-    // sheet mingguannya juga akan kosong.
     seedLogs([
       {'date': dayOffset(0), 'prayer': 'subuh', 'time': '05:00', 'type': 'wajib'},
     ]);
     await pumpProfil(tester);
 
-    final link = find.text('Mingguan');
-    expect(link, findsOneWidget);
-
-    await tester.ensureVisible(link);
-    await tester.tap(link);
-    await tester.pumpAndSettle();
-
-    expect(find.text('STATISTIK MINGGUAN'), findsOneWidget);
+    // Tombol yang membuka StatistikSheet dihapus atas keputusan pemilik
+    // produk — sheet mingguannya berdiri sendiri di tempat lain.
+    expect(find.text('Mingguan'), findsNothing);
+    expect(find.text('Lihat statistik mingguan'), findsNothing);
   });
 }

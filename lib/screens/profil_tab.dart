@@ -23,7 +23,6 @@ import '../../widgets/theme_preset_picker.dart';
 import '../../services/cosmetic_service.dart';
 import '../../services/cosmetic_catalog.dart';
 import 'achievements_screen.dart';
-import 'statistik_sheet.dart';
 import 'welcome_pejuang.dart';
 
 /// Profil Pejuang — hero header, stats grid, achievements, settings rows.
@@ -1127,50 +1126,56 @@ class _ProfilTabState extends State<ProfilTab> {
       excludeSemantics: true,
       label: 'Buka loker skin',
       onTap: _showCosmeticLocker,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: _showCosmeticLocker,
-          borderRadius: BorderRadius.circular(AppRadius.lg),
-          child: Container(
-            constraints: const BoxConstraints(minHeight: 56),
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.md,
-              vertical: AppSpacing.sm,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(AppRadius.lg),
-              border: Border.all(color: AppColors.outlineVariant),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.inventory_2_outlined,
-                  color: AppColors.primary,
-                  size: 22,
+      // Bentuknya sengaja sejajar dengan _achievements(): HudHeader + kartu
+      // PressableScale ber-surfaceContainer, chevron kecil. Dua baris ini
+      // duduk berdampingan di Profil, jadi vokabulernya harus satu.
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const HudHeader('LOKER SKIN'),
+          PressableScale(
+            onTap: _showCosmeticLocker,
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.sm,
+              ),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceContainer,
+                borderRadius: BorderRadius.circular(AppRadius.xxl),
+                border: Border.all(
+                  color: AppColors.outlineVariant.withValues(alpha: 0.3),
                 ),
-                const SizedBox(width: AppSpacing.sm),
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('LOKER SKIN', style: AppText.labelCaps()),
-                      Text(
-                        'Atur aura dan gelar aktif',
-                        style: AppText.bodyMd().copyWith(
-                          color: AppColors.onSurfaceVariant,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.inventory_2_outlined,
+                    color: AppColors.primary,
+                    size: 22,
                   ),
-                ),
-                Icon(Icons.chevron_right, color: AppColors.primary, size: 24),
-              ],
+                  const SizedBox(width: AppSpacing.sm),
+                  Expanded(
+                    child: Text(
+                      'Atur aura dan gelar aktif',
+                      overflow: TextOverflow.ellipsis,
+                      style: AppText.bodyMd().copyWith(
+                        color: AppColors.onSurfaceVariant,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.base),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    size: 14,
+                    color: AppColors.primary,
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -1250,7 +1255,6 @@ class _ProfilTabState extends State<ProfilTab> {
       children: [
         // Total seumur pakai, bukan jendela mingguan: Profil adalah layar
         // identitas, dan angka yang hanya bisa naik terbaca sebagai piala.
-        // Performa mingguan punya rumahnya sendiri di StatistikSheet.
         const HudHeader('STATISTIK'),
         FlatCard(
           key: const Key('profil-stats-card'),
@@ -1267,13 +1271,47 @@ class _ProfilTabState extends State<ProfilTab> {
                       label: 'Tilawah',
                       value: _angka(tilawah),
                       denom: ' kali',
-                      last: true,
+                      last: sejak == null,
                     ),
-                    _weeklyLink(sejak),
+                    if (sejak != null) _statsFooter(sejak),
                   ],
                 ),
         ),
       ],
+    );
+  }
+
+  /// "Sejak kapan" untuk total seumur pakai. Bukan tombol — sekadar keterangan
+  /// yang memberi konteks pada angka lifetime.
+  Widget _statsFooter(String sejak) {
+    return Padding(
+      padding: const EdgeInsets.only(top: AppSpacing.sm),
+      child: Column(
+        children: [
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: AppColors.outlineVariant.withValues(alpha: 0.35),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: AppSpacing.sm),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Sejak $sejak',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppText.bodyMd().copyWith(
+                      color: AppColors.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -1364,60 +1402,6 @@ class _ProfilTabState extends State<ProfilTab> {
             ],
           ],
         ),
-      ),
-    );
-  }
-
-  /// Kaki kartu: "sejak kapan" untuk angka lifetime, plus pintu ke
-  /// StatistikSheet — sheet-nya sudah lama ada di kode tapi tidak pernah
-  /// bisa dibuka dari mana pun. Performa mingguan tinggal di sana, bukan di
-  /// sini, supaya dua satuan waktu tidak bertabrakan dalam satu kartu.
-  Widget _weeklyLink(String? sejak) {
-    return Padding(
-      padding: const EdgeInsets.only(top: AppSpacing.sm),
-      child: Column(
-        children: [
-          Divider(
-            height: 1,
-            thickness: 1,
-            color: AppColors.outlineVariant.withValues(alpha: 0.35),
-          ),
-          InkWell(
-            onTap: () => StatistikSheet.show(context),
-            borderRadius: BorderRadius.circular(AppRadius.md),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      sejak == null
-                          ? 'Lihat statistik mingguan'
-                          : 'Sejak $sejak',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppText.bodyMd().copyWith(
-                        color: AppColors.onSurfaceVariant,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: AppSpacing.xs),
-                  Text(
-                    'Mingguan',
-                    style: AppText.bodyMd().copyWith(
-                      color: AppColors.primary,
-                    ),
-                  ),
-                  Icon(
-                    Icons.chevron_right,
-                    size: 18,
-                    color: AppColors.primary,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
