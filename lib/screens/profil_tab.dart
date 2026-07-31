@@ -1249,6 +1249,7 @@ class _ProfilTabState extends State<ProfilTab> {
         // kapan?" dan tidak bisa ditafsirkan sama sekali.
         const HudHeader('STATISTIK', meta: '7 HARI'),
         FlatCard(
+          key: const Key('profil-stats-card'),
           child: kosong
               ? _statsEmpty()
               : Column(

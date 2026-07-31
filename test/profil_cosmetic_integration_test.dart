@@ -74,8 +74,10 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    final grids = find.byType(GridView);
-    expect(grids, findsOneWidget);
-    expect(tester.getSize(grids).height, lessThan(240));
+    // Statistik dulu GridView 2x2; sekarang daftar baris. Yang dijaga tetap
+    // sama: bagian ini tidak boleh memakan ruang vertikal di HP.
+    final stats = find.byKey(const Key('profil-stats-card'));
+    expect(stats, findsOneWidget);
+    expect(tester.getSize(stats).height, lessThan(240));
   });
 }
