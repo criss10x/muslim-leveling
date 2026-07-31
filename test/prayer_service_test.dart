@@ -12,7 +12,17 @@ void main() {
     );
   });
 
-  test('prayer area falls back through city, town, and village', () {
+  test('prayer area skips a kecamatan in favour of kabupaten kota', () {
+    expect(
+      PrayerService.prayerAreaFromAddress({
+        'county': 'Kecamatan Kuta',
+        'city': 'Kabupaten Badung',
+      }),
+      'Kabupaten Badung',
+    );
+  });
+
+  test('prayer area falls back through city and town', () {
     expect(
       PrayerService.prayerAreaFromAddress({'city': 'Denpasar'}),
       'Denpasar',
@@ -21,7 +31,10 @@ void main() {
       PrayerService.prayerAreaFromAddress({'town': 'Singaraja'}),
       'Singaraja',
     );
-    expect(PrayerService.prayerAreaFromAddress({'village': 'Kuta'}), 'Kuta');
+  });
+
+  test('prayer area rejects village-only reverse geocoding', () {
+    expect(PrayerService.prayerAreaFromAddress({'village': 'Kuta'}), isNull);
   });
 
   test('province catalog includes Bali and all Equran provinces', () {
