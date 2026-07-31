@@ -63,7 +63,7 @@ class _QuranReaderState extends State<QuranReader> {
     // Simpan posisi terakhir setelah frame selesai: dispose berjalan saat
     // Navigator memfinalisasi transisi pop, dan save() memicu notifyListeners
     // yang bisa menyentuh QuranTab di tengah build.
-    final pos = _topVisibleAyah();
+    final pos = _anchorAyah();
     if (pos != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         quranProgress.save(widget.surah.number, pos);
@@ -72,12 +72,32 @@ class _QuranReaderState extends State<QuranReader> {
     super.dispose();
   }
 
-  /// Ayat teratas yang terlihat, atau null kalau belum ada posisi yang valid.
-  int? _topVisibleAyah() {
+  /// Ayat yang memotong garis referensi 25% dari atas viewport — garis yang
+  /// sama dipakai restore (initialAlignment) dan oleh scroll murattal.
+  /// Simpan dan restore simetris terhadap garis yang sama, jadi posisi
+  /// visual saat kembali identik dengan saat ditinggal. Edge adalah fraksi
+  /// viewport, jadi 0.25 cukup — tanpa perlu ukuran viewport.
+  int? _anchorAyah() {
+    const ref = 0.25;
     final positions = _positionsListener.itemPositions.value;
     if (positions.isEmpty) return null;
-    final first = positions.reduce((a, b) => a.index < b.index ? a : b);
-    final ayah = first.index - _basmalahOffset + 1;
+    for (final p in positions) {
+      if (p.itemLeadingEdge <= ref && p.itemTrailingEdge >= ref) {
+        final ayah = p.index - _basmalahOffset + 1;
+        if (ayah >= 1 && ayah <= widget.surah.ayahCount) return ayah;
+      }
+    }
+    // Fallback: item terdekat dengan garis referensi (mis. ada celah padding).
+    ItemPosition best = positions.first;
+    var bestDist = double.infinity;
+    for (final p in positions) {
+      final d = (p.itemLeadingEdge - ref).abs();
+      if (d < bestDist) {
+        bestDist = d;
+        best = p;
+      }
+    }
+    final ayah = best.index - _basmalahOffset + 1;
     if (ayah < 1 || ayah > widget.surah.ayahCount) return null;
     return ayah;
   }
@@ -96,7 +116,6 @@ class _QuranReaderState extends State<QuranReader> {
         _tafsir = results[1] as List<QuranTafsir>;
         _loading = false;
       });
-      _restoreScroll();
     } catch (_) {
       // Fallback ke aset lokal
       try {
@@ -107,7 +126,6 @@ class _QuranReaderState extends State<QuranReader> {
           _tafsir = const [];
           _loading = false;
         });
-        _restoreScroll();
       } catch (fallbackErr) {
         if (!mounted) return;
         setState(() => _loading = false);
@@ -115,20 +133,15 @@ class _QuranReaderState extends State<QuranReader> {
     }
   }
 
-  /// Kembali ke ayat terakhir yang dibaca, kalau reader dibuka lewat tombol
-  /// "Lanjutkan membaca".
-  void _restoreScroll() {
-    final target = widget.initialAyah;
-    if (target == null || _ayahs.isEmpty) return;
-    if (target < 1 || target > widget.surah.ayahCount) return;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted || !_scrollController.isAttached) return;
-      _scrollController.scrollTo(
-        index: target - 1 + _basmalahOffset,
-        duration: Duration.zero,
-        alignment: 0.25,
-      );
-    });
+  /// Indeks awal list saat dibuka lewat tombol "Lanjutkan membaca".
+  /// Dipakai lewat initialScrollIndex (bukan scrollTo) karena PositionedList
+  /// me-layout item mulai dari indeks itu secara presisi — scrollTo ke item
+  /// yang belum di-layout memakai estimasi layar dan meleset beberapa ayat.
+  int get _initialIndex {
+    final a = widget.initialAyah;
+    if (a == null || _ayahs.isEmpty) return 0;
+    if (a < 1 || a > widget.surah.ayahCount) return 0;
+    return a - 1 + _basmalahOffset;
   }
 
   void _onAudioChanged() {
@@ -211,6 +224,8 @@ class _QuranReaderState extends State<QuranReader> {
           : ScrollablePositionedList.builder(
               itemScrollController: _scrollController,
               itemPositionsListener: _positionsListener,
+              initialScrollIndex: _initialIndex,
+              initialAlignment: widget.initialAyah != null ? 0.25 : 0,
               padding: const EdgeInsets.only(bottom: 120, top: 8),
               itemCount: _ayahs.length + _basmalahOffset,
               itemBuilder: (_, i) {
