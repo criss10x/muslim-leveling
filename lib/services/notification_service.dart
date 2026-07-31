@@ -1,3 +1,5 @@
+import 'dart:ui' show Color;
+
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -29,6 +31,12 @@ enum _NotifSound { silent, normal, adzan }
 
 class NotificationService {
   static final _plugin = FlutterLocalNotificationsPlugin();
+
+  // Aksen icon notif — konstanta brand, bukan AppColors.primary: notifikasi
+  // muncul di luar app, jadi tidak ikut preset tema pengguna. Emerald 0xFF34D399
+  // adalah warna primer identitas Muslim Leveling (sinkron dengan
+  // AppColorsDark/Light.primary).
+  static const _notifAccent = Color(0xFF34D399);
 
   // v2: channel v1 di sebagian device (Xiaomi/OEM A15) terlanjur terbuat
   // ambigu tanpa playSound eksplisit → dipin senyap & notif tak muncul.
@@ -82,7 +90,12 @@ class NotificationService {
     // notifications fire at wrong times.
     tz.setLocalLocation(tz.getLocation('Asia/Jakarta'));
 
-    const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+    // ic_stat_notif adalah aset khusus notif small icon: siluet putih di alpha,
+    // di-generate dari android/notif-source.svg ke 5 kerapatan drawable-*.
+    // ic_launcher tidak boleh dipakai di sini — sejak Android 5.0 sistem
+    // memaksa small icon jadi siluet, dan icon launcher berwarna berubah
+    // jadi kotak putih pekat di status bar.
+    const androidInit = AndroidInitializationSettings('@drawable/ic_stat_notif');
     const iosInit = DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
@@ -478,6 +491,9 @@ class NotificationService {
       vibrationPattern: Int64List.fromList([0, 300, 200, 300]),
       enableVibration: true,
       autoCancel: true,
+      // Aksen siluet ic_stat_notif di header notif — Android mewarnai alpha
+      // putihnya dengan ini.
+      color: _notifAccent,
     );
     const iosDetails = DarwinNotificationDetails(
       presentAlert: true,
