@@ -23,6 +23,7 @@ import '../../widgets/theme_preset_picker.dart';
 import '../../services/cosmetic_service.dart';
 import '../../services/cosmetic_catalog.dart';
 import 'achievements_screen.dart';
+import 'statistik_sheet.dart';
 import 'welcome_pejuang.dart';
 
 /// Profil Pejuang — hero header, stats grid, achievements, settings rows.
@@ -1211,102 +1212,235 @@ class _ProfilTabState extends State<ProfilTab> {
     );
   }
 
+  /// Tanggal tujuh hari terakhir, terlama di kiri — format sama dengan
+  /// `PrayerLog.date` (YYYY-MM-DD) supaya bisa dicocokkan langsung.
+  static List<String> _last7Days() {
+    final now = DateTime.now();
+    return List.generate(7, (i) {
+      final d = now.subtract(Duration(days: 6 - i));
+      final m = d.month.toString().padLeft(2, '0');
+      final day = d.day.toString().padLeft(2, '0');
+      return '${d.year}-$m-$day';
+    });
+  }
+
   Widget _stats() {
     final logs = GameService.current.prayerLog;
-    final wajibTotal = logs
-        .where((l) => GameService.wajibList.contains(l.prayer))
-        .length;
-    final sunnahTotal = logs
-        .where((l) => l.type == 'sunnah' || l.prayer.startsWith('rawatib'))
-        .length;
-    final tilawahTotal = logs.where((l) => l.prayer == 'tilawah').length;
+    final days = _last7Days();
+
+    List<int> perDay(bool Function(PrayerLog) match) => days
+        .map((d) => logs.where((l) => l.date == d && match(l)).length)
+        .toList(growable: false);
+
+    final wajib = perDay((l) => GameService.wajibList.contains(l.prayer));
+    final sunnah = perDay(
+      (l) => l.type == 'sunnah' || l.prayer.startsWith('rawatib'),
+    );
+    final tilawah = perDay((l) => l.prayer == 'tilawah');
+
+    int sum(List<int> xs) => xs.fold(0, (a, b) => a + b);
+    final wajibTotal = sum(wajib);
+    final kosong = wajibTotal == 0 && sum(sunnah) == 0 && sum(tilawah) == 0;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const HudHeader('STATISTIK'),
-        GridView.count(
-          crossAxisCount: 2,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          mainAxisSpacing: AppSpacing.sm,
-          crossAxisSpacing: AppSpacing.sm,
-          childAspectRatio: 1.8,
-          children: [
-            _statCard(
-              'Sholat Selesai',
-              '$wajibTotal',
-              'total',
-              Icons.mosque,
-              AppColors.primary,
-            ),
-            _statCard(
-              'Tilawah',
-              '$tilawahTotal',
-              'kali',
-              Icons.menu_book,
-              AppColors.tertiary,
-            ),
-            _statCard(
-              'Sunnah',
-              '$sunnahTotal',
-              'total',
-              Icons.volunteer_activism,
-              AppColors.secondaryFixed,
-            ),
-            _statCard(
-              'Hero Streak',
-              '${GameService.current.heroStreak.current}',
-              'hari',
-              Icons.local_fire_department,
-              AppColors.secondaryFixed,
-            ),
-          ],
+        // Periode dinyatakan di header: tanpa ini angkanya "total sejak
+        // kapan?" dan tidak bisa ditafsirkan sama sekali.
+        const HudHeader('STATISTIK', meta: '7 HARI'),
+        FlatCard(
+          child: kosong
+              ? _statsEmpty()
+              : Column(
+                  children: [
+                    _statRow(
+                      label: 'Sholat wajib',
+                      value: '$wajibTotal',
+                      // Denominator 7 hari x 5 waktu — mengubah angka telanjang
+                      // jadi pencapaian yang bisa dinilai sendiri.
+                      denom: '/35',
+                      counts: wajib,
+                      maxPerDay: 5,
+                    ),
+                    _statRow(
+                      label: 'Sunnah & rawatib',
+                      value: '${sum(sunnah)}',
+                      counts: sunnah,
+                      maxPerDay: _peak(sunnah),
+                    ),
+                    _statRow(
+                      label: 'Tilawah',
+                      value: '${sum(tilawah)}',
+                      denom: ' kali',
+                      counts: tilawah,
+                      maxPerDay: _peak(tilawah),
+                      last: true,
+                    ),
+                    _weeklyLink(),
+                  ],
+                ),
         ),
       ],
     );
   }
 
-  Widget _statCard(
-    String title,
-    String value,
-    String sub,
-    IconData icon,
-    Color color,
-  ) {
-    return FlatCard(
-      padding: const EdgeInsets.all(AppSpacing.sm),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            children: [
-              Icon(icon, color: color, size: 18),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  title,
-                  style: AppText.labelCaps().copyWith(
-                    color: AppColors.onSurfaceVariant,
-                    fontSize: 10,
+  /// Puncak harian sebagai skala batang — untuk metrik tanpa target harian
+  /// yang jelas, pembandingnya adalah hari terbaik pengguna sendiri.
+  static int _peak(List<int> counts) =>
+      counts.fold(1, (a, b) => b > a ? b : a);
+
+  Widget _statsEmpty() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Belum ada catatan minggu ini.',
+          style: AppText.bodyLg().copyWith(color: AppColors.onSurface),
+        ),
+        const SizedBox(height: AppSpacing.base),
+        Text(
+          'Centang sholat pertamamu — statistik mulai terisi di sini.',
+          style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
+        ),
+      ],
+    );
+  }
+
+  Widget _statRow({
+    required String label,
+    required String value,
+    required List<int> counts,
+    required int maxPerDay,
+    String? denom,
+    bool last = false,
+  }) {
+    return Semantics(
+      label: '$label: $value${denom ?? ''} dalam 7 hari terakhir',
+      excludeSemantics: true,
+      child: Padding(
+        padding: EdgeInsets.only(bottom: last ? 0 : AppSpacing.sm),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppText.bodyMd().copyWith(
+                      color: AppColors.onSurface,
+                    ),
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
+                const SizedBox(width: AppSpacing.xs),
+                Text.rich(
+                  TextSpan(
+                    text: value,
+                    style: AppText.bodyLg().copyWith(
+                      color: AppColors.onSurface,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    children: denom == null
+                        ? null
+                        : [
+                            TextSpan(
+                              text: denom,
+                              style: AppText.bodyMd().copyWith(
+                                color: AppColors.onSurfaceVariant,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                _sparkline(counts, maxPerDay),
+              ],
+            ),
+            if (!last) ...[
+              const SizedBox(height: AppSpacing.sm),
+              Divider(
+                height: 1,
+                thickness: 1,
+                color: AppColors.outlineVariant.withValues(alpha: 0.35),
               ),
             ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Tujuh batang untuk tujuh hari. Hari kosong tetap digambar sebagai
+  /// batang redup, bukan dihilangkan — bolong harus terbaca sebagai bolong,
+  /// bukan sebagai data yang hilang.
+  Widget _sparkline(List<int> counts, int maxPerDay) {
+    const barMax = 16.0;
+    const barMin = 4.0;
+
+    return SizedBox(
+      height: barMax,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          for (var i = 0; i < counts.length; i++) ...[
+            if (i > 0) const SizedBox(width: 4),
+            Container(
+              width: 7,
+              height: counts[i] == 0
+                  ? barMin
+                  : (barMax * (counts[i] / maxPerDay)).clamp(7.0, barMax),
+              decoration: BoxDecoration(
+                color: counts[i] == 0
+                    ? AppColors.outlineVariant.withValues(alpha: 0.45)
+                    : AppColors.primary.withValues(
+                        alpha: counts[i] >= maxPerDay ? 1 : 0.55,
+                      ),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  /// Pintu ke StatistikSheet — sheet-nya sudah lama ada di kode tapi tidak
+  /// pernah bisa dibuka dari mana pun.
+  Widget _weeklyLink() {
+    return Padding(
+      padding: const EdgeInsets.only(top: AppSpacing.sm),
+      child: Column(
+        children: [
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: AppColors.outlineVariant.withValues(alpha: 0.35),
           ),
-          const SizedBox(height: AppSpacing.xs),
-          Text(
-            value,
-            style: AppText.displayHero(28).copyWith(color: color, height: 1.1),
-          ),
-          Text(
-            sub,
-            style: AppText.bodyMd().copyWith(
-              color: AppColors.onSurfaceVariant,
-              fontSize: 11,
+          InkWell(
+            onTap: () => StatistikSheet.show(context),
+            borderRadius: BorderRadius.circular(AppRadius.md),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Lihat statistik mingguan',
+                      style: AppText.bodyMd().copyWith(
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    Icons.chevron_right,
+                    size: 18,
+                    color: AppColors.primary,
+                  ),
+                ],
+              ),
             ),
           ),
         ],
