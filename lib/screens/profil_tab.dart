@@ -1212,70 +1212,64 @@ class _ProfilTabState extends State<ProfilTab> {
     );
   }
 
-  /// Tanggal tujuh hari terakhir, terlama di kiri — format sama dengan
-  /// `PrayerLog.date` (YYYY-MM-DD) supaya bisa dicocokkan langsung.
-  static List<String> _last7Days() {
-    final now = DateTime.now();
-    return List.generate(7, (i) {
-      final d = now.subtract(Duration(days: 6 - i));
-      final m = d.month.toString().padLeft(2, '0');
-      final day = d.day.toString().padLeft(2, '0');
-      return '${d.year}-$m-$day';
-    });
+  static const _namaBulan = [
+    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+  ];
+
+  /// Tanggal catatan paling awal, sebagai "sejak kapan" untuk total seumur
+  /// pakai. Null kalau belum ada catatan sama sekali.
+  static String? _mulaiSejak(List<PrayerLog> logs) {
+    if (logs.isEmpty) return null;
+    final terlama = logs
+        .map((l) => l.date)
+        .where((d) => d.isNotEmpty)
+        .fold<String?>(null, (a, b) => a == null || b.compareTo(a) < 0 ? b : a);
+    if (terlama == null) return null;
+
+    final d = DateTime.tryParse(terlama);
+    if (d == null) return null;
+    return '${d.day} ${_namaBulan[d.month - 1]} ${d.year}';
   }
 
   Widget _stats() {
     final logs = GameService.current.prayerLog;
-    final days = _last7Days();
 
-    List<int> perDay(bool Function(PrayerLog) match) => days
-        .map((d) => logs.where((l) => l.date == d && match(l)).length)
-        .toList(growable: false);
+    int total(bool Function(PrayerLog) match) => logs.where(match).length;
 
-    final wajib = perDay((l) => GameService.wajibList.contains(l.prayer));
-    final sunnah = perDay(
+    final wajib = total((l) => GameService.wajibList.contains(l.prayer));
+    final sunnah = total(
       (l) => l.type == 'sunnah' || l.prayer.startsWith('rawatib'),
     );
-    final tilawah = perDay((l) => l.prayer == 'tilawah');
-
-    int sum(List<int> xs) => xs.fold(0, (a, b) => a + b);
-    final wajibTotal = sum(wajib);
-    final kosong = wajibTotal == 0 && sum(sunnah) == 0 && sum(tilawah) == 0;
+    final tilawah = total((l) => l.prayer == 'tilawah');
+    final sejak = _mulaiSejak(logs);
+    final kosong = wajib == 0 && sunnah == 0 && tilawah == 0;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Periode dinyatakan di header: tanpa ini angkanya "total sejak
-        // kapan?" dan tidak bisa ditafsirkan sama sekali.
-        const HudHeader('STATISTIK', meta: '7 HARI'),
+        // Total seumur pakai, bukan jendela mingguan: Profil adalah layar
+        // identitas, dan angka yang hanya bisa naik terbaca sebagai piala.
+        // Performa mingguan punya rumahnya sendiri di StatistikSheet.
+        const HudHeader('STATISTIK'),
         FlatCard(
           key: const Key('profil-stats-card'),
           child: kosong
               ? _statsEmpty()
               : Column(
                   children: [
-                    _statRow(
-                      label: 'Sholat wajib',
-                      value: '$wajibTotal',
-                      // Denominator 7 hari x 5 waktu — mengubah angka telanjang
-                      // jadi pencapaian yang bisa dinilai sendiri.
-                      denom: '/35',
-                      counts: wajib,
-                      dailyTarget: 5,
-                    ),
+                    _statRow(label: 'Sholat wajib', value: _angka(wajib)),
                     _statRow(
                       label: 'Sunnah & rawatib',
-                      value: '${sum(sunnah)}',
-                      counts: sunnah,
+                      value: _angka(sunnah),
                     ),
                     _statRow(
                       label: 'Tilawah',
-                      value: '${sum(tilawah)}',
+                      value: _angka(tilawah),
                       denom: ' kali',
-                      counts: tilawah,
                       last: true,
                     ),
-                    _weeklyLink(),
+                    _weeklyLink(sejak),
                   ],
                 ),
         ),
@@ -1283,19 +1277,24 @@ class _ProfilTabState extends State<ProfilTab> {
     );
   }
 
-  /// Skala batang untuk metrik tanpa target harian. Lantai 3 disengaja:
-  /// dengan skala murni relatif, satu kejadian saja sudah menghasilkan batang
-  /// penuh, sehingga "3 sunnah seminggu" terbaca sekuat sholat wajib yang
-  /// sempurna. Lantai ini menjaga proporsinya jujur.
-  static int _peak(List<int> counts) =>
-      counts.fold(3, (a, b) => b > a ? b : a);
+  /// Pemisah ribuan — total seumur pakai cepat menembus empat digit, dan
+  /// "1247" jauh lebih lambat dibaca daripada "1.247".
+  static String _angka(int n) {
+    final s = n.toString();
+    final buf = StringBuffer();
+    for (var i = 0; i < s.length; i++) {
+      if (i > 0 && (s.length - i) % 3 == 0) buf.write('.');
+      buf.write(s[i]);
+    }
+    return buf.toString();
+  }
 
   Widget _statsEmpty() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Belum ada catatan minggu ini.',
+          'Belum ada catatan.',
           style: AppText.bodyLg().copyWith(color: AppColors.onSurface),
         ),
         const SizedBox(height: AppSpacing.base),
@@ -1310,13 +1309,11 @@ class _ProfilTabState extends State<ProfilTab> {
   Widget _statRow({
     required String label,
     required String value,
-    required List<int> counts,
-    int? dailyTarget,
     String? denom,
     bool last = false,
   }) {
     return Semantics(
-      label: '$label: $value${denom ?? ''} dalam 7 hari terakhir',
+      label: '$label: $value${denom ?? ''}',
       excludeSemantics: true,
       child: Padding(
         padding: EdgeInsets.only(bottom: last ? 0 : AppSpacing.sm),
@@ -1355,8 +1352,6 @@ class _ProfilTabState extends State<ProfilTab> {
                           ],
                   ),
                 ),
-                const SizedBox(width: AppSpacing.sm),
-                _sparkline(counts, dailyTarget),
               ],
             ),
             if (!last) ...[
@@ -1373,52 +1368,11 @@ class _ProfilTabState extends State<ProfilTab> {
     );
   }
 
-  /// Tujuh batang untuk tujuh hari. Hari kosong tetap digambar sebagai
-  /// batang redup, bukan dihilangkan — bolong harus terbaca sebagai bolong,
-  /// bukan sebagai data yang hilang.
-  ///
-  /// [dailyTarget] hanya diisi untuk metrik yang punya target harian nyata
-  /// (sholat wajib = 5). Di situ batang penuh berarti "target tercapai" dan
-  /// boleh terang. Metrik tanpa target tidak pernah mendapat perlakuan itu:
-  /// tidak ada yang bisa disebut tercapai kalau tidak ada yang ditargetkan.
-  Widget _sparkline(List<int> counts, int? dailyTarget) {
-    const barMax = 16.0;
-    const barMin = 4.0;
-    final scale = dailyTarget ?? _peak(counts);
-
-    return SizedBox(
-      height: barMax,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          for (var i = 0; i < counts.length; i++) ...[
-            if (i > 0) const SizedBox(width: 4),
-            Container(
-              width: 7,
-              height: counts[i] == 0
-                  ? barMin
-                  : (barMax * (counts[i] / scale)).clamp(7.0, barMax),
-              decoration: BoxDecoration(
-                color: counts[i] == 0
-                    ? AppColors.outlineVariant.withValues(alpha: 0.45)
-                    : AppColors.primary.withValues(
-                        alpha: (dailyTarget != null && counts[i] >= dailyTarget)
-                            ? 1
-                            : 0.55,
-                      ),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-
-  /// Pintu ke StatistikSheet — sheet-nya sudah lama ada di kode tapi tidak
-  /// pernah bisa dibuka dari mana pun.
-  Widget _weeklyLink() {
+  /// Kaki kartu: "sejak kapan" untuk angka lifetime, plus pintu ke
+  /// StatistikSheet — sheet-nya sudah lama ada di kode tapi tidak pernah
+  /// bisa dibuka dari mana pun. Performa mingguan tinggal di sana, bukan di
+  /// sini, supaya dua satuan waktu tidak bertabrakan dalam satu kartu.
+  Widget _weeklyLink(String? sejak) {
     return Padding(
       padding: const EdgeInsets.only(top: AppSpacing.sm),
       child: Column(
@@ -1437,10 +1391,21 @@ class _ProfilTabState extends State<ProfilTab> {
                 children: [
                   Expanded(
                     child: Text(
-                      'Lihat statistik mingguan',
+                      sejak == null
+                          ? 'Lihat statistik mingguan'
+                          : 'Sejak $sejak',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: AppText.bodyMd().copyWith(
-                        color: AppColors.primary,
+                        color: AppColors.onSurfaceVariant,
                       ),
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.xs),
+                  Text(
+                    'Mingguan',
+                    style: AppText.bodyMd().copyWith(
+                      color: AppColors.primary,
                     ),
                   ),
                   Icon(

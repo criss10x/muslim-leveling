@@ -66,19 +66,37 @@ void main() {
     SharedPreferences.setMockInitialValues(basePrefs());
     await pumpProfil(tester);
 
-    expect(find.text('Belum ada catatan minggu ini.'), findsOneWidget);
+    expect(find.text('Belum ada catatan.'), findsOneWidget);
     // Kartu-kartu lama berisi "0 total" tidak boleh muncul lagi.
     expect(find.text('Sholat Selesai'), findsNothing);
     expect(find.text('total'), findsNothing);
   });
 
-  testWidgets('periode dinyatakan eksplisit di header', (tester) async {
-    SharedPreferences.setMockInitialValues(basePrefs());
+  testWidgets('angka lifetime, bukan jendela mingguan', (tester) async {
+    // Catatan jauh di luar 7 hari terakhir harus tetap terhitung — inilah
+    // pembeda total seumur pakai dari jendela mingguan.
+    seedLogs([
+      {'date': dayOffset(200), 'prayer': 'subuh', 'time': '05:00', 'type': 'wajib'},
+      {'date': dayOffset(120), 'prayer': 'dzuhur', 'time': '12:00', 'type': 'wajib'},
+      {'date': dayOffset(0), 'prayer': 'ashar', 'time': '15:00', 'type': 'wajib'},
+    ]);
     await pumpProfil(tester);
 
-    // Tanpa '7 HARI' angkanya tidak bisa ditafsirkan sama sekali.
+    expect(find.text('3'), findsWidgets);
+    // Header tidak lagi mengklaim periode 7 hari.
     expect(find.text('STATISTIK'), findsOneWidget);
-    expect(find.text('7 HARI'), findsOneWidget);
+    expect(find.text('7 HARI'), findsNothing);
+  });
+
+  testWidgets('total lifetime diberi keterangan sejak kapan', (tester) async {
+    seedLogs([
+      {'date': '2026-03-12', 'prayer': 'subuh', 'time': '05:00', 'type': 'wajib'},
+      {'date': dayOffset(0), 'prayer': 'dzuhur', 'time': '12:00', 'type': 'wajib'},
+    ]);
+    await pumpProfil(tester);
+
+    // "Total" tanpa titik mulai tidak bisa ditafsirkan.
+    expect(find.text('Sejak 12 Maret 2026'), findsOneWidget);
   });
 
   testWidgets('Hero Streak tidak lagi digandakan di Statistik', (tester) async {
@@ -90,55 +108,46 @@ void main() {
     expect(find.text('Hero Streak'), findsNothing);
   });
 
-  testWidgets('baris statistik memakai denominator, bukan angka telanjang', (
-    tester,
-  ) async {
+  testWidgets('angka besar diberi pemisah ribuan', (tester) async {
     seedLogs([
-      for (final p in ['subuh', 'dzuhur', 'ashar'])
-        {'date': dayOffset(0), 'prayer': p, 'time': '05:00', 'type': 'wajib'},
-      {'date': dayOffset(2), 'prayer': 'subuh', 'time': '05:00', 'type': 'wajib'},
-      {'date': dayOffset(1), 'prayer': 'tilawah', 'time': '20:00', 'type': 'tilawah'},
+      for (var i = 0; i < 1247; i++)
+        {
+          'date': dayOffset(i % 300),
+          'prayer': 'subuh',
+          'time': '05:00',
+          'type': 'wajib',
+        },
     ]);
     await pumpProfil(tester);
 
     expect(find.text('Sholat wajib'), findsOneWidget);
-    expect(find.text('Tilawah'), findsOneWidget);
-    // 4 sholat wajib dalam 7 hari, dari kemungkinan 35.
-    expect(find.textContaining('/35'), findsOneWidget);
+    // "1247" jauh lebih lambat dibaca daripada "1.247".
+    expect(find.text('1.247'), findsOneWidget);
   });
 
-  testWidgets('golden: Statistik dengan data tujuh hari', (tester) async {
-    // Pola sengaja tidak rata: ada hari penuh, hari separuh, dan hari bolong,
-    // supaya sparkline benar-benar diuji, bukan tujuh batang seragam.
+  testWidgets('golden: Statistik dengan total lifetime', (tester) async {
+    // Sebaran panjang, bukan seminggu: totalnya harus terlihat seperti
+    // akumulasi berbulan-bulan, termasuk angka empat digit.
     final logs = <Map<String, String>>[];
-    void wajib(int daysAgo, List<String> prayers) {
-      for (final p in prayers) {
-        logs.add({
-          'date': dayOffset(daysAgo),
-          'prayer': p,
-          'time': '05:00',
-          'type': 'wajib',
-        });
-      }
-    }
-
-    wajib(6, ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya']);
-    wajib(5, ['subuh', 'dzuhur', 'ashar']);
-    wajib(4, ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya']);
-    wajib(3, ['subuh']);
-    wajib(1, ['subuh', 'dzuhur', 'ashar', 'maghrib']);
-    wajib(0, ['subuh', 'dzuhur']);
-    for (final d in [6, 4, 1]) {
+    for (var i = 0; i < 1247; i++) {
       logs.add({
-        'date': dayOffset(d),
+        'date': dayOffset(i % 280),
+        'prayer': GameService.wajibList[i % 5],
+        'time': '05:00',
+        'type': 'wajib',
+      });
+    }
+    for (var i = 0; i < 386; i++) {
+      logs.add({
+        'date': dayOffset(i % 280),
         'prayer': 'rawatib_subuh',
         'time': '05:10',
         'type': 'sunnah',
       });
     }
-    for (final d in [5, 4, 0]) {
+    for (var i = 0; i < 92; i++) {
       logs.add({
-        'date': dayOffset(d),
+        'date': dayOffset(i % 280),
         'prayer': 'tilawah',
         'time': '20:00',
         'type': 'tilawah',
@@ -164,7 +173,7 @@ void main() {
     ]);
     await pumpProfil(tester);
 
-    final link = find.text('Lihat statistik mingguan');
+    final link = find.text('Mingguan');
     expect(link, findsOneWidget);
 
     await tester.ensureVisible(link);
