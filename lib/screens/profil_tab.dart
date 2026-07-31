@@ -1125,6 +1125,7 @@ class _ProfilTabState extends State<ProfilTab> {
       container: true,
       excludeSemantics: true,
       label: 'Buka loker skin',
+      onTap: _showCosmeticLocker,
       child: Material(
         color: Colors.transparent,
         child: InkWell(

@@ -1,3 +1,5 @@
+import 'dart:ui' show SemanticsAction;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,6 +38,13 @@ void main() {
     );
     final stats = find.text('STATISTIK', skipOffstage: false);
     expect(locker, findsOneWidget);
+    expect(
+      tester
+          .getSemantics(locker)
+          .getSemanticsData()
+          .hasAction(SemanticsAction.tap),
+      isTrue,
+    );
     expect(tester.getSize(locker).height, greaterThanOrEqualTo(44));
     expect(
       tester.getTopLeft(stats).dy,
