@@ -385,19 +385,53 @@ class PrayerService {
   // --- SharedPreferences helpers ---
   static final ValueNotifier<int> locationVersion = ValueNotifier(0);
 
-  static bool _isKecamatan(String value) {
-    final normalized = value.trim().toLowerCase();
-    return normalized.startsWith('kecamatan ') ||
-        normalized.startsWith('kec. ');
+  static String _normalizedAreaName(String value) {
+    final normalized = value
+        .trim()
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^a-z0-9]+'), ' ')
+        .trim();
+    return normalized
+        .replaceFirst(RegExp(r'^(kabupaten|kab|kota)\s+'), '')
+        .trim();
   }
 
-  static String? prayerAreaFromAddress(Map<String, dynamic>? address) {
-    for (final key in const ['county', 'city', 'municipality', 'town']) {
+  static String? _areaType(String value) {
+    final normalized = value
+        .trim()
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^a-z0-9]+'), ' ')
+        .trim();
+    final match = RegExp(r'^(kabupaten|kab|kota)\s+').firstMatch(normalized);
+    if (match == null) return null;
+    return match.group(1) == 'kota' ? 'kota' : 'kab';
+  }
+
+  static String? prayerAreaFromAddress(
+    Map<String, dynamic>? address,
+    List<String> validAreas,
+  ) {
+    for (final key in const [
+      'county',
+      'region',
+      'state_district',
+      'city',
+      'municipality',
+      'town',
+    ]) {
       final value = address?[key] as String?;
-      if (value != null &&
-          value.trim().isNotEmpty &&
-          !_isKecamatan(value)) {
-        return value.trim();
+      if (value == null || value.trim().isEmpty) continue;
+      final candidate = _normalizedAreaName(value);
+      final matches = validAreas
+          .where((area) => _normalizedAreaName(area) == candidate)
+          .toList();
+      final type = _areaType(value);
+      if (type != null) {
+        for (final area in matches) {
+          if (_areaType(area) == type) return area.trim();
+        }
+      } else if (matches.length == 1) {
+        return matches.single.trim();
       }
     }
     return null;
@@ -458,8 +492,9 @@ class PrayerService {
       final geoBody = await geoRes.transform(utf8.decoder).join();
       final geoJson = jsonDecode(geoBody) as Map<String, dynamic>;
       final address = geoJson['address'] as Map<String, dynamic>?;
-      final rawCity = prayerAreaFromAddress(address);
-      if (rawCity == null || rawCity.trim().isEmpty) {
+      final state = address?['state'] as String? ?? '';
+      final province = provinceFromState(state);
+      if (province.isEmpty) {
         return (
           id: null,
           name: null,
@@ -467,17 +502,21 @@ class PrayerService {
         );
       }
 
-      final searchResult = await searchCities(rawCity);
-      if (searchResult.isNotEmpty) {
-        final first = searchResult.first;
+      final validAreas = await citiesForProvince(province);
+      final area = prayerAreaFromAddress(address, validAreas);
+      if (area == null) {
         return (
-          id: first['id'] as String,
-          name: first['lokasi'] as String,
-          failure: null,
+          id: null,
+          name: null,
+          failure: CurrentLocationFailure.lookupFailed,
         );
       }
 
-      return (id: rawCity, name: rawCity, failure: null);
+      final areaKey = area.toLowerCase().trim();
+      _provCache[areaKey] = province;
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('prov_$areaKey', province);
+      return (id: area, name: area, failure: null);
     } on TimeoutException {
       return (id: null, name: null, failure: CurrentLocationFailure.timeout);
     } catch (_) {
@@ -537,7 +576,9 @@ class PrayerService {
     'Gorontalo',
     'Jambi',
     'Lampung',
+    'Maluku Utara',
     'Maluku',
+    'Papua Barat',
     'Papua',
     'Riau',
     'Yogyakarta',
@@ -556,4 +597,6 @@ class PrayerService {
     }
     return '';
   }
+
+  static String provinceFromState(String state) => _extractProvinsi(state);
 }
