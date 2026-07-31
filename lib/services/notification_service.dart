@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -65,6 +66,7 @@ class NotificationService {
   static const _prefTimingsPrefix = 'timing_';
   static const _prefNotifMode = 'notif_mode'; // fokus/seimbang/intensif
   static const _prefSoundMode = 'notif_sound_mode'; // senyap/suara/adzan
+  static const _prefPerPrayerSounds = 'per_prayer_sounds'; // {"subuh":"senyap",...}
 
   static const _wajibList = ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya'];
 
@@ -349,6 +351,55 @@ class NotificationService {
     }
   }
 
+  /// Mode suara per sholat (override global). Key = nama sholat
+  /// ('subuh'..'isya'), value = 'senyap'/'suara'/'adzan'.
+  /// Empty map = semua sholat ikut mode global dari tab Profil.
+  static Future<Map<String, String>> getPerPrayerSounds() async {
+    final prefs = await SharedPreferences.getInstance();
+    final raw = prefs.getString(_prefPerPrayerSounds);
+    if (raw == null || raw.isEmpty) return {};
+    try {
+      final decoded = jsonDecode(raw);
+      if (decoded is Map<String, dynamic>) {
+        return decoded.map((k, v) => MapEntry(k, v.toString()));
+      }
+    } catch (_) {}
+    return {};
+  }
+
+  /// Set mode suara satu sholat, simpan, lalu reschedule kalau pengingat
+  /// aktif. Mode sholat lain tidak disentuh.
+  static Future<void> setPerPrayerSound(String prayer, String sound) async {
+    if (!_initialized) await init();
+    final prefs = await SharedPreferences.getInstance();
+    final map = await getPerPrayerSounds();
+    map[prayer] = sound;
+    await prefs.setString(_prefPerPrayerSounds, jsonEncode(map));
+    if (await isRemindersEnabled()) {
+      final city = prefs.getString(_prefCity) ?? '';
+      final timings = await _readTimingsFromPrefs(prefs);
+      if (city.isNotEmpty && timings.isNotEmpty) {
+        await _scheduleAlarms(city, timings);
+      }
+    }
+  }
+
+  /// Hapus override satu sholat → kembali ikut mode global Profil.
+  static Future<void> clearPerPrayerSound(String prayer) async {
+    if (!_initialized) await init();
+    final prefs = await SharedPreferences.getInstance();
+    final map = await getPerPrayerSounds();
+    map.remove(prayer);
+    await prefs.setString(_prefPerPrayerSounds, jsonEncode(map));
+    if (await isRemindersEnabled()) {
+      final city = prefs.getString(_prefCity) ?? '';
+      final timings = await _readTimingsFromPrefs(prefs);
+      if (city.isNotEmpty && timings.isNotEmpty) {
+        await _scheduleAlarms(city, timings);
+      }
+    }
+  }
+
   // ═══════════════════════════════════════════
   //  Internal: scheduling logic
   // ═══════════════════════════════════════════
@@ -360,6 +411,7 @@ class NotificationService {
     final now = DateTime.now();
     final mode = await getNotifMode();
     final soundMode = await getSoundMode();
+    final perPrayer = await getPerPrayerSounds();
 
     for (final prayer in _wajibList) {
       final timeStr = timings[prayer];
@@ -385,10 +437,11 @@ class NotificationService {
           scheduledTime = scheduledTime.add(const Duration(days: 1));
         }
         // Elemen terakhir = tepat waktu adzan. Jenis suara mengikuti
-        // pilihan user: senyap semua / suara standar semua / adzan hanya
-        // saat masuk waktu (pra-adzan tetap suara standar).
+        // pilihan user per sholat (override) atau mode global: senyap
+        // semua / suara standar semua / adzan hanya saat masuk waktu
+        // (pra-adzan tetap suara standar).
         final isMain = i == schedules.length - 1;
-        final sound = switch (soundMode) {
+        final sound = switch (perPrayer[prayer] ?? soundMode) {
           'senyap' => _NotifSound.silent,
           'suara' => _NotifSound.normal,
           _ => isMain ? _NotifSound.adzan : _NotifSound.normal,

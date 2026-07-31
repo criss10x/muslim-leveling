@@ -4,6 +4,7 @@ import '../../widgets/common.dart';
 import '../../widgets/city_picker.dart';
 import '../../services/prayer_service.dart';
 import '../../services/game_service.dart';
+import '../../services/notification_service.dart';
 import 'qibla_screen.dart';
 
 /// Jadwal Sholat — V3 logic ported to V1 design.
@@ -22,6 +23,10 @@ class _JadwalTabState extends State<JadwalTab> {
   String _cityId = '';
   bool _loading = true;
   String? _error;
+  // Mode suara per sholat (override global Profil). Dimuat di _loadAndFetch
+  // karena prefs async; dipakai sinkron di _schedule().
+  Map<String, String> _perPrayerSounds = {};
+  String _globalSound = 'adzan';
 
   @override
   void initState() {
@@ -45,6 +50,16 @@ class _JadwalTabState extends State<JadwalTab> {
   }
 
   Future<void> _loadAndFetch() async {
+    // Mode suara per sholat bisa berubah dari tab Profil (global) atau
+    // bottom sheet di tab ini — selalu refresh supaya icon sinkron.
+    final sounds = await NotificationService.getPerPrayerSounds();
+    final global = await NotificationService.getSoundMode();
+    if (mounted) {
+      setState(() {
+        _perPrayerSounds = sounds;
+        _globalSound = global;
+      });
+    }
     final loc = await PrayerService.loadLocation();
     if (loc == null) {
       // Jangan fetch dengan ID default — API v3 pakai MD5 city ID,
@@ -635,6 +650,8 @@ class _JadwalTabState extends State<JadwalTab> {
               it.icon,
               it.isNext,
               it.isLogged,
+              it.id,
+              _perPrayerSounds[it.id] ?? _globalSound,
             ),
           ),
         ),
@@ -648,6 +665,8 @@ class _JadwalTabState extends State<JadwalTab> {
     IconData icon,
     bool isNext,
     bool isLogged,
+    String prayerId,
+    String sound,
   ) {
     // Disiplin warna redesign: cyan = berikutnya/sekarang, primary = selesai.
     final iconColor = isNext
@@ -715,7 +734,133 @@ class _JadwalTabState extends State<JadwalTab> {
               color: isNext ? AppColors.tertiary : AppColors.onSurface,
             ),
           ),
+          const SizedBox(width: AppSpacing.sm),
+          _soundIcon(sound, prayerId),
         ],
+      ),
+    );
+  }
+
+  // Ikon mode suara di kanan tiap baris sholat. Tap = buka picker.
+  static const _soundIcons = {
+    'senyap': (Icons.volume_off_rounded, 'Senyap'),
+    'suara': (Icons.notifications_rounded, 'Suara'),
+    'adzan': (Icons.mosque, 'Adzan'),
+  };
+
+  Widget _soundIcon(String sound, String prayerId) {
+    final (iconData, label) = _soundIcons[sound] ??
+        (Icons.notifications_none_rounded, 'Mengikuti global');
+    return GestureDetector(
+      onTap: () => _showSoundPicker(prayerId, sound),
+      child: Icon(iconData, size: 20, color: AppColors.onSurfaceVariant),
+    );
+  }
+
+  void _showSoundPicker(String prayerId, String current) {
+    // true = sholat ini punya override eksplisit; false = ikut global.
+    final isOverride = _perPrayerSounds.containsKey(prayerId);
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.surfaceContainerHigh,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.lg)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.md,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Notifikasi $prayerId',
+                style: AppText.titleLg().copyWith(
+                  color: AppColors.onSurface,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.md),
+              _soundOption(prayerId, isOverride && current == 'senyap', 'senyap',
+                  Icons.volume_off_rounded, 'Senyap — tanpa suara'),
+              _soundOption(prayerId, isOverride && current == 'suara', 'suara',
+                  Icons.notifications_rounded, 'Suara — notifikasi standar HP'),
+              _soundOption(prayerId, isOverride && current == 'adzan', 'adzan',
+                  Icons.mosque, 'Adzan — suara adzan penuh'),
+              _soundOption(
+                prayerId,
+                !isOverride,
+                _globalSound,
+                Icons.notifications_none_rounded,
+                'Ikuti pengaturan global',
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _soundOption(String prayerId, bool selected, String value,
+      IconData icon, String label) {
+    return InkWell(
+      onTap: () async {
+        Navigator.pop(context);
+        // value == _globalSound → hapus override agar kembali ikut global.
+        if (value == _globalSound) {
+          await NotificationService.clearPerPrayerSound(prayerId);
+        } else {
+          await NotificationService.setPerPrayerSound(prayerId, value);
+        }
+        final sounds = await NotificationService.getPerPrayerSounds();
+        final global = await NotificationService.getSoundMode();
+        if (mounted) {
+          setState(() {
+            _perPrayerSounds = sounds;
+            _globalSound = global;
+          });
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.sm,
+        ),
+        margin: const EdgeInsets.only(bottom: AppSpacing.xs),
+        decoration: BoxDecoration(
+          color: selected
+              ? AppColors.primary.withValues(alpha: 0.12)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(AppRadius.md),
+          border: Border.all(
+            color: selected
+                ? AppColors.primary.withValues(alpha: 0.4)
+                : AppColors.outlineVariant.withValues(alpha: 0.3),
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(icon,
+                size: 20,
+                color: selected
+                    ? AppColors.primary
+                    : AppColors.onSurfaceVariant),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Text(
+                label,
+                style: AppText.bodyMd().copyWith(
+                  color: selected ? AppColors.primary : AppColors.onSurface,
+                ),
+              ),
+            ),
+            if (selected)
+              Icon(Icons.check_circle_rounded,
+                  size: 18, color: AppColors.primary),
+          ],
+        ),
       ),
     );
   }
