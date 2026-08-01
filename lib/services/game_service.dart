@@ -504,13 +504,19 @@ class GameService {
     return '${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}';
   }
 
-  static String todayStr() {
-    final d = DateTime.now();
+  /// Local HP time: daily quests, logs, and streaks reset at 03.00.
+  static String dailyDateKey(DateTime now) {
+    final calendarDay = DateTime(now.year, now.month, now.day);
+    final d = now.hour < 3
+        ? calendarDay.subtract(const Duration(days: 1))
+        : calendarDay;
     return '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
   }
 
+  static String todayStr() => dailyDateKey(DateTime.now());
+
   static String yesterdayStr() {
-    final d = DateTime.now().subtract(const Duration(days: 1));
+    final d = DateTime.parse(todayStr()).subtract(const Duration(days: 1));
     return '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
   }
 
