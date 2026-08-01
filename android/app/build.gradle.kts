@@ -16,7 +16,7 @@ val keystoreProperties = Properties().apply {
     }
 }
 
-val useReleaseKeystore = keystoreProperties.getProperty("storeFile")?.let { file(it).exists() } == true
+val useReleaseKeystore = keystoreProperties.getProperty("storeFile")?.let { rootProject.file(it).exists() } == true
 
 android {
     namespace = "id.muslimleveling.muslim_leveling"
@@ -50,11 +50,12 @@ android {
 
     buildTypes {
         release {
-            signingConfig = if (useReleaseKeystore) {
-                signingConfigs.getByName("release")
-            } else {
-                signingConfigs.getByName("debug")
+            // ponytail: fail-fast kalau keystore release tidak ada — jangan pernah
+            // silent-fallback ke debug signing di build release (Play Store akan tolak).
+            if (!useReleaseKeystore) {
+                throw GradleException("Release build tanpa keystore: key.properties atau storeFile tidak ditemukan.")
             }
+            signingConfig = signingConfigs.getByName("release")
             // ponytail: disable R8/minify — package_info_plus duplicate-class
             // conflict di R8 task. App kecil, obfuscation gak kritis.
             isMinifyEnabled = false
