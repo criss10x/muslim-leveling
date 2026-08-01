@@ -371,6 +371,8 @@ class GameService {
     // ponytail: migrate legacy `rewards` → ownedCosmetics on every successful
     // load path (local hit or remote hit) so equip/unequip see up-to-date ownership.
     _cache = CosmeticService.migrateRewards(_cache);
+    final restoredStreaks = backfillPrayerStreaks(_cache);
+    if (!identical(restoredStreaks, _cache)) await _save(restoredStreaks);
     return _cache;
   }
 
@@ -640,6 +642,48 @@ class GameService {
       best: cur > s.best ? cur : s.best,
       lastDate: today,
     );
+  }
+
+  /// Rebuilds only missing legacy streak entries from existing prayer logs.
+  static GameState backfillPrayerStreaks(GameState state) {
+    final restored = Map<String, StreakState>.from(state.perPrayerStreaks);
+    var changed = false;
+
+    for (final prayer in wajibList) {
+      final saved = restored[prayer];
+      if (saved != null &&
+          (saved.current > 0 || saved.best > 0 || saved.lastDate.isNotEmpty)) {
+        continue;
+      }
+
+      final dates =
+          state.prayerLog
+              .where((log) => log.prayer == prayer && log.type == 'wajib')
+              .map((log) => log.date)
+              .where((date) => DateTime.tryParse(date) != null)
+              .toSet()
+              .toList()
+            ..sort();
+      if (dates.isEmpty) continue;
+
+      var current = 1;
+      var best = 1;
+      for (var i = 1; i < dates.length; i++) {
+        final previous = DateTime.parse(dates[i - 1]);
+        final date = DateTime.parse(dates[i]);
+        current = date.difference(previous).inDays == 1 ? current + 1 : 1;
+        if (current > best) best = current;
+      }
+
+      restored[prayer] = StreakState(
+        current: current,
+        best: best,
+        lastDate: dates.last,
+      );
+      changed = true;
+    }
+
+    return changed ? state.copyWith(perPrayerStreaks: restored) : state;
   }
 
   /// ponytail: Jumat weekly streak — 7-day gap check instead of yesterday.

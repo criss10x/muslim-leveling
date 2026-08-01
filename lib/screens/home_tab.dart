@@ -423,17 +423,41 @@ class _HomeTabState extends State<HomeTab> {
                 AnimatedCount(
                   value: info.xpInCurrentLevel,
                   suffix: ' / ${info.xpNeededForNextLevel}',
-                  style: AppText.bodyMd().copyWith(
-                    color: AppColors.primary,
-                  ),
+                  style: AppText.bodyMd().copyWith(color: AppColors.primary),
                 ),
               ],
             ),
             const SizedBox(height: AppSpacing.xs),
-            NeonProgressBar(
-              progress: info.progress,
-              leadingGlow: true,
-              height: 10,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(AppRadius.pill),
+              child: Container(
+                height: 10,
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceContainerHigh,
+                  borderRadius: BorderRadius.circular(AppRadius.pill),
+                ),
+                child: FractionallySizedBox(
+                  alignment: Alignment.centerLeft,
+                  widthFactor: info.progress.clamp(0.0, 1.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [tier.inkPrimary, tier.inkSecondary],
+                      ),
+                      borderRadius: BorderRadius.circular(AppRadius.pill),
+                      boxShadow: light
+                          ? null
+                          : [
+                              BoxShadow(
+                                color: tier.inkPrimary.withValues(alpha: 0.5),
+                                blurRadius: 8,
+                                spreadRadius: 1,
+                              ),
+                            ],
+                    ),
+                  ),
+                ),
+              ),
             ),
             const SizedBox(height: 6),
             Align(
