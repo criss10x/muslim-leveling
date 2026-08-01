@@ -243,6 +243,93 @@ class LearningContent {
       ],
     ),
     LearningCategory(
+      id: 'keyakinan',
+      label: 'Keyakinan',
+      icon: '💭',
+      modules: [
+        LearningModule(
+          id: 'why_4.1',
+          categoryId: 'keyakinan',
+          title: 'Aku Muslim Karena Apa?',
+          icon: '🪞',
+          estimatedMinutes: 4,
+          xpReward: 200,
+        ),
+        LearningModule(
+          id: 'why_4.2',
+          categoryId: 'keyakinan',
+          title: 'Untuk Apa Aku Diciptakan?',
+          icon: '🧭',
+          estimatedMinutes: 5,
+          xpReward: 200,
+        ),
+        LearningModule(
+          id: 'why_4.3',
+          categoryId: 'keyakinan',
+          title: 'Kenapa Harus Salat Lima Waktu?',
+          icon: '🕌',
+          estimatedMinutes: 5,
+          xpReward: 200,
+        ),
+        LearningModule(
+          id: 'why_4.4',
+          categoryId: 'keyakinan',
+          title: 'Kenapa Al-Quran Tidak Cukup Dibaca Saja?',
+          icon: '📖',
+          estimatedMinutes: 5,
+          xpReward: 200,
+        ),
+        LearningModule(
+          id: 'why_4.5',
+          categoryId: 'keyakinan',
+          title: 'Kenapa Ada Halal dan Haram? Apa Allah Membatasi Kita?',
+          icon: '⚖️',
+          estimatedMinutes: 5,
+          xpReward: 200,
+        ),
+        LearningModule(
+          id: 'why_4.6',
+          categoryId: 'keyakinan',
+          title: 'Kalau Allah Baik, Kenapa Hidup Tetap Berat?',
+          icon: '🌧️',
+          estimatedMinutes: 5,
+          xpReward: 200,
+        ),
+        LearningModule(
+          id: 'why_4.7',
+          categoryId: 'keyakinan',
+          title: 'Kenapa Doaku Belum Dikabulkan?',
+          icon: '🤲',
+          estimatedMinutes: 4,
+          xpReward: 200,
+        ),
+        LearningModule(
+          id: 'why_4.8',
+          categoryId: 'keyakinan',
+          title: 'Kalau Semua Sudah Ditakdirkan, Kenapa Aku Harus Berusaha?',
+          icon: '🌱',
+          estimatedMinutes: 5,
+          xpReward: 200,
+        ),
+        LearningModule(
+          id: 'why_4.9',
+          categoryId: 'keyakinan',
+          title: 'Kenapa Harus Bertobat Kalau Aku Terus Mengulang Salah?',
+          icon: '💛',
+          estimatedMinutes: 4,
+          xpReward: 200,
+        ),
+        LearningModule(
+          id: 'why_4.10',
+          categoryId: 'keyakinan',
+          title: 'Iman yang Dewasa Itu Seperti Apa?',
+          icon: '✨',
+          estimatedMinutes: 5,
+          xpReward: 250,
+        ),
+      ],
+    ),
+    LearningCategory(
       id: 'rukun_islam',
       label: 'Rukun Islam',
       icon: '🕌',
@@ -389,6 +476,26 @@ class LearningContent {
         return _quran6Article;
       case 'alquran_1.11':
         return _quran7Article;
+      case 'why_4.1':
+        return _why1Article;
+      case 'why_4.2':
+        return _why2Article;
+      case 'why_4.3':
+        return _why3Article;
+      case 'why_4.4':
+        return _why4Article;
+      case 'why_4.5':
+        return _why5Article;
+      case 'why_4.6':
+        return _why6Article;
+      case 'why_4.7':
+        return _why7Article;
+      case 'why_4.8':
+        return _why8Article;
+      case 'why_4.9':
+        return _why9Article;
+      case 'why_4.10':
+        return _why10Article;
       case 'rukun_2.1':
         return _rukun2_1Article;
       case 'rukun_2.2':
@@ -440,6 +547,26 @@ class LearningContent {
         return _quran6Quiz;
       case 'alquran_1.11':
         return _quran7Quiz;
+      case 'why_4.1':
+        return _why1Quiz;
+      case 'why_4.2':
+        return _why2Quiz;
+      case 'why_4.3':
+        return _why3Quiz;
+      case 'why_4.4':
+        return _why4Quiz;
+      case 'why_4.5':
+        return _why5Quiz;
+      case 'why_4.6':
+        return _why6Quiz;
+      case 'why_4.7':
+        return _why7Quiz;
+      case 'why_4.8':
+        return _why8Quiz;
+      case 'why_4.9':
+        return _why9Quiz;
+      case 'why_4.10':
+        return _why10Quiz;
       case 'rukun_2.1':
         return _rukun2_1Quiz;
       case 'rukun_2.2':
@@ -3703,5 +3830,817 @@ const _quran7Quiz = <QuizQuestion>[
     correctIndex: 2,
     explanation:
         'Langkah sederhana yang dilakukan nyata lebih berarti untuk menumbuhkan iman.',
+  ),
+];
+
+const _why1Article = <ArticleBlock>[
+  Heading('Aku Muslim Karena Apa?'),
+  Paragraph(
+    'Banyak orang tumbuh sebagai Muslim karena keluarga dan lingkungan. Itu bukan kesalahan. Namun ketika dewasa, kita berhak memberi jawaban yang lebih sadar kepada diri sendiri.',
+  ),
+  Paragraph(
+    'Iman yang dipilih tidak berarti membenci masa lalu. Justru kita menghargai warisan baik, lalu memeriksanya dengan jujur: apa yang aku yakini, dan mengapa aku meyakininya?',
+  ),
+  Highlight(
+    '“Janganlah kamu mengikuti sesuatu yang tidak kamu ketahui.” — QS. Al-Isra 17:36',
+  ),
+  Paragraph(
+    'Bertanya bukan tanda durhaka. Pertanyaan yang jujur dapat menjadi pintu belajar, selama kita mau mencari jawaban dengan rendah hati.',
+  ),
+  Cta(
+    'Tulis satu pertanyaan tentang Islam yang selama ini kamu simpan. Mulailah mencari jawabannya, satu per satu.',
+  ),
+];
+
+const _why2Article = <ArticleBlock>[
+  Heading('Untuk Apa Aku Diciptakan?'),
+  Paragraph(
+    'Hidup mudah terasa kosong bila hanya mengejar nilai, pekerjaan, uang, atau pengakuan. Semua itu bisa baik, tetapi tidak cukup menjadi tujuan akhir.',
+  ),
+  Highlight(
+    '“Aku tidak menciptakan jin dan manusia melainkan agar mereka beribadah kepada-Ku.” — QS. Adz-Dzariyat 51:56',
+  ),
+  Paragraph(
+    'Ibadah bukan berarti hidup hanya di masjid. Saat niatnya benar, belajar, bekerja, menjaga keluarga, dan menolong orang dapat menjadi bagian dari penghambaan kepada Allah.',
+  ),
+  Paragraph(
+    'Tujuan hidup memberi arah: bukan “apa yang membuatku terlihat berhasil?”, tetapi “apa yang membuat hidupku bernilai di hadapan Allah?”',
+  ),
+  Cta(
+    'Pilih satu kegiatan rutin hari ini dan luruskan niatnya sebagai ibadah.',
+  ),
+];
+
+const _why3Article = <ArticleBlock>[
+  Heading('Kenapa Harus Salat Lima Waktu?'),
+  Paragraph(
+    'Salat bukan absensi untuk membuktikan Allah tahu kita patuh. Allah tidak membutuhkan salat kita; kitalah yang membutuhkan pengingat dan arah di tengah hidup yang ramai.',
+  ),
+  Highlight('“Dirikanlah salat untuk mengingat-Ku.” — QS. Taha 20:14'),
+  Paragraph(
+    'Lima waktu membuat kita berhenti sejenak: Subuh memulai hari, Zuhur mengoreksi arah, Asar mengingatkan waktu, Magrib menutup aktivitas, dan Isya menenangkan hati.',
+  ),
+  Paragraph(
+    'Kadang salat terasa hambar. Itu bukan alasan untuk menyerah; itu tanda kita perlu memperbaiki hadirnya hati sedikit demi sedikit.',
+  ),
+  Cta(
+    'Pada salat berikutnya, pahami satu kalimat yang kamu ucapkan. Mulai dari Al-Fatihah.',
+  ),
+];
+
+const _why4Article = <ArticleBlock>[
+  Heading('Kenapa Al-Quran Tidak Cukup Dibaca Saja?'),
+  Paragraph(
+    'Tilawah dan hafalan sangat mulia. Tetapi Al-Quran diturunkan sebagai petunjuk. Petunjuk baru menolong saat kita memahami arahnya dan mencoba menjalankannya.',
+  ),
+  Highlight(
+    '“Ini adalah kitab yang Kami turunkan penuh berkah agar mereka mentadabburi ayat-ayatnya.” — QS. Sad 38:29',
+  ),
+  Paragraph(
+    'Tadabbur tidak harus menunggu menjadi ahli tafsir. Mulailah dengan membaca terjemahan yang baik, melihat penjelasan tepercaya, lalu bertanya: apa yang ayat ini ubah dalam sikapku?',
+  ),
+  Paragraph(
+    'Satu ayat yang dipahami dan diamalkan dapat lebih membekas daripada banyak halaman yang lewat tanpa direnungkan.',
+  ),
+  Cta(
+    'Setelah tilawah hari ini, pilih satu ayat dan baca terjemahannya sebelum menutup mushaf.',
+  ),
+];
+
+const _why5Article = <ArticleBlock>[
+  Heading('Kenapa Ada Halal dan Haram? Apa Allah Membatasi Kita?'),
+  Paragraph(
+    'Batas sering terasa seperti penghalang. Padahal dalam hidup, banyak batas justru melindungi: aturan lalu lintas, pagar jurang, dan resep obat.',
+  ),
+  Paragraph(
+    'Halal dan haram membimbing manusia agar tidak diperbudak oleh keinginan sesaat. Batas ini menjaga iman, jiwa, akal, keluarga, dan harta.',
+  ),
+  Highlight(
+    '“Allah menghendaki kemudahan bagimu dan tidak menghendaki kesukaran bagimu.” — QS. Al-Baqarah 2:185',
+  ),
+  Paragraph(
+    'Tidak semua hikmah langsung terasa. Saat belum mengerti sebuah aturan, kita boleh belajar alasannya sambil tetap bersikap rendah hati di hadapan Allah.',
+  ),
+  Cta(
+    'Pilih satu aturan Islam yang terasa berat. Cari dulu hikmah dan cara menjalankannya secara bertahap.',
+  ),
+];
+
+const _why6Article = <ArticleBlock>[
+  Heading('Kalau Allah Baik, Kenapa Hidup Tetap Berat?'),
+  Paragraph(
+    'Kesulitan tidak selalu berarti Allah membenci kita. Dunia memang bukan tempat tanpa luka; ia tempat memilih, bertumbuh, dan kembali kepada Allah.',
+  ),
+  Highlight(
+    '“Kami pasti akan menguji kamu dengan sedikit ketakutan, kelaparan, kekurangan harta, jiwa, dan buah-buahan.” — QS. Al-Baqarah 2:155',
+  ),
+  Paragraph(
+    'Kita tidak perlu pura-pura kuat. Sedih, lelah, dan menangis adalah manusiawi. Sabar bukan menolak rasa sakit, tetapi tetap mencari jalan yang baik saat sakit itu ada.',
+  ),
+  Paragraph(
+    'Ujian juga bukan alasan menghakimi orang lain: “pasti dosanya banyak.” Kita tidak tahu seluruh cerita seseorang.',
+  ),
+  Cta(
+    'Saat sedang berat, sebutkan satu bantuan nyata yang bisa kamu lakukan hari ini, lalu iringi dengan doa.',
+  ),
+];
+
+const _why7Article = <ArticleBlock>[
+  Heading('Kenapa Doaku Belum Dikabulkan?'),
+  Paragraph(
+    'Doa bukan tombol instan. Doa adalah ibadah dan hubungan dengan Allah: kita meminta, berusaha, dan percaya bahwa Allah mengetahui yang kita belum tahu.',
+  ),
+  Highlight(
+    '“Aku mengabulkan permohonan orang yang berdoa apabila dia berdoa kepada-Ku.” — QS. Al-Baqarah 2:186',
+  ),
+  Paragraph(
+    'Jawaban doa bisa datang sesuai yang diminta, ditunda pada waktu yang lebih baik, atau diganti dengan perlindungan dan kebaikan lain. Kita tidak selalu melihat bentuknya segera.',
+  ),
+  Paragraph(
+    'Tetap berdoa tidak berarti pasif. Jika berdoa ingin lulus, tetap belajar. Jika berdoa sembuh, tetap mencari pertolongan yang tepat.',
+  ),
+  Cta(
+    'Ubah satu doa umum menjadi doa yang jujur dan spesifik, lalu tulis satu usaha yang menyertainya.',
+  ),
+];
+
+const _why8Article = <ArticleBlock>[
+  Heading('Kalau Semua Sudah Ditakdirkan, Kenapa Aku Harus Berusaha?'),
+  Paragraph(
+    'Takdir bukan alasan untuk berhenti memilih. Kita tidak mengetahui masa depan, tetapi kita diberi akal, kesempatan, dan tanggung jawab atas pilihan yang ada di depan kita.',
+  ),
+  Highlight(
+    '“Sesungguhnya Allah tidak akan mengubah keadaan suatu kaum sampai mereka mengubah keadaan yang ada pada diri mereka sendiri.” — QS. Ar-Ra’d 13:11',
+  ),
+  Paragraph(
+    'Tawakal bukan duduk diam. Tawakal adalah melakukan usaha yang benar, lalu menyerahkan hasil yang tidak bisa kita kendalikan kepada Allah.',
+  ),
+  Paragraph(
+    'Ketika hasil tidak sesuai harapan, kita boleh sedih. Namun kita tidak perlu menganggap usaha sia-sia; proses baik tetap membentuk diri kita.',
+  ),
+  Cta(
+    'Pilih satu hal yang bisa kamu usahakan minggu ini. Buat langkah pertama yang kecil dan jelas.',
+  ),
+];
+
+const _why9Article = <ArticleBlock>[
+  Heading('Kenapa Harus Bertobat Kalau Aku Terus Mengulang Salah?'),
+  Paragraph(
+    'Mengulang kesalahan memang melelahkan. Namun rasa malu kepada Allah seharusnya membawa kita kembali, bukan membuat kita putus asa.',
+  ),
+  Highlight(
+    '“Janganlah kamu berputus asa dari rahmat Allah.” — QS. Az-Zumar 39:53',
+  ),
+  Paragraph(
+    'Tobat yang jujur berarti mengakui salah, menyesal, berhenti sebisa mungkin, dan berniat memperbaiki diri. Jika jatuh lagi, bangun lagi dan cari akar masalahnya.',
+  ),
+  Paragraph(
+    'Perubahan sering membutuhkan lingkungan baik, batas yang jelas, dan bantuan orang tepercaya. Meminta bantuan bukan tanda iman lemah.',
+  ),
+  Cta(
+    'Kenali satu pemicu kesalahanmu. Ganti satu kebiasaan kecil yang membuatmu lebih aman hari ini.',
+  ),
+];
+
+const _why10Article = <ArticleBlock>[
+  Heading('Iman yang Dewasa Itu Seperti Apa?'),
+  Paragraph(
+    'Iman yang dewasa bukan berarti tidak pernah ragu, tidak pernah salah, atau paling banyak bicara agama. Iman dewasa membuat kita lebih jujur, rendah hati, dan bertanggung jawab.',
+  ),
+  Highlight(
+    '“Sesungguhnya yang paling mulia di antara kamu di sisi Allah ialah yang paling bertakwa.” — QS. Al-Hujurat 49:13',
+  ),
+  Paragraph(
+    'Orang beriman tetap belajar ketika belum tahu, meminta maaf ketika salah, dan berbuat baik ketika tidak ada yang melihat. Ia tidak memakai agama untuk merendahkan orang lain.',
+  ),
+  Paragraph(
+    'Iman bertumbuh melalui kebiasaan kecil yang dijaga: salat yang diperbaiki, ilmu yang dicari, kesalahan yang ditobati, dan kebaikan yang dilakukan.',
+  ),
+  Cta(
+    'Pilih satu tanda iman dewasa yang ingin kamu latih minggu ini: jujur, menjaga janji, atau lebih lembut kepada orang lain.',
+  ),
+];
+
+const _why1Quiz = <QuizQuestion>[
+  QuizQuestion(
+    question: 'Menjadi Muslim karena keluarga berarti...',
+    options: [
+      'Iman pasti tidak sah',
+      'Tidak boleh lagi bertanya',
+      'Bisa menjadi awal untuk belajar lebih sadar',
+      'Tidak perlu memeriksa keyakinan',
+    ],
+    correctIndex: 2,
+    explanation:
+        'Warisan keluarga dapat menjadi awal yang baik; iman juga perlu dipahami dan dipilih dengan sadar.',
+  ),
+  QuizQuestion(
+    question: 'Sikap sehat terhadap pertanyaan tentang Islam adalah...',
+    options: [
+      'Mencari jawaban dengan jujur dan rendah hati',
+      'Menyimpannya karena pasti salah',
+      'Mengolok orang yang bertanya',
+      'Hanya mencari jawaban yang disukai',
+    ],
+    correctIndex: 0,
+    explanation: 'Pertanyaan jujur dapat menjadi pintu belajar yang baik.',
+  ),
+  QuizQuestion(
+    question: 'QS. Al-Isra 17:36 mengingatkan agar kita...',
+    options: [
+      'Mengikuti semua kebiasaan',
+      'Tidak mengikuti sesuatu tanpa pengetahuan',
+      'Berhenti belajar agama',
+      'Menolak nasihat keluarga',
+    ],
+    correctIndex: 1,
+    explanation:
+        'Ayat ini mendorong sikap berilmu, bukan mengikuti tanpa dasar.',
+  ),
+  QuizQuestion(
+    question: 'Langkah awal yang disarankan artikel adalah...',
+    options: [
+      'Memenangkan debat',
+      'Menghafal semua jawaban',
+      'Menilai iman orang lain',
+      'Menulis satu pertanyaan yang disimpan',
+    ],
+    correctIndex: 3,
+    explanation: 'Satu pertanyaan yang jujur adalah awal belajar yang nyata.',
+  ),
+  QuizQuestion(
+    question: 'Iman yang dipilih secara sadar berarti...',
+    options: [
+      'Membenci didikan masa lalu',
+      'Menghargai warisan baik sambil memahaminya',
+      'Menolak semua tradisi',
+      'Tidak perlu guru',
+    ],
+    correctIndex: 1,
+    explanation:
+        'Belajar secara sadar tidak mengharuskan kita meremehkan keluarga atau tradisi baik.',
+  ),
+];
+
+const _why2Quiz = <QuizQuestion>[
+  QuizQuestion(
+    question: 'Menurut QS. Adz-Dzariyat 51:56, manusia diciptakan untuk...',
+    options: [
+      'Mencari pujian',
+      'Beribadah kepada Allah',
+      'Bersaing tanpa batas',
+      'Mengumpulkan harta',
+    ],
+    correctIndex: 1,
+    explanation:
+        'Ibadah adalah tujuan utama yang memberi arah pada seluruh hidup.',
+  ),
+  QuizQuestion(
+    question: 'Contoh kegiatan duniawi yang dapat bernilai ibadah adalah...',
+    options: [
+      'Belajar dengan niat yang baik',
+      'Mencari pujian',
+      'Menyakiti pesaing',
+      'Mengabaikan keluarga',
+    ],
+    correctIndex: 0,
+    explanation:
+        'Belajar, bekerja, dan menolong dapat bernilai ibadah bila niat dan caranya benar.',
+  ),
+  QuizQuestion(
+    question: 'Tujuan hidup membantu kita bertanya...',
+    options: [
+      'Apa yang membuatku terkenal?',
+      'Apa yang paling mudah?',
+      'Apa yang bernilai di hadapan Allah?',
+      'Apa yang orang lain harapkan?',
+    ],
+    correctIndex: 2,
+    explanation: 'Arah hidup Islam tidak berhenti pada pengakuan manusia.',
+  ),
+  QuizQuestion(
+    question: 'Ibadah dalam Islam hanya berarti...',
+    options: [
+      'Salat di masjid',
+      'Membaca buku agama',
+      'Berdiam diri',
+      'Tidak hanya ritual; aktivitas baik juga bisa bernilai ibadah',
+    ],
+    correctIndex: 3,
+    explanation: 'Ruang ibadah luas ketika niat dan caranya benar.',
+  ),
+  QuizQuestion(
+    question: 'Latihan praktis setelah artikel ini adalah...',
+    options: [
+      'Membandingkan tujuan hidup orang lain',
+      'Meluruskan niat satu kegiatan rutin',
+      'Menunda semua pekerjaan',
+      'Mencari aktivitas paling sulit',
+    ],
+    correctIndex: 1,
+    explanation:
+        'Niat yang baik menghubungkan kegiatan sehari-hari dengan tujuan hidup.',
+  ),
+];
+
+const _why3Quiz = <QuizQuestion>[
+  QuizQuestion(
+    question: 'Allah memerintahkan salat terutama agar kita...',
+    options: [
+      'Terlihat lebih baik',
+      'Mengingat-Nya',
+      'Tidak perlu bekerja',
+      'Menilai orang lain',
+    ],
+    correctIndex: 1,
+    explanation:
+        'QS. Taha 20:14 menyebut salat sebagai jalan untuk mengingat Allah.',
+  ),
+  QuizQuestion(
+    question: 'Salat lima waktu dapat dipahami sebagai...',
+    options: [
+      'Jeda untuk kembali sadar dan mengarahkan diri',
+      'Hukuman harian',
+      'Beban tanpa makna',
+      'Kompetisi ibadah',
+    ],
+    correctIndex: 0,
+    explanation:
+        'Salat memberi ruang berhenti dari kesibukan dan kembali mengingat Allah.',
+  ),
+  QuizQuestion(
+    question: 'Saat salat terasa hambar, sikap yang lebih baik adalah...',
+    options: [
+      'Langsung meninggalkannya',
+      'Menyalahkan orang lain',
+      'Mencari pemahaman dan memperbaiki kehadiran hati',
+      'Menganggapnya tidak penting',
+    ],
+    correctIndex: 2,
+    explanation:
+        'Rasa hambar dapat menjadi ajakan untuk memperbaiki kualitas salat perlahan.',
+  ),
+  QuizQuestion(
+    question:
+        'Latihan paling sederhana untuk menambah pemahaman salat adalah...',
+    options: [
+      'Mengganti semua bacaan',
+      'Membaca sangat cepat',
+      'Tidak perlu tahu arti',
+      'Memahami satu kalimat, misalnya Al-Fatihah',
+    ],
+    correctIndex: 3,
+    explanation:
+        'Memahami sedikit demi sedikit lebih realistis dan membangun hadirnya hati.',
+  ),
+  QuizQuestion(
+    question: 'Mengapa Allah tidak membutuhkan salat kita?',
+    options: [
+      'Karena Allah tidak mengetahui kita',
+      'Karena manfaat salat kembali kepada manusia',
+      'Karena salat hanya tradisi',
+      'Karena manusia tidak punya pilihan',
+    ],
+    correctIndex: 1,
+    explanation:
+        'Kita yang membutuhkan pengingat, arah, dan hubungan dengan Allah.',
+  ),
+];
+
+const _why4Quiz = <QuizQuestion>[
+  QuizQuestion(
+    question: 'Selain dibaca, Al-Quran diturunkan untuk...',
+    options: [
+      'Dijadikan hiasan saja',
+      'Dipahami dan menjadi petunjuk',
+      'Disimpan tanpa dibuka',
+      'Dibaca hanya saat lomba',
+    ],
+    correctIndex: 1,
+    explanation:
+        'Al-Quran adalah petunjuk yang perlu dibaca, dipahami, dan diamalkan.',
+  ),
+  QuizQuestion(
+    question: 'Tadabbur Al-Quran berarti...',
+    options: [
+      'Merenungkan makna dan dampak ayat',
+      'Menghafal tanpa arti',
+      'Membaca paling cepat',
+      'Memilih ayat yang mudah saja',
+    ],
+    correctIndex: 0,
+    explanation:
+        'Tadabbur mengajak kita memperhatikan pesan ayat bagi kehidupan.',
+  ),
+  QuizQuestion(
+    question: 'Untuk mulai memahami Al-Quran, seseorang...',
+    options: [
+      'Harus menunggu jadi ahli tafsir',
+      'Tidak boleh membaca terjemahan',
+      'Bisa membaca terjemahan dan penjelasan tepercaya',
+      'Cukup menghafal judul surah',
+    ],
+    correctIndex: 2,
+    explanation:
+        'Belajar dasar dengan sumber tepercaya adalah langkah awal yang baik.',
+  ),
+  QuizQuestion(
+    question: 'QS. Sad 38:29 menyebut Al-Quran diturunkan agar...',
+    options: [
+      'Menjadi koleksi pribadi',
+      'Tidak ada yang bertanya',
+      'Hanya didengar tanpa dipahami',
+      'Ayat-ayatnya ditadabburi',
+    ],
+    correctIndex: 3,
+    explanation: 'Ayat tersebut menekankan perenungan terhadap Al-Quran.',
+  ),
+  QuizQuestion(
+    question: 'Langkah sesudah tilawah yang dianjurkan adalah...',
+    options: [
+      'Menutup mushaf secepatnya',
+      'Memilih satu ayat dan membaca terjemahannya',
+      'Menilai bacaan orang lain',
+      'Menghindari pertanyaan',
+    ],
+    correctIndex: 1,
+    explanation:
+        'Satu ayat yang dipahami dapat lebih membekas dalam sikap sehari-hari.',
+  ),
+];
+
+const _why5Quiz = <QuizQuestion>[
+  QuizQuestion(
+    question: 'Perumpamaan yang tepat untuk halal dan haram adalah...',
+    options: [
+      'Penghalang tanpa tujuan',
+      'Pagar yang dapat melindungi dari jurang',
+      'Aturan agar hidup lebih rumit',
+      'Cara merendahkan manusia',
+    ],
+    correctIndex: 1,
+    explanation:
+        'Batas dapat berfungsi sebagai perlindungan, seperti pagar di tempat berbahaya.',
+  ),
+  QuizQuestion(
+    question: 'Batas dalam Islam membantu menjaga...',
+    options: [
+      'Keinginan sesaat saja',
+      'Pujian manusia',
+      'Iman, jiwa, akal, keluarga, dan harta',
+      'Persaingan antarorang',
+    ],
+    correctIndex: 2,
+    explanation:
+        'Aturan halal-haram mengarahkan manusia kepada kemaslahatan yang lebih luas.',
+  ),
+  QuizQuestion(
+    question:
+        'Saat belum memahami hikmah sebuah aturan, sikap yang baik adalah...',
+    options: [
+      'Mengejek aturannya',
+      'Menganggap semua orang salah',
+      'Menyebarkan informasi tanpa cek',
+      'Belajar alasannya dengan rendah hati',
+    ],
+    correctIndex: 3,
+    explanation:
+        'Belajar dan rendah hati membantu kita memahami aturan dengan lebih matang.',
+  ),
+  QuizQuestion(
+    question: 'QS. Al-Baqarah 2:185 menyebut Allah menghendaki...',
+    options: [
+      'Kemudahan bagi manusia',
+      'Kesulitan bagi manusia',
+      'Manusia tidak punya pilihan',
+      'Aturan tanpa hikmah',
+    ],
+    correctIndex: 0,
+    explanation:
+        'Ayat ini mengingatkan bahwa Allah menghendaki kemudahan, bukan kesukaran.',
+  ),
+  QuizQuestion(
+    question: 'Langkah praktis ketika suatu aturan terasa berat adalah...',
+    options: [
+      'Langsung menyerah',
+      'Menghakimi yang mampu',
+      'Mencari hikmah dan cara bertahap menjalaninya',
+      'Menyembunyikan pertanyaan',
+    ],
+    correctIndex: 2,
+    explanation:
+        'Pendekatan bertahap membantu perubahan menjadi lebih nyata dan bertahan.',
+  ),
+];
+
+const _why6Quiz = <QuizQuestion>[
+  QuizQuestion(
+    question: 'Kesulitan hidup selalu berarti...',
+    options: [
+      'Allah membenci kita',
+      'Kita manusia yang gagal',
+      'Tidak selalu berarti Allah membenci kita',
+      'Tidak boleh meminta bantuan',
+    ],
+    correctIndex: 2,
+    explanation:
+        'Kesulitan adalah bagian dari dunia dan bisa menjadi ruang untuk bertumbuh serta kembali kepada Allah.',
+  ),
+  QuizQuestion(
+    question: 'Sabar yang sehat bukan...',
+    options: [
+      'Mengakui rasa sakit sambil mencari jalan baik',
+      'Menolak semua emosi dan pura-pura kuat',
+      'Tetap berusaha dalam keadaan sulit',
+      'Meminta pertolongan saat perlu',
+    ],
+    correctIndex: 1,
+    explanation: 'Sabar bukan meniadakan rasa sedih atau lelah.',
+  ),
+  QuizQuestion(
+    question: 'QS. Al-Baqarah 2:155 menyebut bahwa manusia akan...',
+    options: [
+      'Selalu bebas dari masalah',
+      'Tidak pernah takut',
+      'Mendapat semua yang diinginkan',
+      'Diuji dengan berbagai bentuk kekurangan',
+    ],
+    correctIndex: 3,
+    explanation:
+        'Ayat ini mengingatkan bahwa ujian adalah bagian dari kehidupan.',
+  ),
+  QuizQuestion(
+    question: 'Sikap terhadap orang yang sedang diuji adalah...',
+    options: [
+      'Tidak menghakimi seolah tahu semua dosanya',
+      'Menganggap ia pasti kurang iman',
+      'Membandingkan luka kita dengannya',
+      'Menjauhinya',
+    ],
+    correctIndex: 0,
+    explanation:
+        'Kita tidak mengetahui seluruh kisah dan beban hidup seseorang.',
+  ),
+  QuizQuestion(
+    question: 'Saat kondisi sedang berat, langkah yang dianjurkan adalah...',
+    options: [
+      'Menutup diri total',
+      'Mencari satu bantuan nyata dan berdoa',
+      'Menyalahkan diri tanpa henti',
+      'Menolak semua dukungan',
+    ],
+    correctIndex: 1,
+    explanation: 'Doa dan tindakan nyata dapat berjalan bersama.',
+  ),
+];
+
+const _why7Quiz = <QuizQuestion>[
+  QuizQuestion(
+    question: 'Doa bukan...',
+    options: [
+      'Ibadah dan hubungan dengan Allah',
+      'Tombol instan untuk semua permintaan',
+      'Permintaan yang disertai usaha',
+      'Tempat menyampaikan harapan',
+    ],
+    correctIndex: 1,
+    explanation:
+        'Doa tidak menjadikan manusia pasif atau menjamin hasil hadir sesuai waktu kita.',
+  ),
+  QuizQuestion(
+    question: 'Jika berdoa ingin lulus, tindakan yang tepat adalah...',
+    options: [
+      'Tetap belajar dan menyiapkan diri',
+      'Tidak perlu belajar lagi',
+      'Hanya menunggu hasil',
+      'Menyalahkan orang lain',
+    ],
+    correctIndex: 0,
+    explanation: 'Doa dan ikhtiar berjalan bersama.',
+  ),
+  QuizQuestion(
+    question: 'Salah satu bentuk jawaban doa yang mungkin adalah...',
+    options: [
+      'Selalu persis sesuai waktu kita',
+      'Tidak pernah ada kebaikan lain',
+      'Diberi pada waktu yang lebih baik',
+      'Membuat kita berhenti berusaha',
+    ],
+    correctIndex: 2,
+    explanation: 'Allah mengetahui hal yang tidak selalu kita lihat saat ini.',
+  ),
+  QuizQuestion(
+    question: 'QS. Al-Baqarah 2:186 menyampaikan bahwa Allah...',
+    options: [
+      'Jauh dari hamba yang berdoa',
+      'Tidak mendengar permintaan',
+      'Hanya menerima doa orang sempurna',
+      'Mengabulkan permohonan orang yang berdoa',
+    ],
+    correctIndex: 3,
+    explanation:
+        'Ayat ini menegaskan kedekatan Allah kepada orang yang berdoa.',
+  ),
+  QuizQuestion(
+    question: 'Latihan setelah artikel ini adalah...',
+    options: [
+      'Mengubah doa menjadi lebih jujur dan spesifik',
+      'Berhenti menyebut harapan',
+      'Hanya meminta tanpa berusaha',
+      'Membandingkan doa dengan orang lain',
+    ],
+    correctIndex: 0,
+    explanation:
+        'Doa yang jujur membantu kita mengenali kebutuhan dan langkah nyata.',
+  ),
+];
+
+const _why8Quiz = <QuizQuestion>[
+  QuizQuestion(
+    question: 'Takdir bukan alasan untuk...',
+    options: [
+      'Berhenti memilih dan berusaha',
+      'Berdoa kepada Allah',
+      'Belajar dari kegagalan',
+      'Membuat rencana baik',
+    ],
+    correctIndex: 0,
+    explanation:
+        'Kita tidak mengetahui masa depan, tetapi bertanggung jawab atas pilihan hari ini.',
+  ),
+  QuizQuestion(
+    question: 'Tawakal berarti...',
+    options: [
+      'Diam tanpa usaha',
+      'Berusaha dengan benar lalu menyerahkan hasil kepada Allah',
+      'Memastikan semua hasil sesuai keinginan',
+      'Menyalahkan takdir',
+    ],
+    correctIndex: 1,
+    explanation: 'Tawakal menyatukan ikhtiar dan penyerahan diri kepada Allah.',
+  ),
+  QuizQuestion(
+    question:
+        'QS. Ar-Ra’d 13:11 mengajarkan bahwa Allah tidak mengubah keadaan suatu kaum sampai...',
+    options: [
+      'Mereka menunggu tanpa bergerak',
+      'Semua orang setuju',
+      'Mereka berhenti berusaha',
+      'Mereka mengubah keadaan diri mereka',
+    ],
+    correctIndex: 3,
+    explanation: 'Ayat ini mendorong perubahan dari diri sendiri.',
+  ),
+  QuizQuestion(
+    question:
+        'Saat hasil usaha tidak sesuai harapan, sikap yang tepat adalah...',
+    options: [
+      'Menganggap seluruh usaha sia-sia',
+      'Tidak boleh merasa sedih',
+      'Belajar dari proses dan tetap mengambil langkah baik',
+      'Menyalahkan semua orang',
+    ],
+    correctIndex: 2,
+    explanation:
+        'Hasil bukan satu-satunya nilai; proses baik juga membentuk diri.',
+  ),
+  QuizQuestion(
+    question: 'Contoh langkah pertama yang baik adalah...',
+    options: [
+      'Menunggu sampai yakin seratus persen',
+      'Membuat satu langkah kecil yang jelas minggu ini',
+      'Mengabaikan semua masalah',
+      'Meminta orang lain mengerjakan semuanya',
+    ],
+    correctIndex: 1,
+    explanation:
+        'Langkah kecil yang dilakukan lebih berarti daripada rencana tanpa tindakan.',
+  ),
+];
+
+const _why9Quiz = <QuizQuestion>[
+  QuizQuestion(
+    question: 'Saat mengulang kesalahan, rasa malu kepada Allah seharusnya...',
+    options: [
+      'Membuat kita putus asa',
+      'Membawa kita kembali dan memperbaiki diri',
+      'Membuat kita menyalahkan orang lain',
+      'Membuat kita berhenti berdoa',
+    ],
+    correctIndex: 1,
+    explanation: 'Rasa bersalah yang sehat mendorong tobat, bukan putus asa.',
+  ),
+  QuizQuestion(
+    question: 'QS. Az-Zumar 39:53 melarang kita...',
+    options: [
+      'Belajar dari kesalahan',
+      'Meminta maaf',
+      'Berputus asa dari rahmat Allah',
+      'Mencari lingkungan baik',
+    ],
+    correctIndex: 2,
+    explanation:
+        'Rahmat Allah adalah alasan untuk terus kembali dan memperbaiki diri.',
+  ),
+  QuizQuestion(
+    question: 'Tobat yang jujur mencakup...',
+    options: [
+      'Menutupi semua kesalahan tanpa berubah',
+      'Menyalahkan keadaan',
+      'Mengulangi kesalahan dengan sengaja',
+      'Menyesal, berhenti sebisa mungkin, dan berniat memperbaiki',
+    ],
+    correctIndex: 3,
+    explanation: 'Tobat adalah arah kembali yang diwujudkan melalui perubahan.',
+  ),
+  QuizQuestion(
+    question:
+        'Jika sering terjatuh pada kesalahan yang sama, langkah tambahan yang baik adalah...',
+    options: [
+      'Mencari pemicu dan lingkungan pendukung',
+      'Menganggap tobat tidak berguna',
+      'Menyembunyikan semua masalah sendirian',
+      'Tidak perlu membuat batas',
+    ],
+    correctIndex: 0,
+    explanation:
+        'Mengenali pemicu membantu kita membuat perubahan yang lebih nyata.',
+  ),
+  QuizQuestion(
+    question:
+        'Meminta bantuan orang tepercaya ketika berusaha berubah berarti...',
+    options: [
+      'Tanda iman lemah',
+      'Tanda putus asa',
+      'Langkah yang dapat membantu perubahan',
+      'Tidak perlu tobat',
+    ],
+    correctIndex: 2,
+    explanation:
+        'Dukungan dan batas yang sehat dapat membantu proses perubahan.',
+  ),
+];
+
+const _why10Quiz = <QuizQuestion>[
+  QuizQuestion(
+    question: 'Iman yang dewasa bukan berarti...',
+    options: [
+      'Selalu ingin belajar',
+      'Tidak pernah salah atau ragu',
+      'Lebih rendah hati',
+      'Bertanggung jawab',
+    ],
+    correctIndex: 1,
+    explanation:
+        'Manusia tetap bisa salah dan ragu; kedewasaan terlihat dari cara meresponsnya.',
+  ),
+  QuizQuestion(
+    question: 'Salah satu tanda iman dewasa adalah...',
+    options: [
+      'Memakai agama untuk merendahkan orang lain',
+      'Merasa paling tahu',
+      'Meminta maaf ketika salah',
+      'Mengabaikan janji',
+    ],
+    correctIndex: 2,
+    explanation:
+        'Mengakui kesalahan dan memperbaikinya adalah bentuk tanggung jawab.',
+  ),
+  QuizQuestion(
+    question:
+        'QS. Al-Hujurat 49:13 menyebut yang paling mulia di sisi Allah adalah...',
+    options: [
+      'Yang paling bertakwa',
+      'Yang paling terkenal',
+      'Yang paling kaya',
+      'Yang paling banyak dipuji',
+    ],
+    correctIndex: 0,
+    explanation:
+        'Kemuliaan di sisi Allah diukur dengan takwa, bukan status dunia.',
+  ),
+  QuizQuestion(
+    question: 'Iman yang dewasa tampak saat seseorang...',
+    options: [
+      'Baik hanya ketika dilihat',
+      'Selalu memenangkan perdebatan',
+      'Tidak pernah meminta bantuan',
+      'Berbuat baik meski tidak ada yang melihat',
+    ],
+    correctIndex: 3,
+    explanation:
+        'Keikhlasan terlihat ketika kebaikan tidak bergantung pada pengakuan manusia.',
+  ),
+  QuizQuestion(
+    question: 'Kebiasaan kecil untuk menumbuhkan iman dewasa adalah...',
+    options: [
+      'Menjaga janji dan bersikap lebih lembut',
+      'Menunggu menjadi sempurna',
+      'Mencari kesalahan orang lain',
+      'Hanya bicara tentang agama',
+    ],
+    correctIndex: 0,
+    explanation:
+        'Iman bertumbuh melalui akhlak dan kebiasaan kecil yang konsisten.',
   ),
 ];
