@@ -436,10 +436,17 @@ class _HomeTabState extends State<HomeTab> {
                   color: AppColors.surfaceContainerHigh,
                   borderRadius: BorderRadius.circular(AppRadius.pill),
                 ),
-                child: FractionallySizedBox(
-                  alignment: Alignment.centerLeft,
-                  widthFactor: info.progress.clamp(0.0, 1.0),
+                child: TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0, end: info.progress.clamp(0.0, 1.0)),
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeOutCubic,
+                  builder: (context, progress, child) => FractionallySizedBox(
+                    alignment: Alignment.centerLeft,
+                    widthFactor: progress,
+                    child: child,
+                  ),
                   child: Container(
+                    key: const Key('home-xp-progress-fill'),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [tier.inkPrimary, tier.inkSecondary],
