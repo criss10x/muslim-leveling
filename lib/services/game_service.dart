@@ -686,6 +686,23 @@ class GameService {
     return changed ? state.copyWith(perPrayerStreaks: restored) : state;
   }
 
+  /// Restores one wajib-prayer streak after today's log is removed.
+  static StreakState restorePrayerStreakAfterUnlog(
+    Iterable<PrayerLog> logs,
+    String prayer, {
+    StreakState? previous,
+  }) {
+    final saved = previous ?? StreakState();
+    final previousDate = logs
+        .where((log) => log.prayer == prayer && log.type == 'wajib')
+        .map((log) => log.date)
+        .fold<String>('', (latest, date) => date.compareTo(latest) > 0 ? date : latest);
+    return saved.copyWith(
+      current: (saved.current - 1).clamp(0, 999999),
+      lastDate: previousDate,
+    );
+  }
+
   /// ponytail: Jumat weekly streak — 7-day gap check instead of yesterday.
   static StreakState _updWeeklyStreak(StreakState s, String today) {
     if (s.lastDate == today) return s;
@@ -1094,10 +1111,10 @@ class GameService {
     var tilawah = _cache.tilawahStreak;
 
     if (logItem.type == 'wajib' && wajibList.contains(prayer)) {
-      final s = pstr[prayer] ?? StreakState();
-      pstr[prayer] = s.copyWith(
-        current: (s.current - 1).clamp(0, 999999),
-        lastDate: '',
+      pstr[prayer] = restorePrayerStreakAfterUnlog(
+        updatedLogs,
+        prayer,
+        previous: pstr[prayer],
       );
     }
     if (wasFullBefore) {

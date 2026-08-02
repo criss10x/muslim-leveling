@@ -54,4 +54,34 @@ void main() {
     expect(restored.perPrayerStreaks['subuh']!.current, 8);
     expect(restored.perPrayerStreaks['subuh']!.best, 12);
   });
+
+  test(
+    'rebuild streak kembali ke hari sebelumnya setelah catatan hari ini dihapus',
+    () {
+      final remainingLogs = [
+        PrayerLog(
+          date: '2026-07-01',
+          prayer: 'subuh',
+          time: '04:45',
+          type: 'wajib',
+        ),
+        PrayerLog(
+          date: '2026-07-02',
+          prayer: 'subuh',
+          time: '04:44',
+          type: 'wajib',
+        ),
+      ];
+
+      final rebuilt = GameService.restorePrayerStreakAfterUnlog(
+        remainingLogs,
+        'subuh',
+        previous: StreakState(current: 3, best: 3, lastDate: '2026-07-03'),
+      );
+
+      expect(rebuilt.current, 2);
+      expect(rebuilt.best, 3);
+      expect(rebuilt.lastDate, '2026-07-02');
+    },
+  );
 }

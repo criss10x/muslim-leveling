@@ -1798,16 +1798,29 @@ class _ProfilTabState extends State<ProfilTab> {
     await AchievementService.load(force: true);
 
     // Always push merged result so cloud catches up (signed-in only).
-    await SupabaseSync.saveGame(GameService.current.toMap());
-    await SupabaseSync.saveLearning(LearningService.current.toMap());
-    await SupabaseSync.saveAchievements({
+    final gameSaved = await SupabaseSync.saveGame(GameService.current.toMap());
+    final learningSaved = await SupabaseSync.saveLearning(
+      LearningService.current.toMap(),
+    );
+    final achievementsSaved = await SupabaseSync.saveAchievements({
       'unlocked': mergedAch,
       'ts': DateTime.now().toUtc().toIso8601String(),
     });
+    final backupSaved = SupabaseSync.allSaved([
+      gameSaved,
+      learningSaved,
+      achievementsSaved,
+    ]);
 
     if (!mounted) return;
     setState(() {});
     await _loadProfile();
+    if (!backupSaved) {
+      _showSettingSnackbar(
+        '⚠️ Login berhasil, tetapi backup belum tersimpan. Cek koneksi lalu coba login lagi.',
+      );
+      return;
+    }
     _showSettingSnackbar(
       hasRemote
           ? '☁️ Login OK — progress digabung (XP tertinggi + achievement digabung).'

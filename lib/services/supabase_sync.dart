@@ -47,6 +47,9 @@ class SupabaseSync {
   static Future<bool> saveAchievements(Map<String, dynamic> data) =>
       _upsert({'achievements': data});
 
+  static bool allSaved(Iterable<bool> results) =>
+      results.every((saved) => saved);
+
   static Future<Map<String, dynamic>?> load() async {
     if (!canSync) return null;
     final c = _client;
