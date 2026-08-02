@@ -444,20 +444,6 @@ class _BelajarResultScreenState extends State<BelajarResultScreen>
               color: AppColors.tertiary,
             ),
           ),
-        if (_passed)
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton(
-              onPressed: () { Navigator.of(context).pop(); Navigator.of(context).pop(); },
-              style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.onSurfaceVariant,
-                side: BorderSide(color: AppColors.outlineVariant),
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-              child: Text('BALIK KE ARTIKEL', style: AppText.labelCaps()),
-            ),
-          ),
       ],
     );
   }
