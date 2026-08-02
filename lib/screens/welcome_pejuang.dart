@@ -3,9 +3,55 @@ import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import 'character_creation.dart';
 
-/// Welcome Pejuang — onboarding hero with 3 feature cards + start button.
-class WelcomePejuangScreen extends StatelessWidget {
+/// First-use mission briefing with a compact, gamified introduction.
+class WelcomePejuangScreen extends StatefulWidget {
   const WelcomePejuangScreen({super.key});
+
+  @override
+  State<WelcomePejuangScreen> createState() => _WelcomePejuangScreenState();
+}
+
+class _WelcomePejuangScreenState extends State<WelcomePejuangScreen>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _entryCtl;
+
+  @override
+  void initState() {
+    super.initState();
+    _entryCtl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 710),
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    _entryCtl.dispose();
+    super.dispose();
+  }
+
+  Animation<double> _fade(double start, double end) => CurvedAnimation(
+    parent: _entryCtl,
+    curve: Interval(start, end, curve: Curves.easeOutCubic),
+  );
+
+  Widget _enter({
+    required Widget child,
+    required double start,
+    required double end,
+  }) {
+    final animation = _fade(start, end);
+    return FadeTransition(
+      opacity: animation,
+      child: SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(0, 0.04),
+          end: Offset.zero,
+        ).animate(animation),
+        child: child,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,49 +62,59 @@ class WelcomePejuangScreen extends StatelessWidget {
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               children: [
                 const SizedBox(height: AppSpacing.lg),
-                _header(),
-                const SizedBox(height: AppSpacing.xl),
-                _featureCard(
-                  icon: Icons.mosque_outlined,
-                  title: 'Quest Sholat',
-                  description:
-                      'Selesaikan quest sholat wajib & sunnah setiap hari untuk dapat XP dan menjaga streak.',
-                  accent: AppColors.primary,
+                _enter(child: _header(), start: 0, end: 0.4),
+                const SizedBox(height: AppSpacing.lg),
+                _enter(
+                  start: 0.3,
+                  end: 0.55,
+                  child: _benefit(
+                    Icons.mosque_outlined,
+                    'Quest Sholat',
+                    'Sholat → XP → streak',
+                    AppColors.primary,
+                  ),
                 ),
                 const SizedBox(height: AppSpacing.sm),
-                _featureCard(
-                  icon: Icons.menu_book_outlined,
-                  title: 'Belajar yang Fun',
-                  description:
-                      'Pelajari materi Islam melalui artikel & quiz interaktif yang menyenangkan.',
-                  accent: AppColors.tertiary,
+                _enter(
+                  start: 0.4,
+                  end: 0.65,
+                  child: _benefit(
+                    Icons.menu_book_outlined,
+                    'Belajar Islam',
+                    'Artikel & quiz Islam',
+                    AppColors.tertiary,
+                  ),
                 ),
                 const SizedBox(height: AppSpacing.sm),
-                _featureCard(
-                  icon: Icons.military_tech_outlined,
-                  title: 'Badge & Achievement',
-                  description:
-                      'Kumpulkan badge dan capai rank tertinggi sebagai pejuang muslim.',
-                  accent: AppColors.secondaryContainer,
+                _enter(
+                  start: 0.5,
+                  end: 0.75,
+                  child: _benefit(
+                    Icons.military_tech_outlined,
+                    'Raih Badge',
+                    'Konsisten, raih badge',
+                    AppColors.secondaryContainer,
+                  ),
                 ),
-                const SizedBox(height: AppSpacing.xl),
-                HeroButton(
-                  label: 'MULAI PETUALANGAN',
-                  trailingIcon: Icons.arrow_forward,
-                  onPressed: () {
-                    Navigator.of(context).push(
+                const SizedBox(height: AppSpacing.lg),
+                _enter(
+                  start: 0.65,
+                  end: 1,
+                  child: HeroButton(
+                    label: 'MULAI MISI PERTAMA',
+                    trailingIcon: Icons.arrow_forward,
+                    onPressed: () => Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => const CharacterCreationScreen(),
                       ),
-                    );
-                  },
+                    ),
+                  ),
                 ),
                 const SizedBox(height: AppSpacing.sm),
                 Text(
-                  'Fun way to 100% fokus istiqomah.',
+                  'Pelan-pelan, yang penting istiqomah.',
                   style: AppText.bodyMd().copyWith(
                     color: AppColors.onSurfaceVariant,
                   ),
@@ -78,21 +134,18 @@ class WelcomePejuangScreen extends StatelessWidget {
     return Column(
       children: [
         Container(
-          width: 80,
-          height: 80,
+          width: 72,
+          height: 72,
           decoration: BoxDecoration(
             color: AppColors.surfaceContainer,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: AppColors.primary.withValues(alpha: 0.3),
-              width: 2,
-            ),
+            borderRadius: BorderRadius.circular(AppRadius.xl),
+            border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
             boxShadow: light
                 ? null
                 : [
                     BoxShadow(
-                      color: AppColors.primary.withValues(alpha: 0.15),
-                      blurRadius: 30,
+                      color: AppColors.primary.withValues(alpha: 0.18),
+                      blurRadius: 18,
                     ),
                   ],
           ),
@@ -100,111 +153,52 @@ class WelcomePejuangScreen extends StatelessWidget {
             colorFilter: ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
             child: Image.asset(
               'assets/images/logo_mark.png',
-              width: 48,
-              height: 48,
+              width: 44,
+              height: 44,
             ),
           ),
         ),
         const SizedBox(height: AppSpacing.md),
-        // Light: solid ink. Dark: gradient mask (neon chrome).
-        if (light) ...[
-          Text(
-            'MUSLIM',
-            style: AppText.displayHero(32).copyWith(
-              color: AppColors.onSurface,
-              height: 38 / 32,
-            ),
-          ),
-          Text(
-            'LEVELING',
-            style: AppText.displayHero(32).copyWith(
-              color: AppColors.primary,
-              height: 38 / 32,
-            ),
-          ),
-        ] else ...[
-          ShaderMask(
-            shaderCallback: (rect) => LinearGradient(
-              colors: [AppColors.onSurface, AppColors.onSurfaceVariant],
-            ).createShader(rect),
-            child: Text(
-              'MUSLIM',
-              style: AppText.displayHero(32).copyWith(
-                color: Colors.white,
-                height: 38 / 32,
-              ),
-            ),
-          ),
-          ShaderMask(
-            shaderCallback: (rect) => LinearGradient(
-              colors: [AppColors.primary, AppColors.tertiary],
-            ).createShader(rect),
-            child: Text(
-              'LEVELING',
-              style: AppText.displayHero(32).copyWith(
-                color: Colors.white,
-                height: 38 / 32,
-              ),
-            ),
-          ),
-        ],
+        Text(
+          'SELAMAT DATANG',
+          style: AppText.displayHero(30).copyWith(color: AppColors.onSurface),
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        Text(
+          'Mulai perjalanan baikmu hari ini.',
+          style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
+        ),
       ],
     );
   }
 
-  Widget _featureCard({
-    required IconData icon,
-    required String title,
-    required String description,
-    required Color accent,
-  }) {
+  Widget _benefit(IconData icon, String title, String copy, Color accent) {
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.md),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.sm,
+      ),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainer.withValues(alpha: 0.6),
-        borderRadius: BorderRadius.circular(AppRadius.xl),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
         border: Border.all(color: accent.withValues(alpha: 0.2)),
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 4,
-            height: 36,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [accent, accent.withValues(alpha: 0)],
-              ),
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          const SizedBox(width: AppSpacing.md),
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(AppRadius.lg),
-              border: Border.all(color: AppColors.outlineVariant),
-            ),
-            child: Icon(icon, color: accent, size: 24),
-          ),
-          const SizedBox(width: AppSpacing.md),
+          Icon(icon, color: accent, size: 22),
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(flex: 2, child: Text(title, style: AppText.titleLg())),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: AppText.titleLg()),
-                const SizedBox(height: AppSpacing.xs),
-                Text(
-                  description,
-                  style: AppText.bodyMd().copyWith(
-                    color: AppColors.onSurfaceVariant,
-                  ),
-                ),
-              ],
+            flex: 3,
+            child: Text(
+              copy,
+              style: AppText.bodyMd().copyWith(
+                color: AppColors.onSurfaceVariant,
+                fontSize: 12,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.right,
             ),
           ),
         ],
