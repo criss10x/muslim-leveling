@@ -7,7 +7,7 @@ import 'welcome_pejuang.dart';
 import 'dashboard_shell.dart';
 
 /// Splash screen — pulsing shield + animated loading bar.
-/// Mirrors splash_screen_animated_loading_sequence.
+/// Logo, copy, and progress enter once before routing.
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -17,61 +17,66 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
-  late final AnimationController _pulseCtl;
+  late final AnimationController _entryCtl;
   late final AnimationController _barCtl;
-  late final AnimationController _fadeCtl;
   Timer? _navTimer;
 
   @override
   void initState() {
     super.initState();
-    _pulseCtl = AnimationController(
+    _entryCtl = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2),
-    )..repeat(reverse: true);
+      duration: const Duration(milliseconds: 450),
+    )..forward();
     _barCtl = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 850),
     )..forward();
-    _fadeCtl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    );
-    _navTimer = Timer(const Duration(milliseconds: 1200), () async {
+    _navTimer = Timer(const Duration(milliseconds: 900), _navigate);
+  }
+
+  Future<void> _navigate() async {
+    var hasProfile = false;
+    try {
       if (mounted) {
         final prefs = await SharedPreferences.getInstance();
         final done = prefs.getBool('onboarding_done') ?? false;
         final nickname = prefs.getString('nickname');
-        final hasProfile = done && nickname != null && nickname.isNotEmpty;
-        _fadeCtl.forward().then((_) {
-          if (mounted) {
-            Navigator.of(context).pushReplacement(
-              PageRouteBuilder(
-                pageBuilder: (_, __, ___) => hasProfile
-                    ? const DashboardShell()
-                    : const WelcomePejuangScreen(),
-                transitionsBuilder: (_, anim, __, child) =>
-                    FadeTransition(opacity: anim, child: child),
-                transitionDuration: const Duration(milliseconds: 400),
-              ),
-            );
-          }
-        });
+        hasProfile = done && nickname != null && nickname.isNotEmpty;
       }
-    });
+    } catch (_) {
+      // ponytail: onboarding is the safe fallback when local prefs fail.
+    }
+    if (!mounted) return;
+    Navigator.of(context).pushReplacement(
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) =>
+            hasProfile ? const DashboardShell() : const WelcomePejuangScreen(),
+        transitionsBuilder: (_, anim, __, child) =>
+            FadeTransition(opacity: anim, child: child),
+        transitionDuration: const Duration(milliseconds: 200),
+      ),
+    );
   }
 
   @override
   void dispose() {
-    _pulseCtl.dispose();
+    _entryCtl.dispose();
     _barCtl.dispose();
-    _fadeCtl.dispose();
     _navTimer?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final logoEntry = CurvedAnimation(
+      parent: _entryCtl,
+      curve: const Interval(0, 0.4, curve: Curves.easeOutCubic),
+    );
+    final copyEntry = CurvedAnimation(
+      parent: _entryCtl,
+      curve: const Interval(0.27, 1, curve: Curves.easeOutCubic),
+    );
     return Scaffold(
       backgroundColor: AppColors.background,
       body: AmbientBackground(
@@ -81,85 +86,113 @@ class _SplashScreenState extends State<SplashScreen>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                AnimatedBuilder(
-                  animation: _pulseCtl,
-                  builder: (_, __) {
-                    final t = _pulseCtl.value;
-                    final light = isLightTheme;
-                    return Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        // Light: white raised card + hairline. Dark: surface + neon pulse.
-                        color: light
-                            ? AppColors.surfaceContainerLowest
-                            : AppColors.surfaceContainer,
-                        borderRadius: BorderRadius.circular(28),
-                        border: Border.all(
-                          color: light
-                              ? AppColors.primary
-                                  .withValues(alpha: 0.45 + 0.25 * t)
-                              : AppColors.primary
-                                  .withValues(alpha: 0.3 + 0.4 * t),
-                          width: light ? 1.5 : 2,
-                        ),
-                        // Glow pulse: dark-only. Light stays flat (Strava).
-                        boxShadow: light
-                            ? null
-                            : [
-                                BoxShadow(
-                                  color: AppColors.primary
-                                      .withValues(alpha: 0.15 + 0.4 * t),
-                                  blurRadius: 30,
-                                  spreadRadius: 4,
-                                ),
-                              ],
-                      ),
-                      child: ColorFiltered(
-                        colorFilter: ColorFilter.mode(
-                          AppColors.primary,
-                          BlendMode.srcIn,
-                        ),
-                        child: Image.asset(
-                          'assets/images/logo_mark.png',
-                          width: 64,
-                          height: 64,
-                        ),
-                      ),
-                    );
-                  },
+                FadeTransition(
+                  opacity: logoEntry,
+                  child: ScaleTransition(
+                    scale: Tween<double>(
+                      begin: 0.96,
+                      end: 1,
+                    ).animate(logoEntry),
+                    child: AnimatedBuilder(
+                      animation: _entryCtl,
+                      builder: (_, __) {
+                        final t = _entryCtl.value;
+                        final light = isLightTheme;
+                        return Container(
+                          key: const Key('splash-logo-card'),
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            // Light: white raised card + hairline. Dark: surface + neon pulse.
+                            color: light
+                                ? AppColors.surfaceContainerLowest
+                                : AppColors.surfaceContainer,
+                            borderRadius: BorderRadius.circular(28),
+                            border: Border.all(
+                              color: light
+                                  ? AppColors.primary.withValues(
+                                      alpha: 0.45 + 0.25 * t,
+                                    )
+                                  : AppColors.primary.withValues(
+                                      alpha: 0.3 + 0.2 * t,
+                                    ),
+                              width: light ? 1.5 : 2,
+                            ),
+                            // Glow pulse: dark-only. Light stays flat (Strava).
+                            boxShadow: light
+                                ? null
+                                : [
+                                    BoxShadow(
+                                      color: AppColors.primary.withValues(
+                                        alpha: 0.12 + 0.18 * t,
+                                      ),
+                                      blurRadius: 20,
+                                      spreadRadius: 2,
+                                    ),
+                                  ],
+                          ),
+                          child: ColorFiltered(
+                            colorFilter: ColorFilter.mode(
+                              AppColors.primary,
+                              BlendMode.srcIn,
+                            ),
+                            child: Image.asset(
+                              'assets/images/logo_mark.png',
+                              width: 64,
+                              height: 64,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ),
                 const SizedBox(height: AppSpacing.xl),
                 // Light: deep emerald ink title. Dark: neon gradient mask.
-                isLightTheme
-                    ? Text(
-                        'MUSLIM LEVELING',
-                        textAlign: TextAlign.center,
-                        style: AppText.displayHero(40).copyWith(
-                          color: AppColors.primary,
-                          letterSpacing: -0.5,
-                        ),
-                      )
-                    : ShaderMask(
-                        shaderCallback: (rect) => LinearGradient(
-                          colors: [AppColors.primary, AppColors.primaryFixed],
-                        ).createShader(rect),
-                        child: Text(
-                          'MUSLIM LEVELING',
-                          textAlign: TextAlign.center,
-                          style: AppText.displayHero(40).copyWith(
-                            color: Colors.white,
-                            letterSpacing: -0.5,
+                FadeTransition(
+                  opacity: copyEntry,
+                  child: SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0, 0.04),
+                      end: Offset.zero,
+                    ).animate(copyEntry),
+                    child: isLightTheme
+                        ? Text(
+                            'MUSLIM LEVELING',
+                            textAlign: TextAlign.center,
+                            style: AppText.displayHero(40).copyWith(
+                              color: AppColors.primary,
+                              letterSpacing: -0.5,
+                            ),
+                          )
+                        : ShaderMask(
+                            shaderCallback: (rect) => LinearGradient(
+                              colors: [
+                                AppColors.primary,
+                                AppColors.primaryFixed,
+                              ],
+                            ).createShader(rect),
+                            child: Text(
+                              'MUSLIM LEVELING',
+                              textAlign: TextAlign.center,
+                              style: AppText.displayHero(40).copyWith(
+                                color: Colors.white,
+                                letterSpacing: -0.5,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
+                  ),
+                ),
                 const SizedBox(height: AppSpacing.sm),
                 // Light: body ink for punch. onSurfaceVariant fades into canvas.
-                Text(
-                  'Level Up iman, Level Up Kehidupanmu',
-                  textAlign: TextAlign.center,
-                  style: AppText.bodyMd().copyWith(
-                    color: AppColors.onSurface,
+                FadeTransition(
+                  opacity: copyEntry,
+                  child: Text(
+                    'Level Up iman, Level Up Kehidupanmu',
+                    textAlign: TextAlign.center,
+                    style: AppText.bodyMd().copyWith(
+                      color: AppColors.onSurface,
+                    ),
                   ),
                 ),
                 const SizedBox(height: AppSpacing.xl),
@@ -180,7 +213,12 @@ class _SplashScreenState extends State<SplashScreen>
                           ),
                         ),
                         FractionallySizedBox(
-                          widthFactor: _barCtl.value,
+                          key: const Key('splash-progress-fill'),
+                          widthFactor: const Interval(
+                            0.35,
+                            1,
+                            curve: Curves.easeOutCubic,
+                          ).transform(_barCtl.value),
                           child: Container(
                             height: 4,
                             decoration: BoxDecoration(
@@ -200,8 +238,9 @@ class _SplashScreenState extends State<SplashScreen>
                                   ? null
                                   : [
                                       BoxShadow(
-                                        color: AppColors.primary
-                                            .withValues(alpha: 0.6),
+                                        color: AppColors.primary.withValues(
+                                          alpha: 0.6,
+                                        ),
                                         blurRadius: 8,
                                       ),
                                     ],
