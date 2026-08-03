@@ -549,7 +549,9 @@ class GameService {
       case 'rawatib_maghrib_ba_diyyah':
         return isAfter(now, t.maghrib) && isBefore(now, t.isya);
       case 'rawatib_isya_ba_diyyah':
-        return isAfter(now, t.isya) && isBefore(now, addMin(t.isya, 300));
+        // ponytail: pakai wrap-aware compare — addMin(isya, 300) bisa lewat
+        // tengah malam (mis. Isya 19:30 → 00:30), isBefore polos akan false.
+        return _isTimeBetweenWrap(now, t.isya, addMin(t.isya, 300));
       default:
         return true;
     }
@@ -576,10 +578,10 @@ class GameService {
     _ => 'Coba lagi nanti ya.',
   };
 
-  /// Batas akhir quest Subuh: 3 jam setelah adzan. Sholat lain terbuka
-  /// sampai ganti hari karena adzan berikutnya masih menyusul di hari yang
-  /// sama, sedangkan jeda Subuh → Dzuhur terlalu panjang untuk dibiarkan.
+  /// Batas akhir quest wajib: semua quest terkunci jam 03:00 (saat hari
+  /// berganti, lihat dailyDateKey). Subuh lebih ketat: +3 jam setelah adzan.
   static const subuhLockAfterMin = 180;
+  static const wajibDayEndHHmm = '03:00';
 
   // ponytail: test-only flag to bypass time-window for deterministic unit tests.
   static bool _testSkipTimeWindow = false;
@@ -588,21 +590,22 @@ class GameService {
   static bool isPrayerWindowOpen(String prayer, Timings t) {
     if (_testSkipTimeWindow) return true;
     final now = nowHHmm();
-    switch (prayer) {
-      case 'subuh':
-        return isAfter(now, t.subuh) &&
-            isBefore(now, addMin(t.subuh, subuhLockAfterMin));
-      case 'dzuhur':
-        return isAfter(now, t.dzuhur);
-      case 'ashar':
-        return isAfter(now, t.ashar);
-      case 'maghrib':
-        return isAfter(now, t.maghrib);
-      case 'isya':
-        return isAfter(now, t.isya);
-      default:
-        return true;
+    // ponytail: jam 00:00–02:59 masih dihitung hari kemarin (dailyDateKey) —
+    // bandingkan jam secara siklikal: terkunci di [03:00, adzan), terbuka
+    // dari adzan sampai <03:00.
+    final adzan = _adzanFor(prayer, t);
+    if (adzan.isEmpty || _inLockedSiklik(now, adzan)) return false;
+    if (prayer == 'subuh') {
+      return isBefore(now, addMin(adzan, subuhLockAfterMin));
     }
+    return true;
+  }
+
+  /// Locked window: [lockStart, adzan) — wrap tengah malam kalau perlu.
+  static bool _inLockedSiklik(String now, String adzan) {
+    final n = _toMin(now), a = _toMin(adzan), s = _toMin(wajibDayEndHHmm);
+    if (s < a) return n >= s && n < a;
+    return n >= s || n < a;
   }
 
   /// Alasan quest wajib terkunci — dipakai untuk toast di UI.
