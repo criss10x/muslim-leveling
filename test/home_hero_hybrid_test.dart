@@ -33,9 +33,46 @@ void main() {
         find.byKey(const Key('home-hero-card')),
       );
       final decoration = card.decoration! as BoxDecoration;
+      final backgroundFinder = find.descendant(
+        of: find.byKey(const Key('home-hero-card')),
+        matching: find.byWidgetPredicate((widget) {
+          if (widget is! DecoratedBox || widget.decoration is! BoxDecoration) {
+            return false;
+          }
+          final decoration = widget.decoration as BoxDecoration;
+          return decoration.gradient is RadialGradient &&
+              decoration.border != null;
+        }),
+      );
+      final background = tester.widget<DecoratedBox>(backgroundFinder);
+      final backgroundDecoration = background.decoration as BoxDecoration;
+      final pattern = tester.widget<CustomPaint>(
+        find.byKey(const Key('home-hero-pattern')),
+      );
       expect(decoration.boxShadow, isNull);
+      expect(
+        backgroundDecoration.borderRadius,
+        BorderRadius.circular(AppRadius.xl),
+      );
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is IgnorePointer && identical(widget.child, background),
+        ),
+        findsOneWidget,
+      );
       expect(find.byKey(const Key('home-hero-pattern')), findsOneWidget);
-      expect(find.byKey(const Key('home-rank-medallion')), findsOneWidget);
+      final medallionFinder = find.byKey(const Key('home-rank-medallion'));
+      final medallion = tester.widget<Container>(medallionFinder);
+      expect(medallionFinder, findsOneWidget);
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is IgnorePointer && identical(widget.child, medallion),
+        ),
+        findsOneWidget,
+      );
+      expect((pattern.painter as dynamic).opacity, 0.05);
       expect(find.text('CURRENT RANK'), findsOneWidget);
       expect(tester.takeException(), isNull);
     },
@@ -50,10 +87,14 @@ void main() {
       find.byKey(const Key('home-hero-card')),
     );
     final decoration = card.decoration! as BoxDecoration;
+    final pattern = tester.widget<CustomPaint>(
+      find.byKey(const Key('home-hero-pattern')),
+    );
     expect(decoration.boxShadow, hasLength(1));
     expect(find.byKey(const Key('home-hero-pattern')), findsOneWidget);
     expect(find.byKey(const Key('home-rank-medallion')), findsOneWidget);
     expect(find.byKey(const Key('home-xp-progress-fill')), findsOneWidget);
+    expect((pattern.painter as dynamic).opacity, 0.09);
     expect(tester.takeException(), isNull);
   });
 }

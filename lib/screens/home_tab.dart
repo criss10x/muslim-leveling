@@ -332,22 +332,25 @@ class _HomeTabState extends State<HomeTab> {
         child: Stack(
           children: [
             Positioned.fill(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceContainerLow,
-                  gradient: RadialGradient(
-                    center: Alignment.topRight,
-                    radius: 1.4,
-                    colors: [
-                      tier.inkPrimary.withValues(alpha: light ? 0.04 : 0.14),
-                      AppColors.surfaceContainerLow,
-                    ],
-                  ),
-                  border: Border.all(
-                    color: AppColors.primary.withValues(
-                      alpha: light ? 0.35 : 0.45,
+              child: IgnorePointer(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceContainerLow,
+                    gradient: RadialGradient(
+                      center: Alignment.topRight,
+                      radius: 1.4,
+                      colors: [
+                        tier.inkPrimary.withValues(alpha: light ? 0.04 : 0.14),
+                        AppColors.surfaceContainerLow,
+                      ],
                     ),
-                    width: light ? 1.0 : 1.5,
+                    borderRadius: BorderRadius.circular(AppRadius.xl),
+                    border: Border.all(
+                      color: AppColors.primary.withValues(
+                        alpha: light ? 0.35 : 0.45,
+                      ),
+                      width: light ? 1.0 : 1.5,
+                    ),
                   ),
                 ),
               ),
@@ -1847,54 +1850,56 @@ class _RankMedallion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExcludeSemantics(
-      child: Container(
-        key: const Key('home-rank-medallion'),
-        width: 68,
-        height: 68,
-        padding: const EdgeInsets.all(2),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: LinearGradient(
-            colors: [tier.inkPrimary, tier.inkSecondary],
-          ),
-          boxShadow: light
-              ? null
-              : [
-                  BoxShadow(
-                    color: tier.inkPrimary.withValues(alpha: 0.28),
-                    blurRadius: 12,
-                  ),
-                ],
-        ),
+      child: IgnorePointer(
         child: Container(
+          key: const Key('home-rank-medallion'),
+          width: 68,
+          height: 68,
+          padding: const EdgeInsets.all(2),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: AppColors.surfaceContainer,
+            gradient: LinearGradient(
+              colors: [tier.inkPrimary, tier.inkSecondary],
+            ),
+            boxShadow: light
+                ? null
+                : [
+                    BoxShadow(
+                      color: tier.inkPrimary.withValues(alpha: 0.28),
+                      blurRadius: 12,
+                    ),
+                  ],
           ),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              SizedBox.square(
-                dimension: 30,
-                child: CustomPaint(
-                  painter: _IslamicHeroPatternPainter(
-                    color: tier.inkPrimary,
-                    opacity: 1,
-                    singleStar: true,
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.surfaceContainer,
+            ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                SizedBox.square(
+                  dimension: 30,
+                  child: CustomPaint(
+                    painter: _IslamicHeroPatternPainter(
+                      color: tier.inkPrimary,
+                      opacity: 1,
+                      singleStar: true,
+                    ),
                   ),
                 ),
-              ),
-              Positioned(
-                bottom: 7,
-                child: Text(
-                  'LV $level',
-                  style: AppText.labelCapsSm().copyWith(
-                    color: AppColors.onSurfaceVariant,
-                    fontSize: 8,
+                Positioned(
+                  bottom: 7,
+                  child: Text(
+                    'LV $level',
+                    style: AppText.labelCapsSm().copyWith(
+                      color: AppColors.onSurfaceVariant,
+                      fontSize: 8,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

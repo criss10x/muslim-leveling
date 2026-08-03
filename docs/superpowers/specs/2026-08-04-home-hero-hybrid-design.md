@@ -64,4 +64,3 @@ Tidak ada asset bitmap, dependency, konfigurasi, service, atau state baru.
 - Golden test Home tidak ditambahkan karena repo belum memiliki baseline golden Home; visual diverifikasi melalui widget rendering dan screenshot lokal bila emulator tersedia.
 - Jalankan test hero terkait, seluruh `flutter test`, dan `flutter analyze`.
 - Empat issue analyzer baseline di file test yang tidak terkait tetap diterima sesuai keputusan pengguna dan tidak diubah dalam branch ini.
-
