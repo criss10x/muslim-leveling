@@ -1119,6 +1119,21 @@ class GameService {
         prayer,
         previous: pstr[prayer],
       );
+      // Unlog dzuhur hari Jumat → kembalikan streak mingguan jumat.
+      if (prayer == 'dzuhur' &&
+          _isFriday(today) &&
+          pstr['jumat'] != null &&
+          pstr['jumat']!.lastDate == today) {
+        final j = pstr['jumat']!;
+        final prevJumat = updatedLogs
+            .where((l) => l.prayer == 'dzuhur' && _isFriday(l.date))
+            .map((l) => l.date)
+            .fold<String>('', (a, b) => b.compareTo(a) > 0 ? b : a);
+        pstr['jumat'] = j.copyWith(
+          current: (j.current - 1).clamp(0, 999999),
+          lastDate: prevJumat,
+        );
+      }
     }
     if (wasFullBefore) {
       hero = hero.copyWith(
@@ -1554,6 +1569,11 @@ class GameService {
       tracker.putIfAbsent(p, () => StreakState());
     }
     var comeback = state.comebackCount;
+
+    // ponytail: streak 'jumat' mingguan — jangan dievaluasi harian (akan
+    // tergerus 6 hari berturut sebelum Jumat berikutnya). Weekly streak
+    // sudah self-correcting via _updWeeklyStreak (diff==7 → lanjut, else reset).
+    tracker.remove('jumat');
 
     // Week rotation: reset freezeAvailable if different ISO week
     if (_isDifferentWeek(lastChecked, todayDate)) {
