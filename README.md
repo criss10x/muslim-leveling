@@ -1,71 +1,46 @@
 # Muslim Leveling
 
-Flutter Android app: prayer quests, XP, streaks, adzan reminders. Local-first; Google login = optional cloud backup.
+Aplikasi Android gamifikasi ibadah harian: quest sholat 5 waktu + sunnah, XP, level, streak, achievement, jadwal sholat, Al-Quran dengan audio. Local-first; login Google opsional untuk backup cloud.
 
-**Version:** `1.9.1+21` · **Package:** `id.muslimleveling.muslim_leveling` · **Branch:** `main`
+**Version:** `1.9.2+22` · **Package:** `id.muslimleveling.muslim_leveling` · **Privacy Policy:** https://criss10x.github.io/muslim-leveling/
 
 ## Stack
 
-- Flutter (Dart 3.12+)
-- SharedPreferences (source of truth)
-- Supabase Auth + row sync (signed-in only)
-- Google Sign-In → Supabase
+- Flutter (Dart 3.12+), targetSdk 36
+- SharedPreferences (source of truth, save-immediately)
+- Supabase Auth + row sync (hanya setelah login Google)
 - `flutter_local_notifications` + timezone (Asia/Jakarta)
-- Sentry (client DSN)
+- Sentry (crash reporting anonim)
 
-## Features
+## Fitur
 
-- 5 daily prayers + rawatib / tilawah / sedekah quests
-- XP, level, hero streak, achievements
-- Jadwal Kemenag (`api.myquran.com`) + Aladhan fallback
-- City picker (onboarding, Jadwal, Profil)
-- Adzan notif: fokus / seimbang / intensif · senyap / suara / adzan
-- Qibla compass
-- Light (Strava neutrals) + dark (#000) · Electric Jade brand
-- Haid mode freezes streaks
+- **Quest wajib** — 5 sholat, window: adzan → 03:00 (Subuh lebih ketat: adzan +3 jam). Hari dimulai jam 03:00.
+- **Quest sunnah** — dhuha, tahajjud, rawatib, tilawah, zikir, sedekah; tiap quest punya window waktu sendiri.
+- **Streak** — per-sholat, hero (5/5), jumat (mingguan), tilawah. Freeze mingguan + recovery ×0.75. Mode haid: tanpa penalti.
+- **XP & level** — bonus tepat waktu ≤30 menit, bonus 5/5 harian.
+- **Achievement & kosmetik** — medali tier, frame/aura avatar.
+- **Jadwal sholat** — eQuran.id (Kemenag) + fallback MyQuran; city picker / GPS.
+- **Notifikasi adzan** — mode fokus/seimbang/intensif, per-prayer sound.
+- **Al-Quran** — teks + terjemahan + tajwid, audio multi-qari, resume posisi baca.
+- **Backup** — 3 blob Supabase (game/learning/achievements), merge max-XP/union saat login.
+- Light (Strava neutrals) + dark · Electric Jade brand.
 
 ## Setup
 
 ```bash
 flutter pub get
-flutter run
+# android/key.properties → release signing (wajib untuk build release; fail-fast tanpa fallback debug)
+flutter build apk --release --split-per-abi
+flutter build appbundle --release
 ```
 
-Release APK (needs local keystore):
+## Test
 
 ```bash
-# repo root key.properties (gitignored)
-# storeFile=/absolute/path/to/muslim-leveling-release.jks
-# storePassword=…
-# keyAlias=muslim-leveling
-# keyPassword=…
-
-flutter build apk --release --target-platform android-arm64
+flutter test   # golden tests: regenerate di Ubuntu saja (font render beda per OS)
 ```
 
-Google login release: register SHA-1 of the release keystore in Google Cloud + Supabase OAuth redirect  
-`id.muslimleveling.muslim_leveling://login-callback`.
+## Branch
 
-## Architecture (short)
-
-| Layer | Role |
-|---|---|
-| `GameService` | Local game state; fire-and-forget `SupabaseSync.saveGame` |
-| `PrayerService` | City + jadwal cache; `locationVersion` notifies tabs |
-| `NotificationService` | Exact/inexact schedule; 3 Android channels |
-| `AuthService` | Google → Supabase session |
-| `SupabaseSync` | No network until signed in |
-
-Tabs live in `IndexedStack` (`DashboardShell`). Location change bumps `locationVersion` → Home reschedules adzan, Jadwal refetches.
-
-## Git / release
-
-- Trunk-based on `main`; CI: analyze + arm64 release APK artifact
-- Changelog: [`CHANGELOG.md`](CHANGELOG.md)
-- Tags: `v1.9.1` (current)
-- Never commit: `key.properties`, `*.jks`, `.env*`, secret screenshots
-
-## Notes
-
-- Notif timezone pinned WIB (`Asia/Jakarta`). WITA/WIT needs city→TZ map later.
-- Hardcoded Supabase anon key / Sentry DSN / OAuth client ID are public client credentials; RLS owns data isolation.
+- `main` — stabil, mirror release
+- `app-release` — cabang kerja release
