@@ -49,5 +49,5 @@ Changes to this policy are posted on this page with an updated effective date.
 
 ## 7. Contact
 
-Email: **krisandika.email@gmail.com**
+Email: **muslim.leveling@gmail.com**
 GitHub: github.com/madekotprint/muslim-leveling-v6
