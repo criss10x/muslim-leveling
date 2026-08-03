@@ -66,17 +66,27 @@ void main() {
   ) async {
     await pumpHero(tester, light: true);
 
-    expect(find.byKey(const Key('home-hero-card')), findsOneWidget);
+    final card = tester.widget<Container>(
+      find.byKey(const Key('home-hero-card')),
+    );
+    final decoration = card.decoration! as BoxDecoration;
+    expect(decoration.boxShadow, isNull);
     expect(find.byKey(const Key('home-hero-pattern')), findsOneWidget);
     expect(find.byKey(const Key('home-rank-medallion')), findsOneWidget);
     expect(find.text('CURRENT RANK'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Home hero keeps the same hierarchy in dark mode', (tester) async {
+  testWidgets('Home hero adds one restrained rank glow in dark mode', (
+    tester,
+  ) async {
     await pumpHero(tester, light: false);
 
-    expect(find.byKey(const Key('home-hero-card')), findsOneWidget);
+    final card = tester.widget<Container>(
+      find.byKey(const Key('home-hero-card')),
+    );
+    final decoration = card.decoration! as BoxDecoration;
+    expect(decoration.boxShadow, hasLength(1));
     expect(find.byKey(const Key('home-hero-pattern')), findsOneWidget);
     expect(find.byKey(const Key('home-rank-medallion')), findsOneWidget);
     expect(find.byKey(const Key('home-xp-progress-fill')), findsOneWidget);
