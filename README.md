@@ -2,7 +2,7 @@
 
 Aplikasi Android gamifikasi ibadah harian: quest sholat 5 waktu + sunnah, XP, level, streak, achievement, jadwal sholat, Al-Quran dengan audio. Local-first; login Google opsional untuk backup cloud.
 
-**Version:** `1.9.2+22` · **Package:** `id.muslimleveling.muslim_leveling` · **Privacy Policy:** https://criss10x.github.io/muslim-leveling/
+**Version:** `1.0.0+1` · **Package:** `id.muslimleveling.muslim_leveling` · **Privacy Policy:** https://criss10x.github.io/muslim-leveling/
 
 ## Stack
 
