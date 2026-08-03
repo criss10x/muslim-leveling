@@ -50,4 +50,4 @@ Changes to this policy are posted on this page with an updated effective date.
 ## 7. Contact
 
 Email: **muslim.leveling@gmail.com**
-GitHub: github.com/madekotprint/muslim-leveling-v6
+GitHub: github.com/criss10x/muslim-leveling-v6
