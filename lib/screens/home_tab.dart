@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/app_theme.dart';
@@ -312,6 +314,7 @@ class _HomeTabState extends State<HomeTab> {
     final tierP = tier.inkPrimary;
     final tierS = tier.inkSecondary;
     return Container(
+      key: const Key('home-hero-card'),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(AppRadius.xl),
         boxShadow: light
@@ -324,157 +327,192 @@ class _HomeTabState extends State<HomeTab> {
                 ),
               ],
       ),
-      child: Container(
-        padding: const EdgeInsets.all(AppSpacing.lg),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceContainerLow,
-          gradient: light
-              ? null
-              : LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    AppColors.primary.withValues(alpha: 0.14),
-                    AppColors.surfaceContainerLow,
-                  ],
-                ),
-          borderRadius: BorderRadius.circular(AppRadius.xl),
-          border: Border.all(
-            color: AppColors.primary.withValues(alpha: light ? 0.35 : 0.45),
-            width: light ? 1.0 : 1.5,
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        child: Stack(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'CURRENT RANK',
-                        style: AppText.labelCaps().copyWith(
-                          color: AppColors.onSurfaceVariant,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      // Light: bright tier colors (some are white/gold)
-                      // vanish on the near-white card — use solid ink.
-                      // Dark: keep the tier gradient (gaming identity).
-                      isLightTheme
-                          ? Text(
-                              GameService.getRankTitle(info.level),
-                              style: AppText.headlineMd().copyWith(
-                                color: AppColors.onSurface,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            )
-                          : ShaderMask(
-                              shaderCallback: (rect) => LinearGradient(
-                                colors: [tierP, tierS],
-                              ).createShader(rect),
-                              child: Text(
-                                GameService.getRankTitle(info.level),
-                                style: AppText.headlineMd().copyWith(
-                                  color: Colors.white,
-                                  shadows: [
-                                    Shadow(
-                                      color: tierP.withValues(alpha: 0.5),
-                                      blurRadius: 12,
-                                    ),
-                                  ],
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                      Text(
-                        '$_nickname • Lv ${info.level}',
-                        style: AppText.bodyMd().copyWith(
-                          color: AppColors.onSurfaceVariant,
-                          fontSize: 12,
-                        ),
-                      ),
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceContainerLow,
+                  gradient: RadialGradient(
+                    center: Alignment.topRight,
+                    radius: 1.4,
+                    colors: [
+                      tier.inkPrimary.withValues(alpha: light ? 0.04 : 0.14),
+                      AppColors.surfaceContainerLow,
                     ],
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.md),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Text(
-                    'XP PROGRESS',
-                    style: AppText.labelCaps().copyWith(
-                      color: AppColors.onSurfaceVariant,
+                  border: Border.all(
+                    color: AppColors.primary.withValues(
+                      alpha: light ? 0.35 : 0.45,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                AnimatedCount(
-                  value: info.xpInCurrentLevel,
-                  suffix: ' / ${info.xpNeededForNextLevel}',
-                  style: AppText.bodyMd().copyWith(color: AppColors.primary),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.xs),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(AppRadius.pill),
-              child: Container(
-                height: 10,
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceContainerHigh,
-                  borderRadius: BorderRadius.circular(AppRadius.pill),
-                ),
-                child: TweenAnimationBuilder<double>(
-                  tween: Tween(begin: 0, end: info.progress.clamp(0.0, 1.0)),
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeOutCubic,
-                  builder: (context, progress, child) => FractionallySizedBox(
-                    alignment: Alignment.centerLeft,
-                    widthFactor: progress,
-                    child: child,
-                  ),
-                  child: Container(
-                    key: const Key('home-xp-progress-fill'),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [tier.inkPrimary, tier.inkSecondary],
-                      ),
-                      borderRadius: BorderRadius.circular(AppRadius.pill),
-                      boxShadow: light
-                          ? null
-                          : [
-                              BoxShadow(
-                                color: tier.inkPrimary.withValues(alpha: 0.5),
-                                blurRadius: 8,
-                                spreadRadius: 1,
-                              ),
-                            ],
-                    ),
+                    width: light ? 1.0 : 1.5,
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 6),
-            Align(
-              alignment: Alignment.centerRight,
-              child: AnimatedCount(
-                value: info.xpNeededForNextLevel - info.xpInCurrentLevel,
-                suffix: ' XP TO NEXT RANK',
-                style: AppText.labelCaps().copyWith(
-                  color: AppColors.onSurfaceVariant,
+            Positioned.fill(
+              child: IgnorePointer(
+                child: CustomPaint(
+                  key: const Key('home-hero-pattern'),
+                  painter: _IslamicHeroPatternPainter(
+                    color: tier.inkPrimary,
+                    opacity: light ? 0.08 : 0.16,
+                  ),
                 ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'CURRENT RANK',
+                              style: AppText.labelCaps().copyWith(
+                                color: AppColors.onSurfaceVariant,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            // Light: bright tier colors (some are white/gold)
+                            // vanish on the near-white card — use solid ink.
+                            // Dark: keep the tier gradient (gaming identity).
+                            isLightTheme
+                                ? Text(
+                                    GameService.getRankTitle(info.level),
+                                    style: AppText.headlineMd().copyWith(
+                                      color: AppColors.onSurface,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  )
+                                : ShaderMask(
+                                    shaderCallback: (rect) => LinearGradient(
+                                      colors: [tierP, tierS],
+                                    ).createShader(rect),
+                                    child: Text(
+                                      GameService.getRankTitle(info.level),
+                                      style: AppText.headlineMd().copyWith(
+                                        color: Colors.white,
+                                        shadows: [
+                                          Shadow(
+                                            color: tierP.withValues(alpha: 0.5),
+                                            blurRadius: 12,
+                                          ),
+                                        ],
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                            Text(
+                              '$_nickname • Lv ${info.level}',
+                              style: AppText.bodyMd().copyWith(
+                                color: AppColors.onSurfaceVariant,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.md),
+                      _RankMedallion(
+                        tier: tier,
+                        level: info.level,
+                        light: light,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'XP PROGRESS',
+                          style: AppText.labelCaps().copyWith(
+                            color: AppColors.onSurfaceVariant,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      AnimatedCount(
+                        value: info.xpInCurrentLevel,
+                        suffix: ' / ${info.xpNeededForNextLevel}',
+                        style: AppText.bodyMd().copyWith(
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(AppRadius.pill),
+                    child: Container(
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceContainerHigh,
+                        borderRadius: BorderRadius.circular(AppRadius.pill),
+                      ),
+                      child: TweenAnimationBuilder<double>(
+                        tween: Tween(
+                          begin: 0,
+                          end: info.progress.clamp(0.0, 1.0),
+                        ),
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeOutCubic,
+                        builder: (context, progress, child) =>
+                            FractionallySizedBox(
+                              alignment: Alignment.centerLeft,
+                              widthFactor: progress,
+                              child: child,
+                            ),
+                        child: Container(
+                          key: const Key('home-xp-progress-fill'),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [tier.inkPrimary, tier.inkSecondary],
+                            ),
+                            borderRadius: BorderRadius.circular(AppRadius.pill),
+                            boxShadow: light
+                                ? null
+                                : [
+                                    BoxShadow(
+                                      color: tier.inkPrimary.withValues(
+                                        alpha: 0.5,
+                                      ),
+                                      blurRadius: 8,
+                                      spreadRadius: 1,
+                                    ),
+                                  ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: AnimatedCount(
+                      value: info.xpNeededForNextLevel - info.xpInCurrentLevel,
+                      suffix: ' XP TO NEXT RANK',
+                      style: AppText.labelCaps().copyWith(
+                        color: AppColors.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -1795,4 +1833,135 @@ class _RingsPainter extends CustomPainter {
       old.wajib != wajib || old.sunnah != sunnah || old.tilawah != tilawah;
 }
 
-/// Faint 8-pointed star lattice (khatam pattern) for the hero rank card.
+class _RankMedallion extends StatelessWidget {
+  final TierVisualConfig tier;
+  final int level;
+  final bool light;
+
+  const _RankMedallion({
+    required this.tier,
+    required this.level,
+    required this.light,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ExcludeSemantics(
+      child: Container(
+        key: const Key('home-rank-medallion'),
+        width: 68,
+        height: 68,
+        padding: const EdgeInsets.all(2),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: LinearGradient(
+            colors: [tier.inkPrimary, tier.inkSecondary],
+          ),
+          boxShadow: light
+              ? null
+              : [
+                  BoxShadow(
+                    color: tier.inkPrimary.withValues(alpha: 0.28),
+                    blurRadius: 12,
+                  ),
+                ],
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppColors.surfaceContainer,
+          ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              SizedBox.square(
+                dimension: 30,
+                child: CustomPaint(
+                  painter: _IslamicHeroPatternPainter(
+                    color: tier.inkPrimary,
+                    opacity: 1,
+                    singleStar: true,
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 7,
+                child: Text(
+                  'LV $level',
+                  style: AppText.labelCapsSm().copyWith(
+                    color: AppColors.onSurfaceVariant,
+                    fontSize: 8,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _IslamicHeroPatternPainter extends CustomPainter {
+  final Color color;
+  final double opacity;
+  final bool singleStar;
+
+  const _IslamicHeroPatternPainter({
+    required this.color,
+    required this.opacity,
+    this.singleStar = false,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Path star(Offset center, double outerRadius) {
+      final path = Path();
+      for (var i = 0; i < 16; i++) {
+        final radius = i.isEven ? outerRadius : outerRadius * 0.42;
+        final angle = -math.pi / 2 + i * math.pi / 8;
+        final point = Offset(
+          center.dx + math.cos(angle) * radius,
+          center.dy + math.sin(angle) * radius,
+        );
+        if (i == 0) {
+          path.moveTo(point.dx, point.dy);
+        } else {
+          path.lineTo(point.dx, point.dy);
+        }
+      }
+      return path..close();
+    }
+
+    final paint = Paint()
+      ..style = singleStar ? PaintingStyle.fill : PaintingStyle.stroke
+      ..strokeWidth = 1;
+    if (singleStar) {
+      paint.color = color.withValues(alpha: opacity);
+      canvas.drawPath(
+        star(
+          Offset(size.width / 2, size.height / 2 - 4),
+          size.shortestSide / 2,
+        ),
+        paint,
+      );
+      return;
+    }
+
+    final startX = size.width * 0.42;
+    const spacing = 40.0;
+    for (var y = 0.0; y <= size.height + spacing; y += spacing) {
+      for (var x = startX; x <= size.width + spacing; x += spacing) {
+        final fade = ((x - startX) / (size.width - startX)).clamp(0.2, 1.0);
+        paint.color = color.withValues(alpha: opacity * fade);
+        canvas.drawPath(star(Offset(x, y), 13), paint);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _IslamicHeroPatternPainter old) =>
+      old.color != color ||
+      old.opacity != opacity ||
+      old.singleStar != singleStar;
+}
