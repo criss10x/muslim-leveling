@@ -358,7 +358,7 @@ class _HomeTabState extends State<HomeTab> {
                   key: const Key('home-hero-pattern'),
                   painter: _IslamicHeroPatternPainter(
                     color: tier.inkPrimary,
-                    opacity: light ? 0.08 : 0.16,
+                    opacity: light ? 0.05 : 0.09,
                   ),
                 ),
               ),
