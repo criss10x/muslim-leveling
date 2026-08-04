@@ -181,4 +181,20 @@ void main() {
     expect(medallionDecoration.color, AppColors.primary);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('Home hero ellipsizes a long stored nickname', (tester) async {
+    const nickname = 'Pejuang Muslim Yang Sangat Panjang Sekali Untuk Hero';
+    SharedPreferences.setMockInitialValues({
+      'game_state_v1': '{"xp":0,"level":1}',
+      'nickname': nickname,
+    });
+    await tester.binding.setSurfaceSize(const Size(360, 800));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await pumpHero(tester, preset: AppThemePreset.lightEmerald);
+
+    final metadata = tester.widget<Text>(find.text('$nickname • Lv 1'));
+    expect(metadata.maxLines, 1);
+    expect(metadata.overflow, TextOverflow.ellipsis);
+  });
 }

@@ -424,6 +424,8 @@ class _HomeTabState extends State<HomeTab> {
                                 color: AppColors.onSurfaceVariant,
                                 fontSize: 12,
                               ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),
