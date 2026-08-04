@@ -136,7 +136,7 @@ class PrayerService {
     if (cityName.trim().isEmpty) return null;
     try {
       final prov = await _resolveProvinsi(cityName);
-      final kota = _normalizeKabkota(cityName);
+      final kota = normalizeKabkota(cityName);
       final uri = Uri.parse(_equranBase);
       final req = await _client.postUrl(uri);
       req.headers.contentType = ContentType.json;
@@ -169,7 +169,7 @@ class PrayerService {
     if (cityName.trim().isEmpty) return null;
     try {
       final prov = await _resolveProvinsi(cityName);
-      final kota = _normalizeKabkota(cityName);
+      final kota = normalizeKabkota(cityName);
       final uri = Uri.parse(_equranBase);
       final req = await _client.postUrl(uri);
       req.headers.contentType = ContentType.json;
@@ -256,7 +256,7 @@ class PrayerService {
 
     // ponytail: iterate provinces until one matches. Only happens once
     // per unique city, and exits fast for Java (ordered by population).
-    final kotaNorm = _normalizeKabkota(city).toLowerCase().trim();
+    final kotaNorm = normalizeKabkota(city).toLowerCase().trim();
     for (final p in _equranProvinsi) {
       if (p == guess) continue;
       if (await _cityInProvinsi(p, kotaNorm)) {
@@ -298,28 +298,18 @@ class PrayerService {
     )).any((name) => name.toLowerCase().trim() == q);
   }
 
-  /// Normalize MyQuran city name ("KOTA BOGOR") to Equran format ("Kota Bogor").
-  /// Also strips province name if embedded (e.g. "Jakarta, DKI Jakarta").
-  static String _normalizeKabkota(String city) {
+  /// Normalize city names to the labels accepted by the Equran API.
+  @visibleForTesting
+  static String normalizeKabkota(String city) {
+    // Equran has one city-wide schedule for all Jakarta administrative cities.
+    if (city.toLowerCase().contains('jakarta')) return 'Kota Jakarta';
+
     var s = city;
     for (final p in _equranProvinsi) {
       s = _removeProvName(s, p);
     }
     s = _removeProvName(s, 'DI Yogyakarta');
     s = _removeProvName(s, 'Yogyakarta');
-    // Hapus "Jakarta" HANYA kalau dia provinsi, bukan bagian nama kota.
-    // "Kota Jakarta" → "Kota" → salah; harus "Kota Jakarta".
-    // "Jakarta Selatan" → "Selatan" → salah; harus "Kota Jakarta" (Equran).
-    // "Jakarta" sendiri → hapus → fallback "Jakarta" (via `if empty`).
-    if (s.toLowerCase().contains('jakarta')) {
-      final stripped = _removeProvName(s, 'Jakarta');
-      if (stripped.trim().isEmpty || stripped.toLowerCase() == 'dki jakarta') {
-        s = stripped;
-      } else if (!s.toLowerCase().contains('kota jakarta')) {
-        // "Jakarta Selatan" → "Kota Jakarta" (Equran format).
-        return 'Kota Jakarta';
-      }
-    }
     if (s.trim().isEmpty) s = city;
     // Title case
     return s
@@ -429,12 +419,24 @@ class PrayerService {
     Map<String, dynamic>? address,
     List<String> validAreas,
   ) {
-    // Jakarta special case: Nominatim returns "Jakarta Selatan" etc.,
-    // but Equran expects "Kota Jakarta". Check before generic loop.
-    final city = address?['city'] as String?;
-    if (city != null && city.toLowerCase().contains('jakarta')) {
+    // Jakarta special case: Nominatim can put "Jakarta Selatan" etc. in
+    // county, city, or municipality. Equran only accepts "Kota Jakarta".
+    final isJakarta = const [
+      'county',
+      'region',
+      'state_district',
+      'state',
+      'city',
+      'municipality',
+      'town',
+      'village',
+    ].any((key) {
+      final value = address?[key];
+      return value is String && value.toLowerCase().contains('jakarta');
+    });
+    if (isJakarta) {
       for (final area in validAreas) {
-        if (area.toLowerCase().contains('jakarta')) return area.trim();
+        if (area.toLowerCase() == 'kota jakarta') return area;
       }
     }
 
@@ -572,6 +574,8 @@ class PrayerService {
     final id = p.getString('city_id');
     final name = p.getString('city_name');
     if (id == null || name == null) {
+      await p.setString('city_id', _defaultId);
+      await p.setString('city_name', _defaultName);
       return (id: _defaultId, name: _defaultName);
     }
     return (id: id, name: name);
