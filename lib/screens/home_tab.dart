@@ -310,9 +310,10 @@ class _HomeTabState extends State<HomeTab> {
   Widget _heroRank(LevelInfo info) {
     final tier = getTierVisualConfig(getTierName(info.level));
     final light = isLightTheme;
-    // Light: AA ink for border/pattern. Dark: neon brand.
     final tierP = tier.inkPrimary;
     final tierS = tier.inkSecondary;
+    final heroAccent = light ? AppColors.primary : tier.inkPrimary;
+    final heroWash = light ? AppColors.primaryContainer : tier.inkPrimary;
     return Container(
       key: const Key('home-hero-card'),
       decoration: BoxDecoration(
@@ -340,14 +341,14 @@ class _HomeTabState extends State<HomeTab> {
                       center: Alignment.topRight,
                       radius: 1.4,
                       colors: [
-                        tier.inkPrimary.withValues(alpha: light ? 0.04 : 0.14),
+                        heroWash.withValues(alpha: light ? 0.62 : 0.14),
                         AppColors.surfaceContainerLow,
                       ],
                     ),
                     borderRadius: BorderRadius.circular(AppRadius.xl),
                     border: Border.all(
                       color: AppColors.primary.withValues(
-                        alpha: light ? 0.35 : 0.45,
+                        alpha: light ? 0.22 : 0.45,
                       ),
                       width: light ? 1.0 : 1.5,
                     ),
@@ -360,7 +361,7 @@ class _HomeTabState extends State<HomeTab> {
                 child: CustomPaint(
                   key: const Key('home-hero-pattern'),
                   painter: _IslamicHeroPatternPainter(
-                    color: tier.inkPrimary,
+                    color: heroAccent,
                     opacity: light ? 0.05 : 0.09,
                   ),
                 ),
@@ -1858,9 +1859,10 @@ class _RankMedallion extends StatelessWidget {
           padding: const EdgeInsets.all(2),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            gradient: LinearGradient(
-              colors: [tier.inkPrimary, tier.inkSecondary],
-            ),
+            color: light ? AppColors.primary : null,
+            gradient: light
+                ? null
+                : LinearGradient(colors: [tier.inkPrimary, tier.inkSecondary]),
             boxShadow: light
                 ? null
                 : [
@@ -1873,7 +1875,9 @@ class _RankMedallion extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.surfaceContainer,
+              color: light
+                  ? AppColors.primaryContainer
+                  : AppColors.surfaceContainer,
             ),
             child: Stack(
               alignment: Alignment.center,
@@ -1882,7 +1886,7 @@ class _RankMedallion extends StatelessWidget {
                   dimension: 30,
                   child: CustomPaint(
                     painter: _IslamicHeroPatternPainter(
-                      color: tier.inkPrimary,
+                      color: light ? AppColors.primary : tier.inkPrimary,
                       opacity: 1,
                       singleStar: true,
                     ),

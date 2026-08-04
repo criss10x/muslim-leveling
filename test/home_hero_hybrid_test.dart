@@ -3,21 +3,26 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:muslim_leveling/screens/home_tab.dart';
 import 'package:muslim_leveling/theme/app_theme.dart';
+import 'package:muslim_leveling/widgets/tier_avatar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   setUp(() {
     GoogleFonts.config.allowRuntimeFetching = false;
+    activeThemePreset = AppThemePreset.darkEmerald;
     SharedPreferences.setMockInitialValues({
       'game_state_v1': '{"xp":0,"level":1}',
     });
   });
 
-  Future<void> pumpHero(WidgetTester tester, {required bool light}) async {
-    isLightTheme = light;
+  Future<void> pumpHero(
+    WidgetTester tester, {
+    required AppThemePreset preset,
+  }) async {
+    activeThemePreset = preset;
     await tester.pumpWidget(
       MaterialApp(
-        theme: light ? AppTheme.light() : AppTheme.dark(),
+        theme: preset.isLight ? AppTheme.light() : AppTheme.dark(),
         home: const Scaffold(body: HomeTab()),
       ),
     );
@@ -27,7 +32,7 @@ void main() {
   testWidgets(
     'Home hero renders Islamic pattern and rank medallion in light mode',
     (tester) async {
-      await pumpHero(tester, light: true);
+      await pumpHero(tester, preset: AppThemePreset.lightEmerald);
 
       final card = tester.widget<Container>(
         find.byKey(const Key('home-hero-card')),
@@ -46,9 +51,13 @@ void main() {
       );
       final background = tester.widget<DecoratedBox>(backgroundFinder);
       final backgroundDecoration = background.decoration as BoxDecoration;
+      final backgroundGradient =
+          backgroundDecoration.gradient! as RadialGradient;
+      final backgroundBorder = backgroundDecoration.border! as Border;
       final pattern = tester.widget<CustomPaint>(
         find.byKey(const Key('home-hero-pattern')),
       );
+      final patternPainter = pattern.painter as dynamic;
       expect(decoration.boxShadow, isNull);
       expect(
         backgroundDecoration.borderRadius,
@@ -64,6 +73,17 @@ void main() {
       expect(find.byKey(const Key('home-hero-pattern')), findsOneWidget);
       final medallionFinder = find.byKey(const Key('home-rank-medallion'));
       final medallion = tester.widget<Container>(medallionFinder);
+      final medallionDecoration = medallion.decoration! as BoxDecoration;
+      final medallionInner = medallion.child! as Container;
+      final medallionInnerDecoration =
+          medallionInner.decoration! as BoxDecoration;
+      final medallionStar = tester.widget<CustomPaint>(
+        find.descendant(
+          of: medallionFinder,
+          matching: find.byType(CustomPaint),
+        ),
+      );
+      final medallionStarPainter = medallionStar.painter as dynamic;
       expect(medallionFinder, findsOneWidget);
       expect(
         find.byWidgetPredicate(
@@ -72,7 +92,21 @@ void main() {
         ),
         findsOneWidget,
       );
-      expect((pattern.painter as dynamic).opacity, 0.05);
+      expect(backgroundGradient.colors, [
+        AppColors.primaryContainer.withValues(alpha: 0.62),
+        AppColors.surfaceContainerLow,
+      ]);
+      expect(
+        backgroundBorder.top.color,
+        AppColors.primary.withValues(alpha: 0.22),
+      );
+      expect(patternPainter.color, AppColors.primary);
+      expect(patternPainter.opacity, 0.05);
+      expect(medallionDecoration.color, AppColors.primary);
+      expect(medallionDecoration.gradient, isNull);
+      expect(medallionDecoration.boxShadow, isNull);
+      expect(medallionInnerDecoration.color, AppColors.primaryContainer);
+      expect(medallionStarPainter.color, AppColors.primary);
       expect(find.text('CURRENT RANK'), findsOneWidget);
       expect(tester.takeException(), isNull);
     },
@@ -81,7 +115,7 @@ void main() {
   testWidgets('Home hero adds one restrained rank glow in dark mode', (
     tester,
   ) async {
-    await pumpHero(tester, light: false);
+    await pumpHero(tester, preset: AppThemePreset.darkEmerald);
 
     final card = tester.widget<Container>(
       find.byKey(const Key('home-hero-card')),
@@ -90,11 +124,61 @@ void main() {
     final pattern = tester.widget<CustomPaint>(
       find.byKey(const Key('home-hero-pattern')),
     );
+    final tier = getTierVisualConfig(getTierName(1));
+    final patternPainter = pattern.painter as dynamic;
+    final medallion = tester.widget<Container>(
+      find.byKey(const Key('home-rank-medallion')),
+    );
+    final medallionDecoration = medallion.decoration! as BoxDecoration;
+    final medallionInner = medallion.child! as Container;
+    final medallionInnerDecoration =
+        medallionInner.decoration! as BoxDecoration;
     expect(decoration.boxShadow, hasLength(1));
     expect(find.byKey(const Key('home-hero-pattern')), findsOneWidget);
     expect(find.byKey(const Key('home-rank-medallion')), findsOneWidget);
     expect(find.byKey(const Key('home-xp-progress-fill')), findsOneWidget);
-    expect((pattern.painter as dynamic).opacity, 0.09);
+    expect(patternPainter.color, tier.inkPrimary);
+    expect(patternPainter.opacity, 0.09);
+    expect(medallionDecoration.color, isNull);
+    expect((medallionDecoration.gradient! as LinearGradient).colors, [
+      tier.inkPrimary,
+      tier.inkSecondary,
+    ]);
+    expect(medallionDecoration.boxShadow, hasLength(1));
+    expect(medallionInnerDecoration.color, AppColors.surfaceContainer);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Home hero Jade Field follows Light Mushaf semantic colors', (
+    tester,
+  ) async {
+    await pumpHero(tester, preset: AppThemePreset.lightMushaf);
+
+    final background = tester.widget<DecoratedBox>(
+      find.descendant(
+        of: find.byKey(const Key('home-hero-card')),
+        matching: find.byWidgetPredicate((widget) {
+          if (widget is! DecoratedBox || widget.decoration is! BoxDecoration) {
+            return false;
+          }
+          final decoration = widget.decoration as BoxDecoration;
+          return decoration.gradient is RadialGradient &&
+              decoration.border != null;
+        }),
+      ),
+    );
+    final backgroundDecoration = background.decoration as BoxDecoration;
+    final gradient = backgroundDecoration.gradient! as RadialGradient;
+    final medallion = tester.widget<Container>(
+      find.byKey(const Key('home-rank-medallion')),
+    );
+    final medallionDecoration = medallion.decoration! as BoxDecoration;
+
+    expect(
+      gradient.colors.first,
+      AppColors.primaryContainer.withValues(alpha: 0.62),
+    );
+    expect(medallionDecoration.color, AppColors.primary);
     expect(tester.takeException(), isNull);
   });
 }
