@@ -246,6 +246,14 @@ class PrayerService {
       return guess;
     }
 
+    // Jakarta special case: "Jakarta Selatan" (Nominatim) tidak ada di
+    // Equran list; harus "Kota Jakarta". Simpan mapping sekali.
+    if (norm.contains('jakarta') && !norm.contains('kota jakarta')) {
+      _provCache[norm] = 'DKI Jakarta';
+      await prefs.setString('prov_$norm', 'DKI Jakarta');
+      return 'DKI Jakarta';
+    }
+
     // ponytail: iterate provinces until one matches. Only happens once
     // per unique city, and exits fast for Java (ordered by population).
     final kotaNorm = _normalizeKabkota(city).toLowerCase().trim();
@@ -298,9 +306,20 @@ class PrayerService {
       s = _removeProvName(s, p);
     }
     s = _removeProvName(s, 'DI Yogyakarta');
-    s = _removeProvName(s, 'DKI Jakarta');
-    s = _removeProvName(s, 'Jakarta');
     s = _removeProvName(s, 'Yogyakarta');
+    // Hapus "Jakarta" HANYA kalau dia provinsi, bukan bagian nama kota.
+    // "Kota Jakarta" → "Kota" → salah; harus "Kota Jakarta".
+    // "Jakarta Selatan" → "Selatan" → salah; harus "Kota Jakarta" (Equran).
+    // "Jakarta" sendiri → hapus → fallback "Jakarta" (via `if empty`).
+    if (s.toLowerCase().contains('jakarta')) {
+      final stripped = _removeProvName(s, 'Jakarta');
+      if (stripped.trim().isEmpty || stripped.toLowerCase() == 'dki jakarta') {
+        s = stripped;
+      } else if (!s.toLowerCase().contains('kota jakarta')) {
+        // "Jakarta Selatan" → "Kota Jakarta" (Equran format).
+        return 'Kota Jakarta';
+      }
+    }
     if (s.trim().isEmpty) s = city;
     // Title case
     return s
@@ -308,7 +327,6 @@ class PrayerService {
         .map((w) {
           if (w.isEmpty) return w;
           if (w == w.toUpperCase() && w.length > 2) {
-            // All-caps word like "KOTA" → "Kota"
             return w[0].toUpperCase() + w.substring(1).toLowerCase();
           }
           return w[0].toUpperCase() + w.substring(1).toLowerCase();
@@ -411,6 +429,15 @@ class PrayerService {
     Map<String, dynamic>? address,
     List<String> validAreas,
   ) {
+    // Jakarta special case: Nominatim returns "Jakarta Selatan" etc.,
+    // but Equran expects "Kota Jakarta". Check before generic loop.
+    final city = address?['city'] as String?;
+    if (city != null && city.toLowerCase().contains('jakarta')) {
+      for (final area in validAreas) {
+        if (area.toLowerCase().contains('jakarta')) return area.trim();
+      }
+    }
+
     for (final key in const [
       'county',
       'region',
@@ -535,11 +562,18 @@ class PrayerService {
     locationVersion.value++;
   }
 
+  /// ponytail: default Jakarta kalau belum ada lokasi tersimpan.
+  /// Equran API pakai "Kota Jakarta" + "DKI Jakarta".
+  static const _defaultId = 'DKI Jakarta/Kota Jakarta';
+  static const _defaultName = 'Kota Jakarta';
+
   static Future<({String id, String name})?> loadLocation() async {
     final p = await SharedPreferences.getInstance();
     final id = p.getString('city_id');
     final name = p.getString('city_name');
-    if (id == null || name == null) return null;
+    if (id == null || name == null) {
+      return (id: _defaultId, name: _defaultName);
+    }
     return (id: id, name: name);
   }
 

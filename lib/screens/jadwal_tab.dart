@@ -61,20 +61,8 @@ class _JadwalTabState extends State<JadwalTab> {
       });
     }
     final loc = await PrayerService.loadLocation();
-    if (loc == null) {
-      // Jangan fetch dengan ID default — API v3 pakai MD5 city ID,
-      // ID numerik lama tidak valid. Onboarding harusnya sudah menyimpan
-      // lokasi; ini pengaman kalau prefs kosong.
-      if (mounted) {
-        setState(() {
-          _loading = false;
-          _error =
-              'Belum ada lokasi tersimpan. Tap ikon lokasi untuk pilih kota.';
-        });
-      }
-      return;
-    }
-    _cityId = loc.id;
+    // loadLocation() sekarang selalu return non-null (default Jakarta).
+    _cityId = loc!.id;
     _cityName = loc.name;
     await _fetch();
   }
