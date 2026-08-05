@@ -14,8 +14,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  // Tanggal dipatok supaya golden tidak bergeser tiap hari: footer "Sejak X"
+  // bergantung pada tanggal log tertua, yang dihitung mundur dari hari ini.
+  final now = DateTime(2026, 8, 1);
+
   String dayOffset(int daysAgo) {
-    final d = DateTime.now().subtract(Duration(days: daysAgo));
+    final d = now.subtract(Duration(days: daysAgo));
     final m = d.month.toString().padLeft(2, '0');
     final day = d.day.toString().padLeft(2, '0');
     return '${d.year}-$m-$day';
