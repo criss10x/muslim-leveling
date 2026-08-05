@@ -67,3 +67,4 @@ android/app/build/
 supabase_key.jpg
 *.pem
 
+test/failures/
