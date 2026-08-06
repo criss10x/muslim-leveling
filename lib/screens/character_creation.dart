@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
+import '../../services/game_service.dart';
 import '../../services/notification_service.dart';
 import '../../services/prayer_service.dart';
 import 'dashboard_shell.dart';
@@ -21,10 +22,27 @@ class _CharacterCreationScreenState extends State<CharacterCreationScreen> {
   Future<void> _start() async {
     setState(() => _saving = true);
     try {
-      // Init notifikasi di background, tidak blocking
+      // Lokasi diminta lebih dulu agar jadwal dan reminder pertama sesuai kota.
+      final setup = await _syncPrayerSchedule();
+
       await NotificationService.init();
       final notifGranted = await NotificationService.requestPermission();
-      if (!notifGranted && mounted) {
+      if (notifGranted) {
+        // SCHEDULE_EXACT_ALARM perlu special access Android 12+. Bila ditolak,
+        // NotificationService tetap menjadwalkan alarm inexact sebagai fallback.
+        try {
+          await NotificationService.ensureExactAlarmPermission();
+        } catch (_) {
+          // ponytail: exact alarm unavailable still uses inexact notification.
+        }
+        await NotificationService.setRemindersEnabled(true);
+        if (setup.timings != null) {
+          await NotificationService.scheduleAdhanReminders(
+            setup.city,
+            setup.timings!,
+          );
+        }
+      } else if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -35,21 +53,6 @@ class _CharacterCreationScreenState extends State<CharacterCreationScreen> {
             duration: const Duration(seconds: 3),
           ),
         );
-      }
-
-      // Auto-detect lokasi → sync jadwal. Fallback Jakarta kalau gagal.
-      try {
-        final loc = await PrayerService.getCurrentLocation().timeout(
-          const Duration(seconds: 25),
-        );
-        if (loc.failure == null && loc.id != null && loc.name != null) {
-          await PrayerService.saveLocation(loc.id!, loc.name!);
-        } else {
-          await PrayerService.loadLocation(); // set default Jakarta
-        }
-      } catch (_) {
-        // ponytail: timeout/gagal GPS → fallback Jakarta, tidak blocking onboarding
-        await PrayerService.loadLocation();
       }
 
       final prefs = await SharedPreferences.getInstance();
@@ -76,6 +79,61 @@ class _CharacterCreationScreenState extends State<CharacterCreationScreen> {
         ),
         (route) => false,
       );
+    }
+  }
+
+  Future<({String city, Map<String, String>? timings})>
+  _syncPrayerSchedule() async {
+    ({String id, String name})? location;
+    try {
+      final current = await PrayerService.getCurrentLocation().timeout(
+        const Duration(seconds: 25),
+      );
+      if (current.failure == null &&
+          current.id != null &&
+          current.name != null) {
+        await PrayerService.saveLocation(current.id!, current.name!);
+        location = (id: current.id!, name: current.name!);
+      }
+    } catch (_) {
+      // ponytail: GPS timeout/error uses stored location or Jakarta fallback.
+    }
+
+    location ??= await PrayerService.loadLocation();
+    if (location == null) return (city: 'Jakarta', timings: null);
+
+    try {
+      final schedule = await PrayerService.fetchSchedule(
+        cityId: location.id,
+        cityName: location.name,
+      ).timeout(const Duration(seconds: 10), onTimeout: () => null);
+      if (schedule == null) return (city: location.name, timings: null);
+
+      await GameService.setTimings(
+        Timings(
+          imsak: schedule['imsak'] ?? '04:30',
+          subuh: schedule['subuh'] ?? '04:42',
+          terbit: schedule['terbit'] ?? '05:55',
+          dhuha: schedule['dhuha'] ?? '06:20',
+          dzuhur: schedule['dzuhur'] ?? '12:01',
+          ashar: schedule['ashar'] ?? '15:20',
+          maghrib: schedule['maghrib'] ?? '17:55',
+          isya: schedule['isya'] ?? '19:08',
+        ),
+      );
+      return (
+        city: location.name,
+        timings: {
+          'subuh': schedule['subuh'] ?? '',
+          'dzuhur': schedule['dzuhur'] ?? '',
+          'ashar': schedule['ashar'] ?? '',
+          'maghrib': schedule['maghrib'] ?? '',
+          'isya': schedule['isya'] ?? '',
+        },
+      );
+    } catch (_) {
+      // ponytail: jadwal bisa retry dari HomeTab setelah onboarding selesai.
+      return (city: location.name, timings: null);
     }
   }
 
