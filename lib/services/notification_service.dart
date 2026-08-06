@@ -95,7 +95,10 @@ class NotificationService {
     // ic_launcher tidak boleh dipakai di sini — sejak Android 5.0 sistem
     // memaksa small icon jadi siluet, dan icon launcher berwarna berubah
     // jadi kotak putih pekat di status bar.
-    const androidInit = AndroidInitializationSettings('@drawable/ic_stat_notif');
+    // flutter_local_notifications membutuhkan nama resource, bukan Android
+    // resource reference (@drawable/...). Prefix membuat lookup default icon
+    // gagal dengan PlatformException(invalid_icon).
+    const androidInit = AndroidInitializationSettings('ic_stat_notif');
     const iosInit = DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
@@ -186,6 +189,7 @@ class NotificationService {
   /// Request POST_NOTIFICATIONS permission (Android 13+).
   /// Returns true if granted.
   static Future<bool> requestPermission() async {
+    if (!_initialized) await init();
     final androidPlugin = _plugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>();
@@ -195,11 +199,23 @@ class NotificationService {
     return granted ?? false;
   }
 
+  /// Cek status real notifikasi — bukan cuma prefs.
+  /// Return true hanya kalau permission granted DAN user enable di prefs.
+  static Future<bool> areNotificationsEnabled() async {
+    if (!_initialized) await init();
+    final androidPlugin = _plugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
+    if (androidPlugin == null) return true; // iOS or other
+    return await androidPlugin.areNotificationsEnabled() ?? false;
+  }
+
   /// Pastikan izin exact alarm (Android 12+). Tanpa izin ini zonedSchedule
   /// mode exact melempar PlatformException dan TIDAK ADA notif terjadwal
   /// sama sekali. Kalau belum diizinkan, buka halaman sistem
   /// "Alarm & pengingat". Return status akhir.
   static Future<bool> ensureExactAlarmPermission() async {
+    if (!_initialized) await init();
     final androidPlugin = _plugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>();
@@ -298,7 +314,16 @@ class NotificationService {
 
   static Future<bool> isRemindersEnabled() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_prefEnabled) ?? false;
+    final prefEnabled = prefs.getBool(_prefEnabled) ?? false;
+    if (!prefEnabled) return false;
+    // Toggle ON di prefs tapi permission dicabut → notif tidak jalan.
+    // Sync prefs dengan status real.
+    final realEnabled = await areNotificationsEnabled();
+    if (!realEnabled) {
+      await prefs.setBool(_prefEnabled, false);
+      return false;
+    }
+    return true;
   }
 
   // ═══════════════════════════════════════════

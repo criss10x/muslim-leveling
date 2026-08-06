@@ -57,8 +57,10 @@ Project: `muslim-leveling` (number `691907686915`)
    - SHA-1 **release**: `DF:2C:7E:72:5A:29:A7:1B:6F:66:FA:A6:FA:04:78:77:5B:46:F7:23`
    - Google Cloud = 1 client per SHA-1 → buat **2 Android clients** (debug + release), atau tambah SHA di Firebase.
 3. Pastikan **Web application** client ada:
-   - Client ID: `691907686915-2kkvt45674moh5b79uu9udj3s4k6to0s.apps.googleusercontent.com`
+   - Client ID: `691907686915-mpcmcu4oh3e3kv2ld0qs5ur3kl7oro3h.apps.googleusercontent.com`
    - Copy **Client Secret** (untuk Supabase)
+   - Tambahkan **Authorized redirect URI** ini pada Web OAuth client:
+     `https://hiywlsqaurqvbwwuutbo.supabase.co/auth/v1/callback`
 4. **OAuth consent screen** → status Testing OK (tambah test users) atau Publish.
 
 ### Cara cek SHA-1 lagi
@@ -129,6 +131,7 @@ flutter build apk --release \
 - [ ] Android OAuth client + **release SHA-1** di Google Cloud / Firebase
 - [ ] Web OAuth client ID + secret di Supabase Google provider
 - [ ] Redirect URL `id.muslimleveling.muslim_leveling://login-callback` di Supabase
+- [ ] Callback `https://hiywlsqaurqvbwwuutbo.supabase.co/auth/v1/callback` di Google Cloud Web OAuth client
 - [ ] `supabase_rls.sql` sudah di-run
 - [ ] OAuth consent: test user / published
 

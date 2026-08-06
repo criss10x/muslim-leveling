@@ -37,6 +37,7 @@ class _ProfilTabState extends State<ProfilTab> {
   String _nickname = 'Muslim Warrior';
   String? _avatarPath;
   bool _haidMode = false;
+  bool _googleLoginLoading = false;
 
   @override
   void initState() {
@@ -247,9 +248,25 @@ class _ProfilTabState extends State<ProfilTab> {
   }
 
   Future<void> _showNotifDialog() async {
-    bool enabled = await NotificationService.isRemindersEnabled();
-    String mode = await NotificationService.getNotifMode();
-    String soundMode = await NotificationService.getSoundMode();
+    late bool enabled;
+    late String mode;
+    late String soundMode;
+    late bool realEnabled;
+    try {
+      await NotificationService.init();
+      enabled = await NotificationService.isRemindersEnabled();
+      mode = await NotificationService.getNotifMode();
+      soundMode = await NotificationService.getSoundMode();
+      realEnabled = await NotificationService.areNotificationsEnabled();
+    } catch (e, st) {
+      debugPrint('[Profil] gagal buka pengaturan notif: $e');
+      await Sentry.captureException(e, stackTrace: st);
+      if (!mounted) return;
+      _showSettingSnackbar(
+        'Pengaturan notifikasi gagal dibuka: ${_shortError(e)}',
+      );
+      return;
+    }
     if (!mounted) return;
 
     showDialog(
@@ -280,6 +297,29 @@ class _ProfilTabState extends State<ProfilTab> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Status juga false pada first install sebelum prompt muncul.
+                  if (!realEnabled)
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(AppSpacing.md),
+                      margin: const EdgeInsets.only(bottom: AppSpacing.md),
+                      decoration: BoxDecoration(
+                        color: AppColors.errorContainer,
+                        borderRadius: BorderRadius.circular(AppRadius.lg),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.warning_amber, color: AppColors.error, size: 20),
+                          const SizedBox(width: AppSpacing.sm),
+                          Expanded(
+                            child: Text(
+                              'Izin notifikasi belum aktif. Aktifkan untuk menerima pengingat adzan.',
+                              style: AppText.bodyMd().copyWith(color: AppColors.error),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   // Toggle enable
                   Row(
                     children: [
@@ -300,10 +340,15 @@ class _ProfilTabState extends State<ProfilTab> {
                               final granted =
                                   await NotificationService.requestPermission();
                               if (!granted) {
+                                if (!ctx.mounted) return;
+                                Navigator.pop(ctx);
                                 _showSettingSnackbar(
-                                  'Izin notifikasi ditolak. Aktifkan manual di pengaturan HP.',
+                                  'Izin notifikasi belum aktif. Buka Pengaturan Notifikasi Android lalu izinkan.',
                                 );
                                 return;
+                              }
+                              if (ctx.mounted) {
+                                setSt(() => realEnabled = true);
                               }
                               // Tanpa izin "Alarm & pengingat" (Android 12+),
                               // penjadwalan exact gagal total — minta dulu.
@@ -1738,13 +1783,27 @@ class _ProfilTabState extends State<ProfilTab> {
 
   // ── Backup & Account ──
   Future<void> _handleGoogleLogin() async {
-    final uid = await AuthService.signInWithGoogle();
-    if (uid == null) {
-      final err =
-          AuthService.lastError ?? 'Login Google dibatalkan atau gagal.';
-      _showSettingSnackbar('❌ $err');
-      return;
+    if (_googleLoginLoading) return;
+    setState(() => _googleLoginLoading = true);
+    try {
+      final uid = await AuthService.signInWithGoogle();
+      if (uid == null) {
+        final err =
+            AuthService.lastError ?? 'Login Google dibatalkan atau gagal.';
+        _showSettingSnackbar('❌ $err');
+        return;
+      }
+      await _completeGoogleLogin(uid);
+    } catch (e, st) {
+      debugPrint('[Profil] login Google/sync gagal: $e');
+      await Sentry.captureException(e, stackTrace: st);
+      _showSettingSnackbar('❌ Login Google gagal: ${_shortError(e)}');
+    } finally {
+      if (mounted) setState(() => _googleLoginLoading = false);
     }
+  }
+
+  Future<void> _completeGoogleLogin(String uid) async {
     SupabaseSync.initWithUser(uid);
 
     // Local first — never blind-overwrite with cloud (Critical #1).
@@ -1892,9 +1951,19 @@ class _ProfilTabState extends State<ProfilTab> {
                 )
               else
                 FilledButton.icon(
-                  onPressed: _handleGoogleLogin,
-                  icon: const Icon(Icons.g_mobiledata, size: 22),
-                  label: const Text('Lanjut dengan Google'),
+                  onPressed: _googleLoginLoading ? null : _handleGoogleLogin,
+                  icon: _googleLoginLoading
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Icon(Icons.g_mobiledata, size: 22),
+                  label: Text(
+                    _googleLoginLoading
+                        ? 'MENGHUBUNGKAN...'
+                        : 'Lanjut dengan Google',
+                  ),
                   style: FilledButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: AppColors.onPrimary,

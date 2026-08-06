@@ -120,10 +120,16 @@ class AuthService {
         return null;
       }
 
+      final accessToken = googleAuth.accessToken;
+      if (accessToken == null || accessToken.isEmpty) {
+        _lastError = 'Google tidak kirim access token. Mencoba login browser…';
+        return null;
+      }
+
       final res = await Supabase.instance.client.auth.signInWithIdToken(
         provider: OAuthProvider.google,
         idToken: idToken,
-        accessToken: googleAuth.accessToken,
+        accessToken: accessToken,
       );
 
       final uid = res.session?.user.id ?? res.user?.id;
@@ -149,8 +155,21 @@ class AuthService {
   /// - Supabase Auth → Redirect URLs include [redirectUrl]
   /// - Android intent-filter for scheme [redirectScheme]
   static Future<String?> _signInBrowserOAuth() async {
+    StreamSubscription<AuthState>? callbackSub;
     try {
-      final launched = await Supabase.instance.client.auth.signInWithOAuth(
+      final client = Supabase.instance.client;
+      final signedIn = Completer<Session>();
+      // Attach listener before opening Chrome so a fast deep-link callback is
+      // never missed between launch and subscription.
+      callbackSub = client.auth.onAuthStateChange.listen((data) {
+        if (data.event == AuthChangeEvent.signedIn &&
+            data.session != null &&
+            !signedIn.isCompleted) {
+          signedIn.complete(data.session!);
+        }
+      });
+
+      final launched = await client.auth.signInWithOAuth(
         OAuthProvider.google,
         redirectTo: redirectUrl,
         authScreenLaunchMode: LaunchMode.externalApplication,
@@ -162,22 +181,17 @@ class AuthService {
       }
 
       // Wait for deep-link callback to establish a session (max 3 min).
-      // Catatan: Jika tidak kembali ke apps setelah login browser,
-      // pastikan URL berikut sudah terdaftar di Supabase Auth →
-      // External OAuth Providers → Google → Authorized redirect URLs:
-      //   $redirectUrl
+      // Catatan: URL app harus ada di Supabase URL Configuration, sedangkan
+      // callback Supabase harus ada di Web OAuth client Google Cloud.
       final Session session;
       try {
-        session = await Supabase.instance.client.auth.onAuthStateChange
-            .where((e) =>
-                e.event == AuthChangeEvent.signedIn && e.session != null)
-            .map((e) => e.session!)
-            .first
-            .timeout(const Duration(minutes: 3));
+        session = client.auth.currentSession ??
+            await signedIn.future.timeout(const Duration(minutes: 3));
       } on TimeoutException {
         _lastError =
             'Login browser timeout — tidak kembali ke apps. '
-            'Pastikan Redirect URL di Supabase Auth → Google: $redirectUrl. '
+            'Pastikan $redirectUrl ada di Supabase Auth → URL Configuration, '
+            'dan callback Supabase ada di Google Cloud Web OAuth client. '
             'Atau coba login lewat perangkat lain / pastikan Chrome default.';
         return null;
       }
@@ -193,6 +207,8 @@ class AuthService {
       _lastError = _mapError(e);
       debugPrint('[AuthService] browser OAuth gagal: $e');
       return null;
+    } finally {
+      await callbackSub?.cancel();
     }
   }
 
