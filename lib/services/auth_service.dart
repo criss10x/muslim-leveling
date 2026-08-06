@@ -27,7 +27,7 @@ class AuthService {
   static const _webClientId = String.fromEnvironment(
     'GOOGLE_WEB_CLIENT_ID',
     defaultValue:
-        '691907686915-2kkvt45674moh5b79uu9udj3s4k6to0s.apps.googleusercontent.com',
+        '691907686915-mpcmcu4oh3e3kv2ld0qs5ur3kl7oro3h.apps.googleusercontent.com',
   );
 
   /// Deep link scheme for browser OAuth return.
