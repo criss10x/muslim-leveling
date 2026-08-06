@@ -37,6 +37,7 @@ class _ProfilTabState extends State<ProfilTab> {
   String _nickname = 'Muslim Warrior';
   String? _avatarPath;
   bool _haidMode = false;
+  bool _googleLoginLoading = false;
 
   @override
   void initState() {
@@ -1762,13 +1763,27 @@ class _ProfilTabState extends State<ProfilTab> {
 
   // ── Backup & Account ──
   Future<void> _handleGoogleLogin() async {
-    final uid = await AuthService.signInWithGoogle();
-    if (uid == null) {
-      final err =
-          AuthService.lastError ?? 'Login Google dibatalkan atau gagal.';
-      _showSettingSnackbar('❌ $err');
-      return;
+    if (_googleLoginLoading) return;
+    setState(() => _googleLoginLoading = true);
+    try {
+      final uid = await AuthService.signInWithGoogle();
+      if (uid == null) {
+        final err =
+            AuthService.lastError ?? 'Login Google dibatalkan atau gagal.';
+        _showSettingSnackbar('❌ $err');
+        return;
+      }
+      await _completeGoogleLogin(uid);
+    } catch (e, st) {
+      debugPrint('[Profil] login Google/sync gagal: $e');
+      await Sentry.captureException(e, stackTrace: st);
+      _showSettingSnackbar('❌ Login Google gagal: ${_shortError(e)}');
+    } finally {
+      if (mounted) setState(() => _googleLoginLoading = false);
     }
+  }
+
+  Future<void> _completeGoogleLogin(String uid) async {
     SupabaseSync.initWithUser(uid);
 
     // Local first — never blind-overwrite with cloud (Critical #1).
@@ -1916,9 +1931,19 @@ class _ProfilTabState extends State<ProfilTab> {
                 )
               else
                 FilledButton.icon(
-                  onPressed: _handleGoogleLogin,
-                  icon: const Icon(Icons.g_mobiledata, size: 22),
-                  label: const Text('Lanjut dengan Google'),
+                  onPressed: _googleLoginLoading ? null : _handleGoogleLogin,
+                  icon: _googleLoginLoading
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Icon(Icons.g_mobiledata, size: 22),
+                  label: Text(
+                    _googleLoginLoading
+                        ? 'MENGHUBUNGKAN...'
+                        : 'Lanjut dengan Google',
+                  ),
                   style: FilledButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: AppColors.onPrimary,
