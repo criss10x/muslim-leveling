@@ -56,10 +56,8 @@ android {
                 throw GradleException("Release build tanpa keystore: key.properties atau storeFile tidak ditemukan.")
             }
             signingConfig = signingConfigs.getByName("release")
-            // ponytail: disable R8/minify — package_info_plus duplicate-class
-            // conflict di R8 task. App kecil, obfuscation gak kritis.
-            isMinifyEnabled = false
-            isShrinkResources = false
+            isMinifyEnabled = true
+            isShrinkResources = true
         }
     }
 }
