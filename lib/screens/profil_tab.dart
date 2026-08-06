@@ -250,6 +250,7 @@ class _ProfilTabState extends State<ProfilTab> {
     bool enabled = await NotificationService.isRemindersEnabled();
     String mode = await NotificationService.getNotifMode();
     String soundMode = await NotificationService.getSoundMode();
+    final realEnabled = await NotificationService.areNotificationsEnabled();
     if (!mounted) return;
 
     showDialog(
@@ -280,6 +281,29 @@ class _ProfilTabState extends State<ProfilTab> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Warning kalau permission dicabut tapi prefs ON
+                  if (!realEnabled)
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(AppSpacing.md),
+                      margin: const EdgeInsets.only(bottom: AppSpacing.md),
+                      decoration: BoxDecoration(
+                        color: AppColors.errorContainer,
+                        borderRadius: BorderRadius.circular(AppRadius.lg),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.warning_amber, color: AppColors.error, size: 20),
+                          const SizedBox(width: AppSpacing.sm),
+                          Expanded(
+                            child: Text(
+                              'Izin notifikasi dicabut. Buka Pengaturan HP untuk mengaktifkan.',
+                              style: AppText.bodyMd().copyWith(color: AppColors.error),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   // Toggle enable
                   Row(
                     children: [

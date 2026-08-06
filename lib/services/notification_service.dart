@@ -195,6 +195,16 @@ class NotificationService {
     return granted ?? false;
   }
 
+  /// Cek status real notifikasi — bukan cuma prefs.
+  /// Return true hanya kalau permission granted DAN user enable di prefs.
+  static Future<bool> areNotificationsEnabled() async {
+    final androidPlugin = _plugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
+    if (androidPlugin == null) return true; // iOS or other
+    return await androidPlugin.areNotificationsEnabled() ?? false;
+  }
+
   /// Pastikan izin exact alarm (Android 12+). Tanpa izin ini zonedSchedule
   /// mode exact melempar PlatformException dan TIDAK ADA notif terjadwal
   /// sama sekali. Kalau belum diizinkan, buka halaman sistem
@@ -298,7 +308,16 @@ class NotificationService {
 
   static Future<bool> isRemindersEnabled() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_prefEnabled) ?? false;
+    final prefEnabled = prefs.getBool(_prefEnabled) ?? false;
+    if (!prefEnabled) return false;
+    // Toggle ON di prefs tapi permission dicabut → notif tidak jalan.
+    // Sync prefs dengan status real.
+    final realEnabled = await areNotificationsEnabled();
+    if (!realEnabled) {
+      await prefs.setBool(_prefEnabled, false);
+      return false;
+    }
+    return true;
   }
 
   // ═══════════════════════════════════════════

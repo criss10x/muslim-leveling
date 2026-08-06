@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../services/notification_service.dart';
+import '../../services/prayer_service.dart';
 import 'dashboard_shell.dart';
 
 /// Onboarding card — fitur introduction, tanpa form.
@@ -22,7 +23,34 @@ class _CharacterCreationScreenState extends State<CharacterCreationScreen> {
     try {
       // Init notifikasi di background, tidak blocking
       await NotificationService.init();
-      await NotificationService.requestPermission();
+      final notifGranted = await NotificationService.requestPermission();
+      if (!notifGranted && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Izin notifikasi ditolak. Pengingat adzan bisa diaktifkan nanti di Profil.',
+              style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
+            ),
+            backgroundColor: AppColors.surfaceContainerLowest,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+
+      // Auto-detect lokasi → sync jadwal. Fallback Jakarta kalau gagal.
+      try {
+        final loc = await PrayerService.getCurrentLocation().timeout(
+          const Duration(seconds: 25),
+        );
+        if (loc.failure == null && loc.id != null && loc.name != null) {
+          await PrayerService.saveLocation(loc.id!, loc.name!);
+        } else {
+          await PrayerService.loadLocation(); // set default Jakarta
+        }
+      } catch (_) {
+        // ponytail: timeout/gagal GPS → fallback Jakarta, tidak blocking onboarding
+        await PrayerService.loadLocation();
+      }
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('onboarding_done', true);
