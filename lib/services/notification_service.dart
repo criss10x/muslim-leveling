@@ -95,7 +95,10 @@ class NotificationService {
     // ic_launcher tidak boleh dipakai di sini — sejak Android 5.0 sistem
     // memaksa small icon jadi siluet, dan icon launcher berwarna berubah
     // jadi kotak putih pekat di status bar.
-    const androidInit = AndroidInitializationSettings('@drawable/ic_stat_notif');
+    // flutter_local_notifications membutuhkan nama resource, bukan Android
+    // resource reference (@drawable/...). Prefix membuat lookup default icon
+    // gagal dengan PlatformException(invalid_icon).
+    const androidInit = AndroidInitializationSettings('ic_stat_notif');
     const iosInit = DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
@@ -186,6 +189,7 @@ class NotificationService {
   /// Request POST_NOTIFICATIONS permission (Android 13+).
   /// Returns true if granted.
   static Future<bool> requestPermission() async {
+    if (!_initialized) await init();
     final androidPlugin = _plugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>();
@@ -198,6 +202,7 @@ class NotificationService {
   /// Cek status real notifikasi — bukan cuma prefs.
   /// Return true hanya kalau permission granted DAN user enable di prefs.
   static Future<bool> areNotificationsEnabled() async {
+    if (!_initialized) await init();
     final androidPlugin = _plugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>();
@@ -210,6 +215,7 @@ class NotificationService {
   /// sama sekali. Kalau belum diizinkan, buka halaman sistem
   /// "Alarm & pengingat". Return status akhir.
   static Future<bool> ensureExactAlarmPermission() async {
+    if (!_initialized) await init();
     final androidPlugin = _plugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>();

@@ -25,34 +25,51 @@ class _CharacterCreationScreenState extends State<CharacterCreationScreen> {
       // Lokasi diminta lebih dulu agar jadwal dan reminder pertama sesuai kota.
       final setup = await _syncPrayerSchedule();
 
-      await NotificationService.init();
-      final notifGranted = await NotificationService.requestPermission();
-      if (notifGranted) {
-        // SCHEDULE_EXACT_ALARM perlu special access Android 12+. Bila ditolak,
-        // NotificationService tetap menjadwalkan alarm inexact sebagai fallback.
-        try {
-          await NotificationService.ensureExactAlarmPermission();
-        } catch (_) {
-          // ponytail: exact alarm unavailable still uses inexact notification.
-        }
-        await NotificationService.setRemindersEnabled(true);
-        if (setup.timings != null) {
-          await NotificationService.scheduleAdhanReminders(
-            setup.city,
-            setup.timings!,
+      try {
+        await NotificationService.init();
+        final notifGranted = await NotificationService.requestPermission();
+        if (notifGranted) {
+          // SCHEDULE_EXACT_ALARM perlu special access Android 12+. Bila ditolak,
+          // NotificationService tetap menjadwalkan alarm inexact sebagai fallback.
+          try {
+            await NotificationService.ensureExactAlarmPermission();
+          } catch (_) {
+            // ponytail: exact alarm unavailable still uses inexact notification.
+          }
+          await NotificationService.setRemindersEnabled(true);
+          if (setup.timings != null) {
+            await NotificationService.scheduleAdhanReminders(
+              setup.city,
+              setup.timings!,
+            );
+          }
+        } else if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Izin notifikasi ditolak. Pengingat adzan bisa diaktifkan nanti di Profil.',
+                style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
+              ),
+              backgroundColor: AppColors.surfaceContainerLowest,
+              duration: const Duration(seconds: 3),
+            ),
           );
         }
-      } else if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Izin notifikasi ditolak. Pengingat adzan bisa diaktifkan nanti di Profil.',
-              style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
+      } catch (e) {
+        // ponytail: onboarding tetap selesai; pengingat dapat diaktifkan di Profil.
+        debugPrint('[Onboarding] setup notifikasi gagal: $e');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Pengingat belum siap. Aktifkan lagi dari Profil setelah onboarding.',
+                style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
+              ),
+              backgroundColor: AppColors.surfaceContainerLowest,
+              duration: const Duration(seconds: 3),
             ),
-            backgroundColor: AppColors.surfaceContainerLowest,
-            duration: const Duration(seconds: 3),
-          ),
-        );
+          );
+        }
       }
 
       final prefs = await SharedPreferences.getInstance();

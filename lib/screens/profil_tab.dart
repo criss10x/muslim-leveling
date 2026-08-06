@@ -282,7 +282,7 @@ class _ProfilTabState extends State<ProfilTab> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Warning kalau permission dicabut tapi prefs ON
+                  // Status juga false pada first install sebelum prompt muncul.
                   if (!realEnabled)
                     Container(
                       width: double.infinity,
@@ -298,7 +298,7 @@ class _ProfilTabState extends State<ProfilTab> {
                           const SizedBox(width: AppSpacing.sm),
                           Expanded(
                             child: Text(
-                              'Izin notifikasi dicabut. Buka Pengaturan HP untuk mengaktifkan.',
+                              'Izin notifikasi belum aktif. Aktifkan untuk menerima pengingat adzan.',
                               style: AppText.bodyMd().copyWith(color: AppColors.error),
                             ),
                           ),
