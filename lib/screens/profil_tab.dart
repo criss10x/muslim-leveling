@@ -248,10 +248,25 @@ class _ProfilTabState extends State<ProfilTab> {
   }
 
   Future<void> _showNotifDialog() async {
-    bool enabled = await NotificationService.isRemindersEnabled();
-    String mode = await NotificationService.getNotifMode();
-    String soundMode = await NotificationService.getSoundMode();
-    final realEnabled = await NotificationService.areNotificationsEnabled();
+    late bool enabled;
+    late String mode;
+    late String soundMode;
+    late bool realEnabled;
+    try {
+      await NotificationService.init();
+      enabled = await NotificationService.isRemindersEnabled();
+      mode = await NotificationService.getNotifMode();
+      soundMode = await NotificationService.getSoundMode();
+      realEnabled = await NotificationService.areNotificationsEnabled();
+    } catch (e, st) {
+      debugPrint('[Profil] gagal buka pengaturan notif: $e');
+      await Sentry.captureException(e, stackTrace: st);
+      if (!mounted) return;
+      _showSettingSnackbar(
+        'Pengaturan notifikasi gagal dibuka: ${_shortError(e)}',
+      );
+      return;
+    }
     if (!mounted) return;
 
     showDialog(
@@ -325,10 +340,15 @@ class _ProfilTabState extends State<ProfilTab> {
                               final granted =
                                   await NotificationService.requestPermission();
                               if (!granted) {
+                                if (!ctx.mounted) return;
+                                Navigator.pop(ctx);
                                 _showSettingSnackbar(
-                                  'Izin notifikasi ditolak. Aktifkan manual di pengaturan HP.',
+                                  'Izin notifikasi belum aktif. Buka Pengaturan Notifikasi Android lalu izinkan.',
                                 );
                                 return;
+                              }
+                              if (ctx.mounted) {
+                                setSt(() => realEnabled = true);
                               }
                               // Tanpa izin "Alarm & pengingat" (Android 12+),
                               // penjadwalan exact gagal total — minta dulu.
