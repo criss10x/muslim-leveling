@@ -68,3 +68,4 @@ supabase_key.jpg
 *.pem
 
 test/failures/
+release/
