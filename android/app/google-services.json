@@ -18,7 +18,15 @@
           "client_type": 1,
           "android_info": {
             "package_name": "id.muslimleveling.muslim_leveling",
-            "certificate_hash": "A4:26:1B:D1:DF:E4:AA:AB:AE:20:C3:D9:70:5F:A1:22:18:21:EE:2C"
+            "certificate_hash": "DF:2C:7E:72:5A:29:A7:1B:6F:66:FA:A6:FA:04:78:77:5B:46:F7:23"
+          }
+        },
+        {
+          "client_id": "691907686915-hhb5r3vhirhtcp4a6ihev4vt83ctgkko.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.muslimleveling.muslim_leveling",
+            "certificate_hash": "71:43:87:B5:51:78:B5:63:64:10:1C:A4:A1:E1:54:50:E2:CD:17:E8"
           }
         }
       ],

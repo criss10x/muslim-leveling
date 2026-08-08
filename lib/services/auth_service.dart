@@ -158,6 +158,11 @@ class AuthService {
     StreamSubscription<AuthState>? callbackSub;
     try {
       final client = Supabase.instance.client;
+      // Clear stale session/flow state before starting fresh OAuth.
+      try {
+        await client.auth.signOut();
+      } catch (_) {}
+
       final signedIn = Completer<Session>();
       // Attach listener before opening Chrome so a fast deep-link callback is
       // never missed between launch and subscription.
