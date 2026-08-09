@@ -44,3 +44,4 @@ flutter:
     - assets/google_fonts/
     - assets/quran/
     - assets/quran/surah/
+    - assets/supabase_export.json

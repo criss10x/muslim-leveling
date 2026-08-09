@@ -12,6 +12,7 @@ import 'services/cloud_sync.dart';
 import 'services/auth_service.dart';
 import 'services/game_service.dart';
 import 'services/quran_settings.dart';
+import 'services/migration_service.dart';
 
 // ponytail: runApp dulu, init setelah — apapun error di init, UI tetap muncul
 void main() {
@@ -45,7 +46,10 @@ Future<void> _initAsync() async {
     final authed = await AuthService.init();
     if (authed) {
       final uid = AuthService.userId;
-      if (uid != null) CloudSync.initWithUser(uid);
+      if (uid != null) {
+        CloudSync.initWithUser(uid);
+        await MigrationService.maybeMigrate();
+      }
     }
   } catch (_) {}
 
