@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:collection/collection.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'supabase_sync.dart';
+import 'cloud_sync.dart';
 import 'cosmetic_catalog.dart';
 import 'cosmetic_service.dart';
 
@@ -361,8 +361,8 @@ class GameService {
       }
     }
     if (!loaded) {
-      // Fresh install or corrupt local — try Supabase
-      final remote = await SupabaseSync.loadGame();
+      // Fresh install or corrupt local — try Firestore
+      final remote = await CloudSync.loadGame();
       if (remote != null) {
         _cache = GameState.fromMap(remote);
         await p.setString(_key, jsonEncode(remote));
@@ -381,7 +381,7 @@ class GameService {
     stateVersion.value++; // broadcast to passive listeners (Jadwal tab)
     final p = await SharedPreferences.getInstance();
     await p.setString(_key, jsonEncode(s.toMap()));
-    SupabaseSync.saveGame(
+    CloudSync.saveGame(
       s.toMap(),
     ); // fire-and-forget, local is source of truth
   }

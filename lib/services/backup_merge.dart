@@ -1,4 +1,4 @@
-// Pure merge helpers for login restore — no Flutter/Supabase deps.
+// Pure merge helpers for login restore — no Flutter/Firebase deps.
 // ponytail: max-progress pick / union. Dialog Cloud|Device when users need control.
 
 /// Game: keep the map with higher cumulative [xp] (level is derived).

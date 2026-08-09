@@ -1,14 +1,14 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'theme/app_theme.dart';
 import 'services/theme_service.dart';
 import 'screens/splash_screen.dart';
 import 'services/notification_service.dart';
-import 'services/supabase_sync.dart';
+import 'services/cloud_sync.dart';
 import 'services/auth_service.dart';
 import 'services/game_service.dart';
 import 'services/quran_settings.dart';
@@ -22,14 +22,7 @@ void main() {
 
 Future<void> _initAsync() async {
   try {
-    await Supabase.initialize(
-      url: 'https://hiywlsqaurqvbwwuutbo.supabase.co',
-      publishableKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhpeXdsc3FhdXJxdmJ3d3V1dGJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2NTI3ODUsImV4cCI6MjA5OTIyODc4NX0.LDwpQooQKG5ehIENQ7qXPp1XJIkOq3BLXIUL2lOEfTw',
-      // Deep link for browser OAuth fallback (see AuthService.redirectUrl).
-      authOptions: const FlutterAuthClientOptions(
-        authFlowType: AuthFlowType.pkce,
-      ),
-    );
+    await Firebase.initializeApp();
   } catch (_) {}
 
   try {
@@ -38,9 +31,9 @@ Future<void> _initAsync() async {
     if (deviceId == null) {
       final newId = '${_rand36()}-${_rand36()}-${_rand36()}';
       await prefs.setString('device_id', newId);
-      SupabaseSync.init(newId);
+      CloudSync.init(newId);
     } else {
-      SupabaseSync.init(deviceId);
+      CloudSync.init(deviceId);
     }
   } catch (_) {}
 
@@ -52,7 +45,7 @@ Future<void> _initAsync() async {
     final authed = await AuthService.init();
     if (authed) {
       final uid = AuthService.userId;
-      if (uid != null) SupabaseSync.initWithUser(uid);
+      if (uid != null) CloudSync.initWithUser(uid);
     }
   } catch (_) {}
 
@@ -66,7 +59,6 @@ Future<void> _initAsync() async {
   } catch (_) {}
 
   try {
-    // Default dark until ThemeNotifier.load(); toggle rebinds via theme_service.
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,

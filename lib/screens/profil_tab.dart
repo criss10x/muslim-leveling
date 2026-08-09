@@ -13,7 +13,7 @@ import '../../services/game_service.dart';
 import '../../services/notification_service.dart';
 import '../../services/achievement_service.dart';
 import '../../services/learning_content.dart';
-import '../../services/supabase_sync.dart';
+import '../../services/cloud_sync.dart';
 import '../../services/backup_merge.dart';
 import '../../services/auth_service.dart';
 import '../../widgets/achievement_medal.dart';
@@ -1804,7 +1804,7 @@ class _ProfilTabState extends State<ProfilTab> {
   }
 
   Future<void> _completeGoogleLogin(String uid) async {
-    SupabaseSync.initWithUser(uid);
+    CloudSync.initWithUser(uid);
 
     // Local first — never blind-overwrite with cloud (Critical #1).
     await GameService.load();
@@ -1822,7 +1822,7 @@ class _ProfilTabState extends State<ProfilTab> {
       } catch (_) {}
     }
 
-    final remote = await SupabaseSync.load();
+    final remote = await CloudSync.load();
     final hasRemote = remote != null;
     final remoteGame = remote != null && remote['game'] is Map
         ? Map<String, dynamic>.from(remote['game'] as Map)
@@ -1857,15 +1857,15 @@ class _ProfilTabState extends State<ProfilTab> {
     await AchievementService.load(force: true);
 
     // Always push merged result so cloud catches up (signed-in only).
-    final gameSaved = await SupabaseSync.saveGame(GameService.current.toMap());
-    final learningSaved = await SupabaseSync.saveLearning(
+    final gameSaved = await CloudSync.saveGame(GameService.current.toMap());
+    final learningSaved = await CloudSync.saveLearning(
       LearningService.current.toMap(),
     );
-    final achievementsSaved = await SupabaseSync.saveAchievements({
+    final achievementsSaved = await CloudSync.saveAchievements({
       'unlocked': mergedAch,
       'ts': DateTime.now().toUtc().toIso8601String(),
     });
-    final backupSaved = SupabaseSync.allSaved([
+    final backupSaved = CloudSync.allSaved([
       gameSaved,
       learningSaved,
       achievementsSaved,
@@ -1890,7 +1890,7 @@ class _ProfilTabState extends State<ProfilTab> {
   Future<void> _handleLogout() async {
     await AuthService.signOut();
     // Stop cloud writes; local SharedPreferences stays intact.
-    SupabaseSync.clearUser();
+    CloudSync.clearUser();
     if (!mounted) return;
     setState(() {});
     _showSettingSnackbar(

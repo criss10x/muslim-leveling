@@ -21,7 +21,9 @@ dependencies:
   timezone: ^0.10.0
   android_intent_plus: ^5.1.0
   sentry_flutter: ^9.23.0
-  supabase_flutter: ^2.8.4
+  firebase_core: ^4.1.0
+  firebase_auth: ^6.0.0
+  cloud_firestore: ^6.0.0
   google_sign_in: ^6.2.1
   just_audio: ^0.9.42
   audio_session: ^0.1.21

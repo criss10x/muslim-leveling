@@ -4,6 +4,7 @@ plugins {
     id("com.android.application")
     id("dev.flutter.flutter-gradle-plugin")
     id("org.jetbrains.kotlin.android") version "2.3.20" apply false
+    id("com.google.gms.google-services")
 }
 
 apply(plugin = "org.jetbrains.kotlin.android")

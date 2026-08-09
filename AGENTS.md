@@ -20,7 +20,7 @@ Project dir: `~/muslim-leveling-v6`
 - **Try/catch everything async** with `ponytail:` noting swallowed errors.
 - **`ponytail:` in initState** for deferred loading (load in background, never block first paint).
 - No custom build runner / code generation.
-- SharedPreferences for local state, Supabase for cloud backup. Game state lives in Prefs first.
+- SharedPreferences for local state, Firestore for cloud backup. Game state lives in Prefs first.
 - Colors/theme from `app_theme.dart` (`AppColors`, `AppText`, `AppSpacing`, `AppRadius`).
 - Material icons via `Icons.*` — no custom PNG icons for UI elements (only launcher icon).
 
@@ -57,7 +57,7 @@ tool/               # flutter scripts
 |---|---|
 | `GameService` | All game state: XP, level, prayer log, quests, streak. Singleton + `stateVersion` ChangeNotifier. |
 | `AuthService` | Google login (native popup default → browser OAuth fallback). |
-| `SupabaseSync` | Cloud backup/merge. Never blind-overwrite local. |
+| `CloudSync` | Cloud backup/merge (Firestore). Never blind-overwrite local. |
 | `PrayerService` | Jadwal sholat API (fetchSchedule, loadLocation). |
 | `AchievementService` | Medals, tier titles (WARRIOR..MYTHIC). |
 | `NotificationService` | Adzan reminders, scheduled. |
@@ -65,24 +65,18 @@ tool/               # flutter scripts
 
 ## Login & Auth Setup
 
-**Native Google Sign-In (popup) — preferred.**  
-Requires Android OAuth client registered in Google Cloud Console:
+**Native Google Sign-In (popup) — preferred.**  \
+Requires SHA-1 registered in Firebase Console → Project Settings → Your apps:
 
 ```xml
 Package name: id.muslimleveling.muslim_leveling
-SHA-1:        DF:2C:7E:72:5A:29:A7:1B:6F:66:FA:A6:FA:04:78:77:5B:46:F7:23
+SHA-1 (release): DF:2C:7E:72:5A:29:A7:1B:6F:66:FA:A6:FA:04:78:77:5B:46:F7:23
+SHA-1 (debug):   A4:26:1B:D1:DF:E4:AA:AB:AE:20:C3:D9:70:5F:A1:22:18:21:EE:2C
 ```
 
-URL: https://console.cloud.google.com/apis/credentials → Android OAuth client
+URL: https://console.firebase.google.com/project/muslim-leveling/settings/general/android
 
-**If SHA-1 not registered** (first build) → falls back to browser OAuth.  
-For browser OAuth to work, Supabase needs this redirect URL:
-
-```
-id.muslimleveling.muslim_leveling://login-callback
-```
-
-Supabase → Auth → External OAuth Providers → Google → Authorized redirect URLs
+Jika SHA-1 tidak terdaftar → native sign-in gagal dengan error `DEVELOPER_ERROR` (Code 10).
 
 **Keystore**: `~/muslim-leveling-release.jks` (alias: muslim-leveling, pass: android)  
 **Build**: `flutter build apk --release --split-per-abi`  

@@ -2,44 +2,32 @@
   "project_info": {
     "project_number": "691907686915",
     "project_id": "muslim-leveling",
-    "storage_bucket": "muslim-leveling.appspot.com"
+    "storage_bucket": "muslim-leveling.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:691907686915:android:muslim_leveling",
+        "mobilesdk_app_id": "1:691907686915:android:9ec6d49ef4f7aa4b365436",
         "android_client_info": {
           "package_name": "id.muslimleveling.muslim_leveling"
         }
       },
       "oauth_client": [
         {
-          "client_id": "691907686915-hhb5r3vhirhtcp4a6ihev4vt83ctgkko.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "id.muslimleveling.muslim_leveling",
-            "certificate_hash": "DF:2C:7E:72:5A:29:A7:1B:6F:66:FA:A6:FA:04:78:77:5B:46:F7:23"
-          }
-        },
-        {
-          "client_id": "691907686915-hhb5r3vhirhtcp4a6ihev4vt83ctgkko.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "id.muslimleveling.muslim_leveling",
-            "certificate_hash": "71:43:87:B5:51:78:B5:63:64:10:1C:A4:A1:E1:54:50:E2:CD:17:E8"
-          }
+          "client_id": "691907686915-ljhu8cc4uvjuggd093fv5bl7dvk6joil.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD_placeholder_google_cloud_api_key"
+          "current_key": "AIzaSyCu4fR19435lAP7KF57zk1WcOPVQMg_TQs"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "691907686915-2kkvt45674moh5b79uu9udj3s4k6to0s.apps.googleusercontent.com",
+              "client_id": "691907686915-ljhu8cc4uvjuggd093fv5bl7dvk6joil.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

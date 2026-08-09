@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'game_service.dart';
 import 'learning_content.dart';
-import 'supabase_sync.dart';
+import 'cloud_sync.dart';
 
 /// Achievement system ala Mobile Legends — medali kill-streak untuk ibadah.
 /// Terpisah dari badge system lama (GameService.badgeDefs): badge = koleksi
@@ -386,7 +386,7 @@ class AchievementService {
         await Sentry.captureException(e);
       }
     }
-    final remote = await SupabaseSync.loadAchievements();
+    final remote = await CloudSync.loadAchievements();
     if (remote != null && remote['unlocked'] is Map) {
       _unlocked = Map<String, String>.from(remote['unlocked'] as Map);
       await prefs.setString(_prefKey, jsonEncode(_unlocked));
@@ -397,7 +397,7 @@ class AchievementService {
   static Future<void> _persist() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_prefKey, jsonEncode(_unlocked));
-    SupabaseSync.saveAchievements({
+    CloudSync.saveAchievements({
       'unlocked': _unlocked,
       'ts': DateTime.now().toUtc().toIso8601String(),
     }); // fire-and-forget
