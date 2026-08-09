@@ -252,6 +252,15 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                 ),
                 const SizedBox(height: AppSpacing.md),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: AppSpacing.md),
+                  child: Text(
+                    'v1.0.0', // ponytail: update when cutting release
+                    style: AppText.labelCapsSm().copyWith(
+                      color: AppColors.onSurfaceVariant.withValues(alpha: 0.6),
+                    ),
+                  ),
+                ),
                 Text(
                   'MEMUAT DATA PEJUANG...',
                   style: AppText.labelCaps().copyWith(
