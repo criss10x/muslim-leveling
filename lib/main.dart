@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'theme/app_theme.dart';
@@ -12,7 +11,6 @@ import 'services/cloud_sync.dart';
 import 'services/auth_service.dart';
 import 'services/game_service.dart';
 import 'services/quran_settings.dart';
-import 'services/migration_service.dart';
 
 // ponytail: runApp dulu, init setelah — apapun error di init, UI tetap muncul
 void main() {
@@ -22,10 +20,6 @@ void main() {
 }
 
 Future<void> _initAsync() async {
-  try {
-    await Firebase.initializeApp();
-  } catch (_) {}
-
   try {
     final prefs = await SharedPreferences.getInstance();
     final deviceId = prefs.getString('device_id');
@@ -48,7 +42,6 @@ Future<void> _initAsync() async {
       final uid = AuthService.userId;
       if (uid != null) {
         CloudSync.initWithUser(uid);
-        await MigrationService.maybeMigrate();
       }
     }
   } catch (_) {}

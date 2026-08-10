@@ -53,12 +53,23 @@ android {
         release {
             // ponytail: fail-fast kalau keystore release tidak ada — jangan pernah
             // silent-fallback ke debug signing di build release (Play Store akan tolak).
-            if (!useReleaseKeystore) {
-                throw GradleException("Release build tanpa keystore: key.properties atau storeFile tidak ditemukan.")
+            if (useReleaseKeystore) {
+                signingConfig = signingConfigs.getByName("release")
             }
-            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
+        }
+    }
+}
+
+if (!useReleaseKeystore) {
+    tasks.matching {
+        it.name in setOf("assembleRelease", "bundleRelease", "packageRelease")
+    }.configureEach {
+        doFirst {
+            throw GradleException(
+                "Release build tanpa keystore: key.properties atau storeFile tidak ditemukan.",
+            )
         }
     }
 }

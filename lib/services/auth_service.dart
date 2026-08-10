@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart' as fb;
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,14 +14,15 @@ class AuthService {
   static String? get lastError => _lastError;
 
   /// Web OAuth client (client_type: 3) for idToken via native GoogleSignIn.
-  static const _webClientId = String.fromEnvironment(
+  @visibleForTesting
+  static const googleWebClientId = String.fromEnvironment(
     'GOOGLE_WEB_CLIENT_ID',
     defaultValue:
-        '691907686915-mpcmcu4oh3e3kv2ld0qs5ur3kl7oro3h.apps.googleusercontent.com',
+        '691907686915-ljhu8cc4uvjuggd093fv5bl7dvk6joil.apps.googleusercontent.com',
   );
 
   static final _google = GoogleSignIn(
-    serverClientId: _webClientId,
+    serverClientId: googleWebClientId,
     scopes: const ['email', 'profile'],
   );
 
@@ -29,8 +31,24 @@ class AuthService {
   static bool get isSignedIn => _userId != null;
 
   static StreamSubscription<fb.User?>? _authSub;
+  static Future<bool>? _firebaseInit;
+
+  static Future<bool> ensureFirebaseReady() =>
+      _firebaseInit ??= _initializeFirebase();
+
+  static Future<bool> _initializeFirebase() async {
+    try {
+      if (Firebase.apps.isEmpty) await Firebase.initializeApp();
+      return true;
+    } catch (e) {
+      _lastError = 'Firebase belum siap. Coba buka ulang aplikasi. ($e)';
+      debugPrint('[AuthService] Firebase initialization gagal: $e');
+      return false; // ponytail: one init attempt per process, retry on app restart
+    }
+  }
 
   static Future<bool> init() async {
+    if (!await ensureFirebaseReady()) return false;
     try {
       _authSub?.cancel();
       _authSub = fb.FirebaseAuth.instance.authStateChanges().listen((user) {
@@ -57,8 +75,9 @@ class AuthService {
     return false;
   }
 
-  static Future<String?> signInWithGoogle({bool preferNative = true}) async {
+  static Future<String?> signInWithGoogle() async {
     _lastError = null;
+    if (!await ensureFirebaseReady()) return null;
     final native = await _signInNative();
     if (native != null) return native;
     return null; // ponytail: no browser fallback; native always works once SHA-1 registered
