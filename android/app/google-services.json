@@ -14,6 +14,30 @@
       },
       "oauth_client": [
         {
+          "client_id": "691907686915-01mqovrnr8pcvbneaksgdlk90gm1kqvi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.muslimleveling.muslim_leveling",
+            "certificate_hash": "a4261bd1dfe4aaabae20c3d9705fa1221821ee2c"
+          }
+        },
+        {
+          "client_id": "691907686915-9rjn1quf81kthc67g9nqcv1hrlog006c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.muslimleveling.muslim_leveling",
+            "certificate_hash": "df2c7e725a29a71b6f66faa6fa0478775b46f723"
+          }
+        },
+        {
+          "client_id": "691907686915-hhb5r3vhirhtcp4a6ihev4vt83ctgkko.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.muslimleveling.muslim_leveling",
+            "certificate_hash": "714387b55178b56364101ca4a1e15450e2cd17e8"
+          }
+        },
+        {
           "client_id": "691907686915-ljhu8cc4uvjuggd093fv5bl7dvk6joil.apps.googleusercontent.com",
           "client_type": 3
         }
