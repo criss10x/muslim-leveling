@@ -1,5 +1,1 @@
-{
-  "firestore": {
-    "rules": "firestore.rules"
-  }
-}
+{"firestore":{"rules":"firestore.rules"},"flutter":{"platforms":{"android":{"default":{"projectId":"muslim-leveling","appId":"1:691907686915:android:9ec6d49ef4f7aa4b365436","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"muslim-leveling","configurations":{"android":"1:691907686915:android:9ec6d49ef4f7aa4b365436"}}}}}}

@@ -39,5 +39,4 @@ void main() {
 
   GameService.clearTestNow();
   GameService.setTestSkipTimeWindow(true);
-  print('OK: wajib lock 03:00 + subuh +3jam + sunnah windows');
 }

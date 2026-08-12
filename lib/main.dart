@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'theme/app_theme.dart';
@@ -12,20 +11,25 @@ import 'services/cloud_sync.dart';
 import 'services/auth_service.dart';
 import 'services/game_service.dart';
 import 'services/quran_settings.dart';
-import 'services/migration_service.dart';
 
-// ponytail: runApp dulu, init setelah — apapun error di init, UI tetap muncul
-void main() {
+// ponytail: Sentry wrap runApp, init setelah — apapun error di init, UI tetap muncul
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MuslimLevelingApp());
+  await SentryFlutter.init(
+    (options) {
+      options.dsn = 'https://8c85da22b45bf35c51d3df07dcca0096@o4511691396677632.ingest.de.sentry.io/4511691401330768';
+      options.environment = const String.fromEnvironment('SENTRY_ENVIRONMENT', defaultValue: 'production');
+      options.release = const String.fromEnvironment('SENTRY_RELEASE', defaultValue: 'muslim-leveling@1.0.0+17'); // ponytail: sync dengan pubspec version, PackageInfo kalau sering lupa
+      options.tracesSampleRate = 0.1;
+      options.attachScreenshot = true;
+      options.debug = false;
+    },
+    appRunner: () => runApp(const MuslimLevelingApp()),
+  );
   _initAsync();
 }
 
 Future<void> _initAsync() async {
-  try {
-    await Firebase.initializeApp();
-  } catch (_) {}
-
   try {
     final prefs = await SharedPreferences.getInstance();
     final deviceId = prefs.getString('device_id');
@@ -36,31 +40,48 @@ Future<void> _initAsync() async {
     } else {
       CloudSync.init(deviceId);
     }
-  } catch (_) {}
+  } catch (e) {
+    Sentry.captureException(e, withScope: (s) => s.setTag('init_step', 'device_id'));
+  }
 
   try {
     await quranSettings.load();
-  } catch (_) {}
+  } catch (e) {
+    Sentry.captureException(e, withScope: (s) => s.setTag('init_step', 'quran_settings'));
+  }
 
   try {
     final authed = await AuthService.init();
     if (authed) {
       final uid = AuthService.userId;
       if (uid != null) {
-        CloudSync.initWithUser(uid);
-        await MigrationService.maybeMigrate();
+        try {
+          await CloudSync.initWithUser(uid);
+        } catch (e) {
+          Sentry.captureException(e,
+              withScope: (s) =>
+                  s.setTag('init_step', 'cloud_sync_init'));
+          await AuthService.signOut();
+        }
       }
     }
-  } catch (_) {}
+  } catch (e) {
+    Sentry.captureException(e,
+        withScope: (s) => s.setTag('init_step', 'auth_service'));
+  }
 
   try {
     await NotificationService.init();
-  } catch (_) {}
+  } catch (e) {
+    Sentry.captureException(e, withScope: (s) => s.setTag('init_step', 'notification'));
+  }
 
   try {
     await GameService.load();
     await GameService.reconcileCosmeticLapse(isPro: true);
-  } catch (_) {}
+  } catch (e) {
+    Sentry.captureException(e, withScope: (s) => s.setTag('init_step', 'game_service'));
+  }
 
   try {
     SystemChrome.setSystemUIOverlayStyle(
@@ -71,19 +92,7 @@ Future<void> _initAsync() async {
         systemNavigationBarIconBrightness: Brightness.light,
       ),
     );
-  } catch (_) {}
-
-  SentryFlutter.init(
-    (options) {
-      options.dsn = 'https://8c85da...0096@o4511691396677632.ingest.de.sentry.io/4511691401330768';
-      options.environment = const String.fromEnvironment('SENTRY_ENVIRONMENT', defaultValue: 'production');
-      options.release = const String.fromEnvironment('SENTRY_RELEASE', defaultValue: 'muslim-leveling@1.0.0+1');
-      options.tracesSampleRate = 0.1;
-      options.attachScreenshot = true;
-      options.debug = false;
-    },
-    appRunner: () {},
-  );
+  } catch (_) {} // ponytail: UI style failure is cosmetic, not actionable
 }
 
 String _rand36() => BigInt.from(Random().nextInt(1 << 48)).toRadixString(36).padLeft(8, '0');
