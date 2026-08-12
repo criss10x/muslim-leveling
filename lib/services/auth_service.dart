@@ -4,7 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart' as fb;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../firebase_options.dart';
 import 'cloud_sync.dart';
 
 /// Auth layer: Google Sign-In → Firebase Auth.
@@ -38,7 +40,11 @@ class AuthService {
 
   static Future<bool> _initializeFirebase() async {
     try {
-      if (Firebase.apps.isEmpty) await Firebase.initializeApp();
+      if (Firebase.apps.isEmpty) {
+        await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform,
+        );
+      }
       return true;
     } catch (e) {
       _lastError = 'Firebase belum siap. Coba buka ulang aplikasi. ($e)';
@@ -74,7 +80,9 @@ class AuthService {
         }
         return true;
       }
-    } catch (_) {}
+    } catch (e) {
+      Sentry.captureException(e, withScope: (s) => s.setTag('init_step', 'auth_service_init'));
+    }
     return false;
   }
 
@@ -120,6 +128,15 @@ class AuthService {
     } catch (e) {
       _lastError = _mapError(e);
       debugPrint('[AuthService] Google sign-in gagal: $e');
+      Sentry.captureException(
+        e,
+        stackTrace: StackTrace.current,
+        withScope: (scope) {
+          scope.level = SentryLevel.error;
+          scope.setTag('error_type', 'google_sign_in');
+          scope.setContexts('auth_error', {'mapped_error': _lastError});
+        },
+      );
       return null;
     }
   }
