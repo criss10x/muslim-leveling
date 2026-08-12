@@ -67,8 +67,10 @@ class AuthService {
         CloudSync.recordAuthenticatedUser(user.uid);
         final email = user.email;
         if (email != null && email.isNotEmpty) {
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.setString(_prefGoogleUser, email);
+          try {
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setString(_prefGoogleUser, email);
+          } catch (_) {} // ponytail: session validation must not depend on email cache
         }
         return true;
       }
@@ -123,12 +125,21 @@ class AuthService {
   }
 
   static Future<void> signOut() async {
-    try { await _google.signOut(); } catch (_) {}
-    try { await fb.FirebaseAuth.instance.signOut(); } catch (_) {}
     _userId = null;
     CloudSync.clearUser();
+    try { await _google.signOut(); } catch (_) {}
+    try { await fb.FirebaseAuth.instance.signOut(); } catch (_) {}
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_prefGoogleUser);
+  }
+
+  static Future<void> saveCurrentUserEmail() async {
+    try {
+      final email = fb.FirebaseAuth.instance.currentUser?.email;
+      if (email == null || email.isEmpty) return;
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_prefGoogleUser, email);
+    } catch (_) {} // ponytail: email cache must not interrupt a valid login
   }
 
   @visibleForTesting

@@ -1809,8 +1809,10 @@ class _ProfilTabState extends State<ProfilTab> {
       remote = await CloudSync.initWithUser(uid);
     } catch (e, st) {
       debugPrint('[Profil] gagal verifikasi backup cloud: $e');
-      await Sentry.captureException(e, stackTrace: st);
       await AuthService.signOut();
+      try {
+        await Sentry.captureException(e, stackTrace: st);
+      } catch (_) {} // ponytail: telemetry must not block mandatory sign-out
       if (mounted) {
         _showSettingSnackbar(
           'Gagal memverifikasi backup cloud. Cek koneksi lalu coba login lagi.',
@@ -1820,6 +1822,7 @@ class _ProfilTabState extends State<ProfilTab> {
     }
 
     // Local first — never blind-overwrite with cloud (Critical #1).
+    await AuthService.saveCurrentUserEmail();
     await GameService.load();
     await LearningService.load();
     await AchievementService.load(force: true);

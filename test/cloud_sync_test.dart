@@ -92,4 +92,17 @@ void main() {
     expect(CloudSync.canSync, isFalse);
     expect(await CloudSync.saveGame({'xp': 120}), isFalse);
   });
+
+  test('clearing the user invalidates a pending validation read', () async {
+    final pendingRead = Completer<Map<String, dynamic>?>();
+    CloudSync.documentReader = (_) => pendingRead.future;
+
+    final validation = CloudSync.initWithUser('test-user');
+    CloudSync.clearUser();
+    pendingRead.complete({'game': {'xp': 120}});
+
+    await expectLater(validation, throwsA(isA<StateError>()));
+    expect(CloudSync.canSync, isFalse);
+    expect(await CloudSync.saveGame({'xp': 120}), isFalse);
+  });
 }
