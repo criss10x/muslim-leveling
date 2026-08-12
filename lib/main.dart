@@ -19,7 +19,7 @@ void main() async {
     (options) {
       options.dsn = 'https://8c85da22b45bf35c51d3df07dcca0096@o4511691396677632.ingest.de.sentry.io/4511691401330768';
       options.environment = const String.fromEnvironment('SENTRY_ENVIRONMENT', defaultValue: 'production');
-      options.release = const String.fromEnvironment('SENTRY_RELEASE', defaultValue: 'muslim-leveling@1.0.0+17'); // ponytail: sync dengan pubspec version, PackageInfo kalau sering lupa
+      options.release = const String.fromEnvironment('SENTRY_RELEASE', defaultValue: 'muslim-leveling@1.0.0+18'); // ponytail: sync dengan pubspec version, PackageInfo kalau sering lupa
       options.tracesSampleRate = 0.1;
       options.attachScreenshot = true;
       options.debug = false;
