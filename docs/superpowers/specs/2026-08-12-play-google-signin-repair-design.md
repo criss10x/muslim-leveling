@@ -45,4 +45,4 @@ Play App Signing SHA-1
 
 - The new config test fails before the supplied JSON replaces the old file, then passes with the exact Play SHA-1 and Web OAuth client.
 - The credential test fails before the nullable-token helper exists, then passes after the minimal AuthService change.
-- Run focused tests, `flutter analyze`, the full test suite, and a debug APK build before commit.
+- Run focused tests, `flutter analyze`, the full test suite, and `flutter build appbundle --release` before commit. The release AAB verification remains inconclusive until that command returns a successful exit status.
