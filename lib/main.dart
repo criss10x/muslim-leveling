@@ -8,7 +8,6 @@ import 'services/theme_service.dart';
 import 'screens/splash_screen.dart';
 import 'services/notification_service.dart';
 import 'services/cloud_sync.dart';
-import 'services/auth_service.dart';
 import 'services/game_service.dart';
 import 'services/quran_settings.dart';
 
@@ -48,23 +47,6 @@ Future<void> _initAsync() async {
     await quranSettings.load();
   } catch (e) {
     Sentry.captureException(e, withScope: (s) => s.setTag('init_step', 'quran_settings'));
-  }
-
-  try {
-    final authed = await AuthService.init();
-    if (authed) {
-      final uid = AuthService.userId;
-      if (uid != null) {
-        try {
-          await CloudSync.initWithUser(uid);
-        } catch (e) {
-          Sentry.captureException(e, withScope: (s) => s.setTag('init_step', 'cloud_sync_init'));
-          await AuthService.signOut();
-        }
-      }
-    }
-  } catch (e) {
-    Sentry.captureException(e, withScope: (s) => s.setTag('init_step', 'auth_service'));
   }
 
   try {

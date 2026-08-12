@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -12,10 +11,7 @@ import '../../services/prayer_service.dart';
 import '../../services/game_service.dart';
 import '../../services/notification_service.dart';
 import '../../services/achievement_service.dart';
-import '../../services/learning_content.dart';
-import '../../services/cloud_sync.dart';
-import '../../services/backup_merge.dart';
-import '../../services/auth_service.dart';
+
 import '../../widgets/achievement_medal.dart';
 import '../../widgets/tier_avatar.dart';
 import '../../widgets/cosmetic_locker.dart';
@@ -37,7 +33,6 @@ class _ProfilTabState extends State<ProfilTab> {
   String _nickname = 'Muslim Warrior';
   String? _avatarPath;
   bool _haidMode = false;
-  bool _googleLoginLoading = false;
 
   @override
   void initState() {
@@ -904,8 +899,6 @@ class _ProfilTabState extends State<ProfilTab> {
               _achievements(),
               const SizedBox(height: AppSpacing.md),
               _haidModeToggle(),
-              const SizedBox(height: AppSpacing.lg),
-              _accountBackup(),
               const SizedBox(height: AppSpacing.md),
               _settings(),
             ],
@@ -1778,230 +1771,6 @@ class _ProfilTabState extends State<ProfilTab> {
           ),
         ],
       ),
-    );
-  }
-
-  // ── Backup & Account ──
-  Future<void> _handleGoogleLogin() async {
-    if (_googleLoginLoading) return;
-    setState(() => _googleLoginLoading = true);
-    try {
-      final uid = await AuthService.signInWithGoogle();
-      if (uid == null) {
-        final err =
-            AuthService.lastError ?? 'Login Google dibatalkan atau gagal.';
-        _showSettingSnackbar('❌ $err');
-        return;
-      }
-      await _completeGoogleLogin(uid);
-    } catch (e, st) {
-      debugPrint('[Profil] login Google/sync gagal: $e');
-      await Sentry.captureException(e, stackTrace: st);
-      _showSettingSnackbar('❌ Login Google gagal: ${_shortError(e)}');
-    } finally {
-      if (mounted) setState(() => _googleLoginLoading = false);
-    }
-  }
-
-  Future<void> _completeGoogleLogin(String uid) async {
-    Map<String, dynamic>? remote;
-    try {
-      remote = await CloudSync.initWithUser(uid);
-    } catch (e, st) {
-      debugPrint('[Profil] gagal verifikasi backup cloud: $e');
-      await AuthService.signOut();
-      try {
-        await Sentry.captureException(e, stackTrace: st);
-      } catch (_) {} // ponytail: telemetry must not block mandatory sign-out
-      if (mounted) {
-        _showSettingSnackbar(
-          'Gagal memverifikasi backup cloud. Cek koneksi lalu coba login lagi.',
-        );
-      }
-      return;
-    }
-
-    // Local first — never blind-overwrite with cloud (Critical #1).
-    await AuthService.saveCurrentUserEmail();
-    await GameService.load();
-    await LearningService.load();
-    await AchievementService.load(force: true);
-
-    final localGame = GameService.current.toMap();
-    final localLearning = LearningService.current.toMap();
-    final p = await SharedPreferences.getInstance();
-    Map<String, dynamic> localAch = {};
-    final achRaw = p.getString('achievements_unlocked');
-    if (achRaw != null && achRaw.isNotEmpty) {
-      try {
-        localAch = Map<String, dynamic>.from(jsonDecode(achRaw) as Map);
-      } catch (_) {}
-    }
-
-    final hasRemote = remote != null;
-    final remoteGame = remote != null && remote['game'] is Map
-        ? Map<String, dynamic>.from(remote['game'] as Map)
-        : null;
-    final remoteLearning = remote != null && remote['learning'] is Map
-        ? Map<String, dynamic>.from(remote['learning'] as Map)
-        : null;
-    Map<String, dynamic> remoteAch = {};
-    if (remote != null && remote['achievements'] is Map) {
-      final ach = remote['achievements'] as Map;
-      final unlocked = ach['unlocked'] is Map ? ach['unlocked'] : ach;
-      if (unlocked is Map) {
-        remoteAch = Map<String, dynamic>.from(unlocked);
-      }
-    }
-
-    // ponytail: max-XP / union merge. Dialog Cloud|Device when users need control.
-    final mergedGame = remoteGame == null
-        ? localGame
-        : pickRicherGame(localGame, remoteGame);
-    final mergedLearning = remoteLearning == null
-        ? localLearning
-        : mergeLearning(localLearning, remoteLearning);
-    final mergedAch = mergeAchievements(localAch, remoteAch);
-
-    await p.setString('game_state_v1', jsonEncode(mergedGame));
-    await p.setString('learning_state_v1', jsonEncode(mergedLearning));
-    await p.setString('achievements_unlocked', jsonEncode(mergedAch));
-
-    await GameService.load();
-    await LearningService.load();
-    await AchievementService.load(force: true);
-
-    // Always push merged result so cloud catches up (signed-in only).
-    final gameSaved = await CloudSync.saveGame(GameService.current.toMap());
-    final learningSaved = await CloudSync.saveLearning(
-      LearningService.current.toMap(),
-    );
-    final achievementsSaved = await CloudSync.saveAchievements({
-      'unlocked': mergedAch,
-      'ts': DateTime.now().toUtc().toIso8601String(),
-    });
-    final backupSaved = CloudSync.allSaved([
-      gameSaved,
-      learningSaved,
-      achievementsSaved,
-    ]);
-
-    if (!mounted) return;
-    setState(() {});
-    await _loadProfile();
-    if (!backupSaved) {
-      _showSettingSnackbar(
-        '⚠️ Login berhasil, tetapi backup belum tersimpan. Cek koneksi lalu coba login lagi.',
-      );
-      return;
-    }
-    _showSettingSnackbar(
-      hasRemote
-          ? '☁️ Login OK — progress digabung (XP tertinggi + achievement digabung).'
-          : '☁️ Login OK — progress perangkat di-backup ke cloud.',
-    );
-  }
-
-  Future<void> _handleLogout() async {
-    await AuthService.signOut();
-    // Stop cloud writes; local SharedPreferences stays intact.
-    CloudSync.clearUser();
-    if (!mounted) return;
-    setState(() {});
-    _showSettingSnackbar(
-      'Logout berhasil. Progress tetap di perangkat; backup cloud berhenti.',
-    );
-  }
-
-  Widget _accountBackup() {
-    final signedIn = AuthService.isSignedIn;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const HudHeader('BACKUP & AKUN'),
-        FlatCard(
-          padding: const EdgeInsets.all(AppSpacing.md),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  Icon(
-                    signedIn ? Icons.cloud_done : Icons.cloud_off,
-                    color: signedIn
-                        ? AppColors.primary
-                        : AppColors.onSurfaceVariant,
-                    size: 20,
-                  ),
-                  const SizedBox(width: AppSpacing.sm),
-                  Expanded(
-                    child: Text(
-                      signedIn
-                          ? 'Backup cloud aktif (akun Google)'
-                          : 'Belum login — backup cloud mati (hanya di HP ini)',
-                      style: AppText.bodyMd().copyWith(
-                        color: signedIn
-                            ? AppColors.primary
-                            : AppColors.onSurfaceVariant,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: AppSpacing.md),
-              if (signedIn)
-                OutlinedButton.icon(
-                  onPressed: _handleLogout,
-                  icon: const Icon(Icons.logout, size: 18),
-                  label: const Text('Keluar dari Akun'),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: AppColors.error,
-                    side: BorderSide(
-                      color: AppColors.error.withValues(alpha: 0.5),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
-                    ),
-                  ),
-                )
-              else
-                FilledButton.icon(
-                  onPressed: _googleLoginLoading ? null : _handleGoogleLogin,
-                  icon: _googleLoginLoading
-                      ? const SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Icon(Icons.g_mobiledata, size: 22),
-                  label: Text(
-                    _googleLoginLoading
-                        ? 'MENGHUBUNGKAN...'
-                        : 'Lanjut dengan Google',
-                  ),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.onPrimary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
-                    ),
-                  ),
-                ),
-              const SizedBox(height: AppSpacing.xs),
-              Text(
-                signedIn
-                    ? 'Ganti HP? Login akun sama → merge XP tertinggi + achievement.'
-                    : 'Login Google wajib untuk backup cloud. Tanpa login, progress cuma di HP.',
-                style: AppText.bodyMd().copyWith(
-                  color: AppColors.onSurfaceVariant,
-                  fontSize: 11,
-                  height: 1.4,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 
