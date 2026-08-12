@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 /// Sync 3 JSON blobs to Firestore. One doc per signed-in user.
 /// Collection: `user_data`, doc ID = Firebase Auth uid.
 class CloudSync {
   static String? _userId;
+  static Future<Map<String, dynamic>?> Function(String id) _readDocument =
+      _readFirestoreDocument;
 
   /// True only after Firebase Auth succeeds.
   static bool get canSync => _userId != null && _userId!.isNotEmpty;
@@ -33,16 +36,31 @@ class CloudSync {
   static bool allSaved(Iterable<bool> results) =>
       results.every((saved) => saved);
 
-  static Future<Map<String, dynamic>?> load() async {
+  static Future<Map<String, dynamic>?> load({bool failOnError = false}) async {
     if (!canSync) return null;
     try {
-      final doc =
-          await FirebaseFirestore.instance.collection('user_data').doc(_id).get();
-      return doc.exists ? doc.data() : null;
+      return await _readDocument(_id);
     } catch (_) {
+      if (failOnError) rethrow;
       return null;
     }
   }
+
+  static Future<Map<String, dynamic>?> _readFirestoreDocument(String id) async {
+    final doc = await FirebaseFirestore.instance
+        .collection('user_data')
+        .doc(id)
+        .get();
+    return doc.exists ? doc.data() : null;
+  }
+
+  @visibleForTesting
+  static set documentReader(
+    Future<Map<String, dynamic>?> Function(String id) reader,
+  ) => _readDocument = reader;
+
+  @visibleForTesting
+  static void resetDocumentReader() => _readDocument = _readFirestoreDocument;
 
   static Future<Map<String, dynamic>?> loadGame() async {
     final row = await load();
