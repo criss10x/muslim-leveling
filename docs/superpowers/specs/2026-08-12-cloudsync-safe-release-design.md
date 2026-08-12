@@ -40,11 +40,9 @@ can write.
 
 ## Firebase Gate
 
-Before changing Firestore application code, identify the project database
-edition. This Flutter app uses the Firebase Firestore SDK and UID-scoped rules.
-The intended implementation assumes the existing database is Firestore
-Standard. If Console shows Enterprise/native mode instead, read the matching
-Firebase skill reference and revise the plan before code changes.
+Firebase Console has been checked: the existing Firestore database is Standard
+edition in `asia-southeast2`. This Flutter app uses the Firebase Firestore SDK
+and UID-scoped rules; no Console mutation is part of this release.
 
 ## Data Flow
 
@@ -85,9 +83,10 @@ than silently destructive.
 
 1. Use version `1.0.0+16` / Android `versionCode 16`.
 2. Run focused CloudSync tests, `flutter analyze`, and `flutter test`.
-3. Treat pre-existing golden/test diagnostics separately; do not claim a
-   clean suite unless they are resolved or explicitly approved as baseline.
-4. Build `flutter build appbundle --release` and require exit code `0`.
+3. Windows golden mismatches are deterministic font-rasterization differences.
+   Do not refresh the Ubuntu-authoritative PNG baselines.
+4. Require a passing Ubuntu GitHub Actions `analyze-build` workflow and a fresh
+   local `flutter build appbundle --release` with exit code `0`.
 5. Hash and inspect the fresh AAB, commit, push the new branch, and publish
    GitHub Release `v1.0.0+16` with that exact AAB.
 6. Verify the remote branch, release tag, and asset before invoking Windows
