@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -11,7 +12,10 @@ import '../../services/prayer_service.dart';
 import '../../services/game_service.dart';
 import '../../services/notification_service.dart';
 import '../../services/achievement_service.dart';
-
+import '../../services/learning_content.dart';
+import '../../services/cloud_sync.dart';
+import '../../services/backup_merge.dart';
+import '../../services/auth_service.dart';
 import '../../widgets/achievement_medal.dart';
 import '../../widgets/tier_avatar.dart';
 import '../../widgets/cosmetic_locker.dart';
@@ -33,6 +37,7 @@ class _ProfilTabState extends State<ProfilTab> {
   String _nickname = 'Muslim Warrior';
   String? _avatarPath;
   bool _haidMode = false;
+  bool _googleLoginLoading = false;
 
   @override
   void initState() {
@@ -1192,6 +1197,8 @@ class _ProfilTabState extends State<ProfilTab> {
                       ),
                     ],
                   ),
+                  const SizedBox(height: AppSpacing.md),
+                  _googleAuthButton(),
                 ],
               ),
             ),
@@ -1217,6 +1224,179 @@ class _ProfilTabState extends State<ProfilTab> {
         ],
       ),
     );
+  }
+
+  // ── Google Auth ──
+  Widget _googleAuthButton() {
+    final signedIn = AuthService.isSignedIn;
+    if (signedIn) {
+      return Row(
+        children: [
+          Icon(Icons.cloud_done, color: AppColors.primary, size: 16),
+          const SizedBox(width: AppSpacing.xs),
+          Expanded(
+            child: Text(
+              'Backup aktif',
+              style: AppText.labelCaps().copyWith(
+                color: AppColors.primary,
+                fontSize: 10,
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: _handleLogout,
+            child: Text(
+              'Keluar',
+              style: AppText.labelCaps().copyWith(
+                color: AppColors.error,
+                fontSize: 10,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+    return SizedBox(
+      width: double.infinity,
+      child: FilledButton.icon(
+        onPressed: _googleLoginLoading ? null : _handleGoogleLogin,
+        icon: _googleLoginLoading
+            ? const SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+            : const Icon(Icons.g_mobiledata, size: 22),
+        label: Text(
+          _googleLoginLoading ? 'MENGHUBUNGKAN...' : 'Lanjut dengan Google',
+        ),
+        style: FilledButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          foregroundColor: AppColors.onPrimary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.md),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _handleGoogleLogin() async {
+    if (_googleLoginLoading) return;
+    setState(() => _googleLoginLoading = true);
+    try {
+      final uid = await AuthService.signInWithGoogle();
+      if (uid == null) {
+        final err =
+            AuthService.lastError ?? 'Login dibatalkan.';
+        _showSettingSnackbar('❌ $err');
+        return;
+      }
+      await _completeLogin(uid);
+    } catch (e, st) {
+      debugPrint('[Profil] login/sync gagal: $e');
+      await Sentry.captureException(e, stackTrace: st);
+      _showSettingSnackbar('❌ Login gagal: ${_shortError(e)}');
+    } finally {
+      if (mounted) setState(() => _googleLoginLoading = false);
+    }
+  }
+
+  Future<void> _completeLogin(String uid) async {
+    Map<String, dynamic>? remote;
+    try {
+      remote = await CloudSync.initWithUser(uid);
+    } catch (e, st) {
+      debugPrint('[Profil] cloud verify gagal: $e');
+      await AuthService.signOut();
+      try {
+        await Sentry.captureException(e, stackTrace: st);
+      } catch (_) {}
+      if (mounted) {
+        _showSettingSnackbar('Gagal verifikasi cloud. Coba lagi.');
+      }
+      return;
+    }
+
+    await AuthService.saveEmail();
+    await GameService.load();
+    await LearningService.load();
+    await AchievementService.load(force: true);
+
+    final localGame = GameService.current.toMap();
+    final localLearning = LearningService.current.toMap();
+    final p = await SharedPreferences.getInstance();
+    Map<String, dynamic> localAch = {};
+    final achRaw = p.getString('achievements_unlocked');
+    if (achRaw != null && achRaw.isNotEmpty) {
+      try {
+        localAch = Map<String, dynamic>.from(jsonDecode(achRaw) as Map);
+      } catch (_) {}
+    }
+
+    final hasRemote = remote != null;
+    final remoteGame = remote != null && remote['game'] is Map
+        ? Map<String, dynamic>.from(remote['game'] as Map)
+        : null;
+    final remoteLearning =
+        remote != null && remote['learning'] is Map
+            ? Map<String, dynamic>.from(remote['learning'] as Map)
+            : null;
+    Map<String, dynamic> remoteAch = {};
+    if (remote != null && remote['achievements'] is Map) {
+      final ach = remote['achievements'] as Map;
+      final unlocked = ach['unlocked'] is Map ? ach['unlocked'] : ach;
+      if (unlocked is Map) {
+        remoteAch = Map<String, dynamic>.from(unlocked);
+      }
+    }
+
+    final mergedGame = remoteGame == null
+        ? localGame
+        : pickRicherGame(localGame, remoteGame);
+    final mergedLearning = remoteLearning == null
+        ? localLearning
+        : mergeLearning(localLearning, remoteLearning);
+    final mergedAch = mergeAchievements(localAch, remoteAch);
+
+    await p.setString('game_state_v1', jsonEncode(mergedGame));
+    await p.setString('learning_state_v1', jsonEncode(mergedLearning));
+    await p.setString('achievements_unlocked', jsonEncode(mergedAch));
+
+    await GameService.load();
+    await LearningService.load();
+    await AchievementService.load(force: true);
+
+    final results = await Future.wait([
+      CloudSync.saveGame(GameService.current.toMap()),
+      CloudSync.saveLearning(LearningService.current.toMap()),
+      CloudSync.saveAchievements({
+        'unlocked': mergedAch,
+        'ts': DateTime.now().toUtc().toIso8601String(),
+      }),
+    ]);
+    final saved = CloudSync.allSaved(results);
+
+    if (!mounted) return;
+    setState(() {});
+    await _loadProfile();
+    if (!saved) {
+      _showSettingSnackbar(
+          '⚠️ Login OK, tapi backup belum tersimpan.');
+      return;
+    }
+    _showSettingSnackbar(
+      hasRemote
+          ? '☁️ Login OK — progress digabung.'
+          : '☁️ Login OK — progress di-backup.',
+    );
+  }
+
+  Future<void> _handleLogout() async {
+    await AuthService.signOut();
+    if (!mounted) return;
+    setState(() {});
+    _showSettingSnackbar('Logout berhasil.');
   }
 
   /// "Loker Skin" — cosmetic locker (frame/aura/title tabs) reusing the
