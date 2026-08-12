@@ -144,7 +144,7 @@ Run: `flutter analyze`, `flutter test`, and `flutter build appbundle --release`.
 
 Expected: no auth/config regression and a release AAB produced from the repaired configuration; document unrelated existing failures rather than changing unrelated production behavior.
 
-Audit result: `flutter analyze` completed with four unrelated test-only diagnostics, and `flutter test` completed with 158 passes plus two unrelated Windows golden mismatches. `flutter build appbundle --release` emitted no output for more than six minutes and was stopped; no AAB was produced, so this step remains incomplete.
+Audit result: `flutter analyze` completed with four unrelated test-only diagnostics, and `flutter test` completed with 158 passes plus two unrelated Windows golden mismatches. `flutter build appbundle --release` emitted no output for more than six minutes and its wrapper was stopped. An AAB appeared afterward, but the command never returned a successful exit status, so this step remains incomplete.
 
 - [x] **Step 4: Review and commit the scoped repair**
 
