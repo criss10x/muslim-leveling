@@ -19,7 +19,7 @@ void main() async {
     (options) {
       options.dsn = 'https://8c85da22b45bf35c51d3df07dcca0096@o4511691396677632.ingest.de.sentry.io/4511691401330768';
       options.environment = const String.fromEnvironment('SENTRY_ENVIRONMENT', defaultValue: 'production');
-      options.release = const String.fromEnvironment('SENTRY_RELEASE', defaultValue: 'muslim-leveling@1.0.0+18'); // ponytail: sync dengan pubspec version, PackageInfo kalau sering lupa
+      options.release = const String.fromEnvironment('SENTRY_RELEASE', defaultValue: 'muslim-leveling@1.0.0+19'); // ponytail: sync dengan pubspec version, PackageInfo kalau sering lupa
       options.tracesSampleRate = 0.1;
       options.attachScreenshot = true;
       options.debug = false;
@@ -95,7 +95,14 @@ Future<void> _initAsync() async {
   } catch (_) {} // ponytail: UI style failure is cosmetic, not actionable
 }
 
-String _rand36() => BigInt.from(Random().nextInt(1 << 48)).toRadixString(36).padLeft(8, '0');
+String _rand36() {
+  // nextInt max = 2^32; ambil 48 bit via dua tarikan (32 + 16).
+  final hi = Random().nextInt(0x100000000); // 32 bit
+  final lo = Random().nextInt(0x10000); // 16 bit
+  return ((BigInt.from(hi) << 16) + BigInt.from(lo))
+      .toRadixString(36)
+      .padLeft(8, '0');
+}
 
 class MuslimLevelingApp extends StatefulWidget {
   const MuslimLevelingApp({super.key});
