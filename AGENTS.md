@@ -72,6 +72,8 @@ Requires SHA-1 registered in Firebase Console → Project Settings → Your apps
 Package name: id.muslimleveling.muslim_leveling
 SHA-1 (release): DF:2C:7E:72:5A:29:A7:1B:6F:66:FA:A6:FA:04:78:77:5B:46:F7:23
 SHA-1 (debug):   A4:26:1B:D1:DF:E4:AA:AB:AE:20:C3:D9:70:5F:A1:22:18:21:EE:2C
+SHA-1 (Play App Signing): 71:43:87:B5:51:78:B5:63:64:10:1C:A4:A1:E1:54:50:E2:CD:17:E8
+SHA-1 (Play Post-Quantum, hybrid "Quantum-ready beta" aktif): 37:28:4F:19:CD:C3:85:A0:38:A8:08:52:4F:B0:EE:52:30:F2:F8:D5
 ```
 
 URL: https://console.firebase.google.com/project/muslim-leveling/settings/general/android
