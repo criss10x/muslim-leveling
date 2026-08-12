@@ -54,7 +54,7 @@ class AuthService {
       _authSub = fb.FirebaseAuth.instance.authStateChanges().listen((user) {
         if (user != null) {
           _userId = user.uid;
-          CloudSync.initWithUser(user.uid);
+          CloudSync.recordAuthenticatedUser(user.uid);
         } else {
           _userId = null;
           CloudSync.clearUser();
@@ -64,6 +64,7 @@ class AuthService {
       final user = fb.FirebaseAuth.instance.currentUser;
       if (user != null) {
         _userId = user.uid;
+        CloudSync.recordAuthenticatedUser(user.uid);
         final email = user.email;
         if (email != null && email.isNotEmpty) {
           final prefs = await SharedPreferences.getInstance();
@@ -112,8 +113,7 @@ class AuthService {
       }
 
       _userId = uid;
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(_prefGoogleUser, googleUser.email);
+      CloudSync.recordAuthenticatedUser(uid);
       return uid;
     } catch (e) {
       _lastError = _mapError(e);

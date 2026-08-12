@@ -41,7 +41,11 @@ Future<void> _initAsync() async {
     if (authed) {
       final uid = AuthService.userId;
       if (uid != null) {
-        CloudSync.initWithUser(uid);
+        try {
+          await CloudSync.initWithUser(uid);
+        } catch (_) {
+          await AuthService.signOut();
+        }
       }
     }
   } catch (_) {}

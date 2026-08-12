@@ -1804,7 +1804,20 @@ class _ProfilTabState extends State<ProfilTab> {
   }
 
   Future<void> _completeGoogleLogin(String uid) async {
-    CloudSync.initWithUser(uid);
+    Map<String, dynamic>? remote;
+    try {
+      remote = await CloudSync.initWithUser(uid);
+    } catch (e, st) {
+      debugPrint('[Profil] gagal verifikasi backup cloud: $e');
+      await Sentry.captureException(e, stackTrace: st);
+      await AuthService.signOut();
+      if (mounted) {
+        _showSettingSnackbar(
+          'Gagal memverifikasi backup cloud. Cek koneksi lalu coba login lagi.',
+        );
+      }
+      return;
+    }
 
     // Local first — never blind-overwrite with cloud (Critical #1).
     await GameService.load();
@@ -1822,7 +1835,6 @@ class _ProfilTabState extends State<ProfilTab> {
       } catch (_) {}
     }
 
-    final remote = await CloudSync.load();
     final hasRemote = remote != null;
     final remoteGame = remote != null && remote['game'] is Map
         ? Map<String, dynamic>.from(remote['game'] as Map)
