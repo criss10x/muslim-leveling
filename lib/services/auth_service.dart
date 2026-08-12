@@ -44,6 +44,8 @@ class AuthService {
     } catch (e) {
       _lastError = 'Firebase belum siap. ($e)';
       debugPrint('[Auth] Firebase init gagal: $e');
+      Sentry.captureException(e,
+          withScope: (s) => s.setTag('error_type', 'firebase_init'));
       return false;
     }
   }
@@ -103,6 +105,10 @@ class AuthService {
       if (idToken == null || idToken.isEmpty) {
         _lastError =
             'Google tidak kirim idToken. Cek SHA-1 di Firebase Console.';
+        Sentry.captureMessage(_lastError!,
+            level: SentryLevel.error,
+            withScope: (scope) =>
+                scope.setTag('error_type', 'google_sign_in_no_idtoken'));
         return null;
       }
 
@@ -115,6 +121,10 @@ class AuthService {
       final uid = res.user?.uid;
       if (uid == null) {
         _lastError = 'Firebase Auth gagal — user kosong.';
+        Sentry.captureMessage(_lastError!,
+            level: SentryLevel.error,
+            withScope: (scope) =>
+                scope.setTag('error_type', 'google_sign_in_empty_uid'));
         return null;
       }
 
