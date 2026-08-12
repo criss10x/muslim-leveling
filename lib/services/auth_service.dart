@@ -100,15 +100,9 @@ class AuthService {
         return null;
       }
 
-      final accessToken = googleAuth.accessToken;
-      if (accessToken == null || accessToken.isEmpty) {
-        _lastError = 'Google tidak kirim access token.';
-        return null;
-      }
-
-      final credential = fb.GoogleAuthProvider.credential(
+      final credential = googleCredentialForTokens(
         idToken: idToken,
-        accessToken: accessToken,
+        accessToken: googleAuth.accessToken,
       );
       final res = await fb.FirebaseAuth.instance.signInWithCredential(credential);
       final uid = res.user?.uid;
@@ -136,6 +130,15 @@ class AuthService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_prefGoogleUser);
   }
+
+  @visibleForTesting
+  static fb.AuthCredential googleCredentialForTokens({
+    required String idToken,
+    String? accessToken,
+  }) => fb.GoogleAuthProvider.credential(
+    idToken: idToken,
+    accessToken: accessToken,
+  );
 
   static Future<String?> get savedEmail async {
     final prefs = await SharedPreferences.getInstance();
