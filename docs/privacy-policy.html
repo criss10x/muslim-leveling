@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — Muslim Leveling</title>
+<style>
+  body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; max-width: 720px; margin: 0 auto; padding: 32px 20px; color: #1A1A1A; line-height: 1.7; }
+  h1 { color: #047857; }
+  h2 { color: #047857; font-size: 1.15rem; margin-top: 2rem; }
+  a { color: #047857; }
+</style>
+</head>
+<body>
+<h1>Privacy Policy — Muslim Leveling</h1>
+<p><strong>Effective date:</strong> 4 August 2026<br>
+<strong>App:</strong> Muslim Leveling (<code>id.muslimleveling.muslim_leveling</code>)</p>
+
+<p>Muslim Leveling ("the app") helps you track prayer times, quests, and Islamic learning progress. This policy explains what data is collected, why, and where it goes.</p>
+
+<h2>1. Data We Collect</h2>
+<p><strong>Location (optional, on-device only)</strong><br>
+Used solely to calculate prayer times for your position. Coordinates are sent over HTTPS to the public prayer-time APIs (<code>equran.id</code>, <code>api.myquran.com</code>) to fetch the schedule. Location is never stored on our servers and never shared with third parties beyond the API call itself. You can instead pick a city manually and never grant location permission.</p>
+<p><strong>Google Account (optional)</strong><br>
+If you sign in with Google, we receive your email, name, and profile photo from Google Sign-In. This is used only to back up and sync your game/learning progress to your account. Sign-in is optional — the app works fully offline without it.</p>
+<p><strong>App Progress Data</strong><br>
+Quest progress, XP, achievements, and learning records. Stored locally on your device. If signed in, a copy is synced to our Supabase (PostgreSQL) backend tied to your account.</p>
+<p><strong>Notifications &amp; Alarms</strong><br>
+Prayer reminders use local notifications and exact alarms. No data leaves the device.</p>
+<p><strong>Crash Reports</strong><br>
+Sentry collects anonymized crash logs (device model, OS version, stack trace) to fix bugs. No personal content is included.</p>
+
+<h2>2. What We Never Do</h2>
+<ul>
+<li>No ads, no ad trackers, no analytics-for-marketing.</li>
+<li>No selling or sharing of personal data with third parties.</li>
+<li>No location history or background location tracking.</li>
+</ul>
+
+<h2>3. Third-Party Services</h2>
+<ul>
+<li><strong>Supabase</strong> — account &amp; progress sync (supabase.com/privacy)</li>
+<li><strong>Sentry</strong> — crash reporting (sentry.io/privacy)</li>
+<li><strong>Google Sign-In</strong> — authentication (policies.google.com/privacy)</li>
+<li><strong>eQuran.id / MyQuran.com</strong> — prayer time calculation</li>
+</ul>
+
+<h2>4. Data Retention &amp; Deletion</h2>
+<p>Progress stays on your device until you uninstall. Server-side backup exists only while your account is active. To delete your account and all server data, see the <a href="delete-account.html">Account &amp; Data Deletion page</a> — we delete within 7 days.</p>
+
+<h2>5. Children</h2>
+<p>The app is suitable for all ages and collects no data from children beyond what is described above. Account sign-in requires the user's own Google account.</p>
+
+<h2>6. Changes</h2>
+<p>Changes to this policy are posted on this page with an updated effective date.</p>
+
+<h2>7. Contact</h2>
+<p>Email: <strong>muslim.leveling@gmail.com</strong><br>
+GitHub: <a href="https://github.com/criss10x/muslim-leveling">github.com/criss10x/muslim-leveling</a></p>
+</body>
+</html>

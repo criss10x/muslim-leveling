@@ -1,61 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Privacy Policy — Muslim Leveling</title>
+<title>Muslim Leveling — Level Up Your Iman</title>
+<meta name="description" content="Muslim Leveling: aplikasi self-improvement Islami dengan gamifikasi. Selesaikan quest ibadah harian, kumpulkan XP, naik level, dan istiqamah bareng-bareng.">
 <style>
-  body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; max-width: 720px; margin: 0 auto; padding: 32px 20px; color: #1A1A1A; line-height: 1.7; }
-  h1 { color: #047857; }
-  h2 { color: #047857; font-size: 1.15rem; margin-top: 2rem; }
-  a { color: #047857; }
+  :root { --green:#047857; --green-dark:#065F46; --gold:#F59E0B; --ink:#1A1A1A; --muted:#5A5A5A; --bg:#FAFAF7; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; color: var(--ink); background: var(--bg); line-height: 1.6; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+
+  header { background: linear-gradient(150deg, var(--green-dark), var(--green)); color: #fff; text-align: center; padding: 64px 20px 56px; }
+  header img { width: 112px; height: 112px; border-radius: 26px; box-shadow: 0 8px 24px rgba(0,0,0,.25); }
+  header h1 { font-size: 2rem; margin: 18px 0 6px; letter-spacing: .3px; }
+  header .tagline { color: #D1FAE5; font-weight: 600; font-size: 1.05rem; }
+  header p.desc { max-width: 560px; margin: 14px auto 0; color: #ECFDF5; font-size: .98rem; }
+  .btn-play { display: inline-flex; align-items: center; gap: 10px; margin-top: 26px; background: #111; color: #fff; text-decoration: none; padding: 12px 26px; border-radius: 12px; font-weight: 600; font-size: .95rem; box-shadow: 0 4px 14px rgba(0,0,0,.3); }
+  .btn-play:hover { background: #000; }
+  .btn-play svg { width: 22px; height: 22px; fill: #fff; }
+
+  section { padding: 48px 0 8px; }
+  h2 { color: var(--green-dark); font-size: 1.35rem; margin-bottom: 20px; text-align: center; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .card { background: #fff; border: 1px solid #E7E5E0; border-radius: 14px; padding: 20px; }
+  .card .ico { font-size: 1.7rem; }
+  .card h3 { font-size: 1.02rem; margin: 8px 0 4px; color: var(--ink); }
+  .card p { font-size: .9rem; color: var(--muted); }
+
+  .steps { counter-reset: step; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .step { background: #fff; border: 1px solid #E7E5E0; border-radius: 14px; padding: 20px; position: relative; }
+  .step::before { counter-increment: step; content: counter(step); display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center; background: var(--green); color: #fff; border-radius: 50%; font-weight: 700; font-size: .9rem; margin-bottom: 10px; }
+  .step p { font-size: .9rem; color: var(--muted); }
+
+  footer { margin-top: 56px; background: var(--green-dark); color: #D1FAE5; text-align: center; padding: 28px 20px; font-size: .88rem; }
+  footer a { color: #fff; text-decoration: underline; }
+  footer .links { margin-bottom: 10px; }
+  footer .links a { margin: 0 10px; }
 </style>
 </head>
 <body>
-<h1>Privacy Policy — Muslim Leveling</h1>
-<p><strong>Effective date:</strong> 4 August 2026<br>
-<strong>App:</strong> Muslim Leveling (<code>id.muslimleveling.muslim_leveling</code>)</p>
 
-<p>Muslim Leveling ("the app") helps you track prayer times, quests, and Islamic learning progress. This policy explains what data is collected, why, and where it goes.</p>
+<header>
+  <img src="assets/logo.png" alt="Logo Muslim Leveling">
+  <h1>Muslim Leveling</h1>
+  <div class="tagline">Level Up Your Iman 🌙</div>
+  <p class="desc">Ubah ibadah harian jadi perjalanan leveling: selesaikan quest, kumpulkan XP, jaga streak, dan istiqamah selangkah demi selangkah.</p>
+  <a class="btn-play" href="https://play.google.com/store/apps/details?id=id.muslimleveling.muslim_leveling" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24"><path d="M3.6 1.8c-.3.3-.5.8-.5 1.4v17.6c0 .6.2 1.1.5 1.4l.1.1 9.9-9.9v-.2L3.7 1.7l-.1.1zm13.3 6.6-3.3 3.3v.2l3.3 3.3.1-.1 3.9-2.2c1.1-.6 1.1-1.7 0-2.3l-3.9-2.2h-.1zm-.1 6.9L13.6 12 3.6 22.2c.4.4 1 .4 1.7 0l11.5-6.9zm0-13.6L5.3 1.8c-.7-.4-1.3-.4-1.7 0L13.6 12l3.2-3.3v-.1z"/></svg>
+    Download di Google Play
+  </a>
+</header>
 
-<h2>1. Data We Collect</h2>
-<p><strong>Location (optional, on-device only)</strong><br>
-Used solely to calculate prayer times for your position. Coordinates are sent over HTTPS to the public prayer-time APIs (<code>equran.id</code>, <code>api.myquran.com</code>) to fetch the schedule. Location is never stored on our servers and never shared with third parties beyond the API call itself. You can instead pick a city manually and never grant location permission.</p>
-<p><strong>Google Account (optional)</strong><br>
-If you sign in with Google, we receive your email, name, and profile photo from Google Sign-In. This is used only to back up and sync your game/learning progress to your account. Sign-in is optional — the app works fully offline without it.</p>
-<p><strong>App Progress Data</strong><br>
-Quest progress, XP, achievements, and learning records. Stored locally on your device. If signed in, a copy is synced to our Supabase (PostgreSQL) backend tied to your account.</p>
-<p><strong>Notifications &amp; Alarms</strong><br>
-Prayer reminders use local notifications and exact alarms. No data leaves the device.</p>
-<p><strong>Crash Reports</strong><br>
-Sentry collects anonymized crash logs (device model, OS version, stack trace) to fix bugs. No personal content is included.</p>
+<div class="wrap">
+  <section>
+    <h2>Kenapa Muslim Leveling?</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="ico">🎯</div>
+        <h3>Quest Ibadah Harian</h3>
+        <p>Lima quest harian seputar shalat, dzikir, dan Al-Qur'an — terstruktur mengikuti waktu shalat, jadi selalu jelas apa yang perlu dikerjakan hari ini.</p>
+      </div>
+      <div class="card">
+        <div class="ico">⭐</div>
+        <h3>XP &amp; Level</h3>
+        <p>Setiap ibadah yang kamu selesaikan menambah XP. Naik level dan rasakan progres nyata dalam perjalanan imanmu.</p>
+      </div>
+      <div class="card">
+        <div class="ico">🔥</div>
+        <h3>Streak Istiqamah</h3>
+        <p>Jaga streak harian dan streak mingguan — motivasi sederhana untuk tetap konsisten, tanpa tekanan berlebihan.</p>
+      </div>
+      <div class="card">
+        <div class="ico">📖</div>
+        <h3>Belajar Al-Qur'an</h3>
+        <p>Materi pembelajaran Al-Qur'an yang ringan dan bertahap, langsung di dalam aplikasi.</p>
+      </div>
+      <div class="card">
+        <div class="ico">☁️</div>
+        <h3>Backup &amp; Sync</h3>
+        <p>Masuk dengan Google, progresmu tersimpan aman di cloud dan bisa dipulihkan kapan saja di perangkat baru.</p>
+      </div>
+      <div class="card">
+        <div class="ico">🕌</div>
+        <h3>Ramah Waktu Ibadah</h3>
+        <p>Quest wajib terbuka mengikuti jadwal shalat — aplikasi menyesuaikan ritme ibadahmu, bukan sebaliknya.</p>
+      </div>
+    </div>
+  </section>
 
-<h2>2. What We Never Do</h2>
-<ul>
-<li>No ads, no ad trackers, no analytics-for-marketing.</li>
-<li>No selling or sharing of personal data with third parties.</li>
-<li>No location history or background location tracking.</li>
-</ul>
+  <section>
+    <h2>Mulai dalam 3 Langkah</h2>
+    <div class="steps">
+      <div class="step"><p><strong>Download</strong> Muslim Leveling dari Google Play — gratis.</p></div>
+      <div class="step"><p><strong>Masuk dengan Google</strong> agar progresmu langsung ter-backup.</p></div>
+      <div class="step"><p><strong>Selesaikan quest harian</strong>, kumpulkan XP, dan naik level!</p></div>
+    </div>
+  </section>
+</div>
 
-<h2>3. Third-Party Services</h2>
-<ul>
-<li><strong>Supabase</strong> — account &amp; progress sync (supabase.com/privacy)</li>
-<li><strong>Sentry</strong> — crash reporting (sentry.io/privacy)</li>
-<li><strong>Google Sign-In</strong> — authentication (policies.google.com/privacy)</li>
-<li><strong>eQuran.id / MyQuran.com</strong> — prayer time calculation</li>
-</ul>
+<footer>
+  <div class="links">
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="delete-account.html">Hapus Akun</a>
+    <a href="mailto:muslim.leveling@gmail.com">Kontak</a>
+  </div>
+  © 2026 Muslim Leveling · muslim.leveling@gmail.com
+</footer>
 
-<h2>4. Data Retention &amp; Deletion</h2>
-<p>Progress stays on your device until you uninstall. Server-side backup exists only while your account is active. To delete your account and all server data, see the <a href="delete-account.html">Account &amp; Data Deletion page</a> — we delete within 7 days.</p>
-
-<h2>5. Children</h2>
-<p>The app is suitable for all ages and collects no data from children beyond what is described above. Account sign-in requires the user's own Google account.</p>
-
-<h2>6. Changes</h2>
-<p>Changes to this policy are posted on this page with an updated effective date.</p>
-
-<h2>7. Contact</h2>
-<p>Email: <strong>muslim.leveling@gmail.com</strong><br>
-GitHub: <a href="https://github.com/criss10x/muslim-leveling">github.com/criss10x/muslim-leveling</a></p>
 </body>
 </html>
