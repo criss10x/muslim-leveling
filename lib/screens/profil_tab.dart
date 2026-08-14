@@ -20,6 +20,7 @@ import '../../widgets/achievement_medal.dart';
 import '../../widgets/tier_avatar.dart';
 import '../../widgets/cosmetic_locker.dart';
 import '../../widgets/theme_preset_picker.dart';
+import '../../widgets/prayer_heatmap.dart';
 import '../../services/cosmetic_service.dart';
 import '../../services/cosmetic_catalog.dart';
 import 'achievements_screen.dart';
@@ -899,6 +900,8 @@ class _ProfilTabState extends State<ProfilTab> {
               const SizedBox(height: AppSpacing.md),
               _stats(),
               const SizedBox(height: AppSpacing.md),
+              _heatmapButton(),
+              const SizedBox(height: AppSpacing.md),
               _cosmeticLocker(),
               const SizedBox(height: AppSpacing.md),
               _achievements(),
@@ -1424,6 +1427,91 @@ class _ProfilTabState extends State<ProfilTab> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  /// Heatmap kalender sholat wajib per bulan — gaya GitHub contribution graph.
+  void _showHeatmap() {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.surfaceContainerHigh,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xl)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const HudHeader('KALENDER SHOLAT WAJIB'),
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                'Makin hijau makin lengkap — 5 shade = 5 sholat wajib.',
+                style: AppText.bodyMd().copyWith(
+                  color: AppColors.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.md),
+              const PrayerHeatmap(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _heatmapButton() {
+    return Semantics(
+      button: true,
+      label: 'Buka kalender sholat wajib',
+      onTap: _showHeatmap,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const HudHeader('KALENDER SHOLAT'),
+          PressableScale(
+            onTap: _showHeatmap,
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.sm,
+              ),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceContainer,
+                borderRadius: BorderRadius.circular(AppRadius.xxl),
+                border: Border.all(
+                  color: AppColors.outlineVariant.withValues(alpha: 0.3),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.calendar_month, color: AppColors.primary, size: 22),
+                  const SizedBox(width: AppSpacing.sm),
+                  Expanded(
+                    child: Text(
+                      'Heatmap sholat wajib per bulan',
+                      overflow: TextOverflow.ellipsis,
+                      style: AppText.bodyMd().copyWith(
+                        color: AppColors.onSurfaceVariant,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.base),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    size: 14,
+                    color: AppColors.primary,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
