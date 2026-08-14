@@ -147,7 +147,13 @@ class _HomeTabState extends State<HomeTab> {
       _toast('⏰ ${GameService.sunnahHint(prayer)}');
       return;
     }
-    final res = await GameService.logPrayerAsync(prayer, type);
+    var bonusXp = 0;
+    if (type == 'wajib') {
+      final chosen = await _askWajibBonus(prayer);
+      if (chosen == null) return; // sheet ditutup — batalkan claim
+      bonusXp = chosen;
+    }
+    final res = await GameService.logPrayerAsync(prayer, type, bonusXp: bonusXp);
     if (!mounted) return;
     if (res == null) {
       _toast('Sholat ini udah dicatat hari ini!');
@@ -170,6 +176,122 @@ class _HomeTabState extends State<HomeTab> {
         ),
       );
     }
+  }
+
+  /// Bottom sheet: pilih bonus XP saat claim sholat wajib.
+  /// Returns bonus XP (0/15/30) atau null kalau sheet ditutup tanpa pilih.
+  Future<int?> _askWajibBonus(String prayer) {
+    return showModalBottomSheet<int>(
+      context: context,
+      backgroundColor: AppColors.surfaceContainerHigh,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xl)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Sudah Sholat (${prayer.cap})?',
+                style: AppText.titleLg().copyWith(color: AppColors.onSurface),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                'Pilih kondisi sholatmu untuk bonus XP',
+                style: AppText.bodyMd().copyWith(
+                  color: AppColors.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.md),
+              _bonusTile(
+                ctx,
+                icon: Icons.schedule,
+                title: 'Tepat waktu',
+                subtitle: 'di bawah 30 menit setelah adzan',
+                xpLabel: '+15 XP',
+                accent: AppColors.primary,
+                onTap: () => Navigator.pop(ctx, GameService.timelyBonusXp),
+              ),
+              _bonusTile(
+                ctx,
+                icon: Icons.mosque,
+                title: 'Berjamaah',
+                subtitle: 'sholat berjamaah',
+                xpLabel: '+30 XP',
+                accent: AppColors.secondaryContainer,
+                onTap: () => Navigator.pop(ctx, GameService.jamaahBonusXp),
+              ),
+              _bonusTile(
+                ctx,
+                icon: Icons.check,
+                title: 'Sudah',
+                subtitle: 'tanpa bonus XP',
+                xpLabel: '+0',
+                accent: AppColors.onSurfaceVariant,
+                onTap: () => Navigator.pop(ctx, 0),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _bonusTile(
+    BuildContext ctx, {
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required String xpLabel,
+    required Color accent,
+    required VoidCallback onTap,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+      child: Material(
+        color: AppColors.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.md,
+              vertical: AppSpacing.sm,
+            ),
+            child: Row(
+              children: [
+                Icon(icon, color: accent, size: 22),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: AppText.bodyLg().copyWith(
+                          color: AppColors.onSurface,
+                        ),
+                      ),
+                      Text(
+                        subtitle,
+                        style: AppText.bodyMd().copyWith(
+                          color: AppColors.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Text(xpLabel, style: AppText.labelCaps().copyWith(color: accent)),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Future<void> _claimQuest(Quest q) async {
