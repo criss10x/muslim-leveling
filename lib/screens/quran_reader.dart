@@ -235,6 +235,7 @@ class _QuranReaderState extends State<QuranReader> {
                 final a = _ayahs[i - _basmalahOffset];
                 return QuranAyahCard(
                   ayah: a,
+                  surahNumber: widget.surah.number,
                   active: current != null &&
                       current.surah == widget.surah.number &&
                       current.ayah == a.ayah,

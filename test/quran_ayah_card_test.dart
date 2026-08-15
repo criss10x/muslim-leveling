@@ -23,7 +23,7 @@ void main() {
 
   testWidgets('menampilkan teks Arab dan terjemahan', (tester) async {
     await tester.pumpWidget(wrap(
-      QuranAyahCard(ayah: ayah, active: false, onPlay: () {}),
+      QuranAyahCard(surahNumber: 1, ayah: ayah, active: false, onPlay: () {}),
     ));
 
     expect(find.text('بِسْمِ ٱللَّهِ'), findsOneWidget);
@@ -33,7 +33,7 @@ void main() {
   testWidgets('menyembunyikan terjemahan sesuai setelan', (tester) async {
     await quranSettings.setShowTranslation(false);
     await tester.pumpWidget(wrap(
-      QuranAyahCard(ayah: ayah, active: false, onPlay: () {}),
+      QuranAyahCard(surahNumber: 1, ayah: ayah, active: false, onPlay: () {}),
     ));
     await tester.pumpAndSettle();
 
@@ -44,7 +44,7 @@ void main() {
   testWidgets('ukuran font Arab mengikuti setelan', (tester) async {
     await quranSettings.setArabicFontSize(40);
     await tester.pumpWidget(wrap(
-      QuranAyahCard(ayah: ayah, active: false, onPlay: () {}),
+      QuranAyahCard(surahNumber: 1, ayah: ayah, active: false, onPlay: () {}),
     ));
     await tester.pumpAndSettle();
 
@@ -55,7 +55,7 @@ void main() {
   testWidgets('tombol play memanggil callback', (tester) async {
     var tapped = 0;
     await tester.pumpWidget(wrap(
-      QuranAyahCard(ayah: ayah, active: false, onPlay: () => tapped++),
+      QuranAyahCard(surahNumber: 1, ayah: ayah, active: false, onPlay: () => tapped++),
     ));
 
     await tester.tap(find.byIcon(Icons.play_arrow));

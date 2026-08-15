@@ -3,9 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_theme.dart';
 import '../services/quran_data.dart';
 import '../services/quran_settings.dart';
+import '../services/quran_bookmark.dart';
 
 class QuranAyahCard extends StatelessWidget {
   final QuranAyah ayah;
+  final int surahNumber;
   final bool active;
   final VoidCallback onPlay;
   final VoidCallback? onTafsir;
@@ -13,6 +15,7 @@ class QuranAyahCard extends StatelessWidget {
   const QuranAyahCard({
     super.key,
     required this.ayah,
+    required this.surahNumber,
     required this.active,
     required this.onPlay,
     this.onTafsir,
@@ -21,11 +24,13 @@ class QuranAyahCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: quranSettings,
+      listenable: Listenable.merge([quranSettings, quranBookmarks]),
       builder: (context, _) {
         final showTr = quranSettings.showTranslation;
         final showLatin = quranSettings.showLatin;
         final showTajweed = quranSettings.showTajweed;
+        final bookmarked =
+            quranBookmarks.isBookmarked(surahNumber, ayah.ayah);
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           padding: const EdgeInsets.all(16),
@@ -57,6 +62,18 @@ class QuranAyahCard extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
+                  IconButton(
+                    onPressed: () => quranBookmarks.toggle(
+                        surahNumber, ayah.ayah, ayah.arabic, ayah.translation),
+                    icon: Icon(
+                      bookmarked ? Icons.bookmark : Icons.bookmark_border,
+                    ),
+                    color: bookmarked
+                        ? AppColors.secondaryFixed
+                        : AppColors.onSurfaceVariant.withValues(alpha: 0.6),
+                    tooltip: bookmarked ? 'Hapus bookmark' : 'Bookmark ayat',
+                    visualDensity: VisualDensity.compact,
+                  ),
                   if (onTafsir != null)
                     IconButton(
                       onPressed: onTafsir,

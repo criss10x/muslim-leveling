@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../services/quran_data.dart';
 import '../services/quran_progress.dart';
+import '../services/quran_bookmark.dart';
 import 'quran_reader.dart';
+import 'quran_bookmarks_screen.dart';
 import '../widgets/rub_el_hizb_badge.dart';
 
 class QuranTab extends StatefulWidget {
@@ -27,6 +29,7 @@ class _QuranTabState extends State<QuranTab> {
     _load();
     quranProgress.addListener(_onProgressChanged);
     quranProgress.load();
+    quranBookmarks.load();
   }
 
   @override
@@ -104,15 +107,36 @@ class _QuranTabState extends State<QuranTab> {
                       ),
                       const SizedBox(width: AppSpacing.xs),
                       // Kaligrafi sebagai aksen, bukan informasi — karena itu
-                      // diredupkan dan tidak diberi semantik.
-                      ExcludeSemantics(
-                        child: Text(
-                          'القرآن',
-                          textDirection: TextDirection.rtl,
-                          maxLines: 1,
-                          style: AppText.headlineMd().copyWith(
-                            color: AppColors.goldInk.withValues(alpha: 0.75),
+                      // diredupkan dan tidak diberi semantik. Flexible+FittedBox:
+                      // menyusut saat layar sempit/teks besar, jangan overflow.
+                      Flexible(
+                        child: ExcludeSemantics(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              'القرآن',
+                              textDirection: TextDirection.rtl,
+                              maxLines: 1,
+                              style: AppText.headlineMd().copyWith(
+                                color:
+                                    AppColors.goldInk.withValues(alpha: 0.75),
+                              ),
+                            ),
                           ),
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
+                      IconButton(
+                        tooltip: 'Bookmark ayat',
+                        onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const QuranBookmarksScreen(),
+                          ),
+                        ),
+                        icon: Icon(
+                          Icons.bookmark_border,
+                          color: AppColors.primary,
+                          size: 22,
                         ),
                       ),
                     ],
