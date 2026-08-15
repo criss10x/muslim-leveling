@@ -14,7 +14,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "691907686915-01mqovrnr8pcvbneaksgdlk90gm1kqvi.apps.googleusercontent.com",
+          "client_id": "691907686915-0om9fkqvg449bolrkhmi2iqlfp6sn7sg.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "id.muslimleveling.muslim_leveling",
@@ -22,7 +22,7 @@
           }
         },
         {
-          "client_id": "691907686915-5c3bta6s848clfm6fvbskhmleg6t5u2u.apps.googleusercontent.com",
+          "client_id": "691907686915-5isbldi192dk1qh0csgevv4agfdf85nu.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "id.muslimleveling.muslim_leveling",
@@ -30,7 +30,7 @@
           }
         },
         {
-          "client_id": "691907686915-8at9rr30fn5rrh81huuutsvg7tjgjpc1.apps.googleusercontent.com",
+          "client_id": "691907686915-9ef08irph1hrdbb5ij2va7eq599dje8g.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "id.muslimleveling.muslim_leveling",
@@ -38,15 +38,7 @@
           }
         },
         {
-          "client_id": "691907686915-d01n9qi2tfcpos7r31v459tpa3q5823t.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "id.muslimleveling.muslim_leveling",
-            "certificate_hash": "51b4b23fafb389be820bf9e937cfea02331a862e"
-          }
-        },
-        {
-          "client_id": "691907686915-qqk6qjnf407dja12uc8fasfa7s19nn8u.apps.googleusercontent.com",
+          "client_id": "691907686915-dubaqc0v2dh28c7sbpfgcfc57orh3nb4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "id.muslimleveling.muslim_leveling",
