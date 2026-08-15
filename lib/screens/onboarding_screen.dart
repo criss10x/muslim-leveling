@@ -60,10 +60,12 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         return;
       }
       if (loc.name != null) {
+        // ponytail: pola sama dengan JadwalTab._currentLocation — saveLocation
+        // saja. Fetch jadwal + simpan timings + reschedule adzan di-handle
+        // listener locationVersion di HomeTab (lihat _fetchTimingsSilently).
         await PrayerService.saveLocation(loc.id!, loc.name!);
-        final city = await _syncPrayerSchedule();
         if (!mounted) return;
-        setState(() => _city = city);
+        setState(() => _city = loc.name);
       }
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -74,36 +76,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   Future<void> _pickCity() async {
     final picked = await CityPicker.show(context);
     if (picked == null) return;
-    final city = await _syncPrayerSchedule();
+    // Sama seperti _changeLocation di JadwalTab — listener yang fetch sisanya.
+    await PrayerService.saveLocation(picked.id, picked.name);
     if (!mounted) return;
-    setState(() => _city = city);
-  }
-
-  /// Ambil jadwal untuk lokasi tersimpan, simpan timings + schedule adzan.
-  Future<String> _syncPrayerSchedule() async {
-    try {
-      final location = await PrayerService.loadLocation();
-      if (location == null) return 'Jakarta';
-      final schedule = await PrayerService.fetchSchedule(
-          cityId: location.id, cityName: location.name);
-      if (schedule == null) return location.name;
-      await GameService.setTimings(Timings(
-        imsak: schedule['imsak'] ?? '04:30',
-        subuh: schedule['subuh'] ?? '04:42',
-        terbit: schedule['terbit'] ?? '05:55',
-        dhuha: schedule['dhuha'] ?? '06:20',
-        dzuhur: schedule['dzuhur'] ?? '12:01',
-        ashar: schedule['ashar'] ?? '15:20',
-        maghrib: schedule['maghrib'] ?? '17:55',
-        isya: schedule['isya'] ?? '19:08',
-      ));
-      await NotificationService.scheduleAdhanReminders(
-          location.name, schedule);
-      return location.name;
-    } catch (_) {
-      // ponytail: fallback Jakarta; kalau API error user tetap bisa lanjut.
-      return _city ?? 'Jakarta';
-    }
+    setState(() => _city = picked.name);
   }
 
   /// Halaman 3: minta notifikasi (bila diminta), tandai onboarding selesai.
@@ -137,6 +113,16 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     final schedule = await PrayerService.fetchSchedule(
         cityId: location.id, cityName: location.name);
     if (schedule != null) {
+      await GameService.setTimings(Timings(
+        imsak: schedule['imsak'] ?? '04:30',
+        subuh: schedule['subuh'] ?? '04:42',
+        terbit: schedule['terbit'] ?? '05:55',
+        dhuha: schedule['dhuha'] ?? '06:20',
+        dzuhur: schedule['dzuhur'] ?? '12:01',
+        ashar: schedule['ashar'] ?? '15:20',
+        maghrib: schedule['maghrib'] ?? '17:55',
+        isya: schedule['isya'] ?? '19:08',
+      ));
       await NotificationService.scheduleAdhanReminders(
           location.name, schedule);
     }
