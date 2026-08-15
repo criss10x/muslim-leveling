@@ -49,23 +49,29 @@ class Timings {
 
 class PrayerLog {
   final String date, prayer, time, type;
+  /// Bonus XP dipilih saat claim (0 = tidak ada, 15 = tepat waktu, 30 = berjamaah).
+  /// Dipersist supaya unlogPrayer bisa mengembalikan jumlah yang persis.
+  final int bonusXp;
   PrayerLog({
     required this.date,
     required this.prayer,
     required this.time,
     required this.type,
+    this.bonusXp = 0,
   });
   factory PrayerLog.fromMap(Map<String, dynamic> m) => PrayerLog(
     date: m['date'],
     prayer: m['prayer'],
     time: m['time'],
     type: m['type'],
+    bonusXp: m['bonusXp'] ?? 0,
   );
   Map<String, dynamic> toMap() => {
     'date': date,
     'prayer': prayer,
     'time': time,
     'type': type,
+    'bonusXp': bonusXp,
   };
 }
 
@@ -583,6 +589,10 @@ class GameService {
   static const subuhLockAfterMin = 180;
   static const wajibDayEndHHmm = '03:00';
 
+  // Bonus XP saat claim sholat wajib — dipilih user di bottom sheet.
+  static const timelyBonusXp = 15; // tepat waktu (≤30 menit)
+  static const jamaahBonusXp = 30; // berjamaah
+
   // ponytail: test-only flag to bypass time-window for deterministic unit tests.
   static bool _testSkipTimeWindow = false;
   static void setTestSkipTimeWindow(bool skip) => _testSkipTimeWindow = skip;
@@ -958,8 +968,9 @@ class GameService {
   static (GameState, int, int)? logPrayer(
     GameState state,
     String prayer,
-    String type,
-  ) {
+    String type, {
+    int bonusXp = 0,
+  }) {
     final today = todayStr();
     final yest = yesterdayStr();
     final now = nowHHmm();
@@ -981,6 +992,7 @@ class GameService {
       prayer: prayer,
       time: now,
       type: type,
+      bonusXp: bonusXp,
     );
     final updatedLogs = [...state.prayerLog, newLog];
 
@@ -1003,17 +1015,9 @@ class GameService {
         );
     if (isHeroCompletor) xpGained += 50;
 
-    if (type == 'wajib') {
-      final adzanTime = switch (prayer) {
-        'subuh' => state.timings.subuh,
-        'dzuhur' => state.timings.dzuhur,
-        'ashar' => state.timings.ashar,
-        'maghrib' => state.timings.maghrib,
-        'isya' => state.timings.isya,
-        _ => '',
-      };
-      if (adzanTime.isNotEmpty && minDiff(now, adzanTime) <= 30) xpGained += 15;
-    }
+    // Bonus XP (tepat waktu / berjamaah) dipilih user saat claim — menggantikan
+    // auto +15 lama yang dulu dihitung dari timestamp tap.
+    xpGained += bonusXp;
 
     final oldInfo = getLevelInfo(state.xp);
     final newInfo = getLevelInfo(state.xp + xpGained);
@@ -1060,9 +1064,10 @@ class GameService {
 
   static Future<(GameState, int, int)?> logPrayerAsync(
     String prayer,
-    String type,
-  ) async {
-    final res = logPrayer(_cache, prayer, type);
+    String type, {
+    int bonusXp = 0,
+  }) async {
+    final res = logPrayer(_cache, prayer, type, bonusXp: bonusXp);
     if (res == null) return null;
     await _save(res.$1);
     await refreshBadges(); // check badge unlock
@@ -1096,11 +1101,8 @@ class GameService {
         );
     if (wasFullBefore) xpLost += 50;
 
-    // Kembalikan timely bonus +15 XP kalau wajib dan masih ≤30 menit setelah adzan.
-    if (logItem.type == 'wajib') {
-      final adzan = _adzanFor(prayer, _cache.timings);
-      if (adzan.isNotEmpty && minDiff(logItem.time, adzan) <= 30) xpLost += 15;
-    }
+    // Kembalikan bonus XP (tepat waktu / berjamaah) yang dipilih saat claim.
+    xpLost += logItem.bonusXp;
 
     final newXp = (_cache.xp - xpLost).clamp(0, 999999);
     final newInfo = getLevelInfo(newXp);

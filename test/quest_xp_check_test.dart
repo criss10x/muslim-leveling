@@ -171,4 +171,23 @@ void main() {
       expect(xpLost, 15, reason: 'sunnah unlog must not steal wajib hero bonus');
     });
   });
+
+  group('wajib bonus XP (claim sheet)', () {
+    test('bonusXp ditambah ke base dan dipersist di log', () {
+      var s = fresh();
+      final res = GameService.logPrayer(s, 'subuh', 'wajib', bonusXp: 15);
+      expect(res!.$2, 45, reason: '30 base + 15 timely');
+      expect(res.$1.prayerLog.last.bonusXp, 15,
+          reason: 'bonus harus dipersist supaya unlog bisa revert');
+
+      var s2 = fresh();
+      final res2 = GameService.logPrayer(s2, 'subuh', 'wajib', bonusXp: 30);
+      expect(res2!.$2, 60, reason: '30 base + 30 jamaah');
+
+      var s3 = fresh();
+      final res3 = GameService.logPrayer(s3, 'subuh', 'wajib');
+      expect(res3!.$2, 30, reason: 'tanpa bonus = base saja');
+      expect(res3.$1.prayerLog.last.bonusXp, 0);
+    });
+  });
 }
