@@ -4,9 +4,13 @@ import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../services/learning_content.dart';
 import 'belajar_article.dart';
+import 'doa_screen.dart';
+import 'hadis_screen.dart';
 
-/// Belajar / Learning Hub — modules list with category tabs and progress.
-/// Logic + content ported from V3 BelajarScreen.kt.
+/// Belajar / Learning Hub — 3 konten: Modul | Doa | Hadis.
+/// Modul: kategori + daftar modul + progress (dari V3 BelajarScreen.kt).
+/// Doa: 2-level navigasi (grup → list doa) dari API equran.id.
+/// Hadis: explore list + muat lagi + search + acak dari API myquran v3.
 class BelajarTab extends StatefulWidget {
   const BelajarTab({super.key});
   @override
@@ -14,6 +18,7 @@ class BelajarTab extends StatefulWidget {
 }
 
 class _BelajarTabState extends State<BelajarTab> {
+  int _hub = 0; // 0=Modul, 1=Doa, 2=Hadis
   int _selectedCat = 0;
 
   @override
@@ -40,32 +45,116 @@ class _BelajarTabState extends State<BelajarTab> {
       backgroundColor: Colors.transparent,
       body: SafeArea(
         bottom: false,
-        child: RefreshIndicator(
-          color: AppColors.primary,
-          onRefresh: _load,
-          child: ListView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md)
-                .copyWith(bottom: 100, top: AppSpacing.md),
-            children: [
-              Text('LEARNING HUB',
-                  style: AppText.labelCaps().copyWith(color: AppColors.primary)),
-              const SizedBox(height: 4),
-              Text('Belajar Bareng',
-                  style: AppText.headlineLg()
-                      .copyWith(fontSize: 28, color: AppColors.onSurface)),
-              const SizedBox(height: 4),
-              Text('Tingkatkan ilmu, raih lebih banyak XP.',
-                  style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant)),
-              const SizedBox(height: AppSpacing.lg),
-              _progressCard(completed, total),
-              const SizedBox(height: AppSpacing.lg),
-              _categoryTabs(),
-              const SizedBox(height: AppSpacing.md),
-              _moduleList(context),
-            ],
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.md, AppSpacing.md, AppSpacing.md, AppSpacing.sm),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('LEARNING HUB',
+                      style: AppText.labelCaps().copyWith(color: AppColors.primary)),
+                  const SizedBox(height: 4),
+                  Text('Belajar Bareng',
+                      style: AppText.headlineLg()
+                          .copyWith(fontSize: 28, color: AppColors.onSurface)),
+                  const SizedBox(height: 4),
+                  Text('Tingkatkan ilmu, raih lebih banyak XP.',
+                      style: AppText.bodyMd()
+                          .copyWith(color: AppColors.onSurfaceVariant)),
+                ],
+              ),
+            ),
+            _hubSelector(),
+            const SizedBox(height: AppSpacing.sm),
+            Expanded(
+              child: switch (_hub) {
+                1 => const DoaScreen(),
+                2 => const HadisScreen(),
+                _ => _modulContent(completed, total),
+              },
+            ),
+          ],
         ),
+      ),
+    );
+  }
+
+  /// Hub selector: Modul | Doa | Hadis — pill segmented, gaya kategori.
+  Widget _hubSelector() {
+    const items = [
+      (Icons.menu_book, 'Modul'),
+      (Icons.volunteer_activism, 'Doa'),
+      (Icons.auto_stories, 'Hadis'),
+    ];
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+      child: Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(AppRadius.pill),
+        ),
+        child: Row(
+          children: List.generate(items.length, (i) {
+            final selected = i == _hub;
+            return Expanded(
+              child: GestureDetector(
+                onTap: () => setState(() => _hub = i),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeOut,
+                  padding: const EdgeInsets.symmetric(vertical: 9),
+                  decoration: BoxDecoration(
+                    color: selected
+                        ? AppColors.primary.withValues(alpha: 0.15)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(AppRadius.pill - 4),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(items[i].$1,
+                          size: 16,
+                          color: selected
+                              ? AppColors.primary
+                              : AppColors.onSurfaceVariant),
+                      const SizedBox(width: 6),
+                      Text(items[i].$2,
+                          style: AppText.labelCaps().copyWith(
+                              fontSize: 11,
+                              color: selected
+                                  ? AppColors.primary
+                                  : AppColors.onSurfaceVariant)),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }),
+        ),
+      ),
+    );
+  }
+
+  /// Konten Modul — ListView scrollable sendiri + RefreshIndicator.
+  Widget _modulContent(int completed, int total) {
+    return RefreshIndicator(
+      color: AppColors.primary,
+      onRefresh: _load,
+      child: ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md)
+            .copyWith(bottom: 100),
+        children: [
+          _progressCard(completed, total),
+          const SizedBox(height: AppSpacing.lg),
+          _categoryTabs(),
+          const SizedBox(height: AppSpacing.md),
+          _moduleList(context),
+        ],
       ),
     );
   }

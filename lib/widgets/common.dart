@@ -93,6 +93,32 @@ class HudHeader extends StatelessWidget {
   }
 }
 
+/// Error + retry — dipakai Doa & Hadis (satu pola).
+class ErrorRetry extends StatelessWidget {
+  final String message;
+  final VoidCallback onRetry;
+  const ErrorRetry({super.key, required this.message, required this.onRetry});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(message,
+              style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant)),
+          const SizedBox(height: AppSpacing.md),
+          TextButton.icon(
+            onPressed: onRetry,
+            icon: const Icon(Icons.refresh, size: 18),
+            label: const Text('Coba lagi'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// FlatCard — kartu datar standar: surfaceContainerLow, radius 16,
 /// tanpa border/shadow. Depth dari surface ramp, bukan BoxShadow.
 class FlatCard extends StatelessWidget {
