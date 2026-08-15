@@ -566,6 +566,8 @@ class PrayerService {
 
   /// ponytail: default Jakarta kalau belum ada lokasi tersimpan.
   /// Equran API pakai "Kota Jakarta" + "DKI Jakarta".
+  /// NOTE: tidak menulis default ke prefs — onboarding bertugas resolve
+  /// lokasi asli. Caller yang belum onboarding akan tetap dapat default ini.
   static const _defaultId = 'DKI Jakarta/Kota Jakarta';
   static const _defaultName = 'Kota Jakarta';
 
@@ -574,8 +576,6 @@ class PrayerService {
     final id = p.getString('city_id');
     final name = p.getString('city_name');
     if (id == null || name == null) {
-      await p.setString('city_id', _defaultId);
-      await p.setString('city_name', _defaultName);
       return (id: _defaultId, name: _defaultName);
     }
     return (id: id, name: name);

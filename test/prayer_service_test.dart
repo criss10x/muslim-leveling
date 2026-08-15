@@ -113,7 +113,7 @@ void main() {
   });
 
   test(
-    'loads and saves Kota Jakarta when no location has been selected',
+    'returns Kota Jakarta default without persisting when no location selected',
     () async {
       SharedPreferences.setMockInitialValues({});
 
@@ -124,8 +124,10 @@ void main() {
         location,
         (id: 'DKI Jakarta/Kota Jakarta', name: 'Kota Jakarta'),
       );
-      expect(prefs.getString('city_id'), 'DKI Jakarta/Kota Jakarta');
-      expect(prefs.getString('city_name'), 'Kota Jakarta');
+      // Default tidak disimpan — onboarding harus resolve lokasi asli,
+      // kalau gagal user pilih manual (bug: auto-save Jakarta ke user Bali).
+      expect(prefs.getString('city_id'), isNull);
+      expect(prefs.getString('city_name'), isNull);
     },
   );
 }
