@@ -2352,22 +2352,33 @@ class _BonusQuestState extends State<_BonusQuest> {
 
   Widget _xpPillSmall(int xp, Color color, Color onColor,
       {bool done = false, bool locked = false}) {
+    // Sama dengan _xpPill quest wajib: DONE + centang saat sudah di-claim.
+    final muted = AppColors.onSurfaceVariant;
+    final fg = locked ? muted.withValues(alpha: 0.7) : (done ? muted : onColor);
+    final bg = locked || done
+        ? AppColors.surfaceContainerHigh.withValues(alpha: 0.6)
+        : color;
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.sm,
         vertical: 2,
       ),
       decoration: BoxDecoration(
-        color: done
-            ? color
-            : (locked ? AppColors.surfaceContainerHighest : color),
+        color: bg,
         borderRadius: BorderRadius.circular(AppRadius.pill),
       ),
-      child: Text(
-        '+$xp XP',
-        style: AppText.labelCapsSm().copyWith(
-          color: done || !locked ? onColor : AppColors.onSurfaceVariant,
-        ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (done) ...[
+            Icon(Icons.check, size: 12, color: fg),
+            const SizedBox(width: 2),
+          ],
+          Text(
+            done ? 'DONE' : '+$xp XP',
+            style: AppText.labelCapsSm().copyWith(color: fg),
+          ),
+        ],
       ),
     );
   }
