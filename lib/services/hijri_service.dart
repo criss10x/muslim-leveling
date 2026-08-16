@@ -32,6 +32,39 @@ const hijriMonthNames = [
   'Zulhijah',
 ];
 
+/// Nama bulan Gregorian dalam Bahasa Indonesia.
+const gregorianMonthNames = [
+  'Januari',
+  'Februari',
+  'Maret',
+  'April',
+  'Mei',
+  'Juni',
+  'Juli',
+  'Agustus',
+  'September',
+  'Oktober',
+  'November',
+  'Desember',
+];
+
+/// Nama bulan Hijriah dalam huruf Arab (aksen judul kartu).
+const hijriMonthArabic = [
+  '',
+  'محرم',
+  'صفر',
+  'ربيع الأول',
+  'ربيع الآخر',
+  'جمادى الأولى',
+  'جمادى الآخرة',
+  'رجب',
+  'شعبان',
+  'رمضان',
+  'شوال',
+  'ذو القعدة',
+  'ذو الحجة',
+];
+
 /// Tanggal penting statis (bulan, hari) → label. Deterministik, tanpa API.
 const hijriImportantDates = <(int, int), String>{
   (1, 1): 'Tahun Baru Hijriah',
