@@ -1514,8 +1514,8 @@ class _HomeTabState extends State<HomeTab> {
           child: Column(
             children: [
               SizedBox(
-                // ponytail: tinggi tetap; teks panjang ke-ellipsis
-                height: 170,
+                // ponytail: tinggi tetap, teks panjang scroll vertikal per halaman
+                height: 260,
                 child: PageView.builder(
                   controller: _highlightCtrl,
                   itemCount: pages.length,
@@ -1556,39 +1556,36 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget _highlightTile(_HighlightPage p) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          p.title,
-          style: AppText.labelCaps().copyWith(color: AppColors.primary),
-        ),
-        const SizedBox(height: AppSpacing.xs),
-        if (p.isArabic)
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            p.title,
+            style: AppText.labelCaps().copyWith(color: AppColors.primary),
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          if (p.isArabic)
+            Text(
               p.arabic,
               textDirection: TextDirection.rtl,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
               style: GoogleFonts.amiriQuran(
-                fontSize: 20,
+                fontSize: 22,
                 height: 1.8,
                 color: AppColors.onSurface,
               ),
             ),
-          ),
-        if (p.isArabic) const SizedBox(height: AppSpacing.xs),
-        Expanded(
-          child: Text(
+          if (p.isArabic) const SizedBox(height: AppSpacing.sm),
+          Text(
             p.text,
-            maxLines: p.isArabic ? 3 : 5,
-            overflow: TextOverflow.ellipsis,
-            style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
+            style: AppText.bodyMd().copyWith(
+              color: AppColors.onSurface,
+              height: 1.5,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
