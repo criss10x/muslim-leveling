@@ -112,15 +112,45 @@ class StreakState {
 }
 
 /// Zikir counter — daily reset, persistent.
+/// count = total tap hari ini (untuk quest/achievement);
+/// counts = per-dzikir key→count; vibrate = preferensi haptic tap.
 class ZikirCounter {
   final String date; // YYYY-MM-DD
   final int count;
-  const ZikirCounter({this.date = '', this.count = 0});
-  ZikirCounter copyWith({String? date, int? count}) =>
-      ZikirCounter(date: date ?? this.date, count: count ?? this.count);
-  factory ZikirCounter.fromMap(Map<String, dynamic> m) =>
-      ZikirCounter(date: m['date'] ?? '', count: m['count'] ?? 0);
-  Map<String, dynamic> toMap() => {'date': date, 'count': count};
+  final Map<String, int> counts;
+  final bool vibrate;
+  const ZikirCounter({
+    this.date = '',
+    this.count = 0,
+    this.counts = const {},
+    this.vibrate = true,
+  });
+  ZikirCounter copyWith({
+    String? date,
+    int? count,
+    Map<String, int>? counts,
+    bool? vibrate,
+  }) =>
+      ZikirCounter(
+        date: date ?? this.date,
+        count: count ?? this.count,
+        counts: counts ?? this.counts,
+        vibrate: vibrate ?? this.vibrate,
+      );
+  factory ZikirCounter.fromMap(Map<String, dynamic> m) => ZikirCounter(
+        date: m['date'] ?? '',
+        count: m['count'] ?? 0,
+        counts: (m['counts'] as Map?)
+                ?.map((k, v) => MapEntry(k.toString(), v as int)) ??
+            const {},
+        vibrate: m['vibrate'] ?? true,
+      );
+  Map<String, dynamic> toMap() => {
+        'date': date,
+        'count': count,
+        'counts': counts,
+        'vibrate': vibrate,
+      };
 }
 
 /// XP harian dari Quran (baca & dengar) — reset harian via date-check,
@@ -1636,9 +1666,38 @@ class GameService {
     return _cache.zikirCounter.date == today ? _cache.zikirCounter.count : 0;
   }
 
+  /// Per-dzikir count hari ini (untuk progress ring di layar dzikir).
+  static Map<String, int> get zikirCountsToday {
+    final today = todayStr();
+    return _cache.zikirCounter.date == today
+        ? _cache.zikirCounter.counts
+        : const {};
+  }
+
+  static bool get zikirVibrate => _cache.zikirCounter.vibrate;
+
+  static Future<void> setZikirVibrate(bool v) async {
+    await _save(
+        _cache.copyWith(zikirCounter: _cache.zikirCounter.copyWith(vibrate: v)));
+  }
+
+  /// Reset counter dzikir [key] hari ini (total ikut berkurang).
+  static Future<void> resetZikir(String key) async {
+    final today = todayStr();
+    final zc = _cache.zikirCounter;
+    if (zc.date != today) return;
+    final c = zc.counts[key] ?? 0;
+    if (c == 0) return;
+    final counts = Map<String, int>.from(zc.counts)..remove(key);
+    await _save(_cache.copyWith(
+      zikirCounter:
+          zc.copyWith(count: (zc.count - c).clamp(0, 1 << 31), counts: counts),
+    ));
+  }
+
   /// Increment zikir +1. No XP awarded (user request 2026-07-02).
   /// Returns (newCount, didLevelUp) — didLevelUp always false now.
-  static Future<(int, bool)> incrementZikir() async {
+  static Future<(int, bool)> incrementZikir({String? key}) async {
     // Auto-claim side quest Dzikir 100x dulu (menyimpan + memuat ulang cache),
     // baru hitung increment di atas state terbaru agar tidak menimpa hasil log.
     final zc0 = _cache.zikirCounter;
@@ -1660,8 +1719,17 @@ class GameService {
       newCount,
     );
 
+    final baseCounts =
+        zc.date == today ? Map<String, int>.from(zc.counts) : <String, int>{};
+    if (key != null) baseCounts[key] = (baseCounts[key] ?? 0) + 1;
+
     final newState = _cache.copyWith(
-      zikirCounter: ZikirCounter(date: today, count: newCount),
+      zikirCounter: ZikirCounter(
+        date: today,
+        count: newCount,
+        counts: baseCounts,
+        vibrate: zc.vibrate,
+      ),
       quests: quests,
     );
     await _save(newState);

@@ -16,6 +16,7 @@ import '../../widgets/achievement_medal.dart';
 import '../../widgets/xp_toast.dart';
 import 'naik_level_screen.dart';
 import 'quran_reader.dart';
+import 'dzikir_screen.dart';
 
 extension _StringExt on String {
   String get cap => '${this[0].toUpperCase()}${substring(1)}';
@@ -1345,108 +1346,17 @@ class _HomeTabState extends State<HomeTab> {
           meta: '$zikirCount/$goal',
           accent: zikirCount >= goal ? AppColors.primary : null,
         ),
-        // ── Zikir tiles 2×2 — tinggi ngikutin konten (≈ tombol Daily Zikir),
-        // bukan aspect ratio grid yang bikin tile ketinggian. IntrinsicHeight
-        // menyamakan tinggi dua tile dalam satu baris (label bisa 2 baris).
-        IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: _zikirTile(
-                  'SUBHANALLAH',
-                  '33',
-                  AppColors.primary,
-                  '',
-                  Icons.refresh,
-                  onTap: () => _showDzikir(
-                    'Subhanallah',
-                    'سُبْحَانَ اللَّهِ',
-                    'Subhanallah',
-                    'Maha Suci Allah, dzikir yang menumbuhkan pohon-pohon di surga.',
-                  ),
-                ),
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: _zikirTile(
-                  'ALHAMDULILLAH',
-                  '33',
-                  AppColors.tertiary,
-                  '',
-                  Icons.refresh,
-                  onTap: () => _showDzikir(
-                    'Alhamdulillah',
-                    'الْحَمْدُ لِلَّهِ',
-                    'Alhamdulillah',
-                    'Segala puji bagi Allah, dzikir yang mengisi timbangan amal di hari kiamat.',
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: AppSpacing.sm),
-        IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: _zikirTile(
-                  'ALLAHU AKBAR',
-                  '33',
-                  AppColors.secondaryFixed,
-                  '',
-                  Icons.refresh,
-                  onTap: () => _showDzikir(
-                    'Allahu Akbar',
-                    'اللَّهُ أَكْبَرُ',
-                    'Allahu Akbar',
-                    'Allah Maha Besar, dzikir yang membuka keberkahan dan ketenangan hati.',
-                  ),
-                ),
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: _zikirTile(
-                  'LA ILAHA ILLALLAH',
-                  '1',
-                  AppColors.tertiary,
-                  '',
-                  Icons.refresh,
-                  onTap: () => _showDzikir(
-                    'La ilaha illallah',
-                    'لَا إِلَهَ إِلَّا اللَّهُ',
-                    'La ilaha illallah',
-                    'Tiada tuhan selain Allah, kalimat tauhid yang paling utama.',
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: AppSpacing.sm),
-        // ── Zikir Clicker (full-width row below grid, no XP) ──
+        // Satu tile besar -> buka layar Dzikir penuh (counter, target, getar, pilih dzikir).
         PressableScale(
           pressedScale: 0.97,
           onTap: () async {
-            final (newCount, _) = await GameService.incrementZikir();
-            if (!mounted) return;
-            setState(() {});
-            if (newCount == goal) {
-              _showZikirComplete();
-              // Zikir 100 pertama → medali WOMBO COMBO.
-              final newAch = await AchievementService.refresh();
-              for (final a in newAch) {
-                if (!mounted) break;
-                await showAchievementUnlock(context, a);
-              }
-            }
+            await Navigator.push(
+                context, MaterialPageRoute(builder: (_) => const DzikirScreen()));
+            if (mounted) setState(() {});
           },
           child: Container(
             padding: const EdgeInsets.all(AppSpacing.md),
             decoration: BoxDecoration(
-              // Satu-satunya CTA di bagian bawah — tint primary tanpa border.
               color: AppColors.primary.withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(AppRadius.xxl),
             ),
@@ -1457,7 +1367,7 @@ class _HomeTabState extends State<HomeTab> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'TAP UNTUK ZIKIR',
+                        'BUKA TASBIH DIGITAL',
                         style: AppText.labelCaps().copyWith(
                           color: AppColors.primary,
                           fontSize: 10,
@@ -1468,9 +1378,8 @@ class _HomeTabState extends State<HomeTab> {
                         value: zikirCount,
                         suffix: ' / $goal',
                         duration: const Duration(milliseconds: 350),
-                        style: AppText.displayHero(
-                          28,
-                        ).copyWith(color: AppColors.primary),
+                        style: AppText.displayHero(28)
+                            .copyWith(color: AppColors.primary),
                       ),
                       const SizedBox(height: 6),
                       ClipRRect(
@@ -1482,11 +1391,17 @@ class _HomeTabState extends State<HomeTab> {
                           valueColor: AlwaysStoppedAnimation(AppColors.primary),
                         ),
                       ),
+                      const SizedBox(height: 6),
+                      Text(
+                        '5 dzikir · target 33/99/100 · getar on/off · reset',
+                        style: AppText.bodyMd()
+                            .copyWith(fontSize: 12, color: AppColors.onSurfaceVariant),
+                      ),
                     ],
                   ),
                 ),
                 const SizedBox(width: AppSpacing.md),
-                Icon(Icons.touch_app, color: AppColors.primary, size: 28),
+                Icon(Icons.chevron_right, color: AppColors.primary, size: 28),
               ],
             ),
           ),
@@ -1603,22 +1518,6 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  void _showZikirComplete() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Row(
-          children: [
-            Text('🎉 ', style: TextStyle(fontSize: 20)),
-            SizedBox(width: 8),
-            Expanded(child: Text('Zikir harian selesai! MasyaAllah 🤲')),
-          ],
-        ),
-        backgroundColor: AppColors.primary,
-        behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 3),
-      ),
-    );
-  }
 
   // ─── Daily Reward Chest ───
   Widget _dailyChest() {
@@ -1876,117 +1775,7 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  Widget _zikirTile(
-    String label,
-    String count,
-    Color color,
-    String cta,
-    IconData icon, {
-    VoidCallback? onTap,
-  }) {
-    return PressableScale(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(AppRadius.xxl),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              label,
-              style: AppText.labelCaps().copyWith(color: color, fontSize: 10),
-            ),
-            const SizedBox(height: 4),
-            Text(count, style: AppText.displayHero(32).copyWith(color: color)),
-            if (cta.isNotEmpty) ...[
-              const SizedBox(height: 4),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(icon, color: color, size: 12),
-                  const SizedBox(width: 4),
-                  Text(
-                    cta,
-                    style: AppText.labelCaps().copyWith(
-                      color: color,
-                      fontSize: 10,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ],
-        ),
-      ),
-    );
-  }
 
-  void _showDzikir(
-    String title,
-    String arabic,
-    String translit,
-    String meaning,
-  ) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: AppColors.surfaceContainerHigh,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xl)),
-      ),
-      builder: (_) => SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(AppSpacing.md),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppColors.outlineVariant,
-                    borderRadius: BorderRadius.circular(AppRadius.xs),
-                  ),
-                ),
-              ),
-              const SizedBox(height: AppSpacing.lg),
-              Text(
-                title,
-                style: AppText.headlineLg().copyWith(color: AppColors.primary),
-              ),
-              const SizedBox(height: AppSpacing.md),
-              Text(
-                arabic,
-                style: AppText.headlineMd().copyWith(
-                  color: AppColors.onSurface,
-                  height: 1.6,
-                ),
-                textAlign: TextAlign.right,
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              Text(
-                translit,
-                style: AppText.bodyMd().copyWith(
-                  color: AppColors.onSurfaceVariant,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              Text(
-                meaning,
-                style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
-              ),
-              const SizedBox(height: AppSpacing.lg),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 class _RingsPainter extends CustomPainter {
