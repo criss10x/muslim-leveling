@@ -8,6 +8,7 @@ import 'cloud_sync.dart';
 import 'cosmetic_catalog.dart';
 import 'cosmetic_service.dart';
 import 'quran_data.dart';
+import 'learning_content.dart';
 
 // ponytail: single-file game state. No riverpod, no bloc.
 // Port dari V3 GameViewModel logic. State persisted as JSON di SharedPreferences.
@@ -1618,6 +1619,30 @@ class GameService {
           '📚',
           'Selesaikan 16 modul Belajar',
         ),
+        (
+          'jamaah_hero',
+          'JAMAAH HERO',
+          '🕌',
+          '20x sholat berjamaah',
+        ),
+        (
+          'jamaah_legend',
+          'JAMAAH LEGEND',
+          '👥',
+          '100x sholat berjamaah',
+        ),
+        (
+          'sunnah_master',
+          'SUNNAH MASTER',
+          '✨',
+          '200 sunnah total',
+        ),
+        (
+          'santri_scholar',
+          'SANTRI SCHOLAR',
+          '🎓',
+          'Selesaikan 40 modul Belajar',
+        ),
       ];
 
   /// Evaluasi semua badge. Return list of newly earned badge IDs.
@@ -1673,9 +1698,22 @@ class GameService {
     if (state.level >= 80) earned.add('mythic_reached');
 
     // 13. Santri Digital — selesaikan 16 modul Belajar
-    // TODO: aktifkan setelah Gap learning system di-port
-    // final completedModules = state.learningProgress.where((m) => m.completed).length;
-    // if (completedModules >= 16) earned.add('santri_digital');
+    final completedModules = LearningService.completedCount;
+    if (completedModules >= 16) earned.add('santri_digital');
+
+    // 14. Jamaah Hero (20x sholat berjamaah, bonusXp == jamaahBonusXp)
+    final jamaahCount =
+        state.prayerLog.where((l) => l.bonusXp == jamaahBonusXp).length;
+    if (jamaahCount >= 20) earned.add('jamaah_hero');
+
+    // 15. Jamaah Legend (100x sholat berjamaah)
+    if (jamaahCount >= 100) earned.add('jamaah_legend');
+
+    // 16. Sunnah Master (200 sunnah total)
+    if (sunnahCount >= 200) earned.add('sunnah_master');
+
+    // 17. Santri Scholar (40 modul Belajar)
+    if (completedModules >= 40) earned.add('santri_scholar');
 
     return earned.toList()..sort(
       (a, b) => badgeDefs
