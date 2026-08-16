@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
@@ -9,8 +10,11 @@ import '../../services/game_service.dart';
 import '../../services/prayer_service.dart';
 import '../../services/notification_service.dart';
 import '../../services/achievement_service.dart';
+import '../../services/daily_highlight.dart';
+import '../../services/quran_data.dart';
 import '../../widgets/achievement_medal.dart';
 import 'naik_level_screen.dart';
+import 'quran_reader.dart';
 
 extension _StringExt on String {
   String get cap => '${this[0].toUpperCase()}${substring(1)}';
@@ -29,6 +33,9 @@ class _HomeTabState extends State<HomeTab> {
   String _nickname = 'Muslim Warrior';
   String _claimingQuestId = '';
   String _error = '';
+  DailyHighlight? _highlight;
+  final _highlightCtrl = PageController();
+  int _highlightPage = 0;
 
   @override
   void initState() {
@@ -44,6 +51,7 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   void dispose() {
+    _highlightCtrl.dispose();
     GameService.stateVersion.removeListener(_onStateChanged);
     PrayerService.locationVersion.removeListener(_onLocationChanged);
     super.dispose();
@@ -74,6 +82,15 @@ class _HomeTabState extends State<HomeTab> {
         AchievementService.refresh(),
         _fetchTimingsSilently(),
         SharedPreferences.getInstance().then((v) => p = v),
+        () async {
+          try {
+            _highlight = await dailyHighlightService.forToday(
+              GameService.todayStr(),
+            );
+          } catch (_) {
+            // ponytail: kartu opsional, gagal → sembunyi
+          }
+        }(),
       ]);
       if (mounted) {
         setState(() {
@@ -370,6 +387,8 @@ class _HomeTabState extends State<HomeTab> {
               _section(8, _sideQuest(context)),
               const SizedBox(height: AppSpacing.lg),
               _section(9, _dailyBento()),
+              const SizedBox(height: AppSpacing.lg),
+              _section(10, _dailyHighlight()),
               if (_error.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.all(AppSpacing.md),
@@ -1529,6 +1548,117 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
+  // ── Daily Highlight: ayat + hadis + doa, seed per tanggal ─────────
+
+  Widget _dailyHighlight() {
+    final h = _highlight;
+    if (h == null) return const SizedBox.shrink();
+    final pages = <_HighlightPage>[
+      _HighlightPage('QS. ${h.surahLatin}: ${h.ayahNumber}', h.ayahArabic,
+          h.ayahIdn,
+          isArabic: true),
+      if (h.hadisIdn.isNotEmpty) _HighlightPage('HADIS HARI INI', '', h.hadisIdn),
+      _HighlightPage('DOA · ${h.doaNama}', '', h.doaIdn),
+    ];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        HudHeader('DAILY HIGHLIGHT', meta: '+1 XP/HAL'),
+        FlatCard(
+          child: Column(
+            children: [
+              SizedBox(
+                // ponytail: tinggi tetap; teks panjang ke-ellipsis
+                height: 170,
+                child: PageView.builder(
+                  controller: _highlightCtrl,
+                  itemCount: pages.length,
+                  onPageChanged: (i) async {
+                    setState(() => _highlightPage = i);
+                    final got = await GameService.claimHighlightSwipeXp(i);
+                    if (got && mounted) _toast('+1 XP Daily Highlight');
+                  },
+                  itemBuilder: (_, i) => GestureDetector(
+                    onTap: i == 0 ? () => _openHighlightAyah(h) : null,
+                    child: _highlightTile(pages[i]),
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (var i = 0; i < pages.length; i++)
+                    Container(
+                      margin: const EdgeInsets.all(3),
+                      width: 6,
+                      height: 6,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: i == _highlightPage
+                            ? AppColors.primary
+                            : AppColors.onSurfaceVariant
+                                .withValues(alpha: 0.3),
+                      ),
+                    ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _highlightTile(_HighlightPage p) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          p.title,
+          style: AppText.labelCaps().copyWith(color: AppColors.primary),
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        if (p.isArabic)
+          Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              p.arabic,
+              textDirection: TextDirection.rtl,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.amiriQuran(
+                fontSize: 20,
+                height: 1.8,
+                color: AppColors.onSurface,
+              ),
+            ),
+          ),
+        if (p.isArabic) const SizedBox(height: AppSpacing.xs),
+        Expanded(
+          child: Text(
+            p.text,
+            maxLines: p.isArabic ? 3 : 5,
+            overflow: TextOverflow.ellipsis,
+            style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Tap ayat → Quran reader di ayat persis. Surah di-resolve ulang
+  /// deterministik (quranData in-memory setelah load pertama → murah).
+  Future<void> _openHighlightAyah(DailyHighlight h) async {
+    final surahs = await quranData.surahs();
+    final surah = surahs[highlightIndex(h.date, surahs.length)];
+    if (!mounted) return;
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => QuranReader(surah: surah, initialAyah: h.ayahNumber),
+      ),
+    );
+  }
+
   void _showZikirComplete() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -2033,6 +2163,13 @@ class _RankMedallion extends StatelessWidget {
       ),
     );
   }
+}
+
+class _HighlightPage {
+  final String title, arabic, text;
+  final bool isArabic;
+  const _HighlightPage(this.title, this.arabic, this.text,
+      {this.isArabic = false});
 }
 
 class _IslamicHeroPatternPainter extends CustomPainter {

@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'cloud_sync.dart';
 import 'cosmetic_catalog.dart';
 import 'cosmetic_service.dart';
+import 'quran_data.dart';
 
 // ponytail: single-file game state. No riverpod, no bloc.
 // Port dari V3 GameViewModel logic. State persisted as JSON di SharedPreferences.
@@ -122,6 +123,46 @@ class ZikirCounter {
   Map<String, dynamic> toMap() => {'date': date, 'count': count};
 }
 
+/// XP harian dari Quran (baca & dengar) — reset harian via date-check,
+/// pola yang sama dengan ZikirCounter. Cap 3 claim per aktivitas per hari.
+class QuranXpState {
+  final String date; // YYYY-MM-DD
+  final int readClaims;
+  final int readMaxGlobal; // nomor ayat global (1..6236) tertinggi hari ini
+  final int readAyatTotal; // ayat maju kumulatif hari ini
+
+  const QuranXpState({
+    this.date = '',
+    this.readClaims = 0,
+    this.readMaxGlobal = 0,
+    this.readAyatTotal = 0,
+  });
+  QuranXpState copyWith({
+    String? date,
+    int? readClaims,
+    int? readMaxGlobal,
+    int? readAyatTotal,
+  }) =>
+      QuranXpState(
+        date: date ?? this.date,
+        readClaims: readClaims ?? this.readClaims,
+        readMaxGlobal: readMaxGlobal ?? this.readMaxGlobal,
+        readAyatTotal: readAyatTotal ?? this.readAyatTotal,
+      );
+  factory QuranXpState.fromMap(Map<String, dynamic> m) => QuranXpState(
+        date: m['date'] ?? '',
+        readClaims: m['readClaims'] ?? 0,
+        readMaxGlobal: m['readMaxGlobal'] ?? 0,
+        readAyatTotal: m['readAyatTotal'] ?? 0,
+      );
+  Map<String, dynamic> toMap() => {
+        'date': date,
+        'readClaims': readClaims,
+        'readMaxGlobal': readMaxGlobal,
+        'readAyatTotal': readAyatTotal,
+      };
+}
+
 class Quest {
   final String id, desc;
   final int xpReward, target, progress;
@@ -188,11 +229,14 @@ class GameState {
   final int comebackCount; // total streak recoveries
   final List<String> badges; // earned badge IDs
   final ZikirCounter zikirCounter; // daily zikir counter
+  final QuranXpState quranXp; // daily Quran XP (read)
   final List<String> rewards; // collected cosmetic reward names
   final String dailyChestOpenedDate; // YYYY-MM-DD last chest open ("" = never)
   final bool haidMode; // menstruation mode: streaks frozen
   final List<String> ownedCosmetics; // cosmetic ids owned (earned/free)
   final Map<String, String> equipped; // slot name -> cosmetic id
+  final String highlightSwipeDate; // YYYY-MM-DD ("" = never)
+  final int highlightSwipeMask; // bit per page set = page claimed today
 
   GameState({
     this.xp = 0,
@@ -208,18 +252,22 @@ class GameState {
     this.comebackCount = 0,
     this.badges = const [],
     ZikirCounter? zikirCounter,
+    QuranXpState? quranXp,
     this.rewards = const [],
     this.dailyChestOpenedDate = '',
     this.haidMode = false,
     this.ownedCosmetics = const [],
     this.equipped = const {},
+    this.highlightSwipeDate = '',
+    this.highlightSwipeMask = 0,
   }) : timings = timings ?? Timings(),
        prayerLog = prayerLog ?? [],
        heroStreak = heroStreak ?? StreakState(),
        perPrayerStreaks = perPrayerStreaks ?? const {},
        tilawahStreak = tilawahStreak ?? StreakState(),
        quests = quests ?? const [],
-       zikirCounter = zikirCounter ?? const ZikirCounter();
+       zikirCounter = zikirCounter ?? const ZikirCounter(),
+       quranXp = quranXp ?? const QuranXpState();
 
   GameState copyWith({
     int? xp,
@@ -235,11 +283,14 @@ class GameState {
     int? comebackCount,
     List<String>? badges,
     ZikirCounter? zikirCounter,
+    QuranXpState? quranXp,
     List<String>? rewards,
     String? dailyChestOpenedDate,
     bool? haidMode,
     List<String>? ownedCosmetics,
     Map<String, String>? equipped,
+    String? highlightSwipeDate,
+    int? highlightSwipeMask,
   }) => GameState(
     xp: xp ?? this.xp,
     level: level ?? this.level,
@@ -254,11 +305,14 @@ class GameState {
     comebackCount: comebackCount ?? this.comebackCount,
     badges: badges ?? this.badges,
     zikirCounter: zikirCounter ?? this.zikirCounter,
+    quranXp: quranXp ?? this.quranXp,
     rewards: rewards ?? this.rewards,
     dailyChestOpenedDate: dailyChestOpenedDate ?? this.dailyChestOpenedDate,
     haidMode: haidMode ?? this.haidMode,
     ownedCosmetics: ownedCosmetics ?? this.ownedCosmetics,
     equipped: equipped ?? this.equipped,
+    highlightSwipeDate: highlightSwipeDate ?? this.highlightSwipeDate,
+    highlightSwipeMask: highlightSwipeMask ?? this.highlightSwipeMask,
   );
 
   factory GameState.fromMap(Map<String, dynamic> m) {
@@ -307,11 +361,16 @@ class GameState {
       comebackCount: m['comebackCount'] ?? 0,
       badges: badgeList,
       zikirCounter: zikir,
+      quranXp: m['quranXp'] != null
+          ? QuranXpState.fromMap(m['quranXp'] as Map<String, dynamic>)
+          : null,
       rewards: rewardList,
       dailyChestOpenedDate: m['dailyChestOpenedDate'] ?? '',
       haidMode: m['haidMode'] ?? false,
       ownedCosmetics: ownedList,
       equipped: equippedMap,
+      highlightSwipeDate: m['highlightSwipeDate'] ?? '',
+      highlightSwipeMask: m['highlightSwipeMask'] ?? 0,
     );
   }
   Map<String, dynamic> toMap() => {
@@ -328,11 +387,14 @@ class GameState {
     'comebackCount': comebackCount,
     'badges': badges,
     'zikirCounter': zikirCounter.toMap(),
+    'quranXp': quranXp.toMap(),
     'rewards': rewards,
     'dailyChestOpenedDate': dailyChestOpenedDate,
     'haidMode': haidMode,
     'ownedCosmetics': ownedCosmetics,
     'equipped': equipped,
+    'highlightSwipeDate': highlightSwipeDate,
+    'highlightSwipeMask': highlightSwipeMask,
   };
 }
 
@@ -347,6 +409,9 @@ class GameService {
   /// derived UI. Mirrors PrayerService.locationVersion pattern.
   static final ValueNotifier<int> stateVersion = ValueNotifier(0);
   static final _rng = Random();
+
+  @visibleForTesting
+  static void resetForTest() => _cache = GameState();
 
   @visibleForTesting
   static int? debugChestRoll;
@@ -1523,6 +1588,77 @@ class GameService {
     await refreshBadges();
     // ponytail: no XP, no level-up from zikir — user explicitly removed it
     return (newCount, false);
+  }
+
+  // ─── Quran XP (harian, auto-grant, capped — tanpa UI) ───
+  // Baca: +1/ayat maju, max 50 ayat (50 XP)/hari.
+  // Dengar: tidak ada XP (dihapus atas permintaan user).
+  // Anti-farm: maju per-panggilan dibatasi 3 ayat (scroll kilat tidak kredit
+  // penuh) dan counter berhenti di cap harian.
+  static const quranReadAyahDailyCap = 50;
+
+  // ─── Daily highlight swipe XP ───
+  // +1 XP per halaman kartu (Ayat/Hadis/Doa) yang pertama dilihat tiap hari.
+  // Bitmask anti-farm: tiap halaman cuma bayar sekali per hari. Cap 3/hari.
+  static const highlightSwipeXpPerPage = 1;
+  static const highlightSwipeMaxPages = 3;
+
+  static Future<bool> claimHighlightSwipeXp(int page) async {
+    if (page < 0 || page >= highlightSwipeMaxPages) return false;
+    final today = todayStr();
+    var mask =
+        _cache.highlightSwipeDate == today ? _cache.highlightSwipeMask : 0;
+    final bit = 1 << page;
+    if (mask & bit != 0) return false;
+    mask |= bit;
+    final newXp = _cache.xp + highlightSwipeXpPerPage;
+    await _save(_cache.copyWith(
+      xp: newXp,
+      level: getLevelInfo(newXp).level,
+      highlightSwipeDate: today,
+      highlightSwipeMask: mask,
+    ));
+    return true;
+  }
+
+  static QuranXpState _qxToday() {
+    final s = _cache.quranXp;
+    return s.date == todayStr() ? s : QuranXpState(date: todayStr());
+  }
+
+  /// Satu-satunya jalur XP baca: dipanggil QuranProgress.save, jadi buka
+  /// reader, scroll, dan murattal semuanya tercatat di titik yang sama.
+  static Future<void> noteQuranPosition(int surah, int ayah) async {
+    var qx = _qxToday();
+    if (qx.readAyatTotal >= quranReadAyahDailyCap) return;
+
+    final surahs = await quranData.surahs();
+    var global = ayah;
+    for (final s in surahs) {
+      if (s.number >= surah) break;
+      global += s.ayahCount;
+    }
+    // ponytail: posisi pertama hari ini = 1 ayat; maju dibatasi 3/panggilan.
+    final advance = qx.readMaxGlobal == 0
+        ? 1
+        : (global - qx.readMaxGlobal).clamp(0, 3);
+    if (advance <= 0) return;
+    qx = qx.copyWith(
+      readMaxGlobal: global,
+      readAyatTotal: (qx.readAyatTotal + advance)
+          .clamp(0, quranReadAyahDailyCap),
+    );
+
+    // XP = ayat maju yang belum dibayar, dibatasi cap harian.
+    final payable =
+        min(quranReadAyahDailyCap - qx.readClaims, qx.readAyatTotal - qx.readClaims);
+    final xp = payable * 1;
+    final newInfo = getLevelInfo(_cache.xp + xp);
+    await _save(_cache.copyWith(
+      xp: _cache.xp + xp,
+      level: newInfo.level,
+      quranXp: qx.copyWith(readClaims: qx.readClaims + payable),
+    ));
   }
 
   // ─── Daily check: streak recovery + comeback counter ───
