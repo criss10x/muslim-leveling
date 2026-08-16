@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
@@ -5,7 +6,9 @@ import '../../widgets/city_picker.dart';
 import '../../services/prayer_service.dart';
 import '../../services/game_service.dart';
 import '../../services/notification_service.dart';
+import '../../services/hijri_service.dart';
 import 'qibla_screen.dart';
+import 'hijri_calendar_screen.dart';
 
 /// Jadwal Sholat — V3 logic ported to V1 design.
 /// Shows next prayer countdown, 5 daily prayers with logged status,
@@ -23,6 +26,7 @@ class _JadwalTabState extends State<JadwalTab> {
   String _cityId = '';
   bool _loading = true;
   String? _error;
+  HijriDay? _hijriToday;
   // Mode suara per sholat (override global Profil). Dimuat di _loadAndFetch
   // karena prefs async; dipakai sinkron di _schedule().
   Map<String, String> _perPrayerSounds = {};
@@ -32,10 +36,17 @@ class _JadwalTabState extends State<JadwalTab> {
   void initState() {
     super.initState();
     _loadAndFetch();
+    // ponytail: fire-and-forget — tanggal Hijriah hari ini untuk strip header.
+    unawaited(_loadHijriToday());
     // Refetch saat kota diganti dari tab lain (profil/onboarding).
     PrayerService.locationVersion.addListener(_loadAndFetch);
     // Rebuild status "sudah dilog" saat sholat dicentang di tab Home.
     GameService.stateVersion.addListener(_onStateChanged);
+  }
+
+  Future<void> _loadHijriToday() async {
+    final d = await hijriService.today();
+    if (mounted) setState(() => _hijriToday = d);
   }
 
   @override
@@ -234,6 +245,29 @@ class _JadwalTabState extends State<JadwalTab> {
             _todayLabel(),
             style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
           ),
+          if (_hijriToday != null)
+            PressableScale(
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => const HijriCalendarScreen(),
+              )),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.calendar_month,
+                    size: 14,
+                    color: AppColors.primary,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    hijriLabel(_hijriToday!),
+                    style: AppText.bodyMd().copyWith(
+                      color: AppColors.primary,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           const SizedBox(height: AppSpacing.sm),
           Row(
             children: [
@@ -663,7 +697,12 @@ class _JadwalTabState extends State<JadwalTab> {
         ? AppColors.primary
         : AppColors.onSurfaceVariant;
 
-    return Container(
+    return GestureDetector(
+      // ponytail: seluruh row = buka setting suara sholat ini (picker sama
+      // dengan icon kanan). Tap target lebih besar, icon tetap visual cue.
+      onTap: () => _showSoundPicker(prayerId, sound),
+      behavior: HitTestBehavior.opaque,
+      child: Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.md,
         vertical: AppSpacing.sm,
@@ -726,6 +765,7 @@ class _JadwalTabState extends State<JadwalTab> {
           _soundIcon(sound, prayerId),
         ],
       ),
+      ),
     );
   }
 
@@ -733,7 +773,7 @@ class _JadwalTabState extends State<JadwalTab> {
   static const _soundIcons = {
     'senyap': (Icons.volume_off_rounded, 'Senyap'),
     'suara': (Icons.notifications_rounded, 'Suara'),
-    'adzan': (Icons.mosque, 'Adzan'),
+    'adzan': (Icons.volume_up_rounded, 'Adzan'),
   };
 
   Widget _soundIcon(String sound, String prayerId) {
@@ -776,7 +816,7 @@ class _JadwalTabState extends State<JadwalTab> {
               _soundOption(prayerId, isOverride && current == 'suara', 'suara',
                   Icons.notifications_rounded, 'Suara — notifikasi standar HP'),
               _soundOption(prayerId, isOverride && current == 'adzan', 'adzan',
-                  Icons.mosque, 'Adzan — suara adzan penuh'),
+                  Icons.volume_up_rounded, 'Adzan — suara adzan penuh'),
               _soundOption(
                 prayerId,
                 !isOverride,
