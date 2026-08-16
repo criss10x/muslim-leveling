@@ -1655,10 +1655,15 @@ class GameService {
           'Selesaikan 40 modul Belajar',
         ),
         // ── Badge progresif (counter kumulatif lifeTotals) ──
-        ('quran_pemula', 'QURAN PEMULA', '📖', 'Baca 100 ayat'),
-        ('quran_reader', 'QURAN READER', '📜', 'Baca 500 ayat'),
-        ('quran_hafizh', 'HAFIZH MUDA', '🌟', 'Baca 2.000 ayat'),
-        ('quran_master', 'HAFIZH MASTER', '📚', 'Baca 6.236 ayat (khatam)'),
+        ('quran_novice', 'QURAN NOVICE', '📖', 'Baca 10 ayat'),
+        ('quran_apprentice', 'QURAN APPRENTICE', '📜', 'Baca 50 ayat'),
+        ('quran_adept', 'QURAN ADEPT', '🌙', 'Baca 100 ayat'),
+        ('quran_scholar', 'QURAN SCHOLAR', '⭐', 'Baca 200 ayat'),
+        ('quran_sage', 'QURAN SAGE', '✨', 'Baca 500 ayat'),
+        ('quran_hafizh', 'HAFIZH MUDA', '🌟', 'Baca 1.000 ayat'),
+        ('quran_guardian', 'QURAN GUARDIAN', '💎', 'Baca 2.000 ayat'),
+        ('quran_champion', 'QURAN CHAMPION', '🔥', 'Baca 4.000 ayat'),
+        ('quran_master', 'HAFIZH MASTER', '👑', 'Baca 6.236 ayat (khatam)'),
         ('hadis_pemula', 'HADIS PEMULA', '🕌', 'Baca 10 hadis'),
         ('hadis_santri', 'HADIS SANTRI', '📿', 'Baca 50 hadis'),
         ('hadis_ulama', 'HADIS ULAMA', '🧠', 'Baca 200 hadis'),
@@ -1737,13 +1742,18 @@ class GameService {
     // 17. Santri Scholar (40 modul Belajar)
     if (completedModules >= 40) earned.add('santri_scholar');
 
-    // ── 18-27. Badge progresif dari counter kumulatif lifeTotals ──
+    // ── 18-32. Badge progresif dari counter kumulatif lifeTotals ──
     final quranAyat = lifeTotal('quran_ayat');
     final hadisRead = lifeTotal('hadis');
     final zikirCount = lifeTotal('zikir');
-    if (quranAyat >= 100) earned.add('quran_pemula');
-    if (quranAyat >= 500) earned.add('quran_reader');
-    if (quranAyat >= 2000) earned.add('quran_hafizh');
+    if (quranAyat >= 10) earned.add('quran_novice');
+    if (quranAyat >= 50) earned.add('quran_apprentice');
+    if (quranAyat >= 100) earned.add('quran_adept');
+    if (quranAyat >= 200) earned.add('quran_scholar');
+    if (quranAyat >= 500) earned.add('quran_sage');
+    if (quranAyat >= 1000) earned.add('quran_hafizh');
+    if (quranAyat >= 2000) earned.add('quran_guardian');
+    if (quranAyat >= 4000) earned.add('quran_champion');
     if (quranAyat >= 6236) earned.add('quran_master');
     if (hadisRead >= 10) earned.add('hadis_pemula');
     if (hadisRead >= 50) earned.add('hadis_santri');

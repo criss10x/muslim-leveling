@@ -44,6 +44,9 @@ class DailyHighlightService {
   DailyHighlight? _mem;
   String? _memDate;
 
+  // ponytail: reset cache memori antar widget-test (singleton lintas test = flake).
+  void resetForTest() { _mem = null; _memDate = null; }
+
   Future<DailyHighlight> forToday(String todayStr) async {
     if (_mem != null && _memDate == todayStr) return _mem!;
     // 1) cache disk — seharian offline setelah load pertama.
