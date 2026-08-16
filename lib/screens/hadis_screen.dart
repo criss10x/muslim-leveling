@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../services/hadis_api.dart';
+import '../../services/game_service.dart';
 
 /// Hadis — explore list (5/page) + search + hadis acak. API myquran v3.
 class HadisScreen extends StatefulWidget {
@@ -316,12 +318,36 @@ class _HadisScreenState extends State<HadisScreen> {
 }
 
 /// Hadis — detail: arab + terjemah + grade + takhrij + hikmah.
-class HadisDetailScreen extends StatelessWidget {
+/// Baca ≥5 dtk → +1 XP (sekali per hadis per hari, cap 10/hari).
+class HadisDetailScreen extends StatefulWidget {
   final HadisItem item;
   const HadisDetailScreen({super.key, required this.item});
 
   @override
+  State<HadisDetailScreen> createState() => _HadisDetailScreenState();
+}
+
+class _HadisDetailScreenState extends State<HadisDetailScreen> {
+  Timer? _xpTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    // ponytail: dwell 5 dtk — timer polos cukup; keluar sebelum itu = tidak baca.
+    _xpTimer = Timer(const Duration(seconds: 5), () {
+      unawaited(GameService.noteHadisRead(widget.item.id));
+    });
+  }
+
+  @override
+  void dispose() {
+    _xpTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final item = widget.item;
     final sahih = item.grade.toLowerCase().contains('sahih');
     return Scaffold(
       backgroundColor: AppColors.background,

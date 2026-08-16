@@ -163,6 +163,28 @@ class QuranXpState {
       };
 }
 
+/// XP harian dari baca Hadis — +1 per hadis baru (dwell ≥5 dtk di detail),
+/// cap [GameService.hadisReadDailyCap]/hari. Anti-farm: id unik per hari.
+class HadisXpState {
+  final String date; // YYYY-MM-DD
+  final List<int> ids; // id hadis yang sudah dibayar hari ini
+  final int claims; // XP yang sudah diberikan hari ini
+
+  const HadisXpState({this.date = '', this.ids = const [], this.claims = 0});
+  HadisXpState copyWith({String? date, List<int>? ids, int? claims}) =>
+      HadisXpState(
+        date: date ?? this.date,
+        ids: ids ?? this.ids,
+        claims: claims ?? this.claims,
+      );
+  factory HadisXpState.fromMap(Map<String, dynamic> m) => HadisXpState(
+        date: m['date'] ?? '',
+        ids: (m['ids'] as List?)?.map((e) => e as int).toList() ?? const [],
+        claims: m['claims'] ?? 0,
+      );
+  Map<String, dynamic> toMap() => {'date': date, 'ids': ids, 'claims': claims};
+}
+
 class Quest {
   final String id, desc;
   final int xpReward, target, progress;
@@ -230,6 +252,7 @@ class GameState {
   final List<String> badges; // earned badge IDs
   final ZikirCounter zikirCounter; // daily zikir counter
   final QuranXpState quranXp; // daily Quran XP (read)
+  final HadisXpState hadisXp; // daily Hadis XP (read)
   final List<String> rewards; // collected cosmetic reward names
   final String dailyChestOpenedDate; // YYYY-MM-DD last chest open ("" = never)
   final bool haidMode; // menstruation mode: streaks frozen
@@ -253,6 +276,7 @@ class GameState {
     this.badges = const [],
     ZikirCounter? zikirCounter,
     QuranXpState? quranXp,
+    HadisXpState? hadisXp,
     this.rewards = const [],
     this.dailyChestOpenedDate = '',
     this.haidMode = false,
@@ -267,7 +291,8 @@ class GameState {
        tilawahStreak = tilawahStreak ?? StreakState(),
        quests = quests ?? const [],
        zikirCounter = zikirCounter ?? const ZikirCounter(),
-       quranXp = quranXp ?? const QuranXpState();
+       quranXp = quranXp ?? const QuranXpState(),
+       hadisXp = hadisXp ?? const HadisXpState();
 
   GameState copyWith({
     int? xp,
@@ -284,6 +309,7 @@ class GameState {
     List<String>? badges,
     ZikirCounter? zikirCounter,
     QuranXpState? quranXp,
+    HadisXpState? hadisXp,
     List<String>? rewards,
     String? dailyChestOpenedDate,
     bool? haidMode,
@@ -306,6 +332,7 @@ class GameState {
     badges: badges ?? this.badges,
     zikirCounter: zikirCounter ?? this.zikirCounter,
     quranXp: quranXp ?? this.quranXp,
+    hadisXp: hadisXp ?? this.hadisXp,
     rewards: rewards ?? this.rewards,
     dailyChestOpenedDate: dailyChestOpenedDate ?? this.dailyChestOpenedDate,
     haidMode: haidMode ?? this.haidMode,
@@ -364,6 +391,9 @@ class GameState {
       quranXp: m['quranXp'] != null
           ? QuranXpState.fromMap(m['quranXp'] as Map<String, dynamic>)
           : null,
+      hadisXp: m['hadisXp'] != null
+          ? HadisXpState.fromMap(m['hadisXp'] as Map<String, dynamic>)
+          : null,
       rewards: rewardList,
       dailyChestOpenedDate: m['dailyChestOpenedDate'] ?? '',
       haidMode: m['haidMode'] ?? false,
@@ -388,6 +418,7 @@ class GameState {
     'badges': badges,
     'zikirCounter': zikirCounter.toMap(),
     'quranXp': quranXp.toMap(),
+    'hadisXp': hadisXp.toMap(),
     'rewards': rewards,
     'dailyChestOpenedDate': dailyChestOpenedDate,
     'haidMode': haidMode,
@@ -1560,6 +1591,44 @@ class GameService {
 
   /// Side quest "Baca Quran" selesai otomatis setelah sekian ayat maju/hari.
   static const quranSideQuestAyat = 10;
+
+  // ─── Hadis XP (harian, auto-grant, capped — tanpa UI) ───
+  // +1 per hadis baru yang dibaca ≥5 dtk di detail. Cap 10/hari.
+  // Anti-farm: id hadis unik per hari; dwell ditegakkan di HadisDetailScreen.
+  static const hadisReadDailyCap = 10;
+
+  /// Side quest "Belajar Hadis": sekian hadis (dwell ≥5 dtk) per hari.
+  static const hadisSideQuestTarget = 5;
+
+  /// Hadis yang sudah terbaca (≥5 dtk) hari ini — untuk progress UI.
+  static int get hadisReadToday {
+    final h = _cache.hadisXp;
+    return h.date == todayStr() ? h.ids.length : 0;
+  }
+
+  /// Catat hadis selesai dibaca (dipanggil setelah dwell 5 dtk tercapai).
+  /// +1 XP per id baru, cap harian; 5 hadis → auto-claim side quest (+15 XP).
+  static Future<void> noteHadisRead(int id) async {
+    final today = todayStr();
+    var h = _cache.hadisXp;
+    if (h.date != today) h = const HadisXpState(); // reset harian
+    if (h.ids.contains(id)) return;
+
+    final ids = [...h.ids, id];
+    final claim = h.claims < hadisReadDailyCap ? 1 : 0;
+    final newInfo = getLevelInfo(_cache.xp + claim);
+    await _save(_cache.copyWith(
+      xp: _cache.xp + claim,
+      level: newInfo.level,
+      hadisXp: h.copyWith(date: today, ids: ids, claims: h.claims + claim),
+    ));
+
+    // Auto-claim side quest "Belajar Hadis" saat 5 hadis terbaca.
+    if (ids.length >= hadisSideQuestTarget &&
+        !isPrayerCheckedToday('hadis5')) {
+      await logPrayerAsync('hadis5', 'side');
+    }
+  }
 
   /// Today's zikir count (resets if date changed).
   static int get zikirCountToday {

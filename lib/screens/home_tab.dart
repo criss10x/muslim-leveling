@@ -1278,6 +1278,57 @@ class _HomeTabState extends State<HomeTab> {
             ),
           );
         }),
+        const SizedBox(height: AppSpacing.sm),
+        // Belajar Hadis — auto-claim 5 hadis (dwell ≥5 dtk per hadis), read-only.
+        Builder(builder: (_) {
+          final count = GameService.hadisReadToday;
+          final done = GameService.isPrayerCheckedToday('hadis5');
+          return FlatCard(
+            child: Row(
+              children: [
+                Icon(
+                  done ? Icons.check_circle : Icons.auto_stories,
+                  color: done
+                      ? AppColors.secondaryFixed
+                      : AppColors.onSurfaceVariant,
+                  size: 26,
+                ),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Belajar Hadis',
+                        style: AppText.titleLg().copyWith(
+                          fontSize: 16,
+                          color: done
+                              ? AppColors.onSurfaceVariant
+                              : AppColors.onSurface,
+                        ),
+                      ),
+                      Text(
+                        done
+                            ? 'Selesai hari ini ✓'
+                            : '${count.clamp(0, GameService.hadisSideQuestTarget)}/${GameService.hadisSideQuestTarget} hadis dibaca',
+                        style: AppText.bodyMd().copyWith(
+                          color: AppColors.onSurfaceVariant,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                _xpPill(
+                  xp,
+                  AppColors.secondaryFixed,
+                  AppColors.onSurface,
+                  done: done,
+                ),
+              ],
+            ),
+          );
+        }),
       ],
     );
   }
