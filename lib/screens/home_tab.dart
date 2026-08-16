@@ -1229,7 +1229,7 @@ class _HomeTabState extends State<HomeTab> {
           );
         }),
         const SizedBox(height: AppSpacing.sm),
-        // Dzikir 100x — locked, auto-claim saat counter mencapai goal.
+        // Dzikir 100x — auto-claim saat counter mencapai goal, read-only.
         Builder(builder: (_) {
           final count = GameService.zikirCountToday;
           final done = GameService.isPrayerCheckedToday('zikir100');
@@ -1237,8 +1237,8 @@ class _HomeTabState extends State<HomeTab> {
             child: Row(
               children: [
                 Icon(
-                  done ? Icons.check_circle : Icons.lock_outline,
-                  color: done ? AppColors.primary : AppColors.onSurfaceVariant,
+                  Icons.self_improvement,
+                  color: AppColors.primary,
                   size: 26,
                 ),
                 const SizedBox(width: AppSpacing.md),
@@ -1272,7 +1272,6 @@ class _HomeTabState extends State<HomeTab> {
                   AppColors.primary,
                   AppColors.onPrimary,
                   done: done,
-                  locked: !done,
                 ),
               ],
             ),
