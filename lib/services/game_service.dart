@@ -1558,6 +1558,9 @@ class GameService {
   // ─── Zikir counter (daily reset, persistent) ───
   static const zikirGoal = 100;
 
+  /// Side quest "Baca Quran" selesai otomatis setelah sekian ayat maju/hari.
+  static const quranSideQuestAyat = 10;
+
   /// Today's zikir count (resets if date changed).
   static int get zikirCountToday {
     final today = todayStr();
@@ -1567,6 +1570,14 @@ class GameService {
   /// Increment zikir +1. No XP awarded (user request 2026-07-02).
   /// Returns (newCount, didLevelUp) — didLevelUp always false now.
   static Future<(int, bool)> incrementZikir() async {
+    // Auto-claim side quest Dzikir 100x dulu (menyimpan + memuat ulang cache),
+    // baru hitung increment di atas state terbaru agar tidak menimpa hasil log.
+    final zc0 = _cache.zikirCounter;
+    final today0 = todayStr();
+    final projected = (zc0.date == today0 ? zc0.count : 0) + 1;
+    if (projected >= zikirGoal && !isPrayerCheckedToday('zikir100')) {
+      await logPrayerAsync('zikir100', 'side');
+    }
     final today = todayStr();
     final zc = _cache.zikirCounter;
     final newCount = (zc.date == today ? zc.count : 0) + 1;
@@ -1659,6 +1670,12 @@ class GameService {
       level: newInfo.level,
       quranXp: qx.copyWith(readClaims: qx.readClaims + payable),
     ));
+
+    // Auto-claim side quest "Baca Quran" saat target ayat tercapai.
+    if (_cache.quranXp.readAyatTotal >= quranSideQuestAyat &&
+        !tilawahDoneToday) {
+      await logPrayerAsync('tilawah', 'tilawah');
+    }
   }
 
   // ─── Daily check: streak recovery + comeback counter ───

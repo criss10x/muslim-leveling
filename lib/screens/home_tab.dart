@@ -1134,7 +1134,6 @@ class _HomeTabState extends State<HomeTab> {
 
   Widget _sideQuest(BuildContext context) {
     final sedekahDone = GameService.isPrayerCheckedToday('sedekah');
-    final tilawahDone = GameService.tilawahDoneToday;
     const xp = 15;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1183,9 +1182,13 @@ class _HomeTabState extends State<HomeTab> {
           ),
         ),
         const SizedBox(height: AppSpacing.sm),
-        PressableScale(
-          onTap: () => _togglePrayer('tilawah', 'tilawah'),
-          child: FlatCard(
+        // Baca Quran — auto-claim dari sistem XP Quran (10 ayat/hari), read-only.
+        Builder(builder: (_) {
+          final qx = GameService.current.quranXp;
+          final ayat =
+              qx.date == GameService.todayStr() ? qx.readAyatTotal : 0;
+          final done = GameService.tilawahDoneToday;
+          return FlatCard(
             child: Row(
               children: [
                 Icon(Icons.menu_book, color: AppColors.tertiary, size: 26),
@@ -1195,18 +1198,18 @@ class _HomeTabState extends State<HomeTab> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Tilawah & Dzikir',
+                        'Baca Quran',
                         style: AppText.titleLg().copyWith(
                           fontSize: 16,
-                          color: tilawahDone
+                          color: done
                               ? AppColors.onSurfaceVariant
                               : AppColors.onSurface,
                         ),
                       ),
                       Text(
-                        tilawahDone
+                        done
                             ? 'Selesai hari ini ✓'
-                            : 'Baca Al-Qur\'an / Dzikir',
+                            : '${ayat.clamp(0, GameService.quranSideQuestAyat)}/${GameService.quranSideQuestAyat} ayat hari ini',
                         style: AppText.bodyMd().copyWith(
                           color: AppColors.onSurfaceVariant,
                           fontSize: 12,
@@ -1219,12 +1222,62 @@ class _HomeTabState extends State<HomeTab> {
                   xp,
                   AppColors.tertiary,
                   AppColors.onTertiary,
-                  done: tilawahDone,
+                  done: done,
                 ),
               ],
             ),
-          ),
-        ),
+          );
+        }),
+        const SizedBox(height: AppSpacing.sm),
+        // Dzikir 100x — locked, auto-claim saat counter mencapai goal.
+        Builder(builder: (_) {
+          final count = GameService.zikirCountToday;
+          final done = GameService.isPrayerCheckedToday('zikir100');
+          return FlatCard(
+            child: Row(
+              children: [
+                Icon(
+                  done ? Icons.check_circle : Icons.lock_outline,
+                  color: done ? AppColors.primary : AppColors.onSurfaceVariant,
+                  size: 26,
+                ),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Dzikir 100x',
+                        style: AppText.titleLg().copyWith(
+                          fontSize: 16,
+                          color: done
+                              ? AppColors.onSurfaceVariant
+                              : AppColors.onSurface,
+                        ),
+                      ),
+                      Text(
+                        done
+                            ? 'Selesai hari ini ✓'
+                            : '$count/${GameService.zikirGoal} dzikir',
+                        style: AppText.bodyMd().copyWith(
+                          color: AppColors.onSurfaceVariant,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                _xpPill(
+                  xp,
+                  AppColors.primary,
+                  AppColors.onPrimary,
+                  done: done,
+                  locked: !done,
+                ),
+              ],
+            ),
+          );
+        }),
       ],
     );
   }
