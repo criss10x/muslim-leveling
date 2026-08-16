@@ -382,7 +382,7 @@ class _HomeTabState extends State<HomeTab> {
               if (_state.quests.isNotEmpty) _section(6, _questList()),
               if (_state.quests.isNotEmpty)
                 const SizedBox(height: AppSpacing.lg),
-              _section(7, _bonusQuest()),
+              _section(7, _BonusQuest(state: _state, onToggle: (id) => _togglePrayer(id, 'sunnah'))),
               const SizedBox(height: AppSpacing.lg),
               _section(8, _sideQuest(context)),
               const SizedBox(height: AppSpacing.lg),
@@ -1000,163 +1000,6 @@ class _HomeTabState extends State<HomeTab> {
                 AppColors.primary,
                 AppColors.onPrimary,
                 done: done,
-                locked: locked,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _bonusQuest() {
-    final t = _state.timings;
-    final items = [
-      ('Dhuha', 'dhuha', 'Sunnah mutlak di pagi hari', Icons.wb_sunny),
-      (
-        'Tahajjud',
-        'tahajjud',
-        'Sunnah malam (qiyamul lail)',
-        Icons.nights_stay,
-      ),
-      (
-        'Qobliyah Subuh',
-        'rawatib_subuh_qobliyah',
-        'Sunnah sebelum Subuh',
-        Icons.history,
-      ),
-      (
-        "Ba'diyah Subuh",
-        'rawatib_subuh_ba_diyyah',
-        'Sunnah sesudah Subuh',
-        Icons.history,
-      ),
-      (
-        'Qobliyah Dzuhur',
-        'rawatib_dzuhur_qobliyah',
-        'Sunnah sebelum Dzuhur',
-        Icons.history,
-      ),
-      (
-        "Ba'diyah Dzuhur",
-        'rawatib_dzuhur_ba_diyyah',
-        'Sunnah sesudah Dzuhur',
-        Icons.history,
-      ),
-      (
-        'Qobliyah Ashar',
-        'rawatib_ashar_qobliyah',
-        'Sunnah sebelum Ashar',
-        Icons.history,
-      ),
-      (
-        "Ba'diyah Maghrib",
-        'rawatib_maghrib_ba_diyyah',
-        'Sunnah sesudah Maghrib',
-        Icons.history,
-      ),
-      (
-        "Ba'diyah Isya",
-        'rawatib_isya_ba_diyyah',
-        'Sunnah sesudah Isya',
-        Icons.history,
-      ),
-    ];
-    final doneCount = items
-        .where((it) => GameService.isPrayerCheckedToday(it.$2))
-        .length;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        HudHeader('BONUS QUEST · SUNNAH', meta: '$doneCount/${items.length}'),
-        ...items.map((it) {
-          final checked = GameService.isPrayerCheckedToday(it.$2);
-          final onTime = GameService.isSunnahOnTime(it.$2, t);
-          return Padding(
-            padding: const EdgeInsets.only(bottom: AppSpacing.xs),
-            child: _bonusRow(
-              it.$1,
-              it.$3,
-              it.$4,
-              AppColors.secondaryFixed,
-              completed: checked,
-              active: !checked && onTime,
-              locked: !checked && !onTime,
-              onTap: () => _togglePrayer(it.$2, 'sunnah'),
-            ),
-          );
-        }),
-      ],
-    );
-  }
-
-  Widget _bonusRow(
-    String name,
-    String sub,
-    IconData icon,
-    Color color, {
-    bool locked = false,
-    bool completed = false,
-    bool active = false,
-    VoidCallback? onTap,
-    int xp = 15,
-  }) {
-    final dimmed = locked && !completed;
-    final iconColor = completed
-        ? color
-        : (locked
-              ? AppColors.onSurfaceVariant
-              : (active ? color : AppColors.onSurfaceVariant));
-    return PressableScale(
-      onTap: locked ? null : onTap,
-      child: Opacity(
-        opacity: dimmed ? 0.45 : 1.0,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 250),
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.md,
-            vertical: AppSpacing.sm,
-          ),
-          decoration: BoxDecoration(
-            color: active
-                ? color.withValues(alpha: 0.06)
-                : AppColors.surfaceContainerLow,
-            borderRadius: BorderRadius.circular(AppRadius.xxl),
-            border: active
-                ? Border.all(color: color.withValues(alpha: 0.45))
-                : null,
-          ),
-          child: Row(
-            children: [
-              Icon(icon, color: iconColor, size: 22),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: AppText.bodyMd().copyWith(
-                        color: completed
-                            ? AppColors.onSurfaceVariant
-                            : AppColors.onSurface,
-                      ),
-                    ),
-                    Text(
-                      sub,
-                      style: AppText.bodyMd().copyWith(
-                        color: AppColors.onSurfaceVariant,
-                        fontSize: 11,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              _xpPill(
-                xp,
-                color,
-                AppColors.onSecondary,
-                done: completed,
                 locked: locked,
               ),
             ],
@@ -2234,4 +2077,195 @@ class _IslamicHeroPatternPainter extends CustomPainter {
       old.color != color ||
       old.opacity != opacity ||
       old.singleStar != singleStar;
+}
+
+/// Bonus Quest Sunnah — collapsible. Collapsed (default) hanya menampilkan
+/// row yang sedang aktif (on-time) atau sudah selesai hari ini; tap chevron
+/// memperluas ke daftar lengkap. State expand in-memory saja (YAGNI persist).
+class _BonusQuest extends StatefulWidget {
+  final GameState state;
+  final void Function(String id) onToggle;
+  const _BonusQuest({required this.state, required this.onToggle});
+
+  @override
+  State<_BonusQuest> createState() => _BonusQuestState();
+}
+
+class _BonusQuestState extends State<_BonusQuest> {
+  bool _expanded = false;
+
+  static const _items = [
+    ('Dhuha', 'dhuha', 'Sunnah mutlak di pagi hari', Icons.wb_sunny),
+    ('Tahajjud', 'tahajjud', 'Sunnah malam (qiyamul lail)', Icons.nights_stay),
+    ('Qobliyah Subuh', 'rawatib_subuh_qobliyah', 'Sunnah sebelum Subuh', Icons.history),
+    ("Ba'diyah Subuh", 'rawatib_subuh_ba_diyyah', 'Sunnah sesudah Subuh', Icons.history),
+    ('Qobliyah Dzuhur', 'rawatib_dzuhur_qobliyah', 'Sunnah sebelum Dzuhur', Icons.history),
+    ("Ba'diyah Dzuhur", 'rawatib_dzuhur_ba_diyyah', 'Sunnah sesudah Dzuhur', Icons.history),
+    ('Qobliyah Ashar', 'rawatib_ashar_qobliyah', 'Sunnah sebelum Ashar', Icons.history),
+    ("Ba'diyah Maghrib", 'rawatib_maghrib_ba_diyyah', 'Sunnah sesudah Maghrib', Icons.history),
+    ("Ba'diyah Isya", 'rawatib_isya_ba_diyyah', 'Sunnah sesudah Isya', Icons.history),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final t = widget.state.timings;
+    final doneCount =
+        _items.where((it) => GameService.isPrayerCheckedToday(it.$2)).length;
+
+    // ponytail: collapsed = on-time ATAU selesai; kalau kosong (mis. lewat
+    // tengah hari, belum ibadah), fallback tampilkan semua biar kartu tak kosong.
+    var visible = _items
+        .where((it) =>
+            GameService.isPrayerCheckedToday(it.$2) ||
+            GameService.isSunnahOnTime(it.$2, t))
+        .toList();
+    if (visible.isEmpty) visible = List.of(_items);
+    final shown = _expanded ? _items : visible;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GestureDetector(
+          onTap: () => setState(() => _expanded = !_expanded),
+          behavior: HitTestBehavior.opaque,
+          child: Row(
+            children: [
+              Expanded(
+                child: HudHeader(
+                  'BONUS QUEST · SUNNAH',
+                  meta: '$doneCount/${_items.length}',
+                ),
+              ),
+              AnimatedRotation(
+                turns: _expanded ? 0.5 : 0,
+                duration: const Duration(milliseconds: 200),
+                child: Icon(
+                  Icons.expand_more,
+                  size: 18,
+                  color: AppColors.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        ),
+        AnimatedSize(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeInOut,
+          child: Column(
+            children: [
+              for (final it in shown)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+                  child: _bonusRow(
+                    it.$1,
+                    it.$3,
+                    it.$4,
+                    AppColors.secondaryFixed,
+                    completed: GameService.isPrayerCheckedToday(it.$2),
+                    active: !GameService.isPrayerCheckedToday(it.$2) &&
+                        GameService.isSunnahOnTime(it.$2, t),
+                    locked: !GameService.isPrayerCheckedToday(it.$2) &&
+                        !GameService.isSunnahOnTime(it.$2, t),
+                    onTap: () => widget.onToggle(it.$2),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _bonusRow(
+    String name,
+    String sub,
+    IconData icon,
+    Color color, {
+    bool locked = false,
+    bool completed = false,
+    bool active = false,
+    VoidCallback? onTap,
+    int xp = 15,
+  }) {
+    final dimmed = locked && !completed;
+    final iconColor = completed
+        ? color
+        : (locked
+              ? AppColors.onSurfaceVariant
+              : (active ? color : AppColors.onSurfaceVariant));
+    return PressableScale(
+      onTap: locked ? null : onTap,
+      child: Opacity(
+        opacity: dimmed ? 0.45 : 1.0,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.md,
+            vertical: AppSpacing.sm,
+          ),
+          decoration: BoxDecoration(
+            color: active
+                ? color.withValues(alpha: 0.06)
+                : AppColors.surfaceContainerLow,
+            borderRadius: BorderRadius.circular(AppRadius.xxl),
+            border: active
+                ? Border.all(color: color.withValues(alpha: 0.45))
+                : null,
+          ),
+          child: Row(
+            children: [
+              Icon(icon, color: iconColor, size: 22),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: AppText.bodyMd().copyWith(
+                        color: completed
+                            ? AppColors.onSurfaceVariant
+                            : AppColors.onSurface,
+                      ),
+                    ),
+                    Text(
+                      sub,
+                      style: AppText.bodyMd().copyWith(
+                        color: AppColors.onSurfaceVariant,
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              _xpPillSmall(xp, color, AppColors.onSecondary,
+                  done: completed, locked: locked),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _xpPillSmall(int xp, Color color, Color onColor,
+      {bool done = false, bool locked = false}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: 2,
+      ),
+      decoration: BoxDecoration(
+        color: done
+            ? color
+            : (locked ? AppColors.surfaceContainerHighest : color),
+        borderRadius: BorderRadius.circular(AppRadius.pill),
+      ),
+      child: Text(
+        '+$xp XP',
+        style: AppText.labelCapsSm().copyWith(
+          color: done || !locked ? onColor : AppColors.onSurfaceVariant,
+        ),
+      ),
+    );
+  }
 }
