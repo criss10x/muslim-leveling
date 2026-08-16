@@ -28,6 +28,14 @@ class _QuranReaderState extends State<QuranReader> {
   final ItemScrollController _scrollController = ItemScrollController();
   final ItemPositionsListener _positionsListener = ItemPositionsListener.create();
 
+  /// ponytail: gate anti-farm — ayat hanya dikredit (save → XP) setelah jadi
+  /// anchor stabil selama ini. Static var agar test bisa menyetel Duration.zero.
+  static var anchorDwellForXp = const Duration(seconds: 3);
+
+  int? _anchorAyahPending;
+  DateTime _anchorSince = DateTime.now();
+  int? _dwelledAyah;
+
   List<QuranAyah> _ayahs = const [];
   bool _loading = true;
   int? _lastScrolledAyah;
@@ -43,6 +51,9 @@ class _QuranReaderState extends State<QuranReader> {
     super.initState();
     _load();
     quranAudio.addListener(_onAudioChanged);
+    // Anti-farm: lacak ayat di garis 25%; baru jadi kandidat XP setelah
+    // bertahan >= 3 detik. Fling cepat → _dwelledAyah tidak maju.
+    _positionsListener.itemPositions.addListener(_onPositionsChanged);
     // Catat surat yang dibuka sebagai bacaan terakhir. Ditunda ke post-frame
     // karena notifyListeners dari save() memicu setState di QuranTab, padahal
     // initState route baru berjalan saat Navigator masih membangun pohon.
@@ -58,12 +69,13 @@ class _QuranReaderState extends State<QuranReader> {
   @override
   void dispose() {
     quranAudio.removeListener(_onAudioChanged);
+    _positionsListener.itemPositions.removeListener(_onPositionsChanged);
     quranAudio.stop();
     WakelockPlus.disable();
     // Simpan posisi terakhir setelah frame selesai: dispose berjalan saat
     // Navigator memfinalisasi transisi pop, dan save() memicu notifyListeners
     // yang bisa menyentuh QuranTab di tengah build.
-    final pos = _anchorAyah();
+    final pos = _dwelledAnchorAyah();
     if (pos != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         quranProgress.save(widget.surah.number, pos);
@@ -73,10 +85,6 @@ class _QuranReaderState extends State<QuranReader> {
   }
 
   /// Ayat yang memotong garis referensi 25% dari atas viewport — garis yang
-  /// sama dipakai restore (initialAlignment) dan oleh scroll murattal.
-  /// Simpan dan restore simetris terhadap garis yang sama, jadi posisi
-  /// visual saat kembali identik dengan saat ditinggal. Edge adalah fraksi
-  /// viewport, jadi 0.25 cukup — tanpa perlu ukuran viewport.
   int? _anchorAyah() {
     const ref = 0.25;
     final positions = _positionsListener.itemPositions.value;
@@ -100,6 +108,29 @@ class _QuranReaderState extends State<QuranReader> {
     final ayah = best.index - _basmalahOffset + 1;
     if (ayah < 1 || ayah > widget.surah.ayahCount) return null;
     return ayah;
+  }
+
+  /// Ayat di garis 25% yang sudah bertahan >= [anchorDwellForXp] — hanya
+  /// inilah yang dikredit XP. Dipanggil dari dispose; listener posisi update
+  /// _dwelledAyah tiap frame scroll berhenti.
+  int? _dwelledAnchorAyah() {
+    if (_anchorAyahPending != null &&
+        DateTime.now().difference(_anchorSince) >= anchorDwellForXp) {
+      _dwelledAyah = _anchorAyahPending;
+    }
+    return _dwelledAyah;
+  }
+
+  void _onPositionsChanged() {
+    final a = _anchorAyah();
+    if (a != _anchorAyahPending) {
+      _anchorAyahPending = a;
+      _anchorSince = DateTime.now();
+      if (_dwelledAyah != null && a != null && a < _dwelledAyah!) {
+        // Scroll balik ke ayat yang belum dwell → reset kredit.
+        _dwelledAyah = null;
+      }
+    }
   }
 
   Future<void> _load() async {

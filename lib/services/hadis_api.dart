@@ -21,11 +21,14 @@ class HadisItem {
 
   factory HadisItem.fromJson(Map<String, dynamic> j) {
     final text = j['text'];
+    // ponytail: explore → {ar,id}; cari/show → string Indonesia. String =
+    // hasil pencarian: teksnya sudah terjemahan, arab & grade kosong.
     final textMap = text is Map ? text : const <String, dynamic>{};
+    final textStr = text is String ? text : '';
     return HadisItem(
       id: j['id'] as int,
       ar: (textMap['ar'] as String?) ?? '',
-      idn: (textMap['id'] as String?) ?? '',
+      idn: (textMap['id'] as String?) ?? textStr,
       grade: (j['grade'] as String?) ?? '',
       takhrij: (j['takhrij'] as String?) ?? '',
       hikmah: j['hikmah'] as String?,

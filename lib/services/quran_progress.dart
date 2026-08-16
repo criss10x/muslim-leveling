@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
+import 'game_service.dart';
 
 /// Posisi baca Quran terakhir (surat + ayat) untuk tombol "Lanjutkan membaca"
 /// di tab Quran. Diperbarui saat surat dibuka, saat murattal berganti ayat,
@@ -31,6 +33,9 @@ class QuranProgress extends ChangeNotifier {
     _surahNumber = surahNumber;
     _ayah = ayah;
     notifyListeners();
+    // ponytail: satu-satunya jalur XP baca — buka reader, scroll, murattal
+    // semuanya lewat sini, jadi XP tidak bisa dobel dari sumber lain.
+    unawaited(GameService.noteQuranPosition(surahNumber, ayah));
     try {
       final p = await SharedPreferences.getInstance();
       await p.setInt(_kSurah, surahNumber);

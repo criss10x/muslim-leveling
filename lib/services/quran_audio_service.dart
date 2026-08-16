@@ -22,6 +22,7 @@ class QuranAudioService extends ChangeNotifier {
   bool _endOfSurah = false; // sleep mode -1 berhenti di akhir queue
 
   QuranAudioService() {
+    // ponytail: XP dengar dihapus — audio berjalan tanpa tracking XP.
     // Indeks playlist berubah → ayat aktif berubah.
     _player.currentIndexStream.listen((_) => notifyListeners());
     _player.playerStateStream.listen((_) => notifyListeners());

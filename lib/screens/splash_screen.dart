@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
-import 'welcome_pejuang.dart';
+import 'onboarding_screen.dart';
 import 'dashboard_shell.dart';
 
 /// Splash screen — pulsing shield + animated loading bar.
@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen>
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
         pageBuilder: (_, __, ___) =>
-            hasProfile ? const DashboardShell() : const WelcomePejuangScreen(),
+            hasProfile ? const DashboardShell() : const OnboardingScreen(),
         transitionsBuilder: (_, anim, __, child) =>
             FadeTransition(opacity: anim, child: child),
         transitionDuration: const Duration(milliseconds: 200),
