@@ -1104,6 +1104,11 @@ class GameService {
           prog = hadisReadToday.clamp(0, 5);
           done = hadisReadToday >= 5;
           break;
+        case 'quest_berjamaah_1':
+          final cnt = todayLogs.where((l) => l.bonusXp == jamaahBonusXp).length;
+          prog = cnt.clamp(0, 1);
+          done = cnt >= 1;
+          break;
       }
       return q.copyWith(progress: prog, completed: done);
     }).toList();
@@ -1529,6 +1534,15 @@ class GameService {
         desc: 'Baca 5 hadis hari ini (≥5 dtk tiap hadis)',
         xpReward: 50,
         target: 5,
+        progress: 0,
+        completed: false,
+        claimed: false,
+      ),
+      Quest(
+        id: 'quest_berjamaah_1',
+        desc: 'Sholat berjamaah 1x hari ini (pilih bonus berjamaah saat claim)',
+        xpReward: 40,
+        target: 1,
         progress: 0,
         completed: false,
         claimed: false,
