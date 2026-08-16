@@ -290,7 +290,7 @@ class _HijriCalendarScreenState extends State<HijriCalendarScreen> {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: 7,
-            childAspectRatio: 1.3,
+            childAspectRatio: 1.15,
             children: [
               for (var i = 1; i < firstWeekday; i++) const SizedBox.shrink(),
               for (final d in days) _dayCell(d, todayStr),
@@ -334,6 +334,9 @@ class _HijriCalendarScreenState extends State<HijriCalendarScreen> {
         '${d.gDate.year}-${d.gDate.month.toString().padLeft(2, '0')}-${d.gDate.day.toString().padLeft(2, '0')}';
     final isToday = key == todayStr;
     final isImportant = hijriImportantDates.containsKey((d.hMonth, d.hDay));
+    // Hari ini = lingkaran solid di angka Hijriah (elemen primer), bukan
+    // kotak pembungkus — kotak lama menyenggol angka Masehi di bawahnya.
+    // Tanggal penting = cincin emas tipis di sekeliling sel.
     return Semantics(
       label: '${d.hDay} ${hijriMonthNames[d.hMonth]}'
           '${isImportant ? ', hari penting' : ''}'
@@ -341,25 +344,35 @@ class _HijriCalendarScreenState extends State<HijriCalendarScreen> {
       child: Container(
         margin: const EdgeInsets.all(2),
         decoration: BoxDecoration(
-          color: isToday
-              ? AppColors.primary.withValues(alpha: 0.15)
-              : isImportant
-              ? AppColors.secondaryFixed.withValues(alpha: 0.18)
+          color: isImportant
+              ? AppColors.secondaryFixed.withValues(alpha: 0.10)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(AppRadius.sm),
-          border: isToday ? Border.all(color: AppColors.primary) : null,
+          border: isImportant
+              ? Border.all(color: AppColors.secondaryFixed.withValues(alpha: 0.6))
+              : null,
         ),
         alignment: Alignment.center,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              '${d.hDay}',
-              style: AppText.titleLg().copyWith(
-                fontSize: 14,
-                color: isToday ? AppColors.primary : AppColors.onSurface,
+            Container(
+              width: 26,
+              height: 26,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isToday ? AppColors.primary : Colors.transparent,
+              ),
+              child: Text(
+                '${d.hDay}',
+                style: AppText.titleLg().copyWith(
+                  fontSize: 14,
+                  color: isToday ? AppColors.onPrimary : AppColors.onSurface,
+                ),
               ),
             ),
+            const SizedBox(height: 2),
             Text(
               '${d.gDate.day}',
               style: AppText.labelCapsSm().copyWith(

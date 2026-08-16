@@ -10,7 +10,7 @@ void main() {
 
   test('cache bulan ter-decode + hijriLabel + tanggal penting', () async {
     SharedPreferences.setMockInitialValues({
-      'hijri_g2h_2026_8': jsonEncode([
+      'hijri_g2h2_2026_8': jsonEncode([
         [1, 17, 2, 1448], // 1 Safar 1448
         [2, 18, 2, 1448],
       ]),

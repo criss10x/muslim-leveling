@@ -89,8 +89,11 @@ class HijriService {
     ..connectionTimeout = const Duration(seconds: 8);
 
   /// Semua hari dalam satu bulan Gregorian → HijriDay. Cache per bulan.
+  /// ponytail: endpoint aladhan memakai urutan path {bulan}/{tahun} —
+  /// {tahun}/{bulan} diam-diam mengembalikan data yang salah/statis.
   Future<List<HijriDay>?> month(int year, int month) async {
-    final key = 'hijri_g2h_${year}_$month';
+    // Key v2: cache lama (key v1) berisi data racun dari endpoint terbalik.
+    final key = 'hijri_g2h2_${year}_$month';
     final p = await SharedPreferences.getInstance();
     final raw = p.getString(key);
     if (raw != null) {
@@ -108,7 +111,7 @@ class HijriService {
     }
     try {
       final req = await _client.getUrl(Uri.parse(
-        'https://api.aladhan.com/v1/gToHCalendar/$year/$month',
+        'https://api.aladhan.com/v1/gToHCalendar/$month/$year',
       ));
       final res = await req.close();
       if (res.statusCode != 200) return null;
