@@ -24,7 +24,7 @@ import '../../widgets/prayer_heatmap.dart';
 import '../../services/cosmetic_service.dart';
 import '../../services/cosmetic_catalog.dart';
 import 'achievements_screen.dart';
-import 'welcome_pejuang.dart';
+import 'onboarding_screen.dart';
 
 /// Profil Pejuang — hero header, stats grid, achievements, settings rows.
 class ProfilTab extends StatefulWidget {
@@ -132,10 +132,21 @@ class _ProfilTabState extends State<ProfilTab> {
     if (picked == null) return;
     final bytes = await picked.readAsBytes();
     final dir = await getApplicationDocumentsDirectory();
-    final file = File('${dir.path}/avatar.jpg');
+    // ponytail: rename tiap pick — nama sama membuat Flutter menyajikan
+    // decode lama dari imageCache (foto baru terlihat "penyet" karena
+    // decode pakai constraint cache lama).
+    final file = File(
+      '${dir.path}/avatar_${DateTime.now().millisecondsSinceEpoch}.jpg',
+    );
     await file.writeAsBytes(bytes);
     final p = await SharedPreferences.getInstance();
+    final old = p.getString('avatar_path');
     await p.setString('avatar_path', file.path);
+    if (old != null && old != file.path) {
+      try {
+        await File(old).delete();
+      } catch (_) {}
+    }
     setState(() => _avatarPath = file.path);
   }
 
@@ -874,7 +885,7 @@ class _ProfilTabState extends State<ProfilTab> {
     await p.clear();
     if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const WelcomePejuangScreen()),
+      MaterialPageRoute(builder: (_) => const OnboardingScreen()),
       (route) => false,
     );
   }
