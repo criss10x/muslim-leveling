@@ -1084,6 +1084,26 @@ class GameService {
           prog = zikirToday.clamp(0, zikirGoal);
           done = zikirToday >= zikirGoal;
           break;
+        case 'quest_quran_10ayat':
+          prog = quranAyatToday.clamp(0, 10);
+          done = quranAyatToday >= 10;
+          break;
+        case 'quest_hadis_3':
+          prog = hadisReadToday.clamp(0, 3);
+          done = hadisReadToday >= 3;
+          break;
+        case 'quest_dzikir_33_subuh':
+          prog = (zikirCountsToday['subhanallah'] ?? 0).clamp(0, 33);
+          done = (zikirCountsToday['subhanallah'] ?? 0) >= 33;
+          break;
+        case 'quest_quran_1halaman':
+          prog = quranAyatToday.clamp(0, 20);
+          done = quranAyatToday >= 20;
+          break;
+        case 'quest_hadis_5':
+          prog = hadisReadToday.clamp(0, 5);
+          done = hadisReadToday >= 5;
+          break;
       }
       return q.copyWith(progress: prog, completed: done);
     }).toList();
@@ -1468,6 +1488,51 @@ class GameService {
         completed: false,
         claimed: false,
       ),
+      Quest(
+        id: 'quest_quran_10ayat',
+        desc: 'Baca Quran 10 ayat hari ini',
+        xpReward: 30,
+        target: 10,
+        progress: 0,
+        completed: false,
+        claimed: false,
+      ),
+      Quest(
+        id: 'quest_hadis_3',
+        desc: 'Baca 3 hadis hari ini (≥5 dtk tiap hadis)',
+        xpReward: 30,
+        target: 3,
+        progress: 0,
+        completed: false,
+        claimed: false,
+      ),
+      Quest(
+        id: 'quest_dzikir_33_subuh',
+        desc: 'Dzikir Subhanallah 33x (tasbih setelah sholat)',
+        xpReward: 25,
+        target: 33,
+        progress: 0,
+        completed: false,
+        claimed: false,
+      ),
+      Quest(
+        id: 'quest_quran_1halaman',
+        desc: 'Baca Quran 20 ayat (≈1 halaman mushaf)',
+        xpReward: 50,
+        target: 20,
+        progress: 0,
+        completed: false,
+        claimed: false,
+      ),
+      Quest(
+        id: 'quest_hadis_5',
+        desc: 'Baca 5 hadis hari ini (≥5 dtk tiap hadis)',
+        xpReward: 50,
+        target: 5,
+        progress: 0,
+        completed: false,
+        claimed: false,
+      ),
     ];
     if (_cache.heroStreak.current >= 6) {
       pool.add(
@@ -1767,6 +1832,12 @@ class GameService {
       highlightSwipeMask: mask,
     ));
     return true;
+  }
+
+  /// Ayat Quran dibaca (maju) hari ini — untuk quest.
+  static int get quranAyatToday {
+    final s = _cache.quranXp;
+    return s.date == todayStr() ? s.readAyatTotal : 0;
   }
 
   static QuranXpState _qxToday() {
