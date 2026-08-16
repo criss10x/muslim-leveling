@@ -13,6 +13,7 @@ import '../../services/achievement_service.dart';
 import '../../services/daily_highlight.dart';
 import '../../services/quran_data.dart';
 import '../../widgets/achievement_medal.dart';
+import '../../widgets/xp_toast.dart';
 import 'naik_level_screen.dart';
 import 'quran_reader.dart';
 
@@ -178,7 +179,7 @@ class _HomeTabState extends State<HomeTab> {
     }
     setState(() => _state = res.$1);
     final (_, xp, levelsGained) = res;
-    _toast('+$xp XP!${levelsGained > 0 ? " 🎉 LEVEL UP!" : ""}');
+    showXpToast(context, xp);
     // Announcer achievement tampil dulu (di home), baru layar naik level.
     final newAch = await AchievementService.refresh();
     for (final a in newAch) {
@@ -320,7 +321,7 @@ class _HomeTabState extends State<HomeTab> {
       _state = s;
       _claimingQuestId = '';
     });
-    _toast('+${q.xpReward} XP dari quest!', top: true);
+    showXpToast(context, q.xpReward);
     // XP quest bisa memicu medali rank (WARRIOR..MYTHIC).
     final newAch = await AchievementService.refresh();
     for (final a in newAch) {
@@ -1522,7 +1523,7 @@ class _HomeTabState extends State<HomeTab> {
                   onPageChanged: (i) async {
                     setState(() => _highlightPage = i);
                     final got = await GameService.claimHighlightSwipeXp(i);
-                    if (got && mounted) _toast('+1 XP Daily Highlight');
+                    if (got && mounted) showXpToast(context, 1);
                   },
                   itemBuilder: (_, i) => GestureDetector(
                     onTap: i == 0 ? () => _openHighlightAyah(h) : null,
