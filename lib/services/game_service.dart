@@ -291,6 +291,9 @@ class GameState {
   final Map<String, String> equipped; // slot name -> cosmetic id
   final String highlightSwipeDate; // YYYY-MM-DD ("" = never)
   final int highlightSwipeMask; // bit per page set = page claimed today
+  /// Counter kumulatif seumur hidup (tidak reset harian) — untuk badge progresif.
+  /// key: 'quran_ayat' | 'hadis' | 'zikir'
+  final Map<String, int> lifeTotals;
 
   GameState({
     this.xp = 0,
@@ -315,6 +318,7 @@ class GameState {
     this.equipped = const {},
     this.highlightSwipeDate = '',
     this.highlightSwipeMask = 0,
+    Map<String, int>? lifeTotals,
   }) : timings = timings ?? Timings(),
        prayerLog = prayerLog ?? [],
        heroStreak = heroStreak ?? StreakState(),
@@ -323,7 +327,8 @@ class GameState {
        quests = quests ?? const [],
        zikirCounter = zikirCounter ?? const ZikirCounter(),
        quranXp = quranXp ?? const QuranXpState(),
-       hadisXp = hadisXp ?? const HadisXpState();
+       hadisXp = hadisXp ?? const HadisXpState(),
+       lifeTotals = lifeTotals ?? const {};
 
   GameState copyWith({
     int? xp,
@@ -348,6 +353,7 @@ class GameState {
     Map<String, String>? equipped,
     String? highlightSwipeDate,
     int? highlightSwipeMask,
+    Map<String, int>? lifeTotals,
   }) => GameState(
     xp: xp ?? this.xp,
     level: level ?? this.level,
@@ -371,6 +377,7 @@ class GameState {
     equipped: equipped ?? this.equipped,
     highlightSwipeDate: highlightSwipeDate ?? this.highlightSwipeDate,
     highlightSwipeMask: highlightSwipeMask ?? this.highlightSwipeMask,
+    lifeTotals: lifeTotals ?? this.lifeTotals,
   );
 
   factory GameState.fromMap(Map<String, dynamic> m) {
@@ -432,6 +439,9 @@ class GameState {
       equipped: equippedMap,
       highlightSwipeDate: m['highlightSwipeDate'] ?? '',
       highlightSwipeMask: m['highlightSwipeMask'] ?? 0,
+      lifeTotals: (m['lifeTotals'] as Map?)
+              ?.map((k, v) => MapEntry(k.toString(), v as int)) ??
+          const {},
     );
   }
   Map<String, dynamic> toMap() => {
@@ -457,6 +467,7 @@ class GameState {
     'equipped': equipped,
     'highlightSwipeDate': highlightSwipeDate,
     'highlightSwipeMask': highlightSwipeMask,
+    'lifeTotals': lifeTotals,
   };
 }
 
@@ -1643,6 +1654,17 @@ class GameService {
           '🎓',
           'Selesaikan 40 modul Belajar',
         ),
+        // ── Badge progresif (counter kumulatif lifeTotals) ──
+        ('quran_pemula', 'QURAN PEMULA', '📖', 'Baca 100 ayat'),
+        ('quran_reader', 'QURAN READER', '📜', 'Baca 500 ayat'),
+        ('quran_hafizh', 'HAFIZH MUDA', '🌟', 'Baca 2.000 ayat'),
+        ('quran_master', 'HAFIZH MASTER', '📚', 'Baca 6.236 ayat (khatam)'),
+        ('hadis_pemula', 'HADIS PEMULA', '🕌', 'Baca 10 hadis'),
+        ('hadis_santri', 'HADIS SANTRI', '📿', 'Baca 50 hadis'),
+        ('hadis_ulama', 'HADIS ULAMA', '🧠', 'Baca 200 hadis'),
+        ('dzikir_pemula', 'DZIKIR PEMULA', '📿', 'Dzikir 1.000x'),
+        ('dzikir_master', 'DZIKIR MASTER', '✨', 'Dzikir 10.000x'),
+        ('dzikir_legend', 'DZIKIR LEGEND', '💫', 'Dzikir 50.000x'),
       ];
 
   /// Evaluasi semua badge. Return list of newly earned badge IDs.
@@ -1715,6 +1737,21 @@ class GameService {
     // 17. Santri Scholar (40 modul Belajar)
     if (completedModules >= 40) earned.add('santri_scholar');
 
+    // ── 18-27. Badge progresif dari counter kumulatif lifeTotals ──
+    final quranAyat = lifeTotal('quran_ayat');
+    final hadisRead = lifeTotal('hadis');
+    final zikirCount = lifeTotal('zikir');
+    if (quranAyat >= 100) earned.add('quran_pemula');
+    if (quranAyat >= 500) earned.add('quran_reader');
+    if (quranAyat >= 2000) earned.add('quran_hafizh');
+    if (quranAyat >= 6236) earned.add('quran_master');
+    if (hadisRead >= 10) earned.add('hadis_pemula');
+    if (hadisRead >= 50) earned.add('hadis_santri');
+    if (hadisRead >= 200) earned.add('hadis_ulama');
+    if (zikirCount >= 1000) earned.add('dzikir_pemula');
+    if (zikirCount >= 10000) earned.add('dzikir_master');
+    if (zikirCount >= 50000) earned.add('dzikir_legend');
+
     return earned.toList()..sort(
       (a, b) => badgeDefs
           .indexWhere((d) => d.$1 == a)
@@ -1764,6 +1801,7 @@ class GameService {
     final ids = [...h.ids, id];
     final claim = h.claims < hadisReadDailyCap ? 1 : 0;
     final newInfo = getLevelInfo(_cache.xp + claim);
+    _bumpLife('hadis');
     await _save(_cache.copyWith(
       xp: _cache.xp + claim,
       level: newInfo.level,
@@ -1840,6 +1878,7 @@ class GameService {
         zc.date == today ? Map<String, int>.from(zc.counts) : <String, int>{};
     if (key != null) baseCounts[key] = (baseCounts[key] ?? 0) + 1;
 
+    _bumpLife('zikir');
     final newState = _cache.copyWith(
       zikirCounter: ZikirCounter(
         date: today,
@@ -1892,6 +1931,15 @@ class GameService {
     return s.date == todayStr() ? s.readAyatTotal : 0;
   }
 
+  /// Bump counter kumulatif (all-time) untuk badge progresif. Tidak reset harian.
+  static void _bumpLife(String key, [int by = 1]) {
+    final t = Map<String, int>.from(_cache.lifeTotals);
+    t[key] = (t[key] ?? 0) + by;
+    _cache = _cache.copyWith(lifeTotals: t);
+  }
+
+  static int lifeTotal(String key) => _cache.lifeTotals[key] ?? 0;
+
   static QuranXpState _qxToday() {
     final s = _cache.quranXp;
     return s.date == todayStr() ? s : QuranXpState(date: todayStr());
@@ -1925,6 +1973,7 @@ class GameService {
         min(quranReadAyahDailyCap - qx.readClaims, qx.readAyatTotal - qx.readClaims);
     final xp = payable * 1;
     final newInfo = getLevelInfo(_cache.xp + xp);
+    _bumpLife('quran_ayat', advance);
     await _save(_cache.copyWith(
       xp: _cache.xp + xp,
       level: newInfo.level,
