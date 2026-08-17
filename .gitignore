@@ -58,6 +58,9 @@ android/app/build/
 # Local Git worktrees
 .worktrees/
 
+# Hermes agent session artifacts
+.hermes/
+
 # Local design companion sessions
 .superpowers/
 

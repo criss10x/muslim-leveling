@@ -8,7 +8,7 @@ import 'cloud_sync.dart';
 import 'cosmetic_catalog.dart';
 import 'cosmetic_service.dart';
 import 'quran_data.dart';
-import 'learning_content.dart';
+import 'achievement_service.dart';
 
 // ponytail: single-file game state. No riverpod, no bloc.
 // Port dari V3 GameViewModel logic. State persisted as JSON di SharedPreferences.
@@ -280,7 +280,6 @@ class GameState {
   final String questDate;
   final String lastCheckedDate; // YYYY-MM-DD — last time dailyCheck ran
   final int comebackCount; // total streak recoveries
-  final List<String> badges; // earned badge IDs
   final ZikirCounter zikirCounter; // daily zikir counter
   final QuranXpState quranXp; // daily Quran XP (read)
   final HadisXpState hadisXp; // daily Hadis XP (read)
@@ -307,7 +306,6 @@ class GameState {
     this.questDate = '',
     this.lastCheckedDate = '',
     this.comebackCount = 0,
-    this.badges = const [],
     ZikirCounter? zikirCounter,
     QuranXpState? quranXp,
     HadisXpState? hadisXp,
@@ -342,7 +340,6 @@ class GameState {
     String? questDate,
     String? lastCheckedDate,
     int? comebackCount,
-    List<String>? badges,
     ZikirCounter? zikirCounter,
     QuranXpState? quranXp,
     HadisXpState? hadisXp,
@@ -366,7 +363,6 @@ class GameState {
     questDate: questDate ?? this.questDate,
     lastCheckedDate: lastCheckedDate ?? this.lastCheckedDate,
     comebackCount: comebackCount ?? this.comebackCount,
-    badges: badges ?? this.badges,
     zikirCounter: zikirCounter ?? this.zikirCounter,
     quranXp: quranXp ?? this.quranXp,
     hadisXp: hadisXp ?? this.hadisXp,
@@ -395,7 +391,6 @@ class GameState {
     (m['perPrayerStreaks'] as Map<String, dynamic>?)?.forEach(
       (k, v) => pstr[k] = StreakState.fromMap(v as Map<String, dynamic>),
     );
-    final badgeList = (m['badges'] as List?)?.cast<String>() ?? [];
     final rewardList = (m['rewards'] as List?)?.cast<String>() ?? [];
     final zikir = m['zikirCounter'] != null
         ? ZikirCounter.fromMap(m['zikirCounter'] as Map<String, dynamic>)
@@ -424,7 +419,6 @@ class GameState {
       questDate: m['questDate'] ?? '',
       lastCheckedDate: m['lastCheckedDate'] ?? '',
       comebackCount: m['comebackCount'] ?? 0,
-      badges: badgeList,
       zikirCounter: zikir,
       quranXp: m['quranXp'] != null
           ? QuranXpState.fromMap(m['quranXp'] as Map<String, dynamic>)
@@ -456,7 +450,6 @@ class GameState {
     'questDate': questDate,
     'lastCheckedDate': lastCheckedDate,
     'comebackCount': comebackCount,
-    'badges': badges,
     'zikirCounter': zikirCounter.toMap(),
     'quranXp': quranXp.toMap(),
     'hadisXp': hadisXp.toMap(),
@@ -485,6 +478,9 @@ class GameService {
 
   @visibleForTesting
   static void resetForTest() => _cache = GameState();
+
+  @visibleForTesting
+  static void setStateForTest(GameState s) => _cache = s;
 
   @visibleForTesting
   static int? debugChestRoll;
@@ -1580,205 +1576,12 @@ class GameService {
     return pool.take(5).toList();
   }
 
-  // ─── Badge system (13 badges) ───
-  // Port dari GameViewModel.evaluateBadges() (main Kotlin).
-  // Setiap aksi yang mengubah state (logPrayer, unlogPrayer, claimQuest, runDailyCheck)
-  // harus memanggil _evaluateBadges() untuk update badge yang earned.
-
-  static const badgeDefs =
-      <(String id, String title, String emoji, String desc)>[
-        ('langkah_pertama', 'LANGKAH PERTAMA', '🌱', 'Log sholat pertama kamu'),
-        ('subuh_warrior', 'SUBUH WARRIOR', '🕌', 'Streak Subuh 7 hari'),
-        ('subuh_legend', 'SUBUH LEGEND', '⭐', 'Streak Subuh 30 hari'),
-        ('five_five_master', '5/5 MASTER', '🏆', 'Selesaikan 5 wajib 1 hari'),
-        (
-          'five_five_streak_7',
-          '5/5 STREAK x7',
-          '🔥',
-          'Streak 5/5 selama 7 hari',
-        ),
-        (
-          'five_five_streak_30',
-          '5/5 STREAK x30',
-          '💎',
-          'Streak 5/5 selama 30 hari',
-        ),
-        ('sultan_sunnah', 'SULTAN SUNNAH', '🤲', '50 sunnah total'),
-        ('tilawah_streak_14', 'TILAWAH STREAK', '📖', 'Streak Tilawah 14 hari'),
-        (
-          'ramadan_champion',
-          'RAMADAN CHAMPION',
-          '🌙',
-          'Aktif di bulan Ramadan',
-        ),
-        (
-          'comeback_king',
-          'COMEBACK KING',
-          '🛡',
-          'Comeback 3x setelah streak putus',
-        ),
-        ('early_bird', 'EARLY BIRD', '⏱', '20x sholat tepat waktu (±10m)'),
-        (
-          'mythic_reached',
-          'MYTHIC REACHED',
-          '👑',
-          'Capai level 80 (Muslim Mythic)',
-        ),
-        (
-          'santri_digital',
-          'SANTRI DIGITAL',
-          '📚',
-          'Selesaikan 16 modul Belajar',
-        ),
-        (
-          'jamaah_hero',
-          'JAMAAH HERO',
-          '🕌',
-          '20x sholat berjamaah',
-        ),
-        (
-          'jamaah_legend',
-          'JAMAAH LEGEND',
-          '👥',
-          '100x sholat berjamaah',
-        ),
-        (
-          'sunnah_master',
-          'SUNNAH MASTER',
-          '✨',
-          '200 sunnah total',
-        ),
-        (
-          'santri_scholar',
-          'SANTRI SCHOLAR',
-          '🎓',
-          'Selesaikan 40 modul Belajar',
-        ),
-        // ── Badge progresif (counter kumulatif lifeTotals) ──
-        ('quran_novice', 'QURAN NOVICE', '📖', 'Baca 10 ayat'),
-        ('quran_apprentice', 'QURAN APPRENTICE', '📜', 'Baca 50 ayat'),
-        ('quran_adept', 'QURAN ADEPT', '🌙', 'Baca 100 ayat'),
-        ('quran_scholar', 'QURAN SCHOLAR', '⭐', 'Baca 200 ayat'),
-        ('quran_sage', 'QURAN SAGE', '✨', 'Baca 500 ayat'),
-        ('quran_hafizh', 'HAFIZH MUDA', '🌟', 'Baca 1.000 ayat'),
-        ('quran_guardian', 'QURAN GUARDIAN', '💎', 'Baca 2.000 ayat'),
-        ('quran_champion', 'QURAN CHAMPION', '🔥', 'Baca 4.000 ayat'),
-        ('quran_master', 'HAFIZH MASTER', '👑', 'Baca 6.236 ayat (khatam)'),
-        ('hadis_pemula', 'HADIS PEMULA', '🕌', 'Baca 10 hadis'),
-        ('hadis_santri', 'HADIS SANTRI', '📿', 'Baca 50 hadis'),
-        ('hadis_ulama', 'HADIS ULAMA', '🧠', 'Baca 200 hadis'),
-        ('dzikir_pemula', 'DZIKIR PEMULA', '📿', 'Dzikir 1.000x'),
-        ('dzikir_master', 'DZIKIR MASTER', '✨', 'Dzikir 10.000x'),
-        ('dzikir_legend', 'DZIKIR LEGEND', '💫', 'Dzikir 50.000x'),
-      ];
-
-  /// Evaluasi semua badge. Return list of newly earned badge IDs.
-  static List<String> evaluateBadges(GameState state) {
-    final earned = state.badges.toSet();
-
-    // 1. Langkah Pertama
-    if (state.prayerLog.isNotEmpty) earned.add('langkah_pertama');
-
-    // 2. Subuh Warrior (streak ≥ 7)
-    final subuhStrk = state.perPrayerStreaks['subuh']?.current ?? 0;
-    if (subuhStrk >= 7) earned.add('subuh_warrior');
-
-    // 3. Subuh Legend (streak ≥ 30)
-    if (subuhStrk >= 30) earned.add('subuh_legend');
-
-    // 4. 5/5 Master (hero streak ≥ 1)
-    final heroStrk = state.heroStreak.current;
-    if (heroStrk >= 1) earned.add('five_five_master');
-
-    // 5. 5/5 Streak x7
-    if (heroStrk >= 7) earned.add('five_five_streak_7');
-
-    // 6. 5/5 Streak x30
-    if (heroStrk >= 30) earned.add('five_five_streak_30');
-
-    // 7. Sultan Sunnah (50 sunnah total)
-    final sunnahCount = state.prayerLog.where((l) => l.type == 'sunnah').length;
-    if (sunnahCount >= 50) earned.add('sultan_sunnah');
-
-    // 8. Tilawah Streak (14 hari)
-    final tilawahStrk = state.tilawahStreak.current;
-    if (tilawahStrk >= 14) earned.add('tilawah_streak_14');
-
-    // 9. Ramadan Champion — log sholat hari ini (aktif beribadah)
-    final today = todayStr();
-    if (state.prayerLog.any((l) => l.date == today)) {
-      earned.add('ramadan_champion');
-    }
-
-    // 10. Comeback King (comebackCount ≥ 3)
-    if (state.comebackCount >= 3) earned.add('comeback_king');
-
-    // 11. Early Bird (20x tepat waktu ±10 menit dari adzan)
-    final timelyCount = state.prayerLog.where((l) {
-      if (l.type != 'wajib') return false;
-      final adzan = _adzanFor(l.prayer, state.timings);
-      return adzan.isNotEmpty && minDiff(l.time, adzan) <= 10;
-    }).length;
-    if (timelyCount >= 20) earned.add('early_bird');
-
-    // 12. Mythic Reached (level ≥ 80)
-    if (state.level >= 80) earned.add('mythic_reached');
-
-    // 13. Santri Digital — selesaikan 16 modul Belajar
-    final completedModules = LearningService.completedCount;
-    if (completedModules >= 16) earned.add('santri_digital');
-
-    // 14. Jamaah Hero (20x sholat berjamaah, bonusXp == jamaahBonusXp)
-    final jamaahCount =
-        state.prayerLog.where((l) => l.bonusXp == jamaahBonusXp).length;
-    if (jamaahCount >= 20) earned.add('jamaah_hero');
-
-    // 15. Jamaah Legend (100x sholat berjamaah)
-    if (jamaahCount >= 100) earned.add('jamaah_legend');
-
-    // 16. Sunnah Master (200 sunnah total)
-    if (sunnahCount >= 200) earned.add('sunnah_master');
-
-    // 17. Santri Scholar (40 modul Belajar)
-    if (completedModules >= 40) earned.add('santri_scholar');
-
-    // ── 18-32. Badge progresif dari counter kumulatif lifeTotals ──
-    final quranAyat = lifeTotal('quran_ayat');
-    final hadisRead = lifeTotal('hadis');
-    final zikirCount = lifeTotal('zikir');
-    if (quranAyat >= 10) earned.add('quran_novice');
-    if (quranAyat >= 50) earned.add('quran_apprentice');
-    if (quranAyat >= 100) earned.add('quran_adept');
-    if (quranAyat >= 200) earned.add('quran_scholar');
-    if (quranAyat >= 500) earned.add('quran_sage');
-    if (quranAyat >= 1000) earned.add('quran_hafizh');
-    if (quranAyat >= 2000) earned.add('quran_guardian');
-    if (quranAyat >= 4000) earned.add('quran_champion');
-    if (quranAyat >= 6236) earned.add('quran_master');
-    if (hadisRead >= 10) earned.add('hadis_pemula');
-    if (hadisRead >= 50) earned.add('hadis_santri');
-    if (hadisRead >= 200) earned.add('hadis_ulama');
-    if (zikirCount >= 1000) earned.add('dzikir_pemula');
-    if (zikirCount >= 10000) earned.add('dzikir_master');
-    if (zikirCount >= 50000) earned.add('dzikir_legend');
-
-    return earned.toList()..sort(
-      (a, b) => badgeDefs
-          .indexWhere((d) => d.$1 == a)
-          .compareTo(badgeDefs.indexWhere((d) => d.$1 == b)),
-    );
-  }
-
-  /// Eval + save badges. Return newly earned badges (for toast notification).
-  static Future<List<String>> refreshBadges() async {
-    final before = _cache.badges.toSet();
-    final after = evaluateBadges(_cache);
-    final newBadges = after.where((b) => !before.contains(b)).toList();
-    if (newBadges.isNotEmpty) {
-      await _save(_cache.copyWith(badges: after));
-    }
-    return newBadges;
-  }
+  // ─── Achievement/medali — badge system lama dimerge ke AchievementService ───
+  // badgeDefs/evaluateBadges dihapus (2026-08): semua ladder akumulasi jadi
+  // medali di AchievementService (defs + _condition). Data lama user aman —
+  // kondisi diturunkan ulang dari prayerLog/lifeTotals yang persist.
+  // Alias dipertahankan supaya call site lama tak berubah.
+  static Future<void> refreshBadges() => AchievementService.refresh();
 
   // ─── Zikir counter (daily reset, persistent) ───
   static const zikirGoal = 100;
@@ -1817,6 +1620,7 @@ class GameService {
       level: newInfo.level,
       hadisXp: h.copyWith(date: today, ids: ids, claims: h.claims + claim),
     ));
+    await refreshBadges(); // hadis ladder may unlock
 
     // Auto-claim side quest "Belajar Hadis" saat 5 hadis terbaca.
     if (ids.length >= hadisSideQuestTarget &&
@@ -1846,17 +1650,16 @@ class GameService {
         _cache.copyWith(zikirCounter: _cache.zikirCounter.copyWith(vibrate: v)));
   }
 
-  /// Reset counter dzikir [key] hari ini (total ikut berkurang).
+  /// Reset counter dzikir [key] hari ini. HANYA nolkan counter aktif ini;
+  /// total dzikir hari ini (count) TETAP akumulasi sampai reset hari baru.
   static Future<void> resetZikir(String key) async {
     final today = todayStr();
     final zc = _cache.zikirCounter;
     if (zc.date != today) return;
-    final c = zc.counts[key] ?? 0;
-    if (c == 0) return;
+    if ((zc.counts[key] ?? 0) == 0) return;
     final counts = Map<String, int>.from(zc.counts)..remove(key);
     await _save(_cache.copyWith(
-      zikirCounter:
-          zc.copyWith(count: (zc.count - c).clamp(0, 1 << 31), counts: counts),
+      zikirCounter: zc.copyWith(counts: counts),
     ));
   }
 
@@ -1989,6 +1792,7 @@ class GameService {
       level: newInfo.level,
       quranXp: qx.copyWith(readClaims: qx.readClaims + payable),
     ));
+    await refreshBadges(); // quran ladder may unlock
 
     // Auto-claim side quest "Baca Quran" saat target ayat tercapai.
     if (_cache.quranXp.readAyatTotal >= quranSideQuestAyat &&

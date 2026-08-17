@@ -12,7 +12,6 @@ import '../../services/notification_service.dart';
 import '../../services/achievement_service.dart';
 import '../../services/daily_highlight.dart';
 import '../../services/quran_data.dart';
-import '../../widgets/achievement_medal.dart';
 import '../../widgets/xp_toast.dart';
 import 'naik_level_screen.dart';
 import 'quran_reader.dart';
@@ -80,8 +79,8 @@ class _HomeTabState extends State<HomeTab> {
       late SharedPreferences p;
       await Future.wait([
         // Backfill diam-diam: progress lama (mis. streak sebelum update app)
-        // langsung terisi di grid profil tanpa memberondong popup saat buka.
-        AchievementService.refresh(),
+        // langsung terisi tanpa memberondong popup saat buka.
+        AchievementService.refresh(silent: true),
         _fetchTimingsSilently(),
         SharedPreferences.getInstance().then((v) => p = v),
         () async {
@@ -181,12 +180,8 @@ class _HomeTabState extends State<HomeTab> {
     setState(() => _state = res.$1);
     final (_, xp, levelsGained) = res;
     showXpToast(context, xp);
-    // Announcer achievement tampil dulu (di home), baru layar naik level.
-    final newAch = await AchievementService.refresh();
-    for (final a in newAch) {
-      if (!mounted) break;
-      await showAchievementUnlock(context, a);
-    }
+    // Medali baru → antrean announcer global (overlay DashboardShell).
+    await AchievementService.refresh();
     if (levelsGained > 0 && mounted) {
       Navigator.of(context).push(
         MaterialPageRoute(
@@ -324,11 +319,7 @@ class _HomeTabState extends State<HomeTab> {
     });
     showXpToast(context, q.xpReward);
     // XP quest bisa memicu medali rank (WARRIOR..MYTHIC).
-    final newAch = await AchievementService.refresh();
-    for (final a in newAch) {
-      if (!mounted) break;
-      await showAchievementUnlock(context, a);
-    }
+    await AchievementService.refresh();
     if (levelsGained > 0 && mounted) {
       Navigator.of(context).push(
         MaterialPageRoute(

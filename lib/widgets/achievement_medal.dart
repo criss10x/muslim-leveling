@@ -208,6 +208,56 @@ class _MedalPainter extends CustomPainter {
       old.unlocked != unlocked;
 }
 
+/// Announcer global — dengerin AchievementService.pendingAnnouncer dan
+/// munculkan popup unlock berurutan. Dipasang sekali di DashboardShell, jadi
+/// semua flow (Quran, dzikir, hadis, sholat, chest) kebagian popup tanpa
+/// tiap caller perlu context sendiri.
+class AchievementAnnouncerOverlay extends StatefulWidget {
+  const AchievementAnnouncerOverlay({super.key});
+
+  @override
+  State<AchievementAnnouncerOverlay> createState() =>
+      _AchievementAnnouncerOverlayState();
+}
+
+class _AchievementAnnouncerOverlayState
+    extends State<AchievementAnnouncerOverlay> {
+  bool _showing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    AchievementService.pendingAnnouncer.addListener(_drain);
+    // Sisa antrean dari sebelum widget mount (mis. aksi saat splash).
+    WidgetsBinding.instance.addPostFrameCallback((_) => _drain());
+  }
+
+  @override
+  void dispose() {
+    AchievementService.pendingAnnouncer.removeListener(_drain);
+    super.dispose();
+  }
+
+  Future<void> _drain() async {
+    if (_showing) return;
+    _showing = true;
+    // Loop sampai kosong: unlock baru bisa masuk saat popup sedang tampil.
+    while (mounted) {
+      final q = AchievementService.pendingAnnouncer.value;
+      if (q.isEmpty) break;
+      AchievementService.pendingAnnouncer.value = const [];
+      for (final def in q) {
+        if (!mounted) break;
+        await showAchievementUnlock(context, def);
+      }
+    }
+    _showing = false;
+  }
+
+  @override
+  Widget build(BuildContext context) => const SizedBox.shrink();
+}
+
 /// Popup announcer: medali masuk elastis, confetti. Light = solid GlassPanel
 /// (no BackdropFilter). Dark keeps soft glow title. Await until closed.
 Future<void> showAchievementUnlock(

@@ -60,7 +60,7 @@ class _ProfilTabState extends State<ProfilTab> {
 
   Future<void> _loadProfile() async {
     await GameService.load();
-    await AchievementService.refresh(); // sinkron medali dengan state terkini
+    await AchievementService.refresh(silent: true); // sinkron medali, tanpa popup
     final p = await SharedPreferences.getInstance();
     final state = GameService.current;
     if (!mounted) return;

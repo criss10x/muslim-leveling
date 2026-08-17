@@ -9,9 +9,9 @@ import 'game_service.dart';
 import 'learning_content.dart';
 import 'cloud_sync.dart';
 
-/// Achievement system ala Mobile Legends — medali kill-streak untuk ibadah.
-/// Terpisah dari badge system lama (GameService.badgeDefs): badge = koleksi
-/// emoji sederhana, achievement = medali bertingkat dengan popup announcer.
+/// Medali bertingkat ala Mobile Legends dengan popup announcer.
+/// Eks badge system (ladder akumulasi) sudah dimerge ke sini (2026-08):
+/// semua koleksi & unlock lewat satu sistem ini.
 ///
 /// Streak yang dipakai adalah HERO STREAK (5/5 wajib per hari, sudah dihitung
 /// GameService.logPrayer). Medali streak memakai nilai tertinggi yang pernah
@@ -363,10 +363,155 @@ class AchievementService {
       tier: AchievementTier.legendary,
       icon: Icons.castle,
     ),
+
+    // ── Ladder akumulasi (eks badge system, dimerge ke medali) ──
+    AchievementDef(
+      id: 'langkah_pertama',
+      title: 'LANGKAH PERTAMA',
+      desc: 'Log sholat pertama kamu',
+      tier: AchievementTier.rookie,
+      icon: Icons.flag,
+    ),
+    AchievementDef(
+      id: 'subuh_legend',
+      title: 'SUBUH LEGEND',
+      desc: 'Streak Subuh 30 hari',
+      tier: AchievementTier.legendary,
+      glyphText: '30',
+    ),
+    AchievementDef(
+      id: 'tilawah_streak_14',
+      title: 'TILAWAH STREAK',
+      desc: 'Streak Tilawah 14 hari',
+      tier: AchievementTier.gold,
+      glyphText: '14',
+    ),
+    AchievementDef(
+      id: 'sultan_sunnah',
+      title: 'SULTAN SUNNAH',
+      desc: '50 sholat sunnah total',
+      tier: AchievementTier.gold,
+      icon: Icons.volunteer_activism,
+    ),
+    AchievementDef(
+      id: 'sunnah_master',
+      title: 'SUNNAH MASTER',
+      desc: '200 sholat sunnah total',
+      tier: AchievementTier.legendary,
+      icon: Icons.auto_awesome,
+    ),
+    AchievementDef(
+      id: 'santri_scholar',
+      title: 'SANTRI SCHOLAR',
+      desc: 'Selesaikan 40 modul Belajar',
+      tier: AchievementTier.epic,
+      icon: Icons.menu_book,
+    ),
+    AchievementDef(
+      id: 'early_bird',
+      title: 'EARLY BIRD',
+      desc: '20x sholat tepat waktu (±10m)',
+      tier: AchievementTier.gold,
+      icon: Icons.alarm_on,
+    ),
+    // Jamaah ladder 5x → 500x
+    AchievementDef(id: 'jamaah_rookie', title: 'JAMAAH ROOKIE',
+      desc: '5x sholat berjamaah', tier: AchievementTier.rookie, glyphText: '5'),
+    AchievementDef(id: 'jamaah_grinder', title: 'JAMAAH GRINDER',
+      desc: '10x sholat berjamaah', tier: AchievementTier.rookie, glyphText: '10'),
+    AchievementDef(id: 'jamaah_warrior', title: 'JAMAAH WARRIOR',
+      desc: '25x sholat berjamaah', tier: AchievementTier.elite, glyphText: '25'),
+    AchievementDef(id: 'jamaah_elite', title: 'JAMAAH ELITE',
+      desc: '50x sholat berjamaah', tier: AchievementTier.gold, glyphText: '50'),
+    AchievementDef(id: 'jamaah_veteran', title: 'JAMAAH VETERAN',
+      desc: '100x sholat berjamaah', tier: AchievementTier.gold, glyphText: '100'),
+    AchievementDef(id: 'jamaah_champion', title: 'JAMAAH CHAMPION',
+      desc: '200x sholat berjamaah', tier: AchievementTier.epic, glyphText: '200'),
+    AchievementDef(id: 'jamaah_hero', title: 'JAMAAH HERO',
+      desc: '350x sholat berjamaah', tier: AchievementTier.epic, glyphText: '350'),
+    AchievementDef(id: 'jamaah_legend', title: 'JAMAAH LEGEND',
+      desc: '500x sholat berjamaah', tier: AchievementTier.legendary, glyphText: '500'),
+    // Wajib ladder 10x → 2000x
+    AchievementDef(id: 'wajib_rookie', title: 'WAJIB ROOKIE',
+      desc: '10x sholat wajib', tier: AchievementTier.rookie, glyphText: '10'),
+    AchievementDef(id: 'wajib_grinder', title: 'WAJIB GRINDER',
+      desc: '25x sholat wajib', tier: AchievementTier.rookie, glyphText: '25'),
+    AchievementDef(id: 'wajib_warrior', title: 'WAJIB WARRIOR',
+      desc: '50x sholat wajib', tier: AchievementTier.elite, glyphText: '50'),
+    AchievementDef(id: 'wajib_elite', title: 'WAJIB ELITE',
+      desc: '100x sholat wajib', tier: AchievementTier.gold, glyphText: '100'),
+    AchievementDef(id: 'wajib_veteran', title: 'WAJIB VETERAN',
+      desc: '200x sholat wajib', tier: AchievementTier.gold, glyphText: '200'),
+    AchievementDef(id: 'wajib_champion', title: 'WAJIB CHAMPION',
+      desc: '400x sholat wajib', tier: AchievementTier.epic, glyphText: '400'),
+    AchievementDef(id: 'wajib_hero', title: 'WAJIB HERO',
+      desc: '700x sholat wajib', tier: AchievementTier.epic, glyphText: '700'),
+    AchievementDef(id: 'wajib_master', title: 'WAJIB MASTER',
+      desc: '1.000x sholat wajib', tier: AchievementTier.legendary, glyphText: '1000'),
+    AchievementDef(id: 'wajib_mythic', title: 'WAJIB MYTHIC',
+      desc: '1.500x sholat wajib', tier: AchievementTier.legendary, glyphText: '1500'),
+    AchievementDef(id: 'wajib_immortal', title: 'WAJIB IMMORTAL',
+      desc: '2.000x sholat wajib', tier: AchievementTier.legendary, glyphText: '2000'),
+    // Quran ladder 10 → 6236 ayat
+    AchievementDef(id: 'quran_novice', title: 'QURAN NOVICE',
+      desc: 'Baca 10 ayat', tier: AchievementTier.rookie, glyphText: '10'),
+    AchievementDef(id: 'quran_apprentice', title: 'QURAN APPRENTICE',
+      desc: 'Baca 50 ayat', tier: AchievementTier.rookie, glyphText: '50'),
+    AchievementDef(id: 'quran_adept', title: 'QURAN ADEPT',
+      desc: 'Baca 100 ayat', tier: AchievementTier.elite, glyphText: '100'),
+    AchievementDef(id: 'quran_scholar', title: 'QURAN SCHOLAR',
+      desc: 'Baca 200 ayat', tier: AchievementTier.gold, glyphText: '200'),
+    AchievementDef(id: 'quran_sage', title: 'QURAN SAGE',
+      desc: 'Baca 500 ayat', tier: AchievementTier.gold, glyphText: '500'),
+    AchievementDef(id: 'quran_hafizh', title: 'HAFIZH MUDA',
+      desc: 'Baca 1.000 ayat', tier: AchievementTier.epic, glyphText: '1000'),
+    AchievementDef(id: 'quran_guardian', title: 'QURAN GUARDIAN',
+      desc: 'Baca 2.000 ayat', tier: AchievementTier.epic, glyphText: '2000'),
+    AchievementDef(id: 'quran_champion', title: 'QURAN CHAMPION',
+      desc: 'Baca 4.000 ayat', tier: AchievementTier.legendary, glyphText: '4000'),
+    AchievementDef(id: 'quran_master', title: 'HAFIZH MASTER',
+      desc: 'Baca 6.236 ayat (khatam)', tier: AchievementTier.legendary, glyphText: '6236'),
+    // Hadis ladder 5x → 500x
+    AchievementDef(id: 'hadis_rookie', title: 'HADIS ROOKIE',
+      desc: 'Baca 5 hadis', tier: AchievementTier.rookie, glyphText: '5'),
+    AchievementDef(id: 'hadis_grinder', title: 'HADIS GRINDER',
+      desc: 'Baca 10 hadis', tier: AchievementTier.rookie, glyphText: '10'),
+    AchievementDef(id: 'hadis_warrior', title: 'HADIS WARRIOR',
+      desc: 'Baca 25 hadis', tier: AchievementTier.elite, glyphText: '25'),
+    AchievementDef(id: 'hadis_elite', title: 'HADIS ELITE',
+      desc: 'Baca 50 hadis', tier: AchievementTier.gold, glyphText: '50'),
+    AchievementDef(id: 'hadis_veteran', title: 'HADIS VETERAN',
+      desc: 'Baca 100 hadis', tier: AchievementTier.gold, glyphText: '100'),
+    AchievementDef(id: 'hadis_champion', title: 'HADIS CHAMPION',
+      desc: 'Baca 200 hadis', tier: AchievementTier.epic, glyphText: '200'),
+    AchievementDef(id: 'hadis_hero', title: 'HADIS HERO',
+      desc: 'Baca 350 hadis', tier: AchievementTier.epic, glyphText: '350'),
+    AchievementDef(id: 'hadis_legend', title: 'HADIS LEGEND',
+      desc: 'Baca 500 hadis', tier: AchievementTier.legendary, glyphText: '500'),
+    // Dzikir ladder 1.000x → 50.000x
+    AchievementDef(id: 'dzikir_pemula', title: 'DZIKIR PEMULA',
+      desc: 'Dzikir 1.000x', tier: AchievementTier.epic, glyphText: '1000'),
+    AchievementDef(id: 'dzikir_master', title: 'DZIKIR MASTER',
+      desc: 'Dzikir 10.000x', tier: AchievementTier.legendary, glyphText: '10000'),
+    AchievementDef(id: 'dzikir_legend', title: 'DZIKIR LEGEND',
+      desc: 'Dzikir 50.000x', tier: AchievementTier.legendary, glyphText: '50000'),
   ];
 
   static Map<String, String> _unlocked = {};
   static bool _loaded = false;
+
+  /// Antrean popup announcer global — diisi refresh() non-silent, ditampilkan
+  /// satu titik oleh AchievementAnnouncerOverlay (flow Quran/zikir/hadis/
+  /// sholat semua lewat sini).
+  static final ValueNotifier<List<AchievementDef>> pendingAnnouncer =
+      ValueNotifier(const []);
+
+  @visibleForTesting
+  static void resetForTest() {
+    _unlocked = {};
+    _loaded = false;
+    pendingAnnouncer.value = const [];
+  }
 
   static Future<void> load({bool force = false}) async {
     if (_loaded && !force) return;
@@ -436,6 +581,13 @@ class AchievementService {
     int bestStreak(StreakState? st) =>
         st == null ? 0 : max(st.current, st.best);
     final learning = LearningService.current.progress;
+    // Counter ladder akumulasi (eks badge system).
+    final jamaahCount =
+        logs.where((l) => l.bonusXp == GameService.jamaahBonusXp).length;
+    final wajibCount = logs.where((l) => l.type == 'wajib').length;
+    final quranAyat = GameService.lifeTotal('quran_ayat');
+    final hadisRead = GameService.lifeTotal('hadis');
+    final zikirCount = GameService.lifeTotal('zikir');
 
     return switch (id) {
       'first_blood' => hero >= 1,
@@ -498,6 +650,54 @@ class AchievementService {
         'rawatib_ashar_qobliyah', 'rawatib_maghrib_ba_diyyah',
         'rawatib_isya_ba_diyyah',
       ].every(logged),
+      // ── Ladder akumulasi (eks badge system) ──
+      'langkah_pertama' => logs.isNotEmpty,
+      'subuh_legend' => bestStreak(s.perPrayerStreaks['subuh']) >= 30,
+      'tilawah_streak_14' => bestStreak(s.tilawahStreak) >= 14,
+      'sultan_sunnah' =>
+        logs.where((l) => l.type == 'sunnah').length >= 50,
+      'sunnah_master' =>
+        logs.where((l) => l.type == 'sunnah').length >= 200,
+      'santri_scholar' => LearningService.completedCount >= 40,
+      'early_bird' => timelyCount(10) >= 20,
+      'jamaah_rookie' => jamaahCount >= 5,
+      'jamaah_grinder' => jamaahCount >= 10,
+      'jamaah_warrior' => jamaahCount >= 25,
+      'jamaah_elite' => jamaahCount >= 50,
+      'jamaah_veteran' => jamaahCount >= 100,
+      'jamaah_champion' => jamaahCount >= 200,
+      'jamaah_hero' => jamaahCount >= 350,
+      'jamaah_legend' => jamaahCount >= 500,
+      'wajib_rookie' => wajibCount >= 10,
+      'wajib_grinder' => wajibCount >= 25,
+      'wajib_warrior' => wajibCount >= 50,
+      'wajib_elite' => wajibCount >= 100,
+      'wajib_veteran' => wajibCount >= 200,
+      'wajib_champion' => wajibCount >= 400,
+      'wajib_hero' => wajibCount >= 700,
+      'wajib_master' => wajibCount >= 1000,
+      'wajib_mythic' => wajibCount >= 1500,
+      'wajib_immortal' => wajibCount >= 2000,
+      'quran_novice' => quranAyat >= 10,
+      'quran_apprentice' => quranAyat >= 50,
+      'quran_adept' => quranAyat >= 100,
+      'quran_scholar' => quranAyat >= 200,
+      'quran_sage' => quranAyat >= 500,
+      'quran_hafizh' => quranAyat >= 1000,
+      'quran_guardian' => quranAyat >= 2000,
+      'quran_champion' => quranAyat >= 4000,
+      'quran_master' => quranAyat >= 6236,
+      'hadis_rookie' => hadisRead >= 5,
+      'hadis_grinder' => hadisRead >= 10,
+      'hadis_warrior' => hadisRead >= 25,
+      'hadis_elite' => hadisRead >= 50,
+      'hadis_veteran' => hadisRead >= 100,
+      'hadis_champion' => hadisRead >= 200,
+      'hadis_hero' => hadisRead >= 350,
+      'hadis_legend' => hadisRead >= 500,
+      'dzikir_pemula' => zikirCount >= 1000,
+      'dzikir_master' => zikirCount >= 10000,
+      'dzikir_legend' => zikirCount >= 50000,
       // Meta-medali: dievaluasi terakhir (urutan defs), jadi unlock baru
       // di pass yang sama sudah masuk _unlocked.
       'hall_of_fame' => defs
@@ -528,7 +728,7 @@ class AchievementService {
   /// terbuka. Return definisi yang BARU terbuka — untuk popup announcer.
   /// [silent] tetap menyimpan tapi pemanggil bisa memilih tak menampilkan
   /// popup (mis. backfill saat app pertama dibuka setelah update).
-  static Future<List<AchievementDef>> refresh() async {
+  static Future<List<AchievementDef>> refresh({bool silent = false}) async {
     await load();
     // Kondisi skill-tree (FIRST CLEAR/MVP/SAGE) baca progress tab Belajar.
     await LearningService.load();
@@ -540,7 +740,12 @@ class AchievementService {
         newly.add(d);
       }
     }
-    if (newly.isNotEmpty) await _persist();
+    if (newly.isNotEmpty) {
+      await _persist();
+      if (!silent) {
+        pendingAnnouncer.value = [...pendingAnnouncer.value, ...newly];
+      }
+    }
     return newly;
   }
 }

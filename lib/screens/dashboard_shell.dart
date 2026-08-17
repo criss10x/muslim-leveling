@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../theme/app_theme.dart';
 import '../../services/theme_service.dart';
 import '../../widgets/common.dart';
+import '../../widgets/achievement_medal.dart';
 import 'home_tab.dart';
 import 'jadwal_tab.dart';
 import 'quran_tab.dart';
@@ -50,16 +51,23 @@ class _DashboardShellState extends State<DashboardShell> {
           backgroundColor: Colors.transparent,
           extendBody: true,
           body: AmbientBackground(
-            child: IndexedStack(
-              index: _tab,
+            child: Stack(
+              fit: StackFit.expand,
               children: [
-                HomeTab(
-                    onSettingsPressed: () =>
-                        setState(() => _tab = _profilTab)),
-                JadwalTab(),
-                QuranTab(),
-                BelajarTab(),
-                ProfilTab(),
+                IndexedStack(
+                  index: _tab,
+                  children: [
+                    HomeTab(
+                        onSettingsPressed: () =>
+                            setState(() => _tab = _profilTab)),
+                    JadwalTab(),
+                    QuranTab(),
+                    BelajarTab(),
+                    ProfilTab(),
+                  ],
+                ),
+                // Announcer global: popup medali unlock dari flow mana pun.
+                const AchievementAnnouncerOverlay(),
               ],
             ),
           ),

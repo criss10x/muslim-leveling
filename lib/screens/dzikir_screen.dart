@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:vibration/vibration.dart';
 import '../../theme/app_theme.dart';
-import '../../widgets/common.dart';
 import '../../services/game_service.dart';
 
 class DzikirItem {
@@ -28,34 +27,68 @@ class DzikirTarget {
 }
 
 const dzikirTargets = [
-  DzikirTarget('33 × Tasbih setelah sholat', 33),
-  DzikirTarget('99 × Asmaul Husna', 99),
-  DzikirTarget('100 × Istighfar / Tahlil', 100),
+  DzikirTarget('33', 33),
+  DzikirTarget('99', 99),
+  DzikirTarget('100', 100),
 ];
 
 /// Layar Dzikir penuh — tasbih digital.
+/// Seluruh layar = zona tap (GestureDetector opaque); kontrol kecil
+/// (back / getar / reset / chips) menyerap gesture sendiri lewat arena.
 class DzikirScreen extends StatefulWidget {
   const DzikirScreen({super.key});
   @override
   State<DzikirScreen> createState() => _DzikirScreenState();
 }
 
-class _DzikirScreenState extends State<DzikirScreen> {
+class _DzikirScreenState extends State<DzikirScreen>
+    with SingleTickerProviderStateMixin {
   int _dzikirIdx = 0;
   int _targetIdx = 0;
   bool _busy = false;
+  late final AnimationController _pulse;
 
   DzikirItem get _dzikir => dzikirItems[_dzikirIdx];
   int get _target => dzikirTargets[_targetIdx].count;
+
+  @override
+  void initState() {
+    super.initState();
+    // Pop kecil tiap tap — feedback visual tanpa perlu widget state.
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 160),
+      reverseDuration: const Duration(milliseconds: 120),
+      lowerBound: 0.94,
+      value: 1.0,
+    );
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
 
   Future<void> _tap() async {
     if (_busy) return;
     _busy = true;
     if (GameService.zikirVibrate) {
-      unawaited(HapticFeedback.lightImpact());
+      // vibrate(), bukan lightImpact() — impact haptic sering no-op di OEM
+      // Android; Vibration.vibrate() langsung tarik motor getar via plugin.
+      unawaited(Vibration.vibrate(duration: 50));
     }
+    _pulse.forward(from: 0.94);
     await GameService.incrementZikir(key: _dzikir.key);
-    if (mounted) setState(() {});
+    // Counter aktif capai target → auto reset aktif dari 0 (total harian tetap).
+    if (mounted) {
+      setState(() {});
+      final c = GameService.zikirCountsToday[_dzikir.key] ?? 0;
+      if (c >= _target) {
+        await GameService.resetZikir(_dzikir.key);
+        if (mounted) setState(() {});
+      }
+    }
     _busy = false;
   }
 
@@ -64,7 +97,8 @@ class _DzikirScreenState extends State<DzikirScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Reset counter?'),
-        content: Text('Counter "${_dzikir.translit}" hari ini akan di-nolkan.'),
+        content: Text(
+            'Counter "${_dzikir.translit}" akan di-nolkan dari 0.\nTotal dzikir hari ini TETAP dihitung.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('BATAL')),
           TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('RESET')),
@@ -87,218 +121,217 @@ class _DzikirScreenState extends State<DzikirScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            // Header
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.md, AppSpacing.md, AppSpacing.md, 0),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.arrow_back),
-                    tooltip: 'Kembali',
-                  ),
-                  const SizedBox(width: AppSpacing.sm),
-                  Expanded(
-                    child: Text('Dzikir', style: AppText.headlineMd()),
-                  ),
-                  // Getar on/off
-                  IconButton(
-                    onPressed: () async {
-                      await GameService.setZikirVibrate(!GameService.zikirVibrate);
-                      setState(() {});
-                    },
-                    tooltip: GameService.zikirVibrate ? 'Matikan getar' : 'Nyalakan getar',
-                    icon: Icon(
-                      GameService.zikirVibrate ? Icons.vibration : Icons.smartphone,
-                      color: GameService.zikirVibrate ? AppColors.primary : AppColors.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.all(AppSpacing.md),
-                children: [
-                  // Total hari ini
-                  FlatCard(
-                    child: Row(
-                      children: [
-                        Icon(Icons.mosque, color: AppColors.secondaryFixed, size: 20),
-                        const SizedBox(width: AppSpacing.sm),
-                        Expanded(
-                          child: Text('Total dzikir hari ini',
-                              style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant)),
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: _tap,
+          child: Column(
+            children: [
+              _header(total, current),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Dzikir aktif — Arab besar, latin, terjemah.
+                      Text(
+                        _dzikir.arabic,
+                        textAlign: TextAlign.center,
+                        textDirection: TextDirection.rtl,
+                        style: AppText.headlineLg().copyWith(
+                          color: AppColors.onSurface,
+                          height: 1.6,
                         ),
-                        Text(
-                          '$total',
-                          style: AppText.headlineMd().copyWith(
-                            color: done ? AppColors.secondaryFixed : AppColors.primary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-
-                  // Pilihan dzikir — chips
-                  Text('PILIH DZIKIR', style: AppText.labelCapsSm().copyWith(color: AppColors.onSurfaceVariant)),
-                  const SizedBox(height: AppSpacing.sm),
-                  SizedBox(
-                    height: 40,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: dzikirItems.length,
-                      separatorBuilder: (_, __) => const SizedBox(width: AppSpacing.sm),
-                      itemBuilder: (context, i) {
-                        final sel = i == _dzikirIdx;
-                        return ChoiceChip(
-                          label: Text(dzikirItems[i].translit),
-                          selected: sel,
-                          onSelected: (_) => setState(() => _dzikirIdx = i),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-
-                  // Teks dzikir (Arab, latin, terjemah)
-                  FlatCard(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _dzikir.arabic,
-                          style: AppText.headlineLg().copyWith(color: AppColors.onSurface, height: 1.5),
-                          textAlign: TextAlign.right,
-                          textDirection: TextDirection.rtl,
-                        ),
-                        const SizedBox(height: AppSpacing.sm),
-                        Text(_dzikir.translit,
-                            style: AppText.bodyMd().copyWith(color: AppColors.primary)),
-                        Text(_dzikir.translation,
-                            style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant)),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-
-                  // Pilihan target — chips
-                  Text('TARGET', style: AppText.labelCapsSm().copyWith(color: AppColors.onSurfaceVariant)),
-                  const SizedBox(height: AppSpacing.sm),
-                  SizedBox(
-                    height: 40,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: dzikirTargets.length,
-                      separatorBuilder: (_, __) => const SizedBox(width: AppSpacing.sm),
-                      itemBuilder: (context, i) {
-                        final sel = i == _targetIdx;
-                        return ChoiceChip(
-                          label: Text(dzikirTargets[i].label),
-                          selected: sel,
-                          onSelected: (_) => setState(() => _targetIdx = i),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.lg),
-
-                  // Tombol reset
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: TextButton.icon(
-                      onPressed: current == 0 ? null : _reset,
-                      icon: const Icon(Icons.restart_alt, size: 18),
-                      label: const Text('Reset counter dzikir ini'),
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-
-                  // Ring progress + angka
-                  SizedBox(
-                    height: 200,
-                    child: Center(
-                      child: Stack(
-                        alignment: Alignment.center,
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                      Text(
+                        _dzikir.translit,
+                        textAlign: TextAlign.center,
+                        style: AppText.titleLg().copyWith(color: AppColors.primary),
+                      ),
+                      Text(
+                        _dzikir.translation,
+                        textAlign: TextAlign.center,
+                        style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
+                      ),
+                      const SizedBox(height: AppSpacing.lg),
+                      // Ring hero — pop tiap tap.
+                      ScaleTransition(
+                        scale: _pulse,
+                        child: _ring(progress, done, current),
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                      // Afordansi: seluruh layar bisa di-tap.
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          SizedBox(
-                            width: 180,
-                            height: 180,
-                            child: CircularProgressIndicator(
-                              value: progress,
-                              strokeWidth: 10,
-                              backgroundColor: AppColors.surfaceContainerHighest,
-                              valueColor: AlwaysStoppedAnimation(
-                                done ? AppColors.secondaryFixed : AppColors.primary,
-                              ),
+                          Icon(Icons.touch_app,
+                              size: 16, color: AppColors.onSurfaceVariant.withValues(alpha: 0.7)),
+                          const SizedBox(width: AppSpacing.xs),
+                          Text(
+                            'Ketuk di mana saja untuk berdzikir',
+                            style: AppText.bodyMd().copyWith(
+                              color: AppColors.onSurfaceVariant,
+                              fontSize: 12,
                             ),
-                          ),
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                '$current',
-                                style: AppText.displayHero(44).copyWith(
-                                  color: done ? AppColors.secondaryFixed : AppColors.primary,
-                                ),
-                              ),
-                              Text(
-                                '/ $_target',
-                                style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
-                              ),
-                              if (done)
-                                Padding(
-                                  padding: const EdgeInsets.only(top: AppSpacing.xs),
-                                  child: Text('TARGET TERCAPAI',
-                                      style: AppText.labelCapsSm().copyWith(color: AppColors.secondaryFixed)),
-                                ),
-                            ],
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                ],
-              ),
-            ),
-
-            // Zona tap besar — seluruh area bawah bisa di-tap untuk menghitung
-            SafeArea(
-              top: false,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.md, 0, AppSpacing.md, AppSpacing.md),
-                child: PressableScale(
-                  pressedScale: 0.96,
-                  onTap: _tap,
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(AppRadius.xxl),
-                    ),
-                    child: Column(
-                      children: [
-                        Icon(Icons.touch_app, color: AppColors.onPrimary, size: 28),
-                        const SizedBox(height: AppSpacing.xs),
-                        Text(
-                          'TAP DI MANA SAJA UNTUK DZIKIR',
-                          style: AppText.labelCaps().copyWith(color: AppColors.onPrimary),
-                        ),
-                      ],
-                    ),
+                    ],
                   ),
                 ),
               ),
-            ),
-          ],
+              _selectors(),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _header(int total, int current) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(AppSpacing.sm, AppSpacing.sm, AppSpacing.sm, 0),
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.arrow_back),
+            tooltip: 'Kembali',
+          ),
+          const SizedBox(width: AppSpacing.xs),
+          Text('Dzikir', style: AppText.headlineMd()),
+          const Spacer(),
+          // Total hari ini — pill compact.
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 6),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceContainer,
+              borderRadius: BorderRadius.circular(AppRadius.pill),
+            ),
+            child: Text(
+              'Hari ini: $total',
+              style: AppText.labelCapsSm().copyWith(color: AppColors.onSurfaceVariant),
+            ),
+          ),
+          const SizedBox(width: AppSpacing.xs),
+          IconButton(
+            onPressed: () async {
+              await GameService.setZikirVibrate(!GameService.zikirVibrate);
+              setState(() {});
+            },
+            tooltip: GameService.zikirVibrate ? 'Matikan getar' : 'Nyalakan getar',
+            icon: Icon(
+              GameService.zikirVibrate ? Icons.vibration : Icons.smartphone,
+              color: GameService.zikirVibrate ? AppColors.primary : AppColors.onSurfaceVariant,
+            ),
+          ),
+          IconButton(
+            onPressed: current == 0 ? null : _reset,
+            tooltip: 'Reset counter ini',
+            icon: const Icon(Icons.restart_alt),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _ring(double progress, bool done, int current) {
+    final accent = done ? AppColors.secondaryFixed : AppColors.primary;
+    return SizedBox(
+      width: 200,
+      height: 200,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          SizedBox(
+            width: 200,
+            height: 200,
+            child: CircularProgressIndicator(
+              value: progress,
+              strokeWidth: 12,
+              strokeCap: StrokeCap.round,
+              backgroundColor: AppColors.surfaceContainerHighest,
+              valueColor: AlwaysStoppedAnimation(accent),
+            ),
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '$current',
+                style: AppText.displayHero(48).copyWith(color: accent),
+              ),
+              Text(
+                '/ $_target',
+                style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
+              ),
+              if (done)
+                Padding(
+                  padding: const EdgeInsets.only(top: AppSpacing.xs),
+                  child: Text(
+                    'TARGET TERCAPAI',
+                    style: AppText.labelCapsSm().copyWith(color: AppColors.secondaryFixed),
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _selectors() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(AppSpacing.md, 0, AppSpacing.md, AppSpacing.md),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('DZIKIR', style: AppText.labelCapsSm().copyWith(color: AppColors.onSurfaceVariant)),
+          const SizedBox(height: AppSpacing.sm),
+          SizedBox(
+            height: 40,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: dzikirItems.length,
+              separatorBuilder: (_, __) => const SizedBox(width: AppSpacing.sm),
+              itemBuilder: (context, i) {
+                final sel = i == _dzikirIdx;
+                return ChoiceChip(
+                  label: Text(dzikirItems[i].translit),
+                  selected: sel,
+                  onSelected: (_) => setState(() => _dzikirIdx = i),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Row(
+            children: [
+              Text('TARGET',
+                  style: AppText.labelCapsSm().copyWith(color: AppColors.onSurfaceVariant)),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(
+                child: SizedBox(
+                  height: 40,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: dzikirTargets.length,
+                    separatorBuilder: (_, __) => const SizedBox(width: AppSpacing.sm),
+                    itemBuilder: (context, i) {
+                      final sel = i == _targetIdx;
+                      return ChoiceChip(
+                        label: Text('${dzikirTargets[i].count}×'),
+                        selected: sel,
+                        onSelected: (_) => setState(() => _targetIdx = i),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
