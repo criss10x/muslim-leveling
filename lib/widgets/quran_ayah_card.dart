@@ -11,6 +11,7 @@ class QuranAyahCard extends StatelessWidget {
   final bool active;
   final VoidCallback onPlay;
   final VoidCallback? onTafsir;
+  final VoidCallback? onShare;
 
   const QuranAyahCard({
     super.key,
@@ -19,6 +20,7 @@ class QuranAyahCard extends StatelessWidget {
     required this.active,
     required this.onPlay,
     this.onTafsir,
+    this.onShare,
   });
 
   @override
@@ -80,6 +82,14 @@ class QuranAyahCard extends StatelessWidget {
                       icon: const Icon(Icons.book_outlined),
                       color: AppColors.onSurfaceVariant.withValues(alpha: 0.6),
                       tooltip: 'Tafsir',
+                      visualDensity: VisualDensity.compact,
+                    ),
+                  if (onShare != null)
+                    IconButton(
+                      onPressed: onShare,
+                      icon: const Icon(Icons.share_outlined),
+                      color: AppColors.onSurfaceVariant.withValues(alpha: 0.6),
+                      tooltip: 'Bagikan ayat',
                       visualDensity: VisualDensity.compact,
                     ),
                   IconButton(

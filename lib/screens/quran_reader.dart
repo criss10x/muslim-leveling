@@ -12,6 +12,7 @@ import '../services/quran_settings.dart';
 import '../widgets/quran_ayah_card.dart';
 import '../widgets/quran_display_sheet.dart';
 import '../widgets/quran_player_bar.dart';
+import '../widgets/quran_share_sheet.dart';
 import '../widgets/quran_tafsir_sheet.dart';
 
 class QuranReader extends StatefulWidget {
@@ -277,6 +278,11 @@ class _QuranReaderState extends State<QuranReader> {
                       showTafsirSheet(context, t.first);
                     }
                   },
+                  onShare: () => showQuranShareSheet(
+                    context,
+                    surah: widget.surah,
+                    ayah: a,
+                  ),
                 );
               },
             ),
