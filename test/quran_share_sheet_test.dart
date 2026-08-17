@@ -18,7 +18,7 @@ void main() {
     translation: 'Dengan nama Allah yang Maha Pengasih lagi Maha Penyayang.',
   );
 
-  // Kumpulan swatch Semantics eksplisit (label = mode: Solid/Gradasi/Estetik).
+  // Swatch eksplisit dengan Semantics berlabel "Mode N" (solid 1..4, ll).
   List<Semantics> swatchOf(WidgetTester t, String label) =>
       t.widgetList<Semantics>(find.byType(Semantics))
           .where((s) => s.properties.label == label)
@@ -51,10 +51,10 @@ void main() {
     await tester.tap(find.text('Solid'));
     await tester.pumpAndSettle();
 
-    // pilih swatch solid ke-2 (index 1)
-    await tester.tap(findSwatch(tester, 'Solid', 1));
+    // pilih swatch solid ke-2 (label "Solid 2")
+    await tester.tap(findSwatch(tester, 'Solid 2', 0));
     await tester.pumpAndSettle();
-    expect(isSelected(swatchOf(tester, 'Solid')[1]), isTrue);
+    expect(isSelected(swatchOf(tester, 'Solid 2').first), isTrue);
 
     // → mode Gradasi, lalu balik Solid
     await tester.tap(find.text('Gradasi'));
@@ -63,8 +63,9 @@ void main() {
     await tester.pumpAndSettle();
 
     // pilihan solid ke-2 tetap terpilih, bukan reset ke pertama
-    final solid = swatchOf(tester, 'Solid');
-    expect(isSelected(solid[1]), isTrue);
-    expect(isSelected(solid[0]), isFalse);
+    final solid = swatchOf(tester, 'Solid 2');
+    expect(solid, hasLength(1));
+    expect(isSelected(solid.first), isTrue);
+    expect(isSelected(swatchOf(tester, 'Solid 1').first), isFalse);
   });
 }

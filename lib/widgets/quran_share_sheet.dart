@@ -178,6 +178,7 @@ class _QShareCard extends StatelessWidget {
                       Text(
                         surah.nameArabic,
                         textAlign: TextAlign.center,
+                        textDirection: TextDirection.rtl,
                         style: GoogleFonts.amiriQuran(
                           fontSize: 30,
                           fontWeight: FontWeight.w700,
@@ -436,14 +437,16 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    for (final p in presets)
+                    for (var k = 0; k < presets.length; k++) ...[
                       Semantics(
                         button: true,
-                        label: p.label,
-                        selected: _bgPresets.indexOf(p) == _presetIdx,
+                        label: presets.length == 1
+                            ? presets[k].label
+                            : '${presets[k].label} ${k + 1}',
+                        selected: _bgPresets.indexOf(presets[k]) == _presetIdx,
                         child: InkWell(
-                          onTap: () =>
-                              setState(() => _presetIdx = _bgPresets.indexOf(p)),
+                          onTap: () => setState(() =>
+                              _presetIdx = _bgPresets.indexOf(presets[k])),
                           borderRadius: BorderRadius.circular(12),
                           child: SizedBox(
                             width: 48,
@@ -453,8 +456,9 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
                                 duration: const Duration(milliseconds: 200),
                                 width: 40,
                                 height: 40,
-                                decoration: p.decoration.copyWith(
-                                  border: _bgPresets.indexOf(p) == _presetIdx
+                                decoration: presets[k].decoration.copyWith(
+                                  border: _bgPresets.indexOf(presets[k]) ==
+                                          _presetIdx
                                       ? Border.all(
                                           color: AppColors.primary, width: 2.5)
                                       : null,
@@ -465,6 +469,7 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
                           ),
                         ),
                       ),
+                    ],
                   ],
                 ),
                 const SizedBox(height: 16),
