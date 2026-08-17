@@ -1993,14 +1993,13 @@ class _BonusQuestState extends State<_BonusQuest> {
     final doneCount =
         _items.where((it) => GameService.isPrayerCheckedToday(it.$2)).length;
 
-    // ponytail: collapsed = on-time ATAU selesai; kalau kosong (mis. lewat
-    // tengah hari, belum ibadah), fallback tampilkan semua biar kartu tak kosong.
-    var visible = _items
+    // ponytail: collapsed = on-time ATAU selesai. Bisa kosong (tak ada sunnah
+    // aktif & belum ada yang dikerjakan) — header tetep ada, tap expand 9.
+    final visible = _items
         .where((it) =>
             GameService.isPrayerCheckedToday(it.$2) ||
             GameService.isSunnahOnTime(it.$2, t))
         .toList();
-    if (visible.isEmpty) visible = List.of(_items);
     final shown = _expanded ? _items : visible;
 
     return Column(

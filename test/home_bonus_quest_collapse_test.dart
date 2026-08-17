@@ -35,4 +35,23 @@ void main() {
     expect(find.text('Tahajjud'), findsOneWidget); // expanded → semua tampil
     expect(find.text("Ba'diyah Isya"), findsOneWidget);
   });
+
+  testWidgets('no active sunnah → collapsed empty; expand still shows 9',
+      (t) async {
+    GameService.setTestNow('06:00'); // gap terbit(05:55)..terbit+15(06:10)
+    // → dhuha belum aktif, rawatib subuh sudah lewat, sisanya belum → semua off
+    await t.pumpWidget(const MaterialApp(home: Scaffold(body: HomeTab())));
+    await t.pump();
+    await t.pump();
+    await t.scrollUntilVisible(find.textContaining('BONUS QUEST'), 200);
+
+    // collapsed: tak ada sunnah on-time & tak ada selesai → daftar kosong.
+    expect(find.text('Dhuha'), findsNothing);
+    expect(find.text('Tahajjud'), findsNothing);
+
+    await t.tap(find.byIcon(Icons.expand_more));
+    await t.pumpAndSettle();
+    expect(find.text('Dhuha'), findsOneWidget);
+    expect(find.text('Tahajjud'), findsOneWidget);
+  });
 }
