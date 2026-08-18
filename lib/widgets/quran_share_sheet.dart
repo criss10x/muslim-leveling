@@ -41,7 +41,13 @@ final List<_BgPreset> _bgPresets = [
     'Solid',
     Icons.circle,
     _QShareBgKind.solid,
-    const BoxDecoration(color: Color(0xFF0B3D2E)),
+    const BoxDecoration(
+      gradient: RadialGradient(
+        center: Alignment(-0.35, -0.45),
+        radius: 1.4,
+        colors: [Color(0xFF1D6A45), Color(0xFF0B3D2E)],
+      ),
+    ),
     _kFg,
     _kSub,
   ),
@@ -49,7 +55,13 @@ final List<_BgPreset> _bgPresets = [
     'Solid',
     Icons.circle,
     _QShareBgKind.solid,
-    const BoxDecoration(color: Color(0xFF101E2B)),
+    const BoxDecoration(
+      gradient: RadialGradient(
+        center: Alignment(-0.35, -0.45),
+        radius: 1.4,
+        colors: [Color(0xFF244B73), Color(0xFF101E2B)],
+      ),
+    ),
     _kFg,
     _kSub,
   ),
@@ -57,7 +69,13 @@ final List<_BgPreset> _bgPresets = [
     'Solid',
     Icons.circle,
     _QShareBgKind.solid,
-    const BoxDecoration(color: Color(0xFF2B1B33)),
+    const BoxDecoration(
+      gradient: RadialGradient(
+        center: Alignment(-0.35, -0.45),
+        radius: 1.4,
+        colors: [Color(0xFF5A3570), Color(0xFF2B1B33)],
+      ),
+    ),
     _kFg,
     _kSub,
   ),
@@ -65,7 +83,13 @@ final List<_BgPreset> _bgPresets = [
     'Solid',
     Icons.circle,
     _QShareBgKind.solid,
-    const BoxDecoration(color: Color(0xFF3B2A10)),
+    const BoxDecoration(
+      gradient: RadialGradient(
+        center: Alignment(-0.35, -0.45),
+        radius: 1.4,
+        colors: [Color(0xFF6B4A1E), Color(0xFF3B2A10)],
+      ),
+    ),
     _kFg,
     _kSub,
   ),
@@ -78,7 +102,8 @@ final List<_BgPreset> _bgPresets = [
       gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: [Color(0xFF064E3B), Color(0xFF34D399)],
+        stops: [0.0, 0.5, 1.0],
+        colors: [Color(0xFF022C22), Color(0xFF0F766E), Color(0xFF34D399)],
       ),
     ),
     _kFg,
@@ -92,7 +117,8 @@ final List<_BgPreset> _bgPresets = [
       gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: [Color(0xFF3A2505), Color(0xFFF59E0B)],
+        stops: [0.0, 0.45, 1.0],
+        colors: [Color(0xFF1C0A02), Color(0xFF7C2D12), Color(0xFFFBBF24)],
       ),
     ),
     _kFg,
@@ -106,7 +132,8 @@ final List<_BgPreset> _bgPresets = [
       gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: [Color(0xFF1E1B4B), Color(0xFF6366F1)],
+        stops: [0.0, 0.5, 1.0],
+        colors: [Color(0xFF0F0A2E), Color(0xFF4338CA), Color(0xFFA5B4FC)],
       ),
     ),
     _kFg,
