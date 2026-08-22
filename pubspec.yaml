@@ -41,6 +41,14 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/mosque_bg.jpg
+    - assets/images/quran_bg_masjid_interior.jpg
+    - assets/images/quran_bg_taman_laut.jpg
+    - assets/images/quran_bg_malam_ufuk.jpg
+    - assets/images/quran_bg_masjid_pantai.jpg
+    - assets/images/quran_bg_fuji.jpg
+    - assets/images/quran_bg_karpet_balkon.jpg
+    - assets/images/quran_bg_taj_mahal.jpg
+    - assets/images/quran_bg_fractal.jpg
     - assets/images/logo_mark.png
     - assets/google_fonts/
     - assets/quran/

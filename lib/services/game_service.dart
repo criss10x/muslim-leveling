@@ -468,8 +468,12 @@ class GameState {
 
 class GameService {
   static const _key = 'game_state_v1';
+  static const _installDateKey = 'first_install_date';
   static GameState _cache = GameState();
   static GameState get current => _cache;
+
+  /// Tanggal instalasi pertama (YYYY-MM-DD) — ditulis sekali saat load().
+  static String? firstInstallDate;
 
   /// Bump on every state write so passive tabs (Jadwal) rebuild their
   /// derived UI. Mirrors PrayerService.locationVersion pattern.
@@ -489,6 +493,12 @@ class GameService {
 
   static Future<GameState> load() async {
     final p = await SharedPreferences.getInstance();
+    // Tulis tanggal instal sekali; user lama dapat tanggal load pertama.
+    firstInstallDate = p.getString(_installDateKey);
+    if (firstInstallDate == null) {
+      firstInstallDate = DateTime.now().toIso8601String().substring(0, 10);
+      await p.setString(_installDateKey, firstInstallDate!);
+    }
     final raw = p.getString(_key);
     var loaded = false;
     if (raw != null) {

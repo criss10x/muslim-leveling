@@ -1630,33 +1630,50 @@ class _ProfilTabState extends State<ProfilTab> {
     'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
   ];
 
-  /// Tanggal catatan paling awal, sebagai "sejak kapan" untuk total seumur
-  /// pakai. Null kalau belum ada catatan sama sekali.
+  /// Tanggal paling awal antara tanggal instal dan log pertama — proxy
+  /// terbaik untuk "sejak kapan", karena install date user lama baru
+  /// tercatat saat update ini pertama jalan.
   static String? _mulaiSejak(List<PrayerLog> logs) {
-    if (logs.isEmpty) return null;
-    final terlama = logs
-        .map((l) => l.date)
-        .where((d) => d.isNotEmpty)
-        .fold<String?>(null, (a, b) => a == null || b.compareTo(a) < 0 ? b : a);
-    if (terlama == null) return null;
+    String? sejak;
+    final install = GameService.firstInstallDate;
+    if (install != null && install.isNotEmpty) sejak = install;
+    for (final l in logs) {
+      if (l.date.isEmpty) continue;
+      if (sejak == null || l.date.compareTo(sejak) < 0) sejak = l.date;
+    }
+    if (sejak == null) return null;
 
-    final d = DateTime.tryParse(terlama);
+    final d = DateTime.tryParse(sejak);
     if (d == null) return null;
     return '${d.day} ${_namaBulan[d.month - 1]} ${d.year}';
   }
 
   Widget _stats() {
     final logs = GameService.current.prayerLog;
+    final state = GameService.current;
 
     int total(bool Function(PrayerLog) match) => logs.where(match).length;
 
     final wajib = total((l) => GameService.wajibList.contains(l.prayer));
-    final sunnah = total(
-      (l) => l.type == 'sunnah' || l.prayer.startsWith('rawatib'),
-    );
-    final tilawah = total((l) => l.prayer == 'tilawah');
+    final quranAyatTotal = state.lifeTotals['quran_ayat'] ?? 0;
+    final quranStreak = state.tilawahStreak.current;
+    final tilawahDailyAvg = state.quranXp.readAyatTotal > 0
+        ? '${state.quranXp.readAyatTotal.toInt()}'
+        : '0';
     final sejak = _mulaiSejak(logs);
-    final kosong = wajib == 0 && sunnah == 0 && tilawah == 0;
+    final kosong = wajib == 0;
+
+    Widget divider() => Column(
+          children: [
+            const SizedBox(height: AppSpacing.xs),
+            Divider(
+              height: 1,
+              thickness: 1,
+              color: AppColors.outlineVariant.withValues(alpha: 0.35),
+            ),
+            const SizedBox(height: AppSpacing.xs),
+          ],
+        );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1671,14 +1688,22 @@ class _ProfilTabState extends State<ProfilTab> {
               : Column(
                   children: [
                     _statRow(label: 'Sholat wajib', value: _angka(wajib)),
+                    divider(),
                     _statRow(
-                      label: 'Sunnah & rawatib',
-                      value: _angka(sunnah),
+                      label: 'Ayat Quran Terbaca',
+                      value: _angka(quranAyatTotal),
                     ),
+                    divider(),
                     _statRow(
-                      label: 'Tilawah',
-                      value: _angka(tilawah),
-                      denom: ' kali',
+                      label: 'Streak Baca Quran',
+                      value: '$quranStreak',
+                      denom: ' hari',
+                    ),
+                    divider(),
+                    _statRow(
+                      label: 'Rata-rata Harian',
+                      value: tilawahDailyAvg,
+                      denom: ' ayat',
                       last: sejak == null,
                     ),
                     if (sejak != null) _statsFooter(sejak),
@@ -1689,8 +1714,8 @@ class _ProfilTabState extends State<ProfilTab> {
     );
   }
 
-  /// "Sejak kapan" untuk total seumur pakai. Bukan tombol — sekadar keterangan
-  /// yang memberi konteks pada angka lifetime.
+  /// Keterangan "Sejak" di bawah kartu statistik — konteks waktu untuk
+  /// angka lifetime. Bukan tombol.
   Widget _statsFooter(String sejak) {
     return Padding(
       padding: const EdgeInsets.only(top: AppSpacing.sm),
@@ -1703,19 +1728,13 @@ class _ProfilTabState extends State<ProfilTab> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: AppSpacing.sm),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    'Sejak $sejak',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppText.bodyMd().copyWith(
-                      color: AppColors.onSurfaceVariant,
-                    ),
-                  ),
-                ),
-              ],
+            child: Text(
+              'Sejak $sejak',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppText.bodyMd().copyWith(
+                color: AppColors.onSurfaceVariant,
+              ),
             ),
           ),
         ],

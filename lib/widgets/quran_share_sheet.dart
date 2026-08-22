@@ -21,14 +21,20 @@ class _BgPreset {
   final BoxDecoration decoration;
   final Color fg;
   final Color sub;
+
+  /// Opasitas dasar scrim gelap untuk preset estetik: foto terang butuh
+  /// nilai tinggi agar teks putih terbaca, foto gelap boleh rendah.
+  /// 0 = tanpa scrim.
+  final double scrim;
   const _BgPreset(
     this.label,
     this.icon,
     this.kind,
     this.decoration,
     this.fg,
-    this.sub,
-  );
+    this.sub, {
+    this.scrim = 0,
+  });
 }
 
 // fg = teks utama, sub = teks sekunder -> putih di background gelap.
@@ -117,8 +123,8 @@ final List<_BgPreset> _bgPresets = [
       gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        stops: [0.0, 0.45, 1.0],
-        colors: [Color(0xFF1C0A02), Color(0xFF7C2D12), Color(0xFFFBBF24)],
+        stops: [0.0, 0.5, 1.0],
+        colors: [Color(0xFFF9CE34), Color(0xFFEE2A7B), Color(0xFF6228D7)],
       ),
     ),
     _kFg,
@@ -132,8 +138,35 @@ final List<_BgPreset> _bgPresets = [
       gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        stops: [0.0, 0.5, 1.0],
-        colors: [Color(0xFF0F0A2E), Color(0xFF4338CA), Color(0xFFA5B4FC)],
+        colors: [Color(0xFF00E5FF), Color(0xFF1200FF)],
+      ),
+    ),
+    _kFg,
+    _kSub,
+  ),
+  _BgPreset(
+    'Gradasi',
+    Icons.gradient,
+    _QShareBgKind.gradient,
+    const BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [Color(0xFFFFE53B), Color(0xFFFF2525)],
+      ),
+    ),
+    _kFg,
+    _kSub,
+  ),
+  _BgPreset(
+    'Gradasi',
+    Icons.gradient,
+    _QShareBgKind.gradient,
+    const BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [Color(0xFFBB73E0), Color(0xFFFF8DDB)],
       ),
     ),
     _kFg,
@@ -152,6 +185,119 @@ final List<_BgPreset> _bgPresets = [
     ),
     _kFg,
     _kSub,
+    scrim: 0.78,
+  ),
+  _BgPreset(
+    'Estetik',
+    Icons.image,
+    _QShareBgKind.esthetic,
+    const BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('assets/images/quran_bg_masjid_interior.jpg'),
+        fit: BoxFit.cover,
+      ),
+    ),
+    _kFg,
+    _kSub,
+    scrim: 0.62,
+  ),
+  _BgPreset(
+    'Estetik',
+    Icons.image,
+    _QShareBgKind.esthetic,
+    const BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('assets/images/quran_bg_taman_laut.jpg'),
+        fit: BoxFit.cover,
+      ),
+    ),
+    _kFg,
+    _kSub,
+    scrim: 0.68,
+  ),
+  _BgPreset(
+    'Estetik',
+    Icons.image,
+    _QShareBgKind.esthetic,
+    const BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('assets/images/quran_bg_malam_ufuk.jpg'),
+        fit: BoxFit.cover,
+      ),
+    ),
+    _kFg,
+    _kSub,
+    scrim: 0.30,
+  ),
+  _BgPreset(
+    'Estetik',
+    Icons.image,
+    _QShareBgKind.esthetic,
+    const BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('assets/images/quran_bg_masjid_pantai.jpg'),
+        fit: BoxFit.cover,
+      ),
+    ),
+    _kFg,
+    _kSub,
+    scrim: 0.55,
+  ),
+  _BgPreset(
+    'Estetik',
+    Icons.image,
+    _QShareBgKind.esthetic,
+    const BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('assets/images/quran_bg_fuji.jpg'),
+        fit: BoxFit.cover,
+      ),
+    ),
+    _kFg,
+    _kSub,
+    scrim: 0.65,
+  ),
+  _BgPreset(
+    'Estetik',
+    Icons.image,
+    _QShareBgKind.esthetic,
+    const BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('assets/images/quran_bg_karpet_balkon.jpg'),
+        fit: BoxFit.cover,
+      ),
+    ),
+    _kFg,
+    _kSub,
+    scrim: 0.55,
+  ),
+  _BgPreset(
+    'Estetik',
+    Icons.image,
+    _QShareBgKind.esthetic,
+    const BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('assets/images/quran_bg_taj_mahal.jpg'),
+        fit: BoxFit.cover,
+      ),
+    ),
+    _kFg,
+    _kSub,
+    scrim: 0.62,
+  ),
+  _BgPreset(
+    'Estetik',
+    Icons.image,
+    _QShareBgKind.esthetic,
+    const BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('assets/images/quran_bg_fractal.jpg'),
+        fit: BoxFit.cover,
+      ),
+    ),
+    _kFg,
+    _kSub,
+    scrim: 0.25,
   ),
 ];
 
@@ -236,8 +382,9 @@ class _QShareCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // Scrim gelap untuk latar estetik agar teks terbaca.
-          if (preset.kind == _QShareBgKind.esthetic)
+          // Scrim gelap untuk latar estetik agar teks terbaca. Kekuatan
+          // per-preset: foto terang butuh tinggi, foto gelap cukup rendah.
+          if (preset.kind == _QShareBgKind.esthetic && preset.scrim > 0)
             Positioned.fill(
               child: DecoratedBox(
                 decoration: BoxDecoration(
@@ -246,8 +393,12 @@ class _QShareCard extends StatelessWidget {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Colors.black.withValues(alpha: 0.45),
-                      Colors.black.withValues(alpha: 0.75),
+                      Colors.black.withValues(
+                        alpha: (preset.scrim - 0.28).clamp(0.10, 0.95),
+                      ),
+                      Colors.black.withValues(
+                        alpha: preset.scrim.clamp(0.10, 0.95),
+                      ),
                     ],
                   ),
                 ),
@@ -530,8 +681,10 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
                   ),
                   const SizedBox(height: 12),
                   // ── Pilihan warna/gambar dalam mode terpilih ──
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 8,
+                    runSpacing: 8,
                     children: [
                       for (var k = 0; k < presets.length; k++) ...[
                         Semantics(
