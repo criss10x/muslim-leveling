@@ -91,7 +91,14 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         try {
           await NotificationService.init();
           final granted = await NotificationService.requestPermission();
-          if (granted) await _scheduleAdhanFromPrefs();
+          if (granted) {
+            // Sama dengan toggle Profil: tanpa exact alarm jadwal gagal,
+            // tanpa battery exemption OEM (Xiaomi/Oppo/Vivo) membunuh
+            // alarm saat app ditutup → notif mati diam-diam.
+            await NotificationService.ensureExactAlarmPermission();
+            await NotificationService.ensureBatteryUnrestricted();
+            await _scheduleAdhanFromPrefs();
+          }
         } catch (_) {
           // ponytail: onboarding tetap selesai; pengingat bisa diaktifkan di Profil.
         }
