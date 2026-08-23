@@ -185,8 +185,10 @@ class _HomeTabState extends State<HomeTab> {
     if (levelsGained > 0 && mounted) {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (_) =>
-              NaikLevelScreen(xpGained: xp, levelsGained: levelsGained),
+          builder: (_) => NaikLevelScreen(
+              xpGained: xp,
+              levelsGained: levelsGained,
+              source: 'Sholat ${prayer[0].toUpperCase()}${prayer.substring(1)}'),
         ),
       );
     }
@@ -323,8 +325,10 @@ class _HomeTabState extends State<HomeTab> {
     if (levelsGained > 0 && mounted) {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (_) =>
-              NaikLevelScreen(xpGained: q.xpReward, levelsGained: levelsGained),
+          builder: (_) => NaikLevelScreen(
+              xpGained: q.xpReward,
+              levelsGained: levelsGained,
+              source: q.desc),
         ),
       );
     }

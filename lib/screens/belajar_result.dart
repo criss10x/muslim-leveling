@@ -370,7 +370,7 @@ class _BelajarResultScreenState extends State<BelajarResultScreen>
     if (!mounted) return;
     if (levelsGained > 0) {
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => NaikLevelScreen(xpGained: module.xpReward, levelsGained: levelsGained),
+        builder: (_) => NaikLevelScreen(xpGained: module.xpReward, levelsGained: levelsGained, source: module.title),
       ));
     } else {
       Navigator.of(context).push(MaterialPageRoute(

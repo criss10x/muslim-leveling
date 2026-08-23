@@ -49,7 +49,14 @@ class _SideQuestAnnouncerOverlayState
         if (mounted && e.$2 > 0) {
           await Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => NaikLevelScreen(levelsGained: e.$2),
+              builder: (_) => NaikLevelScreen(
+                levelsGained: e.$2,
+                source: switch (e.$1) {
+                  'zikir100' => 'Dzikir 100x',
+                  'tilawah' => 'Baca Quran',
+                  _ => 'Belajar Hadis',
+                },
+              ),
             ),
           );
         }
