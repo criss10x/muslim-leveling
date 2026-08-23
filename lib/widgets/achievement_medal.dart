@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../theme/app_theme.dart';
 import '../services/achievement_service.dart';
+import 'announcer_gate.dart';
 import 'common.dart';
 import 'share_card.dart';
 
@@ -228,6 +229,7 @@ class _AchievementAnnouncerOverlayState
   void initState() {
     super.initState();
     AchievementService.pendingAnnouncer.addListener(_drain);
+    AnnouncerGate.busy.addListener(_drain);
     // Sisa antrean dari sebelum widget mount (mis. aksi saat splash).
     WidgetsBinding.instance.addPostFrameCallback((_) => _drain());
   }
@@ -235,6 +237,7 @@ class _AchievementAnnouncerOverlayState
   @override
   void dispose() {
     AchievementService.pendingAnnouncer.removeListener(_drain);
+    AnnouncerGate.busy.removeListener(_drain);
     super.dispose();
   }
 
@@ -243,13 +246,18 @@ class _AchievementAnnouncerOverlayState
     _showing = true;
     // Loop sampai kosong: unlock baru bisa masuk saat popup sedang tampil.
     while (mounted) {
+      // Gerbang bersama: satu selebrasi pada satu waktu — side quest dan
+      // medali berbagi AnnouncerGate supaya dialog tidak race/stack.
+      if (AnnouncerGate.busy.value) break;
       final q = AchievementService.pendingAnnouncer.value;
       if (q.isEmpty) break;
       AchievementService.pendingAnnouncer.value = const [];
+      AnnouncerGate.busy.value = true;
       for (final def in q) {
         if (!mounted) break;
         await showAchievementUnlock(context, def);
       }
+      AnnouncerGate.busy.value = false;
     }
     _showing = false;
   }
