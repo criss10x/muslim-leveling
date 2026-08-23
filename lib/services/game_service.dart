@@ -1231,6 +1231,19 @@ class GameService {
     return (newState, xpGained, levelsGained);
   }
 
+  /// Antrean popup "side quest selesai" global — diisi auto-claim di bawah,
+  /// ditampilkan satu titik oleh SideQuestAnnouncerOverlay (DashboardShell).
+  /// Entry: (key prayer, levelsGained dari claim +15 XP-nya).
+  static final ValueNotifier<List<(String, int)>> pendingSideQuests =
+      ValueNotifier(const []);
+
+  static void _announceSideQuest(String prayer, int levelsGained) {
+    pendingSideQuests.value = [
+      ...pendingSideQuests.value,
+      (prayer, levelsGained),
+    ];
+  }
+
   static Future<(GameState, int, int)?> logPrayerAsync(
     String prayer,
     String type, {
@@ -1635,7 +1648,9 @@ class GameService {
     // Auto-claim side quest "Belajar Hadis" saat 5 hadis terbaca.
     if (ids.length >= hadisSideQuestTarget &&
         !isPrayerCheckedToday('hadis5')) {
+      final lvBefore = _cache.level;
       await logPrayerAsync('hadis5', 'side');
+      _announceSideQuest('hadis5', _cache.level - lvBefore);
     }
   }
 
@@ -1682,7 +1697,9 @@ class GameService {
     final today0 = todayStr();
     final projected = (zc0.date == today0 ? zc0.count : 0) + 1;
     if (projected >= zikirGoal && !isPrayerCheckedToday('zikir100')) {
+      final lvBefore = _cache.level;
       await logPrayerAsync('zikir100', 'side');
+      _announceSideQuest('zikir100', _cache.level - lvBefore);
     }
     final today = todayStr();
     final zc = _cache.zikirCounter;
@@ -1807,7 +1824,9 @@ class GameService {
     // Auto-claim side quest "Baca Quran" saat target ayat tercapai.
     if (_cache.quranXp.readAyatTotal >= quranSideQuestAyat &&
         !tilawahDoneToday) {
+      final lvBefore = _cache.level;
       await logPrayerAsync('tilawah', 'tilawah');
+      _announceSideQuest('tilawah', _cache.level - lvBefore);
     }
   }
 

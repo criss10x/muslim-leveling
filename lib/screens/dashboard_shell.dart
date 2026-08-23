@@ -3,6 +3,7 @@ import '../../theme/app_theme.dart';
 import '../../services/theme_service.dart';
 import '../../widgets/common.dart';
 import '../../widgets/achievement_medal.dart';
+import '../../widgets/side_quest_announcer.dart';
 import 'home_tab.dart';
 import 'jadwal_tab.dart';
 import 'quran_tab.dart';
@@ -68,6 +69,8 @@ class _DashboardShellState extends State<DashboardShell> {
                 ),
                 // Announcer global: popup medali unlock dari flow mana pun.
                 const AchievementAnnouncerOverlay(),
+                // Announcer global: popup side quest selesai (dzikir/quran/hadis).
+                const SideQuestAnnouncerOverlay(),
               ],
             ),
           ),
