@@ -2,4 +2,4 @@
 <!-- Icon dan suara hanya direferensikan lewat string saat runtime, jadi harus
      di-keep manual agar tidak dibuang resource shrinker di build release. -->
 <resources xmlns:tools="http://schemas.android.com/tools"
-    tools:keep="@drawable/ic_stat_notif,@raw/adzan" />
+    tools:keep="@drawable/ic_stat_notif,@raw/adzan,@raw/adzan_a1,@raw/adzan_a2,@raw/adzan_a4,@raw/adzan_a7,@raw/adzan_zahrani" />

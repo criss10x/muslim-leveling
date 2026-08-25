@@ -31,6 +31,7 @@ class _JadwalTabState extends State<JadwalTab> {
   // karena prefs async; dipakai sinkron di _schedule().
   Map<String, String> _perPrayerSounds = {};
   String _globalSound = 'adzan';
+  String _adzanVariant = 'adzan';
 
   @override
   void initState() {
@@ -65,10 +66,12 @@ class _JadwalTabState extends State<JadwalTab> {
     // bottom sheet di tab ini — selalu refresh supaya icon sinkron.
     final sounds = await NotificationService.getPerPrayerSounds();
     final global = await NotificationService.getSoundMode();
+    final variant = await NotificationService.getAdzanVariant();
     if (mounted) {
       setState(() {
         _perPrayerSounds = sounds;
         _globalSound = global;
+        _adzanVariant = variant;
       });
     }
     final loc = await PrayerService.loadLocation();
@@ -217,6 +220,11 @@ class _JadwalTabState extends State<JadwalTab> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
                 child: _schedule(),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                child: _adzanSoundCard(),
               ),
               const SizedBox(height: AppSpacing.lg),
               Padding(
@@ -890,6 +898,78 @@ class _JadwalTabState extends State<JadwalTab> {
           ],
         ),
       ),
+    );
+  }
+
+  /// Kartu pilihan suara adzan: radio per varian + tombol tes.
+  Widget _adzanSoundCard() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        HudHeader('SUARA ADZAN'),
+        Container(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          decoration: BoxDecoration(
+            color: AppColors.surfaceContainerLow,
+            borderRadius: BorderRadius.circular(AppRadius.xxl),
+            border: Border.all(
+              color: AppColors.outlineVariant.withValues(alpha: 0.3),
+            ),
+          ),
+          child: Column(
+            children: [
+              for (final (id, _, label) in NotificationService.adzanVariants)
+                InkWell(
+                  onTap: () async {
+                    if (id == _adzanVariant) return;
+                    await NotificationService.setAdzanVariant(id);
+                    if (mounted) setState(() => _adzanVariant = id);
+                  },
+                  borderRadius: BorderRadius.circular(AppRadius.md),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.xs,
+                      vertical: AppSpacing.sm,
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          id == _adzanVariant
+                              ? Icons.radio_button_checked_rounded
+                              : Icons.radio_button_off_rounded,
+                          size: 20,
+                          color: id == _adzanVariant
+                              ? AppColors.primary
+                              : AppColors.onSurfaceVariant,
+                        ),
+                        const SizedBox(width: AppSpacing.md),
+                        Expanded(
+                          child: Text(
+                            label,
+                            style: AppText.bodyMd().copyWith(
+                              color: id == _adzanVariant
+                                  ? AppColors.onSurface
+                                  : AppColors.onSurfaceVariant,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              const SizedBox(height: AppSpacing.xs),
+              SizedBox(
+                width: double.infinity,
+                child: TextButton.icon(
+                  onPressed: NotificationService.sendTestAdzanSound,
+                  icon: const Icon(Icons.play_circle_outline, size: 18),
+                  label: const Text('Tes suara'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 

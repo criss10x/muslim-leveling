@@ -53,7 +53,35 @@ class NotificationService {
   static const _legacyAdzanChannelId = 'adhan_sound_v1';
   static const _adzanChannelName = 'Adzan';
   static const _adzanChannelDesc = 'Notifikasi bersuara adzan saat masuk waktu sholat';
-  static const _adzanSound = RawResourceAndroidNotificationSound('adzan');
+
+  /// Katalog pilihan suara adzan: (id pref, resource res/raw, label UI).
+  /// 'adzan' = suara default versi lama. Channel Android immutable, jadi
+  /// tiap varian punya channel sendiri: `adhan_sound_v2` (default) dan
+  /// `adhan_sound_<id>_v1` untuk sisanya.
+  static const adzanVariants = [
+    ('adzan', 'adzan', 'Adzan Klasik'),
+    ('a1', 'adzan_a1', 'Adzan 1'),
+    ('a2', 'adzan_a2', 'Adzan 2'),
+    ('a4', 'adzan_a4', 'Adzan 4'),
+    ('a7', 'adzan_a7', 'Adzan 7'),
+    ('zahrani', 'adzan_zahrani', 'Mansour Al-Zahrani'),
+  ];
+  static const _prefAdzanVariant = 'adzan_variant';
+
+  /// Varian aktif (di-cache dari prefs saat init, diupdate setAdzanVariant)
+  /// supaya _detailsFor tetap sinkron tanpa baca prefs berulang.
+  static String _variant = 'adzan';
+
+  static String _variantChannelId(String v) =>
+      v == 'adzan' ? _adzanChannelId : 'adhan_sound_${v}_v1';
+
+  static String _variantResource(String v) =>
+      adzanVariants.firstWhere((e) => e.$1 == v,
+          orElse: () => adzanVariants.first).$2;
+
+  static String _variantLabel(String v) =>
+      adzanVariants.firstWhere((e) => e.$1 == v,
+          orElse: () => adzanVariants.first).$3;
 
   // Channel senyap — notif muncul tanpa suara (mode suara: senyap).
   static const _silentChannelId = 'adhan_silent_v1';
@@ -111,6 +139,13 @@ class NotificationService {
       onDidReceiveNotificationResponse: _onNotificationTap,
     );
 
+    // Muat pilihan suara adzan sebelum channel dibuat, supaya jadwal
+    // berikutnya langsung pakai channel varian yang benar.
+    final prefs = await SharedPreferences.getInstance();
+    _variant = prefs.getString(_prefAdzanVariant) ?? 'adzan';
+    // Guard versi lama/downgrade: id tak dikenal → kembali default.
+    if (!adzanVariants.any((e) => e.$1 == _variant)) _variant = 'adzan';
+
     // Create channel (Android 8+)
     await _createChannel();
 
@@ -129,22 +164,30 @@ class NotificationService {
       enableVibration: true,
     );
 
-    final adzanChannel = AndroidNotificationChannel(
-      _adzanChannelId,
-      _adzanChannelName,
-      description: _adzanChannelDesc,
-      importance: Importance.high,
-      sound: _adzanSound,
-      // Usage alarm supaya adzan tetap terdengar penuh, tidak dipotong
-      // aturan suara notifikasi biasa.
-      audioAttributesUsage: AudioAttributesUsage.alarm,
-      vibrationPattern: Int64List.fromList([0, 300, 200, 300]),
-      enableVibration: true,
-    );
-
     final androidPlugin = _plugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>();
+
+    // Satu channel per varian suara adzan — suara channel tidak bisa
+    // diubah setelah dibuat. Channel hanya dibuat untuk varian yang
+    // aktif; makeNotificationChannel idempotent (update bila sudah ada).
+    for (final (id, res, label) in adzanVariants) {
+      if (id != 'adzan' && id != _variant) continue;
+      final channel = AndroidNotificationChannel(
+        _variantChannelId(id),
+        id == 'adzan' ? _adzanChannelName : 'Adzan — $label',
+        description: _adzanChannelDesc,
+        importance: Importance.high,
+        sound: RawResourceAndroidNotificationSound(res),
+        // Usage alarm supaya adzan tetap terdengar penuh, tidak dipotong
+        // aturan suara notifikasi biasa.
+        audioAttributesUsage: AudioAttributesUsage.alarm,
+        vibrationPattern: Int64List.fromList([0, 300, 200, 300]),
+        enableVibration: true,
+      );
+      await androidPlugin?.createNotificationChannel(channel);
+    }
+
     final silentChannel = AndroidNotificationChannel(
       _silentChannelId,
       _silentChannelName,
@@ -160,7 +203,6 @@ class NotificationService {
     await androidPlugin?.deleteNotificationChannel(_legacyAdzanChannelId);
     await androidPlugin?.deleteNotificationChannel(_legacyChannelId);
     await androidPlugin?.createNotificationChannel(androidChannel);
-    await androidPlugin?.createNotificationChannel(adzanChannel);
     await androidPlugin?.createNotificationChannel(silentChannel);
   }
 
@@ -168,12 +210,13 @@ class NotificationService {
   /// bisa cek/atur suaranya langsung. Fallback: pengaturan notifikasi app.
   static Future<void> openChannelSettings() async {
     const pkg = 'id.muslimleveling.muslim_leveling';
+    final channelId = _variantChannelId(_variant);
     try {
-      const intent = AndroidIntent(
+      final intent = AndroidIntent(
         action: 'android.settings.CHANNEL_NOTIFICATION_SETTINGS',
         arguments: {
           'android.provider.extra.APP_PACKAGE': pkg,
-          'android.provider.extra.CHANNEL_ID': _adzanChannelId,
+          'android.provider.extra.CHANNEL_ID': channelId,
         },
       );
       await intent.launch();
@@ -426,6 +469,37 @@ class NotificationService {
   }
 
   // ═══════════════════════════════════════════
+  //  Pilihan suara adzan (varian)
+  // ═══════════════════════════════════════════
+
+  /// Id varian suara adzan aktif ('adzan', 'a1', ...).
+  static Future<String> getAdzanVariant() async {
+    final prefs = await SharedPreferences.getInstance();
+    final v = prefs.getString(_prefAdzanVariant) ?? 'adzan';
+    return adzanVariants.any((e) => e.$1 == v) ? v : 'adzan';
+  }
+
+  /// Ganti suara adzan: pastikan channel varian baru ada, simpan pref,
+  /// lalu reschedule pengingat supaya jadwal berikutnya pakai suara baru.
+  static Future<void> setAdzanVariant(String variant) async {
+    if (!adzanVariants.any((e) => e.$1 == variant)) return;
+    if (!_initialized) await init();
+    if (variant != _variant) {
+      _variant = variant;
+      await _createChannel(); // buat channel varian baru (idempotent)
+    }
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_prefAdzanVariant, variant);
+    if (await isRemindersEnabled()) {
+      final city = prefs.getString(_prefCity) ?? '';
+      final timings = await _readTimingsFromPrefs(prefs);
+      if (city.isNotEmpty && timings.isNotEmpty) {
+        await _scheduleAlarms(city, timings);
+      }
+    }
+  }
+
+  // ═══════════════════════════════════════════
   //  Internal: scheduling logic
   // ═══════════════════════════════════════════
 
@@ -540,16 +614,17 @@ class NotificationService {
   }
 
   static NotificationDetails _detailsFor(_NotifSound sound) {
+    final isAdzan = sound == _NotifSound.adzan;
     final androidDetails = AndroidNotificationDetails(
       switch (sound) {
         _NotifSound.silent => _silentChannelId,
         _NotifSound.normal => _channelId,
-        _NotifSound.adzan => _adzanChannelId,
+        _NotifSound.adzan => _variantChannelId(_variant),
       },
       switch (sound) {
         _NotifSound.silent => _silentChannelName,
         _NotifSound.normal => _channelName,
-        _NotifSound.adzan => _adzanChannelName,
+        _NotifSound.adzan => 'Adzan${_variant == 'adzan' ? '' : ' — ${_variantLabel(_variant)}'}',
       },
       channelDescription: switch (sound) {
         _NotifSound.silent => _silentChannelDesc,
@@ -560,8 +635,10 @@ class NotificationService {
       priority: Priority.high,
       category: AndroidNotificationCategory.alarm,
       playSound: sound != _NotifSound.silent,
-      sound: sound == _NotifSound.adzan ? _adzanSound : null,
-      audioAttributesUsage: sound == _NotifSound.adzan
+      sound: isAdzan
+          ? RawResourceAndroidNotificationSound(_variantResource(_variant))
+          : null,
+      audioAttributesUsage: isAdzan
           ? AudioAttributesUsage.alarm
           : AudioAttributesUsage.notification,
       vibrationPattern: Int64List.fromList([0, 300, 200, 300]),
