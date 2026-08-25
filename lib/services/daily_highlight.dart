@@ -67,7 +67,7 @@ class DailyHighlightService {
     final doa = doas[highlightIndex(todayStr, doas.length)];
     var hadisId = 0; var hadisIdn = '';
     try {
-      final hd = await hadisApi.show(highlightIndex(todayStr, 2260) + 1);
+      final hd = await hadisApi.show(highlightIndex(todayStr, hadisTotalCount) + 1);
       hadisId = hd.id; hadisIdn = hd.idn;
     } catch (_) {
       // ponytail: offline → hadis kosong, kartu tetap tampil ayat+doa.

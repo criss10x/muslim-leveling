@@ -4,6 +4,7 @@ import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../services/hadis_api.dart';
 import '../../services/game_service.dart';
+import '../../services/daily_highlight.dart';
 
 /// Hadis — explore list (5/page) + search + hadis acak. API myquran v3.
 class HadisScreen extends StatefulWidget {
@@ -22,9 +23,21 @@ class _HadisScreenState extends State<HadisScreen> {
   int _searchTotal = 0;
   String? _error;
 
+  // ponytail: halaman awal di-seed per tanggal (pola Daily Highlight) —
+  // list berganti setiap reset hari, stabil sepanjang hari itu.
+  static const _totalPages =
+      (hadisTotalCount + hadisExplorePageSize - 1) ~/ hadisExplorePageSize;
+  final int _startPage = highlightIndex(GameService.todayStr(), _totalPages) + 1;
+  int _fetchedPages = 0;
+
   @override
   void initState() {
     super.initState();
+    // Tanpa listener, suffixIcon (X) tidak pernah muncul saat mengetik —
+    // kondisi text.isNotEmpty hanya dievaluasi di build.
+    _searchCtrl.addListener(() {
+      if (mounted) setState(() {});
+    });
     _load();
   }
 
@@ -40,14 +53,15 @@ class _HadisScreenState extends State<HadisScreen> {
       _error = null;
     });
     try {
-      final items = await hadisApi.explore(1);
+      final items = await hadisApi.explore(_startPage);
       if (!mounted) return;
       setState(() {
         _items
           ..clear()
           ..addAll(items);
-        _page = 1;
-        _hasMore = items.length == 5;
+        _page = _startPage;
+        _fetchedPages = 1;
+        _hasMore = items.length == 5 && _fetchedPages < _totalPages;
         _isSearch = false;
         _searchTotal = 0;
         _loading = false;
@@ -62,15 +76,21 @@ class _HadisScreenState extends State<HadisScreen> {
   }
 
   Future<void> _loadMore() async {
-    if (_loading || !_hasMore || _isSearch) return;
+    if (_loading || !_hasMore || _isSearch || _fetchedPages >= _totalPages) {
+      return;
+    }
     setState(() => _loading = true);
     try {
-      final items = await hadisApi.explore(_page + 1);
+      // Wrap: setelah halaman terakhir, lanjut dari halaman 1 — mulai
+      // di-seed per tanggal, jadi urutan penuh katalog tetap satu putaran.
+      final next = _page % _totalPages + 1;
+      final items = await hadisApi.explore(next);
       if (!mounted) return;
       setState(() {
         _items.addAll(items);
-        _page++;
-        _hasMore = items.length == 5;
+        _page = next;
+        _fetchedPages++;
+        _hasMore = items.length == 5 && _fetchedPages < _totalPages;
         _loading = false;
       });
     } catch (_) {
@@ -223,6 +243,30 @@ class _HadisScreenState extends State<HadisScreen> {
       return Center(
           child: CircularProgressIndicator(color: AppColors.primary));
     }
+    if (_items.isEmpty) {
+      // Hasil pencarian kosong: tanpa ini layar blank total.
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Tidak ada hadis ditemukan.',
+                  style: AppText.bodyMd()
+                      .copyWith(color: AppColors.onSurfaceVariant)),
+              if (_isSearch)
+                TextButton(
+                  onPressed: () {
+                    _searchCtrl.clear();
+                    _load();
+                  },
+                  child: const Text('Kembali ke daftar'),
+                ),
+            ],
+          ),
+        ),
+      );
+    }
     return RefreshIndicator(
       color: AppColors.primary,
       onRefresh: _load,
@@ -312,7 +356,7 @@ class _HadisScreenState extends State<HadisScreen> {
       child: Text(grade,
           style: AppText.labelCaps().copyWith(
               color: sahih ? AppColors.primary : AppColors.tertiary,
-              fontSize: 9)),
+              fontSize: 11)),
     );
   }
 }
@@ -360,6 +404,7 @@ class _HadisDetailScreenState extends State<HadisDetailScreen> {
               child: Row(
                 children: [
                   IconButton(
+                    tooltip: 'Kembali',
                     icon: Icon(Icons.arrow_back, color: AppColors.onBackground),
                     onPressed: () => Navigator.pop(context),
                   ),
@@ -427,7 +472,7 @@ class _HadisDetailScreenState extends State<HadisDetailScreen> {
       child: Text(grade,
           style: AppText.labelCaps().copyWith(
               color: sahih ? AppColors.primary : AppColors.tertiary,
-              fontSize: 9)),
+              fontSize: 11)),
     );
   }
 }
