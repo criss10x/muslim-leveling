@@ -1,3 +1,4 @@
+import 'adzan_sound_store.dart';
 import 'dart:convert';
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/foundation.dart';
@@ -72,8 +73,18 @@ class NotificationService {
   /// supaya _detailsFor tetap sinkron tanpa baca prefs berulang.
   static String _variant = 'adzan';
 
+  /// Content URI suara varian aktif. Null = varian default 'adzan' yang
+  /// masih berupa raw resource APK. Varian lain didownload on-demand dari
+  /// GitHub Releases (AdzanSoundStore) lalu dimainkan lewat FileProvider
+  /// content URI — sistem Android membaca suara channel di luar app, jadi
+  /// butuh URI + grant baca (AdzanSoundBridge.java).
+  static UriAndroidNotificationSound? _variantSound;
+
+  static const MethodChannel _soundChannel =
+      MethodChannel('muslim_leveling/adzan_sound');
+
   static String _variantChannelId(String v) =>
-      v == 'adzan' ? _adzanChannelId : 'adhan_sound_${v}_v1';
+      v == 'adzan' ? _adzanChannelId : 'adhan_sound_${v}_v2';
 
   static String _variantResource(String v) =>
       adzanVariants.firstWhere((e) => e.$1 == v,
@@ -145,6 +156,21 @@ class NotificationService {
     _variant = prefs.getString(_prefAdzanVariant) ?? 'adzan';
     // Guard versi lama/downgrade: id tak dikenal → kembali default.
     if (!adzanVariants.any((e) => e.$1 == _variant)) _variant = 'adzan';
+    // Restore content URI varian dari cache (unduh di sesi sebelumnya).
+    if (_variant != 'adzan') {
+      try {
+        _variantSound = await _soundForVariant(_variant);
+      } catch (e) {
+        debugPrint('[NotificationService] restore varian $_variant gagal: $e');
+      }
+      // Cache hilang (uninstall/reinstall) → channel tidak bisa dibuat
+      // dengan suara varian. Kembali ke default, dan tulis pref-nya supaya
+      // UI dan jadwal tetap konsisten.
+      if (_variantSound == null) {
+        _variant = 'adzan';
+        await prefs.setString(_prefAdzanVariant, 'adzan');
+      }
+    }
 
     // Create channel (Android 8+)
     await _createChannel();
@@ -171,14 +197,17 @@ class NotificationService {
     // Satu channel per varian suara adzan — suara channel tidak bisa
     // diubah setelah dibuat. Channel hanya dibuat untuk varian yang
     // aktif; makeNotificationChannel idempotent (update bila sudah ada).
-    for (final (id, res, label) in adzanVariants) {
+    for (final (id, _, label) in adzanVariants) {
       if (id != 'adzan' && id != _variant) continue;
       final channel = AndroidNotificationChannel(
         _variantChannelId(id),
         id == 'adzan' ? _adzanChannelName : 'Adzan — $label',
         description: _adzanChannelDesc,
         importance: Importance.high,
-        sound: RawResourceAndroidNotificationSound(res),
+        // Default = raw resource APK; varian = content URI file unduhan.
+        sound: id == 'adzan'
+            ? const RawResourceAndroidNotificationSound('adzan')
+            : _variantSound,
         // Usage alarm supaya adzan tetap terdengar penuh, tidak dipotong
         // aturan suara notifikasi biasa.
         audioAttributesUsage: AudioAttributesUsage.alarm,
@@ -186,6 +215,15 @@ class NotificationService {
         enableVibration: true,
       );
       await androidPlugin?.createNotificationChannel(channel);
+    }
+
+    // Channel varian v1 sudah yatim (resource mp3-nya tidak lagi dibundel
+    // di APK sejak download on-demand) — buang supaya tidak jadi channel
+    // bisu di pengaturan sistem.
+    for (final (id, _, _) in adzanVariants) {
+      if (id != 'adzan') {
+        await androidPlugin?.deleteNotificationChannel('adhan_sound_${id}_v1');
+      }
     }
 
     final silentChannel = AndroidNotificationChannel(
@@ -479,12 +517,40 @@ class NotificationService {
     return adzanVariants.any((e) => e.$1 == v) ? v : 'adzan';
   }
 
-  /// Ganti suara adzan: pastikan channel varian baru ada, simpan pref,
-  /// lalu reschedule pengingat supaya jadwal berikutnya pakai suara baru.
+  /// Sudah diunduh ke cache lokal? (untuk ikon centang/status di UI)
+  static Future<bool> isVariantDownloaded(String variant) async {
+    if (variant == 'adzan') return true;
+    return await AdzanSoundStore.cachedPath(_variantResource(variant)) != null;
+  }
+
+  /// Suara varian non-default: unduh (atau pakai cache) → FileProvider
+  /// content URI → UriAndroidNotificationSound.
+  /// Melempar error kalau gagal (UI menampilkan pesan + kembali ke default).
+  static Future<UriAndroidNotificationSound> _soundForVariant(
+    String variant,
+  ) async {
+    final path = await AdzanSoundStore.fetch(_variantResource(variant));
+    final uri = await _soundChannel.invokeMethod<String>(
+      'contentUri',
+      {'filePath': path},
+    );
+    if (uri == null || uri.isEmpty) {
+      throw StateError('content URI kosong untuk $variant');
+    }
+    return UriAndroidNotificationSound(uri);
+  }
+
+  /// Ganti suara adzan: download varian bila perlu, pastikan channel
+  /// varian baru ada, simpan pref, lalu reschedule pengingat supaya
+  /// jadwal berikutnya pakai suara baru.
   static Future<void> setAdzanVariant(String variant) async {
     if (!adzanVariants.any((e) => e.$1 == variant)) return;
     if (!_initialized) await init();
     if (variant != _variant) {
+      // Download bisa gagal — jangan ganti state sebelum suara siap.
+      if (variant != 'adzan') {
+        _variantSound = await _soundForVariant(variant);
+      }
       _variant = variant;
       await _createChannel(); // buat channel varian baru (idempotent)
     }
@@ -635,8 +701,12 @@ class NotificationService {
       priority: Priority.high,
       category: AndroidNotificationCategory.alarm,
       playSound: sound != _NotifSound.silent,
+      // Varian aktif: default = raw resource, sisanya content URI unduhan
+      // (sudah di-cache di _variantSound sejak init/setAdzanVariant).
       sound: isAdzan
-          ? RawResourceAndroidNotificationSound(_variantResource(_variant))
+          ? (_variant == 'adzan'
+                ? const RawResourceAndroidNotificationSound('adzan')
+                : _variantSound)
           : null,
       audioAttributesUsage: isAdzan
           ? AudioAttributesUsage.alarm

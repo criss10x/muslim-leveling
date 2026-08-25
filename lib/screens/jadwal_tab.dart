@@ -32,6 +32,8 @@ class _JadwalTabState extends State<JadwalTab> {
   Map<String, String> _perPrayerSounds = {};
   String _globalSound = 'adzan';
   String _adzanVariant = 'adzan';
+  // Varian yang sedang diunduh (null = tidak ada).
+  String? _downloadingVariant;
 
   @override
   void initState() {
@@ -902,6 +904,8 @@ class _JadwalTabState extends State<JadwalTab> {
   }
 
   /// Kartu pilihan suara adzan: radio per varian + tombol tes.
+  /// Varian selain default diunduh on-demand (~1-2MB) lalu dipakai
+  /// sebagai suara channel notifikasi.
   Widget _adzanSoundCard() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -919,49 +923,14 @@ class _JadwalTabState extends State<JadwalTab> {
           child: Column(
             children: [
               for (final (id, _, label) in NotificationService.adzanVariants)
-                InkWell(
-                  onTap: () async {
-                    if (id == _adzanVariant) return;
-                    await NotificationService.setAdzanVariant(id);
-                    if (mounted) setState(() => _adzanVariant = id);
-                  },
-                  borderRadius: BorderRadius.circular(AppRadius.md),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.xs,
-                      vertical: AppSpacing.sm,
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          id == _adzanVariant
-                              ? Icons.radio_button_checked_rounded
-                              : Icons.radio_button_off_rounded,
-                          size: 20,
-                          color: id == _adzanVariant
-                              ? AppColors.primary
-                              : AppColors.onSurfaceVariant,
-                        ),
-                        const SizedBox(width: AppSpacing.md),
-                        Expanded(
-                          child: Text(
-                            label,
-                            style: AppText.bodyMd().copyWith(
-                              color: id == _adzanVariant
-                                  ? AppColors.onSurface
-                                  : AppColors.onSurfaceVariant,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                _adzanVariantRow(id, label),
               const SizedBox(height: AppSpacing.xs),
               SizedBox(
                 width: double.infinity,
                 child: TextButton.icon(
-                  onPressed: NotificationService.sendTestAdzanSound,
+                  onPressed: _downloadingVariant == null
+                      ? NotificationService.sendTestAdzanSound
+                      : null,
                   icon: const Icon(Icons.play_circle_outline, size: 18),
                   label: const Text('Tes suara'),
                 ),
@@ -971,6 +940,93 @@ class _JadwalTabState extends State<JadwalTab> {
         ),
       ],
     );
+  }
+
+  Widget _adzanVariantRow(String id, String label) {
+    final selected = id == _adzanVariant;
+    final downloading = _downloadingVariant == id;
+    return InkWell(
+      onTap: downloading ? null : () => _pickAdzanVariant(id),
+      borderRadius: BorderRadius.circular(AppRadius.md),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.xs,
+          vertical: AppSpacing.sm,
+        ),
+        child: Row(
+          children: [
+            Icon(
+              selected
+                  ? Icons.radio_button_checked_rounded
+                  : Icons.radio_button_off_rounded,
+              size: 20,
+              color: selected
+                  ? AppColors.primary
+                  : AppColors.onSurfaceVariant,
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Text(
+                label,
+                style: AppText.bodyMd().copyWith(
+                  color: selected
+                      ? AppColors.onSurface
+                      : AppColors.onSurfaceVariant,
+                ),
+              ),
+            ),
+            // Status download: default selalu siap (bundled di APK).
+            if (downloading)
+              SizedBox.square(
+                dimension: 16,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AppColors.primary,
+                ),
+              )
+            else if (id != 'adzan')
+              FutureBuilder<bool>(
+                future: NotificationService.isVariantDownloaded(id),
+                builder: (context, snap) => Icon(
+                  snap.data == true
+                      ? Icons.check_circle_rounded
+                      : Icons.download_rounded,
+                  size: 18,
+                  color: selected
+                      ? AppColors.primary
+                      : AppColors.onSurfaceVariant,
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pickAdzanVariant(String id) async {
+    if (id == _adzanVariant) return;
+    final wasDownloaded = await NotificationService.isVariantDownloaded(id);
+    if (!wasDownloaded && mounted) {
+      setState(() => _downloadingVariant = id);
+    }
+    try {
+      await NotificationService.setAdzanVariant(id);
+      if (mounted) setState(() => _adzanVariant = id);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Gagal mengunduh suara adzan. Periksa koneksi lalu coba lagi.',
+              style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
+            ),
+            backgroundColor: AppColors.surfaceContainerLowest,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _downloadingVariant = null);
+    }
   }
 
   Widget _infoCard() {

@@ -7,5 +7,6 @@ class MainActivity : FlutterActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         ShareUtil.register(flutterEngine, this)
+        AdzanSoundBridge.register(flutterEngine, this)
     }
 }
