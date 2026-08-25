@@ -152,20 +152,6 @@ final List<_BgPreset> _bgPresets = [
       gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: [Color(0xFFFFE53B), Color(0xFFFF2525)],
-      ),
-    ),
-    _kFg,
-    _kSub,
-  ),
-  _BgPreset(
-    'Gradasi',
-    Icons.gradient,
-    _QShareBgKind.gradient,
-    const BoxDecoration(
-      gradient: LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
         colors: [Color(0xFFBB73E0), Color(0xFFFF8DDB)],
       ),
     ),
