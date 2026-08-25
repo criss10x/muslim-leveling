@@ -15,24 +15,26 @@ import 'share_card.dart';
 /// Warna gradient per tier — selaras palet app (emerald/cyan/gold) +
 /// crimson→gold untuk tier atas, senada dengan tier avatar profil.
 (Color, Color) tierColors(AchievementTier tier) => switch (tier) {
-      AchievementTier.rookie => (AppColors.primary, const Color(0xFF14B8A6)),
-      AchievementTier.elite =>
-        (AppColors.tertiary, AppColors.tertiaryFixed),
-      AchievementTier.gold =>
-        (AppColors.secondaryFixed, AppColors.secondaryFixedDim),
-      AchievementTier.epic =>
-        (const Color(0xFFDC2626), const Color(0xFFEC4899)),
-      AchievementTier.legendary =>
-        (const Color(0xFFF59E0B), const Color(0xFFDC2626)),
-    };
+  AchievementTier.rookie => (AppColors.primary, const Color(0xFF14B8A6)),
+  AchievementTier.elite => (AppColors.tertiary, AppColors.tertiaryFixed),
+  AchievementTier.gold => (
+    AppColors.secondaryFixed,
+    AppColors.secondaryFixedDim,
+  ),
+  AchievementTier.epic => (const Color(0xFFDC2626), const Color(0xFFEC4899)),
+  AchievementTier.legendary => (
+    const Color(0xFFF59E0B),
+    const Color(0xFFDC2626),
+  ),
+};
 
 String tierLabel(AchievementTier tier) => switch (tier) {
-      AchievementTier.rookie => 'ROOKIE',
-      AchievementTier.elite => 'ELITE',
-      AchievementTier.gold => 'GOLD',
-      AchievementTier.epic => 'EPIC',
-      AchievementTier.legendary => 'LEGENDARY',
-    };
+  AchievementTier.rookie => 'ROOKIE',
+  AchievementTier.elite => 'ELITE',
+  AchievementTier.gold => 'GOLD',
+  AchievementTier.epic => 'EPIC',
+  AchievementTier.legendary => 'LEGENDARY',
+};
 
 class AchievementMedal extends StatelessWidget {
   final AchievementDef def;
@@ -75,9 +77,12 @@ class AchievementMedal extends StatelessWidget {
         ],
       );
     } else {
-      glyph = Icon(def.icon, size: size * 0.38, color: glyphColor, shadows: [
-        Shadow(color: c1.withValues(alpha: 0.8), blurRadius: 12),
-      ]);
+      glyph = Icon(
+        def.icon,
+        size: size * 0.38,
+        color: glyphColor,
+        shadows: [Shadow(color: c1.withValues(alpha: 0.8), blurRadius: 12)],
+      );
     }
 
     return SizedBox(
@@ -91,8 +96,11 @@ class AchievementMedal extends StatelessWidget {
           legendary: unlocked && def.tier == AchievementTier.legendary,
         ),
         child: Center(
-          child: SizedBox(width: size * 0.55, height: size * 0.55,
-              child: Center(child: glyph)),
+          child: SizedBox(
+            width: size * 0.55,
+            height: size * 0.55,
+            child: Center(child: glyph),
+          ),
         ),
       ),
     );
@@ -269,8 +277,11 @@ class _AchievementAnnouncerOverlayState
 /// Popup announcer: medali masuk elastis, confetti. Light = solid GlassPanel
 /// (no BackdropFilter). Dark keeps soft glow title. Await until closed.
 Future<void> showAchievementUnlock(
-    BuildContext context, AchievementDef def) async {
+  BuildContext context,
+  AchievementDef def,
+) async {
   final (c1, _) = tierColors(def.tier);
+  final reduceMotion = MediaQuery.of(context).disableAnimations;
   await showGeneralDialog(
     context: context,
     barrierDismissible: true,
@@ -292,108 +303,131 @@ Future<void> showAchievementUnlock(
           children: [
             Padding(
               padding: const EdgeInsets.all(AppSpacing.xl),
-              child: GlassPanel(
-                padding: const EdgeInsets.all(AppSpacing.xl),
-                borderColor: c1.withValues(alpha: 0.5),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'ACHIEVEMENT UNLOCKED!',
-                      style: AppText.labelCaps().copyWith(
-                        color: AppColors.secondaryFixed,
-                        letterSpacing: 2,
+              child: Semantics(
+                label:
+                    'Achievement terbuka: ${def.title}. ${def.desc}. '
+                    'Tier ${tierLabel(def.tier)}.',
+                child: GlassPanel(
+                  padding: const EdgeInsets.all(AppSpacing.xl),
+                  borderColor: c1.withValues(alpha: 0.5),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'ACHIEVEMENT UNLOCKED!',
+                        style: AppText.labelCaps().copyWith(
+                          color: AppColors.secondaryFixed,
+                          letterSpacing: 2,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
-                    TweenAnimationBuilder<double>(
-                      tween: Tween(begin: 0.6, end: 1.0),
-                      duration: const Duration(milliseconds: 700),
-                      curve: Curves.elasticOut,
-                      builder: (_, scale, child) =>
-                          Transform.scale(scale: scale, child: child),
-                      child: ShimmerSweep(
-                        child: AchievementMedal(
-                            def: def, unlocked: true, size: 130),
+                      const SizedBox(height: AppSpacing.lg),
+                      TweenAnimationBuilder<double>(
+                        tween: Tween(begin: reduceMotion ? 1.0 : 0.6, end: 1.0),
+                        duration: reduceMotion
+                            ? Duration.zero
+                            : const Duration(milliseconds: 700),
+                        curve: Curves.elasticOut,
+                        builder: (_, scale, child) =>
+                            Transform.scale(scale: scale, child: child),
+                        child: ShimmerSweep(
+                          child: AchievementMedal(
+                            def: def,
+                            unlocked: true,
+                            size: 130,
+                          ),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
-                    Text(
-                      def.title,
-                      textAlign: TextAlign.center,
-                      style: AppText.displayHero(30).copyWith(
-                        color: c1,
-                        shadows: isLightTheme
-                            ? null
-                            : [
-                                Shadow(
-                                  color: c1.withValues(alpha: 0.7),
-                                  blurRadius: 18,
+                      const SizedBox(height: AppSpacing.lg),
+                      Semantics(
+                        header: true,
+                        child: Text(
+                          def.title,
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppText.displayHero(30).copyWith(
+                            color: c1,
+                            shadows: isLightTheme
+                                ? null
+                                : [
+                                    Shadow(
+                                      color: c1.withValues(alpha: 0.7),
+                                      blurRadius: 18,
+                                    ),
+                                  ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.xs),
+                      Text(
+                        def.desc,
+                        textAlign: TextAlign.center,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppText.bodyMd().copyWith(
+                          color: AppColors.onSurfaceVariant,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.xs),
+                      Text(
+                        tierLabel(def.tier),
+                        style: AppText.labelCaps().copyWith(
+                          color: c1,
+                          fontSize: 10,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.lg),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: HeroButton(
+                              label: 'MANTAP!',
+                              trailingIcon: Icons.emoji_events,
+                              onPressed: () => Navigator.of(ctx).pop(),
+                            ),
+                          ),
+                          const SizedBox(width: AppSpacing.sm),
+                          OutlinedButton(
+                            onPressed: () => showShareCard(context, def),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: c1,
+                              side: BorderSide(
+                                color: c1.withValues(alpha: 0.5),
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                  AppRadius.xl,
+                                ),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: AppSpacing.md,
+                                vertical: AppSpacing.md,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.share, size: 16, color: c1),
+                                const SizedBox(width: 6),
+                                Text(
+                                  'Bagikan',
+                                  style: AppText.bodyLg().copyWith(color: c1),
                                 ),
                               ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(height: AppSpacing.xs),
-                    Text(
-                      def.desc,
-                      textAlign: TextAlign.center,
-                      style: AppText.bodyMd()
-                          .copyWith(color: AppColors.onSurfaceVariant),
-                    ),
-                    const SizedBox(height: AppSpacing.xs),
-                    Text(
-                      tierLabel(def.tier),
-                      style: AppText.labelCaps()
-                          .copyWith(color: c1, fontSize: 10),
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: HeroButton(
-                            label: 'MANTAP!',
-                            trailingIcon: Icons.emoji_events,
-                            onPressed: () => Navigator.of(ctx).pop(),
-                          ),
-                        ),
-                        const SizedBox(width: AppSpacing.sm),
-                        OutlinedButton(
-                          onPressed: () => showShareCard(context, def),
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: c1,
-                            side: BorderSide(color: c1.withValues(alpha: 0.5)),
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(AppRadius.xl),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: AppSpacing.md,
-                              vertical: AppSpacing.md,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.share, size: 16, color: c1),
-                              const SizedBox(width: 6),
-                              Text(
-                                'Bagikan',
-                                style: AppText.bodyLg().copyWith(color: c1),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-            const Positioned.fill(
-              child: IgnorePointer(
-                child: ConfettiBurst(particleCount: 45),
+            // Confetti dihormati preference reduced motion.
+            if (!reduceMotion)
+              const Positioned.fill(
+                child: IgnorePointer(child: ConfettiBurst(particleCount: 45)),
               ),
-            ),
           ],
         ),
       ),
@@ -435,8 +469,9 @@ void showAchievementDetail(
             Text(
               def.desc,
               textAlign: TextAlign.center,
-              style: AppText.bodyMd()
-                  .copyWith(color: AppColors.onSurfaceVariant),
+              style: AppText.bodyMd().copyWith(
+                color: AppColors.onSurfaceVariant,
+              ),
             ),
             const SizedBox(height: AppSpacing.sm),
             Text(
@@ -448,6 +483,29 @@ void showAchievementDetail(
                 fontSize: 10,
               ),
             ),
+            if (unlocked) ...[
+              const SizedBox(height: AppSpacing.md),
+              // Path share utama dari grid: ikon pojok medali cuma penanda
+              // visual (< 44px), tombolnya di sini.
+              OutlinedButton.icon(
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                  showShareCard(context, def);
+                },
+                icon: Icon(Icons.share, size: 16, color: c1),
+                label: Text(
+                  'Bagikan',
+                  style: AppText.bodyLg().copyWith(color: c1),
+                ),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: c1,
+                  side: BorderSide(color: c1.withValues(alpha: 0.5)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(AppRadius.xl),
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),

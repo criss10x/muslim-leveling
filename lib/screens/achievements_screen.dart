@@ -3,7 +3,6 @@ import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../services/achievement_service.dart';
 import '../../widgets/achievement_medal.dart';
-import '../../widgets/share_card.dart';
 
 /// Galeri medali — dipisah dari tab Profil.
 ///
@@ -43,7 +42,11 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
               Expanded(
                 child: ListView(
                   padding: const EdgeInsets.fromLTRB(
-                      AppSpacing.md, 0, AppSpacing.md, AppSpacing.xl),
+                    AppSpacing.md,
+                    0,
+                    AppSpacing.md,
+                    AppSpacing.xl,
+                  ),
                   children: [
                     for (var i = 0; i < AchievementTier.values.length; i++)
                       Entrance(
@@ -73,17 +76,20 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
               PressableScale(
                 onTap: () => Navigator.pop(context),
                 child: Container(
-                  width: 40,
-                  height: 40,
+                  width: 44,
+                  height: 44,
                   decoration: BoxDecoration(
                     color: AppColors.surfaceContainerHigh,
                     shape: BoxShape.circle,
                     border: Border.all(
-                        color:
-                            AppColors.outlineVariant.withValues(alpha: 0.3)),
+                      color: AppColors.outlineVariant.withValues(alpha: 0.3),
+                    ),
                   ),
-                  child: Icon(Icons.arrow_back,
-                      color: AppColors.onSurface, size: 20),
+                  child: Icon(
+                    Icons.arrow_back,
+                    color: AppColors.onSurface,
+                    size: 20,
+                  ),
                 ),
               ),
               const SizedBox(width: AppSpacing.md),
@@ -91,9 +97,13 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('GALERI MEDALI',
-                        style: AppText.labelCaps().copyWith(
-                            color: AppColors.secondaryFixed, fontSize: 10)),
+                    Text(
+                      'GALERI MEDALI',
+                      style: AppText.labelCaps().copyWith(
+                        color: AppColors.secondaryFixed,
+                        fontSize: 10,
+                      ),
+                    ),
                     const SizedBox(height: 2),
                     Text('Achievements', style: AppText.displayHero(24)),
                   ],
@@ -106,12 +116,19 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: [
-              Text('$unlocked',
-                  style: AppText.displayHero(20)
-                      .copyWith(color: AppColors.secondaryFixed)),
-              Text(' / $total medali terbuka',
-                  style: AppText.bodyMd().copyWith(
-                      color: AppColors.onSurfaceVariant, fontSize: 12)),
+              Text(
+                '$unlocked',
+                style: AppText.displayHero(
+                  20,
+                ).copyWith(color: AppColors.secondaryFixed),
+              ),
+              Text(
+                ' / $total medali terbuka',
+                style: AppText.bodyMd().copyWith(
+                  color: AppColors.onSurfaceVariant,
+                  fontSize: 12,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: AppSpacing.xs),
@@ -121,8 +138,9 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
               value: pct,
               minHeight: 6,
               backgroundColor: AppColors.surfaceContainerHigh,
-              valueColor:
-                  AlwaysStoppedAnimation<Color>(AppColors.secondaryFixed),
+              valueColor: AlwaysStoppedAnimation<Color>(
+                AppColors.secondaryFixed,
+              ),
             ),
           ),
         ],
@@ -131,20 +149,21 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
   }
 
   Widget _tierSection(AchievementTier tier) {
-    final defs =
-        AchievementService.defs.where((d) => d.tier == tier).toList();
+    final defs = AchievementService.defs.where((d) => d.tier == tier).toList();
     if (defs.isEmpty) return const SizedBox.shrink();
 
-    final got =
-        defs.where((d) => AchievementService.isUnlocked(d.id)).length;
+    final got = defs.where((d) => AchievementService.isUnlocked(d.id)).length;
     final (accent, _) = tierColors(tier);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: AppSpacing.md),
-        HudHeader(_tierLabels[tier]!,
-            meta: '$got/${defs.length}', accent: accent),
+        HudHeader(
+          _tierLabels[tier]!,
+          meta: '$got/${defs.length}',
+          accent: accent,
+        ),
         GridView.count(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -196,15 +215,18 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
             Positioned(
               top: -2,
               right: -2,
-              child: GestureDetector(
-                onTap: () => showShareCard(context, d),
+              // Penanda visual saja (tap medali → detail → Bagikan);
+              // hit area 17px tidak lolos 44px, jangan jadi tap target.
+              child: IgnorePointer(
                 child: Container(
                   padding: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
                     color: AppColors.surfaceContainerHigh,
                     shape: BoxShape.circle,
                     border: Border.all(
-                        color: accent.withValues(alpha: 0.5), width: 1),
+                      color: accent.withValues(alpha: 0.5),
+                      width: 1,
+                    ),
                   ),
                   child: Icon(Icons.share, size: 11, color: accent),
                 ),

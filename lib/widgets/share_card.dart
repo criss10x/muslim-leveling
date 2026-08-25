@@ -19,24 +19,52 @@ import 'achievement_medal.dart';
 // ═══════════════════════════════════════════════════════════════
 
 /// Warna background + glow per tier untuk kartu.
+/// ponytail: warna hardcode (bukan AppColors) disengaja — kartu share adalah
+/// artefak gambar untuk IG/WA, harus tampil identik di tema light/dark.
 (Color bg1, Color bg2, Color glow, Color accent) _tierStyle(
-    AchievementTier tier, String id) {
+  AchievementTier tier,
+  String id,
+) {
   // Collector / Hall of Fame → gradient emas-merah premium
   if (id == 'collector' || id == 'hall_of_fame') {
-    return (const Color(0xFF1A0A0A), const Color(0xFF2D1810),
-        const Color(0xFFFFD700), const Color(0xFFDC2626));
+    return (
+      const Color(0xFF1A0A0A),
+      const Color(0xFF2D1810),
+      const Color(0xFFFFD700),
+      const Color(0xFFDC2626),
+    );
   }
   return switch (tier) {
-    AchievementTier.rookie => (const Color(0xFF000000), const Color(0xFF161C19),
-        const Color(0xFF6B7280), const Color(0xFF00A86B)),
-    AchievementTier.elite => (const Color(0xFF000000), const Color(0xFF0A2E22),
-        const Color(0xFF10B981), const Color(0xFF059669)),
-    AchievementTier.gold => (const Color(0xFF000000), const Color(0xFF1E1600),
-        const Color(0xFFFFD700), const Color(0xFFF59E0B)),
-    AchievementTier.epic => (const Color(0xFF000000), const Color(0xFF0D0828),
-        const Color(0xFF6366F1), const Color(0xFF8B5CF6)),
-    AchievementTier.legendary => (const Color(0xFF000000), const Color(0xFF1A0E00),
-        const Color(0xFFFFD700), const Color(0xFFDC2626)),
+    AchievementTier.rookie => (
+      const Color(0xFF000000),
+      const Color(0xFF161C19),
+      const Color(0xFF6B7280),
+      const Color(0xFF00A86B),
+    ),
+    AchievementTier.elite => (
+      const Color(0xFF000000),
+      const Color(0xFF0A2E22),
+      const Color(0xFF10B981),
+      const Color(0xFF059669),
+    ),
+    AchievementTier.gold => (
+      const Color(0xFF000000),
+      const Color(0xFF1E1600),
+      const Color(0xFFFFD700),
+      const Color(0xFFF59E0B),
+    ),
+    AchievementTier.epic => (
+      const Color(0xFF000000),
+      const Color(0xFF0D0828),
+      const Color(0xFF6366F1),
+      const Color(0xFF8B5CF6),
+    ),
+    AchievementTier.legendary => (
+      const Color(0xFF000000),
+      const Color(0xFF1A0E00),
+      const Color(0xFFFFD700),
+      const Color(0xFFDC2626),
+    ),
   };
 }
 
@@ -61,8 +89,7 @@ class _StarParticlePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _StarParticlePainter old) =>
-      old.phase != phase;
+  bool shouldRepaint(covariant _StarParticlePainter old) => old.phase != phase;
 }
 
 // ── Islamic geometric divider ──
@@ -186,13 +213,17 @@ class _ShareCardRender extends StatelessWidget {
 
                 // ── TIER LABEL ──
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 3,
+                  ),
                   decoration: BoxDecoration(
                     color: accent.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                        color: accent.withValues(alpha: 0.4), width: 0.5),
+                      color: accent.withValues(alpha: 0.4),
+                      width: 0.5,
+                    ),
                   ),
                   child: Text(
                     tierLabel(def.tier),
@@ -209,8 +240,10 @@ class _ShareCardRender extends StatelessWidget {
 
                 // ── BADGE NAME ──
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 10,
+                  ),
                   decoration: BoxDecoration(
                     color: bg2.withValues(alpha: 0.6),
                     borderRadius: BorderRadius.circular(12),
@@ -225,20 +258,25 @@ class _ShareCardRender extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: Text(
-                    def.title,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1.5,
-                      color: glow,
-                      shadows: [
-                        Shadow(
-                          color: glow.withValues(alpha: 0.6),
-                          blurRadius: 12,
-                        ),
-                      ],
+                  // Judul panjang: scale-down satu baris, jangan wrap keluar
+                  // kolom fixed-height (hasil capture PNG ikut aman).
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      def.title,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.5,
+                        color: glow,
+                        shadows: [
+                          Shadow(
+                            color: glow.withValues(alpha: 0.6),
+                            blurRadius: 12,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -248,6 +286,8 @@ class _ShareCardRender extends StatelessWidget {
                 // ── USER INFO ──
                 Text(
                   '@$username',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
@@ -257,6 +297,8 @@ class _ShareCardRender extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   statLine,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 11,
                     color: AppColors.onSurfaceVariant,
@@ -266,6 +308,8 @@ class _ShareCardRender extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   'Rank: $rankTitle',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 10,
                     color: AppColors.secondaryFixed,
@@ -281,8 +325,11 @@ class _ShareCardRender extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.download, size: 10,
-                        color: accent.withValues(alpha: 0.6)),
+                    Icon(
+                      Icons.download,
+                      size: 10,
+                      color: accent.withValues(alpha: 0.6),
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       'Download Muslim Leveling',
@@ -318,25 +365,31 @@ Future<void> showShareCard(BuildContext context, AchievementDef def) async {
 
   final statLine = switch (def.id) {
     // Hero Streak medals
-    'double_kill' || 'triple_kill' || 'unstoppable' ||
-    'dominating' || 'maniac' || 'godlike' ||
-    'savage' || 'legendary'
-      => 'Hero Streak: $heroStreak hari 🔥',
+    'double_kill' ||
+    'triple_kill' ||
+    'unstoppable' ||
+    'dominating' ||
+    'maniac' ||
+    'godlike' ||
+    'savage' ||
+    'legendary' => 'Hero Streak: $heroStreak hari 🔥',
 
     // Per-prayer streaks
-    'subuh_solo_carry'
-      => 'Subuh Streak: ${state.perPrayerStreaks['subuh']?.best ?? 0} hari 🔥',
-    'jungler'
-      => 'Tilawah Streak: ${state.tilawahStreak.best} hari 🔥',
+    'subuh_solo_carry' =>
+      'Subuh Streak: ${state.perPrayerStreaks['subuh']?.best ?? 0} hari 🔥',
+    'jungler' => 'Tilawah Streak: ${state.tilawahStreak.best} hari 🔥',
 
     // Level-based
-    'rank_warrior' || 'rank_elite' || 'rank_master' ||
-    'rank_epic' || 'rank_mythic'
-      => 'Level saat ini: $level — ${GameService.getRankTitle(level)}',
+    'rank_warrior' ||
+    'rank_elite' ||
+    'rank_master' ||
+    'rank_epic' ||
+    'rank_mythic' =>
+      'Level saat ini: $level — ${GameService.getRankTitle(level)}',
 
     // Comeback
-    'comeback_real' || 'phoenix'
-      => 'Total comeback: ${state.comebackCount} kali 💪',
+    'comeback_real' ||
+    'phoenix' => 'Total comeback: ${state.comebackCount} kali 💪',
 
     // Precision
     'critical_hit' => '⚡ Tepat waktu sejak pertama',
@@ -409,10 +462,7 @@ class _SharePreviewDialogState extends State<_SharePreviewDialog>
       vsync: this,
       duration: const Duration(milliseconds: 600),
     );
-    _scaleAnim = CurvedAnimation(
-      parent: _animCtrl,
-      curve: Curves.elasticOut,
-    );
+    _scaleAnim = CurvedAnimation(parent: _animCtrl, curve: Curves.elasticOut);
     _animCtrl.forward();
 
     _starCtrl = AnimationController(
@@ -437,23 +487,23 @@ class _SharePreviewDialogState extends State<_SharePreviewDialog>
   Future<void> _captureAndShare() async {
     setState(() => _sharing = true);
     try {
-      final boundary = _repaintKey.currentContext?.findRenderObject()
-          as RenderRepaintBoundary?;
+      final boundary =
+          _repaintKey.currentContext?.findRenderObject()
+              as RenderRepaintBoundary?;
       if (boundary == null) {
-        if (mounted) setState(() => _sharing = false);
+        _fail('Gagal menyiapkan kartu. Coba lagi.');
         return;
       }
 
       final image = await boundary.toImage(pixelRatio: 3.0);
       final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
       if (bytes == null) {
-        if (mounted) setState(() => _sharing = false);
+        _fail('Gagal membuat gambar kartu. Coba lagi.');
         return;
       }
 
       final dir = await getTemporaryDirectory();
-      final file = File(
-          '${dir.path}/muslim_leveling_${widget.def.id}.png');
+      final file = File('${dir.path}/muslim_leveling_${widget.def.id}.png');
       await file.writeAsBytes(bytes.buffer.asUint8List());
 
       if (!mounted) return;
@@ -465,15 +515,22 @@ class _SharePreviewDialogState extends State<_SharePreviewDialog>
         'text': 'Aku unlock "${widget.def.title}" di Muslim Leveling! 🎮🕌',
       });
     } catch (_) {
-      // silent
+      _fail('Gagal membagikan kartu. Coba lagi.');
     }
     if (mounted) setState(() => _sharing = false);
   }
 
+  void _fail(String msg) {
+    if (!mounted) return;
+    setState(() => _sharing = false);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(msg), behavior: SnackBarBehavior.floating),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final (_, _, glow, accent) =
-        _tierStyle(widget.def.tier, widget.def.id);
+    final (_, _, glow, accent) = _tierStyle(widget.def.tier, widget.def.id);
     final hasStars = _starCtrl.isAnimating;
 
     return Dialog(
@@ -539,11 +596,13 @@ class _SharePreviewDialogState extends State<_SharePreviewDialog>
               ),
               const SizedBox(width: 12),
               // Tutup
-              _actionBtn(
-                icon: Icons.check,
-                label: 'Tutup',
-                color: AppColors.onSurfaceVariant,
-                onTap: () => Navigator.of(context).pop(),
+              Expanded(
+                child: _actionBtn(
+                  icon: Icons.check,
+                  label: 'Tutup',
+                  color: AppColors.onSurfaceVariant,
+                  onTap: () => Navigator.of(context).pop(),
+                ),
               ),
             ],
           ),
@@ -553,6 +612,8 @@ class _SharePreviewDialogState extends State<_SharePreviewDialog>
     );
   }
 
+  // ponytail: Expanded dipindah ke call-site — dulu kembalian Expanded
+  // dibungkus Expanded lagi (ParentDataWidget misuse).
   Widget _actionBtn({
     required IconData icon,
     required String label,
@@ -560,46 +621,42 @@ class _SharePreviewDialogState extends State<_SharePreviewDialog>
     bool loading = false,
     VoidCallback? onTap,
   }) {
-    return Expanded(
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: loading ? null : onTap,
-          borderRadius: BorderRadius.circular(14),
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(
-                color: color.withValues(alpha: 0.3),
-              ),
-            ),
-            child: loading
-                ? SizedBox(
-                    height: 18,
-                    width: 18,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: color,
-                    ),
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(icon, size: 16, color: color),
-                      const SizedBox(width: 6),
-                      Text(
-                        label,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: color,
-                        ),
-                      ),
-                    ],
-                  ),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: loading ? null : onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: color.withValues(alpha: 0.3)),
           ),
+          child: loading
+              ? SizedBox(
+                  height: 18,
+                  width: 18,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: color,
+                  ),
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(icon, size: 16, color: color),
+                    const SizedBox(width: 6),
+                    Text(
+                      label,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: color,
+                      ),
+                    ),
+                  ],
+                ),
         ),
       ),
     );
