@@ -60,10 +60,10 @@ class NotificationService {
   /// `adhan_sound_<id>_v1` untuk sisanya.
   static const adzanVariants = [
     ('adzan', 'adzan', 'Adzan Klasik'),
-    ('a1', 'adzan_a1', 'Adzan 1'),
-    ('a2', 'adzan_a2', 'Adzan 2'),
-    ('a4', 'adzan_a4', 'Adzan 4'),
-    ('a7', 'adzan_a7', 'Adzan 7'),
+    ('a1', 'adzan_a1', 'Ahmad al-Nafees'),
+    ('a2', 'adzan_a2', 'Hafiz Mustafa Özcan'),
+    ('a4', 'adzan_a4', "Dubai's One TV by Mishary Rashid Alafasy"),
+    ('a7', 'adzan_a7', 'Mishary Rashid Alafasy 2'),
     ('zahrani', 'adzan_zahrani', 'Mansour Al-Zahrani'),
   ];
   static const _prefAdzanVariant = 'adzan_variant';
