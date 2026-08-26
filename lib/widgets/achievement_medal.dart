@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
 import '../theme/app_theme.dart';
 import '../services/achievement_service.dart';
 import 'announcer_gate.dart';
@@ -261,9 +261,20 @@ class _AchievementAnnouncerOverlayState
       if (q.isEmpty) break;
       AchievementService.pendingAnnouncer.value = const [];
       AnnouncerGate.busy.value = true;
+      // Beat antisipasi 600ms: user tidak ditimpa popup di tengah
+      // dzikir/aksi (side quest pakai pola yang sama dengan 1200ms).
+      await Future<void>.delayed(const Duration(milliseconds: 600));
+      if (!mounted) break;
+      // Multi-unlock: tawarkan "Lewati semua" — user tidak dipaksa tap
+      // satu-satu sampai antrean habis.
+      var skipAll = false;
       for (final def in q) {
-        if (!mounted) break;
-        await showAchievementUnlock(context, def);
+        if (!mounted || skipAll) break;
+        await showAchievementUnlock(
+          context,
+          def,
+          onSkipAll: q.length > 1 ? () => skipAll = true : null,
+        );
       }
       AnnouncerGate.busy.value = false;
     }
@@ -276,18 +287,27 @@ class _AchievementAnnouncerOverlayState
 
 /// Popup announcer: medali masuk elastis, confetti. Light = solid GlassPanel
 /// (no BackdropFilter). Dark keeps soft glow title. Await until closed.
+/// [onSkipAll] kalau diberikan (multi-unlock) menampilkan tombol "Lewati
+/// semua" yang menutup popup ini dan sisa antrean.
 Future<void> showAchievementUnlock(
   BuildContext context,
-  AchievementDef def,
-) async {
+  AchievementDef def, {
+  VoidCallback? onSkipAll,
+}) async {
   final (c1, _) = tierColors(def.tier);
   final reduceMotion = MediaQuery.of(context).disableAnimations;
+  // Sinyal kinestetik saat popup muncul — satu baris, tanpa paket tambahan.
+  // Ponytail: heavyImpact untuk semua tier; kalau mau tier-aware (heavier
+  // untuk legendary) cukup switch def.tier.
+  HapticFeedback.heavyImpact();
   await showGeneralDialog(
     context: context,
     barrierDismissible: true,
     barrierLabel: 'achievement',
     barrierColor: Colors.black.withValues(alpha: 0.55),
-    transitionDuration: const Duration(milliseconds: 350),
+    transitionDuration: reduceMotion
+        ? Duration.zero
+        : const Duration(milliseconds: 350),
     transitionBuilder: (_, anim, __, child) => FadeTransition(
       opacity: anim,
       child: ScaleTransition(
@@ -314,7 +334,7 @@ Future<void> showAchievementUnlock(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'ACHIEVEMENT UNLOCKED!',
+                        'PENCAPAIAN TERBUKA!',
                         style: AppText.labelCaps().copyWith(
                           color: AppColors.secondaryFixed,
                           letterSpacing: 2,
@@ -368,14 +388,8 @@ Future<void> showAchievementUnlock(
                           color: AppColors.onSurfaceVariant,
                         ),
                       ),
-                      const SizedBox(height: AppSpacing.xs),
-                      Text(
-                        tierLabel(def.tier),
-                        style: AppText.labelCaps().copyWith(
-                          color: c1,
-                          fontSize: 10,
-                        ),
-                      ),
+                      // Tier tidak ditulis ulang: warna medali + Semantics
+                      // label sudah membawa informasinya (hapus chrome).
                       const SizedBox(height: AppSpacing.lg),
                       Row(
                         children: [
@@ -418,15 +432,33 @@ Future<void> showAchievementUnlock(
                           ),
                         ],
                       ),
+                      if (onSkipAll != null)
+                        TextButton(
+                          onPressed: () {
+                            onSkipAll();
+                            Navigator.of(ctx).pop();
+                          },
+                          child: Text(
+                            'Lewati semua',
+                            style: AppText.bodyMd().copyWith(
+                              color: AppColors.onSurfaceVariant,
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ),
               ),
             ),
-            // Confetti dihormati preference reduced motion.
+            // Confetti dihormati preference reduced motion; jumlah
+            // mengikuti tier (rookie 30 → legendary ~118).
             if (!reduceMotion)
-              const Positioned.fill(
-                child: IgnorePointer(child: ConfettiBurst(particleCount: 45)),
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: ConfettiBurst(
+                    particleCount: 30 + def.tier.index * 22,
+                  ),
+                ),
               ),
           ],
         ),
