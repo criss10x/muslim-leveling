@@ -94,20 +94,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
               ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'GALERI MEDALI',
-                      style: AppText.labelCaps().copyWith(
-                        color: AppColors.secondaryFixed,
-                        fontSize: 10,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text('Achievements', style: AppText.displayHero(24)),
-                  ],
-                ),
+                child: Text('Achievements', style: AppText.displayHero(24)),
               ),
             ],
           ),
@@ -164,6 +151,20 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
           meta: '$got/${defs.length}',
           accent: accent,
         ),
+        // Sinyal "hampir sampai" per tier (P2 critique): bar tipis di
+        // bawah tiap tier — global bar tidak bisa menyampaikan ini.
+        Padding(
+          padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(AppRadius.pill),
+            child: LinearProgressIndicator(
+              value: defs.isEmpty ? 0.0 : got / defs.length,
+              minHeight: 3,
+              backgroundColor: AppColors.surfaceContainerHigh,
+              valueColor: AlwaysStoppedAnimation<Color>(accent),
+            ),
+          ),
+        ),
         GridView.count(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -188,50 +189,24 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
         unlocked: unlocked,
         unlockedDate: AchievementService.unlockedDate(d.id),
       ),
-      child: Stack(
-        clipBehavior: Clip.none,
+      child: Column(
         children: [
-          Column(
-            children: [
-              AchievementMedal(def: d, unlocked: unlocked, size: 72),
-              const SizedBox(height: 6),
-              Expanded(
-                child: Text(
-                  d.title,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppText.labelCaps().copyWith(
-                    fontSize: 9,
-                    color: unlocked
-                        ? accent
-                        : AppColors.onSurfaceVariant.withValues(alpha: 0.6),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          if (unlocked)
-            Positioned(
-              top: -2,
-              right: -2,
-              // Penanda visual saja (tap medali → detail → Bagikan);
-              // hit area 17px tidak lolos 44px, jangan jadi tap target.
-              child: IgnorePointer(
-                child: Container(
-                  padding: const EdgeInsets.all(3),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceContainerHigh,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: accent.withValues(alpha: 0.5),
-                      width: 1,
-                    ),
-                  ),
-                  child: Icon(Icons.share, size: 11, color: accent),
-                ),
+          AchievementMedal(def: d, unlocked: unlocked, size: 72),
+          const SizedBox(height: 6),
+          Expanded(
+            child: Text(
+              d.title,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: AppText.labelCaps().copyWith(
+                fontSize: 9,
+                color: unlocked
+                    ? accent
+                    : AppColors.onSurfaceVariant.withValues(alpha: 0.6),
               ),
             ),
+          ),
         ],
       ),
     );

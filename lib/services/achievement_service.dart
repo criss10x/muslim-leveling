@@ -32,6 +32,12 @@ class AchievementDef {
   /// ala kill-count Mobile Legends. Kalau diisi, [icon] diabaikan.
   final String? glyphText;
 
+  /// Petunjuk konkret cara membuka medali. Ditampilkan saat dialog detail
+  /// dibuka untuk medali yang masih terkunci; null = sembunyikan.
+  /// Kalau tidak diisi, [unlockHint] akan di-derive dari [desc] (poin P0
+  /// critique: locked = dead end tanpa info).
+  final String? unlockHint;
+
   const AchievementDef({
     required this.id,
     required this.title,
@@ -39,7 +45,12 @@ class AchievementDef {
     required this.tier,
     this.icon,
     this.glyphText,
+    this.unlockHint,
   });
+
+  /// Hint yang ditampilkan ke user; kalau null, fallback ke [desc] singkat.
+  String get hint =>
+      unlockHint ?? 'Selesaikan: ${desc.toLowerCase()}.';
 }
 
 class AchievementService {
@@ -48,6 +59,7 @@ class AchievementService {
   static const defs = <AchievementDef>[
     AchievementDef(
       id: 'first_blood',
+      unlockHint: 'Catat 5 sholat wajib dalam satu hari (Subuh, Dzuhur, Ashar, Maghrib, Isya).',
       title: 'FIRST BLOOD!',
       desc: 'Selesaikan 5 sholat wajib dalam 1 hari (Hero Streak dimulai!)',
       tier: AchievementTier.rookie,
@@ -250,6 +262,7 @@ class AchievementService {
     ),
     AchievementDef(
       id: 'rank_mythic',
+      unlockHint: 'Naik level lewat XP dari ibadah harian — naik level 80 butuh waktu.',
       title: 'MYTHIC',
       desc: 'Capai Level 80 — Muslim Mythic!',
       tier: AchievementTier.legendary,
@@ -282,6 +295,7 @@ class AchievementService {
     ),
     AchievementDef(
       id: 'first_strike',
+      unlockHint: 'Sholat Subuh dalam 15 menit setelah adzan.',
       title: 'FIRST STRIKE',
       desc: 'Sholat Subuh ≤15 menit setelah adzan',
       tier: AchievementTier.elite,
@@ -289,6 +303,7 @@ class AchievementService {
     ),
     AchievementDef(
       id: 'sharpshooter',
+      unlockHint: '10× sholat tepat waktu (≤10 menit setelah adzan).',
       title: 'SHARPSHOOTER',
       desc: '10× sholat tepat waktu (≤10 menit)',
       tier: AchievementTier.gold,
@@ -305,6 +320,7 @@ class AchievementService {
     ),
     AchievementDef(
       id: 'phoenix',
+      unlockHint: 'Setelah streak putus, mulai lagi sampai tercatat 3 kali bangkit.',
       title: 'PHOENIX',
       desc: 'Bangkit 3× setelah streak putus — gak pernah nyerah',
       tier: AchievementTier.epic,
@@ -321,6 +337,7 @@ class AchievementService {
     ),
     AchievementDef(
       id: 'quiz_mvp',
+      unlockHint: 'Kerjakan kuis di akhir modul Belajar dan jawab semua benar (100%).',
       title: 'MVP',
       desc: 'Skor sempurna 100% di satu quiz',
       tier: AchievementTier.gold,
@@ -328,6 +345,7 @@ class AchievementService {
     ),
     AchievementDef(
       id: 'sage',
+      unlockHint: 'Selesaikan semua 16 modul Belajar (skor kuis terserah).',
       title: 'SAGE',
       desc: 'Tamatkan semua 16 modul Belajar',
       tier: AchievementTier.epic,
@@ -344,6 +362,7 @@ class AchievementService {
     ),
     AchievementDef(
       id: 'full_combo',
+      unlockHint: 'Dalam satu hari: catat 5 wajib + Tilawah + Dhuha.',
       title: 'FULL COMBO',
       desc: 'Dalam 1 hari: 5 wajib + Tilawah + Dhuha',
       tier: AchievementTier.epic,
@@ -351,6 +370,7 @@ class AchievementService {
     ),
     AchievementDef(
       id: 'collector',
+      unlockHint: 'Catat minimal 1× dari 9 jenis sunnah: Dhuha, Tahajjud, Rawatib (5 waktu × 2).',
       title: 'COLLECTOR',
       desc: 'Log semua 9 jenis sholat sunnah minimal 1×',
       tier: AchievementTier.epic,
@@ -358,6 +378,7 @@ class AchievementService {
     ),
     AchievementDef(
       id: 'hall_of_fame',
+      unlockHint: 'Buka semua achievement lainnya satu per satu — terakhir dari 88 medali biasa.',
       title: 'HALL OF FAME',
       desc: 'Buka semua achievement lainnya 👑',
       tier: AchievementTier.legendary,
@@ -395,6 +416,7 @@ class AchievementService {
     ),
     AchievementDef(
       id: 'sunnah_master',
+      unlockHint: 'Total catatan 9 jenis sholat sunnah (Dhuha, Rawatib, Tahajjud, dll).',
       title: 'SUNNAH MASTER',
       desc: '200 sholat sunnah total',
       tier: AchievementTier.legendary,
@@ -402,6 +424,7 @@ class AchievementService {
     ),
     AchievementDef(
       id: 'santri_scholar',
+      unlockHint: 'Selesaikan 40 modul di tab Belajar (saat ini 16 modul, naik bertahap).',
       title: 'SANTRI SCHOLAR',
       desc: 'Selesaikan 40 modul Belajar',
       tier: AchievementTier.epic,
@@ -409,6 +432,7 @@ class AchievementService {
     ),
     AchievementDef(
       id: 'early_bird',
+      unlockHint: '20× sholat tepat waktu (≤10 menit setelah adzan).',
       title: 'EARLY BIRD',
       desc: '20x sholat tepat waktu (±10m)',
       tier: AchievementTier.gold,
@@ -450,7 +474,9 @@ class AchievementService {
       desc: '1.000x sholat wajib', tier: AchievementTier.legendary, glyphText: '1000'),
     AchievementDef(id: 'wajib_mythic', title: 'WAJIB MYTHIC',
       desc: '1.500x sholat wajib', tier: AchievementTier.legendary, glyphText: '1500'),
-    AchievementDef(id: 'wajib_immortal', title: 'WAJIB IMMORTAL',
+    AchievementDef(id: 'wajib_immortal',
+      unlockHint: 'Total catatan sholat wajib kumulatif seumur hidup akun.',
+      title: 'WAJIB IMMORTAL',
       desc: '2.000x sholat wajib', tier: AchievementTier.legendary, glyphText: '2000'),
     // Quran ladder 10 → 6236 ayat
     AchievementDef(id: 'quran_novice', title: 'QURAN NOVICE',
@@ -469,7 +495,9 @@ class AchievementService {
       desc: 'Baca 2.000 ayat', tier: AchievementTier.epic, glyphText: '2000'),
     AchievementDef(id: 'quran_champion', title: 'QURAN CHAMPION',
       desc: 'Baca 4.000 ayat', tier: AchievementTier.legendary, glyphText: '4000'),
-    AchievementDef(id: 'quran_master', title: 'HAFIZH MASTER',
+    AchievementDef(id: 'quran_master',
+      unlockHint: 'Baca total 6.236 ayat (seluruh Al-Qur\'an) sejak pertama install.',
+      title: 'HAFIZH MASTER',
       desc: 'Baca 6.236 ayat (khatam)', tier: AchievementTier.legendary, glyphText: '6236'),
     // Hadis ladder 5x → 500x
     AchievementDef(id: 'hadis_rookie', title: 'HADIS ROOKIE',
@@ -493,7 +521,9 @@ class AchievementService {
       desc: 'Dzikir 1.000x', tier: AchievementTier.epic, glyphText: '1000'),
     AchievementDef(id: 'dzikir_master', title: 'DZIKIR MASTER',
       desc: 'Dzikir 10.000x', tier: AchievementTier.legendary, glyphText: '10000'),
-    AchievementDef(id: 'dzikir_legend', title: 'DZIKIR LEGEND',
+    AchievementDef(id: 'dzikir_legend',
+      unlockHint: 'Total hitungan dzikir dari tab Dzikir seumur hidup akun.',
+      title: 'DZIKIR LEGEND',
       desc: 'Dzikir 50.000x', tier: AchievementTier.legendary, glyphText: '50000'),
   ];
 

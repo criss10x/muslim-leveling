@@ -485,60 +485,84 @@ void showAchievementDetail(
       ),
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.lg),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AchievementMedal(def: def, unlocked: unlocked, size: 96),
-            const SizedBox(height: AppSpacing.md),
-            Text(
-              def.title,
-              textAlign: TextAlign.center,
-              style: AppText.headlineMd().copyWith(
-                color: unlocked ? c1 : AppColors.onSurfaceVariant,
-              ),
-            ),
-            const SizedBox(height: AppSpacing.xs),
-            Text(
-              def.desc,
-              textAlign: TextAlign.center,
-              style: AppText.bodyMd().copyWith(
-                color: AppColors.onSurfaceVariant,
-              ),
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            Text(
-              unlocked
-                  ? 'Terbuka ${unlockedDate ?? ''} • ${tierLabel(def.tier)}'
-                  : 'Terkunci • ${tierLabel(def.tier)}',
-              style: AppText.labelCaps().copyWith(
-                color: unlocked ? c1 : AppColors.onSurfaceVariant,
-                fontSize: 10,
-              ),
-            ),
-            if (unlocked) ...[
+        child: Semantics(
+          label:
+              '${unlocked ? "Terbuka" : "Terkunci"}: ${def.title}. '
+              '${def.desc}. Tier ${tierLabel(def.tier)}.',
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AchievementMedal(def: def, unlocked: unlocked, size: 96),
               const SizedBox(height: AppSpacing.md),
-              // Path share utama dari grid: ikon pojok medali cuma penanda
-              // visual (< 44px), tombolnya di sini.
-              OutlinedButton.icon(
-                onPressed: () {
-                  Navigator.of(ctx).pop();
-                  showShareCard(context, def);
-                },
-                icon: Icon(Icons.share, size: 16, color: c1),
-                label: Text(
-                  'Bagikan',
-                  style: AppText.bodyLg().copyWith(color: c1),
+              Text(
+                def.title,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: AppText.headlineMd().copyWith(
+                  color: unlocked ? c1 : AppColors.onSurfaceVariant,
                 ),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: c1,
-                  side: BorderSide(color: c1.withValues(alpha: 0.5)),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(AppRadius.xl),
+              ),
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                def.desc,
+                textAlign: TextAlign.center,
+                maxLines: 4,
+                overflow: TextOverflow.ellipsis,
+                style: AppText.bodyMd().copyWith(
+                  color: AppColors.onSurfaceVariant,
+                ),
+              ),
+              // P0 critique: locked medali harus mengajar — tunjukkan cara
+              // membukanya, bukan cuma label "Terkunci".
+              if (!unlocked)
+                Padding(
+                  padding: const EdgeInsets.only(top: AppSpacing.sm),
+                  child: Text(
+                    def.hint,
+                    textAlign: TextAlign.center,
+                    style: AppText.bodyMd().copyWith(
+                      color: AppColors.secondaryFixed,
+                    ),
                   ),
                 ),
+              const SizedBox(height: AppSpacing.sm),
+              Text(
+                unlocked
+                    ? 'Terbuka ${unlockedDate ?? ''} • ${tierLabel(def.tier)}'
+                    : 'Terkunci • ${tierLabel(def.tier)}',
+                style: AppText.labelCaps().copyWith(
+                  color: unlocked ? c1 : AppColors.onSurfaceVariant,
+                  fontSize: 10,
+                ),
               ),
+              if (unlocked) ...[
+                const SizedBox(height: AppSpacing.md),
+                // Path share utama dari grid: ikon pojok medali cuma penanda
+                // visual (< 44px), tombolnya di sini.
+                OutlinedButton.icon(
+                  onPressed: () {
+                    // P1 critique: share dulu, dialog detail tetap ada di
+                    // belakang share sheet — kalau share gagal, SnackBar
+                    // tampil dan user masih punya jalan kembali.
+                    showShareCard(context, def);
+                  },
+                  icon: Icon(Icons.share, size: 16, color: c1),
+                  label: Text(
+                    'Bagikan',
+                    style: AppText.bodyLg().copyWith(color: c1),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: c1,
+                    side: BorderSide(color: c1.withValues(alpha: 0.5)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppRadius.xl),
+                    ),
+                  ),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     ),
