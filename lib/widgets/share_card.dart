@@ -131,6 +131,7 @@ class _ShareCardRender extends StatelessWidget {
   final String statLine;
   final int level;
   final String rankTitle;
+  final String? unlockedDate;
 
   const _ShareCardRender({
     required this.def,
@@ -138,6 +139,7 @@ class _ShareCardRender extends StatelessWidget {
     required this.statLine,
     required this.level,
     required this.rankTitle,
+    this.unlockedDate,
   });
 
   @override
@@ -186,6 +188,8 @@ class _ShareCardRender extends StatelessWidget {
             child: Column(
               children: [
                 // ── HEADER ──
+                // Wordmark saja; tagline IDN yang kecil diabaikan (P0: mush
+                // di IG thumb). Nama pencapaian + medal jadi fokus utama.
                 Text(
                   'MUSLIM LEVELING',
                   style: TextStyle(
@@ -193,15 +197,6 @@ class _ShareCardRender extends StatelessWidget {
                     fontWeight: FontWeight.w800,
                     letterSpacing: 3,
                     color: accent.withValues(alpha: 0.7),
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  'Level Up Iman, Level Up Kehidupanmu',
-                  style: TextStyle(
-                    fontSize: 8,
-                    color: accent.withValues(alpha: 0.5),
-                    letterSpacing: 0.5,
                   ),
                 ),
 
@@ -320,27 +315,31 @@ class _ShareCardRender extends StatelessWidget {
                 const SizedBox(height: 16),
 
                 // ── FOOTER ──
+                // P0: ganti 'Download Muslim Leveling' dengan Alhamdulillah
+                // + tanggal unlock — kartu jadi terasa Islamic, audience
+                // dapat konteks (tanggal pencapaian), bukan iklan app.
                 _GeoDivider(color: accent),
                 const SizedBox(height: 6),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.download,
-                      size: 10,
-                      color: accent.withValues(alpha: 0.6),
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      'Download Muslim Leveling',
-                      style: TextStyle(
-                        fontSize: 8,
-                        color: accent.withValues(alpha: 0.6),
-                        letterSpacing: 1,
-                      ),
-                    ),
-                  ],
+                Text(
+                  'Alhamdulillah',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: accent,
+                    letterSpacing: 1.5,
+                  ),
                 ),
+                if (unlockedDate != null && unlockedDate!.isNotEmpty) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    'Diraih $unlockedDate',
+                    style: TextStyle(
+                      fontSize: 9,
+                      color: accent.withValues(alpha: 0.7),
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
@@ -360,11 +359,14 @@ Future<void> showShareCard(BuildContext context, AchievementDef def) async {
   final rankTitle = GameService.getRankTitle(state.level);
   final prefs = await SharedPreferences.getInstance();
   final username = prefs.getString('nickname') ?? 'Muslim Warrior';
+  final unlockedDate = AchievementService.unlockedDate(def.id);
   final level = state.level;
-  final heroStreak = max(state.heroStreak.current, state.heroStreak.best);
 
+  // P1: saat medal punya glyphText (jumlah besar di tengah), stat line
+  // hanya tampilkan KUALIFIER — angka tidak boleh duplikat (P0 legibility).
+  final hasGlyph = def.glyphText != null;
   final statLine = switch (def.id) {
-    // Hero Streak medals
+    // Hero Streak medals — jumlah dari glyphText, qualifier di sini
     'double_kill' ||
     'triple_kill' ||
     'unstoppable' ||
@@ -372,20 +374,21 @@ Future<void> showShareCard(BuildContext context, AchievementDef def) async {
     'maniac' ||
     'godlike' ||
     'savage' ||
-    'legendary' => 'Hero Streak: $heroStreak hari 🔥',
+    'legendary' =>
+      'hari Hero Streak 🔥',
 
     // Per-prayer streaks
     'subuh_solo_carry' =>
-      'Subuh Streak: ${state.perPrayerStreaks['subuh']?.best ?? 0} hari 🔥',
-    'jungler' => 'Tilawah Streak: ${state.tilawahStreak.best} hari 🔥',
+      'hari Subuh beruntun 🔥',
+    'jungler' => 'hari Tilawah beruntun 🔥',
 
-    // Level-based
+    // Level-based — jumlah level tidak ada glyph, biarkan tampil
     'rank_warrior' ||
     'rank_elite' ||
     'rank_master' ||
     'rank_epic' ||
     'rank_mythic' =>
-      'Level saat ini: $level — ${GameService.getRankTitle(level)}',
+      'Level $level — ${GameService.getRankTitle(level)}',
 
     // Comeback
     'comeback_real' ||
@@ -408,7 +411,7 @@ Future<void> showShareCard(BuildContext context, AchievementDef def) async {
     'hall_of_fame' => '👑 Kolektor sejati!',
 
     // Default: just show description
-    _ => def.desc,
+    _ => hasGlyph ? '' : def.desc,
   };
 
   if (!context.mounted) return;
@@ -423,6 +426,7 @@ Future<void> showShareCard(BuildContext context, AchievementDef def) async {
       statLine: statLine,
       level: level,
       rankTitle: rankTitle,
+      unlockedDate: unlockedDate,
     ),
   );
 }
@@ -433,6 +437,7 @@ class _SharePreviewDialog extends StatefulWidget {
   final String statLine;
   final int level;
   final String rankTitle;
+  final String? unlockedDate;
 
   const _SharePreviewDialog({
     required this.def,
@@ -440,6 +445,7 @@ class _SharePreviewDialog extends StatefulWidget {
     required this.statLine,
     required this.level,
     required this.rankTitle,
+    this.unlockedDate,
   });
 
   @override
@@ -486,7 +492,17 @@ class _SharePreviewDialogState extends State<_SharePreviewDialog>
 
   Future<void> _captureAndShare() async {
     setState(() => _sharing = true);
+    // P2: spinner tidak boleh flash — minimum tampil 300ms (capture bisa
+    // lebih cepat dari 16ms di perangkat cepat / re-share dengan cache OS).
+    final sw = Stopwatch()..start();
     try {
+      // P2: deterministik — partikel bintang di-freeze di fase tengah
+      // sebelum capture supaya PNG tidak berisi cluster setengah-jadi.
+      if (_starCtrl.isAnimating) {
+        _starCtrl.stop();
+        _starCtrl.value = 0.5;
+      }
+
       final boundary =
           _repaintKey.currentContext?.findRenderObject()
               as RenderRepaintBoundary?;
@@ -495,7 +511,10 @@ class _SharePreviewDialogState extends State<_SharePreviewDialog>
         return;
       }
 
-      final image = await boundary.toImage(pixelRatio: 3.0);
+      // P2: pixelRatio 3.375 → export 1080×1920 (ideal IG Story);
+      // sebelumnya 3.0 → 960×1707 (di bawah target platform).
+      final image = await boundary.toImage(pixelRatio: 3.375);
+      if (!mounted) return; // P2: guard setelah async gap
       final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
       if (bytes == null) {
         _fail('Gagal membuat gambar kartu. Coba lagi.');
@@ -507,15 +526,22 @@ class _SharePreviewDialogState extends State<_SharePreviewDialog>
       await file.writeAsBytes(bytes.buffer.asUint8List());
 
       if (!mounted) return;
-      setState(() => _saved = true);
 
       const channel = MethodChannel('muslim_leveling/share');
       await channel.invokeMethod('shareFile', {
         'filePath': file.path,
         'text': 'Aku unlock "${widget.def.title}" di Muslim Leveling! 🎮🕌',
       });
+      // P1: _saved baru boleh true setelah share intent sukses;
+      // kalau user batalkan di share sheet, label tidak flip ke 'Bagikan Lagi'.
+      if (mounted) setState(() => _saved = true);
     } catch (_) {
       _fail('Gagal membagikan kartu. Coba lagi.');
+    }
+    // P2: jangan flash — tunggu sampai minimal 300ms total.
+    final elapsed = sw.elapsedMilliseconds;
+    if (elapsed < 300) {
+      await Future<void>.delayed(Duration(milliseconds: 300 - elapsed));
     }
     if (mounted) setState(() => _sharing = false);
   }
@@ -556,6 +582,7 @@ class _SharePreviewDialogState extends State<_SharePreviewDialog>
                         statLine: widget.statLine,
                         level: widget.level,
                         rankTitle: widget.rankTitle,
+                        unlockedDate: widget.unlockedDate,
                       ),
                       // Star particles overlay (legendary/epic)
                       if (hasStars)
@@ -582,27 +609,21 @@ class _SharePreviewDialogState extends State<_SharePreviewDialog>
           const SizedBox(height: 16),
 
           // ── Action buttons ──
+          // P1: hierarki jelas — primary solid, secondary ghost
           Row(
             children: [
-              // Bagikan
               Expanded(
-                child: _actionBtn(
+                child: _primaryBtn(
                   icon: Icons.share,
-                  label: _saved ? 'Bagikan Lagi' : 'Bagikan ke Story',
-                  color: AppColors.primary,
+                  label: _saved ? 'Bagikan Lagi' : 'Bagikan',
                   loading: _sharing,
                   onTap: _captureAndShare,
                 ),
               ),
-              const SizedBox(width: 12),
-              // Tutup
-              Expanded(
-                child: _actionBtn(
-                  icon: Icons.check,
-                  label: 'Tutup',
-                  color: AppColors.onSurfaceVariant,
-                  onTap: () => Navigator.of(context).pop(),
-                ),
+              const SizedBox(width: 8),
+              _ghostBtn(
+                icon: Icons.close,
+                onTap: () => Navigator.of(context).pop(),
               ),
             ],
           ),
@@ -612,12 +633,12 @@ class _SharePreviewDialogState extends State<_SharePreviewDialog>
     );
   }
 
+  // P1: hierarki tombol jelas — primary filled, secondary ghost icon.
   // ponytail: Expanded dipindah ke call-site — dulu kembalian Expanded
   // dibungkus Expanded lagi (ParentDataWidget misuse).
-  Widget _actionBtn({
+  Widget _primaryBtn({
     required IconData icon,
     required String label,
-    required Color color,
     bool loading = false,
     VoidCallback? onTap,
   }) {
@@ -627,36 +648,54 @@ class _SharePreviewDialogState extends State<_SharePreviewDialog>
         onTap: loading ? null : onTap,
         borderRadius: BorderRadius.circular(14),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 14),
+          padding: const EdgeInsets.symmetric(vertical: 16),
           decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.15),
+            color: AppColors.primary,
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: color.withValues(alpha: 0.3)),
           ),
           child: loading
-              ? SizedBox(
-                  height: 18,
-                  width: 18,
+              ? const SizedBox(
+                  height: 20,
+                  width: 20,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: color,
+                    color: Colors.white,
                   ),
                 )
               : Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(icon, size: 16, color: color),
-                    const SizedBox(width: 6),
+                    Icon(icon, size: 18, color: Colors.white),
+                    const SizedBox(width: 8),
                     Text(
                       label,
-                      style: TextStyle(
-                        fontSize: 12,
+                      style: const TextStyle(
+                        fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: color,
+                        color: Colors.white,
                       ),
                     ),
                   ],
                 ),
+        ),
+      ),
+    );
+  }
+
+  Widget _ghostBtn({
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        customBorder: const CircleBorder(),
+        child: Container(
+          width: 48,
+          height: 48,
+          alignment: Alignment.center,
+          child: Icon(icon, size: 24, color: Colors.white),
         ),
       ),
     );
