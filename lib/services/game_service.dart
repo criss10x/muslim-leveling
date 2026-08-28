@@ -1174,7 +1174,6 @@ class GameService {
       _ => 15,
     };
 
-    final wajibList = ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya'];
     final isHeroCompletor =
         type == 'wajib' &&
         wajibList.every(
@@ -1865,8 +1864,8 @@ class GameService {
       return current;
     }
 
-    final lastChecked = DateTime.parse(state.lastCheckedDate);
-    final todayDate = DateTime.parse(today);
+    final lastChecked = _safeParseDate(state.lastCheckedDate, today);
+    final todayDate = _safeParseDate(today, today);
 
     var hero = state.heroStreak;
     var tilawah = state.tilawahStreak;
@@ -1958,7 +1957,9 @@ class GameService {
     }
     if (s.current > 0) {
       final recovered = (s.current * 0.75).floor().clamp(1, s.current);
-      return s.copyWith(current: recovered);
+      // Bug fix: tulis lastDate di recovery branch juga, supaya _updStreak
+      // besok tidak salah-increment (lama: chain stale sampai user re-log).
+      return s.copyWith(current: recovered, lastDate: evalDate);
     }
     return s;
   }
@@ -1988,6 +1989,16 @@ class GameService {
 
   static String _dateKey(DateTime d) =>
       '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+
+  /// Parse YYYY-MM-DD; kalau gagal (corrupted save) fallback ke todayKey
+  /// supaya daily refresh tidak crash dan streak di-evaluate ulang.
+  static DateTime _safeParseDate(String s, String todayKey) {
+    try {
+      return DateTime.parse(s);
+    } catch (_) {
+      return DateTime.parse(todayKey);
+    }
+  }
 
   /// Check if two dates are in different ISO weeks.
   /// ISO week: Monday = start of week. Week 1 = first week with Thursday.

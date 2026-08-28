@@ -1834,110 +1834,263 @@ class _ProfilTabState extends State<ProfilTab> {
   }
 
   Widget _prayerStreaks() {
-    final prayers = [
-      ('Subuh', 'subuh'),
-      ('Dzuhur', 'dzuhur'),
-      ('Ashar', 'ashar'),
-      ('Maghrib', 'maghrib'),
-      ('Isya', 'isya'),
-    ];
-    final streaks = GameService.current.perPrayerStreaks;
+    final state = GameService.current;
+    final streaks = state.perPrayerStreaks;
+    final haidMode = state.haidMode;
+    final todayKey = GameService.todayStr();
+    final yestKey = _yesterdayKey();
+
+    // Pakai wajibList dari game_service sebagai source of truth (sebelumnya
+    // hardcoded di sini + 2× duplikat di game_service). tambah shalat = 1 file.
+    final prayers = GameService.wajibList
+        .map((k) => (_prayerLabel(k), k))
+        .toList();
+
+    // P1: sort by 'weakest link' — yang paling berisiko pecah duluan
+    // (count==0 → belum mulai; lastDate older than today → at-risk).
+    prayers.sort((a, b) {
+      final sa = streaks[a.$2];
+      final sb = streaks[b.$2];
+      final aRisk = sa == null || sa.current == 0
+          ? 0
+          : (sa.lastDate == todayKey
+              ? 2
+              : (sa.lastDate == yestKey ? 1 : 0));
+      final bRisk = sb == null || sb.current == 0
+          ? 0
+          : (sb.lastDate == todayKey
+              ? 2
+              : (sb.lastDate == yestKey ? 1 : 0));
+      return aRisk.compareTo(bRisk);
+    });
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const HudHeader('STREAK PER SHOLAT'),
-        FlatCard(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: prayers.map((entry) {
-              final label = entry.$1;
-              final count = streaks[entry.$2]?.current ?? 0;
-              final active = count > 0;
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    label,
-                    style: AppText.labelCaps().copyWith(
-                      color: active
-                          ? AppColors.onSurface
-                          : AppColors.onSurfaceVariant,
-                      fontSize: 10,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.local_fire_department,
-                        size: 13,
-                        color: active
+        HudHeader(
+          'STREAK PER SHOLAT',
+          meta: haidMode ? 'mode haid · streak di-freeze' : null,
+        ),
+        Semantics(
+          container: true,
+          label: _prayerStreaksSemanticsLabel(streaks, haidMode),
+          child: FlatCard(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: prayers.map((entry) {
+                final label = entry.$1;
+                final key = entry.$2;
+                final s = streaks[key];
+                final count = s?.current ?? 0;
+                final best = s?.best ?? 0;
+                final freezeOk = s?.freezeAvailable ?? true;
+                final active = count > 0;
+                // P0: status 'hari ini' — lastDate == today = dot, == yest = at-risk.
+                final loggedToday = s?.lastDate == todayKey;
+                final atRisk =
+                    !loggedToday && s?.lastDate == yestKey && count > 0;
+                // haid: pakai snowflake bukan fire; suppress warning state.
+                final iconData = haidMode
+                    ? Icons.ac_unit
+                    : atRisk
+                        ? Icons.warning_amber_rounded
+                        : Icons.local_fire_department;
+                final accent = haidMode
+                    ? AppColors.tertiary
+                    : atRisk
+                        ? AppColors.error
+                        : (active
                             ? AppColors.secondaryFixed
-                            : AppColors.outlineVariant,
-                      ),
-                      const SizedBox(width: 2),
-                      Text(
-                        '$count',
-                        style: AppText.titleLg().copyWith(
-                          fontSize: 15,
-                          color: active
-                              ? AppColors.secondaryFixed
-                              : AppColors.onSurfaceVariant,
+                            : AppColors.outlineVariant);
+                final textColor = active || atRisk
+                    ? (haidMode
+                        ? AppColors.tertiary
+                        : atRisk
+                            ? AppColors.error
+                            : AppColors.secondaryFixed)
+                    : AppColors.onSurfaceVariant;
+
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // label + status dot (P0)
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          label,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis, // P3
+                          style: AppText.labelCaps().copyWith(
+                            color: active
+                                ? AppColors.onSurface
+                                : AppColors.onSurfaceVariant,
+                            fontSize: 10,
+                          ),
                         ),
+                        if (loggedToday) ...[
+                          const SizedBox(width: 3),
+                          Container(
+                            width: 4,
+                            height: 4,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(iconData, size: 13, color: accent),
+                        const SizedBox(width: 2),
+                        Text(
+                          '$count',
+                          maxLines: 1, // P3
+                          overflow: TextOverflow.ellipsis,
+                          style: AppText.titleLg().copyWith(
+                            fontSize: 15,
+                            color: textColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                    // P0: tampilkan best + freeze di micro-line
+                    Text(
+                      haidMode
+                          ? 'freeze'
+                          : (best > 0
+                              ? 'best $best${freezeOk ? ' · ❄' : ''}'
+                              : ''),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppText.bodyMd().copyWith(
+                        color: AppColors.onSurfaceVariant,
+                        fontSize: 9,
+                        height: 1.1,
                       ),
-                    ],
-                  ),
-                ],
-              );
-            }).toList(),
+                    ),
+                    // P2: unit 'hari' di belakang count, 10pt dim
+                    Text(
+                      'hari',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppText.bodyMd().copyWith(
+                        color: AppColors.onSurfaceVariant,
+                        fontSize: 9,
+                        height: 1.1,
+                      ),
+                    ),
+                  ],
+                );
+              }).toList(),
+            ),
           ),
         ),
-        if (streaks['jumat']?.current != null &&
-            streaks['jumat']!.current > 0) ...[
-          const SizedBox(height: AppSpacing.sm),
-          FlatCard(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.md,
-              vertical: AppSpacing.sm,
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.mosque, size: 18, color: AppColors.primary),
-                const SizedBox(width: AppSpacing.sm),
-                Text(
-                  'Jumat',
-                  style: AppText.bodyLg().copyWith(color: AppColors.onSurface),
-                ),
-                const Spacer(),
-                Icon(
-                  Icons.local_fire_department,
-                  size: 14,
-                  color: AppColors.secondaryFixed,
-                ),
-                const SizedBox(width: 3),
-                Text(
-                  '${streaks['jumat']!.current}',
-                  style: AppText.titleLg().copyWith(
-                    fontSize: 16,
-                    color: AppColors.secondaryFixed,
+        // P2: Friday row selalu render (best/4 minggu) untuk discoverability.
+        // Pakai best bukan current — Friday pecah weekly, current=1 kebanyakan.
+        Builder(builder: (_) {
+          final jumat = streaks['jumat'];
+          final bestJumat = jumat?.best ?? 0;
+          return Padding(
+            padding: const EdgeInsets.only(top: AppSpacing.sm),
+            child: FlatCard(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.sm,
+              ),
+              child: Row(
+                children: [
+                  Icon(haidMode ? Icons.ac_unit : Icons.mosque,
+                      size: 18,
+                      color: haidMode
+                          ? AppColors.tertiary
+                          : AppColors.primary),
+                  const SizedBox(width: AppSpacing.sm),
+                  Text(
+                    'Jumat',
+                    style:
+                        AppText.bodyLg().copyWith(color: AppColors.onSurface),
                   ),
-                ),
-                const SizedBox(width: 3),
-                Text(
-                  'minggu',
-                  style: AppText.bodyMd().copyWith(
-                    color: AppColors.onSurfaceVariant,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
+                  const Spacer(),
+                  if (haidMode) ...[
+                    Text(
+                      'mode haid',
+                      style: AppText.bodyMd().copyWith(
+                        color: AppColors.tertiary,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ] else ...[
+                    Icon(
+                      Icons.local_fire_department,
+                      size: 14,
+                      color: AppColors.secondaryFixed,
+                    ),
+                    const SizedBox(width: 3),
+                    Text(
+                      '$bestJumat',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppText.titleLg().copyWith(
+                        fontSize: 16,
+                        color: AppColors.secondaryFixed,
+                      ),
+                    ),
+                    const SizedBox(width: 3),
+                    Text(
+                      'minggu',
+                      style: AppText.bodyMd().copyWith(
+                        color: AppColors.onSurfaceVariant,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
-          ),
-        ],
+          );
+        }),
       ],
     );
+  }
+
+  String _prayerLabel(String key) => switch (key) {
+        'subuh' => 'Subuh',
+        'dzuhur' => 'Dzuhur',
+        'ashar' => 'Ashar',
+        'maghrib' => 'Maghrib',
+        'isya' => 'Isya',
+        _ => key,
+      };
+
+  /// YYYY-MM-DD untuk kemarin relatif ke hari ini.
+  String _yesterdayKey() {
+    final d = DateTime.now().subtract(const Duration(days: 1));
+    return '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+  }
+
+  /// Susun label untuk TalkBack: "Streak per salat. Subuh 7 hari. Dzuhur 0
+  /// hari. … Mode haid aktif: streak di-freeze." (atau tanpa mode-haid).
+  String _prayerStreaksSemanticsLabel(
+    Map<String, StreakState> streaks,
+    bool haidMode,
+  ) {
+    final todayKey = GameService.todayStr();
+    final parts = <String>['Streak per salat'];
+    for (final key in GameService.wajibList) {
+      final s = streaks[key];
+      final c = s?.current ?? 0;
+      final logged = s?.lastDate == todayKey;
+      parts.add(
+        '${_prayerLabel(key)} $c hari${logged ? ', sudah shalat hari ini' : ''}',
+      );
+    }
+    if (haidMode) parts.add('Mode haid aktif, streak di-freeze');
+    return parts.join('. ');
   }
 
   /// Ringkasan medali + pintu ke galeri.
