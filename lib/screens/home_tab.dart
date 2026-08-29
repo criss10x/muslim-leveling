@@ -14,6 +14,7 @@ import '../../services/daily_highlight.dart';
 import '../../services/quran_data.dart';
 import '../../widgets/xp_toast.dart';
 import 'naik_level_screen.dart';
+import 'quest_claim_screen.dart';
 import 'quran_reader.dart';
 import 'dzikir_screen.dart';
 
@@ -322,6 +323,11 @@ class _HomeTabState extends State<HomeTab> {
     showXpToast(context, q.xpReward);
     // XP quest bisa memicu medali rank (WARRIOR..MYTHIC).
     await AchievementService.refresh();
+    // Quest harian claim event: kalau level-up, NaikLevelScreen menang
+    // (register riang + confetti, sudah jadi expected user feedback).
+    // Kalau tidak, tampilkan QuestClaimScreen — layar singkat hangat
+    // yang affirmative ("Alhamdulillah", quote islami, dorongan).
+    // NaikLevelScreen lama masih jalan untuk events yang naik rank.
     if (levelsGained > 0 && mounted) {
       Navigator.of(context).push(
         MaterialPageRoute(
@@ -329,6 +335,18 @@ class _HomeTabState extends State<HomeTab> {
               xpGained: q.xpReward,
               levelsGained: levelsGained,
               source: q.desc),
+        ),
+      );
+    } else if (mounted) {
+      final claimed = _state.quests.where((x) => x.claimed).length;
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => QuestClaimScreen(
+            quest: q,
+            xpGained: q.xpReward,
+            claimedTodayCount: claimed,
+            isHaidMode: _state.haidMode,
+          ),
         ),
       );
     }
