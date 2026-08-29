@@ -41,20 +41,28 @@ class _QuestClaimScreenState extends State<QuestClaimScreen>
   }
 
   /// Kategori dari quest.id — cepat, deterministic.
-  /// Pool quest 15: 'subuh', 'dzuhur', 'maghrib', 'isya', 'tilawah',
-  /// 'dhuha', 'rawatib', 'sunnah', 'five_rings', 'timely', 'one_sunnah',
-  /// 'any_three', 'subuh_isya'. Tidak ada Quran/Hadis quest id sekarang.
+  /// Pool quest 20: 'subuh_tepat','dzuhur_tepat','maghrib_tepat',
+  /// 'isya_hadir','timely_prayers','five_rings','tilawah_today',
+  /// 'dhuha_before_dzuhur','rawatib_one','rawatib_two','one_sunnah',
+  /// 'subuh_isya','any_three','zikir_33','zikir_goal','dzikir_33_subuh',
+  /// 'quran_10ayat','quran_1halaman','hadis_3','hadis_5'.
   _QuestCategory get _category {
     final id = widget.quest.id;
-    if (id.contains('tilawah') || id.contains('dzikir')) return _QuestCategory.tilawah;
+    if (id.contains('hadis')) return _QuestCategory.hadis;
+    if (id.contains('quran') || id == 'quest_tilawah_today') {
+      return _QuestCategory.quran;
+    }
+    if (id.contains('zikir') || id.contains('dzikir')) {
+      return _QuestCategory.zikir;
+    }
+    if (id == 'quest_five_rings') return _QuestCategory.fiveRings;
+    if (id == 'quest_subuh_isya') return _QuestCategory.subuhIsya;
     if (id.contains('rawatib') || id.contains('dhuha') ||
-        id.contains('sunnah')) {
+        id == 'quest_one_sunnah') {
       return _QuestCategory.sunnah;
     }
-    if (id.contains('five_rings') || id.contains('subuh_isya') ||
-        id.contains('any_three') || id.contains('timely')) {
-      return _QuestCategory.streak;
-    }
+    // Sisa: subuh_tepat, dzuhur_tepat, maghrib_tepat, isya_hadir,
+    // timely_prayers, any_three — semua tentang disiplin wajib.
     return _QuestCategory.sholat;
   }
 
@@ -65,15 +73,16 @@ class _QuestClaimScreenState extends State<QuestClaimScreen>
     return q[i];
   }
 
-  /// Copy dorongan — varies by claim count + haid + at-risk.
+  /// Copy dorongan — spesifik untuk daily quest rotasi, bukan generik.
+  /// Pilih berdasarkan kategori quest (A-G), fallback ke H, dengan
+  /// round-robin per quest.id (deterministic, terasa 'tercatat').
   String _encouragement() {
     if (widget.isHaidMode) {
-      return 'Tetap dekat dengan-Nya. Setiap niat tercatat.';
+      return 'Tetap dekat dengan-Nya. Niat tercatat, amal tercatat.';
     }
-    final n = widget.claimedTodayCount;
-    if (n == 1) return 'Catatan kebaikan pertamamu hari ini.';
-    if (n == 2) return 'Istiqomah — satu lagi tercatat.';
-    return 'Terus lanjutkan, malaikat mencatat.';
+    final lines = _copyPool[_category] ?? _copyPool[_QuestCategory.sholat]!;
+    final i = widget.quest.id.hashCode.abs() % lines.length;
+    return lines[i];
   }
 
   @override
@@ -193,7 +202,7 @@ class _QuestClaimScreenState extends State<QuestClaimScreen>
   }
 }
 
-enum _QuestCategory { sholat, sunnah, tilawah, streak }
+enum _QuestCategory { sholat, sunnah, zikir, quran, hadis, fiveRings, subuhIsya }
 
 class _Quote {
   final String arabic;
@@ -231,7 +240,7 @@ const _quotes = <_QuestCategory, List<_Quote>>{
       'Dua rakaat shalat fajar lebih baik daripada dunia dan seisinya.',
     ),
   ],
-  _QuestCategory.tilawah: [
+  _QuestCategory.quran: [
     _Quote(
       'اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ',
       'Bacalah dengan menyebut nama Tuhanmu yang menciptakan.',
@@ -241,23 +250,112 @@ const _quotes = <_QuestCategory, List<_Quote>>{
       'Sesungguhnya orang-orang yang membaca kitab Allah dan mendirikan shalat... akan mendapat pahala yang berlipat.',
     ),
     _Quote(
-      'وَقَالَ الرَّسُولُ يَا رَبِّ إِنَّ قَوْمِي اتَّخَذُوا هَٰذَا الْقُرْآنَ مَهْجُورًا',
-      'Kami tidak akan meninggalkan Al-Qur\'an; ia penjaga kami di dunia dan syafaat di akhirat.',
+      'شَهِدَ اللَّهُ أَنَّهُ لَا إِلَٰهَ إِلَّا هُوَ',
+      'Allah menyatakan bahwa tidak ada tuhan selain Dia.',
     ),
   ],
-  _QuestCategory.streak: [
+  _QuestCategory.subuhIsya: [
     _Quote(
       'وَاعْبُدْ رَبَّكَ حَتَّىٰ يَأْتِيَكَ الْيَقِينُ',
-      'Sembahlah Tuhanmu sampai datang kepadamu keyakinan (ajal).',
+      'Sembahlah Tuhanmu sampai datang kepadamu keyakinan.',
     ),
     _Quote(
       'وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ مَخْرَجًا',
-      'Barangsiapa bertakwa kepada Allah, niscaya Dia akan membukakan jalan keluar.',
+      'Barangsiapa bertakwa kepada Allah, niscaya Dia membukakan jalan keluar.',
     ),
     _Quote(
       'لَا تَحْزَنْ إِنَّ اللَّهَ مَعَنَا',
-      'Janganlah kamu bersedih, sesungguhnya Allah bersama kita.',
+      'Janganlah bersedih, sesungguhnya Allah bersama kita.',
     ),
+  ],
+  _QuestCategory.zikir: [
+    _Quote(
+      'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ سُبْحَانَ اللَّهِ الْعَظِيمِ',
+      'Maha Suci Allah dan dengan puji-Nya, Maha Suci Allah yang Maha Agung.',
+    ),
+    _Quote(
+      'لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ',
+      'Tidak ada tuhan selain Allah, Maha Esa, tidak ada sekutu bagi-Nya.',
+    ),
+    _Quote(
+      'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ',
+      'Segala puji bagi Allah, Tuhan semesta alam.',
+    ),
+  ],
+  _QuestCategory.hadis: [
+    _Quote(
+      'إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ',
+      'Sesungguhnya setiap amal tergantung pada niatnya.',
+    ),
+    _Quote(
+      'مَنْ غَشَّنَا فَلَيْسَ مِنَّا',
+      'Barangsiapa menipu kami, dia bukan dari golongan kami.',
+    ),
+    _Quote(
+      'الْمُسْلِمُ مَنْ سَلِمَ الْمُسْلِمُونَ مِنْ لِسَانِهِ وَيَدِهِ',
+      'Muslim adalah yang menjaga kaum muslimin dari gangguan lisan dan tangannya.',
+    ),
+  ],
+  _QuestCategory.fiveRings: [
+    _Quote(
+      'الْعَبْدُ يُؤْجَرُ عَلَى كُلِّ شَيْءٍ حَتَّى فِتَاتِ التُّفَاحَةِ',
+      'Hamba diberi pahala atas setiap hal, bahkan potongan kecilnya.',
+    ),
+    _Quote(
+      'أَحَبُّ الْأَعْمَالِ إِلَى اللَّهِ أَدْوَمُهَا وَإِنْ قَلَّ',
+      'Amal yang paling dicintai Allah adalah yang paling konsisten, walau sedikit.',
+    ),
+    _Quote(
+      'مَنْ رَضِيَ بِقَسْمِ اللَّهِ كَانَ لَهُ أَجْرٌ عَظِيمٌ',
+      'Barangsiapa ridha dengan ketentuan Allah, dia mendapat pahala yang besar.',
+    ),
+  ],
+};
+
+/// Copy dorongan per kategori quest — round-robin per quest.id (deterministic).
+/// Spesifik untuk daily quest rotasi, bukan generik. Copy sudah di-humanize
+/// (hapus AI words, vague closings, formulaic sayings per humanizer SKILL §7-32).
+const _copyPool = <_QuestCategory, List<String>>{
+  _QuestCategory.sholat: [
+    'Adzan berkumandang, kamu berdiri lebih dulu.',
+    'Tepat waktu. Malaikat menambahkan catatan untukmu.',
+    'Khusyuk di awal waktu. Timbangannya berat.',
+    'Kamu datang sebelum keletihanmu sendiri.',
+  ],
+  _QuestCategory.sunnah: [
+    'Wajib sudah cukup. Kamu tambah lagi.',
+    'Tidak diminta, tidak dipaksa. Karena itu yang tulus.',
+    'Dua rakaat untuk-Nya, sebelum kamu lupa.',
+    'Yang Rasul lakukan, kamu lakukan juga.',
+  ],
+  _QuestCategory.zikir: [
+    'Lidahmu basah. Hati ikut basah.',
+    'Tiga puluh tiga kali, atau lebih. Tiap kali terasa ringan.',
+    'Subhanallah, subhanallah, subhanallah. Riak kecil di dadamu.',
+    'Hitungan selesai. Yang tersisa adalah rasa tenangnya.',
+  ],
+  _QuestCategory.quran: [
+    'Kalam-Nya melewati mata dan hatimu hari ini.',
+    'Ayat yang kamu baca, malaikat mengaminkannya.',
+    'Sedikit ayat, dibaca dengan khusyuk. Lebih utama dari banyak yang terburu.',
+    'Satu halaman tertutup. Tinggal menunggu yang besok.',
+  ],
+  _QuestCategory.hadis: [
+    'Kamu duduk bersama sunnahnya hari ini.',
+    'Sabda yang kamu baca, beliau ucapkan seribu tahun lalu.',
+    'Tiga hadis, tiga catatan. Salah satunya mungkin yang kamu butuhkan.',
+    'Kamu membaca, lalu hidup. Itu yang diminta.',
+  ],
+  _QuestCategory.fiveRings: [
+    'Lima waktu, satu hari. Tidak bolong satu pun.',
+    'Subuh, Dzuhur, Ashar, Maghrib, Isya. Kamu datang di semuanya.',
+    'Hati yang utuh biasanya begini.',
+    'Malaikat menutup catatan. Lengkap.',
+  ],
+  _QuestCategory.subuhIsya: [
+    'Dua ujung hari, satu hari yang utuh.',
+    'Kamu jaga Subuh. Kamu jaga Isya. Allah cukupkan sisanya.',
+    'Pagar berdiri. Hari ini lengkap.',
   ],
 };
 
@@ -310,8 +408,11 @@ class _CategoryIcon extends StatelessWidget {
     return switch (category) {
       _QuestCategory.sholat => Icons.mosque_outlined,
       _QuestCategory.sunnah => Icons.auto_awesome_outlined,
-      _QuestCategory.tilawah => Icons.menu_book_outlined,
-      _QuestCategory.streak => Icons.flag_outlined,
+      _QuestCategory.zikir => Icons.spa_outlined,
+      _QuestCategory.quran => Icons.menu_book_outlined,
+      _QuestCategory.hadis => Icons.format_quote_outlined,
+      _QuestCategory.fiveRings => Icons.workspace_premium_outlined,
+      _QuestCategory.subuhIsya => Icons.brightness_2_outlined,
     };
   }
 
