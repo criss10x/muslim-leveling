@@ -77,7 +77,13 @@ class _SplashScreenState extends State<SplashScreen>
       parent: _entryCtl,
       curve: const Interval(0.27, 1, curve: Curves.easeOutCubic),
     );
-    return Scaffold(
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        _navTimer?.cancel();
+        _navigate();
+      },
+      child: Scaffold(
       backgroundColor: AppColors.background,
       body: AmbientBackground(
         child: Center(
@@ -271,6 +277,7 @@ class _SplashScreenState extends State<SplashScreen>
             ),
           ),
         ),
+      ),
       ),
     );
   }

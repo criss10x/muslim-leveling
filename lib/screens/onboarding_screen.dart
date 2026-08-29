@@ -23,6 +23,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   late final AnimationController _entry = AnimationController(
       vsync: this, duration: const Duration(milliseconds: 600))
     ..forward();
+  final _nickCtrl = TextEditingController();
 
   int _page = 0;
   bool _busy = false;
@@ -32,6 +33,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   void dispose() {
     _pageCtrl.dispose();
     _entry.dispose();
+    _nickCtrl.dispose();
     super.dispose();
   }
 
@@ -105,7 +107,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       }
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('onboarding_done', true);
-      await prefs.setString('nickname', 'Pejuang');
+      final raw = _nickCtrl.text.trim();
+      // P2: nama pejuang opsional — kosong → "Pejuang" (tidak dipaksa).
+      final nick = raw.isEmpty ? 'Pejuang' : raw;
+      await prefs.setString('nickname', nick);
       if (!mounted) return;
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const DashboardShell()));
@@ -147,12 +152,22 @@ class _OnboardingScreenState extends State<OnboardingScreen>
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
+                style: TextButton.styleFrom(
+                  // P3: textbutton default ~36px, di-bawah 48dp guideline
+                  minimumSize: const Size(48, 48),
+                  tapTargetSize: MaterialTapTargetSize.padded,
+                ),
                 onPressed: _isLast || _busy ? null : _skip,
-                child: Text('Lewati',
-                    style: AppText.bodyMd().copyWith(
-                        color: _isLast || _busy
-                            ? AppColors.onSurfaceVariant.withValues(alpha: .4)
-                            : AppColors.onSurfaceVariant)),
+                child: Text(
+                  'Lewati',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppText.bodyMd().copyWith(
+                    color: _isLast || _busy
+                        ? AppColors.onSurfaceVariant.withValues(alpha: .4)
+                        : AppColors.onSurfaceVariant,
+                  ),
+                ),
               ),
             ),
             Expanded(
@@ -177,21 +192,53 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   Widget _page1() {
     return _PageBody(
       entry: _entry,
+      semanticsLabel: 'Langkah 1 dari 3: Selamat Datang',
       child: Column(
         children: [
           const Spacer(),
           const _Mascot(emoji: '🛡️'),
-          const SizedBox(height: AppSpacing.xl),
-          Text('Selamat Datang, Muslim Warrior!',
-              style: AppText.titleLg(), textAlign: TextAlign.center),
+          const SizedBox(height: AppSpacing.md),
+          // P1: live XP preview — show don't tell. Satu kartu mock
+          // langsung jawab "apa itu XP?" tanpa 43 kata copy.
+          const _MockXpCard(),
           const SizedBox(height: AppSpacing.md),
           Text(
-            'Muslim Leveling mengubah perjalanan ibadahmu jadi petualangan. '
-            'Selesaikan quest sholat, kumpulkan XP, naikkan level — '
-            'bangun kebiasaan sholat konsisten sedikit demi sedikit.',
+            'Selamat Datang, Muslim Warrior!',
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: AppText.titleLg(),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Text(
+            'Selesaikan quest sholat, kumpulkan XP, naikkan level.',
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
             style:
                 AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
             textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: AppSpacing.md),
+          // P2: input nama opsional — tidak dipaksa, soft placeholder.
+          TextField(
+            controller: _nickCtrl,
+            maxLength: 20,
+            maxLines: 1,
+            textCapitalization: TextCapitalization.words,
+            style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
+            decoration: InputDecoration(
+              hintText: 'Nama pejuang (opsional — kosong: Pejuang)',
+              hintStyle: AppText.bodyMd().copyWith(
+                  color: AppColors.onSurfaceVariant.withValues(alpha: 0.6)),
+              isDense: true,
+              contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 14, vertical: 12),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppRadius.md),
+                borderSide: BorderSide(color: AppColors.outlineVariant),
+              ),
+              counterText: '',
+            ),
           ),
           const Spacer(),
           HeroButton(
@@ -208,33 +255,45 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     final confirmed = _city != null;
     return _PageBody(
       entry: _entry,
+      semanticsLabel: 'Langkah 2 dari 3: Lokasi',
       child: Column(
         children: [
           const Spacer(),
           const _Mascot(emoji: '📍'),
           const SizedBox(height: AppSpacing.xl),
-          Text('Butuh Lokasimu',
-              style: AppText.titleLg(), textAlign: TextAlign.center),
+          Text(
+            'Butuh Lokasimu',
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: AppText.titleLg(),
+            textAlign: TextAlign.center,
+          ),
           const SizedBox(height: AppSpacing.md),
           Text(
             'Untuk menghitung jadwal sholat & arah qiblat yang akurat, '
             'kami perlu akses lokasi. Lokasi tidak dibagikan ke siapa pun — '
             'semua perhitungan terjadi di HP-mu.',
+            maxLines: 6,
+            overflow: TextOverflow.ellipsis,
             style:
                 AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: AppSpacing.md),
           if (confirmed)
-            Text('✓ $_city',
-                style:
-                    AppText.bodyMd().copyWith(color: Colors.green.shade700)),
+            Text(
+              '✓ $_city',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppText.bodyMd().copyWith(color: Colors.green.shade700),
+            ),
           const Spacer(),
           HeroButton(
               label: _busy
                   ? 'MENGAMBIL LOKASI...'
                   : (confirmed ? 'Lanjut' : 'Izinkan Lokasi'),
-              onPressed: _busy ? null : (confirmed ? _next : _allowLocation)),
+              onPressed:
+                  _busy ? null : (confirmed ? _next : _allowLocation)),
           const SizedBox(height: AppSpacing.sm),
           GhostButton(
               label: 'Pilih kota manual',
@@ -249,16 +308,24 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   Widget _page3() {
     return _PageBody(
       entry: _entry,
+      semanticsLabel: 'Langkah 3 dari 3: Pengingat Adzan',
       child: Column(
         children: [
           const Spacer(),
           const _Mascot(emoji: '🔔'),
           const SizedBox(height: AppSpacing.xl),
-          Text('Pengingat Adzan',
-              style: AppText.titleLg(), textAlign: TextAlign.center),
+          Text(
+            'Pengingat Adzan',
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: AppText.titleLg(),
+            textAlign: TextAlign.center,
+          ),
           const SizedBox(height: AppSpacing.md),
           Text(
             'Biar tidak kelewat, kami kirim pengingat saat waktu sholat tiba.',
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
             style:
                 AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
             textAlign: TextAlign.center,
@@ -268,6 +335,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
               label: _busy ? 'MENYALA...' : 'Izinkan Notifikasi',
               trailingIcon: Icons.notifications_active_outlined,
               onPressed: _busy ? null : () => _finish(enableNotif: true)),
+          const SizedBox(height: AppSpacing.sm),
+          // P0: escape dari halaman 3 — sebelumnya Lewati di-disable tanpa
+          // alternatif visible (user terjebak di permission notif).
+          GhostButton(
+              label: 'Lewati, nanti saja',
+              icon: Icons.close,
+              onPressed: _busy ? null : () => _finish(enableNotif: false)),
           const SizedBox(height: AppSpacing.lg),
         ],
       ),
@@ -276,22 +350,88 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 }
 
 /// Satu halaman onboarding dengan animasi fade+slide saat masuk.
+/// Wrap Semantics supaya TalkBack baca 'Langkah N dari 3'.
 class _PageBody extends StatelessWidget {
   final Animation<double> entry;
   final Widget child;
-  const _PageBody({required this.entry, required this.child});
+  final String semanticsLabel;
+  const _PageBody({
+    required this.entry,
+    required this.child,
+    required this.semanticsLabel,
+  });
 
   @override
   Widget build(BuildContext context) {
     final fade = CurvedAnimation(parent: entry, curve: Curves.easeOutCubic);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: FadeTransition(
-        opacity: fade,
-        child: SlideTransition(
-          position: Tween(begin: const Offset(0, 0.04), end: Offset.zero)
-              .animate(fade),
-          child: child,
+    return Semantics(
+      container: true,
+      label: semanticsLabel,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: FadeTransition(
+          opacity: fade,
+          child: SlideTransition(
+            position: Tween(begin: const Offset(0, 0.04), end: Offset.zero)
+                .animate(fade),
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Mock XP card — preview loop 'sholat → XP' di page 1.
+/// ponytail: reuses surfaceContainer/primary tokens, no new widgets.
+class _MockXpCard extends StatelessWidget {
+  const _MockXpCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: 'Contoh: Subuh selesai, ditambah 50 XP',
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceContainer,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          border: Border.all(color: AppColors.primary.withValues(alpha: 0.25)),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.primary.withValues(alpha: 0.12),
+              blurRadius: 10,
+              spreadRadius: 1,
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.check_circle, size: 18, color: AppColors.primary),
+            const SizedBox(width: 8),
+            Text(
+              'Subuh ✓',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppText.labelCaps().copyWith(color: AppColors.onSurface),
+            ),
+            const SizedBox(width: 10),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.primary,
+                borderRadius: BorderRadius.circular(99),
+              ),
+              child: Text(
+                '+50 XP',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppText.labelCapsSm()
+                    .copyWith(color: AppColors.surfaceContainerLowest),
+              ),
+            ),
+          ],
         ),
       ),
     );
