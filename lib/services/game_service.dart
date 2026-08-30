@@ -571,8 +571,21 @@ class GameService {
   static Future<void> setTimings(Timings t) =>
       _save(_cache.copyWith(timings: t));
 
-  static Future<void> setHaidMode(bool v) =>
-      _save(_cache.copyWith(haidMode: v));
+  /// Matikan haid: majukan lastCheckedDate ke hari ini supaya hari-hari haid
+  /// (tanpa log) TIDAK dievaluasi sebagai missed saat runDailyCheck berikutnya.
+  /// ponytail: fix P0 — haid freeze harus benar-benar freeze (tanpa rentang
+  /// haid tersimpan, ini cukup; rentang penuh jika butuh granularity).
+  static Future<void> setHaidMode(bool v) async {
+    final cur = _cache;
+    if (!v && cur.haidMode) {
+      await _save(cur.copyWith(
+        haidMode: v,
+        lastCheckedDate: todayStr(),
+      ));
+    } else {
+      await _save(cur.copyWith(haidMode: v));
+    }
+  }
   static bool get haidMode => _cache.haidMode;
 
   // ─── XP / Level ───
@@ -844,6 +857,9 @@ class GameService {
   }
 
   /// Restores one wajib-prayer streak after today's log is removed.
+  /// ponytail: fix P2 — jika lastDate==today (streak di-update hari ini oleh
+  /// log yang sekarang dihapus), jangan decrement: streak riwayat tidak
+  /// berubah hanya karena unlog, dan _updStreak besok tetap +1 dari sini.
   static StreakState restorePrayerStreakAfterUnlog(
     Iterable<PrayerLog> logs,
     String prayer, {
@@ -854,6 +870,10 @@ class GameService {
         .where((log) => log.prayer == prayer && log.type == 'wajib')
         .map((log) => log.date)
         .fold<String>('', (latest, date) => date.compareTo(latest) > 0 ? date : latest);
+    if (saved.lastDate == todayStr()) {
+      // Unlog hanya menghapus log hari ini; streak hari ini tidak dicabut.
+      return saved;
+    }
     return saved.copyWith(
       current: (saved.current - 1).clamp(0, 999999),
       lastDate: previousDate,
