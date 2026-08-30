@@ -1869,7 +1869,11 @@ class _ProfilTabState extends State<ProfilTab> {
       children: [
         HudHeader(
           'STREAK PER SHOLAT',
-          meta: haidMode ? 'mode haid · streak di-freeze' : null,
+          meta: haidMode
+              ? 'mode haid · streak di-freeze'
+              : (GameService.freezeShields > 0
+                  ? '❄️ ${GameService.freezeShields} shield'
+                  : null),
         ),
         Semantics(
           container: true,

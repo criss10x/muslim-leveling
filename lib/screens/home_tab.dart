@@ -1663,7 +1663,9 @@ class _HomeTabState extends State<HomeTab> {
   void _showChestReveal(ChestRevealState reveal) {
     final accent = reveal.isCosmetic
         ? AppColors.secondaryFixed
-        : AppColors.tertiary;
+        : reveal.isShield
+            ? AppColors.tertiary
+            : AppColors.primary;
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -1709,7 +1711,11 @@ class _HomeTabState extends State<HomeTab> {
                 ),
                 const SizedBox(height: AppSpacing.md),
                 Text(
-                  reveal.isCosmetic ? 'KOSMETIK BARU!' : 'REWARD DIDAPAT!',
+                  reveal.isCosmetic
+                      ? 'KOSMETIK BARU!'
+                      : reveal.isShield
+                          ? 'FREEZE SHIELD!'
+                          : 'REWARD DIDAPAT!',
                   style: AppText.labelCaps().copyWith(
                     color: accent,
                     fontSize: 12,
@@ -1723,7 +1729,18 @@ class _HomeTabState extends State<HomeTab> {
                   ).copyWith(color: AppColors.onSurface),
                   textAlign: TextAlign.center,
                 ),
-                if (!reveal.isCosmetic) ...[
+                if (reveal.isShield) ...[
+                  const SizedBox(height: AppSpacing.sm),
+                  Text(
+                    'Streak aman 1 hari saat lupa sholat. Total: ${reveal.shieldCount} ❄️',
+                    style: AppText.bodyMd().copyWith(
+                      color: AppColors.onSurfaceVariant,
+                      fontSize: 12,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+                if (!reveal.isCosmetic && !reveal.isShield) ...[
                   const SizedBox(height: AppSpacing.md),
                   // XP reward
                   Container(

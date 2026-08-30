@@ -288,6 +288,7 @@ class GameState {
   final bool haidMode; // menstruation mode: streaks frozen
   final List<String> ownedCosmetics; // cosmetic ids owned (earned/free)
   final Map<String, String> equipped; // slot name -> cosmetic id
+  final int freezeShields; // inventory freeze shield (dari daily chest), auto-pakai saat missed
   final String highlightSwipeDate; // YYYY-MM-DD ("" = never)
   final int highlightSwipeMask; // bit per page set = page claimed today
   /// Counter kumulatif seumur hidup (tidak reset harian) — untuk badge progresif.
@@ -314,6 +315,7 @@ class GameState {
     this.haidMode = false,
     this.ownedCosmetics = const [],
     this.equipped = const {},
+    this.freezeShields = 0,
     this.highlightSwipeDate = '',
     this.highlightSwipeMask = 0,
     Map<String, int>? lifeTotals,
@@ -348,6 +350,7 @@ class GameState {
     bool? haidMode,
     List<String>? ownedCosmetics,
     Map<String, String>? equipped,
+    int? freezeShields,
     String? highlightSwipeDate,
     int? highlightSwipeMask,
     Map<String, int>? lifeTotals,
@@ -371,6 +374,7 @@ class GameState {
     haidMode: haidMode ?? this.haidMode,
     ownedCosmetics: ownedCosmetics ?? this.ownedCosmetics,
     equipped: equipped ?? this.equipped,
+    freezeShields: freezeShields ?? this.freezeShields,
     highlightSwipeDate: highlightSwipeDate ?? this.highlightSwipeDate,
     highlightSwipeMask: highlightSwipeMask ?? this.highlightSwipeMask,
     lifeTotals: lifeTotals ?? this.lifeTotals,
@@ -431,6 +435,7 @@ class GameState {
       haidMode: m['haidMode'] ?? false,
       ownedCosmetics: ownedList,
       equipped: equippedMap,
+      freezeShields: m['freezeShields'] ?? 0,
       highlightSwipeDate: m['highlightSwipeDate'] ?? '',
       highlightSwipeMask: m['highlightSwipeMask'] ?? 0,
       lifeTotals: (m['lifeTotals'] as Map?)
@@ -458,6 +463,7 @@ class GameState {
     'haidMode': haidMode,
     'ownedCosmetics': ownedCosmetics,
     'equipped': equipped,
+    'freezeShields': freezeShields,
     'highlightSwipeDate': highlightSwipeDate,
     'highlightSwipeMask': highlightSwipeMask,
     'lifeTotals': lifeTotals,
@@ -587,6 +593,10 @@ class GameService {
     }
   }
   static bool get haidMode => _cache.haidMode;
+
+  /// Freeze shield inventory (dari daily chest). Auto-pakai saat missed day:
+  /// 1 shield = 1 hari aman (semua streak).
+  static int get freezeShields => _cache.freezeShields;
 
   // ─── XP / Level ───
   static int xpNeededForLevel(int level) =>
@@ -1896,25 +1906,44 @@ class GameService {
     }
 
     // Evaluate missed days: lastChecked+1 .. today-1 (exclusive of today)
+    var shields = state.freezeShields;
     var evalDate = lastChecked.add(const Duration(days: 1));
     while (evalDate.isBefore(todayDate)) {
       final evalStr = _dateKey(evalDate);
-      hero = _evalStreakMissed(
-        hero,
-        _allWajibLoggedForDate(state, evalStr),
-        evalStr,
-      );
-      tilawah = _evalStreakMissed(
-        tilawah,
-        _prayerLoggedForDate(state, evalStr, 'tilawah'),
-        evalStr,
-      );
-      for (final p in tracker.keys) {
-        tracker[p] = _evalStreakMissed(
-          tracker[p]!,
-          _prayerLoggedForDate(state, evalStr, p),
+
+      // Freeze shield: jika ADA streak yang masih aktif (current>0) dan hari
+      // itu tidak lengkap → konsumsi 1 shield, lewati penalty SEMUA streak
+      // hari itu. (1 shield = 1 hari aman.)
+      var needsShield = false;
+      if (shields > 0) {
+        final anyActiveStreak = hero.current > 0 ||
+            tilawah.current > 0 ||
+            tracker.values.any((s) => s.current > 0);
+        needsShield = anyActiveStreak &&
+            !_allWajibLoggedForDate(state, evalStr);
+      }
+      if (needsShield) {
+        shields -= 1;
+      }
+
+      if (!needsShield) {
+        hero = _evalStreakMissed(
+          hero,
+          _allWajibLoggedForDate(state, evalStr),
           evalStr,
         );
+        tilawah = _evalStreakMissed(
+          tilawah,
+          _prayerLoggedForDate(state, evalStr, 'tilawah'),
+          evalStr,
+        );
+        for (final p in tracker.keys) {
+          tracker[p] = _evalStreakMissed(
+            tracker[p]!,
+            _prayerLoggedForDate(state, evalStr, p),
+            evalStr,
+          );
+        }
       }
       evalDate = evalDate.add(const Duration(days: 1));
     }
@@ -1936,6 +1965,7 @@ class GameService {
       perPrayerStreaks: tracker,
       tilawahStreak: tilawah,
       comebackCount: comeback,
+      freezeShields: shields,
       lastCheckedDate: today,
     );
     await _save(updated);
@@ -2099,10 +2129,30 @@ class GameService {
       _cache.dailyChestOpenedDate == todayStr();
 
   /// Claim the daily chest. Returns reveal data or null if not eligible.
+  /// Reward roll: 15% freeze shield, 10% cosmetic, 75% +30 XP.
   static Future<ChestRevealState?> claimDailyChest() async {
     if (!isDailyChestAvailable) return null;
 
-    final unlockCosmetic = (debugChestRoll ?? _rng.nextInt(100)) < 10;
+    final roll = debugChestRoll ?? _rng.nextInt(100);
+    // Freeze shield (15%) — item tersimpan, auto-pakai saat missed day.
+    if (roll < 15) {
+      final newShields = _cache.freezeShields + 1;
+      await _save(_cache.copyWith(
+        freezeShields: newShields,
+        dailyChestOpenedDate: todayStr(),
+      ));
+      return ChestRevealState(
+        xpReward: 0,
+        rewardName: 'Freeze Shield',
+        rewardEmoji: '❄️',
+        cosmeticId: null,
+        levelsGained: 0,
+        isShield: true,
+        shieldCount: newShields,
+      );
+    }
+
+    final unlockCosmetic = roll < 25; // 10% dari 100 (setelah 15% shield)
     final unownedFree = CosmeticCatalog.all
         .where(
           (c) =>
@@ -2149,6 +2199,8 @@ class ChestRevealState {
   final String rewardEmoji;
   final String? cosmeticId;
   final int levelsGained;
+  final bool isShield; // true jika reward = freeze shield
+  final int shieldCount; // total freeze shields setelah claim
 
   bool get isCosmetic => cosmeticId != null;
   bool get isDuplicate => false;
@@ -2158,6 +2210,8 @@ class ChestRevealState {
     required this.rewardEmoji,
     this.cosmeticId,
     required this.levelsGained,
+    this.isShield = false,
+    this.shieldCount = 0,
   });
 }
 
