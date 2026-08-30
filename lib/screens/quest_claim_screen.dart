@@ -78,7 +78,8 @@ class _QuestClaimScreenState extends State<QuestClaimScreen>
   /// round-robin per quest.id (deterministic, terasa 'tercatat').
   String _encouragement() {
     if (widget.isHaidMode) {
-      return 'Tetap dekat dengan-Nya. Niat tercatat, amal tercatat.';
+      final i = widget.quest.id.hashCode.abs() % _haidPool.length;
+      return _haidPool[i];
     }
     final lines = _copyPool[_category] ?? _copyPool[_QuestCategory.sholat]!;
     final i = widget.quest.id.hashCode.abs() % lines.length;
@@ -313,51 +314,62 @@ const _quotes = <_QuestCategory, List<_Quote>>{
 };
 
 /// Copy dorongan per kategori quest — round-robin per quest.id (deterministic).
-/// Spesifik untuk daily quest rotasi, bukan generik. Copy sudah di-humanize
-/// (hapus AI words, vague closings, formulaic sayings per humanizer SKILL §7-32).
+/// Spesifik untuk daily quest rotasi, bukan generik. Tone: 'hangat, pendek,
+/// humble, supportive' — bukan 'memberi penilaian dari atas'. Emoji sangat
+/// sedikit (🤍 🌙 ✨), hindari klaim teologis spesifik yang belum ada dasar.
 const _copyPool = <_QuestCategory, List<String>>{
   _QuestCategory.sholat: [
-    'Adzan berkumandang, kamu berdiri lebih dulu.',
-    'Tepat waktu. Malaikat menambahkan catatan untukmu.',
-    'Khusyuk di awal waktu. Timbangannya berat.',
-    'Kamu datang sebelum keletihanmu sendiri.',
+    'Kamu mungkin lagi sibuk, tapi tetap nyempetin. Good job.',
+    'Adzan selesai, kamu langsung jalan. Mantap.',
+    'Tepat waktu hari ini. Satu hal baik yang kamu jaga.',
+    'Capek tetap capek. Tapi kamu tetap datang. 🤍',
   ],
   _QuestCategory.sunnah: [
-    'Wajib sudah cukup. Kamu tambah lagi.',
-    'Tidak diminta, tidak dipaksa. Karena itu yang tulus.',
-    'Dua rakaat untuk-Nya, sebelum kamu lupa.',
-    'Yang Rasul lakukan, kamu lakukan juga.',
+    'Nggak wajib, tapi kamu tetap memilih untuk melakukannya.',
+    'Nggak ada yang maksa. Kamu sendiri yang memilih untuk datang.',
+    'Dua rakaat hari ini. Kecil, tapi berarti.',
+    'Pelan-pelan, kebiasaan baik seperti ini yang kamu bangun.',
   ],
   _QuestCategory.zikir: [
-    'Lidahmu basah. Hati ikut basah.',
-    'Tiga puluh tiga kali, atau lebih. Tiap kali terasa ringan.',
-    'Subhanallah, subhanallah, subhanallah. Riak kecil di dadamu.',
-    'Hitungan selesai. Yang tersisa adalah rasa tenangnya.',
+    'Di tengah ramainya hari, kamu masih menyempatkan ingat Allah.',
+    'Berhenti sebentar. Tarik napas. Ingat Allah.',
+    'Apa pun yang lagi kamu pikirin, kamu tetap meluangkan waktu untuk zikir.',
+    'Selesai zikir. Semoga hati terasa sedikit lebih ringan. 🤍',
   ],
   _QuestCategory.quran: [
-    'Kalam-Nya melewati mata dan hatimu hari ini.',
-    'Ayat yang kamu baca, malaikat mengaminkannya.',
-    'Sedikit ayat, dibaca dengan khusyuk. Lebih utama dari banyak yang terburu.',
-    'Satu halaman tertutup. Tinggal menunggu yang besok.',
+    'Satu ayat hari ini. Pelan-pelan, yang penting terus.',
+    'Hari ini kamu kembali membuka Al-Quran. Senang lihatnya.',
+    'Nggak harus banyak. Satu halaman pun tetap sebuah langkah.',
+    'Satu halaman selesai. Besok lanjut lagi, ya.',
   ],
   _QuestCategory.hadis: [
-    'Kamu duduk bersama sunnahnya hari ini.',
-    'Sabda yang kamu baca, beliau ucapkan seribu tahun lalu.',
-    'Tiga hadis, tiga catatan. Salah satunya mungkin yang kamu butuhkan.',
-    'Kamu membaca, lalu hidup. Itu yang diminta.',
+    'Hari ini kamu meluangkan waktu untuk belajar dari sabda Nabi.',
+    'Satu hadis kamu baca hari ini. Semoga ada yang bisa kamu bawa ke harimu.',
+    'Nemu hadis yang ngena? Simpan. Siapa tahu kamu butuh mengingatnya lagi.',
+    'Sedikit belajar hari ini, semoga jadi bekal untuk besok.',
   ],
   _QuestCategory.fiveRings: [
-    'Lima waktu, satu hari. Tidak bolong satu pun.',
-    'Subuh, Dzuhur, Ashar, Maghrib, Isya. Kamu datang di semuanya.',
-    'Hati yang utuh biasanya begini.',
-    'Malaikat menutup catatan. Lengkap.',
+    'Subuh, Dzuhur, Ashar, Maghrib, Isya. Kamu hadir di semuanya hari ini.',
+    'Lima waktu selesai. Alhamdulillah, hari ini kamu berhasil menjaganya.',
+    'Satu hari, lima waktu. Lengkap. 🤍',
+    'Hari ini selesai dengan baik. Besok kita mulai lagi.',
   ],
   _QuestCategory.subuhIsya: [
-    'Dua ujung hari, satu hari yang utuh.',
-    'Kamu jaga Subuh. Kamu jaga Isya. Allah cukupkan sisanya.',
-    'Pagar berdiri. Hari ini lengkap.',
+    'Subuh kamu jaga, Isya kamu jaga. Alhamdulillah.',
+    'Dari awal sampai akhir hari, kamu tetap menyempatkan diri.',
+    'Dua waktu ini kamu jaga hari ini. Good job.',
+    'Hari ini kamu berhasil menjaga Subuh dan Isya. Besok lanjut lagi.',
   ],
 };
+
+/// haidMode — round-robin 4 baris. Hindari klaim teologis ('niatmu dihitung'),
+/// fokus pada dukungan personal ('kamu tetap bagian dari perjalanan ini').
+const _haidPool = [
+  'Hari ini waktunya istirahat. Tetap semangat, ya. 🤍',
+  'Nggak apa-apa berhenti sebentar. Kamu tetap bagian dari perjalanan ini.',
+  'Hari ini kamu nggak perlu mengejar quest ini. Jaga diri dan tetap dekat dengan Allah.',
+  'Quest boleh berhenti sebentar. Perjalananmu tetap lanjut.',
+];
 
 /// Kartu kertas ala Mushaf — light surface di tengah canvas dark,
 /// supaya mata istirahat dari hitam pekat + identitas islami kuat.
