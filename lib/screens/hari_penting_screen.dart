@@ -3,7 +3,7 @@ import '../../theme/app_theme.dart';
 import '../../services/hijri_service.dart';
 
 /// Hari Penting Islam — replace HijriCalendarScreen (month-grid lama).
-/// Layout: timeline strip 12 bulan Hijri di atas + list 10 kartu kronologis.
+/// Layout: list kronologis 10 momen penting + badge status.
 class HariPentingScreen extends StatefulWidget {
   const HariPentingScreen({super.key});
 
@@ -14,8 +14,6 @@ class HariPentingScreen extends StatefulWidget {
 class _HariPentingScreenState extends State<HariPentingScreen> {
   List<ImportantHijriDate>? _dates;
   bool _loading = true;
-  int _selectedMonth = DateTime.now().month; // ponytail: fallback Gregorian
-  final _scrollCtrl = ScrollController();
 
   @override
   void initState() {
@@ -29,21 +27,7 @@ class _HariPentingScreenState extends State<HariPentingScreen> {
     setState(() {
       _dates = dates;
       _loading = false;
-      // Center timeline ke bulan pertama yang punya tanggal mendatang.
-      if (dates.isNotEmpty) {
-        final upcoming = dates.firstWhere(
-          (d) => (d.daysUntil ?? 999) >= 0,
-          orElse: () => dates.last,
-        );
-        _selectedMonth = upcoming.hMonth;
-      }
     });
-  }
-
-  @override
-  void dispose() {
-    _scrollCtrl.dispose();
-    super.dispose();
   }
 
   @override
@@ -69,111 +53,9 @@ class _HariPentingScreenState extends State<HariPentingScreen> {
               : RefreshIndicator(
                   onRefresh: _load,
                   color: AppColors.primary,
-                  child: Column(
-                    children: [
-                      _buildTimeline(),
-                      Expanded(child: _buildList()),
-                    ],
-                  ),
+                  child: _buildList(),
                 ),
     );
-  }
-
-  // --- Timeline strip ---
-
-  Widget _buildTimeline() {
-    // ponytail: 12 kotak statis, highlight bulan yang punya momen.
-    final monthsWithEvent = <int>{};
-    if (_dates != null) {
-      for (final d in _dates!) {
-        monthsWithEvent.add(d.hMonth);
-      }
-    }
-
-    return SizedBox(
-      height: 56,
-      child: ListView.builder(
-        controller: _scrollCtrl,
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        itemCount: 12,
-        itemBuilder: (_, i) {
-          final month = i + 1;
-          final short = _monthShort(month);
-          final hasEvent = monthsWithEvent.contains(month);
-          final isSelected = month == _selectedMonth;
-
-          return GestureDetector(
-            onTap: () {
-              setState(() => _selectedMonth = month);
-              _scrollToMonth(month);
-            },
-            child: Container(
-              width: 48,
-              margin: const EdgeInsets.symmetric(horizontal: 3),
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? AppColors.primary.withValues(alpha: 0.15)
-                    : AppColors.surfaceContainer,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: isSelected
-                      ? AppColors.primary
-                      : AppColors.outlineVariant.withValues(alpha: 0.3),
-                  width: isSelected ? 1.5 : 0.5,
-                ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    short,
-                    style: AppText.bodyMd().copyWith(
-                      color: isSelected
-                          ? AppColors.primary
-                          : AppColors.onSurfaceVariant,
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                      fontSize: 10,
-                    ),
-                  ),
-                  if (hasEvent) ...[
-                    const SizedBox(height: 3),
-                    Container(
-                      width: 5,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: isSelected
-                            ? AppColors.primary
-                            : AppColors.primary.withValues(alpha: 0.5),
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  String _monthShort(int m) {
-    const names = [
-      '', 'Muh', 'Saf', 'Rb1', 'Rb2', 'Jm1', 'Jm2',
-      'Raj', 'Sya', 'Ram', 'Syw', 'DzQ', 'DzH',
-    ];
-    return m >= 1 && m <= 12 ? names[m] : '?';
-  }
-
-  void _scrollToMonth(int month) {
-    // ponytail: scroll list ke kartu pertama di bulan ini.
-    if (_dates == null) return;
-    final idx = _dates!.indexWhere((d) => d.hMonth == month);
-    if (idx < 0) return;
-    // Estimate item height ~100px, scroll to that offset.
-    // Real implementation would use ScrollablePositionedList, but
-    // ponytail: ListView + animateTo covers it for 10 items.
   }
 
   // --- List kartu ---
