@@ -41,17 +41,15 @@ class _QuestClaimScreenState extends State<QuestClaimScreen>
   }
 
   /// Kategori dari quest.id — cepat, deterministic.
-  /// Pool quest 20: 'subuh_tepat','dzuhur_tepat','maghrib_tepat',
-  /// 'isya_hadir','timely_prayers','five_rings','tilawah_today',
+  /// Pool quest 19: 'subuh_tepat','dzuhur_tepat','maghrib_tepat',
+  /// 'isya_hadir','timely_prayers','five_rings',
   /// 'dhuha_before_dzuhur','rawatib_one','rawatib_two','one_sunnah',
   /// 'subuh_isya','any_three','zikir_33','zikir_goal','dzikir_33_subuh',
   /// 'quran_10ayat','quran_1halaman','hadis_3','hadis_5'.
   _QuestCategory get _category {
     final id = widget.quest.id;
     if (id.contains('hadis')) return _QuestCategory.hadis;
-    if (id.contains('quran') || id == 'quest_tilawah_today') {
-      return _QuestCategory.quran;
-    }
+    if (id.contains('quran')) return _QuestCategory.quran;
     if (id.contains('zikir') || id.contains('dzikir')) {
       return _QuestCategory.zikir;
     }

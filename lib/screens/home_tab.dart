@@ -794,14 +794,16 @@ class _HomeTabState extends State<HomeTab> {
   Widget _ritualRings() {
     final wajib = GameService.checkedWajibToday;
     final sunnah = GameService.sunnahCountToday;
-    final quranAyat = GameService.quranAyatToday;
-    final hadisRead = GameService.hadisReadToday;
+    // Side quest selesai hari ini — sync dengan _sideQuest() (4 kartu).
+    final sideDone = [
+      GameService.isPrayerCheckedToday('sedekah'),
+      GameService.tilawahDoneToday,
+      GameService.isPrayerCheckedToday('zikir100'),
+      GameService.isPrayerCheckedToday('hadis5'),
+    ].where((d) => d).length;
     final wProgress = (wajib / 5).clamp(0.0, 1.0);
     final sProgress = (sunnah / 8).clamp(0.0, 1.0);
-    final qProgress =
-        (quranAyat / GameService.quranSideQuestAyat).clamp(0.0, 1.0);
-    final hProgress =
-        (hadisRead / GameService.hadisSideQuestTarget).clamp(0.0, 1.0);
+    final sqProgress = (sideDone / 4).clamp(0.0, 1.0);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -814,8 +816,7 @@ class _HomeTabState extends State<HomeTab> {
                 width: 130,
                 height: 130,
                 child: CustomPaint(
-                  painter:
-                      _RingsPainter(wProgress, sProgress, qProgress, hProgress),
+                  painter: _RingsPainter(wProgress, sProgress, sqProgress),
                 ),
               ),
               const SizedBox(width: AppSpacing.lg),
@@ -826,17 +827,7 @@ class _HomeTabState extends State<HomeTab> {
                     const SizedBox(height: AppSpacing.sm),
                     _ringStat('SUNNAH', '$sunnah/8', AppColors.secondaryFixed),
                     const SizedBox(height: AppSpacing.sm),
-                    _ringStat(
-                      'QURAN',
-                      '$quranAyat/${GameService.quranSideQuestAyat}',
-                      AppColors.tertiary,
-                    ),
-                    const SizedBox(height: AppSpacing.sm),
-                    _ringStat(
-                      'HADIS',
-                      '$hadisRead/${GameService.hadisSideQuestTarget}',
-                      AppColors.error,
-                    ),
+                    _ringStat('SIDE QUEST', '$sideDone/4', AppColors.tertiary),
                   ],
                 ),
               ),
@@ -1803,20 +1794,19 @@ class _HomeTabState extends State<HomeTab> {
 }
 
 class _RingsPainter extends CustomPainter {
-  final double wajib, sunnah, quran, hadis;
-  _RingsPainter(this.wajib, this.sunnah, this.quran, this.hadis);
+  final double wajib, sunnah, sideQuest;
+  _RingsPainter(this.wajib, this.sunnah, this.sideQuest);
 
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
-    final radii = [56.0, 44.0, 32.0, 20.0];
+    final radii = [56.0, 42.0, 28.0];
     final colors = [
       AppColors.primary,
       AppColors.secondaryFixed,
       AppColors.tertiary,
-      AppColors.error,
     ];
-    final progresses = [wajib, sunnah, quran, hadis];
+    final progresses = [wajib, sunnah, sideQuest];
 
     for (var i = 0; i < radii.length; i++) {
       final paintBg = Paint()
@@ -1848,8 +1838,7 @@ class _RingsPainter extends CustomPainter {
   bool shouldRepaint(covariant _RingsPainter old) =>
       old.wajib != wajib ||
       old.sunnah != sunnah ||
-      old.quran != quran ||
-      old.hadis != hadis;
+      old.sideQuest != sideQuest;
 }
 
 class _RankMedallion extends StatelessWidget {

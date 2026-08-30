@@ -1027,12 +1027,6 @@ class GameService {
             done = true;
           }
           break;
-        case 'quest_tilawah_today':
-          if (todayLogs.any((l) => l.prayer == 'tilawah')) {
-            prog = 1;
-            done = true;
-          }
-          break;
         case 'quest_rawatib_two':
           final cnt = todayLogs
               .where((l) => l.prayer.startsWith('rawatib'))
@@ -1401,15 +1395,6 @@ class GameService {
         id: 'quest_five_rings',
         desc: 'Lengkapin 5/5 sholat hari ini',
         xpReward: 100,
-        target: 1,
-        progress: 0,
-        completed: false,
-        claimed: false,
-      ),
-      Quest(
-        id: 'quest_tilawah_today',
-        desc: 'Tilawah/Dzikir hari ini',
-        xpReward: 30,
         target: 1,
         progress: 0,
         completed: false,
