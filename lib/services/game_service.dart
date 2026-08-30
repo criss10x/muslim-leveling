@@ -2129,13 +2129,13 @@ class GameService {
       _cache.dailyChestOpenedDate == todayStr();
 
   /// Claim the daily chest. Returns reveal data or null if not eligible.
-  /// Reward roll: 15% freeze shield, 10% cosmetic, 75% +30 XP.
+  /// Reward roll: 5% freeze shield, 10% cosmetic, 85% +30 XP.
   static Future<ChestRevealState?> claimDailyChest() async {
     if (!isDailyChestAvailable) return null;
 
     final roll = debugChestRoll ?? _rng.nextInt(100);
-    // Freeze shield (15%) — item tersimpan, auto-pakai saat missed day.
-    if (roll < 15) {
+    // Freeze shield (5%) — item tersimpan, auto-pakai saat missed day.
+    if (roll < 5) {
       final newShields = _cache.freezeShields + 1;
       await _save(_cache.copyWith(
         freezeShields: newShields,
@@ -2152,7 +2152,7 @@ class GameService {
       );
     }
 
-    final unlockCosmetic = roll < 25; // 10% dari 100 (setelah 15% shield)
+    final unlockCosmetic = roll < 15; // 10% dari 100 (setelah 5% shield)
     final unownedFree = CosmeticCatalog.all
         .where(
           (c) =>

@@ -30,9 +30,9 @@ void main() {
     GameService.debugChestPickIndex = null;
   });
 
-  test('daily chest grants a new cosmetic on a cosmetic roll (15-25)', () async {
+  test('daily chest grants a new cosmetic on a cosmetic roll (5-15)', () async {
     await loadEligibleChest();
-    GameService.debugChestRoll = 15; // 15-25 = cosmetic
+    GameService.debugChestRoll = 5; // 5-15 = cosmetic
     GameService.debugChestPickIndex = 0;
 
     final reveal = await GameService.claimDailyChest();
@@ -42,9 +42,9 @@ void main() {
     expect(GameService.current.ownedCosmetics, contains(reveal.cosmeticId));
   });
 
-  test('daily chest grants exactly 30 XP on a standard roll (25+)', () async {
+  test('daily chest grants exactly 30 XP on a standard roll (15+)', () async {
     await loadEligibleChest();
-    GameService.debugChestRoll = 25; // 25+ = XP
+    GameService.debugChestRoll = 15; // 15+ = XP
 
     final reveal = await GameService.claimDailyChest();
 
@@ -53,9 +53,9 @@ void main() {
     expect(GameService.current.xp, 30);
   });
 
-  test('daily chest grants a freeze shield on a shield roll (0-15)', () async {
+  test('daily chest grants a freeze shield on a shield roll (0-5)', () async {
     await loadEligibleChest();
-    GameService.debugChestRoll = 0; // 0-15 = freeze shield
+    GameService.debugChestRoll = 0; // 0-5 = freeze shield
 
     final reveal = await GameService.claimDailyChest();
 
