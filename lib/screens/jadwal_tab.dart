@@ -8,7 +8,7 @@ import '../../services/game_service.dart';
 import '../../services/notification_service.dart';
 import '../../services/hijri_service.dart';
 import 'qibla_screen.dart';
-import 'hijri_calendar_screen.dart';
+import 'hari_penting_screen.dart';
 
 /// Jadwal Sholat — V3 logic ported to V1 design.
 /// Shows next prayer countdown, 5 daily prayers with logged status,
@@ -258,7 +258,7 @@ class _JadwalTabState extends State<JadwalTab> {
           if (_hijriToday != null)
             PressableScale(
               onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => const HijriCalendarScreen(),
+                builder: (_) => const HariPentingScreen(),
               )),
               child: Row(
                 children: [
