@@ -255,29 +255,11 @@ class _JadwalTabState extends State<JadwalTab> {
             _todayLabel(),
             style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
           ),
-          if (_hijriToday != null)
-            PressableScale(
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => const HariPentingScreen(),
-              )),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.calendar_month,
-                    size: 14,
-                    color: AppColors.primary,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    hijriLabel(_hijriToday!),
-                    style: AppText.bodyMd().copyWith(
-                      color: AppColors.primary,
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          // Tombol Hari Penting Islam — selalu render (data statis,
+          // tidak perlu API). Fallback label kalau tanggal hijriah gagal
+          // dimuat; kalau berhasil tampilkan tanggal sebagai affordance.
+          const SizedBox(height: AppSpacing.sm),
+          _hariPentingButton(),
           const SizedBox(height: AppSpacing.sm),
           Row(
             children: [
@@ -360,6 +342,54 @@ class _JadwalTabState extends State<JadwalTab> {
             ),
           ),
           child: Icon(Icons.my_location, size: 18, color: AppColors.primary),
+        ),
+      ),
+    );
+  }
+
+  /// Tombol Hari Penting Islam — pill konsisten dengan tombol lokasi.
+  /// Selalu render: data statis (hijriImportantDates const), tidak di-gate
+  /// API hijriah. Kalau tanggal berhasil dimuat tampilkan sebagai affordance,
+  /// kalau gagal tampilkan label netral 'Hari Penting Islam'.
+  /// Touch target ≥44px (SizedBox height 44 + padding horizontal).
+  /// Semantics label eksplisit untuk TalkBack.
+  Widget _hariPentingButton() {
+    final label = _hijriToday != null
+        ? hijriLabel(_hijriToday!)
+        : 'Hari Penting Islam';
+    return Semantics(
+      button: true,
+      label: 'Tanggal Hijriah, buka Hari Penting Islam',
+      child: PressableScale(
+        onTap: () => Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => const HariPentingScreen(),
+        )),
+        child: Container(
+          height: 44,
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm + 2),
+          decoration: BoxDecoration(
+            color: AppColors.surfaceContainerLow,
+            borderRadius: BorderRadius.circular(AppRadius.xl),
+            border: Border.all(
+              color: AppColors.outlineVariant.withValues(alpha: 0.3),
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.calendar_month, size: 16, color: AppColors.primary),
+              const SizedBox(width: AppSpacing.xs),
+              Text(
+                label,
+                style: AppText.bodyMd().copyWith(
+                  color: AppColors.primary,
+                  fontSize: 12,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
         ),
       ),
     );

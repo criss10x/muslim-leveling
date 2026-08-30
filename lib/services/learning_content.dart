@@ -1461,7 +1461,7 @@ const _rukun2_5Article = <ArticleBlock>[
     'Haji itu ibadah ziarah ke Makkah, Arab Saudi. Wajib sekali seumur hidup buat Muslim yang MAMPU (secara fisik dan finansial). Kalau belum mampu? Gak wajib. Simple.',
   ),
   Paragraph(
-    'Haji dilakukan setiap tanggal 8-12 Dzulhijjah (bulan ke-12 kalender Islam). Ada rangkaian ibadah: tawaf (keliling Ka\'bah), sa\'i (jalan bolak-balik), wukuf di Arafah (puncak haji), melempar jumrah, dan lain-lain.',
+    'Haji dilakukan setiap tanggal 8-12 Zulhijah (bulan ke-12 kalender Islam). Ada rangkaian ibadah: tawaf (keliling Ka\'bah), sa\'i (jalan bolak-balik), wukuf di Arafah (puncak haji), melempar jumrah, dan lain-lain.',
   ),
   Subheading('👕 Ihram: Semua Sama Rata'),
   Paragraph(

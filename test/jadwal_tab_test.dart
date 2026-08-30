@@ -24,7 +24,7 @@ void main() {
     );
   });
 
-  testWidgets('Jadwal header keeps location compact without calendar', (
+  testWidgets('Jadwal header keeps location compact, calendar always shown', (
     tester,
   ) async {
     GoogleFonts.config.allowRuntimeFetching = false;
@@ -38,8 +38,10 @@ void main() {
     expect(find.byIcon(Icons.my_location), findsOneWidget);
     expect(find.text('Lokasi Saat Ini'), findsNothing);
     expect(find.text('Cari Kota'), findsOneWidget);
-    expect(find.byIcon(Icons.calendar_month), findsNothing);
-    expect(find.text('Kalender'), findsNothing);
+    // Tombol Hari Penting Islam selalu render (fix P1a: tidak di-gate API).
+    // Kalau API hijriah gagal, label fallback 'Hari Penting Islam' muncul.
+    expect(find.byIcon(Icons.calendar_month), findsOneWidget);
+    expect(find.text('Hari Penting Islam'), findsOneWidget);
   });
 
   testWidgets('next-prayer name uses light-theme foreground', (tester) async {
