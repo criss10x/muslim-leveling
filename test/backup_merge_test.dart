@@ -17,6 +17,46 @@ void main() {
     );
   });
 
+  test('pickRicherGame preserves local streak/shield when remote XP higher', () {
+    final merged = pickRicherGame(
+      {
+        'xp': 100,
+        'freezeShields': 3,
+        'heroStreak': {'current': 10, 'best': 15},
+        'perPrayerStreaks': {
+          'subuh': {'current': 8, 'best': 9, 'freezeAvailable': false},
+        },
+        'ownedCosmetics': ['a', 'b'],
+      },
+      {
+        'xp': 500, // remote XP lebih tinggi
+        'freezeShields': 0,
+        'heroStreak': {'current': 2, 'best': 3},
+        'perPrayerStreaks': {
+          'subuh': {'current': 1, 'best': 2, 'freezeAvailable': true},
+        },
+        'ownedCosmetics': ['a'],
+      },
+    );
+
+    expect(merged['xp'], 500); // XP remote menang
+    expect(merged['freezeShields'], 3, reason: 'shield lokal lebih tinggi');
+    expect((merged['heroStreak'] as Map)['current'], 10,
+        reason: 'hero streak lokal dipertahankan');
+    expect((merged['perPrayerStreaks'] as Map)['subuh']['current'], 8,
+        reason: 'per-prayer streak lokal dipertahankan');
+    expect(merged['ownedCosmetics'], containsAll(['a', 'b']),
+        reason: 'cosmetic union');
+  });
+
+  test('pickRicherGame keeps local when remote missing a field', () {
+    final merged = pickRicherGame(
+      {'xp': 100, 'freezeShields': 2},
+      {'xp': 300}, // remote tidak punya freezeShields
+    );
+    expect(merged['freezeShields'], 2, reason: 'field lokal dipertahankan');
+  });
+
   test('mergeLearning unions modules and max score', () {
     final learn = mergeLearning(
       {

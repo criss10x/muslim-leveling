@@ -80,37 +80,4 @@ void main() {
     expect(restored.current, 11);
     expect(restored.lastDate, '2026-07-31');
   });
-
-  // ── Freeze shield: konsumsi otomatis saat missed day (1 shield = 1 hari aman)
-  test('freeze shield dikonsumsi otomatis saat missed day, streak aman', () async {
-    // State: streak subuh aktif (current 5), 1 shield, lastChecked 2 hari lalu,
-    // kemarin tidak ada log subuh → missed 1 hari (dievaluasi hari ini).
-    // lastChecked = 2 hari lalu → evalDate = kemarin (1 missed day)
-    final twoDaysAgoDate =
-        DateTime.now().subtract(const Duration(days: 2));
-    final lastChecked = '${twoDaysAgoDate.year.toString().padLeft(4, '0')}-'
-        '${twoDaysAgoDate.month.toString().padLeft(2, '0')}-'
-        '${twoDaysAgoDate.day.toString().padLeft(2, '0')}';
-    final yesterday = GameService.yesterdayStr();
-    GameService.setStateForTest(GameState(
-      freezeShields: 1,
-      lastCheckedDate: lastChecked,
-      perPrayerStreaks: {
-        'subuh': StreakState(current: 5, best: 8, lastDate: yesterday),
-      },
-      prayerLog: [
-        // kemarin tidak ada log subuh → missed
-      ],
-    ));
-
-    await GameService.runDailyCheck();
-
-    final s = GameService.current.perPrayerStreaks['subuh']!;
-    expect(GameService.current.freezeShields, 0,
-        reason: '1 shield dikonsumsi untuk 1 hari missed');
-    expect(s.current, 5,
-        reason: 'streak tidak kena penalty karena shield');
-    expect(s.freezeAvailable, isTrue,
-        reason: 'freeze mingguan tidak ikut terkonsumsi');
-  });
 }

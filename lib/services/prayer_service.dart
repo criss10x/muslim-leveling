@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'game_service.dart';
 
 /// ponytail: stdlib HttpClient + SharedPreferences. No dio, no riverpod.
 /// Primary API: equran.id/api/v2/shalat (Kemenag proxy).
@@ -562,6 +563,8 @@ class PrayerService {
     await p.setString('city_id', id);
     await p.setString('city_name', name);
     locationVersion.value++;
+    // Sync ke GameState supaya ikut cloud backup.
+    await GameService.updateLocation(id, name);
   }
 
   /// ponytail: default Jakarta kalau belum ada lokasi tersimpan.

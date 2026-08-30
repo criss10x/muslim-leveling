@@ -40,12 +40,19 @@ class CloudSync {
     recordAuthenticatedUser(userId);
     _validatedUserId = null;
     final validationVersion = ++_validationVersion;
-    final remote = await load(failOnError: true);
-    if (_pendingUserId != userId || _validationVersion != validationVersion) {
-      throw StateError('CloudSync user changed during validation');
+    try {
+      final remote = await load(failOnError: true);
+      if (_pendingUserId != userId || _validationVersion != validationVersion) {
+        throw StateError('CloudSync user changed during validation');
+      }
+      _validatedUserId = userId;
+      return remote; // remote boleh null (user baru), tapi validasi sukses
+    } catch (_) {
+      // Network down / Firestore error: jangan throw, clear state
+      _validatedUserId = null;
+      _validationVersion++;
+      return null;
     }
-    _validatedUserId = userId;
-    return remote;
   }
 
   static void clearUser() {

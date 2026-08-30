@@ -65,13 +65,10 @@ void main() {
     expect(CloudSync.canSync, isTrue);
   });
 
-  test('validation read error leaves writes disabled', () async {
+  test('validation read error returns null and leaves writes disabled', () async {
     CloudSync.documentReader = (_) async => throw StateError('Firestore down');
 
-    await expectLater(
-      CloudSync.initWithUser('test-user'),
-      throwsA(isA<StateError>()),
-    );
+    expect(await CloudSync.initWithUser('test-user'), isNull);
 
     expect(CloudSync.canSync, isFalse);
     expect(await CloudSync.saveGame({'xp': 120}), isFalse);
@@ -88,7 +85,7 @@ void main() {
     CloudSync.recordAuthenticatedUser('new-user');
     oldRead.complete({'game': {'xp': 120}});
 
-    await expectLater(validation, throwsA(isA<StateError>()));
+    expect(await validation, isNull);
     expect(CloudSync.canSync, isFalse);
     expect(await CloudSync.saveGame({'xp': 120}), isFalse);
   });
@@ -101,7 +98,7 @@ void main() {
     CloudSync.clearUser();
     pendingRead.complete({'game': {'xp': 120}});
 
-    await expectLater(validation, throwsA(isA<StateError>()));
+    expect(await validation, isNull);
     expect(CloudSync.canSync, isFalse);
     expect(await CloudSync.saveGame({'xp': 120}), isFalse);
   });

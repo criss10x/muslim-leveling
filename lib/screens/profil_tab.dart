@@ -124,6 +124,8 @@ class _ProfilTabState extends State<ProfilTab> {
     if (result == null || result.isEmpty) return;
     final p = await SharedPreferences.getInstance();
     await p.setString('nickname', result);
+    // Sync ke GameState supaya ikut cloud backup.
+    await GameService.updateNickname(result);
     setState(() => _nickname = result);
   }
 
@@ -1320,6 +1322,22 @@ class _ProfilTabState extends State<ProfilTab> {
     Map<String, dynamic>? remote;
     try {
       remote = await CloudSync.initWithUser(uid);
+      if (remote == null) {
+        // P0 fix: network down / verifikasi gagal → tetap lanjut login
+        // (data lokal aman), tapi tanpa cloud backup.
+        debugPrint('[Profil] cloud verify gagal/offline: sync nonaktif');
+        await AuthService.saveEmail();
+        await GameService.load();
+        await LearningService.load();
+        await AchievementService.load(force: true);
+        if (mounted) {
+          setState(() {});
+          await _loadProfile();
+          _showSettingSnackbar(
+              '⚠️ Login OK, tapi backup belum aktif (offline).');
+        }
+        return;
+      }
     } catch (e, st) {
       debugPrint('[Profil] cloud verify gagal: $e');
       await AuthService.signOut();
@@ -1348,16 +1366,15 @@ class _ProfilTabState extends State<ProfilTab> {
       } catch (_) {}
     }
 
-    final hasRemote = remote != null;
-    final remoteGame = remote != null && remote['game'] is Map
+    // remote non-null di sini (null sudah di-early-return di atas).
+    final remoteGame = remote['game'] is Map
         ? Map<String, dynamic>.from(remote['game'] as Map)
         : null;
-    final remoteLearning =
-        remote != null && remote['learning'] is Map
-            ? Map<String, dynamic>.from(remote['learning'] as Map)
-            : null;
+    final remoteLearning = remote['learning'] is Map
+        ? Map<String, dynamic>.from(remote['learning'] as Map)
+        : null;
     Map<String, dynamic> remoteAch = {};
-    if (remote != null && remote['achievements'] is Map) {
+    if (remote['achievements'] is Map) {
       final ach = remote['achievements'] as Map;
       final unlocked = ach['unlocked'] is Map ? ach['unlocked'] : ach;
       if (unlocked is Map) {
@@ -1376,6 +1393,18 @@ class _ProfilTabState extends State<ProfilTab> {
     await p.setString('game_state_v1', jsonEncode(mergedGame));
     await p.setString('learning_state_v1', jsonEncode(mergedLearning));
     await p.setString('achievements_unlocked', jsonEncode(mergedAch));
+
+    // Restore nickname + kota dari cloud (jika ada) ke SharedPreferences.
+    final nick = mergedGame['nickname']?.toString();
+    if (nick != null && nick.isNotEmpty) {
+      await p.setString('nickname', nick);
+    }
+    final cid = mergedGame['cityId']?.toString();
+    final cname = mergedGame['cityName']?.toString();
+    if (cid != null && cid.isNotEmpty) {
+      await p.setString('city_id', cid);
+      await p.setString('city_name', cname ?? '');
+    }
 
     await GameService.load();
     await LearningService.load();
@@ -1399,11 +1428,7 @@ class _ProfilTabState extends State<ProfilTab> {
           '⚠️ Login OK, tapi backup belum tersimpan.');
       return;
     }
-    _showSettingSnackbar(
-      hasRemote
-          ? '☁️ Login OK — progress digabung.'
-          : '☁️ Login OK — progress di-backup.',
-    );
+    _showSettingSnackbar('☁️ Login OK — progress digabung.');
   }
 
   Future<void> _handleLogout() async {

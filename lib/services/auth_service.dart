@@ -90,10 +90,8 @@ class AuthService {
 
   static Future<String?> _signInNative() async {
     try {
-      try {
-        await _google.signOut();
-      } catch (_) {}
-
+      // ponytail: tidak signOut() dulu — GoogleSignIn pakai cached account
+      // (akun sebelumnya), supaya tidak re-prompt OAuth tiap login.
       final googleUser = await _google.signIn();
       if (googleUser == null) {
         _lastError = 'Login dibatalkan.';

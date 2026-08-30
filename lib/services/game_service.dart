@@ -291,6 +291,11 @@ class GameState {
   final int freezeShields; // inventory freeze shield (dari daily chest), auto-pakai saat missed
   final String highlightSwipeDate; // YYYY-MM-DD ("" = never)
   final int highlightSwipeMask; // bit per page set = page claimed today
+  /// Profil yang ikut di-sync: nickname + kota adzan.
+  /// ponytail: avatar_path tidak di-sync (file lokal, path tidak berguna lintas device).
+  final String nickname; // "" = default 'Muslim Warrior'
+  final String cityId; // "" = belum set
+  final String cityName; // "" = belum set
   /// Counter kumulatif seumur hidup (tidak reset harian) — untuk badge progresif.
   /// key: 'quran_ayat' | 'hadis' | 'zikir'
   final Map<String, int> lifeTotals;
@@ -318,6 +323,9 @@ class GameState {
     this.freezeShields = 0,
     this.highlightSwipeDate = '',
     this.highlightSwipeMask = 0,
+    this.nickname = '',
+    this.cityId = '',
+    this.cityName = '',
     Map<String, int>? lifeTotals,
   }) : timings = timings ?? Timings(),
        prayerLog = prayerLog ?? [],
@@ -353,6 +361,9 @@ class GameState {
     int? freezeShields,
     String? highlightSwipeDate,
     int? highlightSwipeMask,
+    String? nickname,
+    String? cityId,
+    String? cityName,
     Map<String, int>? lifeTotals,
   }) => GameState(
     xp: xp ?? this.xp,
@@ -377,6 +388,9 @@ class GameState {
     freezeShields: freezeShields ?? this.freezeShields,
     highlightSwipeDate: highlightSwipeDate ?? this.highlightSwipeDate,
     highlightSwipeMask: highlightSwipeMask ?? this.highlightSwipeMask,
+    nickname: nickname ?? this.nickname,
+    cityId: cityId ?? this.cityId,
+    cityName: cityName ?? this.cityName,
     lifeTotals: lifeTotals ?? this.lifeTotals,
   );
 
@@ -438,6 +452,9 @@ class GameState {
       freezeShields: m['freezeShields'] ?? 0,
       highlightSwipeDate: m['highlightSwipeDate'] ?? '',
       highlightSwipeMask: m['highlightSwipeMask'] ?? 0,
+      nickname: m['nickname'] ?? '',
+      cityId: m['cityId'] ?? '',
+      cityName: m['cityName'] ?? '',
       lifeTotals: (m['lifeTotals'] as Map?)
               ?.map((k, v) => MapEntry(k.toString(), v as int)) ??
           const {},
@@ -466,6 +483,9 @@ class GameState {
     'freezeShields': freezeShields,
     'highlightSwipeDate': highlightSwipeDate,
     'highlightSwipeMask': highlightSwipeMask,
+    'nickname': nickname,
+    'cityId': cityId,
+    'cityName': cityName,
     'lifeTotals': lifeTotals,
   };
 }
@@ -597,6 +617,14 @@ class GameService {
   /// Freeze shield inventory (dari daily chest). Auto-pakai saat missed day:
   /// 1 shield = 1 hari aman (semua streak).
   static int get freezeShields => _cache.freezeShields;
+
+  /// Update nickname (sync ke cloud via toMap).
+  static Future<void> updateNickname(String nick) =>
+      _save(_cache.copyWith(nickname: nick));
+
+  /// Update kota adzan (sync ke cloud via toMap).
+  static Future<void> updateLocation(String id, String name) =>
+      _save(_cache.copyWith(cityId: id, cityName: name));
 
   // ─── XP / Level ───
   static int xpNeededForLevel(int level) =>
