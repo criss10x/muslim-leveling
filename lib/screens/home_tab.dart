@@ -17,6 +17,7 @@ import 'naik_level_screen.dart';
 import 'quest_claim_screen.dart';
 import 'quran_reader.dart';
 import 'dzikir_screen.dart';
+import 'hadis_screen.dart';
 
 extension _StringExt on String {
   String get cap => '${this[0].toUpperCase()}${substring(1)}';
@@ -1299,49 +1300,57 @@ class _HomeTabState extends State<HomeTab> {
         Builder(builder: (_) {
           final count = GameService.hadisReadToday;
           final done = GameService.isPrayerCheckedToday('hadis5');
-          return FlatCard(
-            child: Row(
-              children: [
-                Icon(
-                  done ? Icons.check_circle : Icons.auto_stories,
-                  color: done
-                      ? AppColors.secondaryFixed
-                      : AppColors.onSurfaceVariant,
-                  size: 26,
-                ),
-                const SizedBox(width: AppSpacing.md),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Belajar Hadis',
-                        style: AppText.titleLg().copyWith(
-                          fontSize: 16,
-                          color: done
-                              ? AppColors.onSurfaceVariant
-                              : AppColors.onSurface,
-                        ),
-                      ),
-                      Text(
-                        done
-                            ? 'Selesai hari ini ✓'
-                            : '${count.clamp(0, GameService.hadisSideQuestTarget)}/${GameService.hadisSideQuestTarget} hadis dibaca',
-                        style: AppText.bodyMd().copyWith(
-                          color: AppColors.onSurfaceVariant,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
+          return PressableScale(
+            pressedScale: 0.97,
+            onTap: () async {
+              await Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => const HadisScreen()));
+              if (mounted) setState(() {});
+            },
+            child: FlatCard(
+              child: Row(
+                children: [
+                  Icon(
+                    done ? Icons.check_circle : Icons.auto_stories,
+                    color: done
+                        ? AppColors.secondaryFixed
+                        : AppColors.onSurfaceVariant,
+                    size: 26,
                   ),
-                ),
-                _xpPill(
-                  xp,
-                  AppColors.secondaryFixed,
-                  AppColors.onSurface,
-                  done: done,
-                ),
-              ],
+                  const SizedBox(width: AppSpacing.md),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Belajar Hadis',
+                          style: AppText.titleLg().copyWith(
+                            fontSize: 16,
+                            color: done
+                                ? AppColors.onSurfaceVariant
+                                : AppColors.onSurface,
+                          ),
+                        ),
+                        Text(
+                          done
+                              ? 'Selesai hari ini ✓'
+                              : '${count.clamp(0, GameService.hadisSideQuestTarget)}/${GameService.hadisSideQuestTarget} hadis dibaca',
+                          style: AppText.bodyMd().copyWith(
+                            color: AppColors.onSurfaceVariant,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  _xpPill(
+                    xp,
+                    AppColors.secondaryFixed,
+                    AppColors.onSurface,
+                    done: done,
+                  ),
+                ],
+              ),
             ),
           );
         }),
