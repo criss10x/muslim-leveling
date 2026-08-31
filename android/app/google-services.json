@@ -46,6 +46,14 @@
           }
         },
         {
+          "client_id": "691907686915-v2ieept73l4bgtmr9usdftb8n45hadca.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.muslimleveling.muslim_leveling",
+            "certificate_hash": "cc3fdabe460b8db63aff4a7e6faafcc6f37ef3ed"
+          }
+        },
+        {
           "client_id": "691907686915-ljhu8cc4uvjuggd093fv5bl7dvk6joil.apps.googleusercontent.com",
           "client_type": 3
         }
