@@ -52,7 +52,7 @@ void main() {
     expect(top('STATISTIK'), greaterThan(top('STREAK PER SHOLAT')));
     expect(tester.getTopLeft(locker).dy, greaterThan(top('STATISTIK')));
     expect(top('ACHIEVEMENTS'), greaterThan(tester.getTopLeft(locker).dy));
-    expect(top('Mode Haid'), greaterThan(top('ACHIEVEMENTS')));
+    expect(top('Periode Haid'), greaterThan(top('ACHIEVEMENTS')));
     expect(find.byType(CosmeticLocker), findsNothing);
 
     await tester.tap(locker);
