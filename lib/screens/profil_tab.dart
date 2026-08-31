@@ -599,6 +599,73 @@ class _ProfilTabState extends State<ProfilTab> {
                       ),
                     ),
                   ),
+                  // Jalan pintas Auto-start (Xiaomi/Oppo/Vivo) — tanpa ini
+                  // alarm dibunuh OEM saat app ditutup → adzan tak pernah
+                  // muncul di lock screen. Buka halaman sistem langsung.
+                  const SizedBox(height: AppSpacing.xs),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(AppSpacing.md),
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceContainerLow,
+                      borderRadius: BorderRadius.circular(AppRadius.lg),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.battery_alert,
+                              size: 20,
+                              color: AppColors.tertiary,
+                            ),
+                            const SizedBox(width: AppSpacing.sm),
+                            Expanded(
+                              child: Text(
+                                'Adzan tak muncul di Xiaomi/Oppo/Vivo?',
+                                style: AppText.bodyMd().copyWith(
+                                  color: AppColors.onSurface,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: AppSpacing.sm),
+                        Text(
+                          'Aktifkan "Autostart" & "Tanpa batasan baterai" di pengaturan HP agar alarm tetap bunyi saat app ditutup, dan notif muncul di lock screen.',
+                          style: AppText.bodyMd().copyWith(
+                            color: AppColors.onSurfaceVariant,
+                            fontSize: 13,
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.sm),
+                        SizedBox(
+                          width: double.infinity,
+                          child: OutlinedButton.icon(
+                            onPressed: () async {
+                              final ok = await NotificationService
+                                  .openOemAutoStartSettings();
+                              if (!ok && ctx.mounted) {
+                                Navigator.pop(ctx);
+                                _showSettingSnackbar(
+                                  'Buka Pengaturan > Aplikasi > Muslim Leveling > Baterai & Autostart manual.',
+                                );
+                              }
+                            },
+                            icon: const Icon(Icons.power_settings_new, size: 16),
+                            label: Text(
+                              'Buka Pengaturan Auto-start',
+                              style: AppText.bodyMd().copyWith(
+                                color: AppColors.primary,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),

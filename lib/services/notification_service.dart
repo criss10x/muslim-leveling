@@ -267,6 +267,43 @@ class NotificationService {
     }
   }
 
+  /// Buka halaman Auto-start MIUI (Xiaomi) / izin "Autostart" OEM.
+  /// Fallback berlapis: pengaturan baterai → detail app. Return false kalau
+  /// semua gagal (bukan device MIUI/OEM — user tinggal lihat instruksi).
+  static Future<bool> openOemAutoStartSettings() async {
+    const pkg = 'id.muslimleveling.muslim_leveling';
+    // MIUI 12+ autostart management page
+    const targets = [
+      ('com.miui.securitycenter', 'com.miui.permcenter.autostart.AutoStartManagementActivity'),
+      // MIUI lama
+      ('com.miui.securitycenter', 'com.miui.permcenter.autostart.AutoStartManagementActivity'),
+      // Oppo/Realme/OnePlus ColorOS
+      ('com.coloros.safecenter', 'com.coloros.safecenter.permission.startup.StartupAppListActivity'),
+      // Vivo
+      ('com.vivo.permissionmanager', 'com.vivo.permissionmanager.activity.BgStartUpManagerActivity'),
+    ];
+    for (final (pkgName, activity) in targets) {
+      try {
+        await AndroidIntent(
+          action: 'android.intent.action.MAIN',
+          package: pkgName,
+          componentName: '$pkgName/$activity',
+        ).launch();
+        return true;
+      } catch (_) {}
+    }
+    // Fallback: detail app (user scroll ke "Baterai"/"Autostart" manual)
+    try {
+      await AndroidIntent(
+        action: 'android.settings.APPLICATION_DETAILS_SETTINGS',
+        arguments: {'package': pkg},
+      ).launch();
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   /// Request POST_NOTIFICATIONS permission (Android 13+).
   /// Returns true if granted.
   static Future<bool> requestPermission() async {
