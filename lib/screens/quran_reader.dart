@@ -307,7 +307,7 @@ class _QuranReaderState extends State<QuranReader> {
           FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
-              'بسم الله',
+              'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ',
               textAlign: TextAlign.center,
               textDirection: TextDirection.rtl,
               style: GoogleFonts.amiriQuran(

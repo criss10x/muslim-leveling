@@ -261,7 +261,7 @@ class _SplashScreenState extends State<SplashScreen>
                 Padding(
                   padding: const EdgeInsets.only(bottom: AppSpacing.md),
                   child: Text(
-                    'v1.0.0', // ponytail: update when cutting release
+                    'v1.1.0', // ponytail: update when cutting release
                     style: AppText.labelCapsSm().copyWith(
                       color: AppColors.onSurfaceVariant.withValues(alpha: 0.6),
                     ),
