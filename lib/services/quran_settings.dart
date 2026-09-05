@@ -21,12 +21,14 @@ class QuranSettings extends ChangeNotifier {
   static const _kSpeed = 'quran_speed';
   static const _kQari = 'quran_qari_id';
   static const _kSleepMinutes = 'quran_sleep_minutes';
+  static const _kUseShortTafsir = 'quran_use_short_tafsir';
 
   double _arabicFontSize = 28;
   double _translationFontSize = 15;
   bool _showTranslation = true;
   bool _showLatin = true;
   bool _showTajweed = false;
+  bool _useShortTafsir = true; // default ringkas
   double _speed = 1.0;
   String _qariId = '05';
   int _sleepMinutes = -1; // -1 = akhir surat
@@ -36,6 +38,7 @@ class QuranSettings extends ChangeNotifier {
   bool get showTranslation => _showTranslation;
   bool get showLatin => _showLatin;
   bool get showTajweed => _showTajweed;
+  bool get useShortTafsir => _useShortTafsir;
   double get speed => _speed;
   String get qariId => _qariId;
   int get sleepMinutes => _sleepMinutes;
@@ -52,6 +55,7 @@ class QuranSettings extends ChangeNotifier {
     _showTranslation = p.getBool(_kShowTranslation) ?? true;
     _showLatin = p.getBool(_kShowLatin) ?? true;
     _showTajweed = p.getBool(_kShowTajweed) ?? false;
+    _useShortTafsir = p.getBool(_kUseShortTafsir) ?? true;
     _speed = p.getDouble(_kSpeed) ?? 1.0;
     _qariId = p.getString(_kQari) ?? '05';
     _sleepMinutes = p.getInt(_kSleepMinutes) ?? -1;
@@ -69,6 +73,13 @@ class QuranSettings extends ChangeNotifier {
     _showTajweed = v;
     final p = await SharedPreferences.getInstance();
     await p.setBool(_kShowTajweed, v);
+    notifyListeners();
+  }
+
+  Future<void> setUseShortTafsir(bool v) async {
+    _useShortTafsir = v;
+    final p = await SharedPreferences.getInstance();
+    await p.setBool(_kUseShortTafsir, v);
     notifyListeners();
   }
 

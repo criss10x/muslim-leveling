@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
+import 'quran_settings.dart';
 
 class QuranSurah {
   final int number;
@@ -95,9 +96,28 @@ class QuranData {
 
 class QuranTafsir {
   final int ayah;
-  final String text;
+  final String shortText;
+  final String longText;
 
-  const QuranTafsir({required this.ayah, required this.text});
+  String get text =>
+      shortText.isNotEmpty && quranSettings.useShortTafsir
+          ? shortText
+          : longText;
+
+  const QuranTafsir({
+    required this.ayah,
+    required this.shortText,
+    required this.longText,
+  });
+
+  factory QuranTafsir.fromGading(Map<String, dynamic> j) {
+    final t = j['tafsir']?['id'] as Map<String, dynamic>? ?? {};
+    return QuranTafsir(
+      ayah: j['number']?['inSurah'] as int? ?? 0,
+      shortText: (t['short'] as String?) ?? '',
+      longText: (t['long'] as String?) ?? '',
+    );
+  }
 }
 
 final QuranData quranData = QuranData();

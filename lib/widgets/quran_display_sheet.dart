@@ -77,6 +77,15 @@ class _DisplaySheet extends StatelessWidget {
                     subtitle: 'Merah=Ghunnah, Biru=Qalqalah/Idgham, '
                         'Hijau=Mad',
                   ),
+                  const Divider(height: 24),
+                  _switchTile(
+                    value: quranSettings.useShortTafsir,
+                    onChanged: (v) => quranSettings.setUseShortTafsir(v),
+                    title: 'Tafsir Ringkas',
+                    subtitle: quranSettings.useShortTafsir
+                        ? 'Tafsir Muyassar (ringkas, mudah dicerna)'
+                        : 'Tafsir Kemenag (lengkap)',
+                  ),
                 ],
               ),
             ),
