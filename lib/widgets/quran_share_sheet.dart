@@ -347,6 +347,8 @@ class _QShareCard extends StatelessWidget {
   final _BgPreset preset;
   final Color fg;
   final Color sub;
+  final bool showArabic;
+  final bool showTranslation;
 
   const _QShareCard({
     required this.surah,
@@ -354,6 +356,8 @@ class _QShareCard extends StatelessWidget {
     required this.preset,
     required this.fg,
     required this.sub,
+    this.showArabic = true,
+    this.showTranslation = true,
   });
 
   @override
@@ -436,26 +440,54 @@ class _QShareCard extends StatelessWidget {
                 Divider(color: fg.withValues(alpha: 0.25), height: 1),
                 const SizedBox(height: 10),
                 // ── Arab ayat ──
-                Text(
-                  ayah.arabic,
-                  maxLines: 6,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.right,
-                  textDirection: TextDirection.rtl,
-                  style: GoogleFonts.amiriQuran(
-                    fontSize: 24,
-                    height: 1.7,
-                    color: fg,
+                if (showArabic) ...[
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        ayah.arabic,
+                        maxLines: 8,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.right,
+                        textDirection: TextDirection.rtl,
+                        style: GoogleFonts.amiriQuran(
+                          fontSize: 24,
+                          height: 1.7,
+                          color: fg,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 12),
+                  if (showTranslation) const SizedBox(height: 12),
+                ],
                 // ── Terjemahan ──
-                Text(
-                  ayah.translation,
-                  maxLines: 5,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 14, height: 1.55, color: sub),
-                ),
+                if (showTranslation) ...[
+                  showArabic
+                      ? Expanded(
+                          child: Center(
+                            child: Text(
+                              ayah.translation,
+                              maxLines: 6,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 14,
+                                height: 1.55,
+                                color: sub,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Text(
+                          ayah.translation,
+                          maxLines: 12,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16,
+                            height: 1.6,
+                            color: sub,
+                          ),
+                        ),
+                ],
                 const Spacer(),
                 // ── Detail ayat ──
                 Center(
@@ -552,6 +584,8 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
   final _repaintKey = GlobalKey();
   int _presetIdx = _kDefaultPreset; // gradient jade
   bool _sharing = false;
+  bool _showArabic = true;
+  bool _showTranslation = true;
 
   static const int _kDefaultPreset = 4;
 
@@ -642,6 +676,8 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
                         preset: _preset,
                         fg: _preset.fg,
                         sub: _preset.sub,
+                        showArabic: _showArabic,
+                        showTranslation: _showTranslation,
                       ),
                     ),
                   ),
@@ -713,6 +749,33 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
                     ],
                   ),
                   const SizedBox(height: 16),
+                  // ── Pilihan konten: Arab / Terjemahan ──
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _contentChip(
+                        label: 'Arab',
+                        icon: Icons.translate,
+                        selected: _showArabic,
+                        onTap: () {
+                          // Jangan izinkan keduanya mati — ini yang terakhir aktif.
+                          if (_showArabic && !_showTranslation) return;
+                          setState(() => _showArabic = !_showArabic);
+                        },
+                      ),
+                      const SizedBox(width: 8),
+                      _contentChip(
+                        label: 'Terjemahan',
+                        icon: Icons.menu_book,
+                        selected: _showTranslation,
+                        onTap: () {
+                          if (!_showArabic && _showTranslation) return;
+                          setState(() => _showTranslation = !_showTranslation);
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
                   // ── Tombol share ──
                   SizedBox(
                     width: double.infinity,
@@ -736,6 +799,47 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
                     ),
                   ),
                 ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// ponytail: chip toggle konten — selalu izinkan minimal 1 aktif.
+  Widget _contentChip({
+    required String label,
+    required IconData icon,
+    required bool selected,
+    required VoidCallback onTap,
+  }) {
+    final Color fg = selected ? Colors.white : Colors.white70;
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(AppRadius.pill),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: selected
+              ? AppColors.primary.withValues(alpha: 0.9)
+              : Colors.white.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(AppRadius.pill),
+          border: selected
+              ? null
+              : Border.all(color: Colors.white.withValues(alpha: 0.25)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 15, color: fg),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: fg,
               ),
             ),
           ],
