@@ -5,6 +5,8 @@ import '../services/quran_data.dart';
 /// API key dari dokumentasi equran.id
 const _base = 'https://equran.id/api/v2';
 const _gadingBase = 'https://api.quran.gading.dev';
+// Self-host di muslim.lifetimeleveling.com (Hostinger via GitHub auto-deploy).
+const _selfHostBase = 'https://muslim.lifetimeleveling.com/api/tafsir';
 
 class QuranApi {
   /// Fetch ayahs for surah [number] from API, with transliteration teksLatin.
@@ -27,28 +29,62 @@ class QuranApi {
     }
   }
 
-  /// Fetch tafsir for surah [number] from gading.dev API.
+  /// Fetch tafsir for surah [number].
+  /// Chain: self-host (Hostinger) → gading.dev → equran.id.
   /// Returns short (Muyassar) + long (Kemenag) tafsir per ayat.
   Future<List<QuranTafsir>> tafsir(int number) async {
+    try {
+      return await _fetch(
+        Uri.parse('$_selfHostBase/$number.json'),
+        _parseSelfHosted,
+        userAgent: 'MuslimLeveling/1.1',
+      );
+    } catch (_) {
+      // Self-host down → fallback gading.dev
+      try {
+        return await _fetch(
+          Uri.parse('$_gadingBase/surah/$number'),
+          _parseGading,
+          userAgent: 'MuslimLeveling/1.1',
+        );
+      } catch (_) {
+        // gading.dev down → fallback equran.id (long saja)
+        return _tafsirFallback(number);
+      }
+    }
+  }
+
+  Future<List<QuranTafsir>> _fetch(
+    Uri uri,
+    List<QuranTafsir> Function(dynamic body) parse, {
+    String? userAgent,
+  }) async {
     final client = HttpClient();
     try {
-      final req = await client.getUrl(Uri.parse('$_gadingBase/surah/$number'));
-      req.headers.set(HttpHeaders.userAgentHeader, 'MuslimLeveling/1.1');
+      final req = await client.getUrl(uri);
+      if (userAgent != null) {
+        req.headers.set(HttpHeaders.userAgentHeader, userAgent);
+      }
       final res = await req.close();
       final body = await res.transform(utf8.decoder).join();
-      final json = jsonDecode(body) as Map<String, dynamic>;
-      final verses = (json['data']['verses'] as List)
-          .cast<Map<String, dynamic>>();
-      return verses.map((j) => QuranTafsir.fromGading(j)).toList(growable: false);
-    } catch (_) {
-      // Fallback ke equran.id jika gading.dev down
-      return _tafsirFallback(number);
+      return parse(jsonDecode(body));
     } finally {
       client.close();
     }
   }
 
-  /// Fallback: equran.id v2 (tafsir Kemenag long saja, tanpa short).
+  List<QuranTafsir> _parseSelfHosted(dynamic json) {
+    final ayahs = (json['ayahs'] as List).cast<Map<String, dynamic>>();
+    return ayahs.map(QuranTafsir.fromSelfHosted).toList(growable: false);
+  }
+
+  List<QuranTafsir> _parseGading(dynamic json) {
+    final verses = (json['data']['verses'] as List)
+        .cast<Map<String, dynamic>>();
+    return verses.map(QuranTafsir.fromGading).toList(growable: false);
+  }
+
+  /// Fallback terakhir: equran.id v2 (tafsir Kemenag long saja, tanpa short).
   Future<List<QuranTafsir>> _tafsirFallback(int number) async {
     final client = HttpClient();
     try {

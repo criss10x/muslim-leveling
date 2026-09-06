@@ -209,6 +209,16 @@ class QuranTafsir {
       longText: (t['long'] as String?) ?? '',
     );
   }
+
+  /// Parse format self-host (muslim.lifetimeleveling.com/api/tafsir/{n}.json):
+  /// {"surah":N,"nameLatin":"...","ayahs":[{"ayah":1,"short":"...","long":"..."}]}
+  factory QuranTafsir.fromSelfHosted(Map<String, dynamic> j) {
+    return QuranTafsir(
+      ayah: j['ayah'] as int? ?? 0,
+      shortText: (j['short'] as String?) ?? '',
+      longText: (j['long'] as String?) ?? '',
+    );
+  }
 }
 
 final QuranData quranData = QuranData();
