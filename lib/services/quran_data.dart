@@ -92,6 +92,65 @@ class QuranData {
           s.number.toString() == q;
     }).toList(growable: false);
   }
+
+  /// Indeks terjemahan per surat (lazy, dibangun saat pencarian ayat pertama).
+  Map<int, List<QuranAyah>>? _translationIndex;
+
+  /// Cari kata di dalam terjemahan Indonesia semua ayat.
+  /// Return daftar [surahNumber, ayahNumber, translation] yang match.
+  /// Limit 30 hasil agar list tetap ringan.
+  Future<List<QuranSearchHit>> searchVerses(String query) async {
+    final q = query.trim().toLowerCase();
+    if (q.isEmpty) return const [];
+
+    var index = _translationIndex;
+    if (index == null) {
+      // Build sekali, cache di memori. Scan 114 file ≈ cepat & hanya field
+      // translation (ringan). 1.8M char total tapi di-split per surat.
+      index = <int, List<QuranAyah>>{};
+      for (var n = 1; n <= 114; n++) {
+        try {
+          final raw = await rootBundle
+              .loadString('assets/quran/surah/$n.json');
+          final list = (jsonDecode(raw) as List)
+              .cast<Map<String, dynamic>>()
+              .map(QuranAyah.fromJson)
+              .toList(growable: false);
+          index[n] = list;
+        } catch (_) {
+          // Skip surat yang gagal dimuat.
+        }
+      }
+      _translationIndex = index;
+    }
+
+    final hits = <QuranSearchHit>[];
+    for (final e in index.entries) {
+      for (final ayah in e.value) {
+        if (ayah.translation.toLowerCase().contains(q)) {
+          hits.add(QuranSearchHit(
+            surahNumber: e.key,
+            ayahNumber: ayah.ayah,
+            translation: ayah.translation,
+          ));
+          if (hits.length >= 30) return hits;
+        }
+      }
+    }
+    return hits;
+  }
+}
+
+/// Hasil pencarian satu ayat di terjemahan.
+class QuranSearchHit {
+  final int surahNumber;
+  final int ayahNumber;
+  final String translation;
+  const QuranSearchHit({
+    required this.surahNumber,
+    required this.ayahNumber,
+    required this.translation,
+  });
 }
 
 class QuranTafsir {

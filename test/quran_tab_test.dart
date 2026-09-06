@@ -94,7 +94,9 @@ void main() {
     await tester.pumpWidget(wrap(QuranTab()));
     await tester.pumpAndSettle();
 
-    await tester.enterText(find.byType(TextField), 'zzzzzz');
+    // <3 huruf: lewati pencarian ayat (async asset), tampil pesan langsung.
+    // 'x' tidak ada di nama latin surat manapun → list kosong.
+    await tester.enterText(find.byType(TextField), 'x');
     await tester.pumpAndSettle();
 
     expect(find.text('Surat tidak ditemukan'), findsOneWidget);

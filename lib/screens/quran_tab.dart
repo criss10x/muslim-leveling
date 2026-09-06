@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../services/quran_data.dart';
@@ -19,6 +21,9 @@ class _QuranTabState extends State<QuranTab> {
   String _query = '';
   bool _loading = true;
   bool _failed = false;
+  List<QuranSearchHit> _verseHits = const [];
+  bool _searchingVerses = false;
+  Timer? _debounce;
   // Controller eksplisit: SliverPersistentHeader membangun ulang child-nya
   // saat scroll, dan TextField tanpa controller berisiko kehilangan isinya.
   final TextEditingController _searchController = TextEditingController();
@@ -35,8 +40,30 @@ class _QuranTabState extends State<QuranTab> {
   @override
   void dispose() {
     quranProgress.removeListener(_onProgressChanged);
+    _debounce?.cancel();
     _searchController.dispose();
     super.dispose();
+  }
+
+  /// Debounce 400ms lalu cari di terjemahan (lazy index, satu kali).
+  void _onQueryChanged(String v) {
+    _debounce?.cancel();
+    setState(() {
+      _query = v;
+      _verseHits = const [];
+    });
+    final q = v.trim();
+    if (q.length < 3) return; // kata pendek → terlalu banyak hasil
+    _debounce = Timer(const Duration(milliseconds: 400), () async {
+      if (!mounted) return;
+      setState(() => _searchingVerses = true);
+      final hits = await quranData.searchVerses(q);
+      if (!mounted) return;
+      setState(() {
+        _verseHits = hits;
+        _searchingVerses = false;
+      });
+    });
   }
 
   void _onProgressChanged() {
@@ -174,10 +201,10 @@ class _QuranTabState extends State<QuranTab> {
               extent: _SearchHeader.extentFor(context),
               child: TextField(
                 controller: _searchController,
-                onChanged: (v) => setState(() => _query = v),
+                onChanged: _onQueryChanged,
                 style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
                 decoration: InputDecoration(
-                  hintText: 'Cari surat, arti, atau nomor',
+                  hintText: 'Cari surat, arti, nomor, atau kata',
                   hintStyle: AppText.bodyMd().copyWith(
                     color: AppColors.onSurfaceVariant,
                   ),
@@ -195,7 +222,41 @@ class _QuranTabState extends State<QuranTab> {
               ),
             ),
           ),
-          if (list.isEmpty)
+          if (list.isEmpty && _query.trim().length >= 3)
+            _searchingVerses
+                ? const SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                : _verseHits.isEmpty
+                    ? SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: Center(
+                          child: Text(
+                            'Tidak ditemukan di surat maupun terjemahan ayat',
+                            style: AppText.bodyMd().copyWith(
+                              color: AppColors.onSurfaceVariant,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      )
+                    : SliverPadding(
+                        padding: const EdgeInsets.only(
+                          left: AppSpacing.md,
+                          right: AppSpacing.md,
+                          top: AppSpacing.xs,
+                          bottom: AppSpacing.xxl * 2,
+                        ),
+                        sliver: SliverList.builder(
+                          itemCount: _verseHits.length,
+                          itemBuilder: (_, i) => _VerseHitRow(
+                            hit: _verseHits[i],
+                            surah: _surahOf(_verseHits[i].surahNumber),
+                          ),
+                        ),
+                      )
+          else if (list.isEmpty)
             SliverFillRemaining(
               hasScrollBody: false,
               child: Center(
@@ -229,6 +290,13 @@ class _QuranTabState extends State<QuranTab> {
   QuranSurah? get _lastSurah {
     final n = quranProgress.surahNumber;
     if (n == null || !quranProgress.hasProgress) return null;
+    for (final s in _all) {
+      if (s.number == n) return s;
+    }
+    return null;
+  }
+
+  QuranSurah? _surahOf(int n) {
     for (final s in _all) {
       if (s.number == n) return s;
     }
@@ -534,4 +602,97 @@ class _SearchHeader extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(covariant _SearchHeader oldDelegate) =>
       oldDelegate.extent != extent || oldDelegate.child != child;
+}
+
+/// Satu baris hasil pencarian ayat dalam terjemahan. Tap → buka QuranReader
+/// langsung ke ayat yang dimaksud.
+class _VerseHitRow extends StatelessWidget {
+  final QuranSearchHit hit;
+  final QuranSurah? surah;
+
+  const _VerseHitRow({required this.hit, required this.surah});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+      child: Material(
+        color: AppColors.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(AppRadius.xl),
+          onTap: () {
+            if (surah == null) return;
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => QuranReader(
+                  surah: surah!,
+                  initialAyah: hit.ayahNumber,
+                ),
+              ),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 34,
+                  height: 34,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.14),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      '${hit.surahNumber}',
+                      style: AppText.labelCaps().copyWith(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        surah == null
+                            ? 'Surat ${hit.surahNumber} · Ayat ${hit.ayahNumber}'
+                            : '${surah!.nameLatin} · Ayat ${hit.ayahNumber}',
+                        style: AppText.bodyMd().copyWith(
+                          color: AppColors.onSurfaceVariant,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        hit.translation,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppText.bodyMd().copyWith(
+                          color: AppColors.onSurface,
+                          height: 1.4,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.xs),
+                Icon(
+                  Icons.chevron_right,
+                  color: AppColors.onSurfaceVariant,
+                  size: 20,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
