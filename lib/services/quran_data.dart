@@ -98,25 +98,29 @@ class QuranData {
   Future<List<_IdxRow>>? _indexFuture;
 
   /// Cari kata di dalam terjemahan Indonesia semua ayat.
-  /// Return daftar [surahNumber, ayahNumber, translation] yang match.
-  /// Limit 30 hasil agar list tetap ringan.
-  Future<List<QuranSearchHit>> searchVerses(String query) async {
+  /// Return daftar [surahNumber, ayahNumber, translation] yang match,
+  /// dibatasi 30 hasil; [truncated] true kalau masih ada match tersisa.
+  Future<QuranSearchResult> searchVerses(String query) async {
     final q = query.trim().toLowerCase();
-    if (q.isEmpty) return const [];
+    if (q.isEmpty) return const QuranSearchResult([], false);
 
     final rows = await _ensureIndex();
     final hits = <QuranSearchHit>[];
+    var truncated = false;
     for (final r in rows) {
       if (r.lower.contains(q)) {
+        if (hits.length >= 30) {
+          truncated = true;
+          break;
+        }
         hits.add(QuranSearchHit(
           surahNumber: r.surah,
           ayahNumber: r.ayah,
           translation: r.text,
         ));
-        if (hits.length >= 30) break;
       }
     }
-    return hits;
+    return QuranSearchResult(hits, truncated);
   }
 
   Future<List<_IdxRow>> _ensureIndex() {
@@ -171,6 +175,14 @@ class QuranSearchHit {
     required this.ayahNumber,
     required this.translation,
   });
+}
+
+/// Hasil pencarian ayat: daftar hit + penanda apakah dibatasi 30
+/// (masih ada match lain yang tidak ditampilkan).
+class QuranSearchResult {
+  final List<QuranSearchHit> hits;
+  final bool truncated;
+  const QuranSearchResult(this.hits, this.truncated);
 }
 
 class QuranTafsir {

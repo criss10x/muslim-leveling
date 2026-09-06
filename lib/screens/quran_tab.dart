@@ -23,6 +23,7 @@ class _QuranTabState extends State<QuranTab> {
   bool _failed = false;
   List<QuranSearchHit> _verseHits = const [];
   bool _searchingVerses = false;
+  bool _truncated = false; // hasil dipotong di 30, masih ada match lain
   Timer? _debounce;
   // Urutan request pencarian: hasil lama dibuang kalau query sudah berubah
   // (stale-response race).
@@ -56,20 +57,28 @@ class _QuranTabState extends State<QuranTab> {
       _query = v;
       _verseHits = const [];
       _searchingVerses = false;
+      _truncated = false;
     });
     final q = v.trim();
     if (q.length < 3) return; // kata pendek → terlalu banyak hasil
+    // Mulai spinner SEKARANG (bukan setelah debounce): kalau surat tidak
+    // cocok, tanpa ini user lihat flash "Tidak ditemukan" selama 400ms.
+    if (quranData.search(_all, q).isEmpty) {
+      setState(() => _searchingVerses = true);
+    }
     _debounce = Timer(const Duration(milliseconds: 400), () async {
       final seq = _searchSeq;
       // Nama surat sudah cocok → hasil ayat tidak relevan; jangan scan.
       if (quranData.search(_all, q).isNotEmpty) return;
       if (!mounted) return;
-      setState(() => _searchingVerses = true);
       try {
-        final hits = await quranData.searchVerses(q);
+        final res = await quranData.searchVerses(q);
         // Hasil lama (query sudah berubah) → buang.
         if (!mounted || seq != _searchSeq) return;
-        setState(() => _verseHits = hits);
+        setState(() {
+          _verseHits = res.hits;
+          _truncated = res.truncated;
+        });
       } finally {
         // Spinner mati walau searchVerses melempar (defensif).
         if (mounted && seq == _searchSeq) {
@@ -270,8 +279,11 @@ class _QuranTabState extends State<QuranTab> {
                                   bottom: 8,
                                 ),
                                 child: Text(
-                                  '${_verseHits.length} ayat ditemukan di '
-                                  'terjemahan',
+                                  _truncated
+                                      ? '${_verseHits.length}+ ayat ditemukan '
+                                          '— persempit kata kunci'
+                                      : '${_verseHits.length} ayat ditemukan '
+                                          'di terjemahan',
                                   style: AppText.labelCaps().copyWith(
                                     color: AppColors.onSurfaceVariant,
                                   ),
