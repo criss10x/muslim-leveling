@@ -24,6 +24,9 @@ class _QuranTabState extends State<QuranTab> {
   List<QuranSearchHit> _verseHits = const [];
   bool _searchingVerses = false;
   Timer? _debounce;
+  // Urutan request pencarian: hasil lama dibuang kalau query sudah berubah
+  // (stale-response race).
+  int _searchSeq = 0;
   // Controller eksplisit: SliverPersistentHeader membangun ulang child-nya
   // saat scroll, dan TextField tanpa controller berisiko kehilangan isinya.
   final TextEditingController _searchController = TextEditingController();
@@ -48,21 +51,31 @@ class _QuranTabState extends State<QuranTab> {
   /// Debounce 400ms lalu cari di terjemahan (lazy index, satu kali).
   void _onQueryChanged(String v) {
     _debounce?.cancel();
+    _searchSeq++; // setiap ketikan invalidasi hasil yang sedang berjalan
     setState(() {
       _query = v;
       _verseHits = const [];
+      _searchingVerses = false;
     });
     final q = v.trim();
     if (q.length < 3) return; // kata pendek → terlalu banyak hasil
     _debounce = Timer(const Duration(milliseconds: 400), () async {
+      final seq = _searchSeq;
+      // Nama surat sudah cocok → hasil ayat tidak relevan; jangan scan.
+      if (quranData.search(_all, q).isNotEmpty) return;
       if (!mounted) return;
       setState(() => _searchingVerses = true);
-      final hits = await quranData.searchVerses(q);
-      if (!mounted) return;
-      setState(() {
-        _verseHits = hits;
-        _searchingVerses = false;
-      });
+      try {
+        final hits = await quranData.searchVerses(q);
+        // Hasil lama (query sudah berubah) → buang.
+        if (!mounted || seq != _searchSeq) return;
+        setState(() => _verseHits = hits);
+      } finally {
+        // Spinner mati walau searchVerses melempar (defensif).
+        if (mounted && seq == _searchSeq) {
+          setState(() => _searchingVerses = false);
+        }
+      }
     });
   }
 
@@ -248,12 +261,32 @@ class _QuranTabState extends State<QuranTab> {
                           top: AppSpacing.xs,
                           bottom: AppSpacing.xxl * 2,
                         ),
-                        sliver: SliverList.builder(
-                          itemCount: _verseHits.length,
-                          itemBuilder: (_, i) => _VerseHitRow(
-                            hit: _verseHits[i],
-                            surah: _surahOf(_verseHits[i].surahNumber),
-                          ),
+                        sliver: SliverMainAxisGroup(
+                          slivers: [
+                            SliverToBoxAdapter(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 4,
+                                  bottom: 8,
+                                ),
+                                child: Text(
+                                  '${_verseHits.length} ayat ditemukan di '
+                                  'terjemahan',
+                                  style: AppText.labelCaps().copyWith(
+                                    color: AppColors.onSurfaceVariant,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SliverList.builder(
+                              itemCount: _verseHits.length,
+                              itemBuilder: (_, i) => _VerseHitRow(
+                                hit: _verseHits[i],
+                                query: _query.trim(),
+                                surah: _surahOf(_verseHits[i].surahNumber),
+                              ),
+                            ),
+                          ],
                         ),
                       )
           else if (list.isEmpty)
@@ -608,12 +641,71 @@ class _SearchHeader extends SliverPersistentHeaderDelegate {
 /// langsung ke ayat yang dimaksud.
 class _VerseHitRow extends StatelessWidget {
   final QuranSearchHit hit;
+  final String query;
   final QuranSurah? surah;
 
-  const _VerseHitRow({required this.hit, required this.surah});
+  const _VerseHitRow({
+    required this.hit,
+    required this.query,
+    required this.surah,
+  });
+
+  /// Potong [text] jadi ~90 karakter di sekitar match [q], supaya kata yang
+  /// dicari selalu terlihat (bukan terpotong ellipsis di akhir kalimat).
+  /// Return null kalau q kosong/tidak ketemu → tampilkan teks apa adanya.
+  String? _snippet(String text, String q) {
+    final idx = text.toLowerCase().indexOf(q);
+    if (idx < 0 || text.length <= 90) return null;
+    var start = idx - 35;
+    var end = idx + q.length + 50;
+    if (start < 0) {
+      start = 0;
+      end = 90;
+    }
+    if (end > text.length) end = text.length;
+    return (start > 0 ? '…' : '') +
+        text.substring(start, end) +
+        (end < text.length ? '…' : '');
+  }
+
+  /// RichText dengan kata kunci di-highlight (bold + warna primer).
+  List<TextSpan> _highlight(String text, String q) {
+    final spans = <TextSpan>[];
+    if (q.isEmpty) {
+      spans.add(TextSpan(text: text));
+      return spans;
+    }
+    var rest = text;
+    final lowerQ = q.toLowerCase();
+    while (true) {
+      final idx = rest.toLowerCase().indexOf(lowerQ);
+      if (idx < 0) {
+        spans.add(TextSpan(text: rest));
+        break;
+      }
+      if (idx > 0) spans.add(TextSpan(text: rest.substring(0, idx)));
+      final match = rest.substring(idx, idx + q.length);
+      spans.add(TextSpan(
+        text: match,
+        style: TextStyle(
+          color: AppColors.primary,
+          fontWeight: FontWeight.w700,
+        ),
+      ));
+      rest = rest.substring(idx + q.length);
+      if (rest.isEmpty) break;
+    }
+    return spans;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final snippet = _snippet(hit.translation, query);
+    final shown = snippet ?? hit.translation;
+    final baseStyle = AppText.bodyMd().copyWith(
+      color: AppColors.onSurface,
+      height: 1.4,
+    );
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.sm),
       child: Material(
@@ -665,19 +757,16 @@ class _VerseHitRow extends StatelessWidget {
                             : '${surah!.nameLatin} · Ayat ${hit.ayahNumber}',
                         style: AppText.bodyMd().copyWith(
                           color: AppColors.onSurfaceVariant,
-                          fontSize: 12,
+                          fontSize: 13,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       const SizedBox(height: 3),
-                      Text(
-                        hit.translation,
+                      Text.rich(
+                        TextSpan(children: _highlight(shown, query)),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: AppText.bodyMd().copyWith(
-                          color: AppColors.onSurface,
-                          height: 1.4,
-                        ),
+                        style: baseStyle,
                       ),
                     ],
                   ),

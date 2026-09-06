@@ -93,8 +93,9 @@ class QuranData {
     }).toList(growable: false);
   }
 
-  /// Indeks terjemahan per surat (lazy, dibangun saat pencarian ayat pertama).
-  Map<int, List<QuranAyah>>? _translationIndex;
+  /// Baris indeks pencarian terjemahan. Single-flight: dibangun sekali,
+  /// hanya menyimpan teks (asli + lowercase) — bukan objek [QuranAyah] penuh.
+  Future<List<_IdxRow>>? _indexFuture;
 
   /// Cari kata di dalam terjemahan Indonesia semua ayat.
   /// Return daftar [surahNumber, ayahNumber, translation] yang match.
@@ -103,42 +104,61 @@ class QuranData {
     final q = query.trim().toLowerCase();
     if (q.isEmpty) return const [];
 
-    var index = _translationIndex;
-    if (index == null) {
-      // Build sekali, cache di memori. Scan 114 file ≈ cepat & hanya field
-      // translation (ringan). 1.8M char total tapi di-split per surat.
-      index = <int, List<QuranAyah>>{};
-      for (var n = 1; n <= 114; n++) {
-        try {
-          final raw = await rootBundle
-              .loadString('assets/quran/surah/$n.json');
-          final list = (jsonDecode(raw) as List)
-              .cast<Map<String, dynamic>>()
-              .map(QuranAyah.fromJson)
-              .toList(growable: false);
-          index[n] = list;
-        } catch (_) {
-          // Skip surat yang gagal dimuat.
-        }
-      }
-      _translationIndex = index;
-    }
-
+    final rows = await _ensureIndex();
     final hits = <QuranSearchHit>[];
-    for (final e in index.entries) {
-      for (final ayah in e.value) {
-        if (ayah.translation.toLowerCase().contains(q)) {
-          hits.add(QuranSearchHit(
-            surahNumber: e.key,
-            ayahNumber: ayah.ayah,
-            translation: ayah.translation,
-          ));
-          if (hits.length >= 30) return hits;
-        }
+    for (final r in rows) {
+      if (r.lower.contains(q)) {
+        hits.add(QuranSearchHit(
+          surahNumber: r.surah,
+          ayahNumber: r.ayah,
+          translation: r.text,
+        ));
+        if (hits.length >= 30) break;
       }
     }
     return hits;
   }
+
+  Future<List<_IdxRow>> _ensureIndex() {
+    final f = _indexFuture;
+    if (f != null) return f; // dua panggilan bersamaan → satu build saja
+    final t = _buildIndex();
+    _indexFuture = t;
+    return t;
+  }
+
+  Future<List<_IdxRow>> _buildIndex() async {
+    final rows = <_IdxRow>[];
+    // await per file membuat decode menyebar antar-frame (tidak menyendat
+    // UI). 114 × ~32KB, parse per file hanya ~1-2ms.
+    for (var n = 1; n <= 114; n++) {
+      try {
+        final raw = await rootBundle.loadString('assets/quran/surah/$n.json');
+        for (final j in (jsonDecode(raw) as List).cast<Map<String, dynamic>>()) {
+          final text = j['translation'] as String? ?? '';
+          if (text.isEmpty) continue;
+          rows.add(_IdxRow(
+            n,
+            j['ayah'] as int? ?? 0,
+            text,
+            text.toLowerCase(),
+          ));
+        }
+      } catch (_) {
+        // ponytail: lewati surat korup — satu file jelek tak menggagalkan index.
+      }
+    }
+    return rows;
+  }
+}
+
+/// Satu baris indeks pencarian terjemahan.
+class _IdxRow {
+  final int surah;
+  final int ayah;
+  final String text; // teks asli, untuk snippet & tampil
+  final String lower; // sudah lowercase, untuk contains cepat
+  const _IdxRow(this.surah, this.ayah, this.text, this.lower);
 }
 
 /// Hasil pencarian satu ayat di terjemahan.
