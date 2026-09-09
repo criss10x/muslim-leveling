@@ -57,6 +57,55 @@ void main() {
     expect(merged['freezeShields'], 2, reason: 'field lokal dipertahankan');
   });
 
+  test('pickRicherGame restores rich remote streaks after fresh install', () {
+    // Simulasi reinstall: lokal kosong (fresh), remote punya streak banyak.
+    final merged = pickRicherGame(
+      {
+        'xp': 0,
+        'perPrayerStreaks': {}, // fresh install — tidak ada streak
+      },
+      {
+        'xp': 5000, // remote XP tinggi
+        'perPrayerStreaks': {
+          'subuh': {'current': 8, 'best': 9, 'lastDate': '2026-09-08'},
+          'maghrib': {'current': 15, 'best': 20, 'lastDate': '2026-09-08'},
+          'isya': {'current': 3, 'best': 6, 'lastDate': '2026-09-07'},
+        },
+        'heroStreak': {'current': 12, 'best': 12, 'lastDate': '2026-09-08'},
+      },
+    );
+    final streaks = merged['perPrayerStreaks'] as Map;
+    expect(streaks.length, 3, reason: 'streak remote harus dipertahankan');
+    expect((streaks['maghrib'] as Map)['current'], 15,
+        reason: 'maghrib remote 15 tidak boleh hilang jadi 0');
+    expect((streaks['subuh'] as Map)['current'], 8);
+  });
+
+  test('pickRicherGame merges both sides per-prayer (union, richer wins)', () {
+    // Lokal punya isya (lebih baru), remote punya subuh (satu2nya) —
+    // keduanya harus muncul, bukan saling menimpa.
+    final merged = pickRicherGame(
+      {
+        'xp': 100,
+        'perPrayerStreaks': {
+          'isya': {'current': 4, 'best': 6, 'lastDate': '2026-09-08'},
+        },
+      },
+      {
+        'xp': 200,
+        'perPrayerStreaks': {
+          'subuh': {'current': 7, 'best': 9, 'lastDate': '2026-09-08'},
+          'isya': {'current': 2, 'best': 3, 'lastDate': '2026-09-06'},
+        },
+      },
+    );
+    final streaks = merged['perPrayerStreaks'] as Map;
+    expect(streaks.length, 2, reason: 'union dua sisi');
+    expect((streaks['subuh'] as Map)['current'], 7);
+    expect((streaks['isya'] as Map)['current'], 4,
+        reason: 'isya lokal 4 > remote 2 — lokal menang');
+  });
+
   test('mergeLearning unions modules and max score', () {
     final learn = mergeLearning(
       {

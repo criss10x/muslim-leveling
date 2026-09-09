@@ -31,8 +31,16 @@ Map<String, dynamic> pickRicherGame(
       merged[key] = lv;
       continue;
     }
-    if (_isNumericMap(lv) && _isNumericMap(rv)) {
-      // perPrayerStreaks / lifeTotals: nilai per-key max.
+    if (key == 'perPrayerStreaks' || key == 'lifeTotals') {
+      // Map<String, Map> (perPrayerStreaks: {subuh: {current,best,...}}) —
+      // merge per-key, nilai lebih kaya menang (bukan seluruh map lokal menang).
+      // ponytail: fix reinstall — lokal fresh (kosong) vs remote (kaya):
+      // dulu `else merged[key]=lv` membuang streak remote. Sekarang union.
+      final lm = Map<String, dynamic>.from(lv as Map);
+      final rm = Map<String, dynamic>.from(rv as Map);
+      merged[key] = _mergeRichMaps(lm, rm);
+    } else if (_isNumericMap(lv) && _isNumericMap(rv)) {
+      // Nilai per-key max (freezeShields dll — tapi mereka skalar, jarang di sini).
       merged[key] = {
         ...rv,
         ...{for (final e in (lv as Map).entries) e.key: _maxNum(lv, rv, e.key)},
@@ -44,6 +52,56 @@ Map<String, dynamic> pickRicherGame(
     }
   }
   return merged;
+}
+
+/// Merge dua map yang nilainya map-of-record (streak/shield state).
+/// Untuk tiap key: pilih nilai yang "lebih kaya" — current lebih besar menang;
+/// kalau salah satu kosong ambil yang terisi; kalau sama, gabung best tertinggi
+/// & lastDate paling baru.
+Map<String, dynamic> _mergeRichMaps(
+  Map<String, dynamic> local,
+  Map<String, dynamic> remote,
+) {
+  final out = Map<String, dynamic>.from(remote);
+  local.forEach((k, lv) {
+    final rv = out[k];
+    if (rv == null) {
+      out[k] = lv;
+      return;
+    }
+    if (lv is Map && rv is Map) {
+      out[k] = _pickRicherStreak(
+        Map<String, dynamic>.from(lv),
+        Map<String, dynamic>.from(rv),
+      );
+    } else {
+      out[k] = lv; // bukan record — lokal menang
+    }
+  });
+  return out;
+}
+
+Map<String, dynamic> _pickRicherStreak(
+  Map<String, dynamic> a,
+  Map<String, dynamic> b,
+) {
+  final aCur = (a['current'] as num?)?.toInt() ?? 0;
+  final bCur = (b['current'] as num?)?.toInt() ?? 0;
+  final aBest = (a['best'] as num?)?.toInt() ?? 0;
+  final bBest = (b['best'] as num?)?.toInt() ?? 0;
+  final aDate = a['lastDate']?.toString() ?? '';
+  final bDate = b['lastDate']?.toString() ?? '';
+  // Yang current lebih tinggi menang (atau yang terisi kalau satunya kosong).
+  if (aCur != bCur) return aCur > bCur ? a : b;
+  // current sama: best lebih tinggi menang.
+  if (aBest != bBest) return aBest > bBest ? a : b;
+  // current & best sama: lastDate paling baru menang.
+  if (aDate != bDate) return aDate.compareTo(bDate) > 0 ? a : b;
+  // Identik — kembalikan a (gabungkan freezeAvailable OR).
+  if ((a['freezeAvailable'] == false) != (b['freezeAvailable'] == false)) {
+    return {...a, 'freezeAvailable': true};
+  }
+  return a;
 }
 
 bool _isNumericMap(Object? v) => v is Map && v.values.every((e) => e is num);
