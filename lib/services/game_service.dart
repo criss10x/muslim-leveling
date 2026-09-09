@@ -852,17 +852,17 @@ class GameService {
     );
   }
 
-  /// Rebuilds only missing legacy streak entries from existing prayer logs.
+  /// Rebuilds missing legacy streak entries from existing prayer logs.
+  /// ponytail: heal — untuk tiap salat ambil yang lebih kaya dari (nilai
+  /// tersimpan, nilai yang dihitung dari prayerLog). Dipanggil tiap load(),
+  /// jadi streak yang terlanjur 0/1 akibat sync/reinstall diperbaiki otomatis
+  /// dari riwayat — tanpa tombol manual.
   static GameState backfillPrayerStreaks(GameState state) {
     final restored = Map<String, StreakState>.from(state.perPrayerStreaks);
     var changed = false;
 
     for (final prayer in wajibList) {
       final saved = restored[prayer];
-      if (saved != null &&
-          (saved.current > 0 || saved.best > 0 || saved.lastDate.isNotEmpty)) {
-        continue;
-      }
 
       final dates =
           state.prayerLog
@@ -883,15 +883,32 @@ class GameService {
         if (current > best) best = current;
       }
 
-      restored[prayer] = StreakState(
+      final fromLog = StreakState(
         current: current,
         best: best,
         lastDate: dates.last,
       );
-      changed = true;
+      final hasSaved = saved != null &&
+          (saved.current > 0 || saved.best > 0 || saved.lastDate.isNotEmpty);
+      final healed = hasSaved ? _richerOf(saved, fromLog) : fromLog;
+      if (!hasSaved ||
+          healed.current != saved.current ||
+          healed.best != saved.best) {
+        restored[prayer] = healed;
+        changed = true;
+      }
     }
 
     return changed ? state.copyWith(perPrayerStreaks: restored) : state;
+  }
+
+  /// Streak yang lebih kaya menang: current terbesar; kalau sama, best
+  /// terbesar; kalau sama, lastDate paling baru. (Sama dgn _pickRicherStreak
+  /// di backup_merge.dart — duplikasi kecil biar game_service tetap mandiri.)
+  static StreakState _richerOf(StreakState a, StreakState b) {
+    if (a.current != b.current) return a.current > b.current ? a : b;
+    if (a.best != b.best) return a.best > b.best ? a : b;
+    return a.lastDate.compareTo(b.lastDate) > 0 ? a : b;
   }
 
   /// Restores one wajib-prayer streak after today's log is removed.
