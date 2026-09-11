@@ -27,7 +27,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-          version: 3.44.4
+          flutter-version: 3.44.4
           cache: true
 
       - run: flutter pub get
@@ -63,7 +63,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-          version: 3.44.4
+          flutter-version: 3.44.4
           cache: true
 
       - name: Install dependencies
@@ -140,7 +140,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-          version: 3.44.4
+          flutter-version: 3.44.4
           cache: true
 
       - name: Install dependencies
@@ -168,11 +168,14 @@ jobs:
           name: app-release-aab
           path: build/app/outputs/bundle/release/app-release.aab
 
+      # Tag terpisah dari job APK: dua job yang berebut satu tag rilis
+      # membuat salah satunya gagal saat membuat tag itu bersamaan.
       - name: Upload AAB to GitHub Release
         if: github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
           files: build/app/outputs/bundle/release/app-release.aab
-          name: Latest Build
-          tag_name: latest
+          name: Latest AAB
+          tag_name: latest-aab
           prerelease: true
+          make_latest: false
