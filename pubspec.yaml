@@ -53,3 +53,11 @@ flutter:
     - assets/google_fonts/
     - assets/quran/
     - assets/quran/surah/
+  # ponytail: font icon Phosphor di-vendor (MIT) — lihat lib/theme/app_icons.dart
+  fonts:
+    - family: Phosphor
+      fonts:
+        - asset: assets/fonts/Phosphor-Regular.ttf
+    - family: PhosphorFill
+      fonts:
+        - asset: assets/fonts/Phosphor-Fill.ttf

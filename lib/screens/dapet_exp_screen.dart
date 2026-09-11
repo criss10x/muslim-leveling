@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../services/game_service.dart';
+import '../theme/app_icons.dart';
 
 /// Dapet EXP — celebration screen after claiming quiz XP (no level-up).
 /// Mirrors the Naik Level victory screen but themed for the Belajar tab:
@@ -91,7 +92,7 @@ class DapetExpScreen extends StatelessWidget {
                     delay: const Duration(milliseconds: 850),
                     child: HeroButton(
                       label: 'KEMBALI',
-                      trailingIcon: Icons.arrow_back,
+                      trailingIcon: AppIcons.arrowBack,
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                   ),
@@ -133,7 +134,7 @@ class DapetExpScreen extends StatelessWidget {
                 ],
         ),
         child: Icon(
-          Icons.auto_stories,
+          AppIcons.autoStories,
           color: light ? AppColors.onPrimary : AppColors.background,
           size: 72,
         ),
@@ -145,9 +146,9 @@ class DapetExpScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _rewardChip('+$xpGained', 'XP', AppColors.primary, Icons.bolt),
-        _rewardChip('$score%', 'Skor Quiz', AppColors.tertiary, Icons.quiz),
-        _rewardChip('Lv ${info.level}', 'Level', AppColors.secondaryFixed, Icons.trending_up),
+        _rewardChip('+$xpGained', 'XP', AppColors.primary, AppIcons.bolt),
+        _rewardChip('$score%', 'Skor Quiz', AppColors.tertiary, AppIcons.quiz),
+        _rewardChip('Lv ${info.level}', 'Level', AppColors.secondaryFixed, AppIcons.trendingUp),
       ],
     );
   }

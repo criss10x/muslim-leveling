@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:muslim_leveling/widgets/city_picker.dart';
+import 'package:muslim_leveling/theme/app_icons.dart';
 
 void main() {
   testWidgets('picker requires province before filtering kabupaten kota', (
@@ -70,7 +71,7 @@ void main() {
     await tester.pump();
     await tester.tap(find.text('Bali'));
     await tester.pump();
-    await tester.tap(find.byIcon(Icons.arrow_back));
+    await tester.tap(find.byIcon(AppIcons.arrowBack));
     await tester.pump();
     await tester.enterText(find.byType(TextField), 'banten');
     await tester.pump();

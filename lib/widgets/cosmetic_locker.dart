@@ -4,12 +4,13 @@ import '../services/cosmetic_catalog.dart';
 import '../services/cosmetic_service.dart';
 import '../services/game_service.dart';
 import '../services/entitlement_service.dart';
+import '../theme/app_icons.dart';
 
 const _slotLabels = {CosmeticSlot.aura: 'Aura', CosmeticSlot.title: 'Title'};
 
 const _slotIcons = {
-  CosmeticSlot.aura: Icons.auto_awesome,
-  CosmeticSlot.title: Icons.workspace_premium_outlined,
+  CosmeticSlot.aura: AppIcons.autoAwesome,
+  CosmeticSlot.title: AppIcons.workspacePremiumOutlined,
 };
 
 const _visibleSlots = [CosmeticSlot.aura, CosmeticSlot.title];
@@ -67,12 +68,12 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
       return Text(cosmetic.emoji, style: const TextStyle(fontSize: 26));
     }
     final icon = switch (cosmetic.auraSpec?.effect) {
-      AuraEffect.halo => Icons.brightness_1_outlined,
-      AuraEffect.crescent => Icons.dark_mode_outlined,
-      AuraEffect.drift => Icons.blur_on_outlined,
-      AuraEffect.orbit => Icons.all_inclusive,
-      AuraEffect.goldOrbit => Icons.auto_awesome,
-      null => Icons.do_not_disturb_alt_outlined,
+      AuraEffect.halo => AppIcons.brightness1Outlined,
+      AuraEffect.crescent => AppIcons.darkModeOutlined,
+      AuraEffect.drift => AppIcons.blurOnOutlined,
+      AuraEffect.orbit => AppIcons.allInclusive,
+      AuraEffect.goldOrbit => AppIcons.autoAwesome,
+      null => AppIcons.doNotDisturbAltOutlined,
     };
     return Icon(icon, color: color, size: 28);
   }
@@ -292,7 +293,7 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
             ),
             child: Row(
               children: [
-                Icon(Icons.auto_awesome, color: AppColors.primary, size: 18),
+                Icon(AppIcons.autoAwesome, color: AppColors.primary, size: 18),
                 const SizedBox(width: AppSpacing.sm),
                 Expanded(
                   child: Text(

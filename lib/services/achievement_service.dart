@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'game_service.dart';
 import 'learning_content.dart';
 import 'cloud_sync.dart';
+import '../theme/app_icons.dart';
 
 /// Medali bertingkat ala Mobile Legends dengan popup announcer.
 /// Eks badge system (ladder akumulasi) sudah dimerge ke sini (2026-08):
@@ -63,28 +64,28 @@ class AchievementService {
       title: 'FIRST BLOOD!',
       desc: 'Selesaikan 5 sholat wajib dalam 1 hari (Hero Streak dimulai!)',
       tier: AchievementTier.rookie,
-      icon: Icons.water_drop,
+      icon: AppIcons.waterDrop,
     ),
     AchievementDef(
       id: 'early_game',
       title: 'EARLY GAME',
       desc: 'Sholat Subuh pertamamu tercatat',
       tier: AchievementTier.rookie,
-      icon: Icons.wb_twilight,
+      icon: AppIcons.wbTwilight,
     ),
     AchievementDef(
       id: 'dhuha_secured',
       title: 'DHUHA SECURED',
       desc: 'Pertama kali log sholat Dhuha',
       tier: AchievementTier.rookie,
-      icon: Icons.wb_sunny,
+      icon: AppIcons.wbSunny,
     ),
     AchievementDef(
       id: 'tahajjud_secured',
       title: 'TAHAJJUD SECURED',
       desc: 'Pertama kali log sholat Tahajjud',
       tier: AchievementTier.rookie,
-      icon: Icons.nights_stay,
+      icon: AppIcons.nightsStay,
     ),
     AchievementDef(
       id: 'double_kill',
@@ -149,28 +150,28 @@ class AchievementService {
       title: 'MID GAME',
       desc: 'Pertama kali log sholat Dzuhur',
       tier: AchievementTier.rookie,
-      icon: Icons.light_mode,
+      icon: AppIcons.lightMode,
     ),
     AchievementDef(
       id: 'gold_lane',
       title: 'GOLD LANE',
       desc: 'Pertama kali log sholat Ashar',
       tier: AchievementTier.rookie,
-      icon: Icons.flare,
+      icon: AppIcons.flare,
     ),
     AchievementDef(
       id: 'sunset_strike',
       title: 'SUNSET STRIKE',
       desc: 'Pertama kali log sholat Maghrib',
       tier: AchievementTier.rookie,
-      icon: Icons.brightness_4,
+      icon: AppIcons.brightness4,
     ),
     AchievementDef(
       id: 'late_game',
       title: 'LATE GAME',
       desc: 'Pertama kali log sholat Isya',
       tier: AchievementTier.rookie,
-      icon: Icons.dark_mode,
+      icon: AppIcons.darkMode,
     ),
 
     // ── First clear: sunnah (rawatib = buff sebelum/sesudah battle) ──
@@ -179,56 +180,56 @@ class AchievementService {
       title: 'MANA REGEN',
       desc: 'Pertama kali log Tilawah/Dzikir',
       tier: AchievementTier.rookie,
-      icon: Icons.menu_book,
+      icon: AppIcons.menuBook,
     ),
     AchievementDef(
       id: 'dawn_buff',
       title: 'DAWN BUFF',
       desc: 'Pertama kali Qobliyah Subuh',
       tier: AchievementTier.rookie,
-      icon: Icons.shield_moon,
+      icon: AppIcons.shieldMoon,
     ),
     AchievementDef(
       id: 'dawn_finisher',
       title: 'DAWN FINISHER',
       desc: 'Pertama kali Ba\'diyah Subuh',
       tier: AchievementTier.rookie,
-      icon: Icons.shield,
+      icon: AppIcons.shield,
     ),
     AchievementDef(
       id: 'mid_buff',
       title: 'MID BUFF',
       desc: 'Pertama kali Qobliyah Dzuhur',
       tier: AchievementTier.rookie,
-      icon: Icons.add_moderator,
+      icon: AppIcons.addModerator,
     ),
     AchievementDef(
       id: 'mid_finisher',
       title: 'MID FINISHER',
       desc: 'Pertama kali Ba\'diyah Dzuhur',
       tier: AchievementTier.rookie,
-      icon: Icons.security,
+      icon: AppIcons.security,
     ),
     AchievementDef(
       id: 'gold_buff',
       title: 'GOLD BUFF',
       desc: 'Pertama kali Qobliyah Ashar',
       tier: AchievementTier.rookie,
-      icon: Icons.verified_user,
+      icon: AppIcons.verifiedUser,
     ),
     AchievementDef(
       id: 'dusk_finisher',
       title: 'DUSK FINISHER',
       desc: 'Pertama kali Ba\'diyah Maghrib',
       tier: AchievementTier.rookie,
-      icon: Icons.nightlight,
+      icon: AppIcons.nightlight,
     ),
     AchievementDef(
       id: 'night_finisher',
       title: 'NIGHT FINISHER',
       desc: 'Pertama kali Ba\'diyah Isya',
       tier: AchievementTier.rookie,
-      icon: Icons.bedtime,
+      icon: AppIcons.bedtime,
     ),
 
     // ── Rank up ala ranked ML (dari level) ──
@@ -237,28 +238,28 @@ class AchievementService {
       title: 'WARRIOR',
       desc: 'Capai Level 10',
       tier: AchievementTier.rookie,
-      icon: Icons.military_tech,
+      icon: AppIcons.militaryTech,
     ),
     AchievementDef(
       id: 'rank_elite',
       title: 'ELITE',
       desc: 'Capai Level 25',
       tier: AchievementTier.elite,
-      icon: Icons.workspace_premium,
+      icon: AppIcons.workspacePremium,
     ),
     AchievementDef(
       id: 'rank_master',
       title: 'MASTER',
       desc: 'Capai Level 40',
       tier: AchievementTier.gold,
-      icon: Icons.stars,
+      icon: AppIcons.stars,
     ),
     AchievementDef(
       id: 'rank_epic',
       title: 'EPIC',
       desc: 'Capai Level 60',
       tier: AchievementTier.epic,
-      icon: Icons.diamond,
+      icon: AppIcons.diamond,
     ),
     AchievementDef(
       id: 'rank_mythic',
@@ -266,7 +267,7 @@ class AchievementService {
       title: 'MYTHIC',
       desc: 'Capai Level 80 — Muslim Mythic!',
       tier: AchievementTier.legendary,
-      icon: Icons.emoji_events,
+      icon: AppIcons.emojiEvents,
     ),
 
     // ── Solo lane: streak per-ibadah ──
@@ -291,7 +292,7 @@ class AchievementService {
       title: 'CRITICAL HIT!',
       desc: 'Sholat wajib ≤5 menit setelah adzan',
       tier: AchievementTier.rookie,
-      icon: Icons.bolt,
+      icon: AppIcons.bolt,
     ),
     AchievementDef(
       id: 'first_strike',
@@ -299,7 +300,7 @@ class AchievementService {
       title: 'FIRST STRIKE',
       desc: 'Sholat Subuh ≤15 menit setelah adzan',
       tier: AchievementTier.elite,
-      icon: Icons.gps_fixed,
+      icon: AppIcons.gpsFixed,
     ),
     AchievementDef(
       id: 'sharpshooter',
@@ -307,7 +308,7 @@ class AchievementService {
       title: 'SHARPSHOOTER',
       desc: '10× sholat tepat waktu (≤10 menit)',
       tier: AchievementTier.gold,
-      icon: Icons.track_changes,
+      icon: AppIcons.trackChanges,
     ),
 
     // ── Comeback ──
@@ -316,7 +317,7 @@ class AchievementService {
       title: 'COMEBACK IS REAL',
       desc: 'Bangkit lagi setelah streak putus',
       tier: AchievementTier.elite,
-      icon: Icons.replay,
+      icon: AppIcons.replay,
     ),
     AchievementDef(
       id: 'phoenix',
@@ -324,7 +325,7 @@ class AchievementService {
       title: 'PHOENIX',
       desc: 'Bangkit 3× setelah streak putus — gak pernah nyerah',
       tier: AchievementTier.epic,
-      icon: Icons.local_fire_department,
+      icon: AppIcons.localFireDepartment,
     ),
 
     // ── Skill tree: tab Belajar ──
@@ -333,7 +334,7 @@ class AchievementService {
       title: 'FIRST CLEAR',
       desc: 'Selesaikan modul Belajar pertamamu',
       tier: AchievementTier.rookie,
-      icon: Icons.school,
+      icon: AppIcons.school,
     ),
     AchievementDef(
       id: 'quiz_mvp',
@@ -341,7 +342,7 @@ class AchievementService {
       title: 'MVP',
       desc: 'Skor sempurna 100% di satu quiz',
       tier: AchievementTier.gold,
-      icon: Icons.star,
+      icon: AppIcons.star,
     ),
     AchievementDef(
       id: 'sage',
@@ -349,7 +350,7 @@ class AchievementService {
       title: 'SAGE',
       desc: 'Tamatkan semua 16 modul Belajar',
       tier: AchievementTier.epic,
-      icon: Icons.psychology,
+      icon: AppIcons.psychology,
     ),
 
     // ── Combo & koleksi ──
@@ -358,7 +359,7 @@ class AchievementService {
       title: 'WOMBO COMBO',
       desc: 'Tuntaskan Daily Zikir 100 pertama kali',
       tier: AchievementTier.elite,
-      icon: Icons.touch_app,
+      icon: AppIcons.touchApp,
     ),
     AchievementDef(
       id: 'full_combo',
@@ -366,7 +367,7 @@ class AchievementService {
       title: 'FULL COMBO',
       desc: 'Dalam 1 hari: 5 wajib + Tilawah + Dhuha',
       tier: AchievementTier.epic,
-      icon: Icons.whatshot,
+      icon: AppIcons.whatshot,
     ),
     AchievementDef(
       id: 'collector',
@@ -374,7 +375,7 @@ class AchievementService {
       title: 'COLLECTOR',
       desc: 'Log semua 9 jenis sholat sunnah minimal 1×',
       tier: AchievementTier.epic,
-      icon: Icons.collections_bookmark,
+      icon: AppIcons.collectionsBookmark,
     ),
     AchievementDef(
       id: 'hall_of_fame',
@@ -382,7 +383,7 @@ class AchievementService {
       title: 'HALL OF FAME',
       desc: 'Buka semua achievement lainnya 👑',
       tier: AchievementTier.legendary,
-      icon: Icons.castle,
+      icon: AppIcons.castle,
     ),
 
     // ── Ladder akumulasi (eks badge system, dimerge ke medali) ──
@@ -391,7 +392,7 @@ class AchievementService {
       title: 'LANGKAH PERTAMA',
       desc: 'Log sholat pertama kamu',
       tier: AchievementTier.rookie,
-      icon: Icons.flag,
+      icon: AppIcons.flag,
     ),
     AchievementDef(
       id: 'subuh_legend',
@@ -412,7 +413,7 @@ class AchievementService {
       title: 'SULTAN SUNNAH',
       desc: '50 sholat sunnah total',
       tier: AchievementTier.gold,
-      icon: Icons.volunteer_activism,
+      icon: AppIcons.volunteerActivism,
     ),
     AchievementDef(
       id: 'sunnah_master',
@@ -420,7 +421,7 @@ class AchievementService {
       title: 'SUNNAH MASTER',
       desc: '200 sholat sunnah total',
       tier: AchievementTier.legendary,
-      icon: Icons.auto_awesome,
+      icon: AppIcons.autoAwesome,
     ),
     AchievementDef(
       id: 'santri_scholar',
@@ -428,7 +429,7 @@ class AchievementService {
       title: 'SANTRI SCHOLAR',
       desc: 'Selesaikan 40 modul Belajar',
       tier: AchievementTier.epic,
-      icon: Icons.menu_book,
+      icon: AppIcons.menuBook,
     ),
     AchievementDef(
       id: 'early_bird',
@@ -436,7 +437,7 @@ class AchievementService {
       title: 'EARLY BIRD',
       desc: '20x sholat tepat waktu (±10m)',
       tier: AchievementTier.gold,
-      icon: Icons.alarm_on,
+      icon: AppIcons.alarmOn,
     ),
     // Jamaah ladder 5x → 500x
     AchievementDef(id: 'jamaah_rookie', title: 'JAMAAH ROOKIE',

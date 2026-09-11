@@ -9,6 +9,7 @@ import 'jadwal_tab.dart';
 import 'quran_tab.dart';
 import 'belajar_tab.dart';
 import 'profil_tab.dart';
+import '../theme/app_icons.dart';
 
 /// Main shell — bottom nav with 4 tabs and the persistent top app bar.
 class DashboardShell extends StatefulWidget {
@@ -29,11 +30,11 @@ class _DashboardShellState extends State<DashboardShell> {
   }
 
   static const _items = [
-    (Icons.home_outlined, Icons.home, 'HOME'),
-    (Icons.schedule_outlined, Icons.schedule, 'JADWAL'),
-    (Icons.auto_stories_outlined, Icons.auto_stories, 'QURAN'),
-    (Icons.menu_book_outlined, Icons.menu_book, 'BELAJAR'),
-    (Icons.person_outline, Icons.person, 'PROFIL'),
+    (AppIcons.homeOutlined, AppIcons.home, 'HOME'),
+    (AppIcons.scheduleOutlined, AppIcons.schedule, 'JADWAL'),
+    (AppIcons.autoStoriesOutlined, AppIcons.autoStories, 'QURAN'),
+    (AppIcons.menuBookOutlined, AppIcons.menuBook, 'BELAJAR'),
+    (AppIcons.personOutline, AppIcons.person, 'PROFIL'),
   ];
 
   // Indeks bernama, bukan angka telanjang: Profil bergeser dari 3 ke 4 saat

@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../services/theme_service.dart';
+import '../theme/app_icons.dart';
 
 /// Glass panel — translucent surface with subtle border.
 /// Light: solid FlatCard-equivalent (no frosted alpha, no blur).
@@ -110,7 +111,7 @@ class ErrorRetry extends StatelessWidget {
           const SizedBox(height: AppSpacing.md),
           TextButton.icon(
             onPressed: onRetry,
-            icon: const Icon(Icons.refresh, size: 18),
+            icon: const Icon(AppIcons.refresh, size: 18),
             label: const Text('Coba lagi'),
           ),
         ],

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:vibration/vibration.dart';
 import '../../theme/app_theme.dart';
 import '../../services/game_service.dart';
+import '../theme/app_icons.dart';
 
 class DzikirItem {
   final String key;
@@ -165,7 +166,7 @@ class _DzikirScreenState extends State<DzikirScreen>
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.touch_app,
+                          Icon(AppIcons.touchApp,
                               size: 16, color: AppColors.onSurfaceVariant.withValues(alpha: 0.7)),
                           const SizedBox(width: AppSpacing.xs),
                           Text(
@@ -196,7 +197,7 @@ class _DzikirScreenState extends State<DzikirScreen>
         children: [
           IconButton(
             onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.arrow_back),
+            icon: const Icon(AppIcons.arrowBack),
             tooltip: 'Kembali',
           ),
           const SizedBox(width: AppSpacing.xs),
@@ -222,14 +223,14 @@ class _DzikirScreenState extends State<DzikirScreen>
             },
             tooltip: GameService.zikirVibrate ? 'Matikan getar' : 'Nyalakan getar',
             icon: Icon(
-              GameService.zikirVibrate ? Icons.vibration : Icons.smartphone,
+              GameService.zikirVibrate ? AppIcons.vibration : AppIcons.smartphone,
               color: GameService.zikirVibrate ? AppColors.primary : AppColors.onSurfaceVariant,
             ),
           ),
           IconButton(
             onPressed: current == 0 ? null : _reset,
             tooltip: 'Reset counter ini',
-            icon: const Icon(Icons.restart_alt),
+            icon: const Icon(AppIcons.restartAlt),
           ),
         ],
       ),

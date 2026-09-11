@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
+import '../theme/app_icons.dart';
 
 /// Statistik Mingguan — bottom sheet that slides up over the dashboard.
 class StatistikSheet {
@@ -75,11 +76,11 @@ class _StatistikContent extends StatelessWidget {
   Widget _kpis() {
     return Row(
       children: [
-        Expanded(child: _kpi('Total Sholat', '127', 'dari 175', AppColors.primary, Icons.mosque)),
+        Expanded(child: _kpi('Total Sholat', '127', 'dari 175', AppColors.primary, AppIcons.mosque)),
         const SizedBox(width: AppSpacing.sm),
-        Expanded(child: _kpi('Rata-rata', '4.5', '/hari', AppColors.tertiary, Icons.trending_up)),
+        Expanded(child: _kpi('Rata-rata', '4.5', '/hari', AppColors.tertiary, AppIcons.trendingUp)),
         const SizedBox(width: AppSpacing.sm),
-        Expanded(child: _kpi('Streak', '7', 'hari', AppColors.secondaryFixed, Icons.local_fire_department)),
+        Expanded(child: _kpi('Streak', '7', 'hari', AppColors.secondaryFixed, AppIcons.localFireDepartment)),
       ],
     );
   }

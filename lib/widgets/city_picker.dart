@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../services/prayer_service.dart';
+import '../theme/app_icons.dart';
 
 typedef CityLoader = Future<List<String>> Function(String province);
 
@@ -64,7 +65,7 @@ class CityPicker {
               children: [
                 if (!pickingProvince)
                   IconButton(
-                    icon: const Icon(Icons.arrow_back),
+                    icon: const Icon(AppIcons.arrowBack),
                     color: AppColors.primary,
                     onPressed: backToProvince,
                   ),
@@ -105,7 +106,7 @@ class CityPicker {
                         color: AppColors.onSurfaceVariant,
                       ),
                       prefixIcon: Icon(
-                        Icons.search,
+                        AppIcons.search,
                         color: AppColors.primary,
                         size: 20,
                       ),
@@ -161,8 +162,8 @@ class CityPicker {
                             dense: true,
                             leading: Icon(
                               pickingProvince
-                                  ? Icons.map_outlined
-                                  : Icons.location_on,
+                                  ? AppIcons.mapOutlined
+                                  : AppIcons.locationOn,
                               color: AppColors.primary,
                               size: 18,
                             ),

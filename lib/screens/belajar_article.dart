@@ -3,6 +3,7 @@ import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../services/learning_content.dart';
 import 'belajar_quiz.dart';
+import '../theme/app_icons.dart';
 
 /// Article reader — renders ArticleBlock content from V3 LearningContent.
 class BelajarArticleScreen extends StatefulWidget {
@@ -90,7 +91,7 @@ class _BelajarArticleScreenState extends State<BelajarArticleScreen> {
       child: Row(
         children: [
           IconButton(
-            icon: Icon(Icons.arrow_back, color: AppColors.onBackground),
+            icon: Icon(AppIcons.arrowBack, color: AppColors.onBackground),
             onPressed: () => Navigator.pop(context),
           ),
           Expanded(
@@ -160,7 +161,7 @@ class _BelajarArticleScreenState extends State<BelajarArticleScreen> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(Icons.school, color: AppColors.tertiary, size: 20),
+            Icon(AppIcons.school, color: AppColors.tertiary, size: 20),
             const SizedBox(width: AppSpacing.sm),
             Expanded(
               child: Text(block.text,
@@ -212,7 +213,7 @@ class _BelajarArticleScreenState extends State<BelajarArticleScreen> {
         padding: const EdgeInsets.all(AppSpacing.md),
         child: HeroButton(
           label: 'LANJUT KE QUIZ',
-          trailingIcon: Icons.quiz,
+          trailingIcon: AppIcons.quiz,
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
               builder: (_) => BelajarQuizScreen(moduleId: widget.moduleId),

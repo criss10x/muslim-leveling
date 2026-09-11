@@ -7,6 +7,7 @@ import 'package:muslim_leveling/screens/jadwal_tab.dart';
 import 'package:muslim_leveling/services/prayer_service.dart';
 import 'package:muslim_leveling/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:muslim_leveling/theme/app_icons.dart';
 
 void main() {
   tearDown(() {
@@ -35,12 +36,12 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.byIcon(Icons.my_location), findsOneWidget);
+    expect(find.byIcon(AppIcons.myLocation), findsOneWidget);
     expect(find.text('Lokasi Saat Ini'), findsNothing);
     expect(find.text('Cari Kota'), findsOneWidget);
     // Tombol Hari Penting Islam selalu render (fix P1a: tidak di-gate API).
     // Kalau API hijriah gagal, label fallback 'Hari Penting Islam' muncul.
-    expect(find.byIcon(Icons.calendar_month), findsOneWidget);
+    expect(find.byIcon(AppIcons.calendarMonth), findsOneWidget);
     expect(find.text('Hari Penting Islam'), findsOneWidget);
   });
 

@@ -9,6 +9,7 @@ import '../../services/notification_service.dart';
 import '../../services/hijri_service.dart';
 import 'qibla_screen.dart';
 import 'hari_penting_screen.dart';
+import '../theme/app_icons.dart';
 
 /// Jadwal Sholat — V3 logic ported to V1 design.
 /// Shows next prayer countdown, 5 daily prayers with logged status,
@@ -267,7 +268,7 @@ class _JadwalTabState extends State<JadwalTab> {
               const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: _locationButton(
-                  icon: Icons.search,
+                  icon: AppIcons.search,
                   label: 'Cari Kota',
                   onTap: _changeLocation,
                 ),
@@ -341,7 +342,7 @@ class _JadwalTabState extends State<JadwalTab> {
               color: AppColors.outlineVariant.withValues(alpha: 0.3),
             ),
           ),
-          child: Icon(Icons.my_location, size: 18, color: AppColors.primary),
+          child: Icon(AppIcons.myLocation, size: 18, color: AppColors.primary),
         ),
       ),
     );
@@ -377,7 +378,7 @@ class _JadwalTabState extends State<JadwalTab> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.calendar_month, size: 16, color: AppColors.primary),
+              Icon(AppIcons.calendarMonth, size: 16, color: AppColors.primary),
               const SizedBox(width: AppSpacing.xs),
               Text(
                 label,
@@ -434,7 +435,7 @@ class _JadwalTabState extends State<JadwalTab> {
         ),
         child: Row(
           children: [
-            Icon(Icons.explore, size: 22, color: AppColors.secondaryFixed),
+            Icon(AppIcons.explore, size: 22, color: AppColors.secondaryFixed),
             const SizedBox(width: AppSpacing.sm),
             Text(
               'Kompas Kiblat',
@@ -445,7 +446,7 @@ class _JadwalTabState extends State<JadwalTab> {
             ),
             const Spacer(),
             Icon(
-              Icons.arrow_forward_ios,
+              AppIcons.arrowForwardIos,
               size: 14,
               color: AppColors.secondaryFixed,
             ),
@@ -504,7 +505,7 @@ class _JadwalTabState extends State<JadwalTab> {
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     children: [
-                      Icon(Icons.cloud_off, color: AppColors.error, size: 32),
+                      Icon(AppIcons.cloudOff, color: AppColors.error, size: 32),
                       const SizedBox(height: 8),
                       Text(
                         _error!,
@@ -570,7 +571,7 @@ class _JadwalTabState extends State<JadwalTab> {
                         child: Row(
                           children: [
                             Icon(
-                              Icons.timer,
+                              AppIcons.timer,
                               size: 14,
                               color: AppColors.secondaryFixed,
                             ),
@@ -622,7 +623,7 @@ class _JadwalTabState extends State<JadwalTab> {
                           ),
                         ),
                         child: Icon(
-                          Icons.notifications_active,
+                          AppIcons.notificationsActive,
                           color: AppColors.primary,
                           size: 20,
                         ),
@@ -687,11 +688,11 @@ class _JadwalTabState extends State<JadwalTab> {
     }
 
     final items = [
-      row('Subuh', 'subuh', j?['subuh'] ?? '', Icons.wb_twilight),
-      row('Dzuhur', 'dzuhur', j?['dzuhur'] ?? '', Icons.wb_sunny),
-      row('Ashar', 'ashar', j?['ashar'] ?? '', Icons.wb_cloudy),
-      row('Maghrib', 'maghrib', j?['maghrib'] ?? '', Icons.wb_twilight),
-      row('Isya', 'isya', j?['isya'] ?? '', Icons.nightlight),
+      row('Subuh', 'subuh', j?['subuh'] ?? '', AppIcons.wbTwilight),
+      row('Dzuhur', 'dzuhur', j?['dzuhur'] ?? '', AppIcons.wbSunny),
+      row('Ashar', 'ashar', j?['ashar'] ?? '', AppIcons.wbCloudy),
+      row('Maghrib', 'maghrib', j?['maghrib'] ?? '', AppIcons.wbTwilight),
+      row('Isya', 'isya', j?['isya'] ?? '', AppIcons.nightlight),
     ];
 
     final logged = items.where((it) => it.isLogged).length;
@@ -811,14 +812,14 @@ class _JadwalTabState extends State<JadwalTab> {
 
   // Ikon mode suara di kanan tiap baris sholat. Tap = buka picker.
   static const _soundIcons = {
-    'senyap': (Icons.volume_off_rounded, 'Senyap'),
-    'suara': (Icons.notifications_rounded, 'Suara'),
-    'adzan': (Icons.volume_up_rounded, 'Adzan'),
+    'senyap': (AppIcons.volumeOffRounded, 'Senyap'),
+    'suara': (AppIcons.notificationsRounded, 'Suara'),
+    'adzan': (AppIcons.volumeUpRounded, 'Adzan'),
   };
 
   Widget _soundIcon(String sound, String prayerId) {
     final (iconData, label) = _soundIcons[sound] ??
-        (Icons.notifications_none_rounded, 'Mengikuti global');
+        (AppIcons.notificationsNoneRounded, 'Mengikuti global');
     return GestureDetector(
       onTap: () => _showSoundPicker(prayerId, sound),
       child: Icon(iconData, size: 20, color: AppColors.onSurfaceVariant),
@@ -852,16 +853,16 @@ class _JadwalTabState extends State<JadwalTab> {
               ),
               const SizedBox(height: AppSpacing.md),
               _soundOption(prayerId, isOverride && current == 'senyap', 'senyap',
-                  Icons.volume_off_rounded, 'Senyap — tanpa suara'),
+                  AppIcons.volumeOffRounded, 'Senyap — tanpa suara'),
               _soundOption(prayerId, isOverride && current == 'suara', 'suara',
-                  Icons.notifications_rounded, 'Suara — notifikasi standar HP'),
+                  AppIcons.notificationsRounded, 'Suara — notifikasi standar HP'),
               _soundOption(prayerId, isOverride && current == 'adzan', 'adzan',
-                  Icons.volume_up_rounded, 'Adzan — suara adzan penuh'),
+                  AppIcons.volumeUpRounded, 'Adzan — suara adzan penuh'),
               _soundOption(
                 prayerId,
                 !isOverride,
                 _globalSound,
-                Icons.notifications_none_rounded,
+                AppIcons.notificationsNoneRounded,
                 'Ikuti pengaturan global',
               ),
             ],
@@ -925,7 +926,7 @@ class _JadwalTabState extends State<JadwalTab> {
               ),
             ),
             if (selected)
-              Icon(Icons.check_circle_rounded,
+              Icon(AppIcons.checkCircleRounded,
                   size: 18, color: AppColors.primary),
           ],
         ),
@@ -961,7 +962,7 @@ class _JadwalTabState extends State<JadwalTab> {
                   onPressed: _downloadingVariant == null
                       ? NotificationService.sendTestAdzanSound
                       : null,
-                  icon: const Icon(Icons.play_circle_outline, size: 18),
+                  icon: const Icon(AppIcons.playCircleOutline, size: 18),
                   label: const Text('Tes suara'),
                 ),
               ),
@@ -987,8 +988,8 @@ class _JadwalTabState extends State<JadwalTab> {
           children: [
             Icon(
               selected
-                  ? Icons.radio_button_checked_rounded
-                  : Icons.radio_button_off_rounded,
+                  ? AppIcons.radioButtonCheckedRounded
+                  : AppIcons.radioButtonOffRounded,
               size: 20,
               color: selected
                   ? AppColors.primary
@@ -1019,8 +1020,8 @@ class _JadwalTabState extends State<JadwalTab> {
                 future: NotificationService.isVariantDownloaded(id),
                 builder: (context, snap) => Icon(
                   snap.data == true
-                      ? Icons.check_circle_rounded
-                      : Icons.download_rounded,
+                      ? AppIcons.checkCircleRounded
+                      : AppIcons.downloadRounded,
                   size: 18,
                   color: selected
                       ? AppColors.primary

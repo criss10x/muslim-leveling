@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
+import '../theme/app_icons.dart';
 
 /// Koordinat Ka'bah (Masjidil Haram, Makkah)
 const _kaabaLat = 21.4225;
@@ -356,7 +357,7 @@ class _QiblaScreenState extends State<QiblaScreen>
                 border: Border.all(
                     color: AppColors.outlineVariant.withValues(alpha: 0.3)),
               ),
-              child: Icon(Icons.arrow_back,
+              child: Icon(AppIcons.arrowBack,
                   color: AppColors.onSurface, size: 20),
             ),
           ),

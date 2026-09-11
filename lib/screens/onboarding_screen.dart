@@ -7,6 +7,7 @@ import '../../services/game_service.dart';
 import '../../services/notification_service.dart';
 import '../../services/prayer_service.dart';
 import 'dashboard_shell.dart';
+import '../theme/app_icons.dart';
 
 /// Onboarding 3 halaman: welcome → lokasi → pengingat.
 /// Permission diminta saat tombol halaman ditekan, bukan otomatis.
@@ -243,7 +244,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           const Spacer(),
           HeroButton(
               label: 'Lanjut',
-              trailingIcon: Icons.arrow_forward,
+              trailingIcon: AppIcons.arrowForward,
               onPressed: _next),
           const SizedBox(height: AppSpacing.lg),
         ],
@@ -297,7 +298,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           const SizedBox(height: AppSpacing.sm),
           GhostButton(
               label: 'Pilih kota manual',
-              icon: Icons.location_city,
+              icon: AppIcons.locationCity,
               onPressed: _busy ? null : _pickCity),
           const SizedBox(height: AppSpacing.lg),
         ],
@@ -333,14 +334,14 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           const Spacer(),
           HeroButton(
               label: _busy ? 'MENYALA...' : 'Izinkan Notifikasi',
-              trailingIcon: Icons.notifications_active_outlined,
+              trailingIcon: AppIcons.notificationsActiveOutlined,
               onPressed: _busy ? null : () => _finish(enableNotif: true)),
           const SizedBox(height: AppSpacing.sm),
           // P0: escape dari halaman 3 — sebelumnya Lewati di-disable tanpa
           // alternatif visible (user terjebak di permission notif).
           GhostButton(
               label: 'Lewati, nanti saja',
-              icon: Icons.close,
+              icon: AppIcons.close,
               onPressed: _busy ? null : () => _finish(enableNotif: false)),
           const SizedBox(height: AppSpacing.lg),
         ],
@@ -408,7 +409,7 @@ class _MockXpCard extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.check_circle, size: 18, color: AppColors.primary),
+            Icon(AppIcons.checkCircle, size: 18, color: AppColors.primary),
             const SizedBox(width: 8),
             Text(
               'Subuh ✓',

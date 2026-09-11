@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_theme.dart';
 import '../../services/hijri_service.dart';
+import '../theme/app_icons.dart';
 
 /// Hari Penting Islam — replace HijriCalendarScreen (month-grid lama).
 /// Layout: list kronologis 10 momen penting + badge status.
@@ -38,7 +39,7 @@ class _HariPentingScreenState extends State<HariPentingScreen> {
         backgroundColor: AppColors.background,
         surfaceTintColor: Colors.transparent,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.onSurface),
+          icon: Icon(AppIcons.arrowBack, color: AppColors.onSurface),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -208,7 +209,7 @@ class _HariPentingScreenState extends State<HariPentingScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.calendar_month_outlined,
+          Icon(AppIcons.calendarMonthOutlined,
               size: 48, color: AppColors.onSurfaceVariant),
           const SizedBox(height: 12),
           Text(

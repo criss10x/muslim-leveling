@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../services/doa_api.dart';
+import '../theme/app_icons.dart';
 
 /// Doa — level 1: daftar grup doa (dari API equran.id).
 class DoaScreen extends StatefulWidget {
@@ -64,7 +65,7 @@ class _DoaScreenState extends State<DoaScreen> {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.volunteer_activism,
+                    Icon(AppIcons.volunteerActivism,
                         size: 22, color: AppColors.primary),
                     const SizedBox(width: AppSpacing.md),
                     Expanded(
@@ -76,7 +77,7 @@ class _DoaScreenState extends State<DoaScreen> {
                         style: AppText.labelCaps()
                             .copyWith(color: AppColors.onSurfaceVariant)),
                     const SizedBox(width: 4),
-                    Icon(Icons.arrow_forward_ios,
+                    Icon(AppIcons.arrowForwardIos,
                         size: 14, color: AppColors.onSurfaceVariant),
                   ],
                 ),
@@ -159,7 +160,7 @@ class DoaListScreen extends StatelessWidget {
       child: Row(
         children: [
           IconButton(
-            icon: Icon(Icons.arrow_back, color: AppColors.onBackground),
+            icon: Icon(AppIcons.arrowBack, color: AppColors.onBackground),
             onPressed: () => Navigator.pop(context),
           ),
           Expanded(
@@ -200,7 +201,7 @@ class DoaDetailScreen extends StatelessWidget {
               child: Row(
                 children: [
                   IconButton(
-                    icon: Icon(Icons.arrow_back, color: AppColors.onBackground),
+                    icon: Icon(AppIcons.arrowBack, color: AppColors.onBackground),
                     onPressed: () => Navigator.pop(context),
                   ),
                   Expanded(

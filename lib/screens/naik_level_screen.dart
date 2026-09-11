@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../services/game_service.dart';
+import '../theme/app_icons.dart';
 
 /// Naik Level — selebrasi rank-up, satu layar crescendo.
 /// Multi-level (levelsGained > 1) dikompres jadi satu layar "+N LEVEL",
@@ -144,7 +145,7 @@ class _NaikLevelScreenState extends State<NaikLevelScreen> {
                           : const Duration(milliseconds: 850),
                       child: HeroButton(
                         label: 'KEMBALI',
-                        trailingIcon: Icons.arrow_forward,
+                        trailingIcon: AppIcons.arrowForward,
                         onPressed: () => Navigator.of(context).pop(),
                       ),
                     ),
@@ -175,12 +176,12 @@ class _NaikLevelScreenState extends State<NaikLevelScreen> {
         runSpacing: AppSpacing.sm,
         children: [
           if (widget.xpGained != null)
-            _rewardChip('+${widget.xpGained}', 'XP', AppColors.primary, Icons.bolt),
+            _rewardChip('+${widget.xpGained}', 'XP', AppColors.primary, AppIcons.bolt),
           if (widget.levelsGained > 1)
             _rewardChip('+${widget.levelsGained} LEVEL', 'Lonjakan',
-                AppColors.tertiary, Icons.double_arrow),
-          _rewardChip('Lv $level', 'Level', AppColors.secondaryFixed, Icons.trending_up),
-          _rewardChip(rankTitle, 'GELAR BARU', AppColors.tertiary, Icons.auto_awesome),
+                AppColors.tertiary, AppIcons.doubleArrow),
+          _rewardChip('Lv $level', 'Level', AppColors.secondaryFixed, AppIcons.trendingUp),
+          _rewardChip(rankTitle, 'GELAR BARU', AppColors.tertiary, AppIcons.autoAwesome),
         ],
       ),
     );

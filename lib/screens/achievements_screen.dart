@@ -3,6 +3,7 @@ import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../services/achievement_service.dart';
 import '../../widgets/achievement_medal.dart';
+import '../theme/app_icons.dart';
 
 /// Galeri medali — dipisah dari tab Profil.
 ///
@@ -86,7 +87,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                     ),
                   ),
                   child: Icon(
-                    Icons.arrow_back,
+                    AppIcons.arrowBack,
                     color: AppColors.onSurface,
                     size: 20,
                   ),

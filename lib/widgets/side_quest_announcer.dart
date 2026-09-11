@@ -5,6 +5,7 @@ import '../services/game_service.dart';
 import '../screens/naik_level_screen.dart';
 import 'announcer_gate.dart';
 import 'common.dart';
+import '../theme/app_icons.dart';
 
 /// Popup selebrasi side quest selesai (dzikir 100x, baca Quran 10 ayat,
 /// belajar 5 hadis) — pola sama dengan AchievementAnnouncerOverlay:
@@ -106,26 +107,26 @@ Future<void> _show(BuildContext context, List<String> quests) async {
       ? (
           'Alhamdulillah, ${quests.length} Quest Tuntas!',
           'Semua quest harian selesai hari ini. Semoga istiqomah!',
-          Icons.military_tech,
+          AppIcons.militaryTech,
           AppColors.secondaryFixed,
         )
       : switch (quests.single) {
           'zikir100' => (
               'Dzikir 100x Selesai!',
               'Konsisten berdzikir hari ini. Istiqomah!',
-              Icons.self_improvement,
+              AppIcons.selfImprovement,
               AppColors.primary,
             ),
           'tilawah' => (
               'Baca Quran 10 Ayat Selesai!',
               'Tilawah hari ini tuntas. Lanjutkan besok!',
-              Icons.menu_book,
+              AppIcons.menuBook,
               AppColors.tertiary,
             ),
           _ => (
               'Belajar 5 Hadis Selesai!',
               'Lima hadis baru terbaca hari ini. Terus belajar!',
-              Icons.auto_stories,
+              AppIcons.autoStories,
               AppColors.secondaryFixed,
             ),
         };
@@ -224,7 +225,7 @@ Future<void> _show(BuildContext context, List<String> quests) async {
                       const SizedBox(height: AppSpacing.lg),
                       HeroButton(
                         label: 'MANTAP!',
-                        trailingIcon: Icons.emoji_events,
+                        trailingIcon: AppIcons.emojiEvents,
                         onPressed: () => Navigator.of(ctx).pop(),
                       ),
                     ],

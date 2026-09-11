@@ -6,6 +6,7 @@ import '../../services/learning_content.dart';
 import 'belajar_article.dart';
 import 'doa_screen.dart';
 import 'hadis_screen.dart';
+import '../theme/app_icons.dart';
 
 /// Belajar / Learning Hub — 3 konten: Modul | Doa | Hadis.
 /// Modul: kategori + daftar modul + progress (dari V3 BelajarScreen.kt).
@@ -85,9 +86,9 @@ class _BelajarTabState extends State<BelajarTab> {
   /// Hub selector: Modul | Doa | Hadis — pill segmented, gaya kategori.
   Widget _hubSelector() {
     const items = [
-      (Icons.menu_book, 'Modul'),
-      (Icons.volunteer_activism, 'Doa'),
-      (Icons.auto_stories, 'Hadis'),
+      (AppIcons.menuBook, 'Modul'),
+      (AppIcons.volunteerActivism, 'Doa'),
+      (AppIcons.autoStories, 'Hadis'),
     ];
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
@@ -316,7 +317,7 @@ class _BelajarTabState extends State<BelajarTab> {
                 child: Center(
                   child: unlocked
                       ? Text(mod.icon, style: const TextStyle(fontSize: 26))
-                      : Icon(Icons.lock, color: AppColors.onSurfaceVariant, size: 20),
+                      : Icon(AppIcons.lock, color: AppColors.onSurfaceVariant, size: 20),
                 ),
               ),
               const SizedBox(width: AppSpacing.md),
@@ -332,13 +333,13 @@ class _BelajarTabState extends State<BelajarTab> {
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        Icon(Icons.schedule, size: 12, color: AppColors.onSurfaceVariant),
+                        Icon(AppIcons.schedule, size: 12, color: AppColors.onSurfaceVariant),
                         const SizedBox(width: 4),
                         Text('${mod.estimatedMinutes} min',
                             style: AppText.labelCaps().copyWith(
                                 color: AppColors.onSurfaceVariant, fontSize: 10)),
                         const SizedBox(width: AppSpacing.sm),
-                        Icon(Icons.stars, size: 12, color: AppColors.secondaryFixed),
+                        Icon(AppIcons.stars, size: 12, color: AppColors.secondaryFixed),
                         const SizedBox(width: 4),
                         Text(xpClaimed ? '✓ +${mod.xpReward} XP' : '+${mod.xpReward} XP',
                             style: AppText.labelCaps().copyWith(
@@ -359,8 +360,8 @@ class _BelajarTabState extends State<BelajarTab> {
               ),
               Icon(
                 completed
-                    ? Icons.check_circle
-                    : (unlocked ? Icons.arrow_forward_ios : Icons.lock_clock),
+                    ? AppIcons.checkCircle
+                    : (unlocked ? AppIcons.arrowForwardIos : AppIcons.lockClock),
                 color: completed
                     ? AppColors.primary
                     : (isFrontier

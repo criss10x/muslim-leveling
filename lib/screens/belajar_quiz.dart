@@ -3,6 +3,7 @@ import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../services/learning_content.dart';
 import 'belajar_result.dart';
+import '../theme/app_icons.dart';
 
 /// Quiz screen — 5 questions per module, ABCD options, instant feedback.
 class BelajarQuizScreen extends StatefulWidget {
@@ -152,7 +153,7 @@ class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
       child: Row(
         children: [
           IconButton(
-            icon: Icon(Icons.close, color: AppColors.onBackground),
+            icon: Icon(AppIcons.close, color: AppColors.onBackground),
             onPressed: () => Navigator.pop(context),
           ),
           Expanded(
@@ -205,12 +206,12 @@ class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
       borderColor = AppColors.primary;
       bgColor = AppColors.primary.withValues(alpha: 0.15);
       textColor = AppColors.primary;
-      icon = Icons.check_circle;
+      icon = AppIcons.checkCircle;
     } else if (showWrong) {
       borderColor = AppColors.error;
       bgColor = AppColors.error.withValues(alpha: 0.1);
       textColor = AppColors.error;
-      icon = Icons.cancel;
+      icon = AppIcons.cancel;
     } else if (_answered) {
       borderColor = AppColors.outlineVariant.withValues(alpha: 0.2);
       textColor = AppColors.onSurfaceVariant;
@@ -274,7 +275,7 @@ class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
         children: [
           Row(
             children: [
-              Icon(wasCorrect ? Icons.check_circle : Icons.lightbulb,
+              Icon(wasCorrect ? AppIcons.checkCircle : AppIcons.lightbulb,
                   color: wasCorrect ? AppColors.primary : AppColors.tertiary, size: 18),
               const SizedBox(width: AppSpacing.xs),
               Text(wasCorrect ? 'BENAR!' : 'Belum tepat',
@@ -298,7 +299,7 @@ class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
           label: _current < _questions.length - 1
               ? 'PERTANYAAN BERIKUTNYA'
               : 'LIHAT HASIL',
-          trailingIcon: Icons.arrow_forward,
+          trailingIcon: AppIcons.arrowForward,
           onPressed: _next,
         ),
       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../services/theme_service.dart';
 import '../theme/app_theme.dart';
+import '../theme/app_icons.dart';
 
 Future<void> showThemePresetPicker(BuildContext context) {
   return showModalBottomSheet<void>(
@@ -135,7 +136,7 @@ class _PresetOption extends StatelessWidget {
                     ),
                     if (selected)
                       Icon(
-                        Icons.check_circle,
+                        AppIcons.checkCircle,
                         color: AppColors.primary,
                         semanticLabel: 'Tema dipilih',
                       ),

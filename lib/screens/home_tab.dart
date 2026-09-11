@@ -18,6 +18,7 @@ import 'quest_claim_screen.dart';
 import 'quran_reader.dart';
 import 'dzikir_screen.dart';
 import 'hadis_screen.dart';
+import '../theme/app_icons.dart';
 
 extension _StringExt on String {
   String get cap => '${this[0].toUpperCase()}${substring(1)}';
@@ -226,7 +227,7 @@ class _HomeTabState extends State<HomeTab> {
               const SizedBox(height: AppSpacing.md),
               _bonusTile(
                 ctx,
-                icon: Icons.schedule,
+                icon: AppIcons.schedule,
                 title: 'Tepat waktu',
                 subtitle: 'di bawah 30 menit setelah adzan',
                 xpLabel: '+15 XP',
@@ -235,7 +236,7 @@ class _HomeTabState extends State<HomeTab> {
               ),
               _bonusTile(
                 ctx,
-                icon: Icons.mosque,
+                icon: AppIcons.mosque,
                 title: 'Berjamaah',
                 subtitle: 'sholat berjamaah',
                 xpLabel: '+30 XP',
@@ -244,7 +245,7 @@ class _HomeTabState extends State<HomeTab> {
               ),
               _bonusTile(
                 ctx,
-                icon: Icons.check,
+                icon: AppIcons.check,
                 title: 'Sudah',
                 subtitle: 'tanpa bonus XP',
                 xpLabel: '+0',
@@ -455,7 +456,7 @@ class _HomeTabState extends State<HomeTab> {
         const Spacer(),
         IconButton(
           icon: Icon(
-            Icons.settings_outlined,
+            AppIcons.settingsOutlined,
             color: AppColors.onSurfaceVariant,
           ),
           onPressed: widget.onSettingsPressed,
@@ -762,7 +763,7 @@ class _HomeTabState extends State<HomeTab> {
               Row(
                 children: [
                   Icon(
-                    Icons.local_fire_department,
+                    AppIcons.localFireDepartment,
                     color: AppColors.goldInk,
                     size: 16,
                   ),
@@ -923,7 +924,7 @@ class _HomeTabState extends State<HomeTab> {
         ? AppColors.surfaceContainerHigh.withValues(alpha: 0.6)
         : accent.withValues(alpha: 0.14);
     final label = locked ? 'LOCKED' : (done ? 'DONE' : '+$xp XP');
-    final glyph = locked ? Icons.lock : (done ? Icons.check : Icons.bolt);
+    final glyph = locked ? AppIcons.lock : (done ? AppIcons.check : AppIcons.bolt);
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.sm + 2,
@@ -954,13 +955,13 @@ class _HomeTabState extends State<HomeTab> {
   /// ponytail: time-of-day glyph per wajib prayer — replaces generic check_circle.
   /// Color encodes state: done=primary, locked=grey, active=tertiary, else muted.
   IconData _prayerIcon(String key) => switch (key) {
-    'subuh' => Icons.wb_twilight, // fajar
-    'dzuhur' => Icons.wb_sunny, // terik
-    'jumat' => Icons.mosque, // Jumat spesial
-    'ashar' => Icons.wb_cloudy, // sore
-    'maghrib' => Icons.brightness_3, // senja (crescent)
-    'isya' => Icons.nights_stay, // malam
-    _ => Icons.circle_outlined,
+    'subuh' => AppIcons.wbTwilight, // fajar
+    'dzuhur' => AppIcons.wbSunny, // terik
+    'jumat' => AppIcons.mosque, // Jumat spesial
+    'ashar' => AppIcons.wbCloudy, // sore
+    'maghrib' => AppIcons.brightness3, // senja (crescent)
+    'isya' => AppIcons.nightsStay, // malam
+    _ => AppIcons.circleOutlined,
   };
 
   Widget _prayerRow(
@@ -1083,10 +1084,10 @@ class _HomeTabState extends State<HomeTab> {
               children: [
                 Icon(
                   q.claimed
-                      ? Icons.check_circle
+                      ? AppIcons.checkCircle
                       : (q.completed
-                            ? Icons.card_giftcard
-                            : Icons.radio_button_unchecked),
+                            ? AppIcons.cardGiftcard
+                            : AppIcons.radioButtonUnchecked),
                   color: q.claimed
                       ? AppColors.onSurfaceVariant
                       : AppColors.primary,
@@ -1138,7 +1139,7 @@ class _HomeTabState extends State<HomeTab> {
                   )
                 else if (q.claimed)
                   Icon(
-                    Icons.check,
+                    AppIcons.check,
                     color: AppColors.onSurfaceVariant,
                     size: 18,
                   ),
@@ -1162,7 +1163,7 @@ class _HomeTabState extends State<HomeTab> {
           child: FlatCard(
             child: Row(
               children: [
-                Icon(Icons.favorite, color: AppColors.error, size: 26),
+                Icon(AppIcons.favorite, color: AppColors.error, size: 26),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: Column(
@@ -1209,7 +1210,7 @@ class _HomeTabState extends State<HomeTab> {
           return FlatCard(
             child: Row(
               children: [
-                Icon(Icons.menu_book, color: AppColors.tertiary, size: 26),
+                Icon(AppIcons.menuBook, color: AppColors.tertiary, size: 26),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: Column(
@@ -1255,7 +1256,7 @@ class _HomeTabState extends State<HomeTab> {
             child: Row(
               children: [
                 Icon(
-                  Icons.self_improvement,
+                  AppIcons.selfImprovement,
                   color: AppColors.primary,
                   size: 26,
                 ),
@@ -1311,7 +1312,7 @@ class _HomeTabState extends State<HomeTab> {
               child: Row(
                 children: [
                   Icon(
-                    done ? Icons.check_circle : Icons.auto_stories,
+                    done ? AppIcons.checkCircle : AppIcons.autoStories,
                     color: done
                         ? AppColors.secondaryFixed
                         : AppColors.onSurfaceVariant,
@@ -1425,7 +1426,7 @@ class _HomeTabState extends State<HomeTab> {
                   ),
                 ),
                 const SizedBox(width: AppSpacing.md),
-                Icon(Icons.chevron_right, color: AppColors.primary, size: 28),
+                Icon(AppIcons.chevronRight, color: AppColors.primary, size: 28),
               ],
             ),
           ),
@@ -1652,7 +1653,7 @@ class _HomeTabState extends State<HomeTab> {
                     ),
                   ),
                   if (canTap)
-                    Icon(Icons.arrow_forward_ios, color: accent, size: 18),
+                    Icon(AppIcons.arrowForwardIos, color: accent, size: 18),
                 ],
               ),
             ),
@@ -2028,15 +2029,15 @@ class _BonusQuestState extends State<_BonusQuest> {
   bool _expanded = false;
 
   static const _items = [
-    ('Dhuha', 'dhuha', 'Sunnah mutlak di pagi hari', Icons.wb_sunny),
-    ('Tahajjud', 'tahajjud', 'Sunnah malam (qiyamul lail)', Icons.nights_stay),
-    ('Qobliyah Subuh', 'rawatib_subuh_qobliyah', 'Sunnah sebelum Subuh', Icons.history),
-    ("Ba'diyah Subuh", 'rawatib_subuh_ba_diyyah', 'Sunnah sesudah Subuh', Icons.history),
-    ('Qobliyah Dzuhur', 'rawatib_dzuhur_qobliyah', 'Sunnah sebelum Dzuhur', Icons.history),
-    ("Ba'diyah Dzuhur", 'rawatib_dzuhur_ba_diyyah', 'Sunnah sesudah Dzuhur', Icons.history),
-    ('Qobliyah Ashar', 'rawatib_ashar_qobliyah', 'Sunnah sebelum Ashar', Icons.history),
-    ("Ba'diyah Maghrib", 'rawatib_maghrib_ba_diyyah', 'Sunnah sesudah Maghrib', Icons.history),
-    ("Ba'diyah Isya", 'rawatib_isya_ba_diyyah', 'Sunnah sesudah Isya', Icons.history),
+    ('Dhuha', 'dhuha', 'Sunnah mutlak di pagi hari', AppIcons.wbSunny),
+    ('Tahajjud', 'tahajjud', 'Sunnah malam (qiyamul lail)', AppIcons.nightsStay),
+    ('Qobliyah Subuh', 'rawatib_subuh_qobliyah', 'Sunnah sebelum Subuh', AppIcons.history),
+    ("Ba'diyah Subuh", 'rawatib_subuh_ba_diyyah', 'Sunnah sesudah Subuh', AppIcons.history),
+    ('Qobliyah Dzuhur', 'rawatib_dzuhur_qobliyah', 'Sunnah sebelum Dzuhur', AppIcons.history),
+    ("Ba'diyah Dzuhur", 'rawatib_dzuhur_ba_diyyah', 'Sunnah sesudah Dzuhur', AppIcons.history),
+    ('Qobliyah Ashar', 'rawatib_ashar_qobliyah', 'Sunnah sebelum Ashar', AppIcons.history),
+    ("Ba'diyah Maghrib", 'rawatib_maghrib_ba_diyyah', 'Sunnah sesudah Maghrib', AppIcons.history),
+    ("Ba'diyah Isya", 'rawatib_isya_ba_diyyah', 'Sunnah sesudah Isya', AppIcons.history),
   ];
 
   @override
@@ -2073,7 +2074,7 @@ class _BonusQuestState extends State<_BonusQuest> {
                 turns: _expanded ? 0.5 : 0,
                 duration: const Duration(milliseconds: 200),
                 child: Icon(
-                  Icons.expand_more,
+                  AppIcons.expandMore,
                   size: 18,
                   color: AppColors.onSurfaceVariant,
                 ),
@@ -2201,7 +2202,7 @@ class _BonusQuestState extends State<_BonusQuest> {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (done) ...[
-            Icon(Icons.check, size: 12, color: fg),
+            Icon(AppIcons.check, size: 12, color: fg),
             const SizedBox(width: 2),
           ],
           Text(

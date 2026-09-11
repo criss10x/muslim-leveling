@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:muslim_leveling/services/game_service.dart';
 import 'package:muslim_leveling/screens/home_tab.dart';
+import 'package:muslim_leveling/theme/app_icons.dart';
 
 // ponytail: runnable check — Bonus Quest collapsed shows active-only subset,
 // tap chevron expands to full 9 rows. Clock frozen at 13:00 → Dhuha window
@@ -30,7 +31,7 @@ void main() {
     expect(find.text('Dhuha'), findsOneWidget); // aktif jam 13:00
     expect(find.text('Tahajjud'), findsNothing); // terkunci → tersembunyi
 
-    await t.tap(find.byIcon(Icons.expand_more));
+    await t.tap(find.byIcon(AppIcons.expandMore));
     await t.pumpAndSettle();
     expect(find.text('Tahajjud'), findsOneWidget); // expanded → semua tampil
     expect(find.text("Ba'diyah Isya"), findsOneWidget);

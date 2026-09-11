@@ -12,6 +12,7 @@ import '../theme/app_theme.dart';
 import '../services/achievement_service.dart';
 import '../services/game_service.dart';
 import 'achievement_medal.dart';
+import '../theme/app_icons.dart';
 
 // ═══════════════════════════════════════════════════════════════
 // SHARE CARD — Kartu 9:16 buat di-share ke IG Story, WA, dll.
@@ -614,7 +615,7 @@ class _SharePreviewDialogState extends State<_SharePreviewDialog>
             children: [
               Expanded(
                 child: _primaryBtn(
-                  icon: Icons.share,
+                  icon: AppIcons.share,
                   label: _saved ? 'Bagikan Lagi' : 'Bagikan',
                   loading: _sharing,
                   onTap: _captureAndShare,
@@ -622,7 +623,7 @@ class _SharePreviewDialogState extends State<_SharePreviewDialog>
               ),
               const SizedBox(width: 8),
               _ghostBtn(
-                icon: Icons.close,
+                icon: AppIcons.close,
                 onTap: () => Navigator.of(context).pop(),
               ),
             ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
+import '../theme/app_icons.dart';
 
 /// Toast XP micro-reward (Delight Tier 2, micro-level):
 /// pill emas slide-up + spring, bukan SnackBar sistem.
@@ -49,7 +50,7 @@ void showXpToast(BuildContext context, int xp) {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.auto_awesome,
+                          Icon(AppIcons.autoAwesome,
                               size: 14, color: AppColors.onSecondary),
                           const SizedBox(width: 6),
                           Text(

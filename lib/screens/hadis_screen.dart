@@ -5,6 +5,7 @@ import '../../widgets/common.dart';
 import '../../services/hadis_api.dart';
 import '../../services/game_service.dart';
 import '../../services/daily_highlight.dart';
+import '../theme/app_icons.dart';
 
 /// Hadis — explore list (5/page) + search + hadis acak. API myquran v3.
 class HadisScreen extends StatefulWidget {
@@ -172,11 +173,11 @@ class _HadisScreenState extends State<HadisScreen> {
                     hintText: 'Cari hadis…',
                     hintStyle: AppText.bodyMd()
                         .copyWith(color: AppColors.onSurfaceVariant),
-                    prefixIcon: Icon(Icons.search,
+                    prefixIcon: Icon(AppIcons.search,
                         size: 20, color: AppColors.onSurfaceVariant),
                     suffixIcon: _isSearch || _searchCtrl.text.isNotEmpty
                         ? IconButton(
-                            icon: Icon(Icons.close,
+                            icon: Icon(AppIcons.close,
                                 size: 18, color: AppColors.onSurfaceVariant),
                             onPressed: () {
                               _searchCtrl.clear();
@@ -224,7 +225,7 @@ class _HadisScreenState extends State<HadisScreen> {
         ),
         child: Row(
           children: [
-            Icon(Icons.casino, size: 16, color: AppColors.primary),
+            Icon(AppIcons.casino, size: 16, color: AppColors.primary),
             const SizedBox(width: 6),
             Text('Acak',
                 style: AppText.labelCaps()
@@ -289,7 +290,7 @@ class _HadisScreenState extends State<HadisScreen> {
                       )
                     : TextButton.icon(
                         onPressed: _loadMore,
-                        icon: const Icon(Icons.expand_more, size: 18),
+                        icon: const Icon(AppIcons.expandMore, size: 18),
                         label: const Text('Muat Lagi'),
                       ),
               ),
@@ -405,7 +406,7 @@ class _HadisDetailScreenState extends State<HadisDetailScreen> {
                 children: [
                   IconButton(
                     tooltip: 'Kembali',
-                    icon: Icon(Icons.arrow_back, color: AppColors.onBackground),
+                    icon: Icon(AppIcons.arrowBack, color: AppColors.onBackground),
                     onPressed: () => Navigator.pop(context),
                   ),
                   Expanded(

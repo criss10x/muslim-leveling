@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../services/game_service.dart';
+import '../theme/app_icons.dart';
 
 /// Quest Harian Claim — layar singkat hangat setelah klaim quest harian.
 /// Berbeda dari NaikLevelScreen (event langka, confetti): ini event harian
@@ -180,7 +181,7 @@ class _QuestClaimScreenState extends State<QuestClaimScreen>
                     const SizedBox(height: AppSpacing.xl),
                     HeroButton(
                       label: 'Lanjut',
-                      trailingIcon: Icons.arrow_forward,
+                      trailingIcon: AppIcons.arrowForward,
                       onPressed: reduceMotion
                           ? () => Navigator.of(context).pop()
                           : () async {
@@ -416,13 +417,13 @@ class _CategoryIcon extends StatelessWidget {
 
   IconData get _icon {
     return switch (category) {
-      _QuestCategory.sholat => Icons.mosque_outlined,
-      _QuestCategory.sunnah => Icons.auto_awesome_outlined,
-      _QuestCategory.zikir => Icons.spa_outlined,
-      _QuestCategory.quran => Icons.menu_book_outlined,
-      _QuestCategory.hadis => Icons.format_quote_outlined,
-      _QuestCategory.fiveRings => Icons.workspace_premium_outlined,
-      _QuestCategory.subuhIsya => Icons.brightness_2_outlined,
+      _QuestCategory.sholat => AppIcons.mosqueOutlined,
+      _QuestCategory.sunnah => AppIcons.autoAwesomeOutlined,
+      _QuestCategory.zikir => AppIcons.spaOutlined,
+      _QuestCategory.quran => AppIcons.menuBookOutlined,
+      _QuestCategory.hadis => AppIcons.formatQuoteOutlined,
+      _QuestCategory.fiveRings => AppIcons.workspacePremiumOutlined,
+      _QuestCategory.subuhIsya => AppIcons.brightness2Outlined,
     };
   }
 
@@ -437,7 +438,7 @@ class _CategoryIcon extends StatelessWidget {
         color: color.withValues(alpha: 0.12),
         border: Border.all(color: color.withValues(alpha: 0.4), width: 1.5),
       ),
-      child: Icon(haid ? Icons.ac_unit : _icon, color: color, size: 32),
+      child: Icon(haid ? AppIcons.acUnit : _icon, color: color, size: 32),
     );
   }
 }

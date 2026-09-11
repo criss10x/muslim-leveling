@@ -25,6 +25,7 @@ import '../../services/cosmetic_service.dart';
 import '../../services/cosmetic_catalog.dart';
 import 'achievements_screen.dart';
 import 'onboarding_screen.dart';
+import '../theme/app_icons.dart';
 
 /// Profil Pejuang — hero header, stats grid, achievements, settings rows.
 class ProfilTab extends StatefulWidget {
@@ -175,7 +176,7 @@ class _ProfilTabState extends State<ProfilTab> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: Icon(Icons.person, color: AppColors.primary),
+              leading: Icon(AppIcons.person, color: AppColors.primary),
               title: Text('Edit Nama', style: AppText.bodyLg()),
               onTap: () {
                 Navigator.pop(ctx);
@@ -183,7 +184,7 @@ class _ProfilTabState extends State<ProfilTab> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.photo_library, color: AppColors.primary),
+              leading: Icon(AppIcons.photoLibrary, color: AppColors.primary),
               title: Text('Ganti Foto', style: AppText.bodyLg()),
               onTap: () {
                 Navigator.pop(ctx);
@@ -192,7 +193,7 @@ class _ProfilTabState extends State<ProfilTab> {
             ),
             if (_avatarPath != null)
               ListTile(
-                leading: Icon(Icons.delete, color: AppColors.error),
+                leading: Icon(AppIcons.delete, color: AppColors.error),
                 title: Text(
                   'Hapus Foto',
                   style: AppText.bodyLg().copyWith(color: AppColors.error),
@@ -295,7 +296,7 @@ class _ProfilTabState extends State<ProfilTab> {
             title: Row(
               children: [
                 Icon(
-                  Icons.notifications_active,
+                  AppIcons.notificationsActive,
                   color: AppColors.primary,
                   size: 24,
                 ),
@@ -323,7 +324,7 @@ class _ProfilTabState extends State<ProfilTab> {
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.warning_amber, color: AppColors.error, size: 20),
+                          Icon(AppIcons.warningAmber, color: AppColors.error, size: 20),
                           const SizedBox(width: AppSpacing.sm),
                           Expanded(
                             child: Text(
@@ -537,7 +538,7 @@ class _ProfilTabState extends State<ProfilTab> {
                                 }
                               : null,
                           icon: Icon(
-                            Icons.send,
+                            AppIcons.send,
                             size: 16,
                             color: enabled
                                 ? AppColors.primary
@@ -561,7 +562,7 @@ class _ProfilTabState extends State<ProfilTab> {
                                 }
                               : null,
                           icon: Icon(
-                            Icons.volume_up,
+                            AppIcons.volumeUp,
                             size: 16,
                             color: enabled
                                 ? AppColors.secondaryFixed
@@ -587,7 +588,7 @@ class _ProfilTabState extends State<ProfilTab> {
                       onPressed: () =>
                           NotificationService.openChannelSettings(),
                       icon: Icon(
-                        Icons.settings,
+                        AppIcons.settings,
                         size: 16,
                         color: AppColors.onSurfaceVariant,
                       ),
@@ -616,7 +617,7 @@ class _ProfilTabState extends State<ProfilTab> {
                         Row(
                           children: [
                             Icon(
-                              Icons.battery_alert,
+                              AppIcons.batteryAlert,
                               size: 20,
                               color: AppColors.tertiary,
                             ),
@@ -654,7 +655,7 @@ class _ProfilTabState extends State<ProfilTab> {
                                 );
                               }
                             },
-                            icon: const Icon(Icons.power_settings_new, size: 16),
+                            icon: const Icon(AppIcons.powerSettingsNew, size: 16),
                             label: Text(
                               'Buka Pengaturan Auto-start',
                               style: AppText.bodyMd().copyWith(
@@ -734,7 +735,7 @@ class _ProfilTabState extends State<ProfilTab> {
         child: Row(
           children: [
             Icon(
-              selected ? Icons.radio_button_checked : Icons.radio_button_off,
+              selected ? AppIcons.radioButtonChecked : AppIcons.radioButtonOff,
               color: selected ? AppColors.primary : AppColors.onSurfaceVariant,
               size: 20,
             ),
@@ -779,19 +780,19 @@ class _ProfilTabState extends State<ProfilTab> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _privacyItem(Icons.phone_android, 'Tersimpan di perangkat',
+              _privacyItem(AppIcons.phoneAndroid, 'Tersimpan di perangkat',
                   'Semua data — sholat, bacaan Quran, statistik, dan preferensi — '
                   'hanya tinggal di HP kamu. Tidak ada server, tidak ada cloud.'),
               const SizedBox(height: 12),
-              _privacyItem(Icons.wifi_off, 'Tanpa jejak online',
+              _privacyItem(AppIcons.wifiOff, 'Tanpa jejak online',
                   'Aplikasi tidak mengirim aktivitas kamu ke pihak ketiga '
                   'dan tidak memantau perilaku.'),
               const SizedBox(height: 12),
-              _privacyItem(Icons.location_off, 'Lokasi privat',
+              _privacyItem(AppIcons.locationOff, 'Lokasi privat',
                   'Lokasi hanya dipakai sekali untuk menentukan jadwal sholat '
                   'daerahmu. Lokasi tidak disimpan atau dibagikan.'),
               const SizedBox(height: 12),
-              _privacyItem(Icons.delete_outline, 'Hapus kapan saja',
+              _privacyItem(AppIcons.deleteOutline, 'Hapus kapan saja',
                   'Masuk Profil → Keluar untuk menghapus semua data lokal '
                   'sekaligus. Tidak ada yang tersisa di perangkat.'),
             ],
@@ -1103,7 +1104,7 @@ class _ProfilTabState extends State<ProfilTab> {
                                     ),
                                     padding: EdgeInsets.zero,
                                     icon: Icon(
-                                      Icons.edit,
+                                      AppIcons.edit,
                                       color: AppColors.primary,
                                       size: 20,
                                     ),
@@ -1313,7 +1314,7 @@ class _ProfilTabState extends State<ProfilTab> {
     if (signedIn) {
       return Row(
         children: [
-          Icon(Icons.cloud_done, color: AppColors.primary, size: 16),
+          Icon(AppIcons.cloudDone, color: AppColors.primary, size: 16),
           const SizedBox(width: AppSpacing.xs),
           Expanded(
             child: Text(
@@ -1347,7 +1348,7 @@ class _ProfilTabState extends State<ProfilTab> {
                 height: 18,
                 child: CircularProgressIndicator(strokeWidth: 2),
               )
-            : const Icon(Icons.g_mobiledata, size: 22),
+            : const Icon(AppIcons.gMobiledata, size: 22),
         label: Text(
           _googleLoginLoading ? 'MENGHUBUNGKAN...' : 'Lanjut dengan Google',
         ),
@@ -1590,7 +1591,7 @@ class _ProfilTabState extends State<ProfilTab> {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.calendar_month, color: AppColors.primary, size: 22),
+                  Icon(AppIcons.calendarMonth, color: AppColors.primary, size: 22),
                   const SizedBox(width: AppSpacing.sm),
                   Expanded(
                     child: Text(
@@ -1604,7 +1605,7 @@ class _ProfilTabState extends State<ProfilTab> {
                   ),
                   const SizedBox(width: AppSpacing.base),
                   Icon(
-                    Icons.arrow_forward_ios,
+                    AppIcons.arrowForwardIos,
                     size: 14,
                     color: AppColors.primary,
                   ),
@@ -1648,7 +1649,7 @@ class _ProfilTabState extends State<ProfilTab> {
               child: Row(
                 children: [
                   Icon(
-                    Icons.inventory_2_outlined,
+                    AppIcons.inventory2Outlined,
                     color: AppColors.primary,
                     size: 22,
                   ),
@@ -1665,7 +1666,7 @@ class _ProfilTabState extends State<ProfilTab> {
                   ),
                   const SizedBox(width: AppSpacing.base),
                   Icon(
-                    Icons.arrow_forward_ios,
+                    AppIcons.arrowForwardIos,
                     size: 14,
                     color: AppColors.primary,
                   ),
@@ -1985,10 +1986,10 @@ class _ProfilTabState extends State<ProfilTab> {
                     !loggedToday && s?.lastDate == yestKey && count > 0;
                 // haid: pakai snowflake bukan fire; suppress warning state.
                 final iconData = haidMode
-                    ? Icons.ac_unit
+                    ? AppIcons.acUnit
                     : atRisk
-                        ? Icons.warning_amber_rounded
-                        : Icons.local_fire_department;
+                        ? AppIcons.warningAmberRounded
+                        : AppIcons.localFireDepartment;
                 final accent = haidMode
                     ? AppColors.tertiary
                     : atRisk
@@ -2098,7 +2099,7 @@ class _ProfilTabState extends State<ProfilTab> {
               ),
               child: Row(
                 children: [
-                  Icon(haidMode ? Icons.ac_unit : Icons.mosque,
+                  Icon(haidMode ? AppIcons.acUnit : AppIcons.mosque,
                       size: 18,
                       color: haidMode
                           ? AppColors.tertiary
@@ -2120,7 +2121,7 @@ class _ProfilTabState extends State<ProfilTab> {
                     ),
                   ] else ...[
                     Icon(
-                      Icons.local_fire_department,
+                      AppIcons.localFireDepartment,
                       size: 14,
                       color: AppColors.secondaryFixed,
                     ),
@@ -2257,7 +2258,7 @@ class _ProfilTabState extends State<ProfilTab> {
                 ),
                 const SizedBox(width: AppSpacing.base),
                 Icon(
-                  Icons.arrow_forward_ios,
+                  AppIcons.arrowForwardIos,
                   size: 14,
                   color: AppColors.secondaryFixed,
                 ),
@@ -2273,13 +2274,13 @@ class _ProfilTabState extends State<ProfilTab> {
     final rows = <_SettingRow>[
       _SettingRow(
         'Periode Haid',
-        Icons.bloodtype_outlined,
+        AppIcons.bloodtypeOutlined,
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (!_haidMode)
               Icon(
-                Icons.shield_outlined,
+                AppIcons.shieldOutlined,
                 size: 16,
                 color: AppColors.onSurfaceVariant,
               ),
@@ -2301,32 +2302,32 @@ class _ProfilTabState extends State<ProfilTab> {
       ),
       _SettingRow(
         'Pengaturan Akun',
-        Icons.person_outline,
+        AppIcons.personOutline,
         onTap: _editNickname,
       ),
       _SettingRow(
         'Notifikasi',
-        Icons.notifications_outlined,
+        AppIcons.notificationsOutlined,
         onTap: _showNotifDialog,
       ),
       _SettingRow(
         'Tema aplikasi',
-        Icons.palette_outlined,
+        AppIcons.paletteOutlined,
         onTap: () => showThemePresetPicker(context),
       ),
       _SettingRow(
         'Privasi & Data',
-        Icons.lock_outline,
+        AppIcons.lockOutline,
         onTap: _showPrivacyDialog,
       ),
       _SettingRow(
         'Tentang Aplikasi',
-        Icons.info_outline,
+        AppIcons.infoOutline,
         onTap: _showAboutDialog,
       ),
       _SettingRow(
         'Keluar',
-        Icons.logout,
+        AppIcons.logout,
         color: AppColors.error,
         onTap: _confirmLogout,
       ),
@@ -2368,7 +2369,7 @@ class _ProfilTabState extends State<ProfilTab> {
                               r.trailing!
                             else
                               Icon(
-                                Icons.chevron_right,
+                                AppIcons.chevronRight,
                                 color: AppColors.onSurfaceVariant,
                                 size: 20,
                               ),

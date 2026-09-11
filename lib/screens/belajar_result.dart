@@ -6,6 +6,7 @@ import '../../services/learning_content.dart';
 import '../../services/game_service.dart';
 import 'naik_level_screen.dart';
 import 'dapet_exp_screen.dart';
+import '../theme/app_icons.dart';
 
 /// Quiz result — redesigned per spec: victory badge, glass score card,
 /// gradient heading, float animation, hero + ghost action buttons.
@@ -209,7 +210,7 @@ class _BelajarResultScreenState extends State<BelajarResultScreen>
                       ],
               ),
               child: Icon(
-                _passed ? Icons.workspace_premium : Icons.refresh,
+                _passed ? AppIcons.workspacePremium : AppIcons.refresh,
                 size: 52,
                 color: iconColor,
               ),
@@ -338,7 +339,7 @@ class _BelajarResultScreenState extends State<BelajarResultScreen>
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.verified, color: AppColors.primary, size: 18),
+                Icon(AppIcons.verified, color: AppColors.primary, size: 18),
                 const SizedBox(width: 8),
                 Text('${widget.correct}/${widget.total} Benar',
                     style: AppText.titleLg().copyWith(color: AppColors.primary, fontSize: 18)),
@@ -355,7 +356,7 @@ class _BelajarResultScreenState extends State<BelajarResultScreen>
       width: double.infinity,
       child: HeroButton(
         label: 'KLAIM +${module.xpReward} XP',
-        trailingIcon: Icons.stars,
+        trailingIcon: AppIcons.stars,
         onPressed: _processing ? null : () => _claimXp(module),
       ),
     );
@@ -391,7 +392,7 @@ class _BelajarResultScreenState extends State<BelajarResultScreen>
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.bolt, color: AppColors.primary, size: 22),
+          Icon(AppIcons.bolt, color: AppColors.primary, size: 22),
           const SizedBox(width: 8),
           Text('+${module.xpReward} XP',
               style: AppText.headlineMd().copyWith(color: AppColors.primary, fontSize: 22)),
@@ -412,7 +413,7 @@ class _BelajarResultScreenState extends State<BelajarResultScreen>
       ),
       child: Row(
         children: [
-          Icon(Icons.lightbulb, color: AppColors.tertiary, size: 20),
+          Icon(AppIcons.lightbulb, color: AppColors.tertiary, size: 20),
           const SizedBox(width: 12),
           Expanded(
             child: Text('Baca lagi artikelnya, lalu coba quiz lagi. Kamu pasti bisa!',
@@ -430,7 +431,7 @@ class _BelajarResultScreenState extends State<BelajarResultScreen>
           width: double.infinity,
           child: HeroButton(
             label: 'Kembali ke Hub',
-            trailingIcon: Icons.arrow_forward,
+            trailingIcon: AppIcons.arrowForward,
             onPressed: () => Navigator.of(context).popUntil((route) => route.isFirst),
           ),
         ),
@@ -439,7 +440,7 @@ class _BelajarResultScreenState extends State<BelajarResultScreen>
           SizedBox(
             width: double.infinity,
             child: GhostButton(
-              label: 'COBA LAGI', icon: Icons.replay,
+              label: 'COBA LAGI', icon: AppIcons.replay,
               onPressed: () { Navigator.of(context).pop(); Navigator.of(context).pop(); },
               color: AppColors.tertiary,
             ),

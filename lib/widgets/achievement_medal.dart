@@ -6,6 +6,7 @@ import '../services/achievement_service.dart';
 import 'announcer_gate.dart';
 import 'common.dart';
 import 'share_card.dart';
+import '../theme/app_icons.dart';
 
 /// Medali achievement ala Mobile Legends — heksagon dengan gradient tier,
 /// glow, dan glyph di tengah (ikon untuk momen pertama, angka hari untuk
@@ -55,13 +56,13 @@ class AchievementMedal extends StatelessWidget {
 
     Widget glyph;
     if (!unlocked) {
-      glyph = Icon(Icons.lock, size: size * 0.30, color: glyphColor);
+      glyph = Icon(AppIcons.lock, size: size * 0.30, color: glyphColor);
     } else if (def.glyphText != null) {
       // Kill-count ala ML: angka hari besar + api kecil di atasnya.
       glyph = Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.local_fire_department, size: size * 0.18, color: c1),
+          Icon(AppIcons.localFireDepartment, size: size * 0.18, color: c1),
           FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
@@ -396,7 +397,7 @@ Future<void> showAchievementUnlock(
                           Expanded(
                             child: HeroButton(
                               label: 'MANTAP!',
-                              trailingIcon: Icons.emoji_events,
+                              trailingIcon: AppIcons.emojiEvents,
                               onPressed: () => Navigator.of(ctx).pop(),
                             ),
                           ),
@@ -421,7 +422,7 @@ Future<void> showAchievementUnlock(
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.share, size: 16, color: c1),
+                                Icon(AppIcons.share, size: 16, color: c1),
                                 const SizedBox(width: 6),
                                 Text(
                                   'Bagikan',
@@ -547,7 +548,7 @@ void showAchievementDetail(
                     // tampil dan user masih punya jalan kembali.
                     showShareCard(context, def);
                   },
-                  icon: Icon(Icons.share, size: 16, color: c1),
+                  icon: Icon(AppIcons.share, size: 16, color: c1),
                   label: Text(
                     'Bagikan',
                     style: AppText.bodyLg().copyWith(color: c1),
