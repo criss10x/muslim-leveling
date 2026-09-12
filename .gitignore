@@ -26,6 +26,8 @@ migrate_working_dir/
 # Flutter/Dart/Pub related
 **/doc/api/
 **/ios/Flutter/.last_build_id
+# ponytail: artefak kerja skill impeccable (critique/audit lokal), bukan bagian app.
+.impeccable/
 .dart_tool/
 .flutter-plugins-dependencies
 .pub-cache/
