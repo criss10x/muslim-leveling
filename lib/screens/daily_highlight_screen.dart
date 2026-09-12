@@ -8,6 +8,7 @@ import '../../widgets/quran_share_sheet.dart';
 import '../../widgets/quran_tafsir_sheet.dart';
 import '../../services/game_service.dart';
 import '../../services/daily_highlight.dart';
+import '../../services/ulama_quotes.dart';
 import '../../services/quran_data.dart';
 import '../../services/quran_audio_service.dart';
 import '../../services/quran_playlist.dart';
@@ -114,7 +115,10 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
     }
   }
 
-  bool get _tuntas => _claimed == (1 << GameService.highlightSwipeMaxPages) - 1;
+  /// Tuntas = semua blok yang BENAR-BENAR dirender sudah diklaim. Blok hadis
+  /// opsional (offline → hilang), jadi basisnya jumlah halaman, bukan konstanta
+  /// max — kalau tidak, penutup tak pernah "tuntas" saat hadis kosong.
+  bool _tuntas(int count) => _claimed & ((1 << count) - 1) == (1 << count) - 1;
 
   /// Ayat hari ini di Quran, mulai & berhenti di ayat itu.
   void _toggleAudio() {
@@ -193,6 +197,11 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
     );
   }
 
+  /// Kutipan ulama hari ini — deterministik dari tanggal, sama seperti ayat/doa.
+  UlamaQuote get _quote => ulamaQuotes[highlightIndex(_todayKey, ulamaQuotes.length)];
+
+  String get _todayKey => GameService.todayStr();
+
   List<({String title, String arabic, String text, bool isArabic})> _pages(
     DailyHighlight h,
   ) => [
@@ -205,6 +214,8 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
     if (h.hadisIdn.isNotEmpty)
       (title: 'HADIS HARI INI', arabic: '', text: h.hadisIdn, isArabic: false),
     (title: 'DOA · ${h.doaNama}', arabic: '', text: h.doaIdn, isArabic: false),
+    // ponytail: kutipan ulama dari aset lokal — selalu ada, tanpa network.
+    (title: 'KATA ULAMA · ${_quote.tokoh}', arabic: '', text: _quote.idn, isArabic: false),
   ];
 
   @override
@@ -510,15 +521,15 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (_tuntas)
+          if (_tuntas(count))
             Icon(AppIcons.checkCircle, size: 16, color: AppColors.secondaryFixed),
-          if (_tuntas) const SizedBox(width: 6),
+          if (_tuntas(count)) const SizedBox(width: 6),
           Text(
-            _tuntas
+            _tuntas(count)
                 ? 'Renungan hari ini tuntas'
-                : '$_claimed dari $count renungan dibaca · swipe untuk lanjut',
+                : '${_claimed & ((1 << count) - 1)} dari $count renungan dibaca · swipe untuk lanjut',
             style: AppText.labelCapsSm().copyWith(
-              color: _tuntas
+              color: _tuntas(count)
                   ? AppColors.secondaryFixed
                   : AppColors.onSurfaceVariant,
             ),

@@ -1801,10 +1801,14 @@ class GameService {
   static const quranReadAyahDailyCap = 50;
 
   // ─── Daily highlight swipe XP ───
-  // +1 XP per halaman kartu (Ayat/Hadis/Doa) yang pertama dilihat tiap hari.
-  // Bitmask anti-farm: tiap halaman cuma bayar sekali per hari. Cap 3/hari.
+  // +1 XP per halaman kartu (Ayat/Hadis/Doa/Kata Ulama) yang pertama dilihat
+  // tiap hari. Bitmask anti-farm: tiap halaman cuma bayar sekali per hari.
+  // Cap 4/hari.
   static const highlightSwipeXpPerPage = 1;
-  static const highlightSwipeMaxPages = 3;
+  // ponytail: 4 = Ayat / Hadis (opsional) / Doa / Kata Ulama. Hadis bisa
+  // hilang saat offline, jadi bit-nya bisa tetap 0 — penutup menghitung blok
+  // yang benar-benar dirender, bukan konstanta ini.
+  static const highlightSwipeMaxPages = 4;
 
   /// Bitmask halaman highlight yang XP-nya sudah diklaim HARI INI.
   /// 0 kalau tanggalnya beda (mask lama diabaikan, bukan direset).

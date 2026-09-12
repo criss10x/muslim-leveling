@@ -7,6 +7,7 @@ import 'package:muslim_leveling/screens/daily_highlight_screen.dart';
 import 'package:muslim_leveling/services/daily_highlight.dart';
 import 'package:muslim_leveling/services/game_service.dart';
 import 'package:muslim_leveling/services/quran_data.dart';
+import 'package:muslim_leveling/services/ulama_quotes.dart';
 
 /// Ayat uji harus punya padanan asli di aset: _resolve() mencocokkan
 /// surah+ayat dari aset lokal, dan tanpa kecocokan tombol aksi disembunyikan.
@@ -72,17 +73,28 @@ void main() {
     expect(find.text('Bagikan'), findsOneWidget);
   });
 
-  testWidgets('penutup: progres hari ini tampil sebagai "n dari 3"', (
+  testWidgets('penutup: progres hari ini tampil sebagai "n dari 4"', (
     tester,
   ) async {
     _seedToday();
     await _pump(tester);
 
-    // Halaman 1 diklaim otomatis → minimal 1 dari 3.
-    expect(
-      find.textContaining('dari 3 renungan dibaca'),
-      findsOneWidget,
-    );
+    // 4 blok (ayat + hadis + doa + kata ulama); halaman 1 klaim otomatis.
+    expect(find.textContaining('dari 4 renungan dibaca'), findsOneWidget);
+  });
+
+  // ponytail: PageView.builder cuma membangun halaman yang terlihat, jadi blok
+  // ke-4 tak bisa dicari lewat finder. Uji datanya langsung.
+  test('kutipan ulama: pool tidak kosong & deterministik per tanggal', () {
+    expect(ulamaQuotes.length, greaterThanOrEqualTo(10));
+    for (final q in ulamaQuotes) {
+      expect(q.tokoh, isNotEmpty);
+      expect(q.idn, isNotEmpty);
+    }
+    final a = ulamaQuotes[highlightIndex('2026-08-16', ulamaQuotes.length)];
+    final b = ulamaQuotes[highlightIndex('2026-08-16', ulamaQuotes.length)];
+    expect(a.tokoh, b.tokoh);
+    expect(a.idn, b.idn);
   });
 
   testWidgets('tanpa cache → halaman tetap render dgn pesan kosong', (
