@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
@@ -10,14 +9,14 @@ import '../../services/game_service.dart';
 import '../../services/prayer_service.dart';
 import '../../services/notification_service.dart';
 import '../../services/achievement_service.dart';
-import '../../services/daily_highlight.dart';
-import '../../services/quran_data.dart';
 import '../../widgets/xp_toast.dart';
 import 'naik_level_screen.dart';
 import 'quest_claim_screen.dart';
-import 'quran_reader.dart';
 import 'dzikir_screen.dart';
 import 'hadis_screen.dart';
+import 'doa_screen.dart';
+import 'qibla_screen.dart';
+import 'daily_highlight_screen.dart';
 import '../theme/app_icons.dart';
 
 extension _StringExt on String {
@@ -37,9 +36,6 @@ class _HomeTabState extends State<HomeTab> {
   String _nickname = 'Muslim Warrior';
   String _claimingQuestId = '';
   String _error = '';
-  DailyHighlight? _highlight;
-  final _highlightCtrl = PageController();
-  int _highlightPage = 0;
 
   @override
   void initState() {
@@ -55,7 +51,6 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   void dispose() {
-    _highlightCtrl.dispose();
     GameService.stateVersion.removeListener(_onStateChanged);
     PrayerService.locationVersion.removeListener(_onLocationChanged);
     super.dispose();
@@ -86,15 +81,6 @@ class _HomeTabState extends State<HomeTab> {
         AchievementService.refresh(silent: true),
         _fetchTimingsSilently(),
         SharedPreferences.getInstance().then((v) => p = v),
-        () async {
-          try {
-            _highlight = await dailyHighlightService.forToday(
-              GameService.todayStr(),
-            );
-          } catch (_) {
-            // ponytail: kartu opsional, gagal → sembunyi
-          }
-        }(),
       ]);
       if (mounted) {
         setState(() {
@@ -394,20 +380,18 @@ class _HomeTabState extends State<HomeTab> {
               const SizedBox(height: AppSpacing.lg),
               _section(3, _ritualRings()),
               const SizedBox(height: AppSpacing.lg),
-              _section(4, _prayerQuests()),
+              _section(4, _quickActions()),
               const SizedBox(height: AppSpacing.lg),
-              _section(5, _dailyChest()),
+              _section(5, _prayerQuests()),
               const SizedBox(height: AppSpacing.lg),
-              if (_state.quests.isNotEmpty) _section(6, _questList()),
+              _section(6, _dailyChest()),
+              const SizedBox(height: AppSpacing.lg),
+              if (_state.quests.isNotEmpty) _section(7, _questList()),
               if (_state.quests.isNotEmpty)
                 const SizedBox(height: AppSpacing.lg),
-              _section(7, _BonusQuest(state: _state, onToggle: (id) => _togglePrayer(id, 'sunnah'))),
+              _section(8, _BonusQuest(state: _state, onToggle: (id) => _togglePrayer(id, 'sunnah'))),
               const SizedBox(height: AppSpacing.lg),
-              _section(8, _sideQuest(context)),
-              const SizedBox(height: AppSpacing.lg),
-              _section(9, _dailyBento()),
-              const SizedBox(height: AppSpacing.lg),
-              _section(10, _dailyHighlight()),
+              _section(9, _sideQuest(context)),
               if (_error.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.all(AppSpacing.md),
@@ -1361,134 +1345,59 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  Widget _dailyBento() {
-    final zikirCount = GameService.zikirCountToday;
-    final goal = GameService.zikirGoal;
-    final progress = (zikirCount / goal).clamp(0.0, 1.0);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        HudHeader(
-          'DAILY ZIKIR',
-          meta: '$zikirCount/$goal',
-          accent: zikirCount >= goal ? AppColors.primary : null,
-        ),
-        // Satu tile besar -> buka layar Dzikir penuh (counter, target, getar, pilih dzikir).
-        PressableScale(
-          pressedScale: 0.97,
-          onTap: () async {
-            await Navigator.push(
-                context, MaterialPageRoute(builder: (_) => const DzikirScreen()));
-            if (mounted) setState(() {});
-          },
-          child: Container(
-            padding: const EdgeInsets.all(AppSpacing.md),
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.10),
-              borderRadius: BorderRadius.circular(AppRadius.xxl),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'BUKA TASBIH DIGITAL',
-                        style: AppText.labelCaps().copyWith(
-                          color: AppColors.primary,
-                          fontSize: 10,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      AnimatedCount(
-                        value: zikirCount,
-                        suffix: ' / $goal',
-                        duration: const Duration(milliseconds: 350),
-                        style: AppText.displayHero(28)
-                            .copyWith(color: AppColors.primary),
-                      ),
-                      const SizedBox(height: 6),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(AppRadius.sm),
-                        child: LinearProgressIndicator(
-                          value: progress,
-                          minHeight: 4,
-                          backgroundColor: AppColors.surfaceContainerHighest,
-                          valueColor: AlwaysStoppedAnimation(AppColors.primary),
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        '5 dzikir · target 33/99/100 · getar on/off · reset',
-                        style: AppText.bodyMd()
-                            .copyWith(fontSize: 12, color: AppColors.onSurfaceVariant),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.md),
-                Icon(AppIcons.chevronRight, color: AppColors.primary, size: 28),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+  // ── Quick actions: pintasan ke Hadis / Doa / Kiblat / Dzikir / Highlight ──
+  // ponytail: dulu tersebar (Hadis+Doa di tab Belajar, Kiblat di tab Jadwal,
+  // Dzikir & Highlight sebagai section di Home) — sekarang dikumpulkan di satu
+  // deret supaya Home ringkas dan semuanya sejangkauan jempol.
 
-  // ── Daily Highlight: ayat + hadis + doa, seed per tanggal ─────────
-
-  Widget _dailyHighlight() {
-    final h = _highlight;
-    if (h == null) return const SizedBox.shrink();
-    final pages = <_HighlightPage>[
-      _HighlightPage('QS. ${h.surahLatin}: ${h.ayahNumber}', h.ayahArabic,
-          h.ayahIdn,
-          isArabic: true),
-      if (h.hadisIdn.isNotEmpty) _HighlightPage('HADIS HARI INI', '', h.hadisIdn),
-      _HighlightPage('DOA · ${h.doaNama}', '', h.doaIdn),
+  Widget _quickActions() {
+    final actions = <({IconData icon, String label, VoidCallback onTap})>[
+      (
+        icon: AppIcons.autoStories,
+        label: 'Hadis',
+        onTap: () => _push(const HadisScreen()),
+      ),
+      (
+        icon: AppIcons.volunteerActivism,
+        label: 'Doa',
+        onTap: () => _push(const DoaScreen()),
+      ),
+      (
+        icon: AppIcons.explore,
+        label: 'Kiblat',
+        onTap: _openQibla,
+      ),
+      (
+        icon: AppIcons.dotsNine,
+        label: 'Dzikir',
+        onTap: () => _push(const DzikirScreen()),
+      ),
+      (
+        icon: AppIcons.sparkle,
+        label: 'Highlight',
+        onTap: () => _push(const DailyHighlightScreen()),
+      ),
     ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        HudHeader('DAILY HIGHLIGHT', meta: '+1 XP/HAL'),
+        HudHeader('AKSES CEPAT'),
         FlatCard(
+          padding: const EdgeInsets.all(AppSpacing.sm),
           child: Column(
             children: [
-              SizedBox(
-                // ponytail: tinggi tetap, teks panjang scroll vertikal per halaman
-                height: 260,
-                child: PageView.builder(
-                  controller: _highlightCtrl,
-                  itemCount: pages.length,
-                  onPageChanged: (i) async {
-                    setState(() => _highlightPage = i);
-                    final got = await GameService.claimHighlightSwipeXp(i);
-                    if (got && mounted) showXpToast(context, 1);
-                  },
-                  itemBuilder: (_, i) => GestureDetector(
-                    onTap: i == 0 ? () => _openHighlightAyah(h) : null,
-                    child: _highlightTile(pages[i]),
-                  ),
-                ),
-              ),
+              // Baris 1: 3 tombol, baris 2: 2 tombol (yang menyisakan ruang,
+              // bukan melar — supaya lebar tombol tetap seragam).
+              _actionRow(actions.sublist(0, 3)),
+              const SizedBox(height: AppSpacing.sm),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  for (var i = 0; i < pages.length; i++)
-                    Container(
-                      margin: const EdgeInsets.all(3),
-                      width: 6,
-                      height: 6,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: i == _highlightPage
-                            ? AppColors.primary
-                            : AppColors.onSurfaceVariant
-                                .withValues(alpha: 0.3),
-                      ),
-                    ),
+                  for (final a in actions.sublist(3)) ...[
+                    Expanded(child: _actionTile(a.icon, a.label, a.onTap)),
+                    if (a != actions.last) const SizedBox(width: AppSpacing.sm),
+                  ],
+                  if (actions.sublist(3).length < 3)
+                    const Spacer(flex: 1),
                 ],
               ),
             ],
@@ -1498,49 +1407,65 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  Widget _highlightTile(_HighlightPage p) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            p.title,
-            style: AppText.labelCaps().copyWith(color: AppColors.primary),
-          ),
-          const SizedBox(height: AppSpacing.xs),
-          if (p.isArabic)
+  Widget _actionRow(List<({IconData icon, String label, VoidCallback onTap})> row) {
+    return Row(
+      children: [
+        for (final a in row) ...[
+          Expanded(child: _actionTile(a.icon, a.label, a.onTap)),
+          if (a != row.last) const SizedBox(width: AppSpacing.sm),
+        ],
+      ],
+    );
+  }
+
+  Widget _actionTile(IconData icon, String label, VoidCallback onTap) {
+    return PressableScale(
+      pressedScale: 0.95,
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          vertical: AppSpacing.md,
+          horizontal: AppSpacing.xs,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.primary.withValues(alpha: 0.10),
+          borderRadius: BorderRadius.circular(AppRadius.xl),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, size: 24, color: AppColors.primary),
+            const SizedBox(height: 6),
             Text(
-              p.arabic,
-              textDirection: TextDirection.rtl,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.amiriQuran(
-                fontSize: 22,
-                height: 1.8,
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppText.labelCaps().copyWith(
+                fontSize: 10,
                 color: AppColors.onSurface,
               ),
             ),
-          if (p.isArabic) const SizedBox(height: AppSpacing.sm),
-          Text(
-            p.text,
-            style: AppText.bodyMd().copyWith(
-              color: AppColors.onSurface,
-              height: 1.5,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  /// Tap ayat → Quran reader di ayat persis. Surah di-resolve ulang
-  /// deterministik (quranData in-memory setelah load pertama → murah).
-  Future<void> _openHighlightAyah(DailyHighlight h) async {
-    final surahs = await quranData.surahs();
-    final surah = surahs[highlightIndex(h.date, surahs.length)];
+  void _push(Widget screen) {
+    Navigator.push(context, MaterialPageRoute(builder: (_) => screen))
+        .then((_) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  /// Kiblat butuh nama kota — diambil dari lokasi tersimpan (default Jakarta,
+  /// sama seperti tab Jadwal).
+  Future<void> _openQibla() async {
+    final loc = await PrayerService.loadLocation();
     if (!mounted) return;
-    Navigator.of(context).push(
+    Navigator.push(
+      context,
       MaterialPageRoute(
-        builder: (_) => QuranReader(surah: surah, initialAyah: h.ayahNumber),
+        builder: (_) => QiblaScreen(cityName: loc?.name ?? 'Jakarta'),
       ),
     );
   }
@@ -1942,13 +1867,6 @@ class _RankMedallion extends StatelessWidget {
       ),
     );
   }
-}
-
-class _HighlightPage {
-  final String title, arabic, text;
-  final bool isArabic;
-  const _HighlightPage(this.title, this.arabic, this.text,
-      {this.isArabic = false});
 }
 
 class _IslamicHeroPatternPainter extends CustomPainter {

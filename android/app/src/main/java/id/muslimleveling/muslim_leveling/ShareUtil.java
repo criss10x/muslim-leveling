@@ -27,6 +27,29 @@ public class ShareUtil implements MethodChannel.MethodCallHandler {
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        // ponytail: shareText = berbagi teks polos (tanpa gambar) — dipakai
+        // Daily Highlight. shareFile tetap seperti semula (kartu achievement).
+        if ("shareText".equals(call.method)) {
+            String text = call.argument("text");
+            if (text == null) {
+                result.error("INVALID_ARG", "text is required", null);
+                return;
+            }
+            try {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, text);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent chooser = Intent.createChooser(intent, "Bagikan ke");
+                chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(chooser);
+                result.success(true);
+            } catch (Exception e) {
+                result.error("SHARE_FAILED", e.getMessage(), null);
+            }
+            return;
+        }
+
         if (!"shareFile".equals(call.method)) {
             result.notImplemented();
             return;

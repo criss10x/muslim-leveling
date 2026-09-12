@@ -59,6 +59,7 @@ class AppIcons {
   static const diamond = IconData(0xe1ec, fontFamily: 'Phosphor');
   static const doNotDisturbAltOutlined = IconData(0xe32c, fontFamily: 'Phosphor');
   static const doubleArrow = IconData(0xe098, fontFamily: 'Phosphor');
+  static const dotsNine = IconData(0xe1fc, fontFamily: 'Phosphor');
   static const downloadRounded = IconData(0xe20c, fontFamily: 'Phosphor');
   static const edit = IconData(0xe3b4, fontFamily: 'Phosphor');
   static const emojiEvents = IconData(0xe67e, fontFamily: 'Phosphor');
@@ -132,6 +133,7 @@ class AppIcons {
   static const shieldOutlined = IconData(0xe40a, fontFamily: 'Phosphor');
   static const smartphone = IconData(0xe1e0, fontFamily: 'Phosphor');
   static const spaOutlined = IconData(0xe6cc, fontFamily: 'Phosphor');
+  static const sparkle = IconData(0xe6a2, fontFamily: 'Phosphor');
   static const star = IconData(0xe46a, fontFamily: 'Phosphor');
   static const stars = IconData(0xe6a4, fontFamily: 'Phosphor');
   static const sunDim = IconData(0xe474, fontFamily: 'Phosphor');

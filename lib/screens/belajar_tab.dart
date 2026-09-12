@@ -4,14 +4,11 @@ import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../services/learning_content.dart';
 import 'belajar_article.dart';
-import 'doa_screen.dart';
-import 'hadis_screen.dart';
 import '../theme/app_icons.dart';
 
-/// Belajar / Learning Hub — 3 konten: Modul | Doa | Hadis.
-/// Modul: kategori + daftar modul + progress (dari V3 BelajarScreen.kt).
-/// Doa: 2-level navigasi (grup → list doa) dari API equran.id.
-/// Hadis: explore list + muat lagi + search + acak dari API myquran v3.
+/// Belajar / Learning Hub — konten Modul: kategori + daftar modul + progress
+/// (dari V3 BelajarScreen.kt).
+/// ponytail: Doa & Hadis dulu di sini, sekarang jadi tombol di tab Home.
 class BelajarTab extends StatefulWidget {
   const BelajarTab({super.key});
   @override
@@ -19,7 +16,6 @@ class BelajarTab extends StatefulWidget {
 }
 
 class _BelajarTabState extends State<BelajarTab> {
-  int _hub = 0; // 0=Modul, 1=Doa, 2=Hadis
   int _selectedCat = 0;
 
   @override
@@ -68,73 +64,10 @@ class _BelajarTabState extends State<BelajarTab> {
                 ],
               ),
             ),
-            _hubSelector(),
-            const SizedBox(height: AppSpacing.sm),
-            Expanded(
-              child: switch (_hub) {
-                1 => const DoaScreen(),
-                2 => const HadisScreen(),
-                _ => _modulContent(completed, total),
-              },
-            ),
+            // ponytail: Doa & Hadis pindah ke tombol AKSES CEPAT di tab Home,
+            // jadi hub tinggal satu konten — selector dihapus, bukan dibiarkan.
+            Expanded(child: _modulContent(completed, total)),
           ],
-        ),
-      ),
-    );
-  }
-
-  /// Hub selector: Modul | Doa | Hadis — pill segmented, gaya kategori.
-  Widget _hubSelector() {
-    const items = [
-      (AppIcons.menuBook, 'Modul'),
-      (AppIcons.volunteerActivism, 'Doa'),
-      (AppIcons.autoStories, 'Hadis'),
-    ];
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-      child: Container(
-        padding: const EdgeInsets.all(4),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(AppRadius.pill),
-        ),
-        child: Row(
-          children: List.generate(items.length, (i) {
-            final selected = i == _hub;
-            return Expanded(
-              child: GestureDetector(
-                onTap: () => setState(() => _hub = i),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.easeOut,
-                  padding: const EdgeInsets.symmetric(vertical: 9),
-                  decoration: BoxDecoration(
-                    color: selected
-                        ? AppColors.primary.withValues(alpha: 0.15)
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(AppRadius.pill - 4),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(items[i].$1,
-                          size: 16,
-                          color: selected
-                              ? AppColors.primary
-                              : AppColors.onSurfaceVariant),
-                      const SizedBox(width: 6),
-                      Text(items[i].$2,
-                          style: AppText.labelCaps().copyWith(
-                              fontSize: 11,
-                              color: selected
-                                  ? AppColors.primary
-                                  : AppColors.onSurfaceVariant)),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          }),
         ),
       ),
     );

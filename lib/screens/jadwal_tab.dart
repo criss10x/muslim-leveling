@@ -7,7 +7,6 @@ import '../../services/prayer_service.dart';
 import '../../services/game_service.dart';
 import '../../services/notification_service.dart';
 import '../../services/hijri_service.dart';
-import 'qibla_screen.dart';
 import 'hari_penting_screen.dart';
 import '../theme/app_icons.dart';
 
@@ -214,11 +213,6 @@ class _JadwalTabState extends State<JadwalTab> {
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
                 child: _nextPrayerCard(),
               ),
-              const SizedBox(height: AppSpacing.sm),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-                child: _qiblaButton(),
-              ),
               const SizedBox(height: AppSpacing.lg),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
@@ -413,47 +407,6 @@ class _JadwalTabState extends State<JadwalTab> {
       return;
     }
     await PrayerService.saveLocation(result.id!, result.name!);
-  }
-
-  Widget _qiblaButton() {
-    return PressableScale(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => QiblaScreen(cityName: _cityName)),
-        );
-      },
-      // Tint gold tenang — kiblat = item spesial tab ini, tapi bukan hero.
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.sm + 2,
-        ),
-        decoration: BoxDecoration(
-          color: AppColors.secondaryContainer.withValues(alpha: 0.10),
-          borderRadius: BorderRadius.circular(AppRadius.xxl),
-        ),
-        child: Row(
-          children: [
-            Icon(AppIcons.explore, size: 22, color: AppColors.secondaryFixed),
-            const SizedBox(width: AppSpacing.sm),
-            Text(
-              'Kompas Kiblat',
-              style: AppText.titleLg().copyWith(
-                fontSize: 15,
-                color: AppColors.onSurface,
-              ),
-            ),
-            const Spacer(),
-            Icon(
-              AppIcons.arrowForwardIos,
-              size: 14,
-              color: AppColors.secondaryFixed,
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   Widget _nextPrayerCard() {
