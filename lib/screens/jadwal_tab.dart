@@ -688,7 +688,9 @@ class _JadwalTabState extends State<JadwalTab> {
     }
 
     final items = [
+      row('Imsak', 'imsak', j?['imsak'] ?? '', AppIcons.hourglassSimple),
       row('Subuh', 'subuh', j?['subuh'] ?? '', AppIcons.wbTwilight),
+      row('Terbit', 'terbit', j?['terbit'] ?? '', AppIcons.sunDim),
       row('Dzuhur', 'dzuhur', j?['dzuhur'] ?? '', AppIcons.wbSunny),
       row('Ashar', 'ashar', j?['ashar'] ?? '', AppIcons.wbCloudy),
       row('Maghrib', 'maghrib', j?['maghrib'] ?? '', AppIcons.wbTwilight),
@@ -700,7 +702,7 @@ class _JadwalTabState extends State<JadwalTab> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         HudHeader(
-          '5 WAKTU SHOLAT',
+          'JADWAL HARI INI',
           meta: '$logged/5',
           accent: logged == 5 ? AppColors.primary : null,
         ),
@@ -731,7 +733,9 @@ class _JadwalTabState extends State<JadwalTab> {
     String prayerId,
     String sound,
   ) {
-    // Disiplin warna redesign: cyan = berikutnya/sekarang, primary = selesai.
+    // ponytail: imsak & terbit selalu senyap — tap tidak membuka picker suara,
+    // jadi tidak ada jalan bagi user untuk memberi suara ke keduanya.
+    final isMarker = _markerIds.contains(prayerId);
     final iconColor = isNext
         ? AppColors.tertiary
         : isLogged
@@ -741,7 +745,7 @@ class _JadwalTabState extends State<JadwalTab> {
     return GestureDetector(
       // ponytail: seluruh row = buka setting suara sholat ini (picker sama
       // dengan icon kanan). Tap target lebih besar, icon tetap visual cue.
-      onTap: () => _showSoundPicker(prayerId, sound),
+      onTap: isMarker ? null : () => _showSoundPicker(prayerId, sound),
       behavior: HitTestBehavior.opaque,
       child: Container(
       padding: const EdgeInsets.symmetric(
@@ -810,6 +814,9 @@ class _JadwalTabState extends State<JadwalTab> {
     );
   }
 
+  // ponytail: imsak & terbit — penanda waktu, selalu senyap, tanpa picker.
+  static const _markerIds = {'imsak', 'terbit'};
+
   // Ikon mode suara di kanan tiap baris sholat. Tap = buka picker.
   static const _soundIcons = {
     'senyap': (AppIcons.volumeOffRounded, 'Senyap'),
@@ -818,6 +825,15 @@ class _JadwalTabState extends State<JadwalTab> {
   };
 
   Widget _soundIcon(String sound, String prayerId) {
+    // Marker (imsak/terbit) selalu senyap: tampilkan ikon volume-off statis,
+    // bukan kontrol yang bisa di-tap.
+    if (_markerIds.contains(prayerId)) {
+      return Icon(
+        AppIcons.volumeOffRounded,
+        size: 20,
+        color: AppColors.onSurfaceVariant.withValues(alpha: 0.5),
+      );
+    }
     final (iconData, label) = _soundIcons[sound] ??
         (AppIcons.notificationsNoneRounded, 'Mengikuti global');
     return GestureDetector(

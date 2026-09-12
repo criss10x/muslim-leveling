@@ -71,6 +71,7 @@ class AppIcons {
   static const gMobiledata = IconData(0xe144, fontFamily: 'Phosphor');
   static const gpsFixed = IconData(0xe1d6, fontFamily: 'Phosphor');
   static const history = IconData(0xe1a0, fontFamily: 'Phosphor');
+  static const hourglassSimple = IconData(0xe2ba, fontFamily: 'Phosphor');
   static const home = IconData(0xe2c2, fontFamily: 'PhosphorFill');
   static const homeOutlined = IconData(0xe2c2, fontFamily: 'Phosphor');
   static const infoOutline = IconData(0xe2ce, fontFamily: 'Phosphor');
@@ -133,6 +134,7 @@ class AppIcons {
   static const spaOutlined = IconData(0xe6cc, fontFamily: 'Phosphor');
   static const star = IconData(0xe46a, fontFamily: 'Phosphor');
   static const stars = IconData(0xe6a4, fontFamily: 'Phosphor');
+  static const sunDim = IconData(0xe474, fontFamily: 'Phosphor');
   static const timer = IconData(0xe492, fontFamily: 'Phosphor');
   static const touchApp = IconData(0xec90, fontFamily: 'Phosphor');
   static const trackChanges = IconData(0xe47c, fontFamily: 'Phosphor');

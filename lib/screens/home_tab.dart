@@ -135,7 +135,9 @@ class _HomeTabState extends State<HomeTab> {
         // Schedule adhan reminders if enabled
         if (await NotificationService.isRemindersEnabled()) {
           await NotificationService.scheduleAdhanReminders(loc.name, {
+            'imsak': j['imsak'] ?? '04:30',
             'subuh': j['subuh'] ?? '04:42',
+            'terbit': j['terbit'] ?? '05:55',
             'dzuhur': j['dzuhur'] ?? '12:01',
             'ashar': j['ashar'] ?? '15:20',
             'maghrib': j['maghrib'] ?? '17:55',

@@ -398,7 +398,9 @@ class _ProfilTabState extends State<ProfilTab> {
                                   await NotificationService.scheduleAdhanReminders(
                                     loc.name,
                                     {
+                                      'imsak': j['imsak'] ?? '',
                                       'subuh': j['subuh'] ?? '',
+                                      'terbit': j['terbit'] ?? '',
                                       'dzuhur': j['dzuhur'] ?? '',
                                       'ashar': j['ashar'] ?? '',
                                       'maghrib': j['maghrib'] ?? '',

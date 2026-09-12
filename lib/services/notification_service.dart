@@ -109,9 +109,32 @@ class NotificationService {
 
   static const _wajibList = ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya'];
 
-  /// ID notifikasi tetap per sholat (index × 10, + offset reminder 0–2).
+  /// ponytail: imsak & terbit = penanda waktu, BUKAN sholat wajib. Selalu
+  /// senyap (tanpa suara), tidak bisa di-override user, dan hanya 1 pengingat
+  /// tepat saat waktunya — tidak ikut mode fokus/seimbang/intensif.
+  static const _markerList = ['imsak', 'terbit'];
+
+  /// Urutan ini menentukan ID notifikasi — JANGAN menyisipkan di tengah.
+  static const _allList = [..._wajibList, ..._markerList];
+
+  // Ekspos untuk test invariant (lihat test/imsak_terbit_schedule_test.dart).
+  @visibleForTesting
+  static List<String> get wajibList => _wajibList;
+  @visibleForTesting
+  static List<String> get markerList => _markerList;
+  @visibleForTesting
+  static List<String> get allScheduledList => _allList;
+  @visibleForTesting
+  static int baseIdFor(String prayer) => _baseIdFor(prayer);
+  @visibleForTesting
+  static String titleFor(String prayer) => _titleFor(prayer);
+  @visibleForTesting
+  static String bodyFor(String prayer, String city, String mode, int i) =>
+      _bodyFor(prayer, city, mode, i);
+
+  /// ID notifikasi tetap per waktu (index × 10, + offset reminder 0–2).
   /// String.hashCode tidak dijamin stabil antar-run, jadi jangan dipakai.
-  static int _baseIdFor(String prayer) => (_wajibList.indexOf(prayer) + 1) * 10;
+  static int _baseIdFor(String prayer) => (_allList.indexOf(prayer) + 1) * 10;
 
   static bool _initialized = false;
   static bool get isInitialized => _initialized;
@@ -393,7 +416,7 @@ class NotificationService {
     final todayStr =
         '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
     await prefs.setString(_prefDate, todayStr);
-    for (final prayer in _wajibList) {
+    for (final prayer in _allList) {
       final t = timings[prayer];
       if (t != null && t.isNotEmpty) {
         await prefs.setString('$_prefTimingsPrefix$prayer', t);
@@ -615,6 +638,33 @@ class NotificationService {
     final soundMode = await getSoundMode();
     final perPrayer = await getPerPrayerSounds();
 
+    // ponytail: imsak & terbit selalu senyap + 1 reminder saja, jadi
+    // dikerjakan di loop terpisah — tidak menyentuh logika wajib di bawah.
+    for (final marker in _markerList) {
+      final timeStr = timings[marker];
+      if (timeStr == null || timeStr.isEmpty) continue;
+      final parts = timeStr.split(':');
+      if (parts.length != 2) continue;
+      final hour = int.tryParse(parts[0]);
+      final minute = int.tryParse(parts[1]);
+      if (hour == null || minute == null) continue;
+      var scheduledTime = DateTime(now.year, now.month, now.day, hour, minute);
+      if (!scheduledTime.isAfter(now)) {
+        scheduledTime = scheduledTime.add(const Duration(days: 1));
+      }
+      try {
+        await _scheduleOne(
+          id: _baseIdFor(marker),
+          title: _titleFor(marker),
+          body: _bodyFor(marker, city, mode, 0),
+          scheduledTime: scheduledTime,
+          sound: _NotifSound.silent,
+        );
+      } catch (e) {
+        debugPrint('[NotificationService] gagal jadwalkan $marker: $e');
+      }
+    }
+
     for (final prayer in _wajibList) {
       final timeStr = timings[prayer];
       if (timeStr == null || timeStr.isEmpty) continue;
@@ -697,11 +747,19 @@ class NotificationService {
 
   static String _titleFor(String prayer) {
     final cap = prayer[0].toUpperCase() + prayer.substring(1);
+    // ponytail: imsak & terbit bukan sholat — judulnya jangan "Waktunya Sholat".
+    if (_markerList.contains(prayer)) return '🕌 $cap';
     return '🕌 Waktunya Sholat $cap';
   }
 
   static String _bodyFor(String prayer, String city, String mode, int reminderIndex) {
     final loc = city.isNotEmpty ? 'di $city. ' : '';
+    switch (prayer) {
+      case 'imsak':
+        return 'Sudah masuk imsak ${loc}Berhenti makan & minum ya. 🌙';
+      case 'terbit':
+        return 'Matahari terbit ${loc}Waktu Subuh berakhir, Dhuha sudah masuk. ☀️';
+    }
     switch (mode) {
       case 'intensif':
         if (reminderIndex == 0) return '30 menit lagi masuk waktu $prayer ${loc}Persiapan ya! 🔥';
@@ -828,7 +886,7 @@ class NotificationService {
     SharedPreferences prefs,
   ) async {
     final result = <String, String>{};
-    for (final prayer in _wajibList) {
+    for (final prayer in _allList) {
       final t = prefs.getString('$_prefTimingsPrefix$prayer');
       if (t != null && t.isNotEmpty) {
         result[prayer] = t;
