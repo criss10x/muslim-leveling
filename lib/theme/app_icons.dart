@@ -30,6 +30,7 @@ class AppIcons {
   static const batteryAlert = IconData(0xe0c8, fontFamily: 'Phosphor');
   static const bedtime = IconData(0xe58e, fontFamily: 'Phosphor');
   static const bloodtypeOutlined = IconData(0xe210, fontFamily: 'Phosphor');
+  static const bookmarkSimple = IconData(0xe0ea, fontFamily: 'PhosphorFill');
   static const blurOnOutlined = IconData(0xe190, fontFamily: 'Phosphor');
   static const bolt = IconData(0xe2de, fontFamily: 'Phosphor');
   static const brightness1Outlined = IconData(0xe18a, fontFamily: 'Phosphor');
@@ -102,10 +103,12 @@ class AppIcons {
   static const notificationsOutlined = IconData(0xe0ce, fontFamily: 'Phosphor');
   static const notificationsRounded = IconData(0xe0ce, fontFamily: 'Phosphor');
   static const paletteOutlined = IconData(0xe6c8, fontFamily: 'Phosphor');
+  static const pause = IconData(0xe39e, fontFamily: 'Phosphor');
   static const person = IconData(0xe4c2, fontFamily: 'PhosphorFill');
   static const personOutline = IconData(0xe4c2, fontFamily: 'Phosphor');
   static const phoneAndroid = IconData(0xe1e0, fontFamily: 'Phosphor');
   static const photoLibrary = IconData(0xe836, fontFamily: 'Phosphor');
+  static const play = IconData(0xe3d0, fontFamily: 'PhosphorFill');
   static const playCircleOutline = IconData(0xe3d2, fontFamily: 'Phosphor');
   static const powerSettingsNew = IconData(0xe3da, fontFamily: 'Phosphor');
   static const psychology = IconData(0xe74e, fontFamily: 'Phosphor');
@@ -140,6 +143,7 @@ class AppIcons {
   static const timer = IconData(0xe492, fontFamily: 'Phosphor');
   static const touchApp = IconData(0xec90, fontFamily: 'Phosphor');
   static const trackChanges = IconData(0xe47c, fontFamily: 'Phosphor');
+  static const translate = IconData(0xe4a2, fontFamily: 'Phosphor');
   static const trendingUp = IconData(0xe4ae, fontFamily: 'Phosphor');
   static const verified = IconData(0xe606, fontFamily: 'PhosphorFill');
   static const verifiedUser = IconData(0xe606, fontFamily: 'Phosphor');

@@ -1806,6 +1806,13 @@ class GameService {
   static const highlightSwipeXpPerPage = 1;
   static const highlightSwipeMaxPages = 3;
 
+  /// Bitmask halaman highlight yang XP-nya sudah diklaim HARI INI.
+  /// 0 kalau tanggalnya beda (mask lama diabaikan, bukan direset).
+  static int get highlightSwipeClaimedToday {
+    final today = todayStr();
+    return _cache.highlightSwipeDate == today ? _cache.highlightSwipeMask : 0;
+  }
+
   static Future<bool> claimHighlightSwipeXp(int page) async {
     if (page < 0 || page >= highlightSwipeMaxPages) return false;
     final today = todayStr();
