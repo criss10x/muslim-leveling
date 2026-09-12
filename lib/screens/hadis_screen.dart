@@ -26,9 +26,8 @@ class _HadisScreenState extends State<HadisScreen> {
 
   // ponytail: halaman awal di-seed per tanggal (pola Daily Highlight) —
   // list berganti setiap reset hari, stabil sepanjang hari itu.
-  static const _totalPages =
-      (hadisTotalCount + hadisExplorePageSize - 1) ~/ hadisExplorePageSize;
-  final int _startPage = highlightIndex(GameService.todayStr(), _totalPages) + 1;
+  final int _startPage =
+      highlightIndex(GameService.todayStr(), hadisTotalPages) + 1;
   int _fetchedPages = 0;
 
   @override
@@ -62,11 +61,16 @@ class _HadisScreenState extends State<HadisScreen> {
           ..addAll(items);
         _page = _startPage;
         _fetchedPages = 1;
-        _hasMore = items.length == 5 && _fetchedPages < _totalPages;
+        _hasMore =
+            items.length == hadisExplorePageSize &&
+            _fetchedPages < hadisTotalPages;
         _isSearch = false;
         _searchTotal = 0;
         _loading = false;
       });
+      // ponytail: server balas 200 dgn daftar kosong saat di luar jangkauan —
+      // jangan tampil "Tidak ada hadis ditemukan" (itu copy hasil pencarian).
+      if (items.isEmpty) _toast('Tidak ada hadis di halaman ini.');
     } catch (_) {
       if (!mounted) return;
       setState(() {
@@ -77,21 +81,26 @@ class _HadisScreenState extends State<HadisScreen> {
   }
 
   Future<void> _loadMore() async {
-    if (_loading || !_hasMore || _isSearch || _fetchedPages >= _totalPages) {
+    if (_loading ||
+        !_hasMore ||
+        _isSearch ||
+        _fetchedPages >= hadisTotalPages) {
       return;
     }
     setState(() => _loading = true);
     try {
       // Wrap: setelah halaman terakhir, lanjut dari halaman 1 — mulai
       // di-seed per tanggal, jadi urutan penuh katalog tetap satu putaran.
-      final next = _page % _totalPages + 1;
+      final next = _page % hadisTotalPages + 1;
       final items = await hadisApi.explore(next);
       if (!mounted) return;
       setState(() {
         _items.addAll(items);
         _page = next;
         _fetchedPages++;
-        _hasMore = items.length == 5 && _fetchedPages < _totalPages;
+        _hasMore =
+            items.length == hadisExplorePageSize &&
+            _fetchedPages < hadisTotalPages;
         _loading = false;
       });
     } catch (_) {
@@ -100,6 +109,9 @@ class _HadisScreenState extends State<HadisScreen> {
         _loading = false;
         if (_items.isEmpty) _error = 'Gagal memuat hadis.';
       });
+      // ponytail: dulu gagal di halaman ke-2+ senyap total — tombol "Muat
+      // Lagi" terasa tidak merespons. Sekarang selalu kasih umpan balik.
+      if (_items.isNotEmpty) _toast('Gagal memuat hadis. Coba lagi.');
     }
   }
 
@@ -141,76 +153,125 @@ class _HadisScreenState extends State<HadisScreen> {
       final item = await hadisApi.random();
       if (!mounted) return;
       setState(() => _loading = false);
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => HadisDetailScreen(item: item),
-      ));
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => HadisDetailScreen(item: item)));
     } catch (_) {
       if (!mounted) return;
       setState(() {
         _loading = false;
         if (_items.isEmpty) _error = 'Gagal memuat hadis.';
       });
+      // ponytail: "Acak" gagal saat daftar sudah terisi dulu senyap total.
+      if (_items.isNotEmpty) _toast('Gagal mengambil hadis acak. Coba lagi.');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(
-              AppSpacing.md, 0, AppSpacing.md, AppSpacing.sm),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _searchCtrl,
-                  textInputAction: TextInputAction.search,
-                  onSubmitted: _search,
-                  style: AppText.bodyMd().copyWith(color: AppColors.onBackground),
-                  decoration: InputDecoration(
-                    hintText: 'Cari hadis…',
-                    hintStyle: AppText.bodyMd()
-                        .copyWith(color: AppColors.onSurfaceVariant),
-                    prefixIcon: Icon(AppIcons.search,
-                        size: 20, color: AppColors.onSurfaceVariant),
-                    suffixIcon: _isSearch || _searchCtrl.text.isNotEmpty
-                        ? IconButton(
-                            icon: Icon(AppIcons.close,
-                                size: 18, color: AppColors.onSurfaceVariant),
-                            onPressed: () {
-                              _searchCtrl.clear();
-                              _load();
-                            },
-                          )
-                        : null,
-                    isDense: true,
-                    filled: true,
-                    fillColor: AppColors.surfaceContainerLow,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 10),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.pill),
-                      borderSide: BorderSide.none,
+    // ponytail: layar ini dulu mengembalikan Column polos tanpa Scaffold →
+    // TextField melempar "No Material widget found" dan SELURUH layar gagal
+    // build (inilah "hadis kosong": bukan API, tapi tak ada Material
+    // ancestor). Scaffold = Material ancestor, sekaligus latar +
+    // ScaffoldMessenger untuk snackbar. Pola sama dgn DoaScreen/DzikirScreen.
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.md,
+                0,
+                AppSpacing.md,
+                AppSpacing.sm,
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _searchCtrl,
+                      textInputAction: TextInputAction.search,
+                      onSubmitted: _search,
+                      style: AppText.bodyMd().copyWith(
+                        color: AppColors.onBackground,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: 'Cari hadis…',
+                        hintStyle: AppText.bodyMd().copyWith(
+                          color: AppColors.onSurfaceVariant,
+                        ),
+                        prefixIcon: Icon(
+                          AppIcons.search,
+                          size: 20,
+                          color: AppColors.onSurfaceVariant,
+                        ),
+                        suffixIcon: _isSearch || _searchCtrl.text.isNotEmpty
+                            ? IconButton(
+                                icon: Icon(
+                                  AppIcons.close,
+                                  size: 18,
+                                  color: AppColors.onSurfaceVariant,
+                                ),
+                                onPressed: () {
+                                  _searchCtrl.clear();
+                                  _load();
+                                },
+                              )
+                            : null,
+                        isDense: true,
+                        filled: true,
+                        fillColor: AppColors.surfaceContainerLow,
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppRadius.pill),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
                     ),
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  _randomButton(),
+                ],
+              ),
+            ),
+            if (_isSearch)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.md,
+                  0,
+                  AppSpacing.md,
+                  AppSpacing.sm,
+                ),
+                child: Text(
+                  '$_searchTotal hadis ditemukan',
+                  style: AppText.labelCaps().copyWith(
+                    color: AppColors.onSurfaceVariant,
+                    fontSize: 10,
                   ),
                 ),
               ),
-              const SizedBox(width: AppSpacing.sm),
-              _randomButton(),
-            ],
-          ),
+            Expanded(child: _body()),
+          ],
         ),
-        if (_isSearch)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-                AppSpacing.md, 0, AppSpacing.md, AppSpacing.sm),
-            child: Text('$_searchTotal hadis ditemukan',
-                style: AppText.labelCaps()
-                    .copyWith(color: AppColors.onSurfaceVariant, fontSize: 10)),
-          ),
-        Expanded(child: _body()),
-      ],
+      ),
+    );
+  }
+
+  /// ponytail: snackbar ringkas — kegagalan yang tidak boleh senyap.
+  void _toast(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          msg,
+          style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
+        ),
+        backgroundColor: AppColors.surfaceContainerLowest,
+        duration: const Duration(seconds: 2),
+      ),
     );
   }
 
@@ -218,7 +279,10 @@ class _HadisScreenState extends State<HadisScreen> {
     return PressableScale(
       onTap: _loading ? null : _random,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 12),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: 12,
+        ),
         decoration: BoxDecoration(
           color: AppColors.primary.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(AppRadius.pill),
@@ -227,9 +291,13 @@ class _HadisScreenState extends State<HadisScreen> {
           children: [
             Icon(AppIcons.casino, size: 16, color: AppColors.primary),
             const SizedBox(width: 6),
-            Text('Acak',
-                style: AppText.labelCaps()
-                    .copyWith(color: AppColors.primary, fontSize: 11)),
+            Text(
+              'Acak',
+              style: AppText.labelCaps().copyWith(
+                color: AppColors.primary,
+                fontSize: 11,
+              ),
+            ),
           ],
         ),
       ),
@@ -241,8 +309,7 @@ class _HadisScreenState extends State<HadisScreen> {
       return ErrorRetry(message: _error!, onRetry: _load);
     }
     if (_loading && _items.isEmpty) {
-      return Center(
-          child: CircularProgressIndicator(color: AppColors.primary));
+      return Center(child: CircularProgressIndicator(color: AppColors.primary));
     }
     if (_items.isEmpty) {
       // Hasil pencarian kosong: tanpa ini layar blank total.
@@ -252,9 +319,12 @@ class _HadisScreenState extends State<HadisScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Tidak ada hadis ditemukan.',
-                  style: AppText.bodyMd()
-                      .copyWith(color: AppColors.onSurfaceVariant)),
+              Text(
+                'Tidak ada hadis ditemukan.',
+                style: AppText.bodyMd().copyWith(
+                  color: AppColors.onSurfaceVariant,
+                ),
+              ),
               if (_isSearch)
                 TextButton(
                   onPressed: () {
@@ -274,7 +344,11 @@ class _HadisScreenState extends State<HadisScreen> {
       child: ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.fromLTRB(
-                AppSpacing.md, 0, AppSpacing.md, 100),
+          AppSpacing.md,
+          0,
+          AppSpacing.md,
+          100,
+        ),
         itemCount: _items.length + (_hasMore ? 1 : 0),
         itemBuilder: (_, i) {
           if (i == _items.length) {
@@ -286,7 +360,9 @@ class _HadisScreenState extends State<HadisScreen> {
                         width: 22,
                         height: 22,
                         child: CircularProgressIndicator(
-                            strokeWidth: 2, color: AppColors.primary),
+                          strokeWidth: 2,
+                          color: AppColors.primary,
+                        ),
                       )
                     : TextButton.icon(
                         onPressed: _loadMore,
@@ -300,9 +376,11 @@ class _HadisScreenState extends State<HadisScreen> {
           return Padding(
             padding: const EdgeInsets.only(bottom: AppSpacing.sm),
             child: PressableScale(
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => HadisDetailScreen(item: item),
-              )),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => HadisDetailScreen(item: item),
+                ),
+              ),
               child: Container(
                 padding: const EdgeInsets.all(AppSpacing.md),
                 decoration: BoxDecoration(
@@ -316,25 +394,34 @@ class _HadisScreenState extends State<HadisScreen> {
                       children: [
                         if (item.grade.isNotEmpty) _gradeChip(item.grade),
                         const Spacer(),
-                        Text('no. ${item.id}',
-                            style: AppText.labelCaps().copyWith(
-                                color: AppColors.onSurfaceVariant, fontSize: 10)),
+                        Text(
+                          'no. ${item.id}',
+                          style: AppText.labelCaps().copyWith(
+                            color: AppColors.onSurfaceVariant,
+                            fontSize: 10,
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     if (item.ar.isNotEmpty) ...[
-                      Text(item.ar,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.right,
-                          style: const TextStyle(fontSize: 16, height: 1.6)),
+                      Text(
+                        item.ar,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.right,
+                        style: AppText.arabic(16, height: 1.6),
+                      ),
                       const SizedBox(height: AppSpacing.sm),
                     ],
-                    Text(item.idn,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppText.bodyMd()
-                            .copyWith(color: AppColors.onBackground)),
+                    Text(
+                      item.idn,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppText.bodyMd().copyWith(
+                        color: AppColors.onBackground,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -350,14 +437,18 @@ class _HadisScreenState extends State<HadisScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: (sahih ? AppColors.primary : AppColors.tertiary)
-            .withValues(alpha: 0.15),
+        color: (sahih ? AppColors.primary : AppColors.tertiary).withValues(
+          alpha: 0.15,
+        ),
         borderRadius: BorderRadius.circular(AppRadius.pill),
       ),
-      child: Text(grade,
-          style: AppText.labelCaps().copyWith(
-              color: sahih ? AppColors.primary : AppColors.tertiary,
-              fontSize: 11)),
+      child: Text(
+        grade,
+        style: AppText.labelCaps().copyWith(
+          color: sahih ? AppColors.primary : AppColors.tertiary,
+          fontSize: 11,
+        ),
+      ),
     );
   }
 }
@@ -401,19 +492,29 @@ class _HadisDetailScreenState extends State<HadisDetailScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.sm, vertical: AppSpacing.sm),
+                horizontal: AppSpacing.sm,
+                vertical: AppSpacing.sm,
+              ),
               child: Row(
                 children: [
                   IconButton(
                     tooltip: 'Kembali',
-                    icon: Icon(AppIcons.arrowBack, color: AppColors.onBackground),
+                    icon: Icon(
+                      AppIcons.arrowBack,
+                      color: AppColors.onBackground,
+                    ),
                     onPressed: () => Navigator.pop(context),
                   ),
                   Expanded(
-                    child: Text('Hadis no. ${item.id}',
-                        style: AppText.titleLg().copyWith(
-                            fontSize: 16, color: AppColors.primary),
-                        maxLines: 1, overflow: TextOverflow.ellipsis),
+                    child: Text(
+                      'Hadis no. ${item.id}',
+                      style: AppText.titleLg().copyWith(
+                        fontSize: 16,
+                        color: AppColors.primary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   if (item.grade.isNotEmpty) _gradeChip(item.grade, sahih),
                 ],
@@ -421,13 +522,17 @@ class _HadisDetailScreenState extends State<HadisDetailScreen> {
             ),
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.all(AppSpacing.md)
-                    .copyWith(bottom: 100),
+                padding: const EdgeInsets.all(
+                  AppSpacing.md,
+                ).copyWith(bottom: 100),
                 children: [
                   if (item.takhrij.isNotEmpty)
-                    Text(item.takhrij,
-                        style: AppText.labelCaps()
-                            .copyWith(color: AppColors.tertiary)),
+                    Text(
+                      item.takhrij,
+                      style: AppText.labelCaps().copyWith(
+                        color: AppColors.tertiary,
+                      ),
+                    ),
                   const SizedBox(height: AppSpacing.md),
                   if (item.ar.isNotEmpty) ...[
                     Container(
@@ -436,22 +541,32 @@ class _HadisDetailScreenState extends State<HadisDetailScreen> {
                         color: AppColors.surfaceContainerLow,
                         borderRadius: BorderRadius.circular(AppRadius.xxl),
                       ),
-                      child: Text(item.ar,
-                          textAlign: TextAlign.right,
-                          style: const TextStyle(fontSize: 24, height: 1.9)),
+                      child: Text(
+                        item.ar,
+                        textAlign: TextAlign.right,
+                        style: AppText.arabic(24, height: 1.9),
+                      ),
                     ),
                     const SizedBox(height: AppSpacing.lg),
                   ],
                   HudHeader('TERJEMAHAN', meta: null),
-                  Text(item.idn,
-                      style: AppText.bodyMd()
-                          .copyWith(color: AppColors.onBackground, height: 1.5)),
+                  Text(
+                    item.idn,
+                    style: AppText.bodyMd().copyWith(
+                      color: AppColors.onBackground,
+                      height: 1.5,
+                    ),
+                  ),
                   if (item.hikmah != null && item.hikmah!.isNotEmpty) ...[
                     const SizedBox(height: AppSpacing.lg),
                     HudHeader('HIKMAH', meta: null),
-                    Text(item.hikmah!,
-                        style: AppText.bodyMd().copyWith(
-                            color: AppColors.onSurfaceVariant, height: 1.5)),
+                    Text(
+                      item.hikmah!,
+                      style: AppText.bodyMd().copyWith(
+                        color: AppColors.onSurfaceVariant,
+                        height: 1.5,
+                      ),
+                    ),
                   ],
                 ],
               ),
@@ -466,14 +581,18 @@ class _HadisDetailScreenState extends State<HadisDetailScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: (sahih ? AppColors.primary : AppColors.tertiary)
-            .withValues(alpha: 0.15),
+        color: (sahih ? AppColors.primary : AppColors.tertiary).withValues(
+          alpha: 0.15,
+        ),
         borderRadius: BorderRadius.circular(AppRadius.pill),
       ),
-      child: Text(grade,
-          style: AppText.labelCaps().copyWith(
-              color: sahih ? AppColors.primary : AppColors.tertiary,
-              fontSize: 11)),
+      child: Text(
+        grade,
+        style: AppText.labelCaps().copyWith(
+          color: sahih ? AppColors.primary : AppColors.tertiary,
+          fontSize: 11,
+        ),
+      ),
     );
   }
 }

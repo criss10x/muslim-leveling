@@ -14,26 +14,47 @@ int highlightIndex(String todayStr, int len) {
 
 class DailyHighlight {
   final String date, surahLatin, ayahArabic, ayahIdn, hadisIdn, doaNama, doaIdn;
-  final int surahNumber, ayahNumber, hadisId; // hadisId=0 & hadisIdn='' → offline
+  final int surahNumber,
+      ayahNumber,
+      hadisId; // hadisId=0 & hadisIdn='' → offline
   const DailyHighlight({
-    required this.date, required this.surahLatin, required this.ayahArabic,
-    required this.ayahIdn, required this.surahNumber, required this.ayahNumber,
-    this.hadisId = 0, this.hadisIdn = '', this.doaNama = '', this.doaIdn = '',
+    required this.date,
+    required this.surahLatin,
+    required this.ayahArabic,
+    required this.ayahIdn,
+    required this.surahNumber,
+    required this.ayahNumber,
+    this.hadisId = 0,
+    this.hadisIdn = '',
+    this.doaNama = '',
+    this.doaIdn = '',
   });
 
   bool isFor(String todayStr) => date == todayStr;
 
   Map<String, dynamic> toMap() => {
-    'date': date, 'surahLatin': surahLatin, 'ayahArabic': ayahArabic,
-    'ayahIdn': ayahIdn, 'surahNumber': surahNumber, 'ayahNumber': ayahNumber,
-    'hadisId': hadisId, 'hadisIdn': hadisIdn, 'doaNama': doaNama, 'doaIdn': doaIdn,
+    'date': date,
+    'surahLatin': surahLatin,
+    'ayahArabic': ayahArabic,
+    'ayahIdn': ayahIdn,
+    'surahNumber': surahNumber,
+    'ayahNumber': ayahNumber,
+    'hadisId': hadisId,
+    'hadisIdn': hadisIdn,
+    'doaNama': doaNama,
+    'doaIdn': doaIdn,
   };
   factory DailyHighlight.fromMap(Map<String, dynamic> m) => DailyHighlight(
-    date: m['date'] ?? '', surahLatin: m['surahLatin'] ?? '',
-    ayahArabic: m['ayahArabic'] ?? '', ayahIdn: m['ayahIdn'] ?? '',
-    surahNumber: m['surahNumber'] ?? 0, ayahNumber: m['ayahNumber'] ?? 0,
-    hadisId: m['hadisId'] ?? 0, hadisIdn: m['hadisIdn'] ?? '',
-    doaNama: m['doaNama'] ?? '', doaIdn: m['doaIdn'] ?? '',
+    date: m['date'] ?? '',
+    surahLatin: m['surahLatin'] ?? '',
+    ayahArabic: m['ayahArabic'] ?? '',
+    ayahIdn: m['ayahIdn'] ?? '',
+    surahNumber: m['surahNumber'] ?? 0,
+    ayahNumber: m['ayahNumber'] ?? 0,
+    hadisId: m['hadisId'] ?? 0,
+    hadisIdn: m['hadisIdn'] ?? '',
+    doaNama: m['doaNama'] ?? '',
+    doaIdn: m['doaIdn'] ?? '',
   );
 }
 
@@ -45,7 +66,10 @@ class DailyHighlightService {
   String? _memDate;
 
   // ponytail: reset cache memori antar widget-test (singleton lintas test = flake).
-  void resetForTest() { _mem = null; _memDate = null; }
+  void resetForTest() {
+    _mem = null;
+    _memDate = null;
+  }
 
   Future<DailyHighlight> forToday(String todayStr) async {
     if (_mem != null && _memDate == todayStr) return _mem!;
@@ -54,8 +78,14 @@ class DailyHighlightService {
       final p = await SharedPreferences.getInstance();
       final raw = p.getString(_kCache);
       if (raw != null) {
-        final h = DailyHighlight.fromMap(jsonDecode(raw) as Map<String, dynamic>);
-        if (h.isFor(todayStr)) { _mem = h; _memDate = todayStr; return h; }
+        final h = DailyHighlight.fromMap(
+          jsonDecode(raw) as Map<String, dynamic>,
+        );
+        if (h.isFor(todayStr)) {
+          _mem = h;
+          _memDate = todayStr;
+          return h;
+        }
       }
     } catch (_) {}
     // 2) fetch: ayat (lokal) + doa + hadis (deterministik; gagal → kosong).
@@ -65,20 +95,37 @@ class DailyHighlightService {
     final ayah = ayahs[highlightIndex(todayStr, ayahs.length)];
     final doas = await doaApi.fetchAll();
     final doa = doas[highlightIndex(todayStr, doas.length)];
-    var hadisId = 0; var hadisIdn = '';
+    var hadisId = 0;
+    var hadisIdn = '';
     try {
-      final hd = await hadisApi.show(highlightIndex(todayStr, hadisTotalCount) + 1);
-      hadisId = hd.id; hadisIdn = hd.idn;
+      // ponytail: id hadis di API itu SPARSE (1..2260 → 404 semua), jadi id
+      // terhitung dari tanggal selalu gagal. Ambil by posisi dari halaman
+      // explore — service yang sama dipakai layar Hadis.
+      final items = await hadisApi.explore(
+        highlightIndex(todayStr, hadisTotalPages) + 1,
+      );
+      if (items.isNotEmpty) {
+        final pick = items[highlightIndex(todayStr, items.length)];
+        hadisId = pick.id;
+        hadisIdn = pick.idn;
+      }
     } catch (_) {
       // ponytail: offline → hadis kosong, kartu tetap tampil ayat+doa.
     }
     final h = DailyHighlight(
-      date: todayStr, surahLatin: surah.nameLatin,
-      ayahArabic: ayah.arabic, ayahIdn: ayah.translation,
-      surahNumber: surah.number, ayahNumber: ayah.ayah,
-      hadisId: hadisId, hadisIdn: hadisIdn, doaNama: doa.nama, doaIdn: doa.idn,
+      date: todayStr,
+      surahLatin: surah.nameLatin,
+      ayahArabic: ayah.arabic,
+      ayahIdn: ayah.translation,
+      surahNumber: surah.number,
+      ayahNumber: ayah.ayah,
+      hadisId: hadisId,
+      hadisIdn: hadisIdn,
+      doaNama: doa.nama,
+      doaIdn: doa.idn,
     );
-    _mem = h; _memDate = todayStr;
+    _mem = h;
+    _memDate = todayStr;
     try {
       final p = await SharedPreferences.getInstance();
       await p.setString(_kCache, jsonEncode(h.toMap()));

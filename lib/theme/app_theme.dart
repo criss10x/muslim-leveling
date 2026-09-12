@@ -367,6 +367,10 @@ class AppText {
   static TextStyle labelCapsSm() => GoogleFonts.jetBrainsMono(
         fontSize: 10, fontWeight: FontWeight.w700, height: 14 / 10, letterSpacing: 1.0,
       );
+  /// Teks Arab (Quran/hadis) — Amiri Quran, satu sumber agar tidak campur
+  /// font fallback bawaan di layar berbeda.
+  static TextStyle arabic(double size, {double height = 2.0}) =>
+      GoogleFonts.amiriQuran(fontSize: size, height: height);
 }
 
 class AppTheme {

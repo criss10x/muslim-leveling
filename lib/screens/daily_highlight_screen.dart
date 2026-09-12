@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../theme/app_theme.dart';
 import '../../theme/app_icons.dart';
@@ -337,11 +336,7 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
                 p.arabic,
                 textDirection: TextDirection.rtl,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.amiriQuran(
-                  fontSize: 28,
-                  height: 2.0,
-                  color: AppColors.onSurface,
-                ),
+                style: AppText.arabic(28),
               ),
               const SizedBox(height: AppSpacing.md),
               Container(
