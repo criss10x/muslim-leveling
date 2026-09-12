@@ -146,8 +146,15 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      # Keystore sama seperti job analyze-build: tanpanya AAB jatuh ke signing
-      # debug dan SHA-1 berubah-ubah (Google Sign-In DEVELOPER_ERROR).
+      # AAB memakai R8 full-mode yang jauh lebih rakus memori daripada APK.
+      # android/gradle.properties memakai heap 1,5 GB demi VPS 3,6 GB — di
+      # runner ini (7 GB) heap itu bikin "Java heap space" saat bundleRelease.
+      # Naikkan hanya di sini; nilai lokal tidak diubah.
+      - name: Raise Gradle heap for AAB
+        run: |
+          sed -i 's/^org\.gradle\.jvmargs=.*/org.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=1g -XX:ReservedCodeCacheSize=256m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8/' android/gradle.properties
+          grep '^org.gradle.jvmargs' android/gradle.properties
+
       - name: Prepare release keystore
         if: env.KEYSTORE_BASE64 != ''
         run: |
