@@ -1397,6 +1397,16 @@ class _HomeTabState extends State<HomeTab> {
     // butuh progres, pindahkan angka ini ke badge per-tile.
     final renunganDone =
         GameService.bitCount(GameService.highlightSwipeClaimedToday);
+    final tiles = [
+      for (final a in actions)
+        (
+          icon: a.icon,
+          label: a.label,
+          onTap: a.onTap,
+          done: a.label == 'Renungan' &&
+              renunganDone == GameService.highlightSwipeMaxPages,
+        ),
+    ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1413,28 +1423,15 @@ class _HomeTabState extends State<HomeTab> {
           padding: const EdgeInsets.all(AppSpacing.sm),
           child: Column(
             children: [
-              // Baris 1: 3 tombol, baris 2: 2 tombol (yang menyisakan ruang,
-              // bukan melar — supaya lebar tombol tetap seragam).
-              _actionRow(actions.sublist(0, 3)),
-              const SizedBox(height: AppSpacing.sm),
-              Row(
-                children: [
-                  for (final a in actions.sublist(3)) ...[
-                    Expanded(
-                      child: _actionTile(
-                        a.icon,
-                        a.label,
-                        a.onTap,
-                        done: a.label == 'Renungan' &&
-                            renunganDone == GameService.highlightSwipeMaxPages,
-                      ),
-                    ),
-                    if (a != actions.last) const SizedBox(width: AppSpacing.sm),
-                  ],
-                  if (actions.sublist(3).length < 3)
-                    const Spacer(flex: 1),
-                ],
-              ),
+              // ponytail: kisi 3 kolom, SATU jalur kode untuk semua baris.
+              // Sebelumnya baris 2 dirakit manual dengan Spacer(flex: 1):
+              // hasilnya tile baris 2 = 115px sedangkan baris 1 = 111px, plus
+              // lubang 114px di kanan. Sekarang baris terakhir yang tidak penuh
+              // dipad slot kosong → tiap tile persis 1/3 kolom, gap seragam.
+              for (var i = 0; i < tiles.length; i += 3) ...[
+                if (i > 0) const SizedBox(height: AppSpacing.sm),
+                _actionRow(tiles.sublist(i, (i + 3).clamp(0, tiles.length))),
+              ],
             ],
           ),
         ),
@@ -1442,12 +1439,30 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  Widget _actionRow(List<({IconData icon, String label, VoidCallback onTap})> row) {
+  /// Satu baris kisi 3 kolom. Baris terakhir yang tidak penuh dipad slot
+  /// kosong supaya kedua tile tetap 1/3 lebar kolom (bukan melar jadi lebih
+  /// lebar dari tile di atasnya).
+  Widget _actionRow(
+    List<({IconData icon, String label, VoidCallback onTap, bool done})> row,
+  ) {
     return Row(
       children: [
-        for (final a in row) ...[
-          Expanded(child: _actionTile(a.icon, a.label, a.onTap)),
-          if (a != row.last) const SizedBox(width: AppSpacing.sm),
+        for (var i = 0; i < 3; i++) ...[
+          if (i > 0) const SizedBox(width: AppSpacing.sm),
+          Expanded(
+            child: i < row.length
+                ? _actionTile(
+                    row[i].icon,
+                    row[i].label,
+                    row[i].onTap,
+                    done: row[i].done,
+                  )
+                // ponytail: slot kosong, BUKAN Spacer. Spacer berbagi sisa
+                // ruang sehingga tile sebelumnya ikut melar (115 vs 111px).
+                // SizedBox.shrink (bukan .expand) — Row tinggi tak terbatas,
+                // .expand minta tinggi infinity dan meledak.
+                : const SizedBox.shrink(),
+          ),
         ],
       ],
     );
