@@ -133,16 +133,26 @@ class _BelajarTabState extends State<BelajarTab> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('SANTRI DIGITAL',
-                      style: AppText.labelCaps().copyWith(color: AppColors.primary)),
-                  const SizedBox(height: 2),
-                  Text('$completed/$total modul selesai',
-                      style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant)),
-                ],
+              // ponytail: Expanded + ellipsis. Tanpa ini kolom kiri dan angka
+              // 32px berebut ruang dan RenderFlex overflow di layar sempit
+              // (~360dp) begitu total modul jadi 2 digit ("12/12 modul selesai").
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('SANTRI DIGITAL',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppText.labelCaps().copyWith(color: AppColors.primary)),
+                    const SizedBox(height: 2),
+                    Text('$completed/$total modul selesai',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant)),
+                  ],
+                ),
               ),
+              const SizedBox(width: AppSpacing.sm),
               Text('${(progress * 100).round()}%',
                   style: AppText.displayHero(32).copyWith(color: AppColors.primary)),
             ],

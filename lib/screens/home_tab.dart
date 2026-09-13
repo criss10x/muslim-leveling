@@ -835,14 +835,24 @@ class _HomeTabState extends State<HomeTab> {
           decoration: BoxDecoration(shape: BoxShape.circle, color: color),
         ),
         const SizedBox(width: AppSpacing.sm),
-        Text(
-          label,
-          style: AppText.labelCaps().copyWith(
-            color: AppColors.onSurfaceVariant,
-            fontSize: 10,
+        // ponytail: Expanded, bukan Text + Spacer. labelCaps() itu 12px + track
+        // 1.2 ("SIDE QUEST" ≈ 100dp), sementara kolomnya cuma ~108dp di layar
+        // 360dp — labelnya didorong keluar oleh Spacer dan RenderFlex overflow.
+        // Expanded memberi ruang yang tersisa SETELAH value; label mengalah
+        // dulu (ellipsis) alih-alih meluber. Nilainya tetap tidak pernah
+        // terpotong karena tidak fleksibel.
+        Expanded(
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppText.labelCaps().copyWith(
+              color: AppColors.onSurfaceVariant,
+              fontSize: 10,
+            ),
           ),
         ),
-        const Spacer(),
+        const SizedBox(width: AppSpacing.xs),
         Text(value, style: AppText.bodyMd().copyWith(color: color)),
       ],
     );

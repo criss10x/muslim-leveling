@@ -10,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:muslim_leveling/screens/dashboard_shell.dart';
+import 'package:muslim_leveling/screens/home_tab.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -19,10 +20,7 @@ void main() {
 
   testWidgets('setiap tab: konten scroll punya ruang di atas nav bar (#bug)',
       (tester) async {
-    // Pixel-7-class device + inset navigasi. ponytail: lebar 412dp, bukan 360,
-    // karena di 360 ada overflow horizontal yang SUDAH ADA sebelumnya
-    // (home_tab.dart:830, belajar_tab.dart:132) — itu bug lain, jangan sampai
-    // bikin tes ini merah dan mengubur sinyal inset bawah.
+    // Pixel-7-class device + inset navigasi.
     tester.view.physicalSize = const Size(1236, 2745);
     tester.view.devicePixelRatio = 3;
     tester.view.viewPadding = const FakeViewPadding(bottom: 72, top: 90);
@@ -58,5 +56,41 @@ void main() {
             'terakhir bakal ketutup',
       );
     }
+  });
+
+  // ⚠️ Dua pendekatan yang GAGAL dipakai di sini (jangan ulangi):
+  // 1. "nol RenderFlex overflow di 360dp" — tidak deterministik. Dengan bug
+  //    yang sama, satu run melaporkan "overflowed by 49 pixels", run berikutnya
+  //    0 (ukuran teks font test jatuh persis di batas kolom).
+  // 2. `find.ancestor(matching: find.byType(Expanded))` — selalu ketemu, karena
+  //    seluruh Row-nya memang ada di dalam Expanded milik layout induk.
+  //
+  // Yang deterministik: lebar label harus DIBATASI (tight), bukan intrinsik.
+  // `Expanded` memberi constraint minWidth == maxWidth; `Text` telanjang di Row
+  // dapat maxWidth: Infinity. Tidak ada pengukuran teks di sini, jadi hasilnya
+  // tidak bergantung ambient state.
+  testWidgets('label _ringStat dibatasi lebarnya (bukan Text telanjang di Row)',
+      (tester) async {
+    SharedPreferences.setMockInitialValues({});
+    await tester.pumpWidget(const MaterialApp(home: Scaffold(body: HomeTab())));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+
+    var checked = 0;
+    for (final label in ['WAJIB', 'SUNNAH', 'SIDE QUEST']) {
+      final finder = find.text(label);
+      if (finder.evaluate().isEmpty) continue; // ring belum render
+      checked++;
+      final box = tester.renderObject<RenderBox>(finder);
+      expect(
+        box.constraints.minWidth,
+        box.constraints.maxWidth,
+        reason: 'label "$label" tidak dibatasi lebarnya — Text telanjang di Row '
+            'pakai lebar intrinsik dan didorong keluar kolom oleh Spacer di '
+            'layar sempit (RenderFlex overflow). Bungkus dengan Expanded.',
+      );
+    }
+    expect(checked, greaterThan(0),
+        reason: 'tidak ada label _ringStat yang ter-render — tes tidak menguji apa pun');
   });
 }
