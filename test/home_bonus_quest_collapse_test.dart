@@ -31,6 +31,12 @@ void main() {
     expect(find.text('Dhuha'), findsOneWidget); // aktif jam 13:00
     expect(find.text('Tahajjud'), findsNothing); // terkunci → tersembunyi
 
+    // ponytail: ensureVisible dulu. scrollUntilVisible cuma menjamin header
+    // BONUS QUEST kelihatan — chevron di baris bawahnya bisa mendarat tepat di
+    // tepi bawah viewport, dan tap() ke titik di luar render tree itu no-op
+    // (peringatan "would not hit test", lalu expect di bawah gagal).
+    await t.ensureVisible(find.byIcon(AppIcons.expandMore));
+    await t.pumpAndSettle();
     await t.tap(find.byIcon(AppIcons.expandMore));
     await t.pumpAndSettle();
     expect(find.text('Tahajjud'), findsOneWidget); // expanded → semua tampil

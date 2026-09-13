@@ -1453,7 +1453,7 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  /// [done] → badge cek emas di pojok ikon (dipakai Renungan setelah 4/4).
+  /// [done] → badge cek emas di pojok chip ikon (dipakai Renungan setelah 4/4).
   Widget _actionTile(
     IconData icon,
     String label,
@@ -1474,12 +1474,24 @@ class _HomeTabState extends State<HomeTab> {
         ),
         child: Column(
           children: [
-            // ponytail: Stack cuma hidup saat done — ikon tetap center persis
-            // di 4 tile lain (Positioned tidak memengaruhi ukuran Stack).
+            // ponytail: chip ikon = lapisan KEDUA (wash tile 10% → chip 18%).
+            // Referensi appllama: "Icon Square Badges" (Gravl) & "Rounded
+            // Feature Cards" (Quran Widgets, kartu lebih terang dari latar).
+            // Glyph telanjang di atas wash terbaca datar; chip memberi
+            // kedalaman tanpa shadow — AppShadow sengaja kosong, jadi
+            // kedalaman HARUS dari tangga kecerahan, bukan bayangan.
+            // Badge `done` pindah ke pojok chip (dulu pojok glyph 24px).
             Stack(
               clipBehavior: Clip.none,
               children: [
-                Icon(icon, size: 24, color: AppColors.primary),
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.18),
+                    borderRadius: BorderRadius.circular(AppRadius.lg),
+                  ),
+                  child: Icon(icon, size: 22, color: AppColors.primary),
+                ),
                 if (done)
                   Positioned(
                     right: -3,
