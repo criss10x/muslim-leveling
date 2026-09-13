@@ -39,6 +39,7 @@ class AppIcons {
   static const brightness4 = IconData(0xe474, fontFamily: 'Phosphor');
   static const calendarMonth = IconData(0xe10a, fontFamily: 'PhosphorFill');
   static const calendarMonthOutlined = IconData(0xe10a, fontFamily: 'Phosphor');
+  static const camera = IconData(0xe10e, fontFamily: 'Phosphor');
   static const cancel = IconData(0xe4f8, fontFamily: 'Phosphor');
   static const cardGiftcard = IconData(0xe276, fontFamily: 'Phosphor');
   static const casino = IconData(0xe1ee, fontFamily: 'Phosphor');

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import '../services/cosmetic_catalog.dart';
+import '../theme/app_icons.dart';
 import '../theme/app_theme.dart';
 
 /// Builds the avatar outline for a given [FrameShape]. Circle uses an oval,
@@ -518,10 +519,12 @@ class _TierProfileAvatarState extends State<TierProfileAvatar>
                 fit: BoxFit.cover,
                 width: size,
                 height: size,
-                // Decode at display size — full-res camera photos are multi-MB.
+                // ponytail: cacheWidth SAJA. cacheHeight juga diisi = policy
+                // exact (ResizeImage default) → raster dipaksa jadi kotak,
+                // aspek foto non-persegi hilang sebelum BoxFit.cover kebagian
+                // (terukur: sumber 400x300 + 88x88 → 88x88, bukan 88x66).
+                // Lebar saja = skala proporsional, cover yang memotong.
                 cacheWidth: (size * MediaQuery.devicePixelRatioOf(context))
-                    .round(),
-                cacheHeight: (size * MediaQuery.devicePixelRatioOf(context))
                     .round(),
                 gaplessPlayback: true,
                 filterQuality: FilterQuality.medium,
@@ -586,7 +589,7 @@ class _TierProfileAvatarState extends State<TierProfileAvatar>
                 ],
         ),
         alignment: Alignment.center,
-        child: const Text('📷', style: TextStyle(fontSize: 14)),
+        child: Icon(AppIcons.camera, size: 16, color: AppColors.onPrimary),
       ),
     );
   }
@@ -677,10 +680,10 @@ class SmallTierAvatar extends StatelessWidget {
                         fit: BoxFit.cover,
                         width: sizeDp,
                         height: sizeDp,
+                        // ponytail: cacheWidth saja — lihat catatan di
+                        // TierProfileAvatar._buildMainAvatar (policy exact
+                        // merusak aspek foto non-persegi).
                         cacheWidth:
-                            (sizeDp * MediaQuery.devicePixelRatioOf(context))
-                                .round(),
-                        cacheHeight:
                             (sizeDp * MediaQuery.devicePixelRatioOf(context))
                                 .round(),
                         gaplessPlayback: true,

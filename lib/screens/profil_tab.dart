@@ -130,27 +130,41 @@ class _ProfilTabState extends State<ProfilTab> {
     setState(() => _nickname = result);
   }
 
-  Future<void> _pickAvatar() async {
-    final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (picked == null) return;
-    final bytes = await picked.readAsBytes();
-    final dir = await getApplicationDocumentsDirectory();
-    // ponytail: rename tiap pick — nama sama membuat Flutter menyajikan
-    // decode lama dari imageCache (foto baru terlihat "penyet" karena
-    // decode pakai constraint cache lama).
-    final file = File(
-      '${dir.path}/avatar_${DateTime.now().millisecondsSinceEpoch}.jpg',
-    );
-    await file.writeAsBytes(bytes);
-    final p = await SharedPreferences.getInstance();
-    final old = p.getString('avatar_path');
-    await p.setString('avatar_path', file.path);
-    if (old != null && old != file.path) {
-      try {
-        await File(old).delete();
-      } catch (_) {}
+  Future<void> _pickAvatar(ImageSource source) async {
+    try {
+      final picked = await ImagePicker().pickImage(
+        source: source,
+        // ponytail: foto profil tidak pernah >256dp — tanpa batas ini kamera
+        // menyimpan file multi-MB yang hanya dipakai untuk lingkaran 88dp.
+        maxWidth: 1024,
+        maxHeight: 1024,
+        imageQuality: 88,
+      );
+      if (picked == null) return;
+      final bytes = await picked.readAsBytes();
+      final dir = await getApplicationDocumentsDirectory();
+      // ponytail: rename tiap pick — nama sama membuat Flutter menyajikan
+      // decode lama dari imageCache (foto baru terlihat "penyet" karena
+      // decode pakai constraint cache lama).
+      final file = File(
+        '${dir.path}/avatar_${DateTime.now().millisecondsSinceEpoch}.jpg',
+      );
+      await file.writeAsBytes(bytes);
+      final p = await SharedPreferences.getInstance();
+      final old = p.getString('avatar_path');
+      await p.setString('avatar_path', file.path);
+      if (old != null && old != file.path) {
+        try {
+          await File(old).delete();
+        } catch (_) {}
+      }
+      if (!mounted) return;
+      setState(() => _avatarPath = file.path);
+    } catch (e) {
+      // Trust boundary: kamera absen / izin ditolak / file gagal dibaca.
+      if (!mounted) return;
+      _showSettingSnackbar('Gagal mengambil foto: ${_shortError(e)}');
     }
-    setState(() => _avatarPath = file.path);
   }
 
   Future<void> _removeAvatar() async {
@@ -162,6 +176,72 @@ class _ProfilTabState extends State<ProfilTab> {
       } catch (_) {}
     }
     setState(() => _avatarPath = null);
+  }
+
+  /// Sheet khusus foto: Kamera / Galeri / Hapus. Dipisah dari
+  /// [_showEditOptions] karena aksi foto jauh lebih sering dipakai daripada
+  /// ganti nama, dan tap langsung di avatar harus mendarat di sini.
+  void _showPhotoOptions() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.surfaceContainerHigh,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xl)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.md,
+                AppSpacing.sm,
+                AppSpacing.md,
+                AppSpacing.xs,
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    'FOTO PROFIL',
+                    style: AppText.labelCaps().copyWith(
+                      color: AppColors.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: Icon(AppIcons.camera, color: AppColors.primary),
+              title: Text('Ambil dari Kamera', style: AppText.bodyLg()),
+              onTap: () {
+                Navigator.pop(ctx);
+                _pickAvatar(ImageSource.camera);
+              },
+            ),
+            ListTile(
+              leading: Icon(AppIcons.photoLibrary, color: AppColors.primary),
+              title: Text('Pilih dari Galeri', style: AppText.bodyLg()),
+              onTap: () {
+                Navigator.pop(ctx);
+                _pickAvatar(ImageSource.gallery);
+              },
+            ),
+            if (_avatarPath != null)
+              ListTile(
+                leading: Icon(AppIcons.delete, color: AppColors.error),
+                title: Text(
+                  'Hapus Foto',
+                  style: AppText.bodyLg().copyWith(color: AppColors.error),
+                ),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _removeAvatar();
+                },
+              ),
+          ],
+        ),
+      ),
+    );
   }
 
   void _showEditOptions() {
@@ -184,25 +264,13 @@ class _ProfilTabState extends State<ProfilTab> {
               },
             ),
             ListTile(
-              leading: Icon(AppIcons.photoLibrary, color: AppColors.primary),
+              leading: Icon(AppIcons.camera, color: AppColors.primary),
               title: Text('Ganti Foto', style: AppText.bodyLg()),
               onTap: () {
                 Navigator.pop(ctx);
-                _pickAvatar();
+                _showPhotoOptions();
               },
             ),
-            if (_avatarPath != null)
-              ListTile(
-                leading: Icon(AppIcons.delete, color: AppColors.error),
-                title: Text(
-                  'Hapus Foto',
-                  style: AppText.bodyLg().copyWith(color: AppColors.error),
-                ),
-                onTap: () {
-                  Navigator.pop(ctx);
-                  _removeAvatar();
-                },
-              ),
           ],
         ),
       ),
@@ -1074,6 +1142,11 @@ class _ProfilTabState extends State<ProfilTab> {
                           tierName: tier.name,
                           sizeDp: 88,
                           isPro: true,
+                          // Strava: tap langsung di avatar = ganti foto,
+                          // bukan buka menu edit. Badge kamera = affordance
+                          // yang menyatakan itu tanpa perlu dijelaskan.
+                          showEditBadge: true,
+                          onTap: _showPhotoOptions,
                           equippedFrameId: 'frame_default',
                           equippedAuraId: auraId,
                         ),
