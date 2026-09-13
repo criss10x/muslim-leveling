@@ -224,8 +224,14 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
     final h = _h;
     return Scaffold(
       backgroundColor: Colors.transparent,
+      // ponytail: JANGAN `bottom: false` di sini. Halaman ini di-PUSH dengan
+      // Scaffold sendiri (bukan anak DashboardShell), jadi inset nav bar Android
+      // TIDAK diurus siapa pun kalau dimatikan — footer "n dari N renungan
+      // dibaca" tenggelam di bawah nav button sistem. Layar lain yang di-push
+      // (hadis/doa/dzikir/qibla) semuanya pakai SafeArea biasa; file ini satu-
+      // satunya yang menyimpang. `bottom: false` hanya benar di 4 tab, karena di
+      // sana DashboardShell yang memegang insets-nya.
       body: SafeArea(
-        bottom: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

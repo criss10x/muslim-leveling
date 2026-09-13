@@ -23,7 +23,11 @@ void main() {
     // Pixel-7-class device + inset navigasi.
     tester.view.physicalSize = const Size(1236, 2745);
     tester.view.devicePixelRatio = 3;
-    tester.view.viewPadding = const FakeViewPadding(bottom: 72, top: 90);
+    // ponytail: `padding` harus di-set juga — viewPadding saja tidak mengalir
+    // ke MediaQuery.padding, dan SafeArea (di dalam nav bar) membacanya.
+    const insets = FakeViewPadding(bottom: 72, top: 90);
+    tester.view.viewPadding = insets;
+    tester.view.padding = insets;
     addTearDown(tester.view.reset);
 
     await tester.pumpWidget(const MaterialApp(home: DashboardShell()));
