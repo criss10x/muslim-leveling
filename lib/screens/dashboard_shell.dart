@@ -51,7 +51,17 @@ class _DashboardShellState extends State<DashboardShell> {
       builder: (context, _) {
         return Scaffold(
           backgroundColor: Colors.transparent,
-          extendBody: true,
+          // ponytail: DULU `extendBody: true`. Itu bertabrakan dengan nav bar di
+          // bawah: bar-nya solid (0xFF121816, sengaja tanpa BackdropFilter demi
+          // perf) TAPI body-nya diletakkan di belakangnya — jadi 64dp + inset
+          // navigasi tiap tab ketutup permanen. Tab yang lupa kompensasi padding
+          // (Quran) kehilangan item terakhirnya; tab lain menambal dengan
+          // `bottom: 100` yang angka sihirnya gampang basi.
+          // Karena bar-nya opaque, extendBody tidak memberi apa pun secara visual
+          // — cuma memotong konten. Di-nol-kan: Scaffold menyisakan ruang untuk
+          // bar, dan padding bottom:100 yang tersisa jadi ruang napas, bukan
+          // penambal.
+          extendBody: false,
           body: AmbientBackground(
             child: Stack(
               fit: StackFit.expand,
@@ -77,6 +87,7 @@ class _DashboardShellState extends State<DashboardShell> {
           ),
           // Solid surface nav — no BackdropFilter (perf + light-theme contract).
           bottomNavigationBar: Container(
+            key: const ValueKey('nav-bar'),
             decoration: BoxDecoration(
               color: AppColors.surfaceContainerLow,
               border: Border(
