@@ -118,7 +118,8 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
   /// Tuntas = semua blok yang BENAR-BENAR dirender sudah diklaim. Blok hadis
   /// opsional (offline → hilang), jadi basisnya jumlah halaman, bukan konstanta
   /// max — kalau tidak, penutup tak pernah "tuntas" saat hadis kosong.
-  bool _tuntas(int count) => _claimed & ((1 << count) - 1) == (1 << count) - 1;
+  bool _tuntas(int count) =>
+      GameService.bitCount(_claimed & ((1 << count) - 1)) == count;
 
   /// Ayat hari ini di Quran, mulai & berhenti di ayat itu.
   void _toggleAudio() {
@@ -289,17 +290,17 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
   }
 
   Widget _empty() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.lg),
-        child: Text(
-          'Renungan hari ini belum bisa dimuat.\n'
+    // ponytail: ErrorRetry sudah ada & dipakai Doa/Hadis — jangan bikin gaya baru.
+    return ErrorRetry(
+      message: 'Renungan hari ini belum bisa dimuat.\n'
           'Sambungkan internet lalu coba lagi.',
-          textAlign: TextAlign.center,
-          style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
-        ),
-      ),
+      onRetry: _retry,
     );
+  }
+
+  Future<void> _retry() async {
+    setState(() => _loading = true);
+    await _load();
   }
 
   Widget _body(DailyHighlight h) {
@@ -510,7 +511,10 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
   }
 
   /// Penutup: progres hari ini. Tuntas = ritual selesai, bukan sekadar teks.
+  /// ponytail: basisnya blok yang dirender (count), angkanya DIHITUNG dari
+  /// bitmask — mencetak `_claimed` mentah bikin "7 dari 4" setelah 3 blok.
   Widget _footer(int count) {
+    final done = GameService.bitCount(_claimed & ((1 << count) - 1));
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         AppSpacing.lg,
@@ -527,7 +531,7 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
           Text(
             _tuntas(count)
                 ? 'Renungan hari ini tuntas'
-                : '${_claimed & ((1 << count) - 1)} dari $count renungan dibaca · swipe untuk lanjut',
+                : '$done dari $count renungan dibaca · swipe untuk lanjut',
             style: AppText.labelCapsSm().copyWith(
               color: _tuntas(count)
                   ? AppColors.secondaryFixed

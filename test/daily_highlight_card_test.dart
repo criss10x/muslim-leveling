@@ -97,6 +97,51 @@ void main() {
     expect(a.idn, b.idn);
   });
 
+  // ponytail: bug nyata — footer dulu mencetak BITMASK mentah sebagai angka
+  // progres, jadi 3 blok terbaca "7 dari 4". Jaga keduanya: bitCount + render.
+  test('bitCount: mask dihitung, bukan dicetak mentah', () {
+    expect(GameService.bitCount(0), 0);
+    expect(GameService.bitCount(0x1), 1);
+    expect(GameService.bitCount(0x7), 3); // 0b111 → 3, bukan 7
+    expect(GameService.bitCount(0xF), 4);
+  });
+
+  testWidgets('3 dari 4 blok dibaca → footer "3 dari 4", bukan "7 dari 4"', (
+    tester,
+  ) async {
+    final date = GameService.todayStr();
+    SharedPreferences.setMockInitialValues({
+      'daily_highlight': jsonEncode(const DailyHighlight(
+        date: 'PLACEHOLDER',
+        surahLatin: _surahLatin,
+        ayahArabic: 'بِسْمِ اللَّهِ',
+        ayahIdn: 'Dengan nama Allah',
+        surahNumber: 1,
+        ayahNumber: _ayahNumber,
+        hadisId: 5,
+        hadisIdn: 'Hadis uji',
+        doaNama: 'Doa uji',
+        doaIdn: 'Teks doa uji',
+      ).toMap()..['date'] = date),
+      'game_state_v1': jsonEncode(
+        GameState(
+          // Halaman 0..2 diklaim (Ayat/Hadis/Doa) → mask 0b0111 = 7.
+          highlightSwipeDate: date,
+          highlightSwipeMask: 0x7,
+        ).toMap(),
+      ),
+    });
+    // Di device, Home sudah memuat GameService sebelum push layar ini — tes
+    // harus meniru itu, kalau tidak bitmask-nya masih 0 saat initState.
+    await GameService.load();
+
+    await _pump(tester);
+
+    expect(find.textContaining('3 dari 4 renungan dibaca'), findsOneWidget);
+    expect(find.textContaining('7 dari 4'), findsNothing);
+    expect(find.text('Renungan hari ini tuntas'), findsNothing);
+  });
+
   testWidgets('tanpa cache → halaman tetap render dgn pesan kosong', (
     tester,
   ) async {

@@ -1810,6 +1810,19 @@ class GameService {
   // yang benar-benar dirender, bukan konstanta ini.
   static const highlightSwipeMaxPages = 4;
 
+  /// Jumlah bit 1 dalam [mask]. ponytail: Dart tidak punya popcount, dan
+  /// bitmask highlight dipakai sebagai ANGKA progres — dicetak mentah jadi
+  /// "7 dari 4" setelah 3 blok (0b111 = 7).
+  static int bitCount(int mask) {
+    var n = 0;
+    var m = mask;
+    while (m != 0) {
+      m &= m - 1;
+      n++;
+    }
+    return n;
+  }
+
   /// Bitmask halaman highlight yang XP-nya sudah diklaim HARI INI.
   /// 0 kalau tanggalnya beda (mask lama diabaikan, bukan direset).
   static int get highlightSwipeClaimedToday {

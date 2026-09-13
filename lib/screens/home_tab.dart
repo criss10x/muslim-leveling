@@ -1345,12 +1345,16 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  // ── Quick actions: pintasan ke Hadis / Doa / Kiblat / Dzikir / Highlight ──
+  // ── Quick actions: pintasan ke Hadis / Doa / Kiblat / Dzikir / Renungan ──
   // ponytail: dulu tersebar (Hadis+Doa di tab Belajar, Kiblat di tab Jadwal,
-  // Dzikir & Highlight sebagai section di Home) — sekarang dikumpulkan di satu
+  // Dzikir & Renungan sebagai section di Home) — sekarang dikumpulkan di satu
   // deret supaya Home ringkas dan semuanya sejangkauan jempol.
 
   Widget _quickActions() {
+    // ponytail: label 'Renungan' (bukan 'Highlight') — halaman tujuannya sudah
+    // berjudul "Renungan Hari Ini", dan 'Highlight' bertabrakan dengan kutipan
+    // artikel Belajar + sorot hasil cari Quran. Ikonnya buku, bukan sparkle
+    // (glyph generik "AI/ajaib").
     final actions = <({IconData icon, String label, VoidCallback onTap})>[
       (
         icon: AppIcons.autoStories,
@@ -1373,15 +1377,28 @@ class _HomeTabState extends State<HomeTab> {
         onTap: () => _push(const DzikirScreen()),
       ),
       (
-        icon: AppIcons.sparkle,
-        label: 'Highlight',
+        icon: AppIcons.menuBookOutlined,
+        label: 'Renungan',
         onTap: () => _push(const DailyHighlightScreen()),
       ),
     ];
+    // Renungan satu-satunya tile dengan state harian → satu-satunya yang dapat
+    // badge. Sisanya pintasan statis. ponytail: kalau nanti ada tile ke-2 yang
+    // butuh progres, pindahkan angka ini ke badge per-tile.
+    final renunganDone =
+        GameService.bitCount(GameService.highlightSwipeClaimedToday);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        HudHeader('AKSES CEPAT'),
+        HudHeader(
+          'AKSES CEPAT',
+          meta: renunganDone > 0
+              ? 'RENUNGAN $renunganDone/${GameService.highlightSwipeMaxPages}'
+              : null,
+          accent: renunganDone == GameService.highlightSwipeMaxPages
+              ? AppColors.primary
+              : null,
+        ),
         FlatCard(
           padding: const EdgeInsets.all(AppSpacing.sm),
           child: Column(
@@ -1393,7 +1410,15 @@ class _HomeTabState extends State<HomeTab> {
               Row(
                 children: [
                   for (final a in actions.sublist(3)) ...[
-                    Expanded(child: _actionTile(a.icon, a.label, a.onTap)),
+                    Expanded(
+                      child: _actionTile(
+                        a.icon,
+                        a.label,
+                        a.onTap,
+                        done: a.label == 'Renungan' &&
+                            renunganDone == GameService.highlightSwipeMaxPages,
+                      ),
+                    ),
                     if (a != actions.last) const SizedBox(width: AppSpacing.sm),
                   ],
                   if (actions.sublist(3).length < 3)
@@ -1418,7 +1443,13 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  Widget _actionTile(IconData icon, String label, VoidCallback onTap) {
+  /// [done] → badge cek emas di pojok ikon (dipakai Renungan setelah 4/4).
+  Widget _actionTile(
+    IconData icon,
+    String label,
+    VoidCallback onTap, {
+    bool done = false,
+  }) {
     return PressableScale(
       pressedScale: 0.95,
       onTap: onTap,
@@ -1433,16 +1464,30 @@ class _HomeTabState extends State<HomeTab> {
         ),
         child: Column(
           children: [
-            Icon(icon, size: 24, color: AppColors.primary),
+            // ponytail: Stack cuma hidup saat done — ikon tetap center persis
+            // di 4 tile lain (Positioned tidak memengaruhi ukuran Stack).
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Icon(icon, size: 24, color: AppColors.primary),
+                if (done)
+                  Positioned(
+                    right: -3,
+                    top: -3,
+                    child: Icon(
+                      AppIcons.checkCircle,
+                      size: 14,
+                      color: AppColors.secondaryFixed,
+                    ),
+                  ),
+              ],
+            ),
             const SizedBox(height: 6),
             Text(
               label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: AppText.labelCaps().copyWith(
-                fontSize: 10,
-                color: AppColors.onSurface,
-              ),
+              style: AppText.labelCapsSm().copyWith(color: AppColors.onSurface),
             ),
           ],
         ),
