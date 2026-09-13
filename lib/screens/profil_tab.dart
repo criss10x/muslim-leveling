@@ -863,7 +863,7 @@ class _ProfilTabState extends State<ProfilTab> {
               ),
               const SizedBox(height: 4),
               Text(
-                'Versi 1.1.1',
+                'Versi 1.1.2',
                 style: AppText.bodyMd().copyWith(
                   color: AppColors.onSurfaceVariant,
                   fontSize: 13,
