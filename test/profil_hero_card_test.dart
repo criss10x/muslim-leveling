@@ -119,9 +119,8 @@ void main() {
     );
   });
 
-  testWidgets('rank bento uses the rank accent', (tester) async {
+  testWidgets('hero keeps rank identity and tier accent', (tester) async {
     GoogleFonts.config.allowRuntimeFetching = false;
-    isLightTheme = true;
     SharedPreferences.setMockInitialValues({
       'nickname': 'Pejuang',
       'onboarding_done': true,
@@ -131,16 +130,24 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
-        theme: AppTheme.light(),
+        theme: AppTheme.dark(),
         home: const Scaffold(body: ProfilTab()),
       ),
     );
     await tester.pump();
 
-    expect(find.text('Warrior'), findsOneWidget);
+    final tier = getTierVisualConfig('Warrior');
+    // Rank tidak lagi jadi sel statistik ke-4 (duplikat pill rank di atas),
+    // tapi identitas rank tetap tampil — sekarang hanya di pill.
     expect(
-      tester.widget<Text>(find.text('Warrior')).style?.color,
-      getTierVisualConfig('Warrior').inkPrimary,
+      find.text(GameService.getRankTitle(GameService.current.level)),
+      findsOneWidget,
     );
+    // Aksen tier tidak hilang dari hero: dipakai glow kartu + border + bar XP.
+    final card = tester.widget<Container>(
+      find.byKey(const Key('profil-hero-card')),
+    );
+    final shadow = (card.decoration! as BoxDecoration).boxShadow!.first;
+    expect(shadow.color, tier.inkPrimary.withValues(alpha: 0.22));
   });
 }

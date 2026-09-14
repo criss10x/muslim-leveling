@@ -1085,6 +1085,9 @@ class _ProfilTabState extends State<ProfilTab> {
     );
     final equippedTitle = CosmeticCatalog.byId(titleId)?.titleText ?? '';
     final tier = getTierVisualConfig(getTierName(state.level));
+    final heroStreak = state.heroStreak.current;
+    final xpToNext =
+        levelInfo.xpNeededForNextLevel - levelInfo.xpInCurrentLevel;
 
     // Solid raised hero (same language as Home) — GlassPanel alpha muddies on pure black.
     final light = isLightTheme;
@@ -1095,6 +1098,7 @@ class _ProfilTabState extends State<ProfilTab> {
       child: Stack(
         children: [
           Container(
+            key: const Key('profil-hero-card'),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(AppRadius.xl),
               boxShadow: light
@@ -1147,7 +1151,11 @@ class _ProfilTabState extends State<ProfilTab> {
                           // yang menyatakan itu tanpa perlu dijelaskan.
                           showEditBadge: true,
                           onTap: _showPhotoOptions,
-                          equippedFrameId: 'frame_default',
+                          equippedFrameId: CosmeticService.resolveSlot(
+                            state,
+                            CosmeticSlot.frame,
+                            isPro: true,
+                          ),
                           equippedAuraId: auraId,
                         ),
                         const SizedBox(width: AppSpacing.md),
@@ -1269,11 +1277,15 @@ class _ProfilTabState extends State<ProfilTab> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'XP Progress',
-                            style: AppText.labelCaps().copyWith(
-                              color: AppColors.onSurfaceVariant,
-                              fontSize: 10,
+                          Flexible(
+                            child: Text(
+                              '$xpToNext XP lagi → LVL ${levelInfo.level + 1}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppText.labelCaps().copyWith(
+                                color: AppColors.onSurfaceVariant,
+                                fontSize: 10,
+                              ),
                             ),
                           ),
                           Text(
@@ -1341,15 +1353,9 @@ class _ProfilTabState extends State<ProfilTab> {
                       Expanded(
                         child: _miniStat(
                           'Streak',
-                          '${GameService.current.heroStreak.current}🔥',
-                        ),
-                      ),
-                      const SizedBox(width: AppSpacing.sm),
-                      Expanded(
-                        child: _miniStat(
-                          'Rank',
-                          tier.name,
-                          color: tier.inkPrimary,
+                          // ponytail: streak 0 bukan "0🔥" — api tanpa hari
+                          // terbaca sebagai pujian palsu. Dash = belum mulai.
+                          heroStreak == 0 ? '—' : '$heroStreak',
                         ),
                       ),
                     ],
@@ -1754,8 +1760,7 @@ class _ProfilTabState extends State<ProfilTab> {
     );
   }
 
-  Widget _miniStat(String label, String value, {Color? color}) {
-    final accent = color ?? AppColors.primary;
+  Widget _miniStat(String label, String value) {
     return Container(
       width: double.infinity,
       constraints: const BoxConstraints(minHeight: 64),
@@ -1773,7 +1778,7 @@ class _ProfilTabState extends State<ProfilTab> {
               value,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: AppText.titleLg().copyWith(color: accent),
+              style: AppText.titleLg().copyWith(color: AppColors.primary),
             ),
           ),
           Text(
