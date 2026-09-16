@@ -239,7 +239,9 @@ class _QuranTabState extends State<QuranTab> {
                 onChanged: _onQueryChanged,
                 style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
                 decoration: InputDecoration(
-                  hintText: 'Cari surat, kata, atau ayat — mis. Al-Baqarah 286',
+                  hintText:
+                      'Cari surat, kata, atau ayat — mis. '
+                      '${QuranData.exampleAyahRef}',
                   hintStyle: AppText.bodyMd().copyWith(
                     color: AppColors.onSurfaceVariant,
                   ),
@@ -278,7 +280,9 @@ class _QuranTabState extends State<QuranTab> {
                         hasScrollBody: false,
                         child: Center(
                           child: Text(
-                            'Tidak ditemukan di surat maupun terjemahan ayat',
+                            'Tidak ditemukan. Coba kata lain di terjemahan, '
+                            'atau tulis nama surat + nomor ayat — mis. '
+                            '${QuranData.exampleAyahRef}',
                             style: AppText.bodyMd().copyWith(
                               color: AppColors.onSurfaceVariant,
                             ),

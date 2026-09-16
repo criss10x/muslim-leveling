@@ -24,6 +24,17 @@ void main() {
     expect(r.ayah, 286);
   });
 
+  test('contoh yang ditampilkan ke user benar-benar bisa diparse', () {
+    // Hint kolom cari + pesan kosong memakai QuranData.exampleAyahRef. Kalau
+    // contohnya diganti jadi format yang parser tak dukung, user diajari
+    // cara yang tidak jalan — dan itu lolos semua tes lain.
+    final r = p(QuranData.exampleAyahRef);
+    expect(r, isNotNull, reason: 'contoh "${QuranData.exampleAyahRef}" '
+        'tidak diparse parseAyahRef');
+    expect(r!.surah.number, 2);
+    expect(r.ayah, 286);
+  });
+
   test('tanda baca dan pemisah nama surat dimaafkan', () {
     // User mengetik cepat: tanpa tanda hubung, tanpa spasi, pakai titik dua.
     for (final q in [

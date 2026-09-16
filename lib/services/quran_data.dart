@@ -93,6 +93,11 @@ class QuranData {
     }).toList(growable: false);
   }
 
+  /// Contoh acuan ayat yang ditampilkan ke user (hint kolom cari + pesan
+  /// kosong). Tes memastikan contoh ini benar-benar diparse [parseAyahRef] —
+  /// copy tak bisa diam-diam drift dari parser.
+  static const exampleAyahRef = 'Al-Baqarah 286';
+
   /// Parse acuan "surat + nomor ayat": `Al-Baqarah 286`, `baqarah:286`,
   /// `Ali 'Imran 200`, `2:286`. Nama surat dibandingkan tanpa tanda baca dan
   /// tanpa awalan "al" ("al baqarah" dan "albaqarah" sama-sama cocok —
