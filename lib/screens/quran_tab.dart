@@ -22,6 +22,8 @@ class _QuranTabState extends State<QuranTab> {
   bool _loading = true;
   bool _failed = false;
   List<QuranSearchHit> _verseHits = const [];
+  // Acuan "surat + nomor ayat" yang diketik user (mis. "Al-Baqarah 286").
+  ({QuranSurah surah, int ayah})? _ayahRef;
   bool _searchingVerses = false;
   bool _truncated = false; // hasil dipotong di 30, masih ada match lain
   Timer? _debounce;
@@ -56,11 +58,19 @@ class _QuranTabState extends State<QuranTab> {
     setState(() {
       _query = v;
       _verseHits = const [];
+      _ayahRef = null;
       _searchingVerses = false;
       _truncated = false;
     });
     final q = v.trim();
     if (q.length < 3) return; // kata pendek → terlalu banyak hasil
+    // Acuan ayat diperiksa SEBELUM kata: "Al-Baqarah 286" juga cocok dengan
+    // nama surat, jadi tanpa jalur ini hasilnya cuma daftar surat.
+    final ref = QuranData.parseAyahRef(_all, q);
+    if (ref != null) {
+      setState(() => _ayahRef = ref);
+      return;
+    }
     // Mulai spinner SEKARANG (bukan setelah debounce): kalau surat tidak
     // cocok, tanpa ini user lihat flash "Tidak ditemukan" selama 400ms.
     if (quranData.search(_all, q).isEmpty) {
@@ -126,7 +136,10 @@ class _QuranTabState extends State<QuranTab> {
       );
     }
 
-    final list = quranData.search(_all, _query);
+    final ref = _ayahRef;
+    // Saat acuan ayat aktif, daftar surat disembunyikan supaya kartu ayatnya
+    // yang jadi jawaban tunggal — bukan tenggelam di bawah 114 baris surat.
+    final list = ref != null ? const <QuranSurah>[] : quranData.search(_all, _query);
 
     return SafeArea(
       child: CustomScrollView(
@@ -226,7 +239,7 @@ class _QuranTabState extends State<QuranTab> {
                 onChanged: _onQueryChanged,
                 style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
                 decoration: InputDecoration(
-                  hintText: 'Cari surat, arti, nomor, atau kata',
+                  hintText: 'Cari surat, kata, atau ayat — mis. Al-Baqarah 286',
                   hintStyle: AppText.bodyMd().copyWith(
                     color: AppColors.onSurfaceVariant,
                   ),
@@ -244,7 +257,17 @@ class _QuranTabState extends State<QuranTab> {
               ),
             ),
           ),
-          if (list.isEmpty && _query.trim().length >= 3)
+          if (ref != null)
+            SliverPadding(
+              padding: const EdgeInsets.only(
+                left: AppSpacing.md,
+                right: AppSpacing.md,
+                top: AppSpacing.xs,
+                bottom: AppSpacing.xxl * 2,
+              ),
+              sliver: SliverToBoxAdapter(child: _AyahRefCard(ref: ref)),
+            )
+          else if (list.isEmpty && _query.trim().length >= 3)
             _searchingVerses
                 ? const SliverFillRemaining(
                     hasScrollBody: false,
@@ -647,6 +670,129 @@ class _SearchHeader extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(covariant _SearchHeader oldDelegate) =>
       oldDelegate.extent != extent || oldDelegate.child != child;
+}
+
+/// Kartu jawaban untuk acuan "surat + nomor ayat" (mis. "Al-Baqarah 286").
+/// Tap → QuranReader lompat langsung ke ayat itu. Terjemahannya dimuat dari
+/// aset surat yang sama dengan yang dipakai reader — jadi yang ditampilkan di
+/// sini pasti ayat yang sama yang dibuka nanti.
+class _AyahRefCard extends StatefulWidget {
+  final ({QuranSurah surah, int ayah}) ref;
+  const _AyahRefCard({required this.ref});
+
+  @override
+  State<_AyahRefCard> createState() => _AyahRefCardState();
+}
+
+class _AyahRefCardState extends State<_AyahRefCard> {
+  String? _text; // null = masih memuat
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  @override
+  void didUpdateWidget(covariant _AyahRefCard old) {
+    super.didUpdateWidget(old);
+    // ref berubah (user mengetik acuan lain) → muat ulang.
+    if (old.ref.surah.number != widget.ref.surah.number ||
+        old.ref.ayah != widget.ref.ayah) {
+      _text = null;
+      _load();
+    }
+  }
+
+  Future<void> _load() async {
+    final r = widget.ref;
+    try {
+      final ayahs = await quranData.ayahs(r.surah.number);
+      final t = r.ayah >= 1 && r.ayah <= ayahs.length
+          ? ayahs[r.ayah - 1].translation
+          : '';
+      if (mounted) setState(() => _text = t);
+    } catch (_) {
+      // ponytail: aset korup jangan bikin layar kosong — kartunya tetap
+      // membuka ayat yang diminta walau preview-nya gagal.
+      if (mounted) setState(() => _text = '');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final r = widget.ref;
+    return Semantics(
+      button: true,
+      label: 'Buka ${r.surah.nameLatin} ayat ${r.ayah}',
+      child: Material(
+        color: AppColors.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(AppRadius.xxl),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(AppRadius.xxl),
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => QuranReader(surah: r.surah, initialAyah: r.ayah),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    RubElHizbBadge(number: r.surah.number),
+                    const SizedBox(width: AppSpacing.md),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            r.surah.nameLatin,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppText.titleLg().copyWith(
+                              color: AppColors.onSurface,
+                            ),
+                          ),
+                          const SizedBox(height: AppSpacing.xs),
+                          Text(
+                            'Ayat ${r.ayah} dari ${r.surah.ayahCount}',
+                            style: AppText.labelCaps().copyWith(
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Icon(
+                      Icons.arrow_forward,
+                      size: 18,
+                      color: AppColors.onSurfaceVariant,
+                    ),
+                  ],
+                ),
+                if (_text case final t?)
+                  if (t.isNotEmpty) ...[
+                    const SizedBox(height: AppSpacing.md),
+                    Text(
+                      t,
+                      maxLines: 4,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppText.bodyMd().copyWith(
+                        color: AppColors.onSurfaceVariant,
+                        height: 1.4,
+                      ),
+                    ),
+                  ],
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 /// Satu baris hasil pencarian ayat dalam terjemahan. Tap → buka QuranReader

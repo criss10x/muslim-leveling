@@ -93,6 +93,55 @@ class QuranData {
     }).toList(growable: false);
   }
 
+  /// Parse acuan "surat + nomor ayat": `Al-Baqarah 286`, `baqarah:286`,
+  /// `Ali 'Imran 200`, `2:286`. Nama surat dibandingkan tanpa tanda baca dan
+  /// tanpa awalan "al" ("al baqarah" dan "albaqarah" sama-sama cocok —
+  /// getNameLatin pun tak sepakat sendiri: "Ali 'Imran", "Asy-Syu'ara'").
+  /// Return null kalau bukan acuan, atau nomor ayatnya di luar jumlah ayat.
+  /// ponytail: sengaja butuh nama surat. `286` saja tidak diparse — di daftar
+  /// semua surat angka itu tak bisa dibedakan dari nomor surat (2–114), jadi
+  /// hasilnya akan menebak-nebak; pencarian terjemahan sudah menanganinya.
+  static ({QuranSurah surah, int ayah})? parseAyahRef(
+    List<QuranSurah> all,
+    String query,
+  ) {
+    final q = query.trim();
+    // "2:286" dan "2.286" — nomor surat, bukan nama.
+    final colon = RegExp(r'^(\d{1,3})\s*[:.]\s*(\d{1,3})$').firstMatch(q);
+    if (colon != null) {
+      final n = int.parse(colon.group(1)!);
+      for (final s in all) {
+        if (s.number == n) return _refOrNull(s, int.parse(colon.group(2)!));
+      }
+      return null;
+    }
+    // "Al-Baqarah 286" / "baqarah:286"
+    final named = RegExp(r'^(.*?)\s*[:.]?\s+(\d{1,3})$').firstMatch(q) ??
+        RegExp(r'^(.*?)\s*[:.]\s*(\d{1,3})$').firstMatch(q);
+    if (named == null) return null;
+    final name = named.group(1)!.trim();
+    if (name.isEmpty) return null;
+    final m = _nameMatches(all, name);
+    if (m.length != 1) return null; // tak ada / ambigu → jangan menebak
+    return _refOrNull(m.first, int.parse(named.group(2)!));
+  }
+
+  static ({QuranSurah surah, int ayah})? _refOrNull(QuranSurah s, int ayah) =>
+      ayah < 1 || ayah > s.ayahCount ? null : (surah: s, ayah: ayah);
+
+  static List<QuranSurah> _nameMatches(List<QuranSurah> all, String name) {
+    String norm(String v) {
+      final x = v.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]'), '');
+      return x.length > 2 && x.startsWith('al') ? x.substring(2) : x;
+    }
+
+    final n = norm(name);
+    if (n.isEmpty) return const [];
+    return all
+        .where((s) => norm(s.nameLatin) == n || norm(s.nameArabic) == n)
+        .toList(growable: false);
+  }
+
   /// Baris indeks pencarian terjemahan. Single-flight: dibangun sekali,
   /// hanya menyimpan teks (asli + lowercase) — bukan objek [QuranAyah] penuh.
   Future<List<_IdxRow>>? _indexFuture;
