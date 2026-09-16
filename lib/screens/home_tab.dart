@@ -19,6 +19,22 @@ import 'qibla_screen.dart';
 import 'daily_highlight_screen.dart';
 import '../theme/app_icons.dart';
 
+/// Baris Bonus Quest Sunnah — urut waktu ibadah.
+/// ponytail: SATU daftar dipakai dua tempat (list di `_BonusQuest` dan
+/// denominator ring di `_ritualRings`). Sebelumnya ring memakai literal `/8`
+/// terpisah, jadi daftar bisa jadi 9 baris sementara ring tetap bilang 8 —
+/// tanpa satu pun tes gagal. Panjangnya wajib == `GameService.sunnahKeys`.
+const _sunnahQuests = <(String, String, String, IconData)>[
+  ('Dhuha', 'dhuha', 'Sunnah mutlak di pagi hari', AppIcons.wbSunny),
+  ('Tahajjud', 'tahajjud', 'Sunnah malam (qiyamul lail)', AppIcons.nightsStay),
+  ('Qobliyah Subuh', 'rawatib_subuh_qobliyah', 'Sunnah sebelum Subuh', AppIcons.history),
+  ('Qobliyah Dzuhur', 'rawatib_dzuhur_qobliyah', 'Sunnah sebelum Dzuhur', AppIcons.history),
+  ("Ba'diyah Dzuhur", 'rawatib_dzuhur_ba_diyyah', 'Sunnah sesudah Dzuhur', AppIcons.history),
+  ('Qobliyah Ashar', 'rawatib_ashar_qobliyah', 'Sunnah sebelum Ashar', AppIcons.history),
+  ("Ba'diyah Maghrib", 'rawatib_maghrib_ba_diyyah', 'Sunnah sesudah Maghrib', AppIcons.history),
+  ("Ba'diyah Isya", 'rawatib_isya_ba_diyyah', 'Sunnah sesudah Isya', AppIcons.history),
+];
+
 extension _StringExt on String {
   String get cap => '${this[0].toUpperCase()}${substring(1)}';
 }
@@ -27,6 +43,12 @@ extension _StringExt on String {
 class HomeTab extends StatefulWidget {
   final VoidCallback? onSettingsPressed;
   const HomeTab({super.key, this.onSettingsPressed});
+
+  /// Kunci sunnah yang benar-benar dirender baris Bonus Quest. Dipakai tes
+  /// untuk mengunci kesamaan dengan GameService.sunnahKeys + ring denominator.
+  @visibleForTesting
+  static List<String> get bonusSunnahKeys =>
+      [for (final q in _sunnahQuests) q.$2];
   @override
   State<HomeTab> createState() => _HomeTabState();
 }
@@ -790,7 +812,9 @@ class _HomeTabState extends State<HomeTab> {
       GameService.isPrayerCheckedToday('hadis5'),
     ].where((d) => d).length;
     final wProgress = (wajib / 5).clamp(0.0, 1.0);
-    final sProgress = (sunnah / 8).clamp(0.0, 1.0);
+    // ponytail: denominator dari daftar, bukan literal — ring dan baris
+    // Bonus Quest tidak bisa lagi berbeda hitungan.
+    final sProgress = (sunnah / _sunnahQuests.length).clamp(0.0, 1.0);
     final sqProgress = (sideDone / 4).clamp(0.0, 1.0);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -813,7 +837,8 @@ class _HomeTabState extends State<HomeTab> {
                   children: [
                     _ringStat('WAJIB', '$wajib/5', AppColors.primary),
                     const SizedBox(height: AppSpacing.sm),
-                    _ringStat('SUNNAH', '$sunnah/8', AppColors.secondaryFixed),
+                    _ringStat('SUNNAH', '$sunnah/${_sunnahQuests.length}',
+                        AppColors.secondaryFixed),
                     const SizedBox(height: AppSpacing.sm),
                     _ringStat('SIDE QUEST', '$sideDone/4', AppColors.tertiary),
                   ],
@@ -2030,16 +2055,7 @@ class _BonusQuest extends StatefulWidget {
 class _BonusQuestState extends State<_BonusQuest> {
   bool _expanded = false;
 
-  static const _items = [
-    ('Dhuha', 'dhuha', 'Sunnah mutlak di pagi hari', AppIcons.wbSunny),
-    ('Tahajjud', 'tahajjud', 'Sunnah malam (qiyamul lail)', AppIcons.nightsStay),
-    ('Qobliyah Subuh', 'rawatib_subuh_qobliyah', 'Sunnah sebelum Subuh', AppIcons.history),
-    ('Qobliyah Dzuhur', 'rawatib_dzuhur_qobliyah', 'Sunnah sebelum Dzuhur', AppIcons.history),
-    ("Ba'diyah Dzuhur", 'rawatib_dzuhur_ba_diyyah', 'Sunnah sesudah Dzuhur', AppIcons.history),
-    ('Qobliyah Ashar', 'rawatib_ashar_qobliyah', 'Sunnah sebelum Ashar', AppIcons.history),
-    ("Ba'diyah Maghrib", 'rawatib_maghrib_ba_diyyah', 'Sunnah sesudah Maghrib', AppIcons.history),
-    ("Ba'diyah Isya", 'rawatib_isya_ba_diyyah', 'Sunnah sesudah Isya', AppIcons.history),
-  ];
+  static const _items = _sunnahQuests;
 
   @override
   Widget build(BuildContext context) {

@@ -2122,6 +2122,23 @@ class GameService {
   // ─── Derived getters ───
   static const wajibList = ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya'];
 
+  /// Satu-satunya sumber jenis sholat sunnah yang dilacak app.
+  /// ponytail: daftar baris Bonus Quest (home_tab `_sunnahQuests`) dan
+  /// denominator ring "SUNNAH" membaca panjang list ini — dulu keduanya
+  /// konstanta terpisah (`/8`) yang bisa drift diam-diam tanpa tes gagal.
+  /// Tambah jenis sunnah di sini + case `isSunnahOnTime`/`sunnahHint`-nya;
+  /// tes `sunnah_home_ring_test` menahan keduanya tetap sinkron.
+  static const sunnahKeys = [
+    'dhuha',
+    'tahajjud',
+    'rawatib_subuh_qobliyah',
+    'rawatib_dzuhur_qobliyah',
+    'rawatib_dzuhur_ba_diyyah',
+    'rawatib_ashar_qobliyah',
+    'rawatib_maghrib_ba_diyyah',
+    'rawatib_isya_ba_diyyah',
+  ];
+
   static int get checkedWajibToday => wajibList
       .where(
         (p) =>
@@ -2131,9 +2148,7 @@ class GameService {
 
   static int get sunnahCountToday => _cache.prayerLog
       .where(
-        (l) =>
-            l.date == todayStr() &&
-            (l.type == 'sunnah' || l.prayer.startsWith('rawatib')),
+        (l) => l.date == todayStr() && sunnahKeys.contains(l.prayer),
       )
       .length;
 
