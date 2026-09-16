@@ -7,7 +7,7 @@ import 'package:muslim_leveling/screens/home_tab.dart';
 import 'package:muslim_leveling/theme/app_icons.dart';
 
 // ponytail: runnable check — Bonus Quest collapsed shows active-only subset,
-// tap chevron expands to full 9 rows. Clock frozen at 13:00 → Dhuha window
+// tap chevron expands to full 8 rows. Clock frozen at 13:00 → Dhuha window
 // (terbit+15 .. dzuhur) is active, Tahajjud (isya..imsak) is not.
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +21,7 @@ void main() {
   });
   tearDown(() => GameService.setTestNow(null));
 
-  testWidgets('collapsed shows active only; chevron expands to all 9',
+  testWidgets('collapsed shows active only; chevron expands to all 8',
       (t) async {
     await t.pumpWidget(const MaterialApp(home: Scaffold(body: HomeTab())));
     await t.pump();
@@ -41,5 +41,8 @@ void main() {
     await t.pumpAndSettle();
     expect(find.text('Tahajjud'), findsOneWidget); // expanded → semua tampil
     expect(find.text("Ba'diyah Isya"), findsOneWidget);
+    // Ba'diyah Subuh dibuang — bukan bagian rawatib muakkadah, jadi ia tidak
+    // boleh muncul bahkan di daftar penuh.
+    expect(find.text("Ba'diyah Subuh"), findsNothing);
   });
 }

@@ -2034,7 +2034,6 @@ class _BonusQuestState extends State<_BonusQuest> {
     ('Dhuha', 'dhuha', 'Sunnah mutlak di pagi hari', AppIcons.wbSunny),
     ('Tahajjud', 'tahajjud', 'Sunnah malam (qiyamul lail)', AppIcons.nightsStay),
     ('Qobliyah Subuh', 'rawatib_subuh_qobliyah', 'Sunnah sebelum Subuh', AppIcons.history),
-    ("Ba'diyah Subuh", 'rawatib_subuh_ba_diyyah', 'Sunnah sesudah Subuh', AppIcons.history),
     ('Qobliyah Dzuhur', 'rawatib_dzuhur_qobliyah', 'Sunnah sebelum Dzuhur', AppIcons.history),
     ("Ba'diyah Dzuhur", 'rawatib_dzuhur_ba_diyyah', 'Sunnah sesudah Dzuhur', AppIcons.history),
     ('Qobliyah Ashar', 'rawatib_ashar_qobliyah', 'Sunnah sebelum Ashar', AppIcons.history),

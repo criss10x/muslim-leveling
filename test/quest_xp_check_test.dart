@@ -112,11 +112,12 @@ void main() {
   });
 
   group('sunnah window completeness', () {
-    test('all 9 sunnah keys have an isSunnahOnTime case', () {
-      // ponytail: regression for the rawatib_subuh_ba_diyyah missing-case bug.
+    test('all 8 sunnah keys have an isSunnahOnTime case', () {
+      // ponytail: regression untuk case yang hilang di switch isSunnahOnTime.
+      // Ba'diyah Subuh dibuang — tidak ada dalam rawatib muakkadah.
       final keys = [
         'dhuha', 'tahajjud',
-        'rawatib_subuh_qobliyah', 'rawatib_subuh_ba_diyyah',
+        'rawatib_subuh_qobliyah',
         'rawatib_dzuhur_qobliyah', "rawatib_dzuhur_ba'diyyah",
         'rawatib_ashar_qobliyah',
         "rawatib_maghrib_ba_diyyah", "rawatib_isya_ba_diyyah",

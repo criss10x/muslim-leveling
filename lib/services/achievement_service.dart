@@ -190,13 +190,6 @@ class AchievementService {
       icon: AppIcons.shieldMoon,
     ),
     AchievementDef(
-      id: 'dawn_finisher',
-      title: 'DAWN FINISHER',
-      desc: 'Pertama kali Ba\'diyah Subuh',
-      tier: AchievementTier.rookie,
-      icon: AppIcons.shield,
-    ),
-    AchievementDef(
       id: 'mid_buff',
       title: 'MID BUFF',
       desc: 'Pertama kali Qobliyah Dzuhur',
@@ -371,15 +364,15 @@ class AchievementService {
     ),
     AchievementDef(
       id: 'collector',
-      unlockHint: 'Catat minimal 1× dari 9 jenis sunnah: Dhuha, Tahajjud, Rawatib (5 waktu × 2).',
+      unlockHint: 'Catat minimal 1× dari 8 jenis sunnah: Dhuha, Tahajjud, dan 6 rawatib.',
       title: 'COLLECTOR',
-      desc: 'Log semua 9 jenis sholat sunnah minimal 1×',
+      desc: 'Log semua 8 jenis sholat sunnah minimal 1×',
       tier: AchievementTier.epic,
       icon: AppIcons.collectionsBookmark,
     ),
     AchievementDef(
       id: 'hall_of_fame',
-      unlockHint: 'Buka semua achievement lainnya satu per satu — terakhir dari 88 medali biasa.',
+      unlockHint: 'Buka semua achievement lainnya satu per satu — terakhir dari 87 medali biasa.',
       title: 'HALL OF FAME',
       desc: 'Buka semua achievement lainnya 👑',
       tier: AchievementTier.legendary,
@@ -417,7 +410,7 @@ class AchievementService {
     ),
     AchievementDef(
       id: 'sunnah_master',
-      unlockHint: 'Total catatan 9 jenis sholat sunnah (Dhuha, Rawatib, Tahajjud, dll).',
+      unlockHint: 'Total catatan 8 jenis sholat sunnah (Dhuha, Rawatib, Tahajjud, dll).',
       title: 'SUNNAH MASTER',
       desc: '200 sholat sunnah total',
       tier: AchievementTier.legendary,
@@ -555,6 +548,7 @@ class AchievementService {
     if (raw != null && raw.isNotEmpty) {
       try {
         _unlocked = Map<String, String>.from(jsonDecode(raw) as Map);
+        _pruneUnknown();
         _loaded = true;
         return;
       } catch (e) {
@@ -567,7 +561,17 @@ class AchievementService {
       _unlocked = Map<String, String>.from(remote['unlocked'] as Map);
       await prefs.setString(_prefKey, jsonEncode(_unlocked));
     }
+    _pruneUnknown();
     _loaded = true;
+  }
+
+  /// Medali yang sudah dihapus dari [defs] tidak boleh ikut terhitung —
+  /// state lama user masih menyimpan kuncinya, dan unlockedCount membaca
+  /// panjang map, bukan irisan dengan defs. Prune di sini (semua jalur load
+  /// lewat fungsi ini) alih-alih skrip migrasi sekali jalan.
+  static void _pruneUnknown() {
+    final ids = {for (final d in defs) d.id};
+    _unlocked.removeWhere((id, _) => !ids.contains(id));
   }
 
   static Future<void> _persist() async {
@@ -641,7 +645,6 @@ class AchievementService {
       // First clear sunnah
       'mana_regen' => logged('tilawah'),
       'dawn_buff' => logged('rawatib_subuh_qobliyah'),
-      'dawn_finisher' => logged('rawatib_subuh_ba_diyyah'),
       'mid_buff' => logged('rawatib_dzuhur_qobliyah'),
       'mid_finisher' => logged('rawatib_dzuhur_ba_diyyah'),
       'gold_buff' => logged('rawatib_ashar_qobliyah'),
@@ -676,7 +679,7 @@ class AchievementService {
       'full_combo' => _hasFullComboDay(logs),
       'collector' => const [
         'dhuha', 'tahajjud',
-        'rawatib_subuh_qobliyah', 'rawatib_subuh_ba_diyyah',
+        'rawatib_subuh_qobliyah',
         'rawatib_dzuhur_qobliyah', 'rawatib_dzuhur_ba_diyyah',
         'rawatib_ashar_qobliyah', 'rawatib_maghrib_ba_diyyah',
         'rawatib_isya_ba_diyyah',

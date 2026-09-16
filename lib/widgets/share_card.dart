@@ -408,7 +408,7 @@ Future<void> showShareCard(BuildContext context, AchievementDef def) async {
     // Combo & collection
     'wombo_combo' => '📿 Target zikir tercapai!',
     'full_combo' => '🔥 5 wajib + Tilawah + Dhuha',
-    'collector' => '🏛️ Semua 9 sunnah terkumpul',
+    'collector' => '🏛️ Semua 8 sunnah terkumpul',
     'hall_of_fame' => '👑 Kolektor sejati!',
 
     // Default: just show description
