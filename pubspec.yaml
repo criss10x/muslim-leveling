@@ -9,10 +9,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   shared_preferences: ^2.3.3
   cupertino_icons: ^1.0.8
   google_fonts: ^6.2.1
   collection: ^1.18.0
+  # ponytail: intl: any — versi ditentukan flutter_localizations, bukan kita.
+  intl: any
   image_picker: ^1.1.2
   path_provider: ^2.1.5
   sensors_plus: ^6.1.1
@@ -39,6 +43,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
   assets:
     - assets/images/mosque_bg.jpg
     - assets/images/quran_bg_masjid_interior.jpg

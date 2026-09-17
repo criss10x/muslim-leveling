@@ -1,0 +1,8 @@
+arb-dir: lib/l10n
+template-arb-file: app_id.arb
+output-localization-file: app_localizations.dart
+output-class: AppL10n
+# ponytail: nullable-getter false → AppL10n.of(context) tanpa tanda seru,
+# supaya 400+ pemakaian tidak jadi "AppL10n.of(context)!".
+nullable-getter: false
+untranslated-messages-file: l10n-untranslated.json

@@ -63,6 +63,10 @@ android/app/build/
 # Hermes agent session artifacts
 .hermes/
 
+# ponytail: laporan gen-l10n, digenerate ulang tiap `flutter gen-l10n`.
+# Kosong ({}) = tidak ada key yang lupa diterjemahkan.
+l10n-untranslated.json
+
 # Local design companion sessions
 .superpowers/
 
