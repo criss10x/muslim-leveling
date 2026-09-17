@@ -714,69 +714,6 @@ class _FireflyPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 
-/// Soft "neon breathing" wrapper — pulses a colored glow on a child.
-class NeonPulse extends StatefulWidget {
-  final Widget child;
-  final Color color;
-  final Duration duration;
-  const NeonPulse({
-    super.key,
-    required this.child,
-    required this.color,
-    this.duration = const Duration(seconds: 3),
-  });
-
-  @override
-  State<NeonPulse> createState() => _NeonPulseState();
-}
-
-class _NeonPulseState extends State<NeonPulse>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _ctl;
-
-  @override
-  void initState() {
-    super.initState();
-    _ctl = AnimationController(vsync: this, duration: widget.duration)
-      ..repeat(reverse: true);
-  }
-
-  @override
-  void dispose() {
-    _ctl.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // Light: border-only pulse, no glow (neon = dark language).
-    final light = isLightTheme;
-    return AnimatedBuilder(
-      animation: _ctl,
-      builder: (_, __) {
-        final t = _ctl.value;
-        return Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: widget.color.withValues(alpha: 0.3 + 0.2 * t),
-            ),
-            borderRadius: BorderRadius.circular(AppRadius.xl),
-            boxShadow: light
-                ? null
-                : [
-                    BoxShadow(
-                      color: widget.color.withValues(alpha: 0.1 + 0.25 * t),
-                      blurRadius: 5 + 12 * t,
-                    ),
-                  ],
-          ),
-          child: widget.child,
-        );
-      },
-    );
-  }
-}
-
 /// Progress bar — segmented or continuous, with optional animated gradient.
 class NeonProgressBar extends StatelessWidget {
   final double progress; // 0..1
