@@ -1,13 +1,335 @@
 {
   "@@locale": "en",
+  "@achEarnedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "tier": {
+        "type": "String"
+      }
+    }
+  },
+  "@achHintFallback": {
+    "placeholders": {
+      "desc": {
+        "type": "String"
+      }
+    }
+  },
+  "@achLockedTier": {
+    "placeholders": {
+      "tier": {
+        "type": "String"
+      }
+    }
+  },
+  "@achScreenProgress": {
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "@achSemanticsDetail": {
+    "placeholders": {
+      "state": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      },
+      "desc": {
+        "type": "String"
+      },
+      "tier": {
+        "type": "String"
+      }
+    }
+  },
+  "@achSemanticsUnlocked": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "desc": {
+        "type": "String"
+      },
+      "tier": {
+        "type": "String"
+      }
+    }
+  },
+  "@shareCaption": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "@shareEarnedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "@shareStatComeback": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@shareStatLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "rank": {
+        "type": "String"
+      }
+    }
+  },
+  "achBtnAwesome": "NICE!",
+  "achBtnShare": "Share",
+  "achBtnSkipAll": "Skip all",
+  "achEarnedOn": "Unlocked {date} • {tier}",
+  "achHintFallback": "Complete: {desc}.",
+  "achLockedTier": "Locked • {tier}",
+  "achScreenProgress": " / {total} medals unlocked",
+  "achScreenTitle": "Achievements",
+  "achSectionTitle": "ACHIEVEMENTS",
+  "achSeeAll": "See all",
+  "achSemanticsDetail": "{state}: {title}. {desc}. Tier {tier}.",
+  "achSemanticsUnlocked": "Achievement unlocked: {title}. {desc}. Tier {tier}.",
+  "achStateLocked": "Locked",
+  "achStateUnlocked": "Unlocked",
+  "achTierElite": "ELITE",
+  "achTierEpic": "EPIC",
+  "achTierGold": "GOLD",
+  "achTierLegendary": "LEGENDARY",
+  "achTierRookie": "ROOKIE",
+  "achUnlockedBanner": "ACHIEVEMENT UNLOCKED!",
+  "ach_collector_desc": "Log all 8 types of sunnah prayer at least once",
+  "ach_collector_hint": "Log at least 1× of all 8 sunnah types: Dhuha, Tahajjud, and the 6 rawatib.",
+  "ach_collector_title": "COLLECTOR",
+  "ach_comeback_real_desc": "Bounce back after a broken streak",
+  "ach_comeback_real_title": "COMEBACK IS REAL",
+  "ach_critical_hit_desc": "Prayed within 5 minutes of the adhan",
+  "ach_critical_hit_title": "CRITICAL HIT!",
+  "ach_dawn_buff_desc": "First time logging Qabliyah Fajr",
+  "ach_dawn_buff_title": "DAWN BUFF",
+  "ach_dhuha_secured_desc": "First time logging Dhuha prayer",
+  "ach_dhuha_secured_title": "DHUHA SECURED",
+  "ach_dominating_desc": "Hero Streak 7 days in a row",
+  "ach_dominating_title": "DOMINATING!",
+  "ach_double_kill_desc": "Hero Streak 2 days in a row",
+  "ach_double_kill_title": "DOUBLE KILL",
+  "ach_dusk_finisher_desc": "First time logging Ba'diyah Maghrib",
+  "ach_dusk_finisher_title": "DUSK FINISHER",
+  "ach_dzikir_legend_desc": "50,000× dhikr",
+  "ach_dzikir_legend_hint": "Lifetime dhikr count from the Dhikr tab.",
+  "ach_dzikir_legend_title": "DZIKIR LEGEND",
+  "ach_dzikir_master_desc": "10,000× dhikr",
+  "ach_dzikir_master_title": "DZIKIR MASTER",
+  "ach_dzikir_pemula_desc": "1,000× dhikr",
+  "ach_dzikir_pemula_title": "DHIKR BEGINNER",
+  "ach_early_bird_desc": "20× on-time prayers (±10 min)",
+  "ach_early_bird_hint": "20× on-time prayers (≤10 minutes after the adhan).",
+  "ach_early_bird_title": "EARLY BIRD",
+  "ach_early_game_desc": "Your first Fajr prayer is logged",
+  "ach_early_game_title": "EARLY GAME",
+  "ach_first_blood_desc": "Complete all 5 obligatory prayers in one day (Hero Streak starts!)",
+  "ach_first_blood_hint": "Log 5 obligatory prayers in one day (Fajr, Dhuhr, Asr, Maghrib, Isha).",
+  "ach_first_blood_title": "FIRST BLOOD!",
+  "ach_first_clear_module_desc": "Finish your first Learning module",
+  "ach_first_clear_module_title": "FIRST CLEAR",
+  "ach_first_strike_desc": "Fajr within 15 minutes of the adhan",
+  "ach_first_strike_hint": "Pray Fajr within 15 minutes of the adhan.",
+  "ach_first_strike_title": "FIRST STRIKE",
+  "ach_full_combo_desc": "In one day: 5 obligatory + Tilawah + Dhuha",
+  "ach_full_combo_hint": "In one day: log 5 obligatory + Tilawah + Dhuha.",
+  "ach_full_combo_title": "FULL COMBO",
+  "ach_godlike_desc": "Hero Streak 30 days in a row",
+  "ach_godlike_title": "GODLIKE!",
+  "ach_gold_buff_desc": "First time logging Qabliyah Asr",
+  "ach_gold_buff_title": "GOLD BUFF",
+  "ach_gold_lane_desc": "First time logging Asr prayer",
+  "ach_gold_lane_title": "GOLD LANE",
+  "ach_hadis_champion_desc": "Read 200 hadith",
+  "ach_hadis_champion_title": "HADIS CHAMPION",
+  "ach_hadis_elite_desc": "Read 50 hadith",
+  "ach_hadis_elite_title": "HADIS ELITE",
+  "ach_hadis_grinder_desc": "Read 10 hadith",
+  "ach_hadis_grinder_title": "HADIS GRINDER",
+  "ach_hadis_hero_desc": "Read 350 hadith",
+  "ach_hadis_hero_title": "HADIS HERO",
+  "ach_hadis_legend_desc": "Read 500 hadith",
+  "ach_hadis_legend_title": "HADIS LEGEND",
+  "ach_hadis_rookie_desc": "Read 5 hadith",
+  "ach_hadis_rookie_title": "HADIS ROOKIE",
+  "ach_hadis_veteran_desc": "Read 100 hadith",
+  "ach_hadis_veteran_title": "HADIS VETERAN",
+  "ach_hadis_warrior_desc": "Read 25 hadith",
+  "ach_hadis_warrior_title": "HADIS WARRIOR",
+  "ach_hall_of_fame_desc": "Unlock every other achievement 👑",
+  "ach_hall_of_fame_hint": "Unlock every other achievement one by one — the last of 87 regular medals.",
+  "ach_hall_of_fame_title": "HALL OF FAME",
+  "ach_jamaah_champion_desc": "200× prayers in congregation",
+  "ach_jamaah_champion_title": "JAMAAH CHAMPION",
+  "ach_jamaah_elite_desc": "50× prayers in congregation",
+  "ach_jamaah_elite_title": "JAMAAH ELITE",
+  "ach_jamaah_grinder_desc": "10× prayers in congregation",
+  "ach_jamaah_grinder_title": "JAMAAH GRINDER",
+  "ach_jamaah_hero_desc": "350× prayers in congregation",
+  "ach_jamaah_hero_title": "JAMAAH HERO",
+  "ach_jamaah_legend_desc": "500× prayers in congregation",
+  "ach_jamaah_legend_title": "JAMAAH LEGEND",
+  "ach_jamaah_rookie_desc": "5× prayers in congregation",
+  "ach_jamaah_rookie_title": "JAMAAH ROOKIE",
+  "ach_jamaah_veteran_desc": "100× prayers in congregation",
+  "ach_jamaah_veteran_title": "JAMAAH VETERAN",
+  "ach_jamaah_warrior_desc": "25× prayers in congregation",
+  "ach_jamaah_warrior_title": "JAMAAH WARRIOR",
+  "ach_jungler_desc": "7-day Tilawah streak",
+  "ach_jungler_title": "JUNGLER",
+  "ach_langkah_pertama_desc": "Log your very first prayer",
+  "ach_langkah_pertama_title": "FIRST STEP",
+  "ach_late_game_desc": "First time logging Isha prayer",
+  "ach_late_game_title": "LATE GAME",
+  "ach_legendary_desc": "Hero Streak 100 days in a row",
+  "ach_legendary_title": "LEGENDARY!",
+  "ach_mana_regen_desc": "First time logging Tilawah/Dhikr",
+  "ach_mana_regen_title": "MANA REGEN",
+  "ach_maniac_desc": "Hero Streak 14 days in a row",
+  "ach_maniac_title": "MANIAC!",
+  "ach_mid_buff_desc": "First time logging Qabliyah Dhuhr",
+  "ach_mid_buff_title": "MID BUFF",
+  "ach_mid_finisher_desc": "First time logging Ba'diyah Dhuhr",
+  "ach_mid_finisher_title": "MID FINISHER",
+  "ach_mid_game_desc": "First time logging Dhuhr prayer",
+  "ach_mid_game_title": "MID GAME",
+  "ach_night_finisher_desc": "First time logging Ba'diyah Isha",
+  "ach_night_finisher_title": "NIGHT FINISHER",
+  "ach_phoenix_desc": "Bounce back 3× after a broken streak — never give up",
+  "ach_phoenix_hint": "After a broken streak, start again until 3 comebacks are logged.",
+  "ach_phoenix_title": "PHOENIX",
+  "ach_quiz_mvp_desc": "Perfect 100% score on one quiz",
+  "ach_quiz_mvp_hint": "Take the quiz at the end of a Learning module and answer every question right (100%).",
+  "ach_quiz_mvp_title": "MVP",
+  "ach_quran_adept_desc": "Read 100 verses",
+  "ach_quran_adept_title": "QURAN ADEPT",
+  "ach_quran_apprentice_desc": "Read 50 verses",
+  "ach_quran_apprentice_title": "QURAN APPRENTICE",
+  "ach_quran_champion_desc": "Read 4,000 verses",
+  "ach_quran_champion_title": "QURAN CHAMPION",
+  "ach_quran_guardian_desc": "Read 2,000 verses",
+  "ach_quran_guardian_title": "QURAN GUARDIAN",
+  "ach_quran_hafizh_desc": "Read 1,000 verses",
+  "ach_quran_hafizh_title": "YOUNG HAFIZH",
+  "ach_quran_master_desc": "Read all 6,236 verses (khatm)",
+  "ach_quran_master_hint": "Read 6,236 verses in total (the entire Quran) since first install.",
+  "ach_quran_master_title": "HAFIZH MASTER",
+  "ach_quran_novice_desc": "Read 10 verses",
+  "ach_quran_novice_title": "QURAN NOVICE",
+  "ach_quran_sage_desc": "Read 500 verses",
+  "ach_quran_sage_title": "QURAN SAGE",
+  "ach_quran_scholar_desc": "Read 200 verses",
+  "ach_quran_scholar_title": "QURAN SCHOLAR",
+  "ach_rank_elite_desc": "Reach Level 25",
+  "ach_rank_elite_title": "ELITE",
+  "ach_rank_epic_desc": "Reach Level 60",
+  "ach_rank_epic_title": "EPIC",
+  "ach_rank_master_desc": "Reach Level 40",
+  "ach_rank_master_title": "MASTER",
+  "ach_rank_mythic_desc": "Reach Level 80 — Muslim Mythic!",
+  "ach_rank_mythic_hint": "Level up through XP from daily worship — reaching level 80 takes time.",
+  "ach_rank_mythic_title": "MYTHIC",
+  "ach_rank_warrior_desc": "Reach Level 10",
+  "ach_rank_warrior_title": "WARRIOR",
+  "ach_sage_desc": "Complete all 16 Learning modules",
+  "ach_sage_hint": "Complete all 16 Learning modules (quiz score doesn't matter).",
+  "ach_sage_title": "SAGE",
+  "ach_santri_scholar_desc": "Complete 40 Learning modules",
+  "ach_santri_scholar_hint": "Complete 40 modules in the Learning tab (currently 16, growing over time).",
+  "ach_santri_scholar_title": "SANTRI SCHOLAR",
+  "ach_savage_desc": "Hero Streak 60 days in a row",
+  "ach_savage_title": "SAVAGE!",
+  "ach_sharpshooter_desc": "10× on-time prayers (≤10 minutes)",
+  "ach_sharpshooter_hint": "10× on-time prayers (≤10 minutes after the adhan).",
+  "ach_sharpshooter_title": "SHARPSHOOTER",
+  "ach_subuh_legend_desc": "30-day Fajr streak",
+  "ach_subuh_legend_title": "SUBUH LEGEND",
+  "ach_subuh_solo_carry_desc": "7-day Fajr streak — the hardest lane",
+  "ach_subuh_solo_carry_title": "SUBUH SOLO CARRY",
+  "ach_sultan_sunnah_desc": "50 sunnah prayers in total",
+  "ach_sultan_sunnah_title": "SUNNAH SULTAN",
+  "ach_sunnah_master_desc": "200 sunnah prayers in total",
+  "ach_sunnah_master_hint": "Total logs across all 8 types of sunnah prayer (Dhuha, Rawatib, Tahajjud, etc.).",
+  "ach_sunnah_master_title": "SUNNAH MASTER",
+  "ach_sunset_strike_desc": "First time logging Maghrib prayer",
+  "ach_sunset_strike_title": "SUNSET STRIKE",
+  "ach_tahajjud_secured_desc": "First time logging Tahajjud prayer",
+  "ach_tahajjud_secured_title": "TAHAJJUD SECURED",
+  "ach_tilawah_streak_14_desc": "14-day Tilawah streak",
+  "ach_tilawah_streak_14_title": "RECITATION STREAK",
+  "ach_triple_kill_desc": "Hero Streak 3 days in a row",
+  "ach_triple_kill_title": "TRIPLE KILL",
+  "ach_unstoppable_desc": "Hero Streak 5 days in a row",
+  "ach_unstoppable_title": "UNSTOPPABLE!",
+  "ach_wajib_champion_desc": "400× obligatory prayers",
+  "ach_wajib_champion_title": "WAJIB CHAMPION",
+  "ach_wajib_elite_desc": "100× obligatory prayers",
+  "ach_wajib_elite_title": "WAJIB ELITE",
+  "ach_wajib_grinder_desc": "25× obligatory prayers",
+  "ach_wajib_grinder_title": "WAJIB GRINDER",
+  "ach_wajib_hero_desc": "700× obligatory prayers",
+  "ach_wajib_hero_title": "WAJIB HERO",
+  "ach_wajib_immortal_desc": "Lifetime total of obligatory prayers",
+  "ach_wajib_immortal_hint": "Lifetime cumulative total of obligatory prayers.",
+  "ach_wajib_immortal_title": "WAJIB IMMORTAL",
+  "ach_wajib_master_desc": "1,000× obligatory prayers",
+  "ach_wajib_master_title": "WAJIB MASTER",
+  "ach_wajib_mythic_desc": "1,500× obligatory prayers",
+  "ach_wajib_mythic_title": "WAJIB MYTHIC",
+  "ach_wajib_rookie_desc": "10× obligatory prayers",
+  "ach_wajib_rookie_title": "WAJIB ROOKIE",
+  "ach_wajib_veteran_desc": "200× obligatory prayers",
+  "ach_wajib_veteran_title": "WAJIB VETERAN",
+  "ach_wajib_warrior_desc": "50× obligatory prayers",
+  "ach_wajib_warrior_title": "WAJIB WARRIOR",
+  "ach_wombo_combo_desc": "Finish Daily Dhikr 100 for the first time",
+  "ach_wombo_combo_title": "WOMBO COMBO",
   "appTitle": "Muslim Leveling",
-  "tabHome": "Home",
-  "tabJadwal": "Schedule",
-  "tabQuran": "Quran",
+  "localeEnglish": "English",
+  "localeIndonesian": "Bahasa Indonesia",
+  "localePicked": "Language selected",
   "localeSystem": "Follow System (Phone)",
   "localeTitle": "App language",
-  "localeIndonesian": "Bahasa Indonesia",
-  "localeEnglish": "English",
-  "localePicked": "Language selected",
-  "settingLanguage": "Language"
+  "settingLanguage": "Language",
+  "shareBtnShareAgain": "Share Again",
+  "shareCaption": "I unlocked \"{title}\" in Muslim Leveling! 🎮🕌",
+  "shareEarnedOn": "Earned {date}",
+  "shareErrImage": "Could not render the card image. Try again.",
+  "shareErrPrepare": "Could not prepare the card. Try again.",
+  "shareErrShare": "Could not share the card. Try again.",
+  "shareStatAllModules": "📚 All 16 modules complete!",
+  "shareStatCollector": "👑 True collector!",
+  "shareStatComeback": "Total comebacks: {count} 💪",
+  "shareStatDhikr": "📿 Dhikr goal reached!",
+  "shareStatFajr15": "🎯 Fajr under 15 minutes",
+  "shareStatFajrStreak": "days of Fajr streak 🔥",
+  "shareStatFullCombo": "🔥 5 obligatory + Tilawah + Dhuha",
+  "shareStatHeroStreak": "days of Hero Streak 🔥",
+  "shareStatLearning": "📖 Learning started — keep going!",
+  "shareStatLevel": "Level {level} — {rank}",
+  "shareStatOnTime10": "🎯 10× on-time prayers",
+  "shareStatOnTimeFirst": "⚡ On time from the very first",
+  "shareStatQuizPerfect": "⭐ Perfect score!",
+  "shareStatSunnah": "🏛️ All 8 sunnah collected",
+  "shareStatTilawahStreak": "days of Tilawah streak 🔥",
+  "tabHome": "Home",
+  "tabJadwal": "Schedule",
+  "tabQuran": "Quran"
 }

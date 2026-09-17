@@ -1,13 +1,335 @@
 {
   "@@locale": "id",
+  "@achEarnedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "tier": {
+        "type": "String"
+      }
+    }
+  },
+  "@achHintFallback": {
+    "placeholders": {
+      "desc": {
+        "type": "String"
+      }
+    }
+  },
+  "@achLockedTier": {
+    "placeholders": {
+      "tier": {
+        "type": "String"
+      }
+    }
+  },
+  "@achScreenProgress": {
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "@achSemanticsDetail": {
+    "placeholders": {
+      "state": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      },
+      "desc": {
+        "type": "String"
+      },
+      "tier": {
+        "type": "String"
+      }
+    }
+  },
+  "@achSemanticsUnlocked": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "desc": {
+        "type": "String"
+      },
+      "tier": {
+        "type": "String"
+      }
+    }
+  },
+  "@shareCaption": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "@shareEarnedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "@shareStatComeback": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@shareStatLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "rank": {
+        "type": "String"
+      }
+    }
+  },
+  "achBtnAwesome": "MANTAP!",
+  "achBtnShare": "Bagikan",
+  "achBtnSkipAll": "Lewati semua",
+  "achEarnedOn": "Terbuka {date} • {tier}",
+  "achHintFallback": "Selesaikan: {desc}.",
+  "achLockedTier": "Terkunci • {tier}",
+  "achScreenProgress": " / {total} medali terbuka",
+  "achScreenTitle": "Achievements",
+  "achSectionTitle": "ACHIEVEMENTS",
+  "achSeeAll": "Lihat semua",
+  "achSemanticsDetail": "{state}: {title}. {desc}. Tier {tier}.",
+  "achSemanticsUnlocked": "Achievement terbuka: {title}. {desc}. Tier {tier}.",
+  "achStateLocked": "Terkunci",
+  "achStateUnlocked": "Terbuka",
+  "achTierElite": "ELITE",
+  "achTierEpic": "EPIC",
+  "achTierGold": "GOLD",
+  "achTierLegendary": "LEGENDARY",
+  "achTierRookie": "ROOKIE",
+  "achUnlockedBanner": "PENCAPAIAN TERBUKA!",
+  "ach_collector_desc": "Log semua 8 jenis sholat sunnah minimal 1×",
+  "ach_collector_hint": "Catat minimal 1× dari 8 jenis sunnah: Dhuha, Tahajjud, dan 6 rawatib.",
+  "ach_collector_title": "COLLECTOR",
+  "ach_comeback_real_desc": "Bangkit lagi setelah streak putus",
+  "ach_comeback_real_title": "COMEBACK IS REAL",
+  "ach_critical_hit_desc": "Sholat wajib ≤5 menit setelah adzan",
+  "ach_critical_hit_title": "CRITICAL HIT!",
+  "ach_dawn_buff_desc": "Pertama kali Qobliyah Subuh",
+  "ach_dawn_buff_title": "DAWN BUFF",
+  "ach_dhuha_secured_desc": "Pertama kali log sholat Dhuha",
+  "ach_dhuha_secured_title": "DHUHA SECURED",
+  "ach_dominating_desc": "Hero Streak 7 hari beruntun",
+  "ach_dominating_title": "DOMINATING!",
+  "ach_double_kill_desc": "Hero Streak 2 hari beruntun",
+  "ach_double_kill_title": "DOUBLE KILL",
+  "ach_dusk_finisher_desc": "Pertama kali Ba\\'diyah Maghrib",
+  "ach_dusk_finisher_title": "DUSK FINISHER",
+  "ach_dzikir_legend_desc": "Dzikir 50.000x",
+  "ach_dzikir_legend_hint": "Total hitungan dzikir dari tab Dzikir seumur hidup akun.",
+  "ach_dzikir_legend_title": "DZIKIR LEGEND",
+  "ach_dzikir_master_desc": "Dzikir 10.000x",
+  "ach_dzikir_master_title": "DZIKIR MASTER",
+  "ach_dzikir_pemula_desc": "Dzikir 1.000x",
+  "ach_dzikir_pemula_title": "DZIKIR PEMULA",
+  "ach_early_bird_desc": "20x sholat tepat waktu (±10m)",
+  "ach_early_bird_hint": "20× sholat tepat waktu (≤10 menit setelah adzan).",
+  "ach_early_bird_title": "EARLY BIRD",
+  "ach_early_game_desc": "Sholat Subuh pertamamu tercatat",
+  "ach_early_game_title": "EARLY GAME",
+  "ach_first_blood_desc": "Selesaikan 5 sholat wajib dalam 1 hari (Hero Streak dimulai!)",
+  "ach_first_blood_hint": "Catat 5 sholat wajib dalam satu hari (Subuh, Dzuhur, Ashar, Maghrib, Isya).",
+  "ach_first_blood_title": "FIRST BLOOD!",
+  "ach_first_clear_module_desc": "Selesaikan modul Belajar pertamamu",
+  "ach_first_clear_module_title": "FIRST CLEAR",
+  "ach_first_strike_desc": "Sholat Subuh ≤15 menit setelah adzan",
+  "ach_first_strike_hint": "Sholat Subuh dalam 15 menit setelah adzan.",
+  "ach_first_strike_title": "FIRST STRIKE",
+  "ach_full_combo_desc": "Dalam 1 hari: 5 wajib + Tilawah + Dhuha",
+  "ach_full_combo_hint": "Dalam satu hari: catat 5 wajib + Tilawah + Dhuha.",
+  "ach_full_combo_title": "FULL COMBO",
+  "ach_godlike_desc": "Hero Streak 30 hari beruntun",
+  "ach_godlike_title": "GODLIKE!",
+  "ach_gold_buff_desc": "Pertama kali Qobliyah Ashar",
+  "ach_gold_buff_title": "GOLD BUFF",
+  "ach_gold_lane_desc": "Pertama kali log sholat Ashar",
+  "ach_gold_lane_title": "GOLD LANE",
+  "ach_hadis_champion_desc": "Baca 200 hadis",
+  "ach_hadis_champion_title": "HADIS CHAMPION",
+  "ach_hadis_elite_desc": "Baca 50 hadis",
+  "ach_hadis_elite_title": "HADIS ELITE",
+  "ach_hadis_grinder_desc": "Baca 10 hadis",
+  "ach_hadis_grinder_title": "HADIS GRINDER",
+  "ach_hadis_hero_desc": "Baca 350 hadis",
+  "ach_hadis_hero_title": "HADIS HERO",
+  "ach_hadis_legend_desc": "Baca 500 hadis",
+  "ach_hadis_legend_title": "HADIS LEGEND",
+  "ach_hadis_rookie_desc": "Baca 5 hadis",
+  "ach_hadis_rookie_title": "HADIS ROOKIE",
+  "ach_hadis_veteran_desc": "Baca 100 hadis",
+  "ach_hadis_veteran_title": "HADIS VETERAN",
+  "ach_hadis_warrior_desc": "Baca 25 hadis",
+  "ach_hadis_warrior_title": "HADIS WARRIOR",
+  "ach_hall_of_fame_desc": "Buka semua achievement lainnya 👑",
+  "ach_hall_of_fame_hint": "Buka semua achievement lainnya satu per satu — terakhir dari 87 medali biasa.",
+  "ach_hall_of_fame_title": "HALL OF FAME",
+  "ach_jamaah_champion_desc": "200x sholat berjamaah",
+  "ach_jamaah_champion_title": "JAMAAH CHAMPION",
+  "ach_jamaah_elite_desc": "50x sholat berjamaah",
+  "ach_jamaah_elite_title": "JAMAAH ELITE",
+  "ach_jamaah_grinder_desc": "10x sholat berjamaah",
+  "ach_jamaah_grinder_title": "JAMAAH GRINDER",
+  "ach_jamaah_hero_desc": "350x sholat berjamaah",
+  "ach_jamaah_hero_title": "JAMAAH HERO",
+  "ach_jamaah_legend_desc": "500x sholat berjamaah",
+  "ach_jamaah_legend_title": "JAMAAH LEGEND",
+  "ach_jamaah_rookie_desc": "5x sholat berjamaah",
+  "ach_jamaah_rookie_title": "JAMAAH ROOKIE",
+  "ach_jamaah_veteran_desc": "100x sholat berjamaah",
+  "ach_jamaah_veteran_title": "JAMAAH VETERAN",
+  "ach_jamaah_warrior_desc": "25x sholat berjamaah",
+  "ach_jamaah_warrior_title": "JAMAAH WARRIOR",
+  "ach_jungler_desc": "Streak Tilawah 7 hari beruntun",
+  "ach_jungler_title": "JUNGLER",
+  "ach_langkah_pertama_desc": "Log sholat pertama kamu",
+  "ach_langkah_pertama_title": "LANGKAH PERTAMA",
+  "ach_late_game_desc": "Pertama kali log sholat Isya",
+  "ach_late_game_title": "LATE GAME",
+  "ach_legendary_desc": "Hero Streak 100 hari beruntun",
+  "ach_legendary_title": "LEGENDARY!",
+  "ach_mana_regen_desc": "Pertama kali log Tilawah/Dzikir",
+  "ach_mana_regen_title": "MANA REGEN",
+  "ach_maniac_desc": "Hero Streak 14 hari beruntun",
+  "ach_maniac_title": "MANIAC!",
+  "ach_mid_buff_desc": "Pertama kali Qobliyah Dzuhur",
+  "ach_mid_buff_title": "MID BUFF",
+  "ach_mid_finisher_desc": "Pertama kali Ba\\'diyah Dzuhur",
+  "ach_mid_finisher_title": "MID FINISHER",
+  "ach_mid_game_desc": "Pertama kali log sholat Dzuhur",
+  "ach_mid_game_title": "MID GAME",
+  "ach_night_finisher_desc": "Pertama kali Ba\\'diyah Isya",
+  "ach_night_finisher_title": "NIGHT FINISHER",
+  "ach_phoenix_desc": "Bangkit 3× setelah streak putus — gak pernah nyerah",
+  "ach_phoenix_hint": "Setelah streak putus, mulai lagi sampai tercatat 3 kali bangkit.",
+  "ach_phoenix_title": "PHOENIX",
+  "ach_quiz_mvp_desc": "Skor sempurna 100% di satu quiz",
+  "ach_quiz_mvp_hint": "Kerjakan kuis di akhir modul Belajar dan jawab semua benar (100%).",
+  "ach_quiz_mvp_title": "MVP",
+  "ach_quran_adept_desc": "Baca 100 ayat",
+  "ach_quran_adept_title": "QURAN ADEPT",
+  "ach_quran_apprentice_desc": "Baca 50 ayat",
+  "ach_quran_apprentice_title": "QURAN APPRENTICE",
+  "ach_quran_champion_desc": "Baca 4.000 ayat",
+  "ach_quran_champion_title": "QURAN CHAMPION",
+  "ach_quran_guardian_desc": "Baca 2.000 ayat",
+  "ach_quran_guardian_title": "QURAN GUARDIAN",
+  "ach_quran_hafizh_desc": "Baca 1.000 ayat",
+  "ach_quran_hafizh_title": "HAFIZH MUDA",
+  "ach_quran_master_desc": "Baca 6.236 ayat (khatam)",
+  "ach_quran_master_hint": "Baca total 6.236 ayat (seluruh Al-Qur\\'an) sejak pertama install.",
+  "ach_quran_master_title": "HAFIZH MASTER",
+  "ach_quran_novice_desc": "Baca 10 ayat",
+  "ach_quran_novice_title": "QURAN NOVICE",
+  "ach_quran_sage_desc": "Baca 500 ayat",
+  "ach_quran_sage_title": "QURAN SAGE",
+  "ach_quran_scholar_desc": "Baca 200 ayat",
+  "ach_quran_scholar_title": "QURAN SCHOLAR",
+  "ach_rank_elite_desc": "Capai Level 25",
+  "ach_rank_elite_title": "ELITE",
+  "ach_rank_epic_desc": "Capai Level 60",
+  "ach_rank_epic_title": "EPIC",
+  "ach_rank_master_desc": "Capai Level 40",
+  "ach_rank_master_title": "MASTER",
+  "ach_rank_mythic_desc": "Capai Level 80 — Muslim Mythic!",
+  "ach_rank_mythic_hint": "Naik level lewat XP dari ibadah harian — naik level 80 butuh waktu.",
+  "ach_rank_mythic_title": "MYTHIC",
+  "ach_rank_warrior_desc": "Capai Level 10",
+  "ach_rank_warrior_title": "WARRIOR",
+  "ach_sage_desc": "Tamatkan semua 16 modul Belajar",
+  "ach_sage_hint": "Selesaikan semua 16 modul Belajar (skor kuis terserah).",
+  "ach_sage_title": "SAGE",
+  "ach_santri_scholar_desc": "Selesaikan 40 modul Belajar",
+  "ach_santri_scholar_hint": "Selesaikan 40 modul di tab Belajar (saat ini 16 modul, naik bertahap).",
+  "ach_santri_scholar_title": "SANTRI SCHOLAR",
+  "ach_savage_desc": "Hero Streak 60 hari beruntun",
+  "ach_savage_title": "SAVAGE!",
+  "ach_sharpshooter_desc": "10× sholat tepat waktu (≤10 menit)",
+  "ach_sharpshooter_hint": "10× sholat tepat waktu (≤10 menit setelah adzan).",
+  "ach_sharpshooter_title": "SHARPSHOOTER",
+  "ach_subuh_legend_desc": "Streak Subuh 30 hari",
+  "ach_subuh_legend_title": "SUBUH LEGEND",
+  "ach_subuh_solo_carry_desc": "Streak Subuh 7 hari beruntun — lane tersulit",
+  "ach_subuh_solo_carry_title": "SUBUH SOLO CARRY",
+  "ach_sultan_sunnah_desc": "50 sholat sunnah total",
+  "ach_sultan_sunnah_title": "SULTAN SUNNAH",
+  "ach_sunnah_master_desc": "200 sholat sunnah total",
+  "ach_sunnah_master_hint": "Total catatan 8 jenis sholat sunnah (Dhuha, Rawatib, Tahajjud, dll).",
+  "ach_sunnah_master_title": "SUNNAH MASTER",
+  "ach_sunset_strike_desc": "Pertama kali log sholat Maghrib",
+  "ach_sunset_strike_title": "SUNSET STRIKE",
+  "ach_tahajjud_secured_desc": "Pertama kali log sholat Tahajjud",
+  "ach_tahajjud_secured_title": "TAHAJJUD SECURED",
+  "ach_tilawah_streak_14_desc": "Streak Tilawah 14 hari",
+  "ach_tilawah_streak_14_title": "TILAWAH STREAK",
+  "ach_triple_kill_desc": "Hero Streak 3 hari beruntun",
+  "ach_triple_kill_title": "TRIPLE KILL",
+  "ach_unstoppable_desc": "Hero Streak 5 hari beruntun",
+  "ach_unstoppable_title": "UNSTOPPABLE!",
+  "ach_wajib_champion_desc": "400x sholat wajib",
+  "ach_wajib_champion_title": "WAJIB CHAMPION",
+  "ach_wajib_elite_desc": "100x sholat wajib",
+  "ach_wajib_elite_title": "WAJIB ELITE",
+  "ach_wajib_grinder_desc": "25x sholat wajib",
+  "ach_wajib_grinder_title": "WAJIB GRINDER",
+  "ach_wajib_hero_desc": "700x sholat wajib",
+  "ach_wajib_hero_title": "WAJIB HERO",
+  "ach_wajib_immortal_desc": "2.000x sholat wajib",
+  "ach_wajib_immortal_hint": "Total catatan sholat wajib kumulatif seumur hidup akun.",
+  "ach_wajib_immortal_title": "WAJIB IMMORTAL",
+  "ach_wajib_master_desc": "1.000x sholat wajib",
+  "ach_wajib_master_title": "WAJIB MASTER",
+  "ach_wajib_mythic_desc": "1.500x sholat wajib",
+  "ach_wajib_mythic_title": "WAJIB MYTHIC",
+  "ach_wajib_rookie_desc": "10x sholat wajib",
+  "ach_wajib_rookie_title": "WAJIB ROOKIE",
+  "ach_wajib_veteran_desc": "200x sholat wajib",
+  "ach_wajib_veteran_title": "WAJIB VETERAN",
+  "ach_wajib_warrior_desc": "50x sholat wajib",
+  "ach_wajib_warrior_title": "WAJIB WARRIOR",
+  "ach_wombo_combo_desc": "Tuntaskan Daily Zikir 100 pertama kali",
+  "ach_wombo_combo_title": "WOMBO COMBO",
   "appTitle": "Muslim Leveling",
-  "tabHome": "Beranda",
-  "tabJadwal": "Jadwal",
-  "tabQuran": "Al-Quran",
+  "localeEnglish": "English",
+  "localeIndonesian": "Bahasa Indonesia",
+  "localePicked": "Bahasa dipilih",
   "localeSystem": "Ikut Sistem (HP)",
   "localeTitle": "Bahasa aplikasi",
-  "localeIndonesian": "Bahasa Indonesia",
-  "localeEnglish": "English",
-  "localePicked": "Bahasa dipilih",
-  "settingLanguage": "Bahasa"
+  "settingLanguage": "Bahasa",
+  "shareBtnShareAgain": "Bagikan Lagi",
+  "shareCaption": "Aku unlock \"{title}\" di Muslim Leveling! 🎮🕌",
+  "shareEarnedOn": "Diraih {date}",
+  "shareErrImage": "Gagal membuat gambar kartu. Coba lagi.",
+  "shareErrPrepare": "Gagal menyiapkan kartu. Coba lagi.",
+  "shareErrShare": "Gagal membagikan kartu. Coba lagi.",
+  "shareStatAllModules": "📚 Semua 16 modul selesai!",
+  "shareStatCollector": "👑 Kolektor sejati!",
+  "shareStatComeback": "Total comeback: {count} kali 💪",
+  "shareStatDhikr": "📿 Target zikir tercapai!",
+  "shareStatFajr15": "🎯 Subuh sebelum 15 menit",
+  "shareStatFajrStreak": "hari Subuh beruntun 🔥",
+  "shareStatFullCombo": "🔥 5 wajib + Tilawah + Dhuha",
+  "shareStatHeroStreak": "hari Hero Streak 🔥",
+  "shareStatLearning": "📖 Mulai belajar — teruskan!",
+  "shareStatLevel": "Level {level} — {rank}",
+  "shareStatOnTime10": "🎯 10× sholat tepat waktu",
+  "shareStatOnTimeFirst": "⚡ Tepat waktu sejak pertama",
+  "shareStatQuizPerfect": "⭐ Skor sempurna!",
+  "shareStatSunnah": "🏛️ Semua 8 sunnah terkumpul",
+  "shareStatTilawahStreak": "hari Tilawah beruntun 🔥",
+  "tabHome": "Beranda",
+  "tabJadwal": "Jadwal",
+  "tabQuran": "Al-Quran"
 }

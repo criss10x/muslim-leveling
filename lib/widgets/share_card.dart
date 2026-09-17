@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../theme/app_theme.dart';
+import '../l10n/app_localizations.dart';
 import '../services/achievement_service.dart';
 import '../services/game_service.dart';
 import 'achievement_medal.dart';
@@ -127,6 +128,7 @@ class _GeoDivider extends StatelessWidget {
 // ── The card widget (inside RepaintBoundary) ──
 
 class _ShareCardRender extends StatelessWidget {
+  final AppL10n l10n;
   final AchievementDef def;
   final String username;
   final String statLine;
@@ -135,6 +137,7 @@ class _ShareCardRender extends StatelessWidget {
   final String? unlockedDate;
 
   const _ShareCardRender({
+    required this.l10n,
     required this.def,
     required this.username,
     required this.statLine,
@@ -222,7 +225,7 @@ class _ShareCardRender extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    tierLabel(def.tier),
+                    tierLabel(l10n, def.tier),
                     style: TextStyle(
                       fontSize: 9,
                       fontWeight: FontWeight.w700,
@@ -259,7 +262,7 @@ class _ShareCardRender extends StatelessWidget {
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(
-                      def.title,
+                      def.localizedTitle(l10n),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 22,
@@ -333,7 +336,7 @@ class _ShareCardRender extends StatelessWidget {
                 if (unlockedDate != null && unlockedDate!.isNotEmpty) ...[
                   const SizedBox(height: 2),
                   Text(
-                    'Diraih $unlockedDate',
+                    l10n.shareEarnedOn(unlockedDate!),
                     style: TextStyle(
                       fontSize: 9,
                       color: accent.withValues(alpha: 0.7),
@@ -356,6 +359,9 @@ class _ShareCardRender extends StatelessWidget {
 
 /// Tampilkan preview kartu achievement, lalu share/generate gambar.
 Future<void> showShareCard(BuildContext context, AchievementDef def) async {
+  // Ditangkap sebelum async gap: dipakai di dialog yang sudah dibuka, jadi
+  // teksnya ikut bahasa saat share dimulai walau locale berubah di tengah.
+  final l10n = AppL10n.of(context);
   final state = GameService.current;
   final rankTitle = GameService.getRankTitle(state.level);
   final prefs = await SharedPreferences.getInstance();
@@ -376,12 +382,12 @@ Future<void> showShareCard(BuildContext context, AchievementDef def) async {
     'godlike' ||
     'savage' ||
     'legendary' =>
-      'hari Hero Streak 🔥',
+      l10n.shareStatHeroStreak,
 
     // Per-prayer streaks
     'subuh_solo_carry' =>
-      'hari Subuh beruntun 🔥',
-    'jungler' => 'hari Tilawah beruntun 🔥',
+      l10n.shareStatFajrStreak,
+    'jungler' => l10n.shareStatTilawahStreak,
 
     // Level-based — jumlah level tidak ada glyph, biarkan tampil
     'rank_warrior' ||
@@ -389,30 +395,30 @@ Future<void> showShareCard(BuildContext context, AchievementDef def) async {
     'rank_master' ||
     'rank_epic' ||
     'rank_mythic' =>
-      'Level $level — ${GameService.getRankTitle(level)}',
+      l10n.shareStatLevel(level, GameService.getRankTitle(level)),
 
     // Comeback
     'comeback_real' ||
-    'phoenix' => 'Total comeback: ${state.comebackCount} kali 💪',
+    'phoenix' => l10n.shareStatComeback(state.comebackCount),
 
     // Precision
-    'critical_hit' => '⚡ Tepat waktu sejak pertama',
-    'first_strike' => '🎯 Subuh sebelum 15 menit',
-    'sharpshooter' => '🎯 10× sholat tepat waktu',
+    'critical_hit' => l10n.shareStatOnTimeFirst,
+    'first_strike' => l10n.shareStatFajr15,
+    'sharpshooter' => l10n.shareStatOnTime10,
 
     // Learning
-    'first_clear_module' => '📖 Mulai belajar — teruskan!',
-    'quiz_mvp' => '⭐ Skor sempurna!',
-    'sage' => '📚 Semua 16 modul selesai!',
+    'first_clear_module' => l10n.shareStatLearning,
+    'quiz_mvp' => l10n.shareStatQuizPerfect,
+    'sage' => l10n.shareStatAllModules,
 
     // Combo & collection
-    'wombo_combo' => '📿 Target zikir tercapai!',
-    'full_combo' => '🔥 5 wajib + Tilawah + Dhuha',
-    'collector' => '🏛️ Semua 8 sunnah terkumpul',
-    'hall_of_fame' => '👑 Kolektor sejati!',
+    'wombo_combo' => l10n.shareStatDhikr,
+    'full_combo' => l10n.shareStatFullCombo,
+    'collector' => l10n.shareStatSunnah,
+    'hall_of_fame' => l10n.shareStatCollector,
 
     // Default: just show description
-    _ => hasGlyph ? '' : def.desc,
+    _ => hasGlyph ? '' : def.localizedDesc(l10n),
   };
 
   if (!context.mounted) return;
@@ -422,6 +428,7 @@ Future<void> showShareCard(BuildContext context, AchievementDef def) async {
     barrierDismissible: false,
     barrierColor: Colors.black.withValues(alpha: 0.7),
     builder: (ctx) => _SharePreviewDialog(
+      l10n: l10n,
       def: def,
       username: username,
       statLine: statLine,
@@ -433,6 +440,7 @@ Future<void> showShareCard(BuildContext context, AchievementDef def) async {
 }
 
 class _SharePreviewDialog extends StatefulWidget {
+  final AppL10n l10n;
   final AchievementDef def;
   final String username;
   final String statLine;
@@ -441,6 +449,7 @@ class _SharePreviewDialog extends StatefulWidget {
   final String? unlockedDate;
 
   const _SharePreviewDialog({
+    required this.l10n,
     required this.def,
     required this.username,
     required this.statLine,
@@ -508,7 +517,7 @@ class _SharePreviewDialogState extends State<_SharePreviewDialog>
           _repaintKey.currentContext?.findRenderObject()
               as RenderRepaintBoundary?;
       if (boundary == null) {
-        _fail('Gagal menyiapkan kartu. Coba lagi.');
+        _fail(widget.l10n.shareErrPrepare);
         return;
       }
 
@@ -518,7 +527,7 @@ class _SharePreviewDialogState extends State<_SharePreviewDialog>
       if (!mounted) return; // P2: guard setelah async gap
       final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
       if (bytes == null) {
-        _fail('Gagal membuat gambar kartu. Coba lagi.');
+        _fail(widget.l10n.shareErrImage);
         return;
       }
 
@@ -531,13 +540,15 @@ class _SharePreviewDialogState extends State<_SharePreviewDialog>
       const channel = MethodChannel('muslim_leveling/share');
       await channel.invokeMethod('shareFile', {
         'filePath': file.path,
-        'text': 'Aku unlock "${widget.def.title}" di Muslim Leveling! 🎮🕌',
+        'text': widget.l10n.shareCaption(
+          widget.def.localizedTitle(widget.l10n),
+        ),
       });
       // P1: _saved baru boleh true setelah share intent sukses;
       // kalau user batalkan di share sheet, label tidak flip ke 'Bagikan Lagi'.
       if (mounted) setState(() => _saved = true);
     } catch (_) {
-      _fail('Gagal membagikan kartu. Coba lagi.');
+      _fail(widget.l10n.shareErrShare);
     }
     // P2: jangan flash — tunggu sampai minimal 300ms total.
     final elapsed = sw.elapsedMilliseconds;
@@ -557,6 +568,7 @@ class _SharePreviewDialogState extends State<_SharePreviewDialog>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = widget.l10n;
     final (_, _, glow, accent) = _tierStyle(widget.def.tier, widget.def.id);
     final hasStars = _starCtrl.isAnimating;
 
@@ -578,6 +590,7 @@ class _SharePreviewDialogState extends State<_SharePreviewDialog>
                   child: Stack(
                     children: [
                       _ShareCardRender(
+                        l10n: l10n,
                         def: widget.def,
                         username: widget.username,
                         statLine: widget.statLine,
@@ -616,7 +629,7 @@ class _SharePreviewDialogState extends State<_SharePreviewDialog>
               Expanded(
                 child: _primaryBtn(
                   icon: AppIcons.share,
-                  label: _saved ? 'Bagikan Lagi' : 'Bagikan',
+                  label: _saved ? l10n.shareBtnShareAgain : l10n.achBtnShare,
                   loading: _sharing,
                   onTap: _captureAndShare,
                 ),

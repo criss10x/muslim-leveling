@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../theme/app_theme.dart';
+import '../l10n/app_localizations.dart';
 import '../services/achievement_service.dart';
 import 'announcer_gate.dart';
 import 'common.dart';
@@ -29,12 +30,14 @@ import '../theme/app_icons.dart';
   ),
 };
 
-String tierLabel(AchievementTier tier) => switch (tier) {
-  AchievementTier.rookie => 'ROOKIE',
-  AchievementTier.elite => 'ELITE',
-  AchievementTier.gold => 'GOLD',
-  AchievementTier.epic => 'EPIC',
-  AchievementTier.legendary => 'LEGENDARY',
+/// Label tier ikut bahasa aktif. Nama tier di ARB (dulu literal di sini)
+/// supaya nol string UI yang tersisa di Dart.
+String tierLabel(AppL10n l10n, AchievementTier tier) => switch (tier) {
+  AchievementTier.rookie => l10n.achTierRookie,
+  AchievementTier.elite => l10n.achTierElite,
+  AchievementTier.gold => l10n.achTierGold,
+  AchievementTier.epic => l10n.achTierEpic,
+  AchievementTier.legendary => l10n.achTierLegendary,
 };
 
 class AchievementMedal extends StatelessWidget {
@@ -295,6 +298,7 @@ Future<void> showAchievementUnlock(
   AchievementDef def, {
   VoidCallback? onSkipAll,
 }) async {
+  final l10n = AppL10n.of(context);
   final (c1, _) = tierColors(def.tier);
   final reduceMotion = MediaQuery.of(context).disableAnimations;
   // Sinyal kinestetik saat popup muncul — satu baris, tanpa paket tambahan.
@@ -325,9 +329,11 @@ Future<void> showAchievementUnlock(
             Padding(
               padding: const EdgeInsets.all(AppSpacing.xl),
               child: Semantics(
-                label:
-                    'Achievement terbuka: ${def.title}. ${def.desc}. '
-                    'Tier ${tierLabel(def.tier)}.',
+                label: l10n.achSemanticsUnlocked(
+                  def.localizedTitle(l10n),
+                  def.localizedDesc(l10n),
+                  tierLabel(l10n, def.tier),
+                ),
                 child: GlassPanel(
                   padding: const EdgeInsets.all(AppSpacing.xl),
                   borderColor: c1.withValues(alpha: 0.5),
@@ -335,7 +341,7 @@ Future<void> showAchievementUnlock(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'PENCAPAIAN TERBUKA!',
+                        l10n.achUnlockedBanner,
                         style: AppText.labelCaps().copyWith(
                           color: AppColors.secondaryFixed,
                           letterSpacing: 2,
@@ -362,7 +368,7 @@ Future<void> showAchievementUnlock(
                       Semantics(
                         header: true,
                         child: Text(
-                          def.title,
+                          def.localizedTitle(l10n),
                           textAlign: TextAlign.center,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
@@ -381,7 +387,7 @@ Future<void> showAchievementUnlock(
                       ),
                       const SizedBox(height: AppSpacing.xs),
                       Text(
-                        def.desc,
+                        def.localizedDesc(l10n),
                         textAlign: TextAlign.center,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
@@ -396,7 +402,7 @@ Future<void> showAchievementUnlock(
                         children: [
                           Expanded(
                             child: HeroButton(
-                              label: 'MANTAP!',
+                              label: l10n.achBtnAwesome,
                               trailingIcon: AppIcons.emojiEvents,
                               onPressed: () => Navigator.of(ctx).pop(),
                             ),
@@ -425,7 +431,7 @@ Future<void> showAchievementUnlock(
                                 Icon(AppIcons.share, size: 16, color: c1),
                                 const SizedBox(width: 6),
                                 Text(
-                                  'Bagikan',
+                                  l10n.achBtnShare,
                                   style: AppText.bodyLg().copyWith(color: c1),
                                 ),
                               ],
@@ -440,7 +446,7 @@ Future<void> showAchievementUnlock(
                             Navigator.of(ctx).pop();
                           },
                           child: Text(
-                            'Lewati semua',
+                            l10n.achBtnSkipAll,
                             style: AppText.bodyMd().copyWith(
                               color: AppColors.onSurfaceVariant,
                             ),
@@ -475,6 +481,7 @@ void showAchievementDetail(
   required bool unlocked,
   String? unlockedDate,
 }) {
+  final l10n = AppL10n.of(context);
   final (c1, _) = tierColors(def.tier);
   showDialog(
     context: context,
@@ -487,16 +494,19 @@ void showAchievementDetail(
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.lg),
         child: Semantics(
-          label:
-              '${unlocked ? "Terbuka" : "Terkunci"}: ${def.title}. '
-              '${def.desc}. Tier ${tierLabel(def.tier)}.',
+          label: l10n.achSemanticsDetail(
+            unlocked ? l10n.achStateUnlocked : l10n.achStateLocked,
+            def.localizedTitle(l10n),
+            def.localizedDesc(l10n),
+            tierLabel(l10n, def.tier),
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               AchievementMedal(def: def, unlocked: unlocked, size: 96),
               const SizedBox(height: AppSpacing.md),
               Text(
-                def.title,
+                def.localizedTitle(l10n),
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -506,7 +516,7 @@ void showAchievementDetail(
               ),
               const SizedBox(height: AppSpacing.xs),
               Text(
-                def.desc,
+                def.localizedDesc(l10n),
                 textAlign: TextAlign.center,
                 maxLines: 4,
                 overflow: TextOverflow.ellipsis,
@@ -520,7 +530,7 @@ void showAchievementDetail(
                 Padding(
                   padding: const EdgeInsets.only(top: AppSpacing.sm),
                   child: Text(
-                    def.hint,
+                    def.localizedHint(l10n),
                     textAlign: TextAlign.center,
                     style: AppText.bodyMd().copyWith(
                       color: AppColors.secondaryFixed,
@@ -530,8 +540,11 @@ void showAchievementDetail(
               const SizedBox(height: AppSpacing.sm),
               Text(
                 unlocked
-                    ? 'Terbuka ${unlockedDate ?? ''} • ${tierLabel(def.tier)}'
-                    : 'Terkunci • ${tierLabel(def.tier)}',
+                    ? l10n.achEarnedOn(
+                        unlockedDate ?? '',
+                        tierLabel(l10n, def.tier),
+                      )
+                    : l10n.achLockedTier(tierLabel(l10n, def.tier)),
                 style: AppText.labelCaps().copyWith(
                   color: unlocked ? c1 : AppColors.onSurfaceVariant,
                   fontSize: 10,
@@ -550,7 +563,7 @@ void showAchievementDetail(
                   },
                   icon: Icon(AppIcons.share, size: 16, color: c1),
                   label: Text(
-                    'Bagikan',
+                    l10n.achBtnShare,
                     style: AppText.bodyLg().copyWith(color: c1),
                   ),
                   style: OutlinedButton.styleFrom(

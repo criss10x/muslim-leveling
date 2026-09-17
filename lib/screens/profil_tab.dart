@@ -2289,7 +2289,7 @@ class _ProfilTabState extends State<ProfilTab> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         HudHeader(
-          'ACHIEVEMENTS',
+          AppL10n.of(context).achSectionTitle,
           meta: '$unlockedCount/${defs.length}',
           accent: AppColors.secondaryFixed,
         ),
@@ -2329,7 +2329,7 @@ class _ProfilTabState extends State<ProfilTab> {
                 // pernah overflow di layar sempit.
                 Expanded(
                   child: Text(
-                    'Lihat semua',
+                    AppL10n.of(context).achSeeAll,
                     textAlign: TextAlign.right,
                     overflow: TextOverflow.ellipsis,
                     style: AppText.bodyMd().copyWith(

@@ -8,6 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'game_service.dart';
 import 'learning_content.dart';
 import 'cloud_sync.dart';
+import '../l10n/app_localizations.dart';
+import '../l10n/ach_texts.g.dart';
 import '../theme/app_icons.dart';
 
 /// Medali bertingkat ala Mobile Legends dengan popup announcer.
@@ -20,6 +22,10 @@ import '../theme/app_icons.dart';
 
 enum AchievementTier { rookie, elite, gold, epic, legendary }
 
+/// Setiap AchievementDef tidak menyimpan bahasa — teks diambil lewat
+/// [localizedTitle] / [localizedDesc] / [localizedHint] memakai locale aktif.
+/// Kalau ARB tidak punya teksnya, jatuh ke [title] / [desc] (Indonesia) —
+/// jadi medali tidak pernah tampil kosong walau terjemahan belum ada.
 class AchievementDef {
   final String id;
   final String title;
@@ -35,7 +41,7 @@ class AchievementDef {
 
   /// Petunjuk konkret cara membuka medali. Ditampilkan saat dialog detail
   /// dibuka untuk medali yang masih terkunci; null = sembunyikan.
-  /// Kalau tidak diisi, [unlockHint] akan di-derive dari [desc] (poin P0
+  /// Kalau tidak diisi, [localizedHint] di-derive dari desc (poin P0
   /// critique: locked = dead end tanpa info).
   final String? unlockHint;
 
@@ -49,9 +55,22 @@ class AchievementDef {
     this.unlockHint,
   });
 
-  /// Hint yang ditampilkan ke user; kalau null, fallback ke [desc] singkat.
-  String get hint =>
-      unlockHint ?? 'Selesaikan: ${desc.toLowerCase()}.';
+  /// Teks medali untuk bahasa aktif; null → teks Indonesia di [field]nya.
+  String? _text(AppL10n l10n, String field) =>
+      achText(l10n, id, field) ??
+      achText(l10n, id, field.replaceFirst('hint', 'desc'));
+
+  String localizedTitle(AppL10n l10n) => _text(l10n, 'title') ?? title;
+
+  String localizedDesc(AppL10n l10n) => _text(l10n, 'desc') ?? desc;
+
+  /// Hint yang ditampilkan ke user; kalau medali tidak punya unlockHint,
+  /// fallback ke desc singkat (bentuk kalimatnya dari ARB, jadi ikut bahasa).
+  String localizedHint(AppL10n l10n) {
+    final own = _text(l10n, 'hint');
+    if (unlockHint != null) return own ?? unlockHint!;
+    return l10n.achHintFallback(localizedDesc(l10n));
+  }
 }
 
 class AchievementService {

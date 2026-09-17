@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/app_localizations.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../services/achievement_service.dart';
@@ -20,14 +21,6 @@ class AchievementsScreen extends StatefulWidget {
 }
 
 class _AchievementsScreenState extends State<AchievementsScreen> {
-  static const _tierLabels = <AchievementTier, String>{
-    AchievementTier.rookie: 'ROOKIE',
-    AchievementTier.elite: 'ELITE',
-    AchievementTier.gold: 'GOLD',
-    AchievementTier.epic: 'EPIC',
-    AchievementTier.legendary: 'LEGENDARY',
-  };
-
   @override
   Widget build(BuildContext context) {
     final defs = AchievementService.defs;
@@ -65,6 +58,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
   }
 
   Widget _header(int unlocked, int total) {
+    final l10n = AppL10n.of(context);
     final pct = total == 0 ? 0.0 : unlocked / total;
 
     return Padding(
@@ -95,7 +89,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
               ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
-                child: Text('Achievements', style: AppText.displayHero(24)),
+                child: Text(l10n.achScreenTitle, style: AppText.displayHero(24)),
               ),
             ],
           ),
@@ -111,7 +105,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                 ).copyWith(color: AppColors.secondaryFixed),
               ),
               Text(
-                ' / $total medali terbuka',
+                l10n.achScreenProgress(total),
                 style: AppText.bodyMd().copyWith(
                   color: AppColors.onSurfaceVariant,
                   fontSize: 12,
@@ -148,7 +142,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
       children: [
         const SizedBox(height: AppSpacing.md),
         HudHeader(
-          _tierLabels[tier]!,
+          tierLabel(AppL10n.of(context), tier),
           meta: '$got/${defs.length}',
           accent: accent,
         ),
@@ -196,7 +190,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
           const SizedBox(height: 6),
           Expanded(
             child: Text(
-              d.title,
+              d.localizedTitle(AppL10n.of(context)),
               textAlign: TextAlign.center,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
