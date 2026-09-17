@@ -180,4 +180,37 @@ void main() {
 
     expect(kartu('Al-Fatihah').height, kartu('Al-Baqarah').height);
   });
+
+  testWidgets('tombol bookmark rata kanan dengan judul', (tester) async {
+    // Bug lama: kaligrafi dibungkus Flexible (fit loose), jadi ruang sisa Row
+    // menumpuk di kanan dan mendorong IconButton menjauh dari tepi konten —
+    // ikonnya berhenti 41px dari kanan padahal judul mulai 16px dari kiri.
+    // Guard membaca geometri render tree, bukan keberadaan widget.
+    for (final size in const [Size(412, 915), Size(320, 640), Size(600, 900)]) {
+      tester.view.physicalSize = size;
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(wrap(QuranTab()));
+      await tester.pumpAndSettle();
+
+      final btn = tester.getRect(
+        find
+            .ancestor(
+              of: find.byIcon(Icons.bookmark_border),
+              matching: find.byType(IconButton),
+            )
+            .first,
+      );
+      final title = tester.getRect(find.text('Al-Quran'));
+
+      expect(
+        size.width - btn.right,
+        closeTo(title.left, 0.5),
+        reason: 'lebar ${size.width}: tombol kanan harus sejajar margin judul',
+      );
+      // Benar-benar di ujung: sisi kanan tombol = tepi konten padding header.
+      expect(btn.right, closeTo(size.width - 16.0, 0.5));
+    }
+  });
 }

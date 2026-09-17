@@ -169,9 +169,12 @@ class _QuranTabState extends State<QuranTab> {
                       ),
                       const SizedBox(width: AppSpacing.xs),
                       // Kaligrafi sebagai aksen, bukan informasi — karena itu
-                      // diredupkan dan tidak diberi semantik. Flexible+FittedBox:
+                      // diredupkan dan tidak diberi semantik. Expanded+FittedBox:
                       // menyusut saat layar sempit/teks besar, jangan overflow.
-                      Flexible(
+                      // Expanded (bukan Flexible): fit loose menyisakan ruang
+                      // sisa Row yang menumpuk di kanan dan mendorong tombol
+                      // bookmark 12px ke kiri dari tepi konten.
+                      Expanded(
                         child: ExcludeSemantics(
                           child: FittedBox(
                             fit: BoxFit.scaleDown,
