@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:muslim_leveling/screens/hadis_screen.dart';
+import 'helpers/app_wrap.dart';
 
 /// Penjaga regresi: HadisScreen WAJIB punya Material ancestor (Scaffold).
 ///
@@ -12,19 +13,15 @@ void main() {
     tester,
   ) async {
     await tester.pumpWidget(
-      MaterialApp(
-        home: Builder(
+      appWrap(Builder(
           builder: (c) => Scaffold(
             body: TextButton(
               onPressed: () => Navigator.push(
                 c,
                 MaterialPageRoute(builder: (_) => const HadisScreen()),
-              ),
-              child: const Text('buka'),
-            ),
+              ), child: const Text('buka'), ),
           ),
-        ),
-      ),
+        ),),
     );
     await tester.tap(find.text('buka'));
     await tester.pump();

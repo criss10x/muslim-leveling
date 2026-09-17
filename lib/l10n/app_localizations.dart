@@ -126,6 +126,36 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Ikut Sistem (HP)'**
   String get localeSystem;
+
+  /// No description provided for @localeTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Bahasa aplikasi'**
+  String get localeTitle;
+
+  /// No description provided for @localeIndonesian.
+  ///
+  /// In id, this message translates to:
+  /// **'Bahasa Indonesia'**
+  String get localeIndonesian;
+
+  /// No description provided for @localeEnglish.
+  ///
+  /// In id, this message translates to:
+  /// **'English'**
+  String get localeEnglish;
+
+  /// No description provided for @localePicked.
+  ///
+  /// In id, this message translates to:
+  /// **'Bahasa dipilih'**
+  String get localePicked;
+
+  /// No description provided for @settingLanguage.
+  ///
+  /// In id, this message translates to:
+  /// **'Bahasa'**
+  String get settingLanguage;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

@@ -17,6 +17,7 @@ import 'package:muslim_leveling/theme/app_icons.dart';
 import 'package:muslim_leveling/theme/app_theme.dart';
 import 'package:muslim_leveling/widgets/tier_avatar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'helpers/app_wrap.dart';
 
 /// 400x300 (4:3) dengan lingkaran putih di tengah. Rasio sumber != 1
 /// supaya stretch terdeteksi sebagai elips.
@@ -105,17 +106,14 @@ void main() {
     final f = _photo();
 
     await tester.pumpWidget(
-      MaterialApp(
-        theme: AppTheme.dark(),
-        home: Center(
+      appWrap(Center(
           child: TierProfileAvatar(
             profileImagePath: f.path,
             displayName: 'Pejuang',
             tierName: 'Warrior',
             sizeDp: 88,
           ),
-        ),
-      ),
+        ), theme: AppTheme.dark()),
     );
     await tester.pump(const Duration(milliseconds: 300));
 
@@ -141,17 +139,14 @@ void main() {
     tester.view.physicalSize = const Size(600, 600);
     tester.view.devicePixelRatio = 1.0;
     await tester.pumpWidget(
-      MaterialApp(
-        theme: AppTheme.dark(),
-        home: const Center(
+      appWrap(const Center(
           child: TierProfileAvatar(
             displayName: 'Pejuang',
             tierName: 'Warrior',
             sizeDp: 88,
             showEditBadge: true,
           ),
-        ),
-      ),
+        ), theme: AppTheme.dark()),
     );
     await tester.pump(const Duration(milliseconds: 300));
     expect(find.text('\u{1F4F7}'), findsNothing);
@@ -169,10 +164,7 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
 
     await tester.pumpWidget(
-      MaterialApp(
-        theme: AppTheme.dark(),
-        home: const Scaffold(body: ProfilTab()),
-      ),
+      appWrap(const Scaffold(body: ProfilTab()), theme: AppTheme.dark()),
     );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));

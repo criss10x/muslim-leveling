@@ -14,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:muslim_leveling/screens/home_tab.dart';
 import 'package:muslim_leveling/theme/app_theme.dart';
 import 'package:muslim_leveling/widgets/common.dart';
+import 'helpers/app_wrap.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +30,7 @@ void main() {
     addTearDown(t.view.reset);
 
     await t.pumpWidget(
-      MaterialApp(theme: AppTheme.dark(), home: const Scaffold(body: HomeTab())),
+      appWrap(const Scaffold(body: HomeTab()), theme: AppTheme.dark()),
     );
     await t.pump();
     await t.pump(const Duration(milliseconds: 100));

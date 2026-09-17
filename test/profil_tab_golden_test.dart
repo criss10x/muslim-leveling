@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:muslim_leveling/screens/profil_tab.dart';
 import 'package:muslim_leveling/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'helpers/app_wrap.dart';
 
 void main() {
   testWidgets('profil tab golden', (WidgetTester tester) async {
@@ -20,11 +21,7 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
 
     await tester.pumpWidget(
-      MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.dark(),
-        home: const ProfilTab(),
-      ),
+      appWrap(const ProfilTab(), theme: AppTheme.dark(), debugShowCheckedModeBanner: false),
     );
     await tester.pump();
     await tester.pump(const Duration(seconds: 1));

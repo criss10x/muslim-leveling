@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:muslim_leveling/services/game_service.dart';
 import 'package:muslim_leveling/widgets/prayer_heatmap.dart';
+import 'helpers/app_wrap.dart';
 
 void main() {
   test('wajibPerHari hanya hitung sholat wajib, abaikan sunnah/tilawah', () {
@@ -32,11 +33,9 @@ void main() {
   testWidgets('PrayerHeatmap render grid 7 kolom tanpa overflow', (tester) async {
     GoogleFonts.config.allowRuntimeFetching = false;
     await tester.pumpWidget(
-      const MaterialApp(
-        home: Scaffold(
+      appWrap(Scaffold(
           body: SingleChildScrollView(child: PrayerHeatmap()),
-        ),
-      ),
+        )),
     );
     expect(tester.takeException(), isNull);
     expect(find.text('Sen'), findsOneWidget);

@@ -4,6 +4,7 @@ import 'package:muslim_leveling/services/theme_service.dart';
 import 'package:muslim_leveling/theme/app_theme.dart';
 import 'package:muslim_leveling/widgets/theme_preset_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'helpers/app_wrap.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -12,7 +13,7 @@ void main() {
 
   testWidgets('shows four presets and selects Mushaf', (tester) async {
     await tester.pumpWidget(
-      const MaterialApp(home: Scaffold(body: ThemePresetPicker())),
+      appWrap(Scaffold(body: ThemePresetPicker())),
     );
     expect(find.text('Gelap'), findsOneWidget);
     expect(find.text('Terang'), findsOneWidget);

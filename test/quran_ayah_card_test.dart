@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:muslim_leveling/services/quran_data.dart';
 import 'package:muslim_leveling/services/quran_settings.dart';
 import 'package:muslim_leveling/widgets/quran_ayah_card.dart';
+import 'helpers/app_wrap.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +20,7 @@ void main() {
     translation: 'Dengan menyebut nama Allah',
   );
 
-  Widget wrap(Widget child) => MaterialApp(home: Scaffold(body: child));
+  Widget wrap(Widget child) => appWrap(Scaffold(body: child));
 
   testWidgets('menampilkan teks Arab dan terjemahan', (tester) async {
     await tester.pumpWidget(wrap(

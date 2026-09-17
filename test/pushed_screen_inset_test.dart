@@ -16,6 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:muslim_leveling/screens/daily_highlight_screen.dart';
 import 'package:muslim_leveling/services/daily_highlight.dart';
 import 'package:muslim_leveling/services/game_service.dart';
+import 'helpers/app_wrap.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -61,7 +62,7 @@ void main() {
       ).toMap()..['date'] = date),
     });
 
-    await tester.pumpWidget(const MaterialApp(home: DailyHighlightScreen()));
+    await tester.pumpWidget(appWrap(DailyHighlightScreen()));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
     // Toast XP auto-claim halaman 1 hidup 1600ms — habiskan supaya ticker

@@ -7,6 +7,7 @@ import 'package:muslim_leveling/screens/profil_tab.dart';
 import 'package:muslim_leveling/services/game_service.dart';
 import 'package:muslim_leveling/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'helpers/app_wrap.dart';
 
 /// Bagian Statistik di tab Profil. Golden test tidak menjangkau ini karena
 /// state-nya kosong dan hanya merender empty state — jadi baris berisi data
@@ -54,11 +55,7 @@ void main() {
     addTearDown(tester.view.reset);
 
     await tester.pumpWidget(
-      MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.dark(),
-        home: const ProfilTab(),
-      ),
+      appWrap(const ProfilTab(), theme: AppTheme.dark(), debugShowCheckedModeBanner: false),
     );
     await tester.pump();
     await tester.pump(const Duration(seconds: 1));

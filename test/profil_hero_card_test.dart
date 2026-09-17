@@ -6,6 +6,7 @@ import 'package:muslim_leveling/screens/profil_tab.dart';
 import 'package:muslim_leveling/theme/app_theme.dart';
 import 'package:muslim_leveling/widgets/tier_avatar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'helpers/app_wrap.dart';
 
 void main() {
   tearDown(() => isLightTheme = false);
@@ -22,10 +23,7 @@ void main() {
     });
 
     await tester.pumpWidget(
-      MaterialApp(
-        theme: AppTheme.dark(),
-        home: const Scaffold(body: ProfilTab()),
-      ),
+      appWrap(const Scaffold(body: ProfilTab()), theme: AppTheme.dark()),
     );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
@@ -47,10 +45,7 @@ void main() {
     });
 
     await tester.pumpWidget(
-      MaterialApp(
-        theme: AppTheme.dark(),
-        home: const Scaffold(body: ProfilTab()),
-      ),
+      appWrap(const Scaffold(body: ProfilTab()), theme: AppTheme.dark()),
     );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
@@ -75,10 +70,7 @@ void main() {
     });
 
     await tester.pumpWidget(
-      MaterialApp(
-        theme: AppTheme.light(),
-        home: const Scaffold(body: ProfilTab()),
-      ),
+      appWrap(const Scaffold(body: ProfilTab()), theme: AppTheme.light()),
     );
     await tester.pump();
 
@@ -102,10 +94,7 @@ void main() {
     });
 
     await tester.pumpWidget(
-      MaterialApp(
-        theme: AppTheme.dark(),
-        home: const Scaffold(body: ProfilTab()),
-      ),
+      appWrap(const Scaffold(body: ProfilTab()), theme: AppTheme.dark()),
     );
     await tester.pump(const Duration(milliseconds: 300));
 
@@ -129,10 +118,7 @@ void main() {
     });
 
     await tester.pumpWidget(
-      MaterialApp(
-        theme: AppTheme.dark(),
-        home: const Scaffold(body: ProfilTab()),
-      ),
+      appWrap(const Scaffold(body: ProfilTab()), theme: AppTheme.dark()),
     );
     await tester.pump();
 

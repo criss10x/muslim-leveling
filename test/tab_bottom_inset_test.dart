@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:muslim_leveling/screens/dashboard_shell.dart';
 import 'package:muslim_leveling/screens/home_tab.dart';
+import 'helpers/app_wrap.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +31,7 @@ void main() {
     tester.view.padding = insets;
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(const MaterialApp(home: DashboardShell()));
+    await tester.pumpWidget(appWrap(DashboardShell()));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
 
@@ -76,7 +77,7 @@ void main() {
   testWidgets('label _ringStat dibatasi lebarnya (bukan Text telanjang di Row)',
       (tester) async {
     SharedPreferences.setMockInitialValues({});
-    await tester.pumpWidget(const MaterialApp(home: Scaffold(body: HomeTab())));
+    await tester.pumpWidget(appWrap(Scaffold(body: HomeTab())));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
 

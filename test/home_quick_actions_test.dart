@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:muslim_leveling/screens/home_tab.dart';
 import 'package:muslim_leveling/services/game_service.dart';
+import 'helpers/app_wrap.dart';
 
 /// ponytail: penjaga struktur tab Home — 5 pintasan harus ada di bawah ring
 /// "RITUAL HARI INI", dan section lama yang dipindah tidak boleh muncul lagi
@@ -17,7 +18,7 @@ void main() {
   Future<void> pumpHome(WidgetTester tester) async {
     SharedPreferences.setMockInitialValues({});
     await tester.pumpWidget(
-      const MaterialApp(home: Scaffold(body: HomeTab())),
+      appWrap(Scaffold(body: HomeTab())),
     );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
@@ -59,7 +60,7 @@ void main() {
         ).toMap(),
       ),
     });
-    await tester.pumpWidget(const MaterialApp(home: Scaffold(body: HomeTab())));
+    await tester.pumpWidget(appWrap(Scaffold(body: HomeTab())));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
   }

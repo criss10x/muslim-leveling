@@ -22,4 +22,19 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get localeSystem => 'Follow System (Phone)';
+
+  @override
+  String get localeTitle => 'App language';
+
+  @override
+  String get localeIndonesian => 'Bahasa Indonesia';
+
+  @override
+  String get localeEnglish => 'English';
+
+  @override
+  String get localePicked => 'Language selected';
+
+  @override
+  String get settingLanguage => 'Language';
 }

@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:muslim_leveling/screens/quran_tab.dart';
 import 'package:muslim_leveling/screens/quran_reader.dart';
 import 'package:muslim_leveling/services/quran_data.dart';
+import 'helpers/app_wrap.dart';
 
 // ponytail: runnable check untuk pencarian nomor ayat di tab Quran.
 // Kasus user: ketik "Al-Baqarah 286" → bukan cuma daftar surat, tapi kartu
@@ -14,7 +15,7 @@ import 'package:muslim_leveling/services/quran_data.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  Widget wrap(Widget child) => MaterialApp(home: Scaffold(body: child));
+  Widget wrap(Widget child) => appWrap(Scaffold(body: child));
 
   testWidgets('"Al-Baqarah 286" menampilkan kartu ayat, bukan daftar surat',
       (tester) async {

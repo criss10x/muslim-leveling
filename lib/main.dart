@@ -5,6 +5,8 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'theme/app_theme.dart';
 import 'services/theme_service.dart';
+import 'services/locale_service.dart';
+import 'l10n/app_localizations.dart';
 import 'screens/splash_screen.dart';
 import 'services/notification_service.dart';
 import 'services/cloud_sync.dart';
@@ -115,12 +117,13 @@ class MuslimLevelingAppState extends State<MuslimLevelingApp> {
   void initState() {
     super.initState();
     themeNotifier.load();
+    localeNotifier.load();
   }
 
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: themeNotifier,
+      listenable: Listenable.merge([themeNotifier, localeNotifier]),
       builder: (context, _) {
         return MaterialApp(
           title: 'Muslim Leveling',
@@ -128,6 +131,10 @@ class MuslimLevelingAppState extends State<MuslimLevelingApp> {
           theme: AppTheme.light(),
           darkTheme: AppTheme.dark(),
           themeMode: themeNotifier.mode,
+          // null → ikut bahasa HP; di-set user lewat Profil > Bahasa.
+          locale: localeNotifier.override,
+          supportedLocales: LocaleNotifier.supported,
+          localizationsDelegates: AppL10n.localizationsDelegates,
           home: const SplashScreen(),
         );
       },

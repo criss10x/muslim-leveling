@@ -3,11 +3,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:muslim_leveling/screens/quran_tab.dart';
 import 'package:muslim_leveling/screens/quran_reader.dart';
 import 'package:muslim_leveling/widgets/rub_el_hizb_badge.dart';
+import 'helpers/app_wrap.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  Widget wrap(Widget child) => MaterialApp(home: Scaffold(body: child));
+  Widget wrap(Widget child) => appWrap(Scaffold(body: child));
 
   testWidgets('shows Quran hierarchy and opens the selected reader', (
     tester,
@@ -121,14 +122,12 @@ void main() {
     tester,
   ) async {
     await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
+      appWrap(Scaffold(
           body: MediaQuery(
             data: const MediaQueryData(textScaler: TextScaler.linear(2.0)),
             child: QuranTab(),
           ),
-        ),
-      ),
+        )),
     );
     await tester.pumpAndSettle();
 
@@ -150,14 +149,12 @@ void main() {
     addTearDown(tester.view.reset);
 
     await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
+      appWrap(Scaffold(
           body: MediaQuery(
             data: const MediaQueryData(textScaler: TextScaler.linear(2.0)),
             child: QuranTab(),
           ),
-        ),
-      ),
+        )),
     );
     await tester.pumpAndSettle();
 

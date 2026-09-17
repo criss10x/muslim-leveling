@@ -4,5 +4,10 @@
   "tabHome": "Beranda",
   "tabJadwal": "Jadwal",
   "tabQuran": "Al-Quran",
-  "localeSystem": "Ikut Sistem (HP)"
+  "localeSystem": "Ikut Sistem (HP)",
+  "localeTitle": "Bahasa aplikasi",
+  "localeIndonesian": "Bahasa Indonesia",
+  "localeEnglish": "English",
+  "localePicked": "Bahasa dipilih",
+  "settingLanguage": "Bahasa"
 }

@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:muslim_leveling/services/game_service.dart';
 import 'package:muslim_leveling/screens/home_tab.dart';
 import 'package:muslim_leveling/theme/app_icons.dart';
+import 'helpers/app_wrap.dart';
 
 // ponytail: runnable check — Bonus Quest collapsed shows active-only subset,
 // tap chevron expands to full 8 rows. Clock frozen at 13:00 → Dhuha window
@@ -23,7 +24,7 @@ void main() {
 
   testWidgets('collapsed shows active only; chevron expands to all 8',
       (t) async {
-    await t.pumpWidget(const MaterialApp(home: Scaffold(body: HomeTab())));
+    await t.pumpWidget(appWrap(Scaffold(body: HomeTab())));
     await t.pump();
     await t.pump();
     await t.scrollUntilVisible(find.textContaining('BONUS QUEST'), 200);

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:muslim_leveling/widgets/city_picker.dart';
 import 'package:muslim_leveling/theme/app_icons.dart';
+import 'helpers/app_wrap.dart';
 
 void main() {
   testWidgets('picker requires province before filtering kabupaten kota', (
@@ -11,19 +12,15 @@ void main() {
   ) async {
     late Future<({String id, String name})?> selection;
     await tester.pumpWidget(
-      MaterialApp(
-        home: Builder(
+      appWrap(Builder(
           builder: (context) => TextButton(
             onPressed: () {
               selection = CityPicker.show(
                 context,
                 cityLoader: (_) async => ['Kab. Badung', 'Kota Denpasar'],
               );
-            },
-            child: const Text('Buka'),
-          ),
-        ),
-      ),
+            }, child: const Text('Buka'), ),
+        ),),
     );
 
     await tester.tap(find.text('Buka'));
@@ -48,8 +45,7 @@ void main() {
   ) async {
     final bali = Completer<List<String>>();
     await tester.pumpWidget(
-      MaterialApp(
-        home: Builder(
+      appWrap(Builder(
           builder: (context) => TextButton(
             onPressed: () {
               CityPicker.show(
@@ -58,11 +54,8 @@ void main() {
                     ? bali.future
                     : Future.value(['Kota Serang']),
               );
-            },
-            child: const Text('Buka'),
-          ),
-        ),
-      ),
+            }, child: const Text('Buka'), ),
+        ),),
     );
 
     await tester.tap(find.text('Buka'));

@@ -6,6 +6,7 @@ import 'package:muslim_leveling/services/cosmetic_catalog.dart';
 import 'package:muslim_leveling/services/game_service.dart';
 import 'package:muslim_leveling/services/entitlement_service.dart';
 import 'package:muslim_leveling/theme/app_theme.dart';
+import 'helpers/app_wrap.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +19,7 @@ void main() {
     await GameService.load();
     await EntitlementService.load();
     await tester.pumpWidget(
-      const MaterialApp(home: Scaffold(body: CosmeticLocker())),
+      appWrap(Scaffold(body: CosmeticLocker())),
     );
     await tester.pumpAndSettle();
 
@@ -34,7 +35,7 @@ void main() {
     await GameService.debugSeedOwned(['title_crescent']);
 
     await tester.pumpWidget(
-      const MaterialApp(home: Scaffold(body: CosmeticLocker())),
+      appWrap(Scaffold(body: CosmeticLocker())),
     );
     await tester.pumpAndSettle();
 
@@ -58,7 +59,7 @@ void main() {
     );
 
     await tester.pumpWidget(
-      const MaterialApp(home: Scaffold(body: CosmeticLocker())),
+      appWrap(Scaffold(body: CosmeticLocker())),
     );
     await tester.pumpAndSettle();
     await tester.tap(find.text('Title'));
@@ -75,7 +76,7 @@ void main() {
     await GameService.load();
     await EntitlementService.load();
     await tester.pumpWidget(
-      const MaterialApp(home: Scaffold(body: CosmeticLocker())),
+      appWrap(Scaffold(body: CosmeticLocker())),
     );
     await tester.pumpAndSettle();
 
@@ -89,10 +90,7 @@ void main() {
     await GameService.load();
     await EntitlementService.load();
     await tester.pumpWidget(
-      MaterialApp(
-        theme: AppTheme.light(),
-        home: const Scaffold(body: CosmeticLocker()),
-      ),
+      appWrap(const Scaffold(body: CosmeticLocker()), theme: AppTheme.light()),
     );
     await tester.pumpAndSettle();
 

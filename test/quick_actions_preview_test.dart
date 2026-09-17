@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:muslim_leveling/screens/home_tab.dart';
 import 'package:muslim_leveling/services/game_service.dart';
 import 'package:muslim_leveling/theme/app_theme.dart';
+import 'helpers/app_wrap.dart';
 
 /// Seed progres Renungan (bitmask) lewat prefs — sama seperti produksi.
 void _seed(int mask) {
@@ -26,11 +27,7 @@ void _seed(int mask) {
 
 Future<void> _shot(WidgetTester tester, String path) async {
   await tester.pumpWidget(
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.dark(),
-      home: const Scaffold(body: HomeTab()),
-    ),
+    appWrap(const Scaffold(body: HomeTab()), theme: AppTheme.dark(), debugShowCheckedModeBanner: false),
   );
   await tester.pump();
   await tester.pump(const Duration(seconds: 1));

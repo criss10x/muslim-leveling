@@ -7,6 +7,7 @@ import 'package:muslim_leveling/screens/profil_tab.dart';
 import 'package:muslim_leveling/widgets/cosmetic_locker.dart';
 import 'package:muslim_leveling/services/game_service.dart';
 import 'package:muslim_leveling/services/entitlement_service.dart';
+import 'helpers/app_wrap.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +25,7 @@ void main() {
     await GameService.load();
     await EntitlementService.load();
     await tester.pumpWidget(
-      const MaterialApp(home: Scaffold(body: ProfilTab())),
+      appWrap(Scaffold(body: ProfilTab())),
     );
     await tester.pumpAndSettle();
 
@@ -70,7 +71,7 @@ void main() {
     await GameService.load();
     await EntitlementService.load();
     await tester.pumpWidget(
-      const MaterialApp(home: Scaffold(body: ProfilTab())),
+      appWrap(Scaffold(body: ProfilTab())),
     );
     await tester.pumpAndSettle();
 

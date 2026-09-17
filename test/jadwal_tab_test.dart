@@ -8,6 +8,7 @@ import 'package:muslim_leveling/services/prayer_service.dart';
 import 'package:muslim_leveling/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:muslim_leveling/theme/app_icons.dart';
+import 'helpers/app_wrap.dart';
 
 void main() {
   tearDown(() {
@@ -32,7 +33,7 @@ void main() {
     SharedPreferences.setMockInitialValues({});
 
     await tester.pumpWidget(
-      MaterialApp(theme: AppTheme.dark(), home: const JadwalTab()),
+      appWrap(const JadwalTab(), theme: AppTheme.dark()),
     );
     await tester.pumpAndSettle();
 
@@ -72,7 +73,7 @@ void main() {
     });
 
     await tester.pumpWidget(
-      MaterialApp(theme: AppTheme.light(), home: const JadwalTab()),
+      appWrap(const JadwalTab(), theme: AppTheme.light()),
     );
     await tester.pumpAndSettle();
 

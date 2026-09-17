@@ -8,19 +8,18 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:muslim_leveling/theme/app_icons.dart';
+import 'helpers/app_wrap.dart';
 
 /// Render satu icon, balikan hash dari channel alpha-nya.
 Future<String> _sig(WidgetTester tester, IconData icon) async {
   final key = GlobalKey();
   await tester.pumpWidget(
-    MaterialApp(
-      home: Center(
+    appWrap(Center(
         child: RepaintBoundary(
           key: key,
           child: Icon(icon, size: 64, color: const Color(0xFFFFFFFF)),
         ),
-      ),
-    ),
+      )),
   );
   final bytes = await tester.runAsync(() async {
     final ro = key.currentContext!.findRenderObject()! as RenderRepaintBoundary;

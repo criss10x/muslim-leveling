@@ -20,6 +20,8 @@ import '../../widgets/achievement_medal.dart';
 import '../../widgets/tier_avatar.dart';
 import '../../widgets/cosmetic_locker.dart';
 import '../../widgets/theme_preset_picker.dart';
+import '../../widgets/locale_picker.dart';
+import '../../l10n/app_localizations.dart';
 import '../../widgets/prayer_heatmap.dart';
 import '../../services/cosmetic_service.dart';
 import '../../services/cosmetic_catalog.dart';
@@ -2394,6 +2396,11 @@ class _ProfilTabState extends State<ProfilTab> {
         'Tema aplikasi',
         AppIcons.paletteOutlined,
         onTap: () => showThemePresetPicker(context),
+      ),
+      _SettingRow(
+        AppL10n.of(context).settingLanguage,
+        AppIcons.translate,
+        onTap: () => showLocalePicker(context),
       ),
       _SettingRow(
         'Privasi & Data',

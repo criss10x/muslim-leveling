@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:muslim_leveling/services/quran_data.dart';
 import 'package:muslim_leveling/widgets/quran_share_sheet.dart';
+import 'helpers/app_wrap.dart';
 
 void main() {
   const surah = QuranSurah(
@@ -30,8 +31,7 @@ void main() {
       find.byWidget(swatchOf(t, label)[idx]);
 
   testWidgets('ganti mode tidak mereset pilihan swatch', (tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Builder(
+    await tester.pumpWidget(appWrap(Builder(
         builder: (context) => Scaffold(
           body: Center(
             child: ElevatedButton(
@@ -39,10 +39,8 @@ void main() {
                   showQuranShareSheet(context, surah: surah, ayah: ayah),
               child: const Text('open'),
             ),
-          ),
-        ),
-      ),
-    ));
+          ), ),
+      ),));
 
     await tester.tap(find.text('open'));
     await tester.pumpAndSettle();

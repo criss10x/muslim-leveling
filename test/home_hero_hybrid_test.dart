@@ -5,6 +5,7 @@ import 'package:muslim_leveling/screens/home_tab.dart';
 import 'package:muslim_leveling/theme/app_theme.dart';
 import 'package:muslim_leveling/widgets/tier_avatar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'helpers/app_wrap.dart';
 
 void main() {
   setUp(() {
@@ -21,10 +22,7 @@ void main() {
   }) async {
     activeThemePreset = preset;
     await tester.pumpWidget(
-      MaterialApp(
-        theme: preset.isLight ? AppTheme.light() : AppTheme.dark(),
-        home: const Scaffold(body: HomeTab()),
-      ),
+      appWrap(const Scaffold(body: HomeTab()), theme: preset.isLight ? AppTheme.light() : AppTheme.dark()),
     );
     await tester.pump(const Duration(milliseconds: 300));
   }

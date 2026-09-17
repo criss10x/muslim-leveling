@@ -22,4 +22,19 @@ class AppL10nId extends AppL10n {
 
   @override
   String get localeSystem => 'Ikut Sistem (HP)';
+
+  @override
+  String get localeTitle => 'Bahasa aplikasi';
+
+  @override
+  String get localeIndonesian => 'Bahasa Indonesia';
+
+  @override
+  String get localeEnglish => 'English';
+
+  @override
+  String get localePicked => 'Bahasa dipilih';
+
+  @override
+  String get settingLanguage => 'Bahasa';
 }

@@ -4,5 +4,10 @@
   "tabHome": "Home",
   "tabJadwal": "Schedule",
   "tabQuran": "Quran",
-  "localeSystem": "Follow System (Phone)"
+  "localeSystem": "Follow System (Phone)",
+  "localeTitle": "App language",
+  "localeIndonesian": "Bahasa Indonesia",
+  "localeEnglish": "English",
+  "localePicked": "Language selected",
+  "settingLanguage": "Language"
 }

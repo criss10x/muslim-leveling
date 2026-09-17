@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:muslim_leveling/widgets/rub_el_hizb_badge.dart';
+import 'helpers/app_wrap.dart';
 
 void main() {
   Widget wrap(Widget child) =>
-      MaterialApp(home: Scaffold(body: Center(child: child)));
+      appWrap(Scaffold(body: Center(child: child)));
 
   testWidgets('menampilkan nomor surat di tengah badge', (tester) async {
     await tester.pumpWidget(wrap(const RubElHizbBadge(number: 18)));

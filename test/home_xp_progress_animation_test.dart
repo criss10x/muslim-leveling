@@ -5,6 +5,7 @@ import 'package:muslim_leveling/screens/home_tab.dart';
 import 'package:muslim_leveling/services/game_service.dart';
 import 'package:muslim_leveling/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'helpers/app_wrap.dart';
 
 void main() {
   testWidgets('Home XP fill animates after XP changes', (tester) async {
@@ -14,10 +15,7 @@ void main() {
     });
 
     await tester.pumpWidget(
-      MaterialApp(
-        theme: AppTheme.dark(),
-        home: const Scaffold(body: HomeTab()),
-      ),
+      appWrap(const Scaffold(body: HomeTab()), theme: AppTheme.dark()),
     );
     await tester.pump(const Duration(milliseconds: 300));
 

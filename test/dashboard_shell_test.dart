@@ -5,6 +5,7 @@ import 'package:muslim_leveling/screens/dashboard_shell.dart';
 import 'package:muslim_leveling/screens/home_tab.dart';
 import 'package:muslim_leveling/services/game_service.dart';
 import 'package:muslim_leveling/services/achievement_service.dart';
+import 'helpers/app_wrap.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +17,7 @@ void main() {
 
   testWidgets('DashboardShell IndexedStack mengisi penuh (bukan collapse 0x0)',
       (tester) async {
-    await tester.pumpWidget(const MaterialApp(home: DashboardShell()));
+    await tester.pumpWidget(appWrap(DashboardShell()));
     await tester.pump();
 
     final stack = tester.widget<IndexedStack>(find.byType(IndexedStack));

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,6 +7,7 @@ import 'package:muslim_leveling/services/daily_highlight.dart';
 import 'package:muslim_leveling/services/game_service.dart';
 import 'package:muslim_leveling/services/quran_data.dart';
 import 'package:muslim_leveling/services/ulama_quotes.dart';
+import 'helpers/app_wrap.dart';
 
 /// Ayat uji harus punya padanan asli di aset: _resolve() mencocokkan
 /// surah+ayat dari aset lokal, dan tanpa kecocokan tombol aksi disembunyikan.
@@ -15,7 +15,7 @@ const _surahLatin = 'Al-Fatihah';
 const _ayahNumber = 1;
 
 Future<void> _pump(WidgetTester tester) async {
-  await tester.pumpWidget(const MaterialApp(home: DailyHighlightScreen()));
+  await tester.pumpWidget(appWrap(DailyHighlightScreen()));
   await tester.pump();
   await tester.pump(const Duration(milliseconds: 100));
   // _load() auto-claim XP halaman 1 → toast XP hidup 1600ms + animasi
@@ -160,7 +160,7 @@ void main() {
     tester,
   ) async {
     SharedPreferences.setMockInitialValues({});
-    await tester.pumpWidget(const MaterialApp(home: DailyHighlightScreen()));
+    await tester.pumpWidget(appWrap(DailyHighlightScreen()));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
 

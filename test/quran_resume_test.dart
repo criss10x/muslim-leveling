@@ -5,6 +5,7 @@ import 'package:muslim_leveling/screens/quran_reader.dart';
 import 'package:muslim_leveling/services/quran_data.dart';
 import 'package:muslim_leveling/services/quran_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'helpers/app_wrap.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -20,8 +21,7 @@ void main() {
 
   Future<void> pumpReader(WidgetTester tester, {int? initialAyah}) async {
     await tester.pumpWidget(
-      MaterialApp(
-        home: Builder(
+      appWrap(Builder(
           builder: (context) => Scaffold(
             body: Center(
               child: ElevatedButton(
@@ -34,11 +34,9 @@ void main() {
                   ),
                 ),
                 child: const Text('buka'),
-              ),
-            ),
+              ), ),
           ),
-        ),
-      ),
+        ),),
     );
     await tester.tap(find.text('buka'));
     await tester.pumpAndSettle();
@@ -94,7 +92,10 @@ void main() {
         const Offset(0, -3000),
       );
       await tester.pumpAndSettle();
-      await tester.pageBack();
+      // tester.pageBack() mencari tooltip 'Back' hardcoded — dengan locale id
+      // tooltip-nya 'Kembali', jadi tesnya selalu merah. Tap widget-nya
+      // langsung, bebas bahasa.
+      await tester.tap(find.byType(BackButton));
       await tester.pumpAndSettle();
 
       final p = await SharedPreferences.getInstance();

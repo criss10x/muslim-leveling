@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:muslim_leveling/services/game_service.dart';
 import 'package:muslim_leveling/screens/home_tab.dart';
 import 'package:muslim_leveling/theme/app_icons.dart';
+import 'helpers/app_wrap.dart';
 
 // ponytail: runnable check untuk kesesuaian ring "SUNNAH" di tab Home dengan
 // daftar quest sunnah. Tiga jalur yang dulu bisa drift diam-diam:
@@ -94,7 +95,7 @@ void main() {
 
   testWidgets('denominator ring == jumlah baris yang benar-benar dirender',
       (t) async {
-    await t.pumpWidget(const MaterialApp(home: Scaffold(body: HomeTab())));
+    await t.pumpWidget(appWrap(Scaffold(body: HomeTab())));
     await t.pump();
     await t.pump(const Duration(milliseconds: 100));
 
