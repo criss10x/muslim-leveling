@@ -49,6 +49,20 @@ void main() {
   GoogleFonts.config.allowRuntimeFetching = false;
   setUp(dailyHighlightService.resetForTest);
 
+  // Panaskan cache aset Quran SEKALI, di luar testWidgets.
+  //
+  // `_resolve()` menunggu I/O aset NYATA lalu mengisi `_ref`; `_actions()`
+  // disembunyikan selama `_ref` masih null. `_pump()` hanya memajukan fake
+  // clock, jadi tanpa pemanasan ini tes balapan dengan I/O — hijau atau merah
+  // tergantung kecepatan mesin. Surah yang di-resolve ikut tanggal
+  // (highlightIndex), jadi yang dipanaskan adalah yang dipakai hari ini.
+  setUpAll(() async {
+    final surahs = await quranData.surahs();
+    await quranData.ayahs(
+      surahs[highlightIndex(GameService.todayStr(), surahs.length)].number,
+    );
+  });
+
   testWidgets('halaman menampilkan ayat + sitasi + tanggal hijriah slot', (
     tester,
   ) async {
