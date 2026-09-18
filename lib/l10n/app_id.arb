@@ -172,6 +172,16 @@
       }
     }
   },
+  "@onbStepOf": {
+    "placeholders": {
+      "step": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
   "@profilHeroSemantics": {
     "placeholders": {
       "tier": {
@@ -612,6 +622,26 @@
   "localePicked": "Bahasa dipilih",
   "localeSystem": "Ikut Sistem (HP)",
   "localeTitle": "Bahasa aplikasi",
+  "onbContinue": "Lanjut",
+  "onbDefaultNickname": "Pejuang",
+  "onbLangBody": "Kamu bisa ubah kapan saja di Profil.",
+  "onbLangTitle": "Mau pakai bahasa apa?",
+  "onbLocationAllow": "Izinkan Lokasi",
+  "onbLocationBody": "Untuk menghitung jadwal sholat & arah qiblat yang akurat, kami perlu akses lokasi. Lokasi tidak dibagikan ke siapa pun — semua perhitungan terjadi di HP-mu.",
+  "onbLocationLoading": "MENGAMBIL LOKASI...",
+  "onbLocationPickManual": "Pilih kota manual",
+  "onbLocationTitle": "Butuh Lokasimu",
+  "onbNicknameHint": "Nama pejuang (opsional — kosong: Pejuang)",
+  "onbNotifAllow": "Izinkan Notifikasi",
+  "onbNotifBody": "Biar tidak kelewat, kami kirim pengingat saat waktu sholat tiba.",
+  "onbNotifLoading": "MENYALA...",
+  "onbNotifSkip": "Lewati, nanti saja",
+  "onbNotifTitle": "Pengingat Adzan",
+  "onbSkip": "Lewati",
+  "onbStepOf": "Langkah {step} dari {total}",
+  "onbWelcomeBody": "Selesaikan quest sholat, kumpulkan XP, naikkan level.",
+  "onbWelcomeTitle": "Selamat Datang, Muslim Warrior!",
+  "onbXpDemoSemantics": "Contoh: Subuh selesai, ditambah 50 XP",
   "prayerAshar": "Ashar",
   "prayerDzuhur": "Dzuhur",
   "prayerIsya": "Isya",

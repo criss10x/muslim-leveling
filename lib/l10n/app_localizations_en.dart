@@ -938,6 +938,70 @@ class AppL10nEn extends AppL10n {
   String get localeTitle => 'App language';
 
   @override
+  String get onbContinue => 'Continue';
+
+  @override
+  String get onbDefaultNickname => 'Pejuang';
+
+  @override
+  String get onbLangBody => 'You can change this anytime in Profile.';
+
+  @override
+  String get onbLangTitle => 'Which language do you want?';
+
+  @override
+  String get onbLocationAllow => 'Allow Location';
+
+  @override
+  String get onbLocationBody =>
+      'To calculate accurate prayer times and qibla direction we need location access. Your location is not shared with anyone — all calculations happen on your phone.';
+
+  @override
+  String get onbLocationLoading => 'GETTING LOCATION...';
+
+  @override
+  String get onbLocationPickManual => 'Pick city manually';
+
+  @override
+  String get onbLocationTitle => 'We Need Your Location';
+
+  @override
+  String get onbNicknameHint => 'Warrior name (optional — blank: Pejuang)';
+
+  @override
+  String get onbNotifAllow => 'Allow Notifications';
+
+  @override
+  String get onbNotifBody =>
+      'So you never miss it, we send a reminder when prayer time comes.';
+
+  @override
+  String get onbNotifLoading => 'ENABLING...';
+
+  @override
+  String get onbNotifSkip => 'Skip for now';
+
+  @override
+  String get onbNotifTitle => 'Adhan Reminders';
+
+  @override
+  String get onbSkip => 'Skip';
+
+  @override
+  String onbStepOf(String step, String total) {
+    return 'Step $step of $total';
+  }
+
+  @override
+  String get onbWelcomeBody => 'Complete prayer quests, collect XP, level up.';
+
+  @override
+  String get onbWelcomeTitle => 'Welcome, Muslim Warrior!';
+
+  @override
+  String get onbXpDemoSemantics => 'Example: Fajr done, +50 XP added';
+
+  @override
   String get prayerAshar => 'Asr';
 
   @override

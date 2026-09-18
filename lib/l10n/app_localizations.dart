@@ -1812,6 +1812,126 @@ abstract class AppL10n {
   /// **'Bahasa aplikasi'**
   String get localeTitle;
 
+  /// No description provided for @onbContinue.
+  ///
+  /// In id, this message translates to:
+  /// **'Lanjut'**
+  String get onbContinue;
+
+  /// No description provided for @onbDefaultNickname.
+  ///
+  /// In id, this message translates to:
+  /// **'Pejuang'**
+  String get onbDefaultNickname;
+
+  /// No description provided for @onbLangBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Kamu bisa ubah kapan saja di Profil.'**
+  String get onbLangBody;
+
+  /// No description provided for @onbLangTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Mau pakai bahasa apa?'**
+  String get onbLangTitle;
+
+  /// No description provided for @onbLocationAllow.
+  ///
+  /// In id, this message translates to:
+  /// **'Izinkan Lokasi'**
+  String get onbLocationAllow;
+
+  /// No description provided for @onbLocationBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Untuk menghitung jadwal sholat & arah qiblat yang akurat, kami perlu akses lokasi. Lokasi tidak dibagikan ke siapa pun — semua perhitungan terjadi di HP-mu.'**
+  String get onbLocationBody;
+
+  /// No description provided for @onbLocationLoading.
+  ///
+  /// In id, this message translates to:
+  /// **'MENGAMBIL LOKASI...'**
+  String get onbLocationLoading;
+
+  /// No description provided for @onbLocationPickManual.
+  ///
+  /// In id, this message translates to:
+  /// **'Pilih kota manual'**
+  String get onbLocationPickManual;
+
+  /// No description provided for @onbLocationTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Butuh Lokasimu'**
+  String get onbLocationTitle;
+
+  /// No description provided for @onbNicknameHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Nama pejuang (opsional — kosong: Pejuang)'**
+  String get onbNicknameHint;
+
+  /// No description provided for @onbNotifAllow.
+  ///
+  /// In id, this message translates to:
+  /// **'Izinkan Notifikasi'**
+  String get onbNotifAllow;
+
+  /// No description provided for @onbNotifBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Biar tidak kelewat, kami kirim pengingat saat waktu sholat tiba.'**
+  String get onbNotifBody;
+
+  /// No description provided for @onbNotifLoading.
+  ///
+  /// In id, this message translates to:
+  /// **'MENYALA...'**
+  String get onbNotifLoading;
+
+  /// No description provided for @onbNotifSkip.
+  ///
+  /// In id, this message translates to:
+  /// **'Lewati, nanti saja'**
+  String get onbNotifSkip;
+
+  /// No description provided for @onbNotifTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Pengingat Adzan'**
+  String get onbNotifTitle;
+
+  /// No description provided for @onbSkip.
+  ///
+  /// In id, this message translates to:
+  /// **'Lewati'**
+  String get onbSkip;
+
+  /// No description provided for @onbStepOf.
+  ///
+  /// In id, this message translates to:
+  /// **'Langkah {step} dari {total}'**
+  String onbStepOf(String step, String total);
+
+  /// No description provided for @onbWelcomeBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Selesaikan quest sholat, kumpulkan XP, naikkan level.'**
+  String get onbWelcomeBody;
+
+  /// No description provided for @onbWelcomeTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Selamat Datang, Muslim Warrior!'**
+  String get onbWelcomeTitle;
+
+  /// No description provided for @onbXpDemoSemantics.
+  ///
+  /// In id, this message translates to:
+  /// **'Contoh: Subuh selesai, ditambah 50 XP'**
+  String get onbXpDemoSemantics;
+
   /// No description provided for @prayerAshar.
   ///
   /// In id, this message translates to:

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../l10n/app_localizations.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../widgets/city_picker.dart';
@@ -88,6 +89,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   /// Halaman 3: minta notifikasi (bila diminta), tandai onboarding selesai.
   Future<void> _finish({bool enableNotif = true}) async {
     if (_busy) return;
+    // Tangkap l10n sebelum await: pakai context setelah await =
+    // use_build_context_synchronously (warning = CI merah).
+    final l10n = AppL10n.of(context);
     setState(() => _busy = true);
     try {
       if (enableNotif) {
@@ -110,7 +114,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       await prefs.setBool('onboarding_done', true);
       final raw = _nickCtrl.text.trim();
       // P2: nama pejuang opsional — kosong → "Pejuang" (tidak dipaksa).
-      final nick = raw.isEmpty ? 'Pejuang' : raw;
+      final nick = raw.isEmpty ? l10n.onbDefaultNickname : raw;
       await prefs.setString('nickname', nick);
       if (!mounted) return;
       Navigator.of(context).pushReplacement(
@@ -145,6 +149,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -160,7 +165,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 ),
                 onPressed: _isLast || _busy ? null : _skip,
                 child: Text(
-                  'Lewati',
+                  l10n.onbSkip,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: AppText.bodyMd().copyWith(
@@ -191,9 +196,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   // --- halaman ---
 
   Widget _page1() {
+    final l10n = AppL10n.of(context);
     return _PageBody(
       entry: _entry,
-      semanticsLabel: 'Langkah 1 dari 3: Selamat Datang',
+      semanticsLabel: l10n.onbStepOf('1', '3'),
       child: Column(
         children: [
           const Spacer(),
@@ -204,7 +210,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           const _MockXpCard(),
           const SizedBox(height: AppSpacing.md),
           Text(
-            'Selamat Datang, Muslim Warrior!',
+            l10n.onbWelcomeTitle,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: AppText.titleLg(),
@@ -212,7 +218,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Selesaikan quest sholat, kumpulkan XP, naikkan level.',
+            l10n.onbWelcomeBody,
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
             style:
@@ -228,7 +234,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
             textCapitalization: TextCapitalization.words,
             style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
             decoration: InputDecoration(
-              hintText: 'Nama pejuang (opsional — kosong: Pejuang)',
+              hintText: l10n.onbNicknameHint,
               hintStyle: AppText.bodyMd().copyWith(
                   color: AppColors.onSurfaceVariant.withValues(alpha: 0.6)),
               isDense: true,
@@ -243,7 +249,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           ),
           const Spacer(),
           HeroButton(
-              label: 'Lanjut',
+              label: l10n.onbContinue,
               trailingIcon: AppIcons.arrowForward,
               onPressed: _next),
           const SizedBox(height: AppSpacing.lg),
@@ -253,17 +259,18 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   }
 
   Widget _page2() {
+    final l10n = AppL10n.of(context);
     final confirmed = _city != null;
     return _PageBody(
       entry: _entry,
-      semanticsLabel: 'Langkah 2 dari 3: Lokasi',
+      semanticsLabel: l10n.onbStepOf('2', '3'),
       child: Column(
         children: [
           const Spacer(),
           const _Mascot(emoji: '📍'),
           const SizedBox(height: AppSpacing.xl),
           Text(
-            'Butuh Lokasimu',
+            l10n.onbLocationTitle,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: AppText.titleLg(),
@@ -271,9 +278,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           ),
           const SizedBox(height: AppSpacing.md),
           Text(
-            'Untuk menghitung jadwal sholat & arah qiblat yang akurat, '
-            'kami perlu akses lokasi. Lokasi tidak dibagikan ke siapa pun — '
-            'semua perhitungan terjadi di HP-mu.',
+            l10n.onbLocationBody,
             maxLines: 6,
             overflow: TextOverflow.ellipsis,
             style:
@@ -291,13 +296,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           const Spacer(),
           HeroButton(
               label: _busy
-                  ? 'MENGAMBIL LOKASI...'
-                  : (confirmed ? 'Lanjut' : 'Izinkan Lokasi'),
+                  ? l10n.onbLocationLoading
+                  : (confirmed ? l10n.onbContinue : l10n.onbLocationAllow),
               onPressed:
                   _busy ? null : (confirmed ? _next : _allowLocation)),
           const SizedBox(height: AppSpacing.sm),
           GhostButton(
-              label: 'Pilih kota manual',
+              label: l10n.onbLocationPickManual,
               icon: AppIcons.locationCity,
               onPressed: _busy ? null : _pickCity),
           const SizedBox(height: AppSpacing.lg),
@@ -307,16 +312,17 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   }
 
   Widget _page3() {
+    final l10n = AppL10n.of(context);
     return _PageBody(
       entry: _entry,
-      semanticsLabel: 'Langkah 3 dari 3: Pengingat Adzan',
+      semanticsLabel: l10n.onbStepOf('3', '3'),
       child: Column(
         children: [
           const Spacer(),
           const _Mascot(emoji: '🔔'),
           const SizedBox(height: AppSpacing.xl),
           Text(
-            'Pengingat Adzan',
+            l10n.onbNotifTitle,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: AppText.titleLg(),
@@ -324,7 +330,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           ),
           const SizedBox(height: AppSpacing.md),
           Text(
-            'Biar tidak kelewat, kami kirim pengingat saat waktu sholat tiba.',
+            l10n.onbNotifBody,
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
             style:
@@ -333,14 +339,14 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           ),
           const Spacer(),
           HeroButton(
-              label: _busy ? 'MENYALA...' : 'Izinkan Notifikasi',
+              label: _busy ? l10n.onbNotifLoading : l10n.onbNotifAllow,
               trailingIcon: AppIcons.notificationsActiveOutlined,
               onPressed: _busy ? null : () => _finish(enableNotif: true)),
           const SizedBox(height: AppSpacing.sm),
           // P0: escape dari halaman 3 — sebelumnya Lewati di-disable tanpa
           // alternatif visible (user terjebak di permission notif).
           GhostButton(
-              label: 'Lewati, nanti saja',
+              label: l10n.onbNotifSkip,
               icon: AppIcons.close,
               onPressed: _busy ? null : () => _finish(enableNotif: false)),
           const SizedBox(height: AppSpacing.lg),
@@ -390,8 +396,9 @@ class _MockXpCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
     return Semantics(
-      label: 'Contoh: Subuh selesai, ditambah 50 XP',
+      label: l10n.onbXpDemoSemantics,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
@@ -412,7 +419,7 @@ class _MockXpCard extends StatelessWidget {
             Icon(AppIcons.checkCircle, size: 18, color: AppColors.primary),
             const SizedBox(width: 8),
             Text(
-              'Subuh ✓',
+              '${l10n.prayerSubuh} ✓',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: AppText.labelCaps().copyWith(color: AppColors.onSurface),

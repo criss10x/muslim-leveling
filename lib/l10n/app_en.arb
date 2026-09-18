@@ -172,6 +172,16 @@
       }
     }
   },
+  "@onbStepOf": {
+    "placeholders": {
+      "step": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
   "@profilHeroSemantics": {
     "placeholders": {
       "tier": {
@@ -612,6 +622,26 @@
   "localePicked": "Language selected",
   "localeSystem": "Follow System (Phone)",
   "localeTitle": "App language",
+  "onbContinue": "Continue",
+  "onbDefaultNickname": "Pejuang",
+  "onbLangBody": "You can change this anytime in Profile.",
+  "onbLangTitle": "Which language do you want?",
+  "onbLocationAllow": "Allow Location",
+  "onbLocationBody": "To calculate accurate prayer times and qibla direction we need location access. Your location is not shared with anyone — all calculations happen on your phone.",
+  "onbLocationLoading": "GETTING LOCATION...",
+  "onbLocationPickManual": "Pick city manually",
+  "onbLocationTitle": "We Need Your Location",
+  "onbNicknameHint": "Warrior name (optional — blank: Pejuang)",
+  "onbNotifAllow": "Allow Notifications",
+  "onbNotifBody": "So you never miss it, we send a reminder when prayer time comes.",
+  "onbNotifLoading": "ENABLING...",
+  "onbNotifSkip": "Skip for now",
+  "onbNotifTitle": "Adhan Reminders",
+  "onbSkip": "Skip",
+  "onbStepOf": "Step {step} of {total}",
+  "onbWelcomeBody": "Complete prayer quests, collect XP, level up.",
+  "onbWelcomeTitle": "Welcome, Muslim Warrior!",
+  "onbXpDemoSemantics": "Example: Fajr done, +50 XP added",
   "prayerAshar": "Asr",
   "prayerDzuhur": "Dhuhr",
   "prayerIsya": "Isha",

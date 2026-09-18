@@ -936,6 +936,71 @@ class AppL10nId extends AppL10n {
   String get localeTitle => 'Bahasa aplikasi';
 
   @override
+  String get onbContinue => 'Lanjut';
+
+  @override
+  String get onbDefaultNickname => 'Pejuang';
+
+  @override
+  String get onbLangBody => 'Kamu bisa ubah kapan saja di Profil.';
+
+  @override
+  String get onbLangTitle => 'Mau pakai bahasa apa?';
+
+  @override
+  String get onbLocationAllow => 'Izinkan Lokasi';
+
+  @override
+  String get onbLocationBody =>
+      'Untuk menghitung jadwal sholat & arah qiblat yang akurat, kami perlu akses lokasi. Lokasi tidak dibagikan ke siapa pun — semua perhitungan terjadi di HP-mu.';
+
+  @override
+  String get onbLocationLoading => 'MENGAMBIL LOKASI...';
+
+  @override
+  String get onbLocationPickManual => 'Pilih kota manual';
+
+  @override
+  String get onbLocationTitle => 'Butuh Lokasimu';
+
+  @override
+  String get onbNicknameHint => 'Nama pejuang (opsional — kosong: Pejuang)';
+
+  @override
+  String get onbNotifAllow => 'Izinkan Notifikasi';
+
+  @override
+  String get onbNotifBody =>
+      'Biar tidak kelewat, kami kirim pengingat saat waktu sholat tiba.';
+
+  @override
+  String get onbNotifLoading => 'MENYALA...';
+
+  @override
+  String get onbNotifSkip => 'Lewati, nanti saja';
+
+  @override
+  String get onbNotifTitle => 'Pengingat Adzan';
+
+  @override
+  String get onbSkip => 'Lewati';
+
+  @override
+  String onbStepOf(String step, String total) {
+    return 'Langkah $step dari $total';
+  }
+
+  @override
+  String get onbWelcomeBody =>
+      'Selesaikan quest sholat, kumpulkan XP, naikkan level.';
+
+  @override
+  String get onbWelcomeTitle => 'Selamat Datang, Muslim Warrior!';
+
+  @override
+  String get onbXpDemoSemantics => 'Contoh: Subuh selesai, ditambah 50 XP';
+
+  @override
   String get prayerAshar => 'Ashar';
 
   @override
