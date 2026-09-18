@@ -1159,6 +1159,22 @@ class AppL10nId extends AppL10n {
   String get profilFromGallery => 'Pilih dari Galeri';
 
   @override
+  String get profilGender => 'Jenis Kelamin';
+
+  @override
+  String get profilGenderAkhwat => 'Akhwat';
+
+  @override
+  String get profilGenderExplain =>
+      'Dipakai untuk menyembunyikan atau menampilkan menu Periode Haid. Tidak ikut sinkron ke cloud.';
+
+  @override
+  String get profilGenderIkhwan => 'Ikhwan';
+
+  @override
+  String get profilGenderUnset => 'Belum dipilih';
+
+  @override
   String get profilHeatmapBody =>
       'Makin hijau makin lengkap — 5 shade = 5 sholat wajib.';
 

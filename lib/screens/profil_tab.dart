@@ -20,7 +20,8 @@ import '../../widgets/achievement_medal.dart';
 import '../../widgets/tier_avatar.dart';
 import '../../widgets/cosmetic_locker.dart';
 import '../../widgets/theme_preset_picker.dart';
-import '../../widgets/locale_picker.dart';
+import '../widgets/gender_picker.dart';
+import '../widgets/locale_picker.dart';
 import '../../l10n/app_localizations.dart';
 import '../../widgets/prayer_heatmap.dart';
 import '../../services/cosmetic_service.dart';
@@ -41,6 +42,7 @@ class _ProfilTabState extends State<ProfilTab> {
   String _nickname = 'Muslim Warrior';
   String? _avatarPath;
   bool _haidMode = false;
+  String _gender = '';
   bool _googleLoginLoading = false;
 
   @override
@@ -71,6 +73,7 @@ class _ProfilTabState extends State<ProfilTab> {
       _nickname = p.getString('nickname') ?? 'Muslim Warrior';
       _avatarPath = p.getString('avatar_path');
       _haidMode = state.haidMode;
+      _gender = p.getString(kGenderPrefKey) ?? '';
     });
   }
 
@@ -2395,6 +2398,9 @@ class _ProfilTabState extends State<ProfilTab> {
 
   Widget _settings() {
     final rows = <_SettingRow>[
+      // ponytail: genderHidesCycle — satu-satunya efek pilihan gender.
+      // Kalau Lewati (''), baris ini tetap tampil.
+      if (!genderHidesCycle(_gender))
       _SettingRow(
         AppL10n.of(context).profilCyclePeriod,
         AppIcons.bloodtypeOutlined,
@@ -2435,6 +2441,31 @@ class _ProfilTabState extends State<ProfilTab> {
         AppL10n.of(context).profilTheme,
         AppIcons.paletteOutlined,
         onTap: () => showThemePresetPicker(context),
+      ),
+      _SettingRow(
+        AppL10n.of(context).profilGender,
+        AppIcons.personOutline,
+        trailing: Text(
+          switch (_gender) {
+            'male' => AppL10n.of(context).profilGenderIkhwan,
+            'female' => AppL10n.of(context).profilGenderAkhwat,
+            _ => AppL10n.of(context).profilGenderUnset,
+          },
+          style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
+        ),
+        onTap: () async {
+          final picked = await showGenderPicker(context);
+          if (picked == null || !mounted) return;
+          setState(() => _gender = picked);
+          // Ikhwan = baris Periode Haid hilang. Kalau haidMode masih true,
+          // streak-nya freeze diam-diam tanpa tombol untuk mematikan —
+          // jadi matikan sekalian saat pindah ke Ikhwan.
+          if (genderHidesCycle(picked) && _haidMode) {
+            await GameService.setHaidMode(false);
+            if (!mounted) return;
+            setState(() => _haidMode = false);
+          }
+        },
       ),
       _SettingRow(
         AppL10n.of(context).settingLanguage,

@@ -1161,6 +1161,22 @@ class AppL10nEn extends AppL10n {
   String get profilFromGallery => 'Choose from Gallery';
 
   @override
+  String get profilGender => 'Gender';
+
+  @override
+  String get profilGenderAkhwat => 'Akhwat';
+
+  @override
+  String get profilGenderExplain =>
+      'Used to show or hide the Menstrual Period menu. It is not synced to the cloud.';
+
+  @override
+  String get profilGenderIkhwan => 'Ikhwan';
+
+  @override
+  String get profilGenderUnset => 'Not set';
+
+  @override
   String get profilHeatmapBody =>
       'The greener, the more complete — 5 shades = 5 obligatory prayers.';
 

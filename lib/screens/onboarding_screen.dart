@@ -4,6 +4,7 @@ import '../../l10n/app_localizations.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../widgets/city_picker.dart';
+import '../../widgets/gender_picker.dart';
 import '../../widgets/locale_picker.dart';
 import '../../widgets/xp_toast.dart';
 import '../../services/game_service.dart';
@@ -134,7 +135,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       // ponytail: gender di prefs, bukan GameState — pola sama dengan
       // nickname. Efeknya gender tidak ikut cloud backup, jadi copy privasi
       // di halaman 3 ("cuma dipakai untuk menyembunyikan menu") tetap benar.
-      await prefs.setString('gender', _gender);
+      await prefs.setString(kGenderPrefKey, _gender);
       if (!mounted) return;
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const DashboardShell()));

@@ -2226,6 +2226,36 @@ abstract class AppL10n {
   /// **'Pilih dari Galeri'**
   String get profilFromGallery;
 
+  /// No description provided for @profilGender.
+  ///
+  /// In id, this message translates to:
+  /// **'Jenis Kelamin'**
+  String get profilGender;
+
+  /// No description provided for @profilGenderAkhwat.
+  ///
+  /// In id, this message translates to:
+  /// **'Akhwat'**
+  String get profilGenderAkhwat;
+
+  /// No description provided for @profilGenderExplain.
+  ///
+  /// In id, this message translates to:
+  /// **'Dipakai untuk menyembunyikan atau menampilkan menu Periode Haid. Tidak ikut sinkron ke cloud.'**
+  String get profilGenderExplain;
+
+  /// No description provided for @profilGenderIkhwan.
+  ///
+  /// In id, this message translates to:
+  /// **'Ikhwan'**
+  String get profilGenderIkhwan;
+
+  /// No description provided for @profilGenderUnset.
+  ///
+  /// In id, this message translates to:
+  /// **'Belum dipilih'**
+  String get profilGenderUnset;
+
   /// No description provided for @profilHeatmapBody.
   ///
   /// In id, this message translates to:
