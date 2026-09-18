@@ -1398,6 +1398,390 @@ abstract class AppL10n {
   /// **'Simpan'**
   String get commonSave;
 
+  /// No description provided for @homeAskWajibBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Pilih kondisi sholatmu untuk bonus XP'**
+  String get homeAskWajibBody;
+
+  /// No description provided for @homeAskWajibTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Sudah Sholat ({prayer})?'**
+  String homeAskWajibTitle(String prayer);
+
+  /// No description provided for @homeBonusJamaah.
+  ///
+  /// In id, this message translates to:
+  /// **'Berjamaah'**
+  String get homeBonusJamaah;
+
+  /// No description provided for @homeBonusJamaahSub.
+  ///
+  /// In id, this message translates to:
+  /// **'sholat berjamaah'**
+  String get homeBonusJamaahSub;
+
+  /// No description provided for @homeBonusOnTime.
+  ///
+  /// In id, this message translates to:
+  /// **'Tepat waktu'**
+  String get homeBonusOnTime;
+
+  /// No description provided for @homeBonusOnTimeSub.
+  ///
+  /// In id, this message translates to:
+  /// **'di bawah 30 menit setelah adzan'**
+  String get homeBonusOnTimeSub;
+
+  /// No description provided for @homeBonusPlain.
+  ///
+  /// In id, this message translates to:
+  /// **'Sudah'**
+  String get homeBonusPlain;
+
+  /// No description provided for @homeBonusPlainSub.
+  ///
+  /// In id, this message translates to:
+  /// **'tanpa bonus XP'**
+  String get homeBonusPlainSub;
+
+  /// No description provided for @homeBonusQuestSunnah.
+  ///
+  /// In id, this message translates to:
+  /// **'BONUS QUEST · SUNNAH'**
+  String get homeBonusQuestSunnah;
+
+  /// No description provided for @homeChestLocked.
+  ///
+  /// In id, this message translates to:
+  /// **'Selesaikan 5 wajib'**
+  String get homeChestLocked;
+
+  /// No description provided for @homeChestMetaOpened.
+  ///
+  /// In id, this message translates to:
+  /// **'DIBUKA'**
+  String get homeChestMetaOpened;
+
+  /// No description provided for @homeChestMetaProgress.
+  ///
+  /// In id, this message translates to:
+  /// **'{done}/{total} WAJIB'**
+  String homeChestMetaProgress(int done, int total);
+
+  /// No description provided for @homeChestOpenedLabel.
+  ///
+  /// In id, this message translates to:
+  /// **'CHEST DIBUKA'**
+  String get homeChestOpenedLabel;
+
+  /// No description provided for @homeChestOpenedSub.
+  ///
+  /// In id, this message translates to:
+  /// **'Besok lagi ya kak! 🌙'**
+  String get homeChestOpenedSub;
+
+  /// No description provided for @homeChestReadyLabel.
+  ///
+  /// In id, this message translates to:
+  /// **'REWARD SIAP!'**
+  String get homeChestReadyLabel;
+
+  /// No description provided for @homeChestReadySub.
+  ///
+  /// In id, this message translates to:
+  /// **'Klik untuk klaim 🎉'**
+  String get homeChestReadySub;
+
+  /// No description provided for @homeChestTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'DAILY CHEST'**
+  String get homeChestTitle;
+
+  /// No description provided for @homeDefaultCity.
+  ///
+  /// In id, this message translates to:
+  /// **'Jakarta'**
+  String get homeDefaultCity;
+
+  /// No description provided for @homeLevelUpSource.
+  ///
+  /// In id, this message translates to:
+  /// **'Sholat {prayer}'**
+  String homeLevelUpSource(String prayer);
+
+  /// No description provided for @homeLockAfterTime.
+  ///
+  /// In id, this message translates to:
+  /// **'Waktu {prayer} sudah lewat.'**
+  String homeLockAfterTime(String prayer);
+
+  /// No description provided for @homeLockBeforeTime.
+  ///
+  /// In id, this message translates to:
+  /// **'Belum masuk waktu {prayer} (adzan {time}).'**
+  String homeLockBeforeTime(String prayer, String time);
+
+  /// No description provided for @homeLockSubuh.
+  ///
+  /// In id, this message translates to:
+  /// **'Quest Subuh terkunci {hours} jam setelah adzan (sampai {until}). Besok jangan kelewat ya! 💪'**
+  String homeLockSubuh(int hours, String until);
+
+  /// No description provided for @homeLogDuplicate.
+  ///
+  /// In id, this message translates to:
+  /// **'Sholat ini udah dicatat hari ini!'**
+  String get homeLogDuplicate;
+
+  /// No description provided for @homeNext.
+  ///
+  /// In id, this message translates to:
+  /// **'BERIKUTNYA'**
+  String get homeNext;
+
+  /// No description provided for @homeQuestClaimable.
+  ///
+  /// In id, this message translates to:
+  /// **'{n} SIAP KLAIM'**
+  String homeQuestClaimable(int n);
+
+  /// No description provided for @homeQuestDaily.
+  ///
+  /// In id, this message translates to:
+  /// **'QUEST HARIAN'**
+  String get homeQuestDaily;
+
+  /// No description provided for @homeQuickActions.
+  ///
+  /// In id, this message translates to:
+  /// **'AKSES CEPAT'**
+  String get homeQuickActions;
+
+  /// No description provided for @homeQuickActionsMeta.
+  ///
+  /// In id, this message translates to:
+  /// **'RENUNGAN {done}/{total}'**
+  String homeQuickActionsMeta(int done, int total);
+
+  /// No description provided for @homeQuickDoa.
+  ///
+  /// In id, this message translates to:
+  /// **'Doa'**
+  String get homeQuickDoa;
+
+  /// No description provided for @homeQuickDzikir.
+  ///
+  /// In id, this message translates to:
+  /// **'Dzikir'**
+  String get homeQuickDzikir;
+
+  /// No description provided for @homeQuickHadis.
+  ///
+  /// In id, this message translates to:
+  /// **'Hadis'**
+  String get homeQuickHadis;
+
+  /// No description provided for @homeQuickKiblat.
+  ///
+  /// In id, this message translates to:
+  /// **'Kiblat'**
+  String get homeQuickKiblat;
+
+  /// No description provided for @homeQuickRenungan.
+  ///
+  /// In id, this message translates to:
+  /// **'Renungan'**
+  String get homeQuickRenungan;
+
+  /// No description provided for @homeRevealBtn.
+  ///
+  /// In id, this message translates to:
+  /// **'Alhamdulillah! 🤲'**
+  String get homeRevealBtn;
+
+  /// No description provided for @homeRevealCosmetic.
+  ///
+  /// In id, this message translates to:
+  /// **'KOSMETIK BARU!'**
+  String get homeRevealCosmetic;
+
+  /// No description provided for @homeRevealDuplicate.
+  ///
+  /// In id, this message translates to:
+  /// **'Item duplikat — koleksi tetap tersimpan 📦'**
+  String get homeRevealDuplicate;
+
+  /// No description provided for @homeRevealLevelUp.
+  ///
+  /// In id, this message translates to:
+  /// **'⬆️ Level Up!{suffix}'**
+  String homeRevealLevelUp(String suffix);
+
+  /// No description provided for @homeRevealReward.
+  ///
+  /// In id, this message translates to:
+  /// **'REWARD DIDAPAT!'**
+  String get homeRevealReward;
+
+  /// No description provided for @homeRevealShield.
+  ///
+  /// In id, this message translates to:
+  /// **'FREEZE SHIELD!'**
+  String get homeRevealShield;
+
+  /// No description provided for @homeRevealShieldBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Streak aman 1 hari saat lupa sholat. Total: {count} ❄️'**
+  String homeRevealShieldBody(int count);
+
+  /// No description provided for @homeRingWajib.
+  ///
+  /// In id, this message translates to:
+  /// **'WAJIB'**
+  String get homeRingWajib;
+
+  /// No description provided for @homeRitualToday.
+  ///
+  /// In id, this message translates to:
+  /// **'RITUAL HARI INI'**
+  String get homeRitualToday;
+
+  /// No description provided for @homeSideDone.
+  ///
+  /// In id, this message translates to:
+  /// **'Selesai hari ini ✓'**
+  String get homeSideDone;
+
+  /// No description provided for @homeSideDzikir.
+  ///
+  /// In id, this message translates to:
+  /// **'Dzikir 100x'**
+  String get homeSideDzikir;
+
+  /// No description provided for @homeSideDzikirSub.
+  ///
+  /// In id, this message translates to:
+  /// **'{count}/{target} dzikir'**
+  String homeSideDzikirSub(int count, int target);
+
+  /// No description provided for @homeSideHadis.
+  ///
+  /// In id, this message translates to:
+  /// **'Belajar Hadis'**
+  String get homeSideHadis;
+
+  /// No description provided for @homeSideHadisSub.
+  ///
+  /// In id, this message translates to:
+  /// **'{count}/{target} hadis dibaca'**
+  String homeSideHadisSub(int count, int target);
+
+  /// No description provided for @homeSideQuestTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'SIDE QUEST'**
+  String get homeSideQuestTitle;
+
+  /// No description provided for @homeSideQuran.
+  ///
+  /// In id, this message translates to:
+  /// **'Baca Quran'**
+  String get homeSideQuran;
+
+  /// No description provided for @homeSideQuranSub.
+  ///
+  /// In id, this message translates to:
+  /// **'{done}/{target} ayat hari ini'**
+  String homeSideQuranSub(int done, int target);
+
+  /// No description provided for @homeSideSedekah.
+  ///
+  /// In id, this message translates to:
+  /// **'Sedekah'**
+  String get homeSideSedekah;
+
+  /// No description provided for @homeSideSedekahSub.
+  ///
+  /// In id, this message translates to:
+  /// **'Bersedekah hari ini'**
+  String get homeSideSedekahSub;
+
+  /// No description provided for @homeSunnahHintBadiyahDzuhur.
+  ///
+  /// In id, this message translates to:
+  /// **'Ba\'diyah Dzuhur waktunya setelah Dzuhur sampai sebelum Ashar.'**
+  String get homeSunnahHintBadiyahDzuhur;
+
+  /// No description provided for @homeSunnahHintBadiyahIsya.
+  ///
+  /// In id, this message translates to:
+  /// **'Ba\'diyah Isya waktunya setelah Isya sampai tengah malam.'**
+  String get homeSunnahHintBadiyahIsya;
+
+  /// No description provided for @homeSunnahHintBadiyahMaghrib.
+  ///
+  /// In id, this message translates to:
+  /// **'Ba\'diyah Maghrib waktunya setelah Maghrib sampai sebelum Isya.'**
+  String get homeSunnahHintBadiyahMaghrib;
+
+  /// No description provided for @homeSunnahHintDhuha.
+  ///
+  /// In id, this message translates to:
+  /// **'Dhuha bisa setelah matahari naik (±15 min setelah terbit) sampai sebelum Dzuhur.'**
+  String get homeSunnahHintDhuha;
+
+  /// No description provided for @homeSunnahHintFallback.
+  ///
+  /// In id, this message translates to:
+  /// **'Coba lagi nanti ya.'**
+  String get homeSunnahHintFallback;
+
+  /// No description provided for @homeSunnahHintQobliyahAshar.
+  ///
+  /// In id, this message translates to:
+  /// **'Qobliyah Ashar waktunya dari Ashar sampai sebelum Maghrib.'**
+  String get homeSunnahHintQobliyahAshar;
+
+  /// No description provided for @homeSunnahHintQobliyahDzuhur.
+  ///
+  /// In id, this message translates to:
+  /// **'Qobliyah Dzuhur waktunya dari Dzuhur sampai sebelum Ashar.'**
+  String get homeSunnahHintQobliyahDzuhur;
+
+  /// No description provided for @homeSunnahHintQobliyahSubuh.
+  ///
+  /// In id, this message translates to:
+  /// **'Qobliyah Subuh waktunya sama dengan sholat Subuh (dari Subuh sampai Terbit).'**
+  String get homeSunnahHintQobliyahSubuh;
+
+  /// No description provided for @homeSunnahHintTahajjud.
+  ///
+  /// In id, this message translates to:
+  /// **'Tahajjud waktu setelah Isya sampai sebelum Imsak.'**
+  String get homeSunnahHintTahajjud;
+
+  /// No description provided for @homeUnitDays.
+  ///
+  /// In id, this message translates to:
+  /// **'hari'**
+  String get homeUnitDays;
+
+  /// No description provided for @homeWajibQuest.
+  ///
+  /// In id, this message translates to:
+  /// **'WAJIB QUEST'**
+  String get homeWajibQuest;
+
+  /// No description provided for @homeXpToNextRank.
+  ///
+  /// In id, this message translates to:
+  /// **'XP TO NEXT RANK'**
+  String get homeXpToNextRank;
+
   /// No description provided for @localeEnglish.
   ///
   /// In id, this message translates to:
@@ -1445,6 +1829,12 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Isya'**
   String get prayerIsya;
+
+  /// No description provided for @prayerJumat.
+  ///
+  /// In id, this message translates to:
+  /// **'Jumat'**
+  String get prayerJumat;
 
   /// No description provided for @prayerMaghrib.
   ///
@@ -2261,6 +2651,102 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'hari Tilawah beruntun 🔥'**
   String get shareStatTilawahStreak;
+
+  /// No description provided for @sunnahBadiyahDzuhurDesc.
+  ///
+  /// In id, this message translates to:
+  /// **'Sunnah sesudah Dzuhur'**
+  String get sunnahBadiyahDzuhurDesc;
+
+  /// No description provided for @sunnahBadiyahDzuhurName.
+  ///
+  /// In id, this message translates to:
+  /// **'Ba\'diyah Dzuhur'**
+  String get sunnahBadiyahDzuhurName;
+
+  /// No description provided for @sunnahBadiyahIsyaDesc.
+  ///
+  /// In id, this message translates to:
+  /// **'Sunnah sesudah Isya'**
+  String get sunnahBadiyahIsyaDesc;
+
+  /// No description provided for @sunnahBadiyahIsyaName.
+  ///
+  /// In id, this message translates to:
+  /// **'Ba\'diyah Isya'**
+  String get sunnahBadiyahIsyaName;
+
+  /// No description provided for @sunnahBadiyahMaghribDesc.
+  ///
+  /// In id, this message translates to:
+  /// **'Sunnah sesudah Maghrib'**
+  String get sunnahBadiyahMaghribDesc;
+
+  /// No description provided for @sunnahBadiyahMaghribName.
+  ///
+  /// In id, this message translates to:
+  /// **'Ba\'diyah Maghrib'**
+  String get sunnahBadiyahMaghribName;
+
+  /// No description provided for @sunnahDhuhaDesc.
+  ///
+  /// In id, this message translates to:
+  /// **'Sunnah mutlak di pagi hari'**
+  String get sunnahDhuhaDesc;
+
+  /// No description provided for @sunnahDhuhaName.
+  ///
+  /// In id, this message translates to:
+  /// **'Dhuha'**
+  String get sunnahDhuhaName;
+
+  /// No description provided for @sunnahQobliyahAsharDesc.
+  ///
+  /// In id, this message translates to:
+  /// **'Sunnah sebelum Ashar'**
+  String get sunnahQobliyahAsharDesc;
+
+  /// No description provided for @sunnahQobliyahAsharName.
+  ///
+  /// In id, this message translates to:
+  /// **'Qobliyah Ashar'**
+  String get sunnahQobliyahAsharName;
+
+  /// No description provided for @sunnahQobliyahDzuhurDesc.
+  ///
+  /// In id, this message translates to:
+  /// **'Sunnah sebelum Dzuhur'**
+  String get sunnahQobliyahDzuhurDesc;
+
+  /// No description provided for @sunnahQobliyahDzuhurName.
+  ///
+  /// In id, this message translates to:
+  /// **'Qobliyah Dzuhur'**
+  String get sunnahQobliyahDzuhurName;
+
+  /// No description provided for @sunnahQobliyahSubuhDesc.
+  ///
+  /// In id, this message translates to:
+  /// **'Sunnah sebelum Subuh'**
+  String get sunnahQobliyahSubuhDesc;
+
+  /// No description provided for @sunnahQobliyahSubuhName.
+  ///
+  /// In id, this message translates to:
+  /// **'Qobliyah Subuh'**
+  String get sunnahQobliyahSubuhName;
+
+  /// No description provided for @sunnahTahajjudDesc.
+  ///
+  /// In id, this message translates to:
+  /// **'Sunnah malam (qiyamul lail)'**
+  String get sunnahTahajjudDesc;
+
+  /// No description provided for @sunnahTahajjudName.
+  ///
+  /// In id, this message translates to:
+  /// **'Tahajjud'**
+  String get sunnahTahajjudName;
 
   /// No description provided for @tabHome.
   ///

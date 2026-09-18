@@ -9,6 +9,7 @@ import 'cosmetic_catalog.dart';
 import 'cosmetic_service.dart';
 import 'quran_data.dart';
 import 'achievement_service.dart';
+import '../l10n/app_localizations.dart';
 
 // ponytail: single-file game state. No riverpod, no bloc.
 // Port dari V3 GameViewModel logic. State persisted as JSON di SharedPreferences.
@@ -756,24 +757,20 @@ class GameService {
     }
   }
 
-  static String sunnahHint(String prayer) => switch (prayer) {
-    'dhuha' =>
-      'Dhuha bisa setelah matahari naik (±15 min setelah terbit) sampai sebelum Dzuhur.',
-    'tahajjud' => 'Tahajjud waktu setelah Isya sampai sebelum Imsak.',
-    'rawatib_subuh_qobliyah' =>
-      'Qobliyah Subuh waktunya sama dengan sholat Subuh (dari Subuh sampai Terbit).',
-    'rawatib_dzuhur_qobliyah' =>
-      'Qobliyah Dzuhur waktunya dari Dzuhur sampai sebelum Ashar.',
-    'rawatib_dzuhur_ba_diyyah' =>
-      "Ba'diyah Dzuhur waktunya setelah Dzuhur sampai sebelum Ashar.",
-    'rawatib_ashar_qobliyah' =>
-      'Qobliyah Ashar waktunya dari Ashar sampai sebelum Maghrib.',
-    'rawatib_maghrib_ba_diyyah' =>
-      "Ba'diyah Maghrib waktunya setelah Maghrib sampai sebelum Isya.",
-    'rawatib_isya_ba_diyyah' =>
-      "Ba'diyah Isya waktunya setelah Isya sampai tengah malam.",
-    _ => 'Coba lagi nanti ya.',
-  };
+  /// Hint waktu sunnah. Teks dari ARB — sumbernya satu, sama dengan
+  /// baris Bonus Quest di home (nama + keterangan baris itu juga ARB).
+  static String sunnahHint(String prayer, AppL10n l10n) =>
+      switch (prayer) {
+        'dhuha' => l10n.homeSunnahHintDhuha,
+        'tahajjud' => l10n.homeSunnahHintTahajjud,
+        'rawatib_subuh_qobliyah' => l10n.homeSunnahHintQobliyahSubuh,
+        'rawatib_dzuhur_qobliyah' => l10n.homeSunnahHintQobliyahDzuhur,
+        'rawatib_dzuhur_ba_diyyah' => l10n.homeSunnahHintBadiyahDzuhur,
+        'rawatib_ashar_qobliyah' => l10n.homeSunnahHintQobliyahAshar,
+        'rawatib_maghrib_ba_diyyah' => l10n.homeSunnahHintBadiyahMaghrib,
+        'rawatib_isya_ba_diyyah' => l10n.homeSunnahHintBadiyahIsya,
+        _ => l10n.homeSunnahHintFallback,
+      };
 
   /// Batas akhir quest wajib: semua quest terkunci jam 03:00 (saat hari
   /// berganti, lihat dailyDateKey). Subuh lebih ketat: +3 jam setelah adzan.
@@ -810,17 +807,26 @@ class GameService {
   }
 
   /// Alasan quest wajib terkunci — dipakai untuk toast di UI.
-  static String wajibLockHint(String prayer, Timings t) {
-    final cap = prayer[0].toUpperCase() + prayer.substring(1);
+  static String wajibLockHint(String prayer, Timings t, AppL10n l10n) {
     final adzan = _adzanFor(prayer, t);
+    final name = switch (prayer) {
+      'subuh' => l10n.prayerSubuh,
+      'dzuhur' => l10n.prayerDzuhur,
+      'ashar' => l10n.prayerAshar,
+      'maghrib' => l10n.prayerMaghrib,
+      'isya' => l10n.prayerIsya,
+      _ => prayer,
+    };
     if (adzan.isNotEmpty && isBefore(nowHHmm(), adzan)) {
-      return 'Belum masuk waktu $cap (adzan $adzan).';
+      return l10n.homeLockBeforeTime(name, adzan);
     }
     if (prayer == 'subuh') {
-      return 'Quest Subuh terkunci ${subuhLockAfterMin ~/ 60} jam setelah adzan '
-          '(sampai ${addMin(t.subuh, subuhLockAfterMin)}). Besok jangan kelewat ya! 💪';
+      return l10n.homeLockSubuh(
+        subuhLockAfterMin ~/ 60,
+        addMin(t.subuh, subuhLockAfterMin),
+      );
     }
-    return 'Waktu $cap sudah lewat.';
+    return l10n.homeLockAfterTime(name);
   }
 
   static bool isCurrentOrUpcoming(String prayer, Timings t) {

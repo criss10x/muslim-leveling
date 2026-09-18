@@ -696,6 +696,233 @@ class AppL10nEn extends AppL10n {
   String get commonSave => 'Save';
 
   @override
+  String get homeAskWajibBody => 'Pick how you prayed to earn bonus XP';
+
+  @override
+  String homeAskWajibTitle(String prayer) {
+    return 'Have you prayed $prayer?';
+  }
+
+  @override
+  String get homeBonusJamaah => 'In congregation';
+
+  @override
+  String get homeBonusJamaahSub => 'prayed in congregation';
+
+  @override
+  String get homeBonusOnTime => 'On time';
+
+  @override
+  String get homeBonusOnTimeSub => 'within 30 minutes of the adhan';
+
+  @override
+  String get homeBonusPlain => 'Already';
+
+  @override
+  String get homeBonusPlainSub => 'no bonus XP';
+
+  @override
+  String get homeBonusQuestSunnah => 'BONUS QUEST · SUNNAH';
+
+  @override
+  String get homeChestLocked => 'Complete all 5 obligatory prayers';
+
+  @override
+  String get homeChestMetaOpened => 'OPENED';
+
+  @override
+  String homeChestMetaProgress(int done, int total) {
+    return '$done/$total OBLIGATORY';
+  }
+
+  @override
+  String get homeChestOpenedLabel => 'CHEST OPENED';
+
+  @override
+  String get homeChestOpenedSub => 'Come back tomorrow! 🌙';
+
+  @override
+  String get homeChestReadyLabel => 'REWARD READY!';
+
+  @override
+  String get homeChestReadySub => 'Tap to claim 🎉';
+
+  @override
+  String get homeChestTitle => 'DAILY CHEST';
+
+  @override
+  String get homeDefaultCity => 'Jakarta';
+
+  @override
+  String homeLevelUpSource(String prayer) {
+    return '$prayer prayer';
+  }
+
+  @override
+  String homeLockAfterTime(String prayer) {
+    return '$prayer time has passed.';
+  }
+
+  @override
+  String homeLockBeforeTime(String prayer, String time) {
+    return 'It is not $prayer time yet (adhan $time).';
+  }
+
+  @override
+  String homeLockSubuh(int hours, String until) {
+    return 'The Fajr quest locks $hours hours after adhan (until $until). Do not miss it tomorrow! 💪';
+  }
+
+  @override
+  String get homeLogDuplicate => 'This prayer is already logged today!';
+
+  @override
+  String get homeNext => 'NEXT';
+
+  @override
+  String homeQuestClaimable(int n) {
+    return '$n READY TO CLAIM';
+  }
+
+  @override
+  String get homeQuestDaily => 'DAILY QUEST';
+
+  @override
+  String get homeQuickActions => 'QUICK ACCESS';
+
+  @override
+  String homeQuickActionsMeta(int done, int total) {
+    return 'REFLECTION $done/$total';
+  }
+
+  @override
+  String get homeQuickDoa => 'Duas';
+
+  @override
+  String get homeQuickDzikir => 'Dhikr';
+
+  @override
+  String get homeQuickHadis => 'Hadith';
+
+  @override
+  String get homeQuickKiblat => 'Qibla';
+
+  @override
+  String get homeQuickRenungan => 'Reflection';
+
+  @override
+  String get homeRevealBtn => 'Alhamdulillah! 🤲';
+
+  @override
+  String get homeRevealCosmetic => 'NEW COSMETIC!';
+
+  @override
+  String get homeRevealDuplicate =>
+      'Duplicate item — your collection keeps it 📦';
+
+  @override
+  String homeRevealLevelUp(String suffix) {
+    return '⬆️ Level Up!$suffix';
+  }
+
+  @override
+  String get homeRevealReward => 'REWARD GET!';
+
+  @override
+  String get homeRevealShield => 'FREEZE SHIELD!';
+
+  @override
+  String homeRevealShieldBody(int count) {
+    return 'Your streak survives 1 missed day. Total: $count ❄️';
+  }
+
+  @override
+  String get homeRingWajib => 'OBLIGATORY';
+
+  @override
+  String get homeRitualToday => 'TODAY\'S RITUALS';
+
+  @override
+  String get homeSideDone => 'Done today ✓';
+
+  @override
+  String get homeSideDzikir => 'Dhikr 100x';
+
+  @override
+  String homeSideDzikirSub(int count, int target) {
+    return '$count/$target dhikr';
+  }
+
+  @override
+  String get homeSideHadis => 'Study Hadith';
+
+  @override
+  String homeSideHadisSub(int count, int target) {
+    return '$count/$target hadith read';
+  }
+
+  @override
+  String get homeSideQuestTitle => 'SIDE QUEST';
+
+  @override
+  String get homeSideQuran => 'Read Quran';
+
+  @override
+  String homeSideQuranSub(int done, int target) {
+    return '$done/$target verses today';
+  }
+
+  @override
+  String get homeSideSedekah => 'Charity';
+
+  @override
+  String get homeSideSedekahSub => 'Give charity today';
+
+  @override
+  String get homeSunnahHintBadiyahDzuhur =>
+      'Ba\'diyah Dhuhr runs after Dhuhr until before Asr.';
+
+  @override
+  String get homeSunnahHintBadiyahIsya =>
+      'Ba\'diyah Isha runs after Isha until midnight.';
+
+  @override
+  String get homeSunnahHintBadiyahMaghrib =>
+      'Ba\'diyah Maghrib runs after Maghrib until before Isha.';
+
+  @override
+  String get homeSunnahHintDhuha =>
+      'Duha can be prayed after sunrise (±15 min in) until before Dhuhr.';
+
+  @override
+  String get homeSunnahHintFallback => 'Try again later.';
+
+  @override
+  String get homeSunnahHintQobliyahAshar =>
+      'Qabliyah Asr runs from Asr until before Maghrib.';
+
+  @override
+  String get homeSunnahHintQobliyahDzuhur =>
+      'Qabliyah Dhuhr runs from Dhuhr until before Asr.';
+
+  @override
+  String get homeSunnahHintQobliyahSubuh =>
+      'Qabliyah Fajr shares Fajr\'s window (Fajr until sunrise).';
+
+  @override
+  String get homeSunnahHintTahajjud =>
+      'Tahajjud runs after Isha until before Imsak.';
+
+  @override
+  String get homeUnitDays => 'days';
+
+  @override
+  String get homeWajibQuest => 'OBLIGATORY QUEST';
+
+  @override
+  String get homeXpToNextRank => 'XP TO NEXT RANK';
+
+  @override
   String get localeEnglish => 'English';
 
   @override
@@ -718,6 +945,9 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get prayerIsya => 'Isha';
+
+  @override
+  String get prayerJumat => 'Friday';
 
   @override
   String get prayerMaghrib => 'Maghrib';
@@ -1191,6 +1421,54 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get shareStatTilawahStreak => 'days of Tilawah streak 🔥';
+
+  @override
+  String get sunnahBadiyahDzuhurDesc => 'Sunnah after Dhuhr';
+
+  @override
+  String get sunnahBadiyahDzuhurName => 'Ba\'diyah Dhuhr';
+
+  @override
+  String get sunnahBadiyahIsyaDesc => 'Sunnah after Isha';
+
+  @override
+  String get sunnahBadiyahIsyaName => 'Ba\'diyah Isha';
+
+  @override
+  String get sunnahBadiyahMaghribDesc => 'Sunnah after Maghrib';
+
+  @override
+  String get sunnahBadiyahMaghribName => 'Ba\'diyah Maghrib';
+
+  @override
+  String get sunnahDhuhaDesc => 'Sunnah encouraged in the morning';
+
+  @override
+  String get sunnahDhuhaName => 'Duha';
+
+  @override
+  String get sunnahQobliyahAsharDesc => 'Sunnah before Asr';
+
+  @override
+  String get sunnahQobliyahAsharName => 'Qabliyah Asr';
+
+  @override
+  String get sunnahQobliyahDzuhurDesc => 'Sunnah before Dhuhr';
+
+  @override
+  String get sunnahQobliyahDzuhurName => 'Qabliyah Dhuhr';
+
+  @override
+  String get sunnahQobliyahSubuhDesc => 'Sunnah before Fajr';
+
+  @override
+  String get sunnahQobliyahSubuhName => 'Qabliyah Fajr';
+
+  @override
+  String get sunnahTahajjudDesc => 'Night prayer (qiyamul lail)';
+
+  @override
+  String get sunnahTahajjudName => 'Tahajjud';
 
   @override
   String get tabHome => 'Home';

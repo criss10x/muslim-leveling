@@ -18,26 +18,69 @@ import 'doa_screen.dart';
 import 'qibla_screen.dart';
 import 'daily_highlight_screen.dart';
 import '../theme/app_icons.dart';
+import '../l10n/app_localizations.dart';
 
 /// Baris Bonus Quest Sunnah — urut waktu ibadah.
 /// ponytail: SATU daftar dipakai dua tempat (list di `_BonusQuest` dan
 /// denominator ring di `_ritualRings`). Sebelumnya ring memakai literal `/8`
 /// terpisah, jadi daftar bisa jadi 9 baris sementara ring tetap bilang 8 —
 /// tanpa satu pun tes gagal. Panjangnya wajib == `GameService.sunnahKeys`.
-const _sunnahQuests = <(String, String, String, IconData)>[
-  ('Dhuha', 'dhuha', 'Sunnah mutlak di pagi hari', AppIcons.wbSunny),
-  ('Tahajjud', 'tahajjud', 'Sunnah malam (qiyamul lail)', AppIcons.nightsStay),
-  ('Qobliyah Subuh', 'rawatib_subuh_qobliyah', 'Sunnah sebelum Subuh', AppIcons.history),
-  ('Qobliyah Dzuhur', 'rawatib_dzuhur_qobliyah', 'Sunnah sebelum Dzuhur', AppIcons.history),
-  ("Ba'diyah Dzuhur", 'rawatib_dzuhur_ba_diyyah', 'Sunnah sesudah Dzuhur', AppIcons.history),
-  ('Qobliyah Ashar', 'rawatib_ashar_qobliyah', 'Sunnah sebelum Ashar', AppIcons.history),
-  ("Ba'diyah Maghrib", 'rawatib_maghrib_ba_diyyah', 'Sunnah sesudah Maghrib', AppIcons.history),
-  ("Ba'diyah Isya", 'rawatib_isya_ba_diyyah', 'Sunnah sesudah Isya', AppIcons.history),
+/// ponytail: teks (nama + keterangan) tidak lagi di tabel — diambil dari ARB
+/// lewat [_sunnahText]. Tabel ini hanya memegang kunci + ikon.
+const _sunnahQuests = <(String, IconData)>[
+  ('dhuha', AppIcons.wbSunny),
+  ('tahajjud', AppIcons.nightsStay),
+  ('rawatib_subuh_qobliyah', AppIcons.history),
+  ('rawatib_dzuhur_qobliyah', AppIcons.history),
+  ('rawatib_dzuhur_ba_diyyah', AppIcons.history),
+  ('rawatib_ashar_qobliyah', AppIcons.history),
+  ('rawatib_maghrib_ba_diyyah', AppIcons.history),
+  ('rawatib_isya_ba_diyyah', AppIcons.history),
 ];
 
-extension _StringExt on String {
-  String get cap => '${this[0].toUpperCase()}${substring(1)}';
-}
+/// Nama + keterangan satu baris Bonus Quest, dalam bahasa aktif.
+/// Kunci tak dikenal jatuh ke kunci mentah (bukan crash) — isi switch ini dan
+/// tabel di atas wajib sama, dikunci `sunnah_home_ring_test`.
+(String, String) _sunnahText(String key, AppL10n l10n) => switch (key) {
+  'dhuha' => (l10n.sunnahDhuhaName, l10n.sunnahDhuhaDesc),
+  'tahajjud' => (l10n.sunnahTahajjudName, l10n.sunnahTahajjudDesc),
+  'rawatib_subuh_qobliyah' => (
+    l10n.sunnahQobliyahSubuhName,
+    l10n.sunnahQobliyahSubuhDesc,
+  ),
+  'rawatib_dzuhur_qobliyah' => (
+    l10n.sunnahQobliyahDzuhurName,
+    l10n.sunnahQobliyahDzuhurDesc,
+  ),
+  'rawatib_dzuhur_ba_diyyah' => (
+    l10n.sunnahBadiyahDzuhurName,
+    l10n.sunnahBadiyahDzuhurDesc,
+  ),
+  'rawatib_ashar_qobliyah' => (
+    l10n.sunnahQobliyahAsharName,
+    l10n.sunnahQobliyahAsharDesc,
+  ),
+  'rawatib_maghrib_ba_diyyah' => (
+    l10n.sunnahBadiyahMaghribName,
+    l10n.sunnahBadiyahMaghribDesc,
+  ),
+  'rawatib_isya_ba_diyyah' => (
+    l10n.sunnahBadiyahIsyaName,
+    l10n.sunnahBadiyahIsyaDesc,
+  ),
+  _ => (key, ''),
+};
+
+/// Nama sholat untuk UI, dari ARB. Dipakai header sheet bonus, label baris
+/// WAJIB QUEST, dan sumber layar naik-level.
+String _prayerName(String key, AppL10n l10n) => switch (key) {
+  'subuh' => l10n.prayerSubuh,
+  'dzuhur' => l10n.prayerDzuhur,
+  'ashar' => l10n.prayerAshar,
+  'maghrib' => l10n.prayerMaghrib,
+  'isya' => l10n.prayerIsya,
+  _ => key,
+};
 
 /// Home / Dashboard Utama — live game logic (port V3), design preserved.
 class HomeTab extends StatefulWidget {
@@ -48,14 +91,14 @@ class HomeTab extends StatefulWidget {
   /// untuk mengunci kesamaan dengan GameService.sunnahKeys + ring denominator.
   @visibleForTesting
   static List<String> get bonusSunnahKeys =>
-      [for (final q in _sunnahQuests) q.$2];
+      [for (final q in _sunnahQuests) q.$1];
   @override
   State<HomeTab> createState() => _HomeTabState();
 }
 
 class _HomeTabState extends State<HomeTab> {
   GameState _state = GameState();
-  String _nickname = 'Muslim Warrior';
+  String _nickname = '';
   String _claimingQuestId = '';
   String _error = '';
 
@@ -107,7 +150,7 @@ class _HomeTabState extends State<HomeTab> {
       if (mounted) {
         setState(() {
           _state = GameService.current;
-          _nickname = p.getString('nickname') ?? 'Muslim Warrior';
+          _nickname = p.getString('nickname') ?? '';
         });
       }
     } catch (e, st) {
@@ -163,7 +206,9 @@ class _HomeTabState extends State<HomeTab> {
     // tidak bisa dicentang ataupun dibatalkan lagi.
     if (type == 'wajib' &&
         !GameService.isPrayerWindowOpen(prayer, _state.timings)) {
-      _toast('🔒 ${GameService.wajibLockHint(prayer, _state.timings)}');
+      _toast(
+        '🔒 ${GameService.wajibLockHint(prayer, _state.timings, AppL10n.of(context))}',
+      );
       return;
     }
     final isLogged = GameService.isPrayerCheckedToday(prayer);
@@ -175,7 +220,7 @@ class _HomeTabState extends State<HomeTab> {
     }
     if (type == 'sunnah' &&
         !GameService.isSunnahOnTime(prayer, _state.timings)) {
-      _toast('⏰ ${GameService.sunnahHint(prayer)}');
+      _toast('⏰ ${GameService.sunnahHint(prayer, AppL10n.of(context))}');
       return;
     }
     var bonusXp = 0;
@@ -187,7 +232,7 @@ class _HomeTabState extends State<HomeTab> {
     final res = await GameService.logPrayerAsync(prayer, type, bonusXp: bonusXp);
     if (!mounted) return;
     if (res == null) {
-      _toast('Sholat ini udah dicatat hari ini!');
+      _toast(AppL10n.of(context).homeLogDuplicate);
       return;
     }
     setState(() => _state = res.$1);
@@ -201,7 +246,9 @@ class _HomeTabState extends State<HomeTab> {
           builder: (_) => NaikLevelScreen(
               xpGained: xp,
               levelsGained: levelsGained,
-              source: 'Sholat ${prayer[0].toUpperCase()}${prayer.substring(1)}'),
+              source: AppL10n.of(
+                context,
+              ).homeLevelUpSource(_prayerName(prayer, AppL10n.of(context)))),
         ),
       );
     }
@@ -210,6 +257,7 @@ class _HomeTabState extends State<HomeTab> {
   /// Bottom sheet: pilih bonus XP saat claim sholat wajib.
   /// Returns bonus XP (0/15/30) atau null kalau sheet ditutup tanpa pilih.
   Future<int?> _askWajibBonus(String prayer) {
+    final l10n = AppL10n.of(context);
     return showModalBottomSheet<int>(
       context: context,
       backgroundColor: AppColors.surfaceContainerHigh,
@@ -224,12 +272,12 @@ class _HomeTabState extends State<HomeTab> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Sudah Sholat (${prayer.cap})?',
+                l10n.homeAskWajibTitle(_prayerName(prayer, l10n)),
                 style: AppText.titleLg().copyWith(color: AppColors.onSurface),
               ),
               const SizedBox(height: 2),
               Text(
-                'Pilih kondisi sholatmu untuk bonus XP',
+                l10n.homeAskWajibBody,
                 style: AppText.bodyMd().copyWith(
                   color: AppColors.onSurfaceVariant,
                 ),
@@ -238,8 +286,8 @@ class _HomeTabState extends State<HomeTab> {
               _bonusTile(
                 ctx,
                 icon: AppIcons.schedule,
-                title: 'Tepat waktu',
-                subtitle: 'di bawah 30 menit setelah adzan',
+                title: l10n.homeBonusOnTime,
+                subtitle: l10n.homeBonusOnTimeSub,
                 xpLabel: '+15 XP',
                 accent: AppColors.primary,
                 onTap: () => Navigator.pop(ctx, GameService.timelyBonusXp),
@@ -247,8 +295,8 @@ class _HomeTabState extends State<HomeTab> {
               _bonusTile(
                 ctx,
                 icon: AppIcons.mosque,
-                title: 'Berjamaah',
-                subtitle: 'sholat berjamaah',
+                title: l10n.homeBonusJamaah,
+                subtitle: l10n.homeBonusJamaahSub,
                 xpLabel: '+30 XP',
                 accent: AppColors.secondaryContainer,
                 onTap: () => Navigator.pop(ctx, GameService.jamaahBonusXp),
@@ -256,8 +304,8 @@ class _HomeTabState extends State<HomeTab> {
               _bonusTile(
                 ctx,
                 icon: AppIcons.check,
-                title: 'Sudah',
-                subtitle: 'tanpa bonus XP',
+                title: l10n.homeBonusPlain,
+                subtitle: l10n.homeBonusPlainSub,
                 xpLabel: '+0',
                 accent: AppColors.onSurfaceVariant,
                 onTap: () => Navigator.pop(ctx, 0),
@@ -455,7 +503,7 @@ class _HomeTabState extends State<HomeTab> {
         ),
         const SizedBox(width: AppSpacing.xs),
         Text(
-          'MUSLIM LEVELING',
+          AppL10n.of(context).appTitle.toUpperCase(),
           style: AppText.labelCaps().copyWith(
             color: AppColors.onSurface,
             fontSize: 13,
@@ -585,7 +633,7 @@ class _HomeTabState extends State<HomeTab> {
                                     ),
                                   ),
                             Text(
-                              '$_nickname • Lv ${info.level}',
+                              '${_nickname.isEmpty ? AppL10n.of(context).appTitle : _nickname} • Lv ${info.level}',
                               style: AppText.bodyMd().copyWith(
                                 color: AppColors.onSurfaceVariant,
                                 fontSize: 12,
@@ -678,7 +726,8 @@ class _HomeTabState extends State<HomeTab> {
                     alignment: Alignment.centerRight,
                     child: AnimatedCount(
                       value: info.xpNeededForNextLevel - info.xpInCurrentLevel,
-                      suffix: ' XP TO NEXT RANK',
+                      suffix:
+                          ' ${AppL10n.of(context).homeXpToNextRank}',
                       style: AppText.labelCaps().copyWith(
                         color: AppColors.onSurfaceVariant,
                       ),
@@ -756,7 +805,7 @@ class _HomeTabState extends State<HomeTab> {
             AppColors.tertiary,
           ),
           vDivider(),
-          cell('BERIKUTNYA', nextName, nextIn, AppColors.onSurface),
+          cell(AppL10n.of(context).homeNext, nextName, nextIn, AppColors.onSurface),
           vDivider(),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -788,7 +837,7 @@ class _HomeTabState extends State<HomeTab> {
               ),
               const SizedBox(height: 2),
               Text(
-                'hari',
+                AppL10n.of(context).homeUnitDays,
                 style: AppText.bodyMd().copyWith(
                   color: AppColors.onSurfaceVariant,
                   fontSize: 11,
@@ -819,7 +868,7 @@ class _HomeTabState extends State<HomeTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        HudHeader('RITUAL HARI INI'),
+        HudHeader(AppL10n.of(context).homeRitualToday),
         FlatCard(
           padding: const EdgeInsets.all(AppSpacing.lg),
           child: Row(
@@ -835,7 +884,11 @@ class _HomeTabState extends State<HomeTab> {
               Expanded(
                 child: Column(
                   children: [
-                    _ringStat('WAJIB', '$wajib/5', AppColors.primary),
+                    _ringStat(
+                      AppL10n.of(context).homeRingWajib,
+                      '$wajib/5',
+                      AppColors.primary,
+                    ),
                     const SizedBox(height: AppSpacing.sm),
                     _ringStat('SUNNAH', '$sunnah/${_sunnahQuests.length}',
                         AppColors.secondaryFixed),
@@ -891,7 +944,7 @@ class _HomeTabState extends State<HomeTab> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         HudHeader(
-          'WAJIB QUEST',
+          AppL10n.of(context).homeWajibQuest,
           meta: '$done/5',
           accent: done == 5 ? AppColors.primary : null,
         ),
@@ -912,7 +965,8 @@ class _HomeTabState extends State<HomeTab> {
                       'isya': 25,
                     }[p] ??
                     15);
-          final label = isJumat ? 'Jumat' : p.cap;
+          final l10n = AppL10n.of(context);
+          final label = isJumat ? l10n.prayerJumat : _prayerName(p, l10n);
           return Padding(
             padding: const EdgeInsets.only(bottom: AppSpacing.xs),
             child: _prayerRow(
@@ -1057,8 +1111,10 @@ class _HomeTabState extends State<HomeTab> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         HudHeader(
-          'QUEST HARIAN',
-          meta: claimable > 0 ? '$claimable SIAP KLAIM' : null,
+          AppL10n.of(context).homeQuestDaily,
+          meta: claimable > 0
+              ? AppL10n.of(context).homeQuestClaimable(claimable)
+              : null,
           accent: claimable > 0 ? AppColors.primary : null,
         ),
         ..._state.quests.map(
@@ -1178,7 +1234,7 @@ class _HomeTabState extends State<HomeTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        HudHeader('SIDE QUEST'),
+        HudHeader(AppL10n.of(context).homeSideQuestTitle),
         PressableScale(
           onTap: () => _togglePrayer('sedekah', 'sedekah'),
           child: FlatCard(
@@ -1191,7 +1247,7 @@ class _HomeTabState extends State<HomeTab> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Sedekah',
+                        AppL10n.of(context).homeSideSedekah,
                         style: AppText.titleLg().copyWith(
                           fontSize: 16,
                           color: sedekahDone
@@ -1201,8 +1257,8 @@ class _HomeTabState extends State<HomeTab> {
                       ),
                       Text(
                         sedekahDone
-                            ? 'Selesai hari ini ✓'
-                            : 'Bersedekah hari ini',
+                            ? AppL10n.of(context).homeSideDone
+                            : AppL10n.of(context).homeSideSedekahSub,
                         style: AppText.bodyMd().copyWith(
                           color: AppColors.onSurfaceVariant,
                           fontSize: 12,
@@ -1238,7 +1294,7 @@ class _HomeTabState extends State<HomeTab> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Baca Quran',
+                        AppL10n.of(context).homeSideQuran,
                         style: AppText.titleLg().copyWith(
                           fontSize: 16,
                           color: done
@@ -1248,8 +1304,11 @@ class _HomeTabState extends State<HomeTab> {
                       ),
                       Text(
                         done
-                            ? 'Selesai hari ini ✓'
-                            : '${ayat.clamp(0, GameService.quranSideQuestAyat)}/${GameService.quranSideQuestAyat} ayat hari ini',
+                            ? AppL10n.of(context).homeSideDone
+                            : AppL10n.of(context).homeSideQuranSub(
+                                ayat.clamp(0, GameService.quranSideQuestAyat),
+                                GameService.quranSideQuestAyat,
+                              ),
                         style: AppText.bodyMd().copyWith(
                           color: AppColors.onSurfaceVariant,
                           fontSize: 12,
@@ -1287,7 +1346,7 @@ class _HomeTabState extends State<HomeTab> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Dzikir 100x',
+                        AppL10n.of(context).homeSideDzikir,
                         style: AppText.titleLg().copyWith(
                           fontSize: 16,
                           color: done
@@ -1297,8 +1356,11 @@ class _HomeTabState extends State<HomeTab> {
                       ),
                       Text(
                         done
-                            ? 'Selesai hari ini ✓'
-                            : '$count/${GameService.zikirGoal} dzikir',
+                            ? AppL10n.of(context).homeSideDone
+                            : AppL10n.of(context).homeSideDzikirSub(
+                                count,
+                                GameService.zikirGoal,
+                              ),
                         style: AppText.bodyMd().copyWith(
                           color: AppColors.onSurfaceVariant,
                           fontSize: 12,
@@ -1345,7 +1407,7 @@ class _HomeTabState extends State<HomeTab> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Belajar Hadis',
+                          AppL10n.of(context).homeSideHadis,
                           style: AppText.titleLg().copyWith(
                             fontSize: 16,
                             color: done
@@ -1355,8 +1417,14 @@ class _HomeTabState extends State<HomeTab> {
                         ),
                         Text(
                           done
-                              ? 'Selesai hari ini ✓'
-                              : '${count.clamp(0, GameService.hadisSideQuestTarget)}/${GameService.hadisSideQuestTarget} hadis dibaca',
+                              ? AppL10n.of(context).homeSideDone
+                              : AppL10n.of(context).homeSideHadisSub(
+                                  count.clamp(
+                                    0,
+                                    GameService.hadisSideQuestTarget,
+                                  ),
+                                  GameService.hadisSideQuestTarget,
+                                ),
                           style: AppText.bodyMd().copyWith(
                             color: AppColors.onSurfaceVariant,
                             fontSize: 12,
@@ -1393,27 +1461,27 @@ class _HomeTabState extends State<HomeTab> {
     final actions = <({IconData icon, String label, VoidCallback onTap})>[
       (
         icon: AppIcons.autoStories,
-        label: 'Hadis',
+        label: AppL10n.of(context).homeQuickHadis,
         onTap: () => _push(const HadisScreen()),
       ),
       (
         icon: AppIcons.volunteerActivism,
-        label: 'Doa',
+        label: AppL10n.of(context).homeQuickDoa,
         onTap: () => _push(const DoaScreen()),
       ),
       (
         icon: AppIcons.explore,
-        label: 'Kiblat',
+        label: AppL10n.of(context).homeQuickKiblat,
         onTap: _openQibla,
       ),
       (
         icon: AppIcons.dotsNine,
-        label: 'Dzikir',
+        label: AppL10n.of(context).homeQuickDzikir,
         onTap: () => _push(const DzikirScreen()),
       ),
       (
         icon: AppIcons.menuBookOutlined,
-        label: 'Renungan',
+        label: AppL10n.of(context).homeQuickRenungan,
         onTap: () => _push(const DailyHighlightScreen()),
       ),
     ];
@@ -1428,7 +1496,7 @@ class _HomeTabState extends State<HomeTab> {
           icon: a.icon,
           label: a.label,
           onTap: a.onTap,
-          done: a.label == 'Renungan' &&
+          done: a.label == AppL10n.of(context).homeQuickRenungan &&
               renunganDone == GameService.highlightSwipeMaxPages,
         ),
     ];
@@ -1436,9 +1504,12 @@ class _HomeTabState extends State<HomeTab> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         HudHeader(
-          'AKSES CEPAT',
+          AppL10n.of(context).homeQuickActions,
           meta: renunganDone > 0
-              ? 'RENUNGAN $renunganDone/${GameService.highlightSwipeMaxPages}'
+              ? AppL10n.of(context).homeQuickActionsMeta(
+                  renunganDone,
+                  GameService.highlightSwipeMaxPages,
+                )
               : null,
           accent: renunganDone == GameService.highlightSwipeMaxPages
               ? AppColors.primary
@@ -1572,7 +1643,9 @@ class _HomeTabState extends State<HomeTab> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => QiblaScreen(cityName: loc?.name ?? 'Jakarta'),
+        builder: (_) => QiblaScreen(
+          cityName: loc?.name ?? AppL10n.of(context).homeDefaultCity,
+        ),
       ),
     );
   }
@@ -1580,6 +1653,7 @@ class _HomeTabState extends State<HomeTab> {
 
   // ─── Daily Reward Chest ───
   Widget _dailyChest() {
+    final l10n = AppL10n.of(context);
     final wajibDone = GameService.checkedWajibToday;
     final isOpened = GameService.isDailyChestOpened;
     final isReady = GameService.isDailyChestAvailable;
@@ -1594,20 +1668,20 @@ class _HomeTabState extends State<HomeTab> {
 
     if (isOpened) {
       emoji = '📭';
-      label = 'CHEST DIBUKA';
-      subtitle = 'Besok lagi ya kak! 🌙';
+      label = l10n.homeChestOpenedLabel;
+      subtitle = l10n.homeChestOpenedSub;
       accent = AppColors.onSurfaceVariant;
       canTap = false;
     } else if (isReady) {
       emoji = '🎁';
-      label = 'REWARD SIAP!';
-      subtitle = 'Klik untuk klaim 🎉';
+      label = l10n.homeChestReadyLabel;
+      subtitle = l10n.homeChestReadySub;
       accent = AppColors.tertiary;
       canTap = true;
     } else {
       emoji = '🔒';
-      label = 'DAILY CHEST';
-      subtitle = 'Selesaikan 5 wajib';
+      label = l10n.homeChestTitle;
+      subtitle = l10n.homeChestLocked;
       accent = AppColors.primary;
       canTap = false;
     }
@@ -1616,8 +1690,10 @@ class _HomeTabState extends State<HomeTab> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         HudHeader(
-          'DAILY CHEST',
-          meta: isOpened ? 'DIBUKA' : '$wajibDone/$totalWajib WAJIB',
+          l10n.homeChestTitle,
+          meta: isOpened
+              ? l10n.homeChestMetaOpened
+              : l10n.homeChestMetaProgress(wajibDone, totalWajib),
           accent: isReady ? AppColors.tertiary : null,
         ),
         PressableScale(
@@ -1710,6 +1786,8 @@ class _HomeTabState extends State<HomeTab> {
         : reveal.isShield
             ? AppColors.tertiary
             : AppColors.primary;
+    // Ditangkap sebelum showDialog: builder-nya jalan setelah gap.
+    final l10n = AppL10n.of(context);
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -1756,10 +1834,10 @@ class _HomeTabState extends State<HomeTab> {
                 const SizedBox(height: AppSpacing.md),
                 Text(
                   reveal.isCosmetic
-                      ? 'KOSMETIK BARU!'
+                      ? l10n.homeRevealCosmetic
                       : reveal.isShield
-                          ? 'FREEZE SHIELD!'
-                          : 'REWARD DIDAPAT!',
+                          ? l10n.homeRevealShield
+                          : l10n.homeRevealReward,
                   style: AppText.labelCaps().copyWith(
                     color: accent,
                     fontSize: 12,
@@ -1776,7 +1854,7 @@ class _HomeTabState extends State<HomeTab> {
                 if (reveal.isShield) ...[
                   const SizedBox(height: AppSpacing.sm),
                   Text(
-                    'Streak aman 1 hari saat lupa sholat. Total: ${reveal.shieldCount} ❄️',
+                    l10n.homeRevealShieldBody(reveal.shieldCount),
                     style: AppText.bodyMd().copyWith(
                       color: AppColors.onSurfaceVariant,
                       fontSize: 12,
@@ -1809,7 +1887,7 @@ class _HomeTabState extends State<HomeTab> {
                 if (reveal.isDuplicate) ...[
                   const SizedBox(height: AppSpacing.sm),
                   Text(
-                    'Item duplikat — koleksi tetap tersimpan 📦',
+                    l10n.homeRevealDuplicate,
                     style: AppText.bodyMd().copyWith(
                       color: AppColors.onSurfaceVariant,
                       fontSize: 12,
@@ -1819,7 +1897,9 @@ class _HomeTabState extends State<HomeTab> {
                 if (reveal.levelsGained > 0) ...[
                   const SizedBox(height: AppSpacing.sm),
                   Text(
-                    '⬆️ Level Up!${reveal.levelsGained > 1 ? ' x${reveal.levelsGained}' : ''}',
+                    l10n.homeRevealLevelUp(
+                      reveal.levelsGained > 1 ? ' x${reveal.levelsGained}' : '',
+                    ),
                     style: AppText.labelCaps().copyWith(
                       color: AppColors.tertiary,
                       fontSize: 14,
@@ -1840,7 +1920,7 @@ class _HomeTabState extends State<HomeTab> {
                         borderRadius: BorderRadius.circular(AppRadius.lg),
                       ),
                     ),
-                    child: const Text('Alhamdulillah! 🤲'),
+                    child: Text(l10n.homeRevealBtn),
                   ),
                 ),
               ],
@@ -2061,17 +2141,18 @@ class _BonusQuestState extends State<_BonusQuest> {
   Widget build(BuildContext context) {
     final t = widget.state.timings;
     final doneCount =
-        _items.where((it) => GameService.isPrayerCheckedToday(it.$2)).length;
+        _items.where((it) => GameService.isPrayerCheckedToday(it.$1)).length;
 
     // ponytail: collapsed = on-time ATAU selesai; kalau kosong (mis. lewat
     // tengah hari, belum ibadah), fallback tampilkan semua biar kartu tak kosong.
     var visible = _items
         .where((it) =>
-            GameService.isPrayerCheckedToday(it.$2) ||
-            GameService.isSunnahOnTime(it.$2, t))
+            GameService.isPrayerCheckedToday(it.$1) ||
+            GameService.isSunnahOnTime(it.$1, t))
         .toList();
     if (visible.isEmpty) visible = List.of(_items);
     final shown = _expanded ? _items : visible;
+    final l10n = AppL10n.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -2083,7 +2164,7 @@ class _BonusQuestState extends State<_BonusQuest> {
             children: [
               Expanded(
                 child: HudHeader(
-                  'BONUS QUEST · SUNNAH',
+                  l10n.homeBonusQuestSunnah,
                   meta: '$doneCount/${_items.length}',
                 ),
               ),
@@ -2108,16 +2189,16 @@ class _BonusQuestState extends State<_BonusQuest> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: AppSpacing.xs),
                   child: _bonusRow(
-                    it.$1,
-                    it.$3,
-                    it.$4,
+                    _sunnahText(it.$1, l10n).$1,
+                    _sunnahText(it.$1, l10n).$2,
+                    it.$2,
                     AppColors.secondaryFixed,
-                    completed: GameService.isPrayerCheckedToday(it.$2),
-                    active: !GameService.isPrayerCheckedToday(it.$2) &&
-                        GameService.isSunnahOnTime(it.$2, t),
-                    locked: !GameService.isPrayerCheckedToday(it.$2) &&
-                        !GameService.isSunnahOnTime(it.$2, t),
-                    onTap: () => widget.onToggle(it.$2),
+                    completed: GameService.isPrayerCheckedToday(it.$1),
+                    active: !GameService.isPrayerCheckedToday(it.$1) &&
+                        GameService.isSunnahOnTime(it.$1, t),
+                    locked: !GameService.isPrayerCheckedToday(it.$1) &&
+                        !GameService.isSunnahOnTime(it.$1, t),
+                    onTap: () => widget.onToggle(it.$1),
                   ),
                 ),
             ],

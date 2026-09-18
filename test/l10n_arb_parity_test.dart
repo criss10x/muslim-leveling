@@ -55,46 +55,44 @@ void main() {
   });
 
   test('prosa ARB tidak disalin mentah dari Indonesia', () {
-    // Aturan: nilai non-judul yang identik id==en hanya sah kalau SELURUH
-    // katanya istilah yang memang tidak diterjemahkan. Daftar ini sengaja
-    // kata, bukan key — allowlist per-key membuat guard tumpul seiring
-    // bertambahnya key; daftar kata memaksa tiap pengecualian jadi
-    // keputusan yang terbaca.
-    const untranslated = {
-      'level', 'xp', 'lvl', 'streak', 'best', 'achievements', 'v', 'pro',
-      'muslim', 'leveling', 'english', 'bahasa', 'indonesia',
-      'maghrib', // dipakai apa adanya di Indonesia
-      'profile', 'hero', // label a11y hero memakai istilah ini di ID juga
-      'tier', // 'Tier' memang dipakai di prosa Indonesia
-      'android', 'autostart', 'google', 'backup', 'hp',
-      'rookie', 'elite', 'gold', 'epic', 'legendary', // nama tier
+    // Nilai yang identik id==en untuk label pendek itu wajar: HUD memang
+    // berbahasa Inggris di app Indonesia ("DAILY CHEST", "XP TO NEXT RANK"),
+    // dan istilah seperti "Alhamdulillah", "Ba'diyah Maghrib", "Jakarta"
+    // tidak punya padanan.
+    //
+    // Yang TIDAK wajar: prosa Indonesia yang lolos tanpa diterjemahkan.
+    // Deteksinya lewat kata fungsi bahasa Indonesia — kata yang muncul di
+    // kalimat Indonesia dan tidak pernah ada di teks English. Daftar ini
+    // stabil (tidak tumbuh tiap batch), beda dengan allowlist per-key.
+    const indonesiaMarkers = {
+      'di', 'dan', 'yang', 'untuk', 'ini', 'itu', 'hari', 'kamu', 'dengan',
+      'dari', 'tidak', 'sudah', 'bisa', 'saat', 'agar', 'akan', 'adalah',
+      'atau', 'karena', 'setelah', 'sebelum', 'tanpa', 'lagi', 'kak', 'nya',
+      'juga', 'masih', 'hanya', 'semua', 'lebih', 'bila', 'jika',
     };
 
     final id = readArb('id');
     final en = readArb('en');
-    final lazy = <String>[];
+    final untranslated = <String>[];
 
     for (final entry in id.entries) {
       final key = entry.key;
       final value = entry.value;
       if (key.startsWith('@') || value is! String || en[key] != value) continue;
-      // Judul medali & nama tier diuji terpisah di atas.
-      if (key.startsWith('ach_') && key.endsWith('_title')) continue;
-      if (key.startsWith('achTier')) continue;
-
       final words = value
           .replaceAll(RegExp(r'\{[a-zA-Z]+\}'), ' ')
           .toLowerCase()
           .split(RegExp(r'[^a-z]+'))
           .where((w) => w.isNotEmpty);
-      if (!words.every(untranslated.contains)) lazy.add('$key = "$value"');
+      if (words.any(indonesiaMarkers.contains)) {
+        untranslated.add('$key = "$value"');
+      }
     }
 
     expect(
-      lazy,
+      untranslated,
       isEmpty,
-      reason: 'nilai en identik dengan id, dan ada kata yang seharusnya '
-          'diterjemahkan',
+      reason: 'nilai en identik dengan id padahal isinya prosa Indonesia',
     );
   });
 

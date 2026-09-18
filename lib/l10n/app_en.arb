@@ -60,6 +60,118 @@
       }
     }
   },
+  "@homeAskWajibTitle": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      }
+    }
+  },
+  "@homeChestMetaProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "@homeLevelUpSource": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      }
+    }
+  },
+  "@homeLockAfterTime": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      }
+    }
+  },
+  "@homeLockBeforeTime": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "@homeLockSubuh": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "until": {
+        "type": "String"
+      }
+    }
+  },
+  "@homeQuestClaimable": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "@homeQuickActionsMeta": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "@homeRevealLevelUp": {
+    "placeholders": {
+      "suffix": {
+        "type": "String"
+      }
+    }
+  },
+  "@homeRevealShieldBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@homeSideDzikirSub": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "@homeSideHadisSub": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "@homeSideQuranSub": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
   "@profilHeroSemantics": {
     "placeholders": {
       "tier": {
@@ -431,6 +543,70 @@
   "commonLogout": "Sign out",
   "commonOk": "OK",
   "commonSave": "Save",
+  "homeAskWajibBody": "Pick how you prayed to earn bonus XP",
+  "homeAskWajibTitle": "Have you prayed {prayer}?",
+  "homeBonusJamaah": "In congregation",
+  "homeBonusJamaahSub": "prayed in congregation",
+  "homeBonusOnTime": "On time",
+  "homeBonusOnTimeSub": "within 30 minutes of the adhan",
+  "homeBonusPlain": "Already",
+  "homeBonusPlainSub": "no bonus XP",
+  "homeBonusQuestSunnah": "BONUS QUEST · SUNNAH",
+  "homeChestLocked": "Complete all 5 obligatory prayers",
+  "homeChestMetaOpened": "OPENED",
+  "homeChestMetaProgress": "{done}/{total} OBLIGATORY",
+  "homeChestOpenedLabel": "CHEST OPENED",
+  "homeChestOpenedSub": "Come back tomorrow! 🌙",
+  "homeChestReadyLabel": "REWARD READY!",
+  "homeChestReadySub": "Tap to claim 🎉",
+  "homeChestTitle": "DAILY CHEST",
+  "homeDefaultCity": "Jakarta",
+  "homeLevelUpSource": "{prayer} prayer",
+  "homeLockAfterTime": "{prayer} time has passed.",
+  "homeLockBeforeTime": "It is not {prayer} time yet (adhan {time}).",
+  "homeLockSubuh": "The Fajr quest locks {hours} hours after adhan (until {until}). Do not miss it tomorrow! 💪",
+  "homeLogDuplicate": "This prayer is already logged today!",
+  "homeNext": "NEXT",
+  "homeQuestClaimable": "{n} READY TO CLAIM",
+  "homeQuestDaily": "DAILY QUEST",
+  "homeQuickActions": "QUICK ACCESS",
+  "homeQuickActionsMeta": "REFLECTION {done}/{total}",
+  "homeQuickDoa": "Duas",
+  "homeQuickDzikir": "Dhikr",
+  "homeQuickHadis": "Hadith",
+  "homeQuickKiblat": "Qibla",
+  "homeQuickRenungan": "Reflection",
+  "homeRevealBtn": "Alhamdulillah! 🤲",
+  "homeRevealCosmetic": "NEW COSMETIC!",
+  "homeRevealDuplicate": "Duplicate item — your collection keeps it 📦",
+  "homeRevealLevelUp": "⬆️ Level Up!{suffix}",
+  "homeRevealReward": "REWARD GET!",
+  "homeRevealShield": "FREEZE SHIELD!",
+  "homeRevealShieldBody": "Your streak survives 1 missed day. Total: {count} ❄️",
+  "homeRingWajib": "OBLIGATORY",
+  "homeRitualToday": "TODAY'S RITUALS",
+  "homeSideDone": "Done today ✓",
+  "homeSideDzikir": "Dhikr 100x",
+  "homeSideDzikirSub": "{count}/{target} dhikr",
+  "homeSideHadis": "Study Hadith",
+  "homeSideHadisSub": "{count}/{target} hadith read",
+  "homeSideQuestTitle": "SIDE QUEST",
+  "homeSideQuran": "Read Quran",
+  "homeSideQuranSub": "{done}/{target} verses today",
+  "homeSideSedekah": "Charity",
+  "homeSideSedekahSub": "Give charity today",
+  "homeSunnahHintBadiyahDzuhur": "Ba'diyah Dhuhr runs after Dhuhr until before Asr.",
+  "homeSunnahHintBadiyahIsya": "Ba'diyah Isha runs after Isha until midnight.",
+  "homeSunnahHintBadiyahMaghrib": "Ba'diyah Maghrib runs after Maghrib until before Isha.",
+  "homeSunnahHintDhuha": "Duha can be prayed after sunrise (±15 min in) until before Dhuhr.",
+  "homeSunnahHintFallback": "Try again later.",
+  "homeSunnahHintQobliyahAshar": "Qabliyah Asr runs from Asr until before Maghrib.",
+  "homeSunnahHintQobliyahDzuhur": "Qabliyah Dhuhr runs from Dhuhr until before Asr.",
+  "homeSunnahHintQobliyahSubuh": "Qabliyah Fajr shares Fajr's window (Fajr until sunrise).",
+  "homeSunnahHintTahajjud": "Tahajjud runs after Isha until before Imsak.",
+  "homeUnitDays": "days",
+  "homeWajibQuest": "OBLIGATORY QUEST",
+  "homeXpToNextRank": "XP TO NEXT RANK",
   "localeEnglish": "English",
   "localeIndonesian": "Bahasa Indonesia",
   "localePicked": "Language selected",
@@ -439,6 +615,7 @@
   "prayerAshar": "Asr",
   "prayerDzuhur": "Dhuhr",
   "prayerIsya": "Isha",
+  "prayerJumat": "Friday",
   "prayerMaghrib": "Maghrib",
   "prayerSubuh": "Fajr",
   "profilAbout": "About the App",
@@ -575,6 +752,22 @@
   "shareStatQuizPerfect": "⭐ Perfect score!",
   "shareStatSunnah": "🏛️ All 8 sunnah collected",
   "shareStatTilawahStreak": "days of Tilawah streak 🔥",
+  "sunnahBadiyahDzuhurDesc": "Sunnah after Dhuhr",
+  "sunnahBadiyahDzuhurName": "Ba'diyah Dhuhr",
+  "sunnahBadiyahIsyaDesc": "Sunnah after Isha",
+  "sunnahBadiyahIsyaName": "Ba'diyah Isha",
+  "sunnahBadiyahMaghribDesc": "Sunnah after Maghrib",
+  "sunnahBadiyahMaghribName": "Ba'diyah Maghrib",
+  "sunnahDhuhaDesc": "Sunnah encouraged in the morning",
+  "sunnahDhuhaName": "Duha",
+  "sunnahQobliyahAsharDesc": "Sunnah before Asr",
+  "sunnahQobliyahAsharName": "Qabliyah Asr",
+  "sunnahQobliyahDzuhurDesc": "Sunnah before Dhuhr",
+  "sunnahQobliyahDzuhurName": "Qabliyah Dhuhr",
+  "sunnahQobliyahSubuhDesc": "Sunnah before Fajr",
+  "sunnahQobliyahSubuhName": "Qabliyah Fajr",
+  "sunnahTahajjudDesc": "Night prayer (qiyamul lail)",
+  "sunnahTahajjudName": "Tahajjud",
   "tabHome": "Home",
   "tabJadwal": "Schedule",
   "tabQuran": "Quran"

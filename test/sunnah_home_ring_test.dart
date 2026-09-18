@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:muslim_leveling/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -83,7 +84,7 @@ void main() {
 
     for (final k in HomeTab.bonusSunnahKeys) {
       expect(
-        GameService.sunnahHint(k),
+        GameService.sunnahHint(k, lookupAppL10n(const Locale('id'))),
         isNot('Coba lagi nanti ya.'),
         reason: '$k tidak punya case di sunnahHint — hint jatuh ke fallback',
       );
