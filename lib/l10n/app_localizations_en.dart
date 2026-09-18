@@ -944,6 +944,55 @@ class AppL10nEn extends AppL10n {
   String get onbDefaultNickname => 'Pejuang';
 
   @override
+  String get onbGenderAkhwat => 'AKHWAT';
+
+  @override
+  String get onbGenderIkhwan => 'IKHWAN';
+
+  @override
+  String get onbGenderPrivacy =>
+      'Your answer is only used to hide that menu. You can change it anytime in Profile.';
+
+  @override
+  String get onbGenderSkip => 'Skip';
+
+  @override
+  String get onbGenderTitle => 'Are you Ikhwan or Akhwat?';
+
+  @override
+  String get onbGenderWhy =>
+      'Akhwat get the Menstrual Period feature: during your period your prayer streak is frozen automatically, so there is no penalty. We hide it from the Ikhwan view to keep the menu clean.';
+
+  @override
+  String get onbHowAchBody =>
+      'Unlock medals from streaks, recitation, and dhikr.';
+
+  @override
+  String get onbHowAchTitle => 'Achievements';
+
+  @override
+  String get onbHowBody =>
+      'Three things that make your daily worship feel like leveling up.';
+
+  @override
+  String get onbHowDemoHint => 'Try tapping the card';
+
+  @override
+  String get onbHowQuestBody => 'Mark obligatory & sunnah prayers every day.';
+
+  @override
+  String get onbHowQuestTitle => 'Daily Quests';
+
+  @override
+  String get onbHowTitle => 'How to Play';
+
+  @override
+  String get onbHowXpBody => 'Every quest gives XP. Level up, rank up.';
+
+  @override
+  String get onbHowXpTitle => 'XP & Levels';
+
+  @override
   String get onbLangBody => 'You can change this anytime in Profile.';
 
   @override
@@ -964,6 +1013,13 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get onbLocationTitle => 'We Need Your Location';
+
+  @override
+  String get onbNameBody =>
+      'This name shows on Home and your medal cards. You can leave it blank.';
+
+  @override
+  String get onbNameTitle => 'What\'s your warrior name?';
 
   @override
   String get onbNicknameHint => 'Warrior name (optional — blank: Pejuang)';

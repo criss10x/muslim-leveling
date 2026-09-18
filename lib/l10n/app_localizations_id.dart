@@ -942,6 +942,55 @@ class AppL10nId extends AppL10n {
   String get onbDefaultNickname => 'Pejuang';
 
   @override
+  String get onbGenderAkhwat => 'AKHWAT';
+
+  @override
+  String get onbGenderIkhwan => 'IKHWAN';
+
+  @override
+  String get onbGenderPrivacy =>
+      'Jawabanmu cuma dipakai untuk menyembunyikan menu. Kamu bisa ubah kapan saja di Profil.';
+
+  @override
+  String get onbGenderSkip => 'Lewati';
+
+  @override
+  String get onbGenderTitle => 'Kamu Ikhwan atau Akhwat?';
+
+  @override
+  String get onbGenderWhy =>
+      'Akhwat punya fitur Periode Haid: saat datang bulan, streak sholat otomatis di-freeze supaya tidak ada penalti. Fitur itu kami sembunyikan dari tampilan Ikhwan supaya menunya bersih.';
+
+  @override
+  String get onbHowAchBody => 'Buka medali dari streak, tilawah, dan dzikir.';
+
+  @override
+  String get onbHowAchTitle => 'Achievement';
+
+  @override
+  String get onbHowBody =>
+      'Tiga hal ini yang bikin ibadah harianmu terasa seperti naik level.';
+
+  @override
+  String get onbHowDemoHint => 'Coba ketuk kartunya';
+
+  @override
+  String get onbHowQuestBody => 'Tandai sholat wajib & sunnah tiap hari.';
+
+  @override
+  String get onbHowQuestTitle => 'Quest Harian';
+
+  @override
+  String get onbHowTitle => 'Cara Main';
+
+  @override
+  String get onbHowXpBody =>
+      'Tiap quest selesai dapat XP. Naik level, naik pangkat.';
+
+  @override
+  String get onbHowXpTitle => 'XP & Level';
+
+  @override
   String get onbLangBody => 'Kamu bisa ubah kapan saja di Profil.';
 
   @override
@@ -962,6 +1011,13 @@ class AppL10nId extends AppL10n {
 
   @override
   String get onbLocationTitle => 'Butuh Lokasimu';
+
+  @override
+  String get onbNameBody =>
+      'Nama ini muncul di Beranda dan kartu medali. Boleh dikosongkan.';
+
+  @override
+  String get onbNameTitle => 'Siapa nama pejuangmu?';
 
   @override
   String get onbNicknameHint => 'Nama pejuang (opsional — kosong: Pejuang)';

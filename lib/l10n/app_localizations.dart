@@ -1824,6 +1824,96 @@ abstract class AppL10n {
   /// **'Pejuang'**
   String get onbDefaultNickname;
 
+  /// No description provided for @onbGenderAkhwat.
+  ///
+  /// In id, this message translates to:
+  /// **'AKHWAT'**
+  String get onbGenderAkhwat;
+
+  /// No description provided for @onbGenderIkhwan.
+  ///
+  /// In id, this message translates to:
+  /// **'IKHWAN'**
+  String get onbGenderIkhwan;
+
+  /// No description provided for @onbGenderPrivacy.
+  ///
+  /// In id, this message translates to:
+  /// **'Jawabanmu cuma dipakai untuk menyembunyikan menu. Kamu bisa ubah kapan saja di Profil.'**
+  String get onbGenderPrivacy;
+
+  /// No description provided for @onbGenderSkip.
+  ///
+  /// In id, this message translates to:
+  /// **'Lewati'**
+  String get onbGenderSkip;
+
+  /// No description provided for @onbGenderTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Kamu Ikhwan atau Akhwat?'**
+  String get onbGenderTitle;
+
+  /// No description provided for @onbGenderWhy.
+  ///
+  /// In id, this message translates to:
+  /// **'Akhwat punya fitur Periode Haid: saat datang bulan, streak sholat otomatis di-freeze supaya tidak ada penalti. Fitur itu kami sembunyikan dari tampilan Ikhwan supaya menunya bersih.'**
+  String get onbGenderWhy;
+
+  /// No description provided for @onbHowAchBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Buka medali dari streak, tilawah, dan dzikir.'**
+  String get onbHowAchBody;
+
+  /// No description provided for @onbHowAchTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Achievement'**
+  String get onbHowAchTitle;
+
+  /// No description provided for @onbHowBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Tiga hal ini yang bikin ibadah harianmu terasa seperti naik level.'**
+  String get onbHowBody;
+
+  /// No description provided for @onbHowDemoHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Coba ketuk kartunya'**
+  String get onbHowDemoHint;
+
+  /// No description provided for @onbHowQuestBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Tandai sholat wajib & sunnah tiap hari.'**
+  String get onbHowQuestBody;
+
+  /// No description provided for @onbHowQuestTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Quest Harian'**
+  String get onbHowQuestTitle;
+
+  /// No description provided for @onbHowTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Cara Main'**
+  String get onbHowTitle;
+
+  /// No description provided for @onbHowXpBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Tiap quest selesai dapat XP. Naik level, naik pangkat.'**
+  String get onbHowXpBody;
+
+  /// No description provided for @onbHowXpTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'XP & Level'**
+  String get onbHowXpTitle;
+
   /// No description provided for @onbLangBody.
   ///
   /// In id, this message translates to:
@@ -1865,6 +1955,18 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Butuh Lokasimu'**
   String get onbLocationTitle;
+
+  /// No description provided for @onbNameBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Nama ini muncul di Beranda dan kartu medali. Boleh dikosongkan.'**
+  String get onbNameBody;
+
+  /// No description provided for @onbNameTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Siapa nama pejuangmu?'**
+  String get onbNameTitle;
 
   /// No description provided for @onbNicknameHint.
   ///

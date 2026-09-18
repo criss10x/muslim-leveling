@@ -4,13 +4,22 @@ import '../../l10n/app_localizations.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../widgets/city_picker.dart';
+import '../../widgets/locale_picker.dart';
+import '../../widgets/xp_toast.dart';
 import '../../services/game_service.dart';
+import '../../services/locale_service.dart';
 import '../../services/notification_service.dart';
 import '../../services/prayer_service.dart';
 import 'dashboard_shell.dart';
 import '../theme/app_icons.dart';
 
-/// Onboarding 3 halaman: welcome → lokasi → pengingat.
+/// Onboarding 6 halaman: bahasa → nama → Ikhwan/Akhwat → cara main →
+/// lokasi → pengingat.
+///
+/// Urutan bahasa di depan bukan gaya-gayaan: halaman 2-6 langsung terbaca
+/// dalam bahasa yang dipilih, karena pilihan di-apply saat kartu ditekan
+/// (bukan ditunda ke akhir).
+///
 /// Permission diminta saat tombol halaman ditekan, bukan otomatis.
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -21,6 +30,8 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen>
     with SingleTickerProviderStateMixin {
+  static const _total = 6;
+
   final _pageCtrl = PageController();
   late final AnimationController _entry = AnimationController(
       vsync: this, duration: const Duration(milliseconds: 600))
@@ -31,6 +42,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   bool _busy = false;
   String? _city; // kota hasil deteksi/pilih — tampil sebagai ✓ Nama Kota
 
+  /// '' = belum dijawab. Dibedakan dari 'male'/'female' karena hanya
+  /// 'male' yang menyembunyikan fitur haid — lihat ProfilTab.
+  String _gender = '';
+
   @override
   void dispose() {
     _pageCtrl.dispose();
@@ -39,7 +54,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     super.dispose();
   }
 
-  bool get _isLast => _page == 2;
+  bool get _isLast => _page == _total - 1;
 
   Future<void> _next() async {
     if (_isLast) return;
@@ -48,7 +63,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         curve: Curves.easeOutCubic);
   }
 
-  /// Halaman 2: minta lokasi, sinkron jadwal, tampilkan ✓ kota.
+  /// Halaman lokasi: minta lokasi, sinkron jadwal, tampilkan ✓ kota.
   Future<void> _allowLocation() async {
     if (_busy) return;
     setState(() => _busy = true);
@@ -86,7 +101,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     setState(() => _city = picked.name);
   }
 
-  /// Halaman 3: minta notifikasi (bila diminta), tandai onboarding selesai.
+  /// Halaman terakhir: minta notifikasi (bila diminta), tandai onboarding selesai.
   Future<void> _finish({bool enableNotif = true}) async {
     if (_busy) return;
     // Tangkap l10n sebelum await: pakai context setelah await =
@@ -113,9 +128,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('onboarding_done', true);
       final raw = _nickCtrl.text.trim();
-      // P2: nama pejuang opsional — kosong → "Pejuang" (tidak dipaksa).
+      // Nama pejuang opsional — kosong → default (tidak dipaksa).
       final nick = raw.isEmpty ? l10n.onbDefaultNickname : raw;
       await prefs.setString('nickname', nick);
+      // ponytail: gender di prefs, bukan GameState — pola sama dengan
+      // nickname. Efeknya gender tidak ikut cloud backup, jadi copy privasi
+      // di halaman 3 ("cuma dipakai untuk menyembunyikan menu") tetap benar.
+      await prefs.setString('gender', _gender);
       if (!mounted) return;
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const DashboardShell()));
@@ -163,13 +182,16 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                   minimumSize: const Size(48, 48),
                   tapTargetSize: MaterialTapTargetSize.padded,
                 ),
-                onPressed: _isLast || _busy ? null : _skip,
+                // ponytail: halaman bahasa tidak bisa di-skip — semua halaman
+                // lain sudah punya jalan keluar sendiri, dan halaman ini
+                // punya default (ikut HP) yang aman kalau ditinggal begitu saja.
+                onPressed: _page == 0 || _isLast || _busy ? null : _skip,
                 child: Text(
                   l10n.onbSkip,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: AppText.bodyMd().copyWith(
-                    color: _isLast || _busy
+                    color: _page == 0 || _isLast || _busy
                         ? AppColors.onSurfaceVariant.withValues(alpha: .4)
                         : AppColors.onSurfaceVariant,
                   ),
@@ -184,7 +206,14 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                   _page = i;
                   _entry.forward(from: 0);
                 }),
-                children: [_page1(), _page2(), _page3()],
+                children: [
+                  _pageBahasa(),
+                  _pageNama(),
+                  _pageGender(),
+                  _pageCaraMain(),
+                  _pageLokasi(),
+                  _pageNotif(),
+                ],
               ),
             ),
           ],
@@ -195,38 +224,69 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   // --- halaman ---
 
-  Widget _page1() {
+  /// Halaman 1: bahasa. Tap = langsung ganti (localeNotifier yang rebuild
+  /// seluruh app), jadi halaman ini sendiri jadi buktinya.
+  Widget _pageBahasa() {
     final l10n = AppL10n.of(context);
     return _PageBody(
       entry: _entry,
-      semanticsLabel: l10n.onbStepOf('1', '3'),
+      semanticsLabel: l10n.onbStepOf('1', '$_total'),
+      child: Column(
+        children: [
+          const Spacer(),
+          const _Mascot(emoji: '🌐'),
+          const SizedBox(height: AppSpacing.lg),
+          _Title(l10n.onbLangTitle),
+          const SizedBox(height: AppSpacing.sm),
+          _Body(l10n.onbLangBody, maxLines: 3),
+          const SizedBox(height: AppSpacing.lg),
+          // ListenableBuilder: baris terpilih harus pindah saat ditekan.
+          ListenableBuilder(
+            listenable: localeNotifier,
+            builder: (context, _) => Column(
+              children: [
+                LocaleOption(
+                  value: null,
+                  label: l10n.localeSystem,
+                  current: localeNotifier.override,
+                ),
+                for (final locale in LocaleNotifier.supported)
+                  LocaleOption(
+                    value: locale,
+                    label: locale.languageCode == 'id'
+                        ? l10n.localeIndonesian
+                        : l10n.localeEnglish,
+                    current: localeNotifier.override,
+                  ),
+              ],
+            ),
+          ),
+          const Spacer(),
+          HeroButton(
+              label: l10n.onbContinue,
+              trailingIcon: AppIcons.arrowForward,
+              onPressed: _next),
+          const SizedBox(height: AppSpacing.lg),
+        ],
+      ),
+    );
+  }
+
+  /// Halaman 2: nama pejuang (opsional).
+  Widget _pageNama() {
+    final l10n = AppL10n.of(context);
+    return _PageBody(
+      entry: _entry,
+      semanticsLabel: l10n.onbStepOf('2', '$_total'),
       child: Column(
         children: [
           const Spacer(),
           const _Mascot(emoji: '🛡️'),
-          const SizedBox(height: AppSpacing.md),
-          // P1: live XP preview — show don't tell. Satu kartu mock
-          // langsung jawab "apa itu XP?" tanpa 43 kata copy.
-          const _MockXpCard(),
-          const SizedBox(height: AppSpacing.md),
-          Text(
-            l10n.onbWelcomeTitle,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: AppText.titleLg(),
-            textAlign: TextAlign.center,
-          ),
+          const SizedBox(height: AppSpacing.lg),
+          _Title(l10n.onbNameTitle),
           const SizedBox(height: AppSpacing.sm),
-          Text(
-            l10n.onbWelcomeBody,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-            style:
-                AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: AppSpacing.md),
-          // P2: input nama opsional — tidak dipaksa, soft placeholder.
+          _Body(l10n.onbNameBody, maxLines: 3),
+          const SizedBox(height: AppSpacing.lg),
           TextField(
             controller: _nickCtrl,
             maxLength: 20,
@@ -258,33 +318,106 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     );
   }
 
-  Widget _page2() {
+  /// Halaman 3: Ikhwan / Akhwat. Istilah Arab dipakai apa adanya di kedua
+  /// bahasa — tidak ada yang perlu diterjemahkan, dan lebih pas untuk konteks
+  /// ibadah daripada "Pria/Wanita".
+  ///
+  /// Tanpa ikon: font Phosphor yang di-vendor tidak punya glyph gender, dan
+  /// dua kartu dengan glyph identik lebih membingungkan daripada tanpa ikon.
+  Widget _pageGender() {
+    final l10n = AppL10n.of(context);
+    return _PageBody(
+      entry: _entry,
+      semanticsLabel: l10n.onbStepOf('3', '$_total'),
+      child: Column(
+        children: [
+          const Spacer(),
+          _Title(l10n.onbGenderTitle),
+          const SizedBox(height: AppSpacing.md),
+          // Alasan sebenarnya hanya satu: menyembunyikan baris Periode Haid.
+          _Body(l10n.onbGenderWhy, maxLines: 6),
+          const SizedBox(height: AppSpacing.lg),
+          for (final (label, value) in [
+            (l10n.onbGenderIkhwan, 'male'),
+            (l10n.onbGenderAkhwat, 'female'),
+          ])
+            _GenderCard(
+              label: label,
+              selected: _gender == value,
+              onTap: () => setState(() => _gender = value),
+            ),
+          const SizedBox(height: AppSpacing.sm),
+          _Body(l10n.onbGenderPrivacy, maxLines: 3),
+          const Spacer(),
+          GhostButton(
+              label: l10n.onbGenderSkip,
+              icon: AppIcons.close,
+              onPressed: () => setState(() => _gender = '')),
+          const SizedBox(height: AppSpacing.sm),
+          HeroButton(
+              label: l10n.onbContinue,
+              trailingIcon: AppIcons.arrowForward,
+              onPressed: _next),
+          const SizedBox(height: AppSpacing.lg),
+        ],
+      ),
+    );
+  }
+
+  /// Halaman 4: penjelasan quest/XP/achievement + kartu demo yang bisa ditekan.
+  Widget _pageCaraMain() {
+    final l10n = AppL10n.of(context);
+    return _PageBody(
+      entry: _entry,
+      semanticsLabel: l10n.onbStepOf('4', '$_total'),
+      child: Column(
+        children: [
+          const Spacer(),
+          _Title(l10n.onbHowTitle),
+          const SizedBox(height: AppSpacing.sm),
+          _Body(l10n.onbHowBody, maxLines: 3),
+          const SizedBox(height: AppSpacing.lg),
+          for (final (icon, title, body) in [
+            (AppIcons.checkCircle, l10n.onbHowQuestTitle, l10n.onbHowQuestBody),
+            (AppIcons.bolt, l10n.onbHowXpTitle, l10n.onbHowXpBody),
+            (AppIcons.emojiEvents, l10n.onbHowAchTitle, l10n.onbHowAchBody),
+          ])
+            _HowRow(icon: icon, title: title, body: body),
+          const SizedBox(height: AppSpacing.md),
+          const _MockXpCard(),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            l10n.onbHowDemoHint,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppText.labelCapsSm()
+                .copyWith(color: AppColors.onSurfaceVariant),
+          ),
+          const Spacer(),
+          HeroButton(
+              label: l10n.onbContinue,
+              trailingIcon: AppIcons.arrowForward,
+              onPressed: _next),
+          const SizedBox(height: AppSpacing.lg),
+        ],
+      ),
+    );
+  }
+
+  Widget _pageLokasi() {
     final l10n = AppL10n.of(context);
     final confirmed = _city != null;
     return _PageBody(
       entry: _entry,
-      semanticsLabel: l10n.onbStepOf('2', '3'),
+      semanticsLabel: l10n.onbStepOf('5', '$_total'),
       child: Column(
         children: [
           const Spacer(),
           const _Mascot(emoji: '📍'),
           const SizedBox(height: AppSpacing.xl),
-          Text(
-            l10n.onbLocationTitle,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: AppText.titleLg(),
-            textAlign: TextAlign.center,
-          ),
+          _Title(l10n.onbLocationTitle),
           const SizedBox(height: AppSpacing.md),
-          Text(
-            l10n.onbLocationBody,
-            maxLines: 6,
-            overflow: TextOverflow.ellipsis,
-            style:
-                AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
-            textAlign: TextAlign.center,
-          ),
+          _Body(l10n.onbLocationBody, maxLines: 6),
           const SizedBox(height: AppSpacing.md),
           if (confirmed)
             Text(
@@ -311,40 +444,27 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     );
   }
 
-  Widget _page3() {
+  Widget _pageNotif() {
     final l10n = AppL10n.of(context);
     return _PageBody(
       entry: _entry,
-      semanticsLabel: l10n.onbStepOf('3', '3'),
+      semanticsLabel: l10n.onbStepOf('6', '$_total'),
       child: Column(
         children: [
           const Spacer(),
           const _Mascot(emoji: '🔔'),
           const SizedBox(height: AppSpacing.xl),
-          Text(
-            l10n.onbNotifTitle,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: AppText.titleLg(),
-            textAlign: TextAlign.center,
-          ),
+          _Title(l10n.onbNotifTitle),
           const SizedBox(height: AppSpacing.md),
-          Text(
-            l10n.onbNotifBody,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-            style:
-                AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
-            textAlign: TextAlign.center,
-          ),
+          _Body(l10n.onbNotifBody, maxLines: 3),
           const Spacer(),
           HeroButton(
               label: _busy ? l10n.onbNotifLoading : l10n.onbNotifAllow,
               trailingIcon: AppIcons.notificationsActiveOutlined,
               onPressed: _busy ? null : () => _finish(enableNotif: true)),
           const SizedBox(height: AppSpacing.sm),
-          // P0: escape dari halaman 3 — sebelumnya Lewati di-disable tanpa
-          // alternatif visible (user terjebak di permission notif).
+          // P0: escape dari halaman terakhir — sebelumnya Lewati di-disable
+          // tanpa alternatif visible (user terjebak di permission notif).
           GhostButton(
               label: l10n.onbNotifSkip,
               icon: AppIcons.close,
@@ -356,8 +476,134 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   }
 }
 
+/// Judul halaman — satu tempat supaya maxLines/style tidak menyimpang.
+class _Title extends StatelessWidget {
+  final String text;
+  const _Title(this.text);
+
+  @override
+  Widget build(BuildContext context) => Text(
+        text,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+        style: AppText.titleLg(),
+        textAlign: TextAlign.center,
+      );
+}
+
+class _Body extends StatelessWidget {
+  final String text;
+  final int maxLines;
+  const _Body(this.text, {required this.maxLines});
+
+  @override
+  Widget build(BuildContext context) => Text(
+        text,
+        maxLines: maxLines,
+        overflow: TextOverflow.ellipsis,
+        style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
+        textAlign: TextAlign.center,
+      );
+}
+
+/// Kartu pilihan Ikhwan/Akhwat — target besar, satu baris, tanpa ikon.
+class _GenderCard extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+  const _GenderCard({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+      child: Material(
+        color: selected
+            ? AppColors.primaryContainer
+            : AppColors.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          onTap: onTap,
+          child: Semantics(
+            selected: selected,
+            button: true,
+            child: SizedBox(
+              height: 60,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    label,
+                    style: AppText.titleLg().copyWith(
+                      color: selected
+                          ? AppColors.onPrimaryContainer
+                          : AppColors.onSurface,
+                      letterSpacing: 1.5,
+                    ),
+                  ),
+                  if (selected) ...[
+                    const SizedBox(width: AppSpacing.sm),
+                    Icon(AppIcons.checkCircle, color: AppColors.primary),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Satu baris penjelasan di halaman "Cara Main".
+class _HowRow extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String body;
+  const _HowRow({required this.icon, required this.title, required this.body});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 20, color: AppColors.primary),
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppText.bodyLg().copyWith(color: AppColors.onSurface),
+                ),
+                Text(
+                  body,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppText.bodyMd()
+                      .copyWith(color: AppColors.onSurfaceVariant),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// Satu halaman onboarding dengan animasi fade+slide saat masuk.
-/// Wrap Semantics supaya TalkBack baca 'Langkah N dari 3'.
+/// Wrap Semantics supaya TalkBack baca 'Langkah N dari 6'.
 class _PageBody extends StatelessWidget {
   final Animation<double> entry;
   final Widget child;
@@ -389,8 +635,17 @@ class _PageBody extends StatelessWidget {
   }
 }
 
-/// Mock XP card — preview loop 'sholat → XP' di page 1.
-/// ponytail: reuses surfaceContainer/primary tokens, no new widgets.
+/// Kunci kartu demo XP — publik supaya tes bisa menekannya tanpa bergantung
+/// pada teks '+50 XP' yang juga muncul di toast (finder teks jadi ambigu
+/// tepat setelah kartu ditekan sekali).
+const kOnbXpDemoCardKey = ValueKey('onbXpDemoCard');
+
+/// Mock XP card — preview loop 'sholat → XP'.
+///
+/// Bisa ditekan: toast +50 XP sungguhan supaya user melihat hadiahnya, TAPI
+/// tidak ada satu pun panggilan GameService di sini. Kalau bocor, user bisa
+/// menaikkan XP dengan menekan kartu di onboarding berulang kali.
+/// Dijaga test/onboarding_gender_test.dart (tes 'demo XP ... anti-cheat').
 class _MockXpCard extends StatelessWidget {
   const _MockXpCard();
 
@@ -398,48 +653,60 @@ class _MockXpCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppL10n.of(context);
     return Semantics(
+      button: true,
       label: l10n.onbXpDemoSemantics,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceContainer,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          key: kOnbXpDemoCardKey,
           borderRadius: BorderRadius.circular(AppRadius.lg),
-          border: Border.all(color: AppColors.primary.withValues(alpha: 0.25)),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.primary.withValues(alpha: 0.12),
-              blurRadius: 10,
-              spreadRadius: 1,
+          onTap: () => showXpToast(context, 50),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceContainer,
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+              border:
+                  Border.all(color: AppColors.primary.withValues(alpha: 0.25)),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withValues(alpha: 0.12),
+                  blurRadius: 10,
+                  spreadRadius: 1,
+                ),
+              ],
             ),
-          ],
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(AppIcons.checkCircle, size: 18, color: AppColors.primary),
-            const SizedBox(width: 8),
-            Text(
-              '${l10n.prayerSubuh} ✓',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppText.labelCaps().copyWith(color: AppColors.onSurface),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(AppIcons.checkCircle, size: 18, color: AppColors.primary),
+                const SizedBox(width: 8),
+                Text(
+                  '${l10n.prayerSubuh} ✓',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style:
+                      AppText.labelCaps().copyWith(color: AppColors.onSurface),
+                ),
+                const SizedBox(width: 10),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(99),
+                  ),
+                  child: Text(
+                    '+50 XP',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppText.labelCapsSm()
+                        .copyWith(color: AppColors.surfaceContainerLowest),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(width: 10),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                borderRadius: BorderRadius.circular(99),
-              ),
-              child: Text(
-                '+50 XP',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppText.labelCapsSm()
-                    .copyWith(color: AppColors.surfaceContainerLowest),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

@@ -40,13 +40,13 @@ class LocalePicker extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacing.md),
                 // null = ikut HP, itu sebabnya tipenya Locale? bukan Locale.
-                _LocaleOption(
+                LocaleOption(
                   value: null,
                   label: l10n.localeSystem,
                   current: localeNotifier.override,
                 ),
                 for (final locale in LocaleNotifier.supported)
-                  _LocaleOption(
+                  LocaleOption(
                     value: locale,
                     label: locale.languageCode == 'id'
                         ? l10n.localeIndonesian
@@ -62,8 +62,15 @@ class LocalePicker extends StatelessWidget {
   }
 }
 
-class _LocaleOption extends StatelessWidget {
-  const _LocaleOption({
+/// Satu baris pilihan bahasa. Publik karena dipakai dua tempat: bottom sheet
+/// Profil dan halaman pertama onboarding.
+///
+/// Tap = [localeNotifier.setLocale] + pop (kalau ada sheet). Di onboarding
+/// tidak ada route di atasnya, jadi `canPop` false dan layarnya hanya
+/// berganti bahasa — tidak perlu state tambahan.
+class LocaleOption extends StatelessWidget {
+  const LocaleOption({
+    super.key,
     required this.value,
     required this.label,
     required this.current,
