@@ -6,6 +6,8 @@ import 'package:muslim_leveling/screens/splash_screen.dart';
 import 'package:muslim_leveling/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'helpers/app_wrap.dart';
+
 void main() {
   testWidgets('App boots and shows splash', (tester) async {
     await tester.pumpWidget(const MuslimLevelingApp());
@@ -34,7 +36,9 @@ void main() {
     tester,
   ) async {
     SharedPreferences.setMockInitialValues({});
-    await tester.pumpWidget(const MaterialApp(home: SplashScreen()));
+    // appWrap, bukan MaterialApp polos: setelah 900 ms splash navigasi ke
+    // OnboardingScreen, dan itu butuh delegate l10n (AppL10n.of(context)).
+    await tester.pumpWidget(appWrap(const SplashScreen()));
     await tester.pump(const Duration(milliseconds: 900));
 
     final fill = tester.widget<FractionallySizedBox>(
