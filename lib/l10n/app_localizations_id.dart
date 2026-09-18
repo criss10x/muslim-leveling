@@ -679,6 +679,21 @@ class AppL10nId extends AppL10n {
   String get appTitle => 'Muslim Leveling';
 
   @override
+  String get commonCancel => 'Batal';
+
+  @override
+  String get commonClose => 'Tutup';
+
+  @override
+  String get commonLogout => 'Keluar';
+
+  @override
+  String get commonOk => 'Oke';
+
+  @override
+  String get commonSave => 'Simpan';
+
+  @override
   String get localeEnglish => 'English';
 
   @override
@@ -692,6 +707,411 @@ class AppL10nId extends AppL10n {
 
   @override
   String get localeTitle => 'Bahasa aplikasi';
+
+  @override
+  String get prayerAshar => 'Ashar';
+
+  @override
+  String get prayerDzuhur => 'Dzuhur';
+
+  @override
+  String get prayerIsya => 'Isya';
+
+  @override
+  String get prayerMaghrib => 'Maghrib';
+
+  @override
+  String get prayerSubuh => 'Subuh';
+
+  @override
+  String get profilAbout => 'Tentang Aplikasi';
+
+  @override
+  String get profilAboutBody =>
+      'Ibadah itu konsisten, bukan sempurna. Muslim Leveling membantu kamu membangun kebiasaan sholat lima waktu dan membaca Quran dengan cara yang seru — setiap sholat yang dicatat memberi XP, setiap hari tanpa putus menambah streak, dan setiap pencapaian membuka skin avatar baru.';
+
+  @override
+  String get profilAboutFooter =>
+      'Dibuat dengan penuh doa untuk setiap pejuang akhirat.';
+
+  @override
+  String get profilAboutOffline =>
+      'Tidak ada server, tidak ada iklan, tidak ada langganan. Semua datamu tinggal di perangkat — milikmu sepenuhnya.';
+
+  @override
+  String get profilAccountSettings => 'Pengaturan Akun';
+
+  @override
+  String get profilAlreadyPrayedToday => ', sudah shalat hari ini';
+
+  @override
+  String get profilAndroidNotifSettings => 'Pengaturan Notifikasi Android';
+
+  @override
+  String get profilBackupActive => 'Backup aktif';
+
+  @override
+  String get profilBatteryPerm =>
+      'Izinkan \"Tanpa batasan baterai\" supaya pengingat tetap bunyi saat app ditutup.';
+
+  @override
+  String get profilCalendarHeader => 'KALENDER SHOLAT';
+
+  @override
+  String get profilChangePhoto => 'Ganti Foto';
+
+  @override
+  String get profilCloudVerifyFailed => 'Gagal verifikasi cloud. Coba lagi.';
+
+  @override
+  String get profilConnecting => 'MENGHUBUNGKAN...';
+
+  @override
+  String get profilContinueGoogle => 'Lanjut dengan Google';
+
+  @override
+  String get profilCycleExplain =>
+      'Aktifkan saat haid agar streak sholat tetap aman tanpa penalti.';
+
+  @override
+  String get profilCycleFrozenMeta => 'mode haid · streak di-freeze';
+
+  @override
+  String get profilCycleFrozenSemantics => 'Mode haid aktif, streak di-freeze';
+
+  @override
+  String get profilCycleModeShort => 'mode haid';
+
+  @override
+  String get profilCyclePeriod => 'Periode Haid';
+
+  @override
+  String get profilEditName => 'Edit Nama';
+
+  @override
+  String get profilEditProfile => 'Edit profil';
+
+  @override
+  String get profilEnableReminders => 'Aktifkan pengingat';
+
+  @override
+  String get profilExactAlarmPerm =>
+      'Izin \"Alarm & pengingat\" belum aktif — pengingat bisa telat beberapa menit.';
+
+  @override
+  String get profilFriday => 'Jumat';
+
+  @override
+  String get profilFromCamera => 'Ambil dari Kamera';
+
+  @override
+  String get profilFromGallery => 'Pilih dari Galeri';
+
+  @override
+  String get profilHeatmapBody =>
+      'Makin hijau makin lengkap — 5 shade = 5 sholat wajib.';
+
+  @override
+  String get profilHeatmapHeader => 'KALENDER SHOLAT WAJIB';
+
+  @override
+  String get profilHeatmapRow => 'Heatmap sholat wajib per bulan';
+
+  @override
+  String get profilHeatmapSemantics => 'Buka kalender sholat wajib';
+
+  @override
+  String profilHeroSemantics(String tier) {
+    return 'Profile hero — $tier';
+  }
+
+  @override
+  String profilLevelBadge(int level) {
+    return 'LVL $level';
+  }
+
+  @override
+  String get profilLockerRow => 'Atur aura dan gelar aktif';
+
+  @override
+  String get profilLockerSemantics => 'Buka loker skin';
+
+  @override
+  String get profilLockerSkin => 'LOKER SKIN';
+
+  @override
+  String get profilLoginCancelled => 'Login dibatalkan.';
+
+  @override
+  String profilLoginFailed(String msg) {
+    return '❌ Login gagal: $msg';
+  }
+
+  @override
+  String get profilLoginMerged => '☁️ Login OK — progress digabung.';
+
+  @override
+  String get profilLoginNotSaved => '⚠️ Login OK, tapi backup belum tersimpan.';
+
+  @override
+  String get profilLoginOffline =>
+      '⚠️ Login OK, tapi backup belum aktif (offline).';
+
+  @override
+  String get profilLogoutConfirm =>
+      'Hapus data lokal dan kembali ke layar awal?';
+
+  @override
+  String get profilLogoutSuccess => 'Logout berhasil.';
+
+  @override
+  String get profilMiniLevel => 'Level';
+
+  @override
+  String get profilMiniStreak => 'Streak';
+
+  @override
+  String get profilMiniXp => 'XP';
+
+  @override
+  String get profilModeBalanced => '⚖️ Seimbang';
+
+  @override
+  String get profilModeBalancedDesc =>
+      'Diingetin 15 menit sebelum & saat adzan';
+
+  @override
+  String get profilModeFocus => '🎯 Fokus';
+
+  @override
+  String get profilModeFocusDesc => 'Hanya pengingat utama di waktu adzan';
+
+  @override
+  String get profilModeIntense => '🔥 Intensif';
+
+  @override
+  String get profilModeIntenseDesc => '30 menit, 5 menit sebelum & saat adzan';
+
+  @override
+  String get profilNicknameHint => 'Nama panggilan';
+
+  @override
+  String get profilNotifPermAction =>
+      'Izin notifikasi belum aktif. Buka Pengaturan Notifikasi Android lalu izinkan.';
+
+  @override
+  String get profilNotifPermBody =>
+      'Izin notifikasi belum aktif. Aktifkan untuk menerima pengingat adzan.';
+
+  @override
+  String get profilNotifications => 'Notifikasi';
+
+  @override
+  String get profilOemBody =>
+      'Aktifkan \"Autostart\" & \"Tanpa batasan baterai\" di pengaturan HP agar alarm tetap bunyi saat app ditutup, dan notif muncul di lock screen.';
+
+  @override
+  String get profilOemManual =>
+      'Buka Pengaturan > Aplikasi > Muslim Leveling > Baterai & Autostart manual.';
+
+  @override
+  String get profilOemTitle => 'Adzan tak muncul di Xiaomi/Oppo/Vivo?';
+
+  @override
+  String get profilOpenAutostart => 'Buka Pengaturan Auto-start';
+
+  @override
+  String profilPhotoFailed(String msg) {
+    return 'Gagal mengambil foto: $msg';
+  }
+
+  @override
+  String get profilPhotoSection => 'FOTO PROFIL';
+
+  @override
+  String get profilPrivacy => 'Privasi & Data';
+
+  @override
+  String get profilPrivacyDeleteBody =>
+      'Masuk Profil → Keluar untuk menghapus semua data lokal sekaligus. Tidak ada yang tersisa di perangkat.';
+
+  @override
+  String get profilPrivacyDeleteTitle => 'Hapus kapan saja';
+
+  @override
+  String get profilPrivacyLocalBody =>
+      'Semua data — sholat, bacaan Quran, statistik, dan preferensi — hanya tinggal di HP kamu. Tidak ada server, tidak ada cloud.';
+
+  @override
+  String get profilPrivacyLocalTitle => 'Tersimpan di perangkat';
+
+  @override
+  String get profilPrivacyLocationBody =>
+      'Lokasi hanya dipakai sekali untuk menentukan jadwal sholat daerahmu. Lokasi tidak disimpan atau dibagikan.';
+
+  @override
+  String get profilPrivacyLocationTitle => 'Lokasi privat';
+
+  @override
+  String get profilPrivacyTraceBody =>
+      'Aplikasi tidak mengirim aktivitas kamu ke pihak ketiga dan tidak memantau perilaku.';
+
+  @override
+  String get profilPrivacyTraceTitle => 'Tanpa jejak online';
+
+  @override
+  String get profilReminderMode => 'Mode Pengingat';
+
+  @override
+  String get profilReminderTitle => 'Pengingat Adzan';
+
+  @override
+  String profilRemindersChangeFailed(String msg) {
+    return 'Gagal mengubah pengingat: $msg';
+  }
+
+  @override
+  String get profilRemindersFailed =>
+      'Gagal menjadwalkan pengingat — cek izin notifikasi & alarm di pengaturan HP.';
+
+  @override
+  String get profilRemindersNone =>
+      'Mode tersimpan, tapi belum ada pengingat terjadwal — cek izin notifikasi & alarm di pengaturan HP.';
+
+  @override
+  String get profilRemindersOff => 'Pengingat adzan dimatikan';
+
+  @override
+  String profilRemindersScheduled(String mode, int n) {
+    return 'Pengingat adzan aktif: mode $mode — $n pengingat terjadwal';
+  }
+
+  @override
+  String profilRemindersScheduledCount(int n) {
+    return '$n pengingat adzan terjadwal 🔔';
+  }
+
+  @override
+  String get profilRemovePhoto => 'Hapus Foto';
+
+  @override
+  String profilSaveFailed(String msg) {
+    return 'Gagal menyimpan: $msg';
+  }
+
+  @override
+  String get profilSettingsHeader => 'PENGATURAN';
+
+  @override
+  String profilSettingsOpenFailed(String msg) {
+    return 'Pengaturan notifikasi gagal dibuka: $msg';
+  }
+
+  @override
+  String get profilSoundAdzan => '🕌 Adzan';
+
+  @override
+  String get profilSoundAdzanDesc =>
+      'Suara adzan penuh saat masuk waktu sholat';
+
+  @override
+  String get profilSoundMode => 'Suara Notifikasi';
+
+  @override
+  String get profilSoundNormal => '🔔 Suara';
+
+  @override
+  String get profilSoundNormalDesc => 'Notifikasi dengan suara standar HP';
+
+  @override
+  String get profilSoundSilent => '🔕 Senyap';
+
+  @override
+  String get profilSoundSilentDesc => 'Hanya muncul notifikasi, tanpa suara';
+
+  @override
+  String get profilStatsDailyAvg => 'Rata-rata Harian';
+
+  @override
+  String get profilStatsEmptyBody =>
+      'Centang sholat pertamamu — statistik mulai terisi di sini.';
+
+  @override
+  String get profilStatsEmptyTitle => 'Belum ada catatan.';
+
+  @override
+  String get profilStatsHeader => 'STATISTIK';
+
+  @override
+  String get profilStatsQuranStreak => 'Streak Baca Quran';
+
+  @override
+  String profilStatsSince(String date) {
+    return 'Sejak $date';
+  }
+
+  @override
+  String get profilStatsVerses => 'Ayat Quran Terbaca';
+
+  @override
+  String get profilStatsWajib => 'Sholat wajib';
+
+  @override
+  String profilStreakBest(int count) {
+    return 'best $count';
+  }
+
+  @override
+  String get profilStreakFreeze => 'freeze';
+
+  @override
+  String get profilStreakPerPrayer => 'STREAK PER SHOLAT';
+
+  @override
+  String profilStreakSemanticsItem(String prayer, int days) {
+    return '$prayer $days hari';
+  }
+
+  @override
+  String get profilStreakSemanticsTitle => 'Streak per salat';
+
+  @override
+  String get profilTestAdzan => 'Tes Adzan';
+
+  @override
+  String get profilTestNotif => 'Tes Notifikasi';
+
+  @override
+  String profilTestNotifFailed(String msg) {
+    return 'Tes notifikasi gagal: $msg';
+  }
+
+  @override
+  String get profilTheme => 'Tema aplikasi';
+
+  @override
+  String get profilUnitDays => 'hari';
+
+  @override
+  String get profilUnitVerses => 'ayat';
+
+  @override
+  String get profilUnitWeeks => 'minggu';
+
+  @override
+  String profilVersion(String version) {
+    return 'Versi $version';
+  }
+
+  @override
+  String profilXpToNext(int xp, int level) {
+    return '$xp XP lagi → LVL $level';
+  }
+
+  @override
+  String profilXpWithinLevel(int current, int needed) {
+    return '$current/$needed XP';
+  }
 
   @override
   String get settingLanguage => 'Bahasa';

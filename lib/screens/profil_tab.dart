@@ -84,13 +84,13 @@ class _ProfilTabState extends State<ProfilTab> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.surfaceContainerHigh,
-        title: Text('Edit Nama', style: AppText.titleLg()),
+        title: Text(AppL10n.of(context).profilEditName, style: AppText.titleLg()),
         content: TextField(
           controller: ctrl,
           autofocus: true,
           style: AppText.bodyLg(),
           decoration: InputDecoration(
-            hintText: 'Nama panggilan',
+            hintText: AppL10n.of(context).profilNicknameHint,
             hintStyle: AppText.bodyMd().copyWith(
               color: AppColors.onSurfaceVariant,
             ),
@@ -108,7 +108,7 @@ class _ProfilTabState extends State<ProfilTab> {
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: Text(
-              'Batal',
+              AppL10n.of(context).commonCancel,
               style: AppText.bodyMd().copyWith(
                 color: AppColors.onSurfaceVariant,
               ),
@@ -117,7 +117,7 @@ class _ProfilTabState extends State<ProfilTab> {
           TextButton(
             onPressed: () => Navigator.pop(ctx, ctrl.text.trim()),
             child: Text(
-              'Simpan',
+              AppL10n.of(context).commonSave,
               style: AppText.bodyMd().copyWith(color: AppColors.primary),
             ),
           ),
@@ -165,7 +165,9 @@ class _ProfilTabState extends State<ProfilTab> {
     } catch (e) {
       // Trust boundary: kamera absen / izin ditolak / file gagal dibaca.
       if (!mounted) return;
-      _showSettingSnackbar('Gagal mengambil foto: ${_shortError(e)}');
+      _showSettingSnackbar(
+        AppL10n.of(context).profilPhotoFailed(_shortError(e)),
+      );
     }
   }
 
@@ -184,6 +186,8 @@ class _ProfilTabState extends State<ProfilTab> {
   /// [_showEditOptions] karena aksi foto jauh lebih sering dipakai daripada
   /// ganti nama, dan tap langsung di avatar harus mendarat di sini.
   void _showPhotoOptions() {
+    // Ditangkap sekali: builder-nya dipanggil setelah dialog dibuka.
+    final l10n = AppL10n.of(context);
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.surfaceContainerHigh,
@@ -204,7 +208,7 @@ class _ProfilTabState extends State<ProfilTab> {
               child: Row(
                 children: [
                   Text(
-                    'FOTO PROFIL',
+                    l10n.profilPhotoSection,
                     style: AppText.labelCaps().copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -214,7 +218,7 @@ class _ProfilTabState extends State<ProfilTab> {
             ),
             ListTile(
               leading: Icon(AppIcons.camera, color: AppColors.primary),
-              title: Text('Ambil dari Kamera', style: AppText.bodyLg()),
+              title: Text(l10n.profilFromCamera, style: AppText.bodyLg()),
               onTap: () {
                 Navigator.pop(ctx);
                 _pickAvatar(ImageSource.camera);
@@ -222,7 +226,7 @@ class _ProfilTabState extends State<ProfilTab> {
             ),
             ListTile(
               leading: Icon(AppIcons.photoLibrary, color: AppColors.primary),
-              title: Text('Pilih dari Galeri', style: AppText.bodyLg()),
+              title: Text(l10n.profilFromGallery, style: AppText.bodyLg()),
               onTap: () {
                 Navigator.pop(ctx);
                 _pickAvatar(ImageSource.gallery);
@@ -232,7 +236,7 @@ class _ProfilTabState extends State<ProfilTab> {
               ListTile(
                 leading: Icon(AppIcons.delete, color: AppColors.error),
                 title: Text(
-                  'Hapus Foto',
+                  l10n.profilRemovePhoto,
                   style: AppText.bodyLg().copyWith(color: AppColors.error),
                 ),
                 onTap: () {
@@ -247,6 +251,7 @@ class _ProfilTabState extends State<ProfilTab> {
   }
 
   void _showEditOptions() {
+    final l10n = AppL10n.of(context);
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.surfaceContainerHigh,
@@ -259,7 +264,7 @@ class _ProfilTabState extends State<ProfilTab> {
           children: [
             ListTile(
               leading: Icon(AppIcons.person, color: AppColors.primary),
-              title: Text('Edit Nama', style: AppText.bodyLg()),
+              title: Text(l10n.profilEditName, style: AppText.bodyLg()),
               onTap: () {
                 Navigator.pop(ctx);
                 _editNickname();
@@ -267,7 +272,7 @@ class _ProfilTabState extends State<ProfilTab> {
             ),
             ListTile(
               leading: Icon(AppIcons.camera, color: AppColors.primary),
-              title: Text('Ganti Foto', style: AppText.bodyLg()),
+              title: Text(l10n.profilChangePhoto, style: AppText.bodyLg()),
               onTap: () {
                 Navigator.pop(ctx);
                 _showPhotoOptions();
@@ -314,13 +319,17 @@ class _ProfilTabState extends State<ProfilTab> {
         );
         final n = await NotificationService.pendingCount();
         if (!mounted) return;
+        final l10n = AppL10n.of(context);
         _showSettingSnackbar(
           n > 0
-              ? 'Pengingat adzan aktif: mode ${mode[0].toUpperCase()}${mode.substring(1)} — $n pengingat terjadwal 🔔'
-              : 'Mode tersimpan, tapi belum ada pengingat terjadwal — cek izin notifikasi & alarm di pengaturan HP.',
+              ? l10n.profilRemindersScheduled(
+                  '${mode[0].toUpperCase()}${mode.substring(1)}',
+                  n,
+                )
+              : l10n.profilRemindersNone,
         );
       } else {
-        _showSettingSnackbar('Pengingat adzan dimatikan');
+        _showSettingSnackbar(AppL10n.of(context).profilRemindersOff);
       }
     } catch (e, st) {
       // Tampilkan error asli (dipendekkan) — sebelumnya disembunyikan dan
@@ -328,7 +337,9 @@ class _ProfilTabState extends State<ProfilTab> {
       debugPrint('[Profil] gagal simpan pengaturan notif: $e');
       await Sentry.captureException(e, stackTrace: st);
       if (!mounted) return;
-      _showSettingSnackbar('Gagal menyimpan: ${_shortError(e)}');
+      _showSettingSnackbar(
+        AppL10n.of(context).profilSaveFailed(_shortError(e)),
+      );
     }
   }
 
@@ -348,7 +359,8 @@ class _ProfilTabState extends State<ProfilTab> {
       await Sentry.captureException(e, stackTrace: st);
       if (!mounted) return;
       _showSettingSnackbar(
-        'Pengaturan notifikasi gagal dibuka: ${_shortError(e)}',
+        // Sebelum await apa pun di fungsi ini: AppL10n.of(context) aman.
+        AppL10n.of(context).profilSettingsOpenFailed(_shortError(e)),
       );
       return;
     }
@@ -358,6 +370,7 @@ class _ProfilTabState extends State<ProfilTab> {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setSt) {
+          final l10n = AppL10n.of(ctx);
           return AlertDialog(
             backgroundColor: AppColors.surfaceContainerHigh,
             shape: RoundedRectangleBorder(
@@ -372,7 +385,7 @@ class _ProfilTabState extends State<ProfilTab> {
                 ),
                 const SizedBox(width: AppSpacing.sm),
                 Text(
-                  'Pengingat Adzan',
+                  AppL10n.of(context).profilReminderTitle,
                   style: AppText.bodyLg().copyWith(color: AppColors.onSurface),
                 ),
               ],
@@ -398,7 +411,7 @@ class _ProfilTabState extends State<ProfilTab> {
                           const SizedBox(width: AppSpacing.sm),
                           Expanded(
                             child: Text(
-                              'Izin notifikasi belum aktif. Aktifkan untuk menerima pengingat adzan.',
+                              AppL10n.of(context).profilNotifPermBody,
                               style: AppText.bodyMd().copyWith(color: AppColors.error),
                             ),
                           ),
@@ -410,7 +423,7 @@ class _ProfilTabState extends State<ProfilTab> {
                     children: [
                       Expanded(
                         child: Text(
-                          'Aktifkan pengingat',
+                          AppL10n.of(context).profilEnableReminders,
                           style: AppText.bodyMd().copyWith(
                             color: AppColors.onSurface,
                           ),
@@ -428,7 +441,7 @@ class _ProfilTabState extends State<ProfilTab> {
                                 if (!ctx.mounted) return;
                                 Navigator.pop(ctx);
                                 _showSettingSnackbar(
-                                  'Izin notifikasi belum aktif. Buka Pengaturan Notifikasi Android lalu izinkan.',
+                                  l10n.profilNotifPermAction,
                                 );
                                 return;
                               }
@@ -441,7 +454,7 @@ class _ProfilTabState extends State<ProfilTab> {
                                   await NotificationService.ensureExactAlarmPermission();
                               if (!exactOk) {
                                 _showSettingSnackbar(
-                                  'Izin "Alarm & pengingat" belum aktif — pengingat bisa telat beberapa menit.',
+                                  l10n.profilExactAlarmPerm,
                                 );
                               }
                               // Battery optimization = penyebab #1 notif
@@ -450,7 +463,7 @@ class _ProfilTabState extends State<ProfilTab> {
                                   await NotificationService.ensureBatteryUnrestricted();
                               if (!battOk) {
                                 _showSettingSnackbar(
-                                  'Izinkan "Tanpa batasan baterai" supaya pengingat tetap bunyi saat app ditutup.',
+                                  l10n.profilBatteryPerm,
                                 );
                               }
                               await NotificationService.setRemindersEnabled(
@@ -485,8 +498,8 @@ class _ProfilTabState extends State<ProfilTab> {
                                   await NotificationService.pendingCount();
                               _showSettingSnackbar(
                                 n > 0
-                                    ? '$n pengingat adzan terjadwal 🔔'
-                                    : 'Gagal menjadwalkan pengingat — cek izin notifikasi & alarm di pengaturan HP.',
+                                    ? l10n.profilRemindersScheduledCount(n)
+                                    : l10n.profilRemindersFailed,
                               );
                             } else {
                               await NotificationService.setRemindersEnabled(
@@ -500,7 +513,7 @@ class _ProfilTabState extends State<ProfilTab> {
                             debugPrint('[Profil] gagal ubah pengingat: $e');
                             await Sentry.captureException(e, stackTrace: st);
                             _showSettingSnackbar(
-                              'Gagal mengubah pengingat: ${_shortError(e)}',
+                              l10n.profilRemindersChangeFailed(_shortError(e)),
                             );
                           }
                         },
@@ -519,7 +532,7 @@ class _ProfilTabState extends State<ProfilTab> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Mode Pengingat',
+                            AppL10n.of(context).profilReminderMode,
                             style: AppText.bodyMd().copyWith(
                               color: AppColors.onSurfaceVariant,
                               fontWeight: FontWeight.w600,
@@ -528,28 +541,28 @@ class _ProfilTabState extends State<ProfilTab> {
                           const SizedBox(height: AppSpacing.sm),
                           _notifModeOption(
                             'fokus',
-                            '🎯 Fokus',
-                            'Hanya pengingat utama di waktu adzan',
+                            l10n.profilModeFocus,
+                            l10n.profilModeFocusDesc,
                             mode,
                             (m) => setSt(() => mode = m),
                           ),
                           _notifModeOption(
                             'seimbang',
-                            '⚖️ Seimbang',
-                            'Diingetin 15 menit sebelum & saat adzan',
+                            l10n.profilModeBalanced,
+                            l10n.profilModeBalancedDesc,
                             mode,
                             (m) => setSt(() => mode = m),
                           ),
                           _notifModeOption(
                             'intensif',
-                            '🔥 Intensif',
-                            '30 menit, 5 menit sebelum & saat adzan',
+                            l10n.profilModeIntense,
+                            l10n.profilModeIntenseDesc,
                             mode,
                             (m) => setSt(() => mode = m),
                           ),
                           const SizedBox(height: AppSpacing.md),
                           Text(
-                            'Suara Notifikasi',
+                            AppL10n.of(context).profilSoundMode,
                             style: AppText.bodyMd().copyWith(
                               color: AppColors.onSurfaceVariant,
                               fontWeight: FontWeight.w600,
@@ -558,22 +571,22 @@ class _ProfilTabState extends State<ProfilTab> {
                           const SizedBox(height: AppSpacing.sm),
                           _notifModeOption(
                             'senyap',
-                            '🔕 Senyap',
-                            'Hanya muncul notifikasi, tanpa suara',
+                            l10n.profilSoundSilent,
+                            l10n.profilSoundSilentDesc,
                             soundMode,
                             (m) => setSt(() => soundMode = m),
                           ),
                           _notifModeOption(
                             'suara',
-                            '🔔 Suara',
-                            'Notifikasi dengan suara standar HP',
+                            l10n.profilSoundNormal,
+                            l10n.profilSoundNormalDesc,
                             soundMode,
                             (m) => setSt(() => soundMode = m),
                           ),
                           _notifModeOption(
                             'adzan',
-                            '🕌 Adzan',
-                            'Suara adzan penuh saat masuk waktu sholat',
+                            l10n.profilSoundAdzan,
+                            l10n.profilSoundAdzanDesc,
                             soundMode,
                             (m) => setSt(() => soundMode = m),
                           ),
@@ -604,7 +617,7 @@ class _ProfilTabState extends State<ProfilTab> {
                                       stackTrace: st,
                                     );
                                     _showSettingSnackbar(
-                                      'Tes notifikasi gagal: ${_shortError(e)}',
+                                      l10n.profilTestNotifFailed(_shortError(e)),
                                     );
                                   }
                                 }
@@ -617,7 +630,7 @@ class _ProfilTabState extends State<ProfilTab> {
                                 : AppColors.onSurfaceVariant,
                           ),
                           label: Text(
-                            'Tes Notifikasi',
+                            AppL10n.of(context).profilTestNotif,
                             style: AppText.bodyMd().copyWith(
                               color: enabled
                                   ? AppColors.primary
@@ -641,7 +654,7 @@ class _ProfilTabState extends State<ProfilTab> {
                                 : AppColors.onSurfaceVariant,
                           ),
                           label: Text(
-                            'Tes Adzan',
+                            l10n.profilTestAdzan,
                             style: AppText.bodyMd().copyWith(
                               color: enabled
                                   ? AppColors.secondaryFixed
@@ -665,7 +678,7 @@ class _ProfilTabState extends State<ProfilTab> {
                         color: AppColors.onSurfaceVariant,
                       ),
                       label: Text(
-                        'Pengaturan Notifikasi Android',
+                        AppL10n.of(context).profilAndroidNotifSettings,
                         style: AppText.bodyMd().copyWith(
                           color: AppColors.onSurfaceVariant,
                         ),
@@ -696,7 +709,7 @@ class _ProfilTabState extends State<ProfilTab> {
                             const SizedBox(width: AppSpacing.sm),
                             Expanded(
                               child: Text(
-                                'Adzan tak muncul di Xiaomi/Oppo/Vivo?',
+                                AppL10n.of(context).profilOemTitle,
                                 style: AppText.bodyMd().copyWith(
                                   color: AppColors.onSurface,
                                   fontWeight: FontWeight.w600,
@@ -707,7 +720,7 @@ class _ProfilTabState extends State<ProfilTab> {
                         ),
                         const SizedBox(height: AppSpacing.sm),
                         Text(
-                          'Aktifkan "Autostart" & "Tanpa batasan baterai" di pengaturan HP agar alarm tetap bunyi saat app ditutup, dan notif muncul di lock screen.',
+                          AppL10n.of(context).profilOemBody,
                           style: AppText.bodyMd().copyWith(
                             color: AppColors.onSurfaceVariant,
                             fontSize: 13,
@@ -722,14 +735,12 @@ class _ProfilTabState extends State<ProfilTab> {
                                   .openOemAutoStartSettings();
                               if (!ok && ctx.mounted) {
                                 Navigator.pop(ctx);
-                                _showSettingSnackbar(
-                                  'Buka Pengaturan > Aplikasi > Muslim Leveling > Baterai & Autostart manual.',
-                                );
+                                _showSettingSnackbar(l10n.profilOemManual);
                               }
                             },
                             icon: const Icon(AppIcons.powerSettingsNew, size: 16),
                             label: Text(
-                              'Buka Pengaturan Auto-start',
+                              AppL10n.of(context).profilOpenAutostart,
                               style: AppText.bodyMd().copyWith(
                                 color: AppColors.primary,
                               ),
@@ -746,7 +757,7 @@ class _ProfilTabState extends State<ProfilTab> {
               TextButton(
                 onPressed: () => Navigator.pop(ctx),
                 child: Text(
-                  'Tutup',
+                  AppL10n.of(context).commonClose,
                   style: AppText.bodyMd().copyWith(
                     color: AppColors.onSurfaceVariant,
                   ),
@@ -764,7 +775,7 @@ class _ProfilTabState extends State<ProfilTab> {
                   backgroundColor: AppColors.primary,
                 ),
                 child: Text(
-                  'Simpan',
+                  AppL10n.of(context).commonSave,
                   style: AppText.bodyMd().copyWith(color: AppColors.onPrimary),
                 ),
               ),
@@ -842,31 +853,40 @@ class _ProfilTabState extends State<ProfilTab> {
   }
 
   void _showPrivacyDialog() {
+    final l10n = AppL10n.of(context);
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.surfaceContainerHigh,
-        title: Text('Privasi & Data', style: AppText.titleLg()),
+        title: Text(AppL10n.of(context).profilPrivacy, style: AppText.titleLg()),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _privacyItem(AppIcons.phoneAndroid, 'Tersimpan di perangkat',
-                  'Semua data — sholat, bacaan Quran, statistik, dan preferensi — '
-                  'hanya tinggal di HP kamu. Tidak ada server, tidak ada cloud.'),
+              _privacyItem(
+                AppIcons.phoneAndroid,
+                l10n.profilPrivacyLocalTitle,
+                l10n.profilPrivacyLocalBody,
+              ),
               const SizedBox(height: 12),
-              _privacyItem(AppIcons.wifiOff, 'Tanpa jejak online',
-                  'Aplikasi tidak mengirim aktivitas kamu ke pihak ketiga '
-                  'dan tidak memantau perilaku.'),
+              _privacyItem(
+                AppIcons.wifiOff,
+                l10n.profilPrivacyTraceTitle,
+                l10n.profilPrivacyTraceBody,
+              ),
               const SizedBox(height: 12),
-              _privacyItem(AppIcons.locationOff, 'Lokasi privat',
-                  'Lokasi hanya dipakai sekali untuk menentukan jadwal sholat '
-                  'daerahmu. Lokasi tidak disimpan atau dibagikan.'),
+              _privacyItem(
+                AppIcons.locationOff,
+                l10n.profilPrivacyLocationTitle,
+                l10n.profilPrivacyLocationBody,
+              ),
               const SizedBox(height: 12),
-              _privacyItem(AppIcons.deleteOutline, 'Hapus kapan saja',
-                  'Masuk Profil → Keluar untuk menghapus semua data lokal '
-                  'sekaligus. Tidak ada yang tersisa di perangkat.'),
+              _privacyItem(
+                AppIcons.deleteOutline,
+                l10n.profilPrivacyDeleteTitle,
+                l10n.profilPrivacyDeleteBody,
+              ),
             ],
           ),
         ),
@@ -874,7 +894,7 @@ class _ProfilTabState extends State<ProfilTab> {
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: Text(
-              'Oke',
+              AppL10n.of(context).commonOk,
               style: AppText.bodyMd().copyWith(color: AppColors.primary),
             ),
           ),
@@ -917,23 +937,24 @@ class _ProfilTabState extends State<ProfilTab> {
   }
 
   void _showAboutDialog() {
+    final l10n = AppL10n.of(context);
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.surfaceContainerHigh,
-        title: Text('Tentang Aplikasi', style: AppText.titleLg()),
+        title: Text(AppL10n.of(context).profilAbout, style: AppText.titleLg()),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Muslim Leveling',
+                AppL10n.of(context).appTitle,
                 style: AppText.headlineMd().copyWith(color: AppColors.primary),
               ),
               const SizedBox(height: 4),
               Text(
-                'Versi 1.1.2',
+                AppL10n.of(context).profilVersion('1.1.2'),
                 style: AppText.bodyMd().copyWith(
                   color: AppColors.onSurfaceVariant,
                   fontSize: 13,
@@ -941,11 +962,7 @@ class _ProfilTabState extends State<ProfilTab> {
               ),
               const SizedBox(height: 12),
               Text(
-                'Ibadah itu konsisten, bukan sempurna. '
-                'Muslim Leveling membantu kamu membangun kebiasaan sholat lima waktu '
-                'dan membaca Quran dengan cara yang seru — setiap sholat yang dicatat '
-                'memberi XP, setiap hari tanpa putus menambah streak, dan setiap '
-                'pencapaian membuka skin avatar baru.',
+                l10n.profilAboutBody,
                 style: AppText.bodyMd().copyWith(
                   color: AppColors.onSurfaceVariant,
                   height: 1.45,
@@ -953,8 +970,7 @@ class _ProfilTabState extends State<ProfilTab> {
               ),
               const SizedBox(height: 12),
               Text(
-                'Tidak ada server, tidak ada iklan, tidak ada langganan. '
-                'Semua datamu tinggal di perangkat — milikmu sepenuhnya.',
+                l10n.profilAboutOffline,
                 style: AppText.bodyMd().copyWith(
                   color: AppColors.onSurface,
                   fontWeight: FontWeight.w500,
@@ -969,7 +985,7 @@ class _ProfilTabState extends State<ProfilTab> {
               ),
               const SizedBox(height: 12),
               Text(
-                'Dibuat dengan penuh doa untuk setiap pejuang akhirat.',
+                l10n.profilAboutFooter,
                 style: AppText.bodyMd().copyWith(
                   color: AppColors.onSurfaceVariant,
                   fontStyle: FontStyle.italic,
@@ -983,7 +999,7 @@ class _ProfilTabState extends State<ProfilTab> {
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: Text(
-              'Tutup',
+              AppL10n.of(context).commonClose,
               style: AppText.bodyMd().copyWith(color: AppColors.primary),
             ),
           ),
@@ -997,16 +1013,16 @@ class _ProfilTabState extends State<ProfilTab> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.surfaceContainerHigh,
-        title: Text('Keluar', style: AppText.titleLg()),
+        title: Text(AppL10n.of(context).commonLogout, style: AppText.titleLg()),
         content: Text(
-          'Hapus data lokal dan kembali ke layar awal?',
+          AppL10n.of(context).profilLogoutConfirm,
           style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
             child: Text(
-              'Batal',
+              AppL10n.of(context).commonCancel,
               style: AppText.bodyMd().copyWith(
                 color: AppColors.onSurfaceVariant,
               ),
@@ -1015,7 +1031,7 @@ class _ProfilTabState extends State<ProfilTab> {
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
             child: Text(
-              'Keluar',
+              AppL10n.of(context).commonLogout,
               style: AppText.bodyMd().copyWith(color: AppColors.error),
             ),
           ),
@@ -1096,7 +1112,7 @@ class _ProfilTabState extends State<ProfilTab> {
     return Semantics(
       container: true,
       explicitChildNodes: true,
-      label: 'Profile hero — ${tier.name}',
+      label: AppL10n.of(context).profilHeroSemantics(tier.name),
       child: Stack(
         children: [
           Container(
@@ -1182,7 +1198,9 @@ class _ProfilTabState extends State<ProfilTab> {
                                   const SizedBox(width: AppSpacing.xs),
                                   IconButton(
                                     onPressed: _showEditOptions,
-                                    tooltip: 'Edit profil',
+                                    tooltip: AppL10n.of(
+                                      context,
+                                    ).profilEditProfile,
                                     constraints: const BoxConstraints(
                                       minWidth: 44,
                                       minHeight: 44,
@@ -1257,7 +1275,7 @@ class _ProfilTabState extends State<ProfilTab> {
                                   ),
                                 ),
                                 child: Text(
-                                  'LVL ${state.level}',
+                                  AppL10n.of(context).profilLevelBadge(state.level),
                                   style: AppText.labelCapsSm().copyWith(
                                     color: AppColors.primary,
                                     fontWeight: FontWeight.bold,
@@ -1281,7 +1299,10 @@ class _ProfilTabState extends State<ProfilTab> {
                         children: [
                           Flexible(
                             child: Text(
-                              '$xpToNext XP lagi → LVL ${levelInfo.level + 1}',
+                              AppL10n.of(context).profilXpToNext(
+                                xpToNext,
+                                levelInfo.level + 1,
+                              ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: AppText.labelCaps().copyWith(
@@ -1291,7 +1312,10 @@ class _ProfilTabState extends State<ProfilTab> {
                             ),
                           ),
                           Text(
-                            '${levelInfo.xpInCurrentLevel}/${levelInfo.xpNeededForNextLevel} XP',
+                            AppL10n.of(context).profilXpWithinLevel(
+                              levelInfo.xpInCurrentLevel,
+                              levelInfo.xpNeededForNextLevel,
+                            ),
                             style: AppText.bodyMd().copyWith(
                               color: AppColors.primary,
                               fontWeight: FontWeight.w600,
@@ -1343,18 +1367,21 @@ class _ProfilTabState extends State<ProfilTab> {
                     children: [
                       Expanded(
                         child: _miniStat(
-                          'Level',
+                          AppL10n.of(context).profilMiniLevel,
                           '${GameService.current.level}',
                         ),
                       ),
                       const SizedBox(width: AppSpacing.sm),
                       Expanded(
-                        child: _miniStat('XP', '${GameService.current.xp}'),
+                        child: _miniStat(
+                          AppL10n.of(context).profilMiniXp,
+                          '${GameService.current.xp}',
+                        ),
                       ),
                       const SizedBox(width: AppSpacing.sm),
                       Expanded(
                         child: _miniStat(
-                          'Streak',
+                          AppL10n.of(context).profilMiniStreak,
                           // ponytail: streak 0 bukan "0🔥" — api tanpa hari
                           // terbaca sebagai pujian palsu. Dash = belum mulai.
                           heroStreak == 0 ? '—' : '$heroStreak',
@@ -1401,7 +1428,7 @@ class _ProfilTabState extends State<ProfilTab> {
           const SizedBox(width: AppSpacing.xs),
           Expanded(
             child: Text(
-              'Backup aktif',
+              AppL10n.of(context).profilBackupActive,
               style: AppText.labelCaps().copyWith(
                 color: AppColors.primary,
                 fontSize: 10,
@@ -1411,7 +1438,7 @@ class _ProfilTabState extends State<ProfilTab> {
           GestureDetector(
             onTap: _handleLogout,
             child: Text(
-              'Keluar',
+              AppL10n.of(context).commonLogout,
               style: AppText.labelCaps().copyWith(
                 color: AppColors.error,
                 fontSize: 10,
@@ -1433,7 +1460,9 @@ class _ProfilTabState extends State<ProfilTab> {
               )
             : const Icon(AppIcons.gMobiledata, size: 22),
         label: Text(
-          _googleLoginLoading ? 'MENGHUBUNGKAN...' : 'Lanjut dengan Google',
+          _googleLoginLoading
+              ? AppL10n.of(context).profilConnecting
+              : AppL10n.of(context).profilContinueGoogle,
         ),
         style: FilledButton.styleFrom(
           backgroundColor: AppColors.primary,
@@ -1447,13 +1476,15 @@ class _ProfilTabState extends State<ProfilTab> {
   }
 
   Future<void> _handleGoogleLogin() async {
+    // Ditangkap sebelum await: snackbar di bawah dipanggil setelah gap.
+    final l10n = AppL10n.of(context);
     if (_googleLoginLoading) return;
     setState(() => _googleLoginLoading = true);
     try {
       final uid = await AuthService.signInWithGoogle();
       if (uid == null) {
         final err =
-            AuthService.lastError ?? 'Login dibatalkan.';
+            AuthService.lastError ?? l10n.profilLoginCancelled;
         _showSettingSnackbar('❌ $err');
         return;
       }
@@ -1461,13 +1492,14 @@ class _ProfilTabState extends State<ProfilTab> {
     } catch (e, st) {
       debugPrint('[Profil] login/sync gagal: $e');
       await Sentry.captureException(e, stackTrace: st);
-      _showSettingSnackbar('❌ Login gagal: ${_shortError(e)}');
+      _showSettingSnackbar(l10n.profilLoginFailed(_shortError(e)));
     } finally {
       if (mounted) setState(() => _googleLoginLoading = false);
     }
   }
 
   Future<void> _completeLogin(String uid) async {
+    final l10n = AppL10n.of(context);
     Map<String, dynamic>? remote;
     try {
       remote = await CloudSync.initWithUser(uid);
@@ -1482,8 +1514,7 @@ class _ProfilTabState extends State<ProfilTab> {
         if (mounted) {
           setState(() {});
           await _loadProfile();
-          _showSettingSnackbar(
-              '⚠️ Login OK, tapi backup belum aktif (offline).');
+          _showSettingSnackbar(l10n.profilLoginOffline);
         }
         return;
       }
@@ -1494,7 +1525,7 @@ class _ProfilTabState extends State<ProfilTab> {
         await Sentry.captureException(e, stackTrace: st);
       } catch (_) {}
       if (mounted) {
-        _showSettingSnackbar('Gagal verifikasi cloud. Coba lagi.');
+        _showSettingSnackbar(l10n.profilCloudVerifyFailed);
       }
       return;
     }
@@ -1573,18 +1604,17 @@ class _ProfilTabState extends State<ProfilTab> {
     setState(() {});
     await _loadProfile();
     if (!saved) {
-      _showSettingSnackbar(
-          '⚠️ Login OK, tapi backup belum tersimpan.');
+      _showSettingSnackbar(l10n.profilLoginNotSaved);
       return;
     }
-    _showSettingSnackbar('☁️ Login OK — progress digabung.');
+    _showSettingSnackbar(l10n.profilLoginMerged);
   }
 
   Future<void> _handleLogout() async {
     await AuthService.signOut();
     if (!mounted) return;
     setState(() {});
-    _showSettingSnackbar('Logout berhasil.');
+    _showSettingSnackbar(AppL10n.of(context).profilLogoutSuccess);
   }
 
   /// "Loker Skin" — cosmetic locker (frame/aura/title tabs) reusing the
@@ -1602,12 +1632,12 @@ class _ProfilTabState extends State<ProfilTab> {
           heightFactor: 0.86,
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(AppSpacing.md),
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                HudHeader('LOKER SKIN'),
-                SizedBox(height: AppSpacing.sm),
-                CosmeticLocker(),
+                HudHeader(AppL10n.of(context).profilLockerSkin),
+                const SizedBox(height: AppSpacing.sm),
+                const CosmeticLocker(),
               ],
             ),
           ),
@@ -1632,10 +1662,10 @@ class _ProfilTabState extends State<ProfilTab> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const HudHeader('KALENDER SHOLAT WAJIB'),
+              HudHeader(AppL10n.of(context).profilHeatmapHeader),
               const SizedBox(height: AppSpacing.xs),
               Text(
-                'Makin hijau makin lengkap — 5 shade = 5 sholat wajib.',
+                AppL10n.of(context).profilHeatmapBody,
                 style: AppText.bodyMd().copyWith(
                   color: AppColors.onSurfaceVariant,
                 ),
@@ -1652,12 +1682,12 @@ class _ProfilTabState extends State<ProfilTab> {
   Widget _heatmapButton() {
     return Semantics(
       button: true,
-      label: 'Buka kalender sholat wajib',
+      label: AppL10n.of(context).profilHeatmapSemantics,
       onTap: _showHeatmap,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const HudHeader('KALENDER SHOLAT'),
+          HudHeader(AppL10n.of(context).profilCalendarHeader),
           PressableScale(
             onTap: _showHeatmap,
             child: Container(
@@ -1678,7 +1708,7 @@ class _ProfilTabState extends State<ProfilTab> {
                   const SizedBox(width: AppSpacing.sm),
                   Expanded(
                     child: Text(
-                      'Heatmap sholat wajib per bulan',
+                      AppL10n.of(context).profilHeatmapRow,
                       overflow: TextOverflow.ellipsis,
                       style: AppText.bodyMd().copyWith(
                         color: AppColors.onSurfaceVariant,
@@ -1706,7 +1736,7 @@ class _ProfilTabState extends State<ProfilTab> {
       button: true,
       container: true,
       excludeSemantics: true,
-      label: 'Buka loker skin',
+      label: AppL10n.of(context).profilLockerSemantics,
       onTap: _showCosmeticLocker,
       // Bentuknya sengaja sejajar dengan _achievements(): HudHeader + kartu
       // PressableScale ber-surfaceContainer, chevron kecil. Dua baris ini
@@ -1714,7 +1744,7 @@ class _ProfilTabState extends State<ProfilTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const HudHeader('LOKER SKIN'),
+          HudHeader(AppL10n.of(context).profilLockerSkin),
           PressableScale(
             onTap: _showCosmeticLocker,
             child: Container(
@@ -1739,7 +1769,7 @@ class _ProfilTabState extends State<ProfilTab> {
                   const SizedBox(width: AppSpacing.sm),
                   Expanded(
                     child: Text(
-                      'Atur aura dan gelar aktif',
+                      AppL10n.of(context).profilLockerRow,
                       overflow: TextOverflow.ellipsis,
                       style: AppText.bodyMd().copyWith(
                         color: AppColors.onSurfaceVariant,
@@ -1853,30 +1883,33 @@ class _ProfilTabState extends State<ProfilTab> {
       children: [
         // Total seumur pakai, bukan jendela mingguan: Profil adalah layar
         // identitas, dan angka yang hanya bisa naik terbaca sebagai piala.
-        const HudHeader('STATISTIK'),
+        HudHeader(AppL10n.of(context).profilStatsHeader),
         FlatCard(
           key: const Key('profil-stats-card'),
           child: kosong
               ? _statsEmpty()
               : Column(
                   children: [
-                    _statRow(label: 'Sholat wajib', value: _angka(wajib)),
+                    _statRow(
+                      label: AppL10n.of(context).profilStatsWajib,
+                      value: _angka(wajib),
+                    ),
                     divider(),
                     _statRow(
-                      label: 'Ayat Quran Terbaca',
+                      label: AppL10n.of(context).profilStatsVerses,
                       value: _angka(quranAyatTotal),
                     ),
                     divider(),
                     _statRow(
-                      label: 'Streak Baca Quran',
+                      label: AppL10n.of(context).profilStatsQuranStreak,
                       value: '$quranStreak',
-                      denom: ' hari',
+                      denom: ' ${AppL10n.of(context).profilUnitDays}',
                     ),
                     divider(),
                     _statRow(
-                      label: 'Rata-rata Harian',
+                      label: AppL10n.of(context).profilStatsDailyAvg,
                       value: tilawahDailyAvg,
-                      denom: ' ayat',
+                      denom: ' ${AppL10n.of(context).profilUnitVerses}',
                       last: sejak == null,
                     ),
                     if (sejak != null) _statsFooter(sejak),
@@ -1902,7 +1935,7 @@ class _ProfilTabState extends State<ProfilTab> {
           Padding(
             padding: const EdgeInsets.only(top: AppSpacing.sm),
             child: Text(
-              'Sejak $sejak',
+              AppL10n.of(context).profilStatsSince(sejak),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: AppText.bodyMd().copyWith(
@@ -1932,12 +1965,12 @@ class _ProfilTabState extends State<ProfilTab> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Belum ada catatan.',
+          AppL10n.of(context).profilStatsEmptyTitle,
           style: AppText.bodyLg().copyWith(color: AppColors.onSurface),
         ),
         const SizedBox(height: AppSpacing.base),
         Text(
-          'Centang sholat pertamamu — statistik mulai terisi di sini.',
+          AppL10n.of(context).profilStatsEmptyBody,
           style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
         ),
       ],
@@ -2041,9 +2074,9 @@ class _ProfilTabState extends State<ProfilTab> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         HudHeader(
-          'STREAK PER SHOLAT',
+          AppL10n.of(context).profilStreakPerPrayer,
           meta: haidMode
-              ? 'mode haid · streak di-freeze'
+              ? AppL10n.of(context).profilCycleFrozenMeta
               : (GameService.freezeShields > 0
                   ? '❄️ ${GameService.freezeShields} shield'
                   : null),
@@ -2138,9 +2171,10 @@ class _ProfilTabState extends State<ProfilTab> {
                     // P0: tampilkan best + freeze di micro-line
                     Text(
                       haidMode
-                          ? 'freeze'
+                          ? AppL10n.of(context).profilStreakFreeze
                           : (best > 0
-                              ? 'best $best${freezeOk ? ' · ❄' : ''}'
+                              ? '${AppL10n.of(context).profilStreakBest(best)}'
+                                    '${freezeOk ? ' · ❄' : ''}'
                               : ''),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -2152,7 +2186,7 @@ class _ProfilTabState extends State<ProfilTab> {
                     ),
                     // P2: unit 'hari' di belakang count, 10pt dim
                     Text(
-                      'hari',
+                      AppL10n.of(context).profilUnitDays,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppText.bodyMd().copyWith(
@@ -2188,14 +2222,14 @@ class _ProfilTabState extends State<ProfilTab> {
                           : AppColors.primary),
                   const SizedBox(width: AppSpacing.sm),
                   Text(
-                    'Jumat',
+                    AppL10n.of(context).profilFriday,
                     style:
                         AppText.bodyLg().copyWith(color: AppColors.onSurface),
                   ),
                   const Spacer(),
                   if (haidMode) ...[
                     Text(
-                      'mode haid',
+                      AppL10n.of(context).profilCycleModeShort,
                       style: AppText.bodyMd().copyWith(
                         color: AppColors.tertiary,
                         fontSize: 12,
@@ -2219,7 +2253,7 @@ class _ProfilTabState extends State<ProfilTab> {
                     ),
                     const SizedBox(width: 3),
                     Text(
-                      'minggu',
+                      AppL10n.of(context).profilUnitWeeks,
                       style: AppText.bodyMd().copyWith(
                         color: AppColors.onSurfaceVariant,
                         fontSize: 12,
@@ -2235,14 +2269,19 @@ class _ProfilTabState extends State<ProfilTab> {
     );
   }
 
-  String _prayerLabel(String key) => switch (key) {
-        'subuh' => 'Subuh',
-        'dzuhur' => 'Dzuhur',
-        'ashar' => 'Ashar',
-        'maghrib' => 'Maghrib',
-        'isya' => 'Isya',
-        _ => key,
-      };
+  /// Nama sholat untuk UI — dari ARB, bukan label server, karena
+  /// `arabicName` jadwal tidak berguna bagi pembaca non-Arab.
+  String _prayerLabel(String key) {
+    final l10n = AppL10n.of(context);
+    return switch (key) {
+      'subuh' => l10n.prayerSubuh,
+      'dzuhur' => l10n.prayerDzuhur,
+      'ashar' => l10n.prayerAshar,
+      'maghrib' => l10n.prayerMaghrib,
+      'isya' => l10n.prayerIsya,
+      _ => key,
+    };
+  }
 
   /// YYYY-MM-DD untuk kemarin relatif ke hari ini.
   String _yesterdayKey() {
@@ -2257,16 +2296,18 @@ class _ProfilTabState extends State<ProfilTab> {
     bool haidMode,
   ) {
     final todayKey = GameService.todayStr();
-    final parts = <String>['Streak per salat'];
+    final l10n = AppL10n.of(context);
+    final parts = <String>[l10n.profilStreakSemanticsTitle];
     for (final key in GameService.wajibList) {
       final s = streaks[key];
       final c = s?.current ?? 0;
       final logged = s?.lastDate == todayKey;
       parts.add(
-        '${_prayerLabel(key)} $c hari${logged ? ', sudah shalat hari ini' : ''}',
+        l10n.profilStreakSemanticsItem(_prayerLabel(key), c) +
+            (logged ? l10n.profilAlreadyPrayedToday : ''),
       );
     }
-    if (haidMode) parts.add('Mode haid aktif, streak di-freeze');
+    if (haidMode) parts.add(l10n.profilCycleFrozenSemantics);
     return parts.join('. ');
   }
 
@@ -2355,7 +2396,7 @@ class _ProfilTabState extends State<ProfilTab> {
   Widget _settings() {
     final rows = <_SettingRow>[
       _SettingRow(
-        'Periode Haid',
+        AppL10n.of(context).profilCyclePeriod,
         AppIcons.bloodtypeOutlined,
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
@@ -2378,22 +2419,20 @@ class _ProfilTabState extends State<ProfilTab> {
             ),
           ],
         ),
-        onTap: () => _showSettingSnackbar(
-          'Aktifkan saat haid agar streak sholat tetap aman tanpa penalti.',
-        ),
+        onTap: () => _showSettingSnackbar(AppL10n.of(context).profilCycleExplain),
       ),
       _SettingRow(
-        'Pengaturan Akun',
+        AppL10n.of(context).profilAccountSettings,
         AppIcons.personOutline,
         onTap: _editNickname,
       ),
       _SettingRow(
-        'Notifikasi',
+        AppL10n.of(context).profilNotifications,
         AppIcons.notificationsOutlined,
         onTap: _showNotifDialog,
       ),
       _SettingRow(
-        'Tema aplikasi',
+        AppL10n.of(context).profilTheme,
         AppIcons.paletteOutlined,
         onTap: () => showThemePresetPicker(context),
       ),
@@ -2403,17 +2442,17 @@ class _ProfilTabState extends State<ProfilTab> {
         onTap: () => showLocalePicker(context),
       ),
       _SettingRow(
-        'Privasi & Data',
+        AppL10n.of(context).profilPrivacy,
         AppIcons.lockOutline,
         onTap: _showPrivacyDialog,
       ),
       _SettingRow(
-        'Tentang Aplikasi',
+        AppL10n.of(context).profilAbout,
         AppIcons.infoOutline,
         onTap: _showAboutDialog,
       ),
       _SettingRow(
-        'Keluar',
+        AppL10n.of(context).commonLogout,
         AppIcons.logout,
         color: AppColors.error,
         onTap: _confirmLogout,
@@ -2422,7 +2461,7 @@ class _ProfilTabState extends State<ProfilTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const HudHeader('PENGATURAN'),
+        HudHeader(AppL10n.of(context).profilSettingsHeader),
         FlatCard(
           padding: EdgeInsets.zero,
           child: Column(

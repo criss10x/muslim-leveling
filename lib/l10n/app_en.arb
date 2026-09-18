@@ -60,6 +60,130 @@
       }
     }
   },
+  "@profilHeroSemantics": {
+    "placeholders": {
+      "tier": {
+        "type": "String"
+      }
+    }
+  },
+  "@profilLevelBadge": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "@profilLoginFailed": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "@profilPhotoFailed": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "@profilRemindersChangeFailed": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "@profilRemindersScheduled": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      },
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "@profilRemindersScheduledCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "@profilSaveFailed": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "@profilSettingsOpenFailed": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "@profilStatsSince": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "@profilStreakBest": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@profilStreakSemanticsItem": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "@profilTestNotifFailed": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "@profilVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "@profilXpToNext": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "@profilXpWithinLevel": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "needed": {
+        "type": "int"
+      }
+    }
+  },
   "@shareCaption": {
     "placeholders": {
       "title": {
@@ -302,11 +426,133 @@
   "ach_wombo_combo_desc": "Finish Daily Dhikr 100 for the first time",
   "ach_wombo_combo_title": "WOMBO COMBO",
   "appTitle": "Muslim Leveling",
+  "commonCancel": "Cancel",
+  "commonClose": "Close",
+  "commonLogout": "Sign out",
+  "commonOk": "OK",
+  "commonSave": "Save",
   "localeEnglish": "English",
   "localeIndonesian": "Bahasa Indonesia",
   "localePicked": "Language selected",
   "localeSystem": "Follow System (Phone)",
   "localeTitle": "App language",
+  "prayerAshar": "Asr",
+  "prayerDzuhur": "Dhuhr",
+  "prayerIsya": "Isha",
+  "prayerMaghrib": "Maghrib",
+  "prayerSubuh": "Fajr",
+  "profilAbout": "About the App",
+  "profilAboutBody": "Worship is about consistency, not perfection. Muslim Leveling helps you build the habit of the five daily prayers and Quran reading in a way that feels fun — every logged prayer earns XP, every unbroken day grows your streak, and every milestone unlocks a new avatar skin.",
+  "profilAboutFooter": "Made with prayer for everyone striving for the hereafter.",
+  "profilAboutOffline": "No server, no ads, no subscription. All your data stays on the device — entirely yours.",
+  "profilAccountSettings": "Account Settings",
+  "profilAlreadyPrayedToday": ", already prayed today",
+  "profilAndroidNotifSettings": "Android Notification Settings",
+  "profilBackupActive": "Backup active",
+  "profilBatteryPerm": "Allow \"Unrestricted battery\" so reminders still ring when the app is closed.",
+  "profilCalendarHeader": "PRAYER CALENDAR",
+  "profilChangePhoto": "Change Photo",
+  "profilCloudVerifyFailed": "Cloud verification failed. Try again.",
+  "profilConnecting": "CONNECTING...",
+  "profilContinueGoogle": "Continue with Google",
+  "profilCycleExplain": "Turn on during your period so prayer streaks stay safe with no penalty.",
+  "profilCycleFrozenMeta": "period mode · streaks frozen",
+  "profilCycleFrozenSemantics": "Period mode is on, streaks are frozen",
+  "profilCycleModeShort": "period mode",
+  "profilCyclePeriod": "Menstrual Period",
+  "profilEditName": "Edit Name",
+  "profilEditProfile": "Edit profile",
+  "profilEnableReminders": "Enable reminders",
+  "profilExactAlarmPerm": "\"Alarms & reminders\" permission is off — reminders may arrive a few minutes late.",
+  "profilFriday": "Friday",
+  "profilFromCamera": "Take a Photo",
+  "profilFromGallery": "Choose from Gallery",
+  "profilHeatmapBody": "The greener, the more complete — 5 shades = 5 obligatory prayers.",
+  "profilHeatmapHeader": "OBLIGATORY PRAYER CALENDAR",
+  "profilHeatmapRow": "Monthly obligatory prayer heatmap",
+  "profilHeatmapSemantics": "Open obligatory prayer calendar",
+  "profilHeroSemantics": "Profile hero — {tier}",
+  "profilLevelBadge": "LVL {level}",
+  "profilLockerRow": "Set your active aura and title",
+  "profilLockerSemantics": "Open skin locker",
+  "profilLockerSkin": "SKIN LOCKER",
+  "profilLoginCancelled": "Sign-in cancelled.",
+  "profilLoginFailed": "❌ Sign-in failed: {msg}",
+  "profilLoginMerged": "☁️ Signed in — progress merged.",
+  "profilLoginNotSaved": "⚠️ Signed in, but the backup was not saved.",
+  "profilLoginOffline": "⚠️ Signed in, but backup is not active yet (offline).",
+  "profilLogoutConfirm": "Erase local data and return to the first screen?",
+  "profilLogoutSuccess": "Signed out.",
+  "profilMiniLevel": "Level",
+  "profilMiniStreak": "Streak",
+  "profilMiniXp": "XP",
+  "profilModeBalanced": "⚖️ Balanced",
+  "profilModeBalancedDesc": "Reminders 15 minutes before & at adhan time",
+  "profilModeFocus": "🎯 Focus",
+  "profilModeFocusDesc": "Only the main reminder at adhan time",
+  "profilModeIntense": "🔥 Intense",
+  "profilModeIntenseDesc": "30 minutes, 5 minutes before & at adhan time",
+  "profilNicknameHint": "Display name",
+  "profilNotifPermAction": "Notification permission is off. Open Android Notification Settings and allow it.",
+  "profilNotifPermBody": "Notification permission is off. Turn it on to receive adhan reminders.",
+  "profilNotifications": "Notifications",
+  "profilOemBody": "Turn on \"Autostart\" & \"Unrestricted battery\" in your phone settings so alarms still ring when the app is closed and notifications show on the lock screen.",
+  "profilOemManual": "Open Settings > Apps > Muslim Leveling > Battery & Autostart manually.",
+  "profilOemTitle": "Adhan not showing on Xiaomi/Oppo/Vivo?",
+  "profilOpenAutostart": "Open Autostart Settings",
+  "profilPhotoFailed": "Could not take the photo: {msg}",
+  "profilPhotoSection": "PROFILE PHOTO",
+  "profilPrivacy": "Privacy & Data",
+  "profilPrivacyDeleteBody": "Go to Profile → Sign out to erase all local data at once. Nothing is left on the device.",
+  "profilPrivacyDeleteTitle": "Delete any time",
+  "profilPrivacyLocalBody": "All your data — prayers, Quran reading, stats, and preferences — stays on your phone. No server, no cloud.",
+  "profilPrivacyLocalTitle": "Stored on your device",
+  "profilPrivacyLocationBody": "Location is used once to determine your local prayer schedule. It is never stored or shared.",
+  "profilPrivacyLocationTitle": "Private location",
+  "profilPrivacyTraceBody": "The app never sends your activity to third parties and never tracks your behaviour.",
+  "profilPrivacyTraceTitle": "No online trail",
+  "profilReminderMode": "Reminder Mode",
+  "profilReminderTitle": "Adhan Reminders",
+  "profilRemindersChangeFailed": "Could not change reminders: {msg}",
+  "profilRemindersFailed": "Could not schedule reminders — check notification & alarm permissions in your phone settings.",
+  "profilRemindersNone": "Mode saved, but no reminders are scheduled — check notification & alarm permissions in your phone settings.",
+  "profilRemindersOff": "Adhan reminders turned off",
+  "profilRemindersScheduled": "Adhan reminders on: {mode} mode — {n} reminders scheduled",
+  "profilRemindersScheduledCount": "{n} adhan reminders scheduled 🔔",
+  "profilRemovePhoto": "Remove Photo",
+  "profilSaveFailed": "Could not save: {msg}",
+  "profilSettingsHeader": "SETTINGS",
+  "profilSettingsOpenFailed": "Could not open notification settings: {msg}",
+  "profilSoundAdzan": "🕌 Adhan",
+  "profilSoundAdzanDesc": "Full adhan sound at prayer time",
+  "profilSoundMode": "Notification Sound",
+  "profilSoundNormal": "🔔 Sound",
+  "profilSoundNormalDesc": "Notification with your phone's default sound",
+  "profilSoundSilent": "🔕 Silent",
+  "profilSoundSilentDesc": "Notification only, no sound",
+  "profilStatsDailyAvg": "Daily Average",
+  "profilStatsEmptyBody": "Tick your first prayer — your stats start filling in here.",
+  "profilStatsEmptyTitle": "No records yet.",
+  "profilStatsHeader": "STATS",
+  "profilStatsQuranStreak": "Quran Reading Streak",
+  "profilStatsSince": "Since {date}",
+  "profilStatsVerses": "Quran Verses Read",
+  "profilStatsWajib": "Obligatory prayers",
+  "profilStreakBest": "best {count}",
+  "profilStreakFreeze": "frozen",
+  "profilStreakPerPrayer": "STREAK PER PRAYER",
+  "profilStreakSemanticsItem": "{prayer} {days} days",
+  "profilStreakSemanticsTitle": "Streak per prayer",
+  "profilTestAdzan": "Test Adhan",
+  "profilTestNotif": "Test Notification",
+  "profilTestNotifFailed": "Test notification failed: {msg}",
+  "profilTheme": "App theme",
+  "profilUnitDays": "days",
+  "profilUnitVerses": "verses",
+  "profilUnitWeeks": "weeks",
+  "profilVersion": "Version {version}",
+  "profilXpToNext": "{xp} XP to go → LVL {level}",
+  "profilXpWithinLevel": "{current}/{needed} XP",
   "settingLanguage": "Language",
   "shareBtnShareAgain": "Share Again",
   "shareCaption": "I unlocked \"{title}\" in Muslim Leveling! 🎮🕌",

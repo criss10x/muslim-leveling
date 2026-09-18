@@ -60,6 +60,130 @@
       }
     }
   },
+  "@profilHeroSemantics": {
+    "placeholders": {
+      "tier": {
+        "type": "String"
+      }
+    }
+  },
+  "@profilLevelBadge": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "@profilLoginFailed": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "@profilPhotoFailed": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "@profilRemindersChangeFailed": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "@profilRemindersScheduled": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      },
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "@profilRemindersScheduledCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "@profilSaveFailed": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "@profilSettingsOpenFailed": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "@profilStatsSince": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "@profilStreakBest": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@profilStreakSemanticsItem": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "@profilTestNotifFailed": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "@profilVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "@profilXpToNext": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "@profilXpWithinLevel": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "needed": {
+        "type": "int"
+      }
+    }
+  },
   "@shareCaption": {
     "placeholders": {
       "title": {
@@ -302,11 +426,133 @@
   "ach_wombo_combo_desc": "Tuntaskan Daily Zikir 100 pertama kali",
   "ach_wombo_combo_title": "WOMBO COMBO",
   "appTitle": "Muslim Leveling",
+  "commonCancel": "Batal",
+  "commonClose": "Tutup",
+  "commonLogout": "Keluar",
+  "commonOk": "Oke",
+  "commonSave": "Simpan",
   "localeEnglish": "English",
   "localeIndonesian": "Bahasa Indonesia",
   "localePicked": "Bahasa dipilih",
   "localeSystem": "Ikut Sistem (HP)",
   "localeTitle": "Bahasa aplikasi",
+  "prayerAshar": "Ashar",
+  "prayerDzuhur": "Dzuhur",
+  "prayerIsya": "Isya",
+  "prayerMaghrib": "Maghrib",
+  "prayerSubuh": "Subuh",
+  "profilAbout": "Tentang Aplikasi",
+  "profilAboutBody": "Ibadah itu konsisten, bukan sempurna. Muslim Leveling membantu kamu membangun kebiasaan sholat lima waktu dan membaca Quran dengan cara yang seru — setiap sholat yang dicatat memberi XP, setiap hari tanpa putus menambah streak, dan setiap pencapaian membuka skin avatar baru.",
+  "profilAboutFooter": "Dibuat dengan penuh doa untuk setiap pejuang akhirat.",
+  "profilAboutOffline": "Tidak ada server, tidak ada iklan, tidak ada langganan. Semua datamu tinggal di perangkat — milikmu sepenuhnya.",
+  "profilAccountSettings": "Pengaturan Akun",
+  "profilAlreadyPrayedToday": ", sudah shalat hari ini",
+  "profilAndroidNotifSettings": "Pengaturan Notifikasi Android",
+  "profilBackupActive": "Backup aktif",
+  "profilBatteryPerm": "Izinkan \"Tanpa batasan baterai\" supaya pengingat tetap bunyi saat app ditutup.",
+  "profilCalendarHeader": "KALENDER SHOLAT",
+  "profilChangePhoto": "Ganti Foto",
+  "profilCloudVerifyFailed": "Gagal verifikasi cloud. Coba lagi.",
+  "profilConnecting": "MENGHUBUNGKAN...",
+  "profilContinueGoogle": "Lanjut dengan Google",
+  "profilCycleExplain": "Aktifkan saat haid agar streak sholat tetap aman tanpa penalti.",
+  "profilCycleFrozenMeta": "mode haid · streak di-freeze",
+  "profilCycleFrozenSemantics": "Mode haid aktif, streak di-freeze",
+  "profilCycleModeShort": "mode haid",
+  "profilCyclePeriod": "Periode Haid",
+  "profilEditName": "Edit Nama",
+  "profilEditProfile": "Edit profil",
+  "profilEnableReminders": "Aktifkan pengingat",
+  "profilExactAlarmPerm": "Izin \"Alarm & pengingat\" belum aktif — pengingat bisa telat beberapa menit.",
+  "profilFriday": "Jumat",
+  "profilFromCamera": "Ambil dari Kamera",
+  "profilFromGallery": "Pilih dari Galeri",
+  "profilHeatmapBody": "Makin hijau makin lengkap — 5 shade = 5 sholat wajib.",
+  "profilHeatmapHeader": "KALENDER SHOLAT WAJIB",
+  "profilHeatmapRow": "Heatmap sholat wajib per bulan",
+  "profilHeatmapSemantics": "Buka kalender sholat wajib",
+  "profilHeroSemantics": "Profile hero — {tier}",
+  "profilLevelBadge": "LVL {level}",
+  "profilLockerRow": "Atur aura dan gelar aktif",
+  "profilLockerSemantics": "Buka loker skin",
+  "profilLockerSkin": "LOKER SKIN",
+  "profilLoginCancelled": "Login dibatalkan.",
+  "profilLoginFailed": "❌ Login gagal: {msg}",
+  "profilLoginMerged": "☁️ Login OK — progress digabung.",
+  "profilLoginNotSaved": "⚠️ Login OK, tapi backup belum tersimpan.",
+  "profilLoginOffline": "⚠️ Login OK, tapi backup belum aktif (offline).",
+  "profilLogoutConfirm": "Hapus data lokal dan kembali ke layar awal?",
+  "profilLogoutSuccess": "Logout berhasil.",
+  "profilMiniLevel": "Level",
+  "profilMiniStreak": "Streak",
+  "profilMiniXp": "XP",
+  "profilModeBalanced": "⚖️ Seimbang",
+  "profilModeBalancedDesc": "Diingetin 15 menit sebelum & saat adzan",
+  "profilModeFocus": "🎯 Fokus",
+  "profilModeFocusDesc": "Hanya pengingat utama di waktu adzan",
+  "profilModeIntense": "🔥 Intensif",
+  "profilModeIntenseDesc": "30 menit, 5 menit sebelum & saat adzan",
+  "profilNicknameHint": "Nama panggilan",
+  "profilNotifPermAction": "Izin notifikasi belum aktif. Buka Pengaturan Notifikasi Android lalu izinkan.",
+  "profilNotifPermBody": "Izin notifikasi belum aktif. Aktifkan untuk menerima pengingat adzan.",
+  "profilNotifications": "Notifikasi",
+  "profilOemBody": "Aktifkan \"Autostart\" & \"Tanpa batasan baterai\" di pengaturan HP agar alarm tetap bunyi saat app ditutup, dan notif muncul di lock screen.",
+  "profilOemManual": "Buka Pengaturan > Aplikasi > Muslim Leveling > Baterai & Autostart manual.",
+  "profilOemTitle": "Adzan tak muncul di Xiaomi/Oppo/Vivo?",
+  "profilOpenAutostart": "Buka Pengaturan Auto-start",
+  "profilPhotoFailed": "Gagal mengambil foto: {msg}",
+  "profilPhotoSection": "FOTO PROFIL",
+  "profilPrivacy": "Privasi & Data",
+  "profilPrivacyDeleteBody": "Masuk Profil → Keluar untuk menghapus semua data lokal sekaligus. Tidak ada yang tersisa di perangkat.",
+  "profilPrivacyDeleteTitle": "Hapus kapan saja",
+  "profilPrivacyLocalBody": "Semua data — sholat, bacaan Quran, statistik, dan preferensi — hanya tinggal di HP kamu. Tidak ada server, tidak ada cloud.",
+  "profilPrivacyLocalTitle": "Tersimpan di perangkat",
+  "profilPrivacyLocationBody": "Lokasi hanya dipakai sekali untuk menentukan jadwal sholat daerahmu. Lokasi tidak disimpan atau dibagikan.",
+  "profilPrivacyLocationTitle": "Lokasi privat",
+  "profilPrivacyTraceBody": "Aplikasi tidak mengirim aktivitas kamu ke pihak ketiga dan tidak memantau perilaku.",
+  "profilPrivacyTraceTitle": "Tanpa jejak online",
+  "profilReminderMode": "Mode Pengingat",
+  "profilReminderTitle": "Pengingat Adzan",
+  "profilRemindersChangeFailed": "Gagal mengubah pengingat: {msg}",
+  "profilRemindersFailed": "Gagal menjadwalkan pengingat — cek izin notifikasi & alarm di pengaturan HP.",
+  "profilRemindersNone": "Mode tersimpan, tapi belum ada pengingat terjadwal — cek izin notifikasi & alarm di pengaturan HP.",
+  "profilRemindersOff": "Pengingat adzan dimatikan",
+  "profilRemindersScheduled": "Pengingat adzan aktif: mode {mode} — {n} pengingat terjadwal",
+  "profilRemindersScheduledCount": "{n} pengingat adzan terjadwal 🔔",
+  "profilRemovePhoto": "Hapus Foto",
+  "profilSaveFailed": "Gagal menyimpan: {msg}",
+  "profilSettingsHeader": "PENGATURAN",
+  "profilSettingsOpenFailed": "Pengaturan notifikasi gagal dibuka: {msg}",
+  "profilSoundAdzan": "🕌 Adzan",
+  "profilSoundAdzanDesc": "Suara adzan penuh saat masuk waktu sholat",
+  "profilSoundMode": "Suara Notifikasi",
+  "profilSoundNormal": "🔔 Suara",
+  "profilSoundNormalDesc": "Notifikasi dengan suara standar HP",
+  "profilSoundSilent": "🔕 Senyap",
+  "profilSoundSilentDesc": "Hanya muncul notifikasi, tanpa suara",
+  "profilStatsDailyAvg": "Rata-rata Harian",
+  "profilStatsEmptyBody": "Centang sholat pertamamu — statistik mulai terisi di sini.",
+  "profilStatsEmptyTitle": "Belum ada catatan.",
+  "profilStatsHeader": "STATISTIK",
+  "profilStatsQuranStreak": "Streak Baca Quran",
+  "profilStatsSince": "Sejak {date}",
+  "profilStatsVerses": "Ayat Quran Terbaca",
+  "profilStatsWajib": "Sholat wajib",
+  "profilStreakBest": "best {count}",
+  "profilStreakFreeze": "freeze",
+  "profilStreakPerPrayer": "STREAK PER SHOLAT",
+  "profilStreakSemanticsItem": "{prayer} {days} hari",
+  "profilStreakSemanticsTitle": "Streak per salat",
+  "profilTestAdzan": "Tes Adzan",
+  "profilTestNotif": "Tes Notifikasi",
+  "profilTestNotifFailed": "Tes notifikasi gagal: {msg}",
+  "profilTheme": "Tema aplikasi",
+  "profilUnitDays": "hari",
+  "profilUnitVerses": "ayat",
+  "profilUnitWeeks": "minggu",
+  "profilVersion": "Versi {version}",
+  "profilXpToNext": "{xp} XP lagi → LVL {level}",
+  "profilXpWithinLevel": "{current}/{needed} XP",
   "settingLanguage": "Bahasa",
   "shareBtnShareAgain": "Bagikan Lagi",
   "shareCaption": "Aku unlock \"{title}\" di Muslim Leveling! 🎮🕌",

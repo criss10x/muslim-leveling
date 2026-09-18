@@ -1368,6 +1368,36 @@ abstract class AppL10n {
   /// **'Muslim Leveling'**
   String get appTitle;
 
+  /// No description provided for @commonCancel.
+  ///
+  /// In id, this message translates to:
+  /// **'Batal'**
+  String get commonCancel;
+
+  /// No description provided for @commonClose.
+  ///
+  /// In id, this message translates to:
+  /// **'Tutup'**
+  String get commonClose;
+
+  /// No description provided for @commonLogout.
+  ///
+  /// In id, this message translates to:
+  /// **'Keluar'**
+  String get commonLogout;
+
+  /// No description provided for @commonOk.
+  ///
+  /// In id, this message translates to:
+  /// **'Oke'**
+  String get commonOk;
+
+  /// No description provided for @commonSave.
+  ///
+  /// In id, this message translates to:
+  /// **'Simpan'**
+  String get commonSave;
+
   /// No description provided for @localeEnglish.
   ///
   /// In id, this message translates to:
@@ -1397,6 +1427,708 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Bahasa aplikasi'**
   String get localeTitle;
+
+  /// No description provided for @prayerAshar.
+  ///
+  /// In id, this message translates to:
+  /// **'Ashar'**
+  String get prayerAshar;
+
+  /// No description provided for @prayerDzuhur.
+  ///
+  /// In id, this message translates to:
+  /// **'Dzuhur'**
+  String get prayerDzuhur;
+
+  /// No description provided for @prayerIsya.
+  ///
+  /// In id, this message translates to:
+  /// **'Isya'**
+  String get prayerIsya;
+
+  /// No description provided for @prayerMaghrib.
+  ///
+  /// In id, this message translates to:
+  /// **'Maghrib'**
+  String get prayerMaghrib;
+
+  /// No description provided for @prayerSubuh.
+  ///
+  /// In id, this message translates to:
+  /// **'Subuh'**
+  String get prayerSubuh;
+
+  /// No description provided for @profilAbout.
+  ///
+  /// In id, this message translates to:
+  /// **'Tentang Aplikasi'**
+  String get profilAbout;
+
+  /// No description provided for @profilAboutBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Ibadah itu konsisten, bukan sempurna. Muslim Leveling membantu kamu membangun kebiasaan sholat lima waktu dan membaca Quran dengan cara yang seru — setiap sholat yang dicatat memberi XP, setiap hari tanpa putus menambah streak, dan setiap pencapaian membuka skin avatar baru.'**
+  String get profilAboutBody;
+
+  /// No description provided for @profilAboutFooter.
+  ///
+  /// In id, this message translates to:
+  /// **'Dibuat dengan penuh doa untuk setiap pejuang akhirat.'**
+  String get profilAboutFooter;
+
+  /// No description provided for @profilAboutOffline.
+  ///
+  /// In id, this message translates to:
+  /// **'Tidak ada server, tidak ada iklan, tidak ada langganan. Semua datamu tinggal di perangkat — milikmu sepenuhnya.'**
+  String get profilAboutOffline;
+
+  /// No description provided for @profilAccountSettings.
+  ///
+  /// In id, this message translates to:
+  /// **'Pengaturan Akun'**
+  String get profilAccountSettings;
+
+  /// No description provided for @profilAlreadyPrayedToday.
+  ///
+  /// In id, this message translates to:
+  /// **', sudah shalat hari ini'**
+  String get profilAlreadyPrayedToday;
+
+  /// No description provided for @profilAndroidNotifSettings.
+  ///
+  /// In id, this message translates to:
+  /// **'Pengaturan Notifikasi Android'**
+  String get profilAndroidNotifSettings;
+
+  /// No description provided for @profilBackupActive.
+  ///
+  /// In id, this message translates to:
+  /// **'Backup aktif'**
+  String get profilBackupActive;
+
+  /// No description provided for @profilBatteryPerm.
+  ///
+  /// In id, this message translates to:
+  /// **'Izinkan \"Tanpa batasan baterai\" supaya pengingat tetap bunyi saat app ditutup.'**
+  String get profilBatteryPerm;
+
+  /// No description provided for @profilCalendarHeader.
+  ///
+  /// In id, this message translates to:
+  /// **'KALENDER SHOLAT'**
+  String get profilCalendarHeader;
+
+  /// No description provided for @profilChangePhoto.
+  ///
+  /// In id, this message translates to:
+  /// **'Ganti Foto'**
+  String get profilChangePhoto;
+
+  /// No description provided for @profilCloudVerifyFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal verifikasi cloud. Coba lagi.'**
+  String get profilCloudVerifyFailed;
+
+  /// No description provided for @profilConnecting.
+  ///
+  /// In id, this message translates to:
+  /// **'MENGHUBUNGKAN...'**
+  String get profilConnecting;
+
+  /// No description provided for @profilContinueGoogle.
+  ///
+  /// In id, this message translates to:
+  /// **'Lanjut dengan Google'**
+  String get profilContinueGoogle;
+
+  /// No description provided for @profilCycleExplain.
+  ///
+  /// In id, this message translates to:
+  /// **'Aktifkan saat haid agar streak sholat tetap aman tanpa penalti.'**
+  String get profilCycleExplain;
+
+  /// No description provided for @profilCycleFrozenMeta.
+  ///
+  /// In id, this message translates to:
+  /// **'mode haid · streak di-freeze'**
+  String get profilCycleFrozenMeta;
+
+  /// No description provided for @profilCycleFrozenSemantics.
+  ///
+  /// In id, this message translates to:
+  /// **'Mode haid aktif, streak di-freeze'**
+  String get profilCycleFrozenSemantics;
+
+  /// No description provided for @profilCycleModeShort.
+  ///
+  /// In id, this message translates to:
+  /// **'mode haid'**
+  String get profilCycleModeShort;
+
+  /// No description provided for @profilCyclePeriod.
+  ///
+  /// In id, this message translates to:
+  /// **'Periode Haid'**
+  String get profilCyclePeriod;
+
+  /// No description provided for @profilEditName.
+  ///
+  /// In id, this message translates to:
+  /// **'Edit Nama'**
+  String get profilEditName;
+
+  /// No description provided for @profilEditProfile.
+  ///
+  /// In id, this message translates to:
+  /// **'Edit profil'**
+  String get profilEditProfile;
+
+  /// No description provided for @profilEnableReminders.
+  ///
+  /// In id, this message translates to:
+  /// **'Aktifkan pengingat'**
+  String get profilEnableReminders;
+
+  /// No description provided for @profilExactAlarmPerm.
+  ///
+  /// In id, this message translates to:
+  /// **'Izin \"Alarm & pengingat\" belum aktif — pengingat bisa telat beberapa menit.'**
+  String get profilExactAlarmPerm;
+
+  /// No description provided for @profilFriday.
+  ///
+  /// In id, this message translates to:
+  /// **'Jumat'**
+  String get profilFriday;
+
+  /// No description provided for @profilFromCamera.
+  ///
+  /// In id, this message translates to:
+  /// **'Ambil dari Kamera'**
+  String get profilFromCamera;
+
+  /// No description provided for @profilFromGallery.
+  ///
+  /// In id, this message translates to:
+  /// **'Pilih dari Galeri'**
+  String get profilFromGallery;
+
+  /// No description provided for @profilHeatmapBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Makin hijau makin lengkap — 5 shade = 5 sholat wajib.'**
+  String get profilHeatmapBody;
+
+  /// No description provided for @profilHeatmapHeader.
+  ///
+  /// In id, this message translates to:
+  /// **'KALENDER SHOLAT WAJIB'**
+  String get profilHeatmapHeader;
+
+  /// No description provided for @profilHeatmapRow.
+  ///
+  /// In id, this message translates to:
+  /// **'Heatmap sholat wajib per bulan'**
+  String get profilHeatmapRow;
+
+  /// No description provided for @profilHeatmapSemantics.
+  ///
+  /// In id, this message translates to:
+  /// **'Buka kalender sholat wajib'**
+  String get profilHeatmapSemantics;
+
+  /// No description provided for @profilHeroSemantics.
+  ///
+  /// In id, this message translates to:
+  /// **'Profile hero — {tier}'**
+  String profilHeroSemantics(String tier);
+
+  /// No description provided for @profilLevelBadge.
+  ///
+  /// In id, this message translates to:
+  /// **'LVL {level}'**
+  String profilLevelBadge(int level);
+
+  /// No description provided for @profilLockerRow.
+  ///
+  /// In id, this message translates to:
+  /// **'Atur aura dan gelar aktif'**
+  String get profilLockerRow;
+
+  /// No description provided for @profilLockerSemantics.
+  ///
+  /// In id, this message translates to:
+  /// **'Buka loker skin'**
+  String get profilLockerSemantics;
+
+  /// No description provided for @profilLockerSkin.
+  ///
+  /// In id, this message translates to:
+  /// **'LOKER SKIN'**
+  String get profilLockerSkin;
+
+  /// No description provided for @profilLoginCancelled.
+  ///
+  /// In id, this message translates to:
+  /// **'Login dibatalkan.'**
+  String get profilLoginCancelled;
+
+  /// No description provided for @profilLoginFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'❌ Login gagal: {msg}'**
+  String profilLoginFailed(String msg);
+
+  /// No description provided for @profilLoginMerged.
+  ///
+  /// In id, this message translates to:
+  /// **'☁️ Login OK — progress digabung.'**
+  String get profilLoginMerged;
+
+  /// No description provided for @profilLoginNotSaved.
+  ///
+  /// In id, this message translates to:
+  /// **'⚠️ Login OK, tapi backup belum tersimpan.'**
+  String get profilLoginNotSaved;
+
+  /// No description provided for @profilLoginOffline.
+  ///
+  /// In id, this message translates to:
+  /// **'⚠️ Login OK, tapi backup belum aktif (offline).'**
+  String get profilLoginOffline;
+
+  /// No description provided for @profilLogoutConfirm.
+  ///
+  /// In id, this message translates to:
+  /// **'Hapus data lokal dan kembali ke layar awal?'**
+  String get profilLogoutConfirm;
+
+  /// No description provided for @profilLogoutSuccess.
+  ///
+  /// In id, this message translates to:
+  /// **'Logout berhasil.'**
+  String get profilLogoutSuccess;
+
+  /// No description provided for @profilMiniLevel.
+  ///
+  /// In id, this message translates to:
+  /// **'Level'**
+  String get profilMiniLevel;
+
+  /// No description provided for @profilMiniStreak.
+  ///
+  /// In id, this message translates to:
+  /// **'Streak'**
+  String get profilMiniStreak;
+
+  /// No description provided for @profilMiniXp.
+  ///
+  /// In id, this message translates to:
+  /// **'XP'**
+  String get profilMiniXp;
+
+  /// No description provided for @profilModeBalanced.
+  ///
+  /// In id, this message translates to:
+  /// **'⚖️ Seimbang'**
+  String get profilModeBalanced;
+
+  /// No description provided for @profilModeBalancedDesc.
+  ///
+  /// In id, this message translates to:
+  /// **'Diingetin 15 menit sebelum & saat adzan'**
+  String get profilModeBalancedDesc;
+
+  /// No description provided for @profilModeFocus.
+  ///
+  /// In id, this message translates to:
+  /// **'🎯 Fokus'**
+  String get profilModeFocus;
+
+  /// No description provided for @profilModeFocusDesc.
+  ///
+  /// In id, this message translates to:
+  /// **'Hanya pengingat utama di waktu adzan'**
+  String get profilModeFocusDesc;
+
+  /// No description provided for @profilModeIntense.
+  ///
+  /// In id, this message translates to:
+  /// **'🔥 Intensif'**
+  String get profilModeIntense;
+
+  /// No description provided for @profilModeIntenseDesc.
+  ///
+  /// In id, this message translates to:
+  /// **'30 menit, 5 menit sebelum & saat adzan'**
+  String get profilModeIntenseDesc;
+
+  /// No description provided for @profilNicknameHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Nama panggilan'**
+  String get profilNicknameHint;
+
+  /// No description provided for @profilNotifPermAction.
+  ///
+  /// In id, this message translates to:
+  /// **'Izin notifikasi belum aktif. Buka Pengaturan Notifikasi Android lalu izinkan.'**
+  String get profilNotifPermAction;
+
+  /// No description provided for @profilNotifPermBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Izin notifikasi belum aktif. Aktifkan untuk menerima pengingat adzan.'**
+  String get profilNotifPermBody;
+
+  /// No description provided for @profilNotifications.
+  ///
+  /// In id, this message translates to:
+  /// **'Notifikasi'**
+  String get profilNotifications;
+
+  /// No description provided for @profilOemBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Aktifkan \"Autostart\" & \"Tanpa batasan baterai\" di pengaturan HP agar alarm tetap bunyi saat app ditutup, dan notif muncul di lock screen.'**
+  String get profilOemBody;
+
+  /// No description provided for @profilOemManual.
+  ///
+  /// In id, this message translates to:
+  /// **'Buka Pengaturan > Aplikasi > Muslim Leveling > Baterai & Autostart manual.'**
+  String get profilOemManual;
+
+  /// No description provided for @profilOemTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Adzan tak muncul di Xiaomi/Oppo/Vivo?'**
+  String get profilOemTitle;
+
+  /// No description provided for @profilOpenAutostart.
+  ///
+  /// In id, this message translates to:
+  /// **'Buka Pengaturan Auto-start'**
+  String get profilOpenAutostart;
+
+  /// No description provided for @profilPhotoFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal mengambil foto: {msg}'**
+  String profilPhotoFailed(String msg);
+
+  /// No description provided for @profilPhotoSection.
+  ///
+  /// In id, this message translates to:
+  /// **'FOTO PROFIL'**
+  String get profilPhotoSection;
+
+  /// No description provided for @profilPrivacy.
+  ///
+  /// In id, this message translates to:
+  /// **'Privasi & Data'**
+  String get profilPrivacy;
+
+  /// No description provided for @profilPrivacyDeleteBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Masuk Profil → Keluar untuk menghapus semua data lokal sekaligus. Tidak ada yang tersisa di perangkat.'**
+  String get profilPrivacyDeleteBody;
+
+  /// No description provided for @profilPrivacyDeleteTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Hapus kapan saja'**
+  String get profilPrivacyDeleteTitle;
+
+  /// No description provided for @profilPrivacyLocalBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Semua data — sholat, bacaan Quran, statistik, dan preferensi — hanya tinggal di HP kamu. Tidak ada server, tidak ada cloud.'**
+  String get profilPrivacyLocalBody;
+
+  /// No description provided for @profilPrivacyLocalTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Tersimpan di perangkat'**
+  String get profilPrivacyLocalTitle;
+
+  /// No description provided for @profilPrivacyLocationBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Lokasi hanya dipakai sekali untuk menentukan jadwal sholat daerahmu. Lokasi tidak disimpan atau dibagikan.'**
+  String get profilPrivacyLocationBody;
+
+  /// No description provided for @profilPrivacyLocationTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Lokasi privat'**
+  String get profilPrivacyLocationTitle;
+
+  /// No description provided for @profilPrivacyTraceBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Aplikasi tidak mengirim aktivitas kamu ke pihak ketiga dan tidak memantau perilaku.'**
+  String get profilPrivacyTraceBody;
+
+  /// No description provided for @profilPrivacyTraceTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Tanpa jejak online'**
+  String get profilPrivacyTraceTitle;
+
+  /// No description provided for @profilReminderMode.
+  ///
+  /// In id, this message translates to:
+  /// **'Mode Pengingat'**
+  String get profilReminderMode;
+
+  /// No description provided for @profilReminderTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Pengingat Adzan'**
+  String get profilReminderTitle;
+
+  /// No description provided for @profilRemindersChangeFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal mengubah pengingat: {msg}'**
+  String profilRemindersChangeFailed(String msg);
+
+  /// No description provided for @profilRemindersFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal menjadwalkan pengingat — cek izin notifikasi & alarm di pengaturan HP.'**
+  String get profilRemindersFailed;
+
+  /// No description provided for @profilRemindersNone.
+  ///
+  /// In id, this message translates to:
+  /// **'Mode tersimpan, tapi belum ada pengingat terjadwal — cek izin notifikasi & alarm di pengaturan HP.'**
+  String get profilRemindersNone;
+
+  /// No description provided for @profilRemindersOff.
+  ///
+  /// In id, this message translates to:
+  /// **'Pengingat adzan dimatikan'**
+  String get profilRemindersOff;
+
+  /// No description provided for @profilRemindersScheduled.
+  ///
+  /// In id, this message translates to:
+  /// **'Pengingat adzan aktif: mode {mode} — {n} pengingat terjadwal'**
+  String profilRemindersScheduled(String mode, int n);
+
+  /// No description provided for @profilRemindersScheduledCount.
+  ///
+  /// In id, this message translates to:
+  /// **'{n} pengingat adzan terjadwal 🔔'**
+  String profilRemindersScheduledCount(int n);
+
+  /// No description provided for @profilRemovePhoto.
+  ///
+  /// In id, this message translates to:
+  /// **'Hapus Foto'**
+  String get profilRemovePhoto;
+
+  /// No description provided for @profilSaveFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal menyimpan: {msg}'**
+  String profilSaveFailed(String msg);
+
+  /// No description provided for @profilSettingsHeader.
+  ///
+  /// In id, this message translates to:
+  /// **'PENGATURAN'**
+  String get profilSettingsHeader;
+
+  /// No description provided for @profilSettingsOpenFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Pengaturan notifikasi gagal dibuka: {msg}'**
+  String profilSettingsOpenFailed(String msg);
+
+  /// No description provided for @profilSoundAdzan.
+  ///
+  /// In id, this message translates to:
+  /// **'🕌 Adzan'**
+  String get profilSoundAdzan;
+
+  /// No description provided for @profilSoundAdzanDesc.
+  ///
+  /// In id, this message translates to:
+  /// **'Suara adzan penuh saat masuk waktu sholat'**
+  String get profilSoundAdzanDesc;
+
+  /// No description provided for @profilSoundMode.
+  ///
+  /// In id, this message translates to:
+  /// **'Suara Notifikasi'**
+  String get profilSoundMode;
+
+  /// No description provided for @profilSoundNormal.
+  ///
+  /// In id, this message translates to:
+  /// **'🔔 Suara'**
+  String get profilSoundNormal;
+
+  /// No description provided for @profilSoundNormalDesc.
+  ///
+  /// In id, this message translates to:
+  /// **'Notifikasi dengan suara standar HP'**
+  String get profilSoundNormalDesc;
+
+  /// No description provided for @profilSoundSilent.
+  ///
+  /// In id, this message translates to:
+  /// **'🔕 Senyap'**
+  String get profilSoundSilent;
+
+  /// No description provided for @profilSoundSilentDesc.
+  ///
+  /// In id, this message translates to:
+  /// **'Hanya muncul notifikasi, tanpa suara'**
+  String get profilSoundSilentDesc;
+
+  /// No description provided for @profilStatsDailyAvg.
+  ///
+  /// In id, this message translates to:
+  /// **'Rata-rata Harian'**
+  String get profilStatsDailyAvg;
+
+  /// No description provided for @profilStatsEmptyBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Centang sholat pertamamu — statistik mulai terisi di sini.'**
+  String get profilStatsEmptyBody;
+
+  /// No description provided for @profilStatsEmptyTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Belum ada catatan.'**
+  String get profilStatsEmptyTitle;
+
+  /// No description provided for @profilStatsHeader.
+  ///
+  /// In id, this message translates to:
+  /// **'STATISTIK'**
+  String get profilStatsHeader;
+
+  /// No description provided for @profilStatsQuranStreak.
+  ///
+  /// In id, this message translates to:
+  /// **'Streak Baca Quran'**
+  String get profilStatsQuranStreak;
+
+  /// No description provided for @profilStatsSince.
+  ///
+  /// In id, this message translates to:
+  /// **'Sejak {date}'**
+  String profilStatsSince(String date);
+
+  /// No description provided for @profilStatsVerses.
+  ///
+  /// In id, this message translates to:
+  /// **'Ayat Quran Terbaca'**
+  String get profilStatsVerses;
+
+  /// No description provided for @profilStatsWajib.
+  ///
+  /// In id, this message translates to:
+  /// **'Sholat wajib'**
+  String get profilStatsWajib;
+
+  /// No description provided for @profilStreakBest.
+  ///
+  /// In id, this message translates to:
+  /// **'best {count}'**
+  String profilStreakBest(int count);
+
+  /// No description provided for @profilStreakFreeze.
+  ///
+  /// In id, this message translates to:
+  /// **'freeze'**
+  String get profilStreakFreeze;
+
+  /// No description provided for @profilStreakPerPrayer.
+  ///
+  /// In id, this message translates to:
+  /// **'STREAK PER SHOLAT'**
+  String get profilStreakPerPrayer;
+
+  /// No description provided for @profilStreakSemanticsItem.
+  ///
+  /// In id, this message translates to:
+  /// **'{prayer} {days} hari'**
+  String profilStreakSemanticsItem(String prayer, int days);
+
+  /// No description provided for @profilStreakSemanticsTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Streak per salat'**
+  String get profilStreakSemanticsTitle;
+
+  /// No description provided for @profilTestAdzan.
+  ///
+  /// In id, this message translates to:
+  /// **'Tes Adzan'**
+  String get profilTestAdzan;
+
+  /// No description provided for @profilTestNotif.
+  ///
+  /// In id, this message translates to:
+  /// **'Tes Notifikasi'**
+  String get profilTestNotif;
+
+  /// No description provided for @profilTestNotifFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Tes notifikasi gagal: {msg}'**
+  String profilTestNotifFailed(String msg);
+
+  /// No description provided for @profilTheme.
+  ///
+  /// In id, this message translates to:
+  /// **'Tema aplikasi'**
+  String get profilTheme;
+
+  /// No description provided for @profilUnitDays.
+  ///
+  /// In id, this message translates to:
+  /// **'hari'**
+  String get profilUnitDays;
+
+  /// No description provided for @profilUnitVerses.
+  ///
+  /// In id, this message translates to:
+  /// **'ayat'**
+  String get profilUnitVerses;
+
+  /// No description provided for @profilUnitWeeks.
+  ///
+  /// In id, this message translates to:
+  /// **'minggu'**
+  String get profilUnitWeeks;
+
+  /// No description provided for @profilVersion.
+  ///
+  /// In id, this message translates to:
+  /// **'Versi {version}'**
+  String profilVersion(String version);
+
+  /// No description provided for @profilXpToNext.
+  ///
+  /// In id, this message translates to:
+  /// **'{xp} XP lagi → LVL {level}'**
+  String profilXpToNext(int xp, int level);
+
+  /// No description provided for @profilXpWithinLevel.
+  ///
+  /// In id, this message translates to:
+  /// **'{current}/{needed} XP'**
+  String profilXpWithinLevel(int current, int needed);
 
   /// No description provided for @settingLanguage.
   ///

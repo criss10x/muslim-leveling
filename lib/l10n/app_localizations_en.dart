@@ -681,6 +681,21 @@ class AppL10nEn extends AppL10n {
   String get appTitle => 'Muslim Leveling';
 
   @override
+  String get commonCancel => 'Cancel';
+
+  @override
+  String get commonClose => 'Close';
+
+  @override
+  String get commonLogout => 'Sign out';
+
+  @override
+  String get commonOk => 'OK';
+
+  @override
+  String get commonSave => 'Save';
+
+  @override
   String get localeEnglish => 'English';
 
   @override
@@ -694,6 +709,414 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get localeTitle => 'App language';
+
+  @override
+  String get prayerAshar => 'Asr';
+
+  @override
+  String get prayerDzuhur => 'Dhuhr';
+
+  @override
+  String get prayerIsya => 'Isha';
+
+  @override
+  String get prayerMaghrib => 'Maghrib';
+
+  @override
+  String get prayerSubuh => 'Fajr';
+
+  @override
+  String get profilAbout => 'About the App';
+
+  @override
+  String get profilAboutBody =>
+      'Worship is about consistency, not perfection. Muslim Leveling helps you build the habit of the five daily prayers and Quran reading in a way that feels fun — every logged prayer earns XP, every unbroken day grows your streak, and every milestone unlocks a new avatar skin.';
+
+  @override
+  String get profilAboutFooter =>
+      'Made with prayer for everyone striving for the hereafter.';
+
+  @override
+  String get profilAboutOffline =>
+      'No server, no ads, no subscription. All your data stays on the device — entirely yours.';
+
+  @override
+  String get profilAccountSettings => 'Account Settings';
+
+  @override
+  String get profilAlreadyPrayedToday => ', already prayed today';
+
+  @override
+  String get profilAndroidNotifSettings => 'Android Notification Settings';
+
+  @override
+  String get profilBackupActive => 'Backup active';
+
+  @override
+  String get profilBatteryPerm =>
+      'Allow \"Unrestricted battery\" so reminders still ring when the app is closed.';
+
+  @override
+  String get profilCalendarHeader => 'PRAYER CALENDAR';
+
+  @override
+  String get profilChangePhoto => 'Change Photo';
+
+  @override
+  String get profilCloudVerifyFailed => 'Cloud verification failed. Try again.';
+
+  @override
+  String get profilConnecting => 'CONNECTING...';
+
+  @override
+  String get profilContinueGoogle => 'Continue with Google';
+
+  @override
+  String get profilCycleExplain =>
+      'Turn on during your period so prayer streaks stay safe with no penalty.';
+
+  @override
+  String get profilCycleFrozenMeta => 'period mode · streaks frozen';
+
+  @override
+  String get profilCycleFrozenSemantics =>
+      'Period mode is on, streaks are frozen';
+
+  @override
+  String get profilCycleModeShort => 'period mode';
+
+  @override
+  String get profilCyclePeriod => 'Menstrual Period';
+
+  @override
+  String get profilEditName => 'Edit Name';
+
+  @override
+  String get profilEditProfile => 'Edit profile';
+
+  @override
+  String get profilEnableReminders => 'Enable reminders';
+
+  @override
+  String get profilExactAlarmPerm =>
+      '\"Alarms & reminders\" permission is off — reminders may arrive a few minutes late.';
+
+  @override
+  String get profilFriday => 'Friday';
+
+  @override
+  String get profilFromCamera => 'Take a Photo';
+
+  @override
+  String get profilFromGallery => 'Choose from Gallery';
+
+  @override
+  String get profilHeatmapBody =>
+      'The greener, the more complete — 5 shades = 5 obligatory prayers.';
+
+  @override
+  String get profilHeatmapHeader => 'OBLIGATORY PRAYER CALENDAR';
+
+  @override
+  String get profilHeatmapRow => 'Monthly obligatory prayer heatmap';
+
+  @override
+  String get profilHeatmapSemantics => 'Open obligatory prayer calendar';
+
+  @override
+  String profilHeroSemantics(String tier) {
+    return 'Profile hero — $tier';
+  }
+
+  @override
+  String profilLevelBadge(int level) {
+    return 'LVL $level';
+  }
+
+  @override
+  String get profilLockerRow => 'Set your active aura and title';
+
+  @override
+  String get profilLockerSemantics => 'Open skin locker';
+
+  @override
+  String get profilLockerSkin => 'SKIN LOCKER';
+
+  @override
+  String get profilLoginCancelled => 'Sign-in cancelled.';
+
+  @override
+  String profilLoginFailed(String msg) {
+    return '❌ Sign-in failed: $msg';
+  }
+
+  @override
+  String get profilLoginMerged => '☁️ Signed in — progress merged.';
+
+  @override
+  String get profilLoginNotSaved =>
+      '⚠️ Signed in, but the backup was not saved.';
+
+  @override
+  String get profilLoginOffline =>
+      '⚠️ Signed in, but backup is not active yet (offline).';
+
+  @override
+  String get profilLogoutConfirm =>
+      'Erase local data and return to the first screen?';
+
+  @override
+  String get profilLogoutSuccess => 'Signed out.';
+
+  @override
+  String get profilMiniLevel => 'Level';
+
+  @override
+  String get profilMiniStreak => 'Streak';
+
+  @override
+  String get profilMiniXp => 'XP';
+
+  @override
+  String get profilModeBalanced => '⚖️ Balanced';
+
+  @override
+  String get profilModeBalancedDesc =>
+      'Reminders 15 minutes before & at adhan time';
+
+  @override
+  String get profilModeFocus => '🎯 Focus';
+
+  @override
+  String get profilModeFocusDesc => 'Only the main reminder at adhan time';
+
+  @override
+  String get profilModeIntense => '🔥 Intense';
+
+  @override
+  String get profilModeIntenseDesc =>
+      '30 minutes, 5 minutes before & at adhan time';
+
+  @override
+  String get profilNicknameHint => 'Display name';
+
+  @override
+  String get profilNotifPermAction =>
+      'Notification permission is off. Open Android Notification Settings and allow it.';
+
+  @override
+  String get profilNotifPermBody =>
+      'Notification permission is off. Turn it on to receive adhan reminders.';
+
+  @override
+  String get profilNotifications => 'Notifications';
+
+  @override
+  String get profilOemBody =>
+      'Turn on \"Autostart\" & \"Unrestricted battery\" in your phone settings so alarms still ring when the app is closed and notifications show on the lock screen.';
+
+  @override
+  String get profilOemManual =>
+      'Open Settings > Apps > Muslim Leveling > Battery & Autostart manually.';
+
+  @override
+  String get profilOemTitle => 'Adhan not showing on Xiaomi/Oppo/Vivo?';
+
+  @override
+  String get profilOpenAutostart => 'Open Autostart Settings';
+
+  @override
+  String profilPhotoFailed(String msg) {
+    return 'Could not take the photo: $msg';
+  }
+
+  @override
+  String get profilPhotoSection => 'PROFILE PHOTO';
+
+  @override
+  String get profilPrivacy => 'Privacy & Data';
+
+  @override
+  String get profilPrivacyDeleteBody =>
+      'Go to Profile → Sign out to erase all local data at once. Nothing is left on the device.';
+
+  @override
+  String get profilPrivacyDeleteTitle => 'Delete any time';
+
+  @override
+  String get profilPrivacyLocalBody =>
+      'All your data — prayers, Quran reading, stats, and preferences — stays on your phone. No server, no cloud.';
+
+  @override
+  String get profilPrivacyLocalTitle => 'Stored on your device';
+
+  @override
+  String get profilPrivacyLocationBody =>
+      'Location is used once to determine your local prayer schedule. It is never stored or shared.';
+
+  @override
+  String get profilPrivacyLocationTitle => 'Private location';
+
+  @override
+  String get profilPrivacyTraceBody =>
+      'The app never sends your activity to third parties and never tracks your behaviour.';
+
+  @override
+  String get profilPrivacyTraceTitle => 'No online trail';
+
+  @override
+  String get profilReminderMode => 'Reminder Mode';
+
+  @override
+  String get profilReminderTitle => 'Adhan Reminders';
+
+  @override
+  String profilRemindersChangeFailed(String msg) {
+    return 'Could not change reminders: $msg';
+  }
+
+  @override
+  String get profilRemindersFailed =>
+      'Could not schedule reminders — check notification & alarm permissions in your phone settings.';
+
+  @override
+  String get profilRemindersNone =>
+      'Mode saved, but no reminders are scheduled — check notification & alarm permissions in your phone settings.';
+
+  @override
+  String get profilRemindersOff => 'Adhan reminders turned off';
+
+  @override
+  String profilRemindersScheduled(String mode, int n) {
+    return 'Adhan reminders on: $mode mode — $n reminders scheduled';
+  }
+
+  @override
+  String profilRemindersScheduledCount(int n) {
+    return '$n adhan reminders scheduled 🔔';
+  }
+
+  @override
+  String get profilRemovePhoto => 'Remove Photo';
+
+  @override
+  String profilSaveFailed(String msg) {
+    return 'Could not save: $msg';
+  }
+
+  @override
+  String get profilSettingsHeader => 'SETTINGS';
+
+  @override
+  String profilSettingsOpenFailed(String msg) {
+    return 'Could not open notification settings: $msg';
+  }
+
+  @override
+  String get profilSoundAdzan => '🕌 Adhan';
+
+  @override
+  String get profilSoundAdzanDesc => 'Full adhan sound at prayer time';
+
+  @override
+  String get profilSoundMode => 'Notification Sound';
+
+  @override
+  String get profilSoundNormal => '🔔 Sound';
+
+  @override
+  String get profilSoundNormalDesc =>
+      'Notification with your phone\'s default sound';
+
+  @override
+  String get profilSoundSilent => '🔕 Silent';
+
+  @override
+  String get profilSoundSilentDesc => 'Notification only, no sound';
+
+  @override
+  String get profilStatsDailyAvg => 'Daily Average';
+
+  @override
+  String get profilStatsEmptyBody =>
+      'Tick your first prayer — your stats start filling in here.';
+
+  @override
+  String get profilStatsEmptyTitle => 'No records yet.';
+
+  @override
+  String get profilStatsHeader => 'STATS';
+
+  @override
+  String get profilStatsQuranStreak => 'Quran Reading Streak';
+
+  @override
+  String profilStatsSince(String date) {
+    return 'Since $date';
+  }
+
+  @override
+  String get profilStatsVerses => 'Quran Verses Read';
+
+  @override
+  String get profilStatsWajib => 'Obligatory prayers';
+
+  @override
+  String profilStreakBest(int count) {
+    return 'best $count';
+  }
+
+  @override
+  String get profilStreakFreeze => 'frozen';
+
+  @override
+  String get profilStreakPerPrayer => 'STREAK PER PRAYER';
+
+  @override
+  String profilStreakSemanticsItem(String prayer, int days) {
+    return '$prayer $days days';
+  }
+
+  @override
+  String get profilStreakSemanticsTitle => 'Streak per prayer';
+
+  @override
+  String get profilTestAdzan => 'Test Adhan';
+
+  @override
+  String get profilTestNotif => 'Test Notification';
+
+  @override
+  String profilTestNotifFailed(String msg) {
+    return 'Test notification failed: $msg';
+  }
+
+  @override
+  String get profilTheme => 'App theme';
+
+  @override
+  String get profilUnitDays => 'days';
+
+  @override
+  String get profilUnitVerses => 'verses';
+
+  @override
+  String get profilUnitWeeks => 'weeks';
+
+  @override
+  String profilVersion(String version) {
+    return 'Version $version';
+  }
+
+  @override
+  String profilXpToNext(int xp, int level) {
+    return '$xp XP to go → LVL $level';
+  }
+
+  @override
+  String profilXpWithinLevel(int current, int needed) {
+    return '$current/$needed XP';
+  }
 
   @override
   String get settingLanguage => 'Language';

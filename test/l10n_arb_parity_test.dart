@@ -54,29 +54,48 @@ void main() {
     }
   });
 
-  test('chrome ARB tidak disalin mentah dari Indonesia', () {
-    // Yang sah identik: judul medali (nama gaya ML: "SAVAGE!"), nama tier
-    // (ROOKIE…LEGENDARY), nama bahasa dalam bahasanya sendiri ("English"),
-    // judul yang sudah English, dan template Semantics yang bentuknya sama.
-    const allowed = {
-      'appTitle',
-      'localeEnglish',
-      'localeIndonesian',
-      'achScreenTitle',
-      'achSectionTitle',
-      'achSemanticsDetail',
-      'shareStatLevel',
+  test('prosa ARB tidak disalin mentah dari Indonesia', () {
+    // Aturan: nilai non-judul yang identik id==en hanya sah kalau SELURUH
+    // katanya istilah yang memang tidak diterjemahkan. Daftar ini sengaja
+    // kata, bukan key — allowlist per-key membuat guard tumpul seiring
+    // bertambahnya key; daftar kata memaksa tiap pengecualian jadi
+    // keputusan yang terbaca.
+    const untranslated = {
+      'level', 'xp', 'lvl', 'streak', 'best', 'achievements', 'v', 'pro',
+      'muslim', 'leveling', 'english', 'bahasa', 'indonesia',
+      'maghrib', // dipakai apa adanya di Indonesia
+      'profile', 'hero', // label a11y hero memakai istilah ini di ID juga
+      'tier', // 'Tier' memang dipakai di prosa Indonesia
+      'android', 'autostart', 'google', 'backup', 'hp',
+      'rookie', 'elite', 'gold', 'epic', 'legendary', // nama tier
     };
+
     final id = readArb('id');
     final en = readArb('en');
     final lazy = <String>[];
-    id.forEach((key, value) {
-      if (key.startsWith('@') || allowed.contains(key)) return;
-      if (key.startsWith('ach_') && key.endsWith('_title')) return;
-      if (key.startsWith('achTier')) return;
-      if (en[key] == value) lazy.add('$key = "$value"');
-    });
-    expect(lazy, isEmpty, reason: 'nilai en masih identik dengan id');
+
+    for (final entry in id.entries) {
+      final key = entry.key;
+      final value = entry.value;
+      if (key.startsWith('@') || value is! String || en[key] != value) continue;
+      // Judul medali & nama tier diuji terpisah di atas.
+      if (key.startsWith('ach_') && key.endsWith('_title')) continue;
+      if (key.startsWith('achTier')) continue;
+
+      final words = value
+          .replaceAll(RegExp(r'\{[a-zA-Z]+\}'), ' ')
+          .toLowerCase()
+          .split(RegExp(r'[^a-z]+'))
+          .where((w) => w.isNotEmpty);
+      if (!words.every(untranslated.contains)) lazy.add('$key = "$value"');
+    }
+
+    expect(
+      lazy,
+      isEmpty,
+      reason: 'nilai en identik dengan id, dan ada kata yang seharusnya '
+          'diterjemahkan',
+    );
   });
 
   test('medali tanpa unlockHint memakai kalimat fallback dari ARB', () {
