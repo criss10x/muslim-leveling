@@ -1374,6 +1374,48 @@ abstract class AppL10n {
   /// **'Batal'**
   String get commonCancel;
 
+  /// No description provided for @cityPickerEmptyKab.
+  ///
+  /// In id, this message translates to:
+  /// **'Kabupaten/kota tidak ditemukan'**
+  String get cityPickerEmptyKab;
+
+  /// No description provided for @cityPickerEmptyProv.
+  ///
+  /// In id, this message translates to:
+  /// **'Provinsi tidak ditemukan'**
+  String get cityPickerEmptyProv;
+
+  /// No description provided for @cityPickerHintKab.
+  ///
+  /// In id, this message translates to:
+  /// **'Ketik nama kabupaten/kota...'**
+  String get cityPickerHintKab;
+
+  /// No description provided for @cityPickerHintProv.
+  ///
+  /// In id, this message translates to:
+  /// **'Ketik nama provinsi...'**
+  String get cityPickerHintProv;
+
+  /// No description provided for @cityPickerNotFound.
+  ///
+  /// In id, this message translates to:
+  /// **'Kabupaten/kota tidak ditemukan. Coba pilih provinsi lain.'**
+  String get cityPickerNotFound;
+
+  /// No description provided for @cityPickerTitleKab.
+  ///
+  /// In id, this message translates to:
+  /// **'Pilih Kabupaten/Kota'**
+  String get cityPickerTitleKab;
+
+  /// No description provided for @cityPickerTitleProv.
+  ///
+  /// In id, this message translates to:
+  /// **'Pilih Provinsi'**
+  String get cityPickerTitleProv;
+
   /// No description provided for @commonClose.
   ///
   /// In id, this message translates to:
@@ -1869,7 +1911,7 @@ abstract class AppL10n {
   /// No description provided for @onbHowAchTitle.
   ///
   /// In id, this message translates to:
-  /// **'Achievement'**
+  /// **'Achievements'**
   String get onbHowAchTitle;
 
   /// No description provided for @onbHowBody.
@@ -2028,23 +2070,17 @@ abstract class AppL10n {
   /// **'Pengingat Adzan'**
   String get onbNotifTitle;
 
+  /// No description provided for @onbProgressLabel.
+  ///
+  /// In id, this message translates to:
+  /// **'Persiapan'**
+  String get onbProgressLabel;
+
   /// No description provided for @onbStepOf.
   ///
   /// In id, this message translates to:
   /// **'Langkah {step} dari {total}'**
   String onbStepOf(String step, String total);
-
-  /// No description provided for @onbWelcomeBody.
-  ///
-  /// In id, this message translates to:
-  /// **'Selesaikan quest sholat, kumpulkan XP, naikkan level.'**
-  String get onbWelcomeBody;
-
-  /// No description provided for @onbWelcomeTitle.
-  ///
-  /// In id, this message translates to:
-  /// **'Selamat Datang, Muslim Warrior!'**
-  String get onbWelcomeTitle;
 
   /// No description provided for @onbXpDemoSemantics.
   ///

@@ -70,6 +70,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         curve: Curves.easeOutCubic);
   }
 
+  Future<void> _prev() async {
+    if (_page == 0) return;
+    await _pageCtrl.previousPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOutCubic);
+  }
+
   /// Halaman lokasi: minta lokasi, sinkron jadwal, tampilkan ✓ kota.
   Future<void> _allowLocation() async {
     if (_busy) return;
@@ -130,6 +137,22 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     // — jalur ini dulu selesai dalam diam, jadi user mengira pengingat aktif.
     var notifDenied = false;
     try {
+      // ponytail: jawaban disimpan SEBELUM dialog izin OS, bukan sesudah.
+      // Dialog sistem bisa membunuh proses (app di-background lalu di-kill),
+      // dan dulu semua jawaban ada di belakang rantai izin → user yang sudah
+      // mengisi 5 halaman mengulang dari nol. Tidak ada yang bergantung pada
+      // hasil izin di sini, jadi urutannya bebas.
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('onboarding_done', true);
+      final raw = _nickCtrl.text.trim();
+      // Nama pejuang opsional — kosong → default (tidak dipaksa).
+      final nick = raw.isEmpty ? l10n.onbDefaultNickname : raw;
+      await prefs.setString('nickname', nick);
+      // ponytail: gender di prefs, bukan GameState — pola sama dengan
+      // nickname. Efeknya gender tidak ikut cloud backup, jadi copy privasi
+      // di halaman 3 ("cuma dipakai untuk menyembunyikan menu") tetap benar.
+      await prefs.setString(kGenderPrefKey, _gender);
+
       if (enableNotif) {
         try {
           await NotificationService.init();
@@ -144,16 +167,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           notifDenied = true;
         }
       }
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('onboarding_done', true);
-      final raw = _nickCtrl.text.trim();
-      // Nama pejuang opsional — kosong → default (tidak dipaksa).
-      final nick = raw.isEmpty ? l10n.onbDefaultNickname : raw;
-      await prefs.setString('nickname', nick);
-      // ponytail: gender di prefs, bukan GameState — pola sama dengan
-      // nickname. Efeknya gender tidak ikut cloud backup, jadi copy privasi
-      // di halaman 3 ("cuma dipakai untuk menyembunyikan menu") tetap benar.
-      await prefs.setString(kGenderPrefKey, _gender);
       if (!mounted) return;
       // Kabari sebelum pergi kalau izinnya ditolak: dulu jalur ini selesai
       // dalam diam dan user mengira pengingat sudah aktif.
@@ -191,30 +204,54 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: PageView(
-                controller: _pageCtrl,
-                physics: _busy ? const NeverScrollableScrollPhysics() : null,
-                onPageChanged: (i) => setState(() {
-                  _page = i;
-                  _entry.forward(from: 0);
-                }),
-                children: [
-                  _pageBahasa(),
-                  _pageNama(),
-                  _pageGender(),
-                  _pageCaraMain(),
-                  _pageLokasi(),
-                  _pageNotif(),
-                ],
+    final l10n = AppL10n.of(context);
+    return PopScope(
+      // Android back di halaman >1 harus mundur satu langkah, bukan keluar app:
+      // onboarding adalah root route (splash pakai pushReplacement), jadi back
+      // bawaan membuang semua jawaban yang sudah diisi tanpa peringatan.
+      canPop: _page == 0 && !_busy,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop || _busy) return;
+        _prev();
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.background,
+        body: SafeArea(
+          child: Column(
+            children: [
+              // Progres visual, bukan cuma untuk TalkBack. HudHeader = pola meta
+              // yang sudah dipakai tab lain (belajar_tab, jadwal_tab).
+              // ExcludeSemantics: _PageBody sudah membawa kalimat
+              // "Langkah n dari 6" untuk pembaca layar — tanpa ini TalkBack
+              // membacakan progres dua kali.
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, AppSpacing.md, 24, 0),
+                child: ExcludeSemantics(
+                  child: HudHeader(l10n.onbProgressLabel,
+                      meta: '${_page + 1}/$_total'),
+                ),
               ),
-            ),
-          ],
+              Expanded(
+                child: PageView(
+                  controller: _pageCtrl,
+                  physics:
+                      _busy ? const NeverScrollableScrollPhysics() : null,
+                  onPageChanged: (i) => setState(() {
+                    _page = i;
+                    _entry.forward(from: 0);
+                  }),
+                  children: [
+                    _pageBahasa(),
+                    _pageNama(),
+                    _pageGender(),
+                    _pageCaraMain(),
+                    _pageLokasi(),
+                    _pageNotif(),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -232,7 +269,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       child: Column(
         children: [
           const Spacer(),
-          const _Mascot(emoji: '🌐'),
+          const _Mascot(icon: AppIcons.translate),
           const SizedBox(height: AppSpacing.lg),
           _Title(l10n.onbLangTitle),
           const SizedBox(height: AppSpacing.sm),
@@ -279,7 +316,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       child: Column(
         children: [
           const Spacer(),
-          const _Mascot(emoji: '🛡️'),
+          const _Mascot(icon: AppIcons.shieldOutlined),
           const SizedBox(height: AppSpacing.lg),
           _Title(l10n.onbNameTitle),
           const SizedBox(height: AppSpacing.sm),
@@ -289,6 +326,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
             controller: _nickCtrl,
             maxLength: 20,
             maxLines: 1,
+            // Counter ditampilkan (dulu counterText: ''): karakter ke-21
+            // ditolak diam-diam, jadi user tidak tahu kenapa ketikannya macet.
+            // ponytail: pakai counter bawaan TextField, bukan widget sendiri.
+            buildCounter: (_, {required currentLength, required isFocused, maxLength}) =>
+                Text('$currentLength/$maxLength',
+                    style: AppText.labelCapsSm()
+                        .copyWith(color: AppColors.onSurfaceVariant)),
             textCapitalization: TextCapitalization.words,
             style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
             decoration: InputDecoration(
@@ -302,7 +346,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 borderRadius: BorderRadius.circular(AppRadius.md),
                 borderSide: BorderSide(color: AppColors.outlineVariant),
               ),
-              counterText: '',
             ),
           ),
           const Spacer(),
@@ -391,12 +434,20 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           const SizedBox(height: AppSpacing.md),
           const _MockXpCard(),
           const SizedBox(height: AppSpacing.xs),
-          Text(
-            l10n.onbHowDemoHint,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: AppText.labelCapsSm()
-                .copyWith(color: AppColors.onSurfaceVariant),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(AppIcons.touchApp,
+                  size: 16, color: AppColors.onSurfaceVariant),
+              const SizedBox(width: AppSpacing.xs),
+              Flexible(
+                child: Text(
+                  l10n.onbHowDemoHint,
+                  style: AppText.bodyMd()
+                      .copyWith(color: AppColors.onSurfaceVariant),
+                ),
+              ),
+            ],
           ),
           const Spacer(),
           HeroButton(
@@ -418,7 +469,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       child: Column(
         children: [
           const Spacer(),
-          const _Mascot(emoji: '📍'),
+          const _Mascot(icon: AppIcons.locationOn),
           const SizedBox(height: AppSpacing.xl),
           _Title(l10n.onbLocationTitle),
           const SizedBox(height: AppSpacing.md),
@@ -499,7 +550,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       child: Column(
         children: [
           const Spacer(),
-          const _Mascot(emoji: '🔔'),
+          const _Mascot(icon: AppIcons.notificationsActiveOutlined),
           const SizedBox(height: AppSpacing.xl),
           _Title(l10n.onbNotifTitle),
           const SizedBox(height: AppSpacing.md),
@@ -771,14 +822,16 @@ class _MockXpCard extends StatelessWidget {
   }
 }
 
+/// Anchor optik halaman — ikon Phosphor, bukan emoji sistem.
+///
+/// ponytail: app ini vendoring Phosphor justru supaya tidak ada glyph acak dari
+/// font emoji Android. Emoji juga tidak menskala dengan setelan ukuran font
+/// user (fontSize mati), jadi ini sekaligus perbaikan a11y.
+/// Ukuran 64 = radius lama (128px lingkaran), hanya bentuknya yang berubah.
 class _Mascot extends StatelessWidget {
-  final String emoji;
-  const _Mascot({required this.emoji});
+  final IconData icon;
+  const _Mascot({required this.icon});
 
   @override
-  Widget build(BuildContext context) => CircleAvatar(
-        radius: 64,
-        backgroundColor: AppColors.surfaceContainerHigh,
-        child: Text(emoji, style: const TextStyle(fontSize: 64)),
-      );
+  Widget build(BuildContext context) => Icon(icon, size: 64, color: AppColors.primary);
 }

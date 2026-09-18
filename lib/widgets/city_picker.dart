@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 import '../services/prayer_service.dart';
 import '../theme/app_icons.dart';
@@ -12,6 +13,9 @@ class CityPicker {
     BuildContext context, {
     CityLoader? cityLoader,
   }) async {
+    // l10n diambil di sini: builder dialog punya context sendiri, dan teks
+    // dialog harus ikut bahasa aktif (dulu hardcode Indonesia walau app EN).
+    final l10n = AppL10n.of(context);
     final ctrl = TextEditingController();
     final loadCities = cityLoader ?? PrayerService.citiesForProvince;
     List<String> cities = const [];
@@ -44,7 +48,7 @@ class CityPicker {
               cities = loaded;
               loading = false;
               error = loaded.isEmpty
-                  ? 'Kabupaten/kota tidak ditemukan. Coba pilih provinsi lain.'
+                  ? l10n.cityPickerNotFound
                   : null;
             });
           }
@@ -71,7 +75,9 @@ class CityPicker {
                   ),
                 Expanded(
                   child: Text(
-                    pickingProvince ? 'Pilih Provinsi' : 'Pilih Kabupaten/Kota',
+                    pickingProvince
+                        ? l10n.cityPickerTitleProv
+                        : l10n.cityPickerTitleKab,
                     style: AppText.titleLg(),
                   ),
                 ),
@@ -100,8 +106,8 @@ class CityPicker {
                     style: AppText.bodyLg(),
                     decoration: InputDecoration(
                       hintText: pickingProvince
-                          ? 'Ketik nama provinsi...'
-                          : 'Ketik nama kabupaten/kota...',
+                          ? l10n.cityPickerHintProv
+                          : l10n.cityPickerHintKab,
                       hintStyle: AppText.bodyMd().copyWith(
                         color: AppColors.onSurfaceVariant,
                       ),
@@ -144,8 +150,8 @@ class CityPicker {
                       padding: const EdgeInsets.all(16),
                       child: Text(
                         pickingProvince
-                            ? 'Provinsi tidak ditemukan'
-                            : 'Kabupaten/kota tidak ditemukan',
+                            ? l10n.cityPickerEmptyProv
+                            : l10n.cityPickerEmptyKab,
                         style: AppText.bodyMd().copyWith(
                           color: AppColors.onSurfaceVariant,
                         ),
@@ -189,7 +195,7 @@ class CityPicker {
               TextButton(
                 onPressed: () => Navigator.pop(ctx),
                 child: Text(
-                  'Tutup',
+                  l10n.commonClose,
                   style: AppText.bodyMd().copyWith(
                     color: AppColors.onSurfaceVariant,
                   ),

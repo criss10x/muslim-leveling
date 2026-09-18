@@ -684,6 +684,27 @@ class AppL10nEn extends AppL10n {
   String get commonCancel => 'Cancel';
 
   @override
+  String get cityPickerEmptyKab => 'No city found';
+
+  @override
+  String get cityPickerEmptyProv => 'No province found';
+
+  @override
+  String get cityPickerHintKab => 'Type a city name...';
+
+  @override
+  String get cityPickerHintProv => 'Type a province name...';
+
+  @override
+  String get cityPickerNotFound => 'No city found. Try another province.';
+
+  @override
+  String get cityPickerTitleKab => 'Pick a City';
+
+  @override
+  String get cityPickerTitleProv => 'Pick a Province';
+
+  @override
   String get commonClose => 'Close';
 
   @override
@@ -1055,15 +1076,12 @@ class AppL10nEn extends AppL10n {
   String get onbNotifTitle => 'Adhan Reminders';
 
   @override
+  String get onbProgressLabel => 'Setup';
+
+  @override
   String onbStepOf(String step, String total) {
     return 'Step $step of $total';
   }
-
-  @override
-  String get onbWelcomeBody => 'Complete prayer quests, collect XP, level up.';
-
-  @override
-  String get onbWelcomeTitle => 'Welcome, Muslim Warrior!';
 
   @override
   String get onbXpDemoSemantics => 'Example: Fajr done, +50 XP added';

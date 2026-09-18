@@ -682,6 +682,28 @@ class AppL10nId extends AppL10n {
   String get commonCancel => 'Batal';
 
   @override
+  String get cityPickerEmptyKab => 'Kabupaten/kota tidak ditemukan';
+
+  @override
+  String get cityPickerEmptyProv => 'Provinsi tidak ditemukan';
+
+  @override
+  String get cityPickerHintKab => 'Ketik nama kabupaten/kota...';
+
+  @override
+  String get cityPickerHintProv => 'Ketik nama provinsi...';
+
+  @override
+  String get cityPickerNotFound =>
+      'Kabupaten/kota tidak ditemukan. Coba pilih provinsi lain.';
+
+  @override
+  String get cityPickerTitleKab => 'Pilih Kabupaten/Kota';
+
+  @override
+  String get cityPickerTitleProv => 'Pilih Provinsi';
+
+  @override
   String get commonClose => 'Tutup';
 
   @override
@@ -965,7 +987,7 @@ class AppL10nId extends AppL10n {
   String get onbHowAchBody => 'Buka medali dari streak, tilawah, dan dzikir.';
 
   @override
-  String get onbHowAchTitle => 'Achievement';
+  String get onbHowAchTitle => 'Achievements';
 
   @override
   String get onbHowBody =>
@@ -1053,16 +1075,12 @@ class AppL10nId extends AppL10n {
   String get onbNotifTitle => 'Pengingat Adzan';
 
   @override
+  String get onbProgressLabel => 'Persiapan';
+
+  @override
   String onbStepOf(String step, String total) {
     return 'Langkah $step dari $total';
   }
-
-  @override
-  String get onbWelcomeBody =>
-      'Selesaikan quest sholat, kumpulkan XP, naikkan level.';
-
-  @override
-  String get onbWelcomeTitle => 'Selamat Datang, Muslim Warrior!';
 
   @override
   String get onbXpDemoSemantics => 'Contoh: Subuh selesai, ditambah 50 XP';
