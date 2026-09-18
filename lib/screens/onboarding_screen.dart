@@ -165,40 +165,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     }
   }
 
-  Future<void> _skip() => _finish();
-
   @override
   Widget build(BuildContext context) {
-    final l10n = AppL10n.of(context);
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  // P3: textbutton default ~36px, di-bawah 48dp guideline
-                  minimumSize: const Size(48, 48),
-                  tapTargetSize: MaterialTapTargetSize.padded,
-                ),
-                // ponytail: halaman bahasa tidak bisa di-skip — semua halaman
-                // lain sudah punya jalan keluar sendiri, dan halaman ini
-                // punya default (ikut HP) yang aman kalau ditinggal begitu saja.
-                onPressed: _page == 0 || _isLast || _busy ? null : _skip,
-                child: Text(
-                  l10n.onbSkip,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppText.bodyMd().copyWith(
-                    color: _page == 0 || _isLast || _busy
-                        ? AppColors.onSurfaceVariant.withValues(alpha: .4)
-                        : AppColors.onSurfaceVariant,
-                  ),
-                ),
-              ),
-            ),
             Expanded(
               child: PageView(
                 controller: _pageCtrl,
@@ -350,10 +323,17 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           const SizedBox(height: AppSpacing.sm),
           _Body(l10n.onbGenderPrivacy, maxLines: 3),
           const Spacer(),
+          // ponytail: label lama "Lewati" bertabrakan dengan tombol Lewati
+          // kanan-atas yang artinya lain (dan tidak maju sama sekali) → user
+          // menekan yang salah, atau menekan ini dan menyimpulkan app rusak.
+          // Sekarang: label menyebut fungsinya, dan ia maju seperti tombol
+          // mana pun di posisi itu. Ikon dihapus — halaman ini zero-ikon.
           GhostButton(
               label: l10n.onbGenderSkip,
-              icon: AppIcons.close,
-              onPressed: () => setState(() => _gender = '')),
+              onPressed: () {
+                setState(() => _gender = '');
+                _next();
+              }),
           const SizedBox(height: AppSpacing.sm),
           HeroButton(
               label: l10n.onbContinue,

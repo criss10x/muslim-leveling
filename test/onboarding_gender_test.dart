@@ -51,14 +51,18 @@ void main() {
     });
   }
 
-  testWidgets('Lewati → gender kosong (tidak sembunyikan fitur haid)',
+  testWidgets('Tidak perlu → gender kosong dan langsung maju ke halaman 4',
       (tester) async {
     SharedPreferences.setMockInitialValues({});
     await gotoGender(tester);
-    await tester.tap(find.text('LEWATI'));
-    await tester.pump();
-    await finish(tester);
+    await tester.tap(find.text('TIDAK PERLU'));
+    await tester.pumpAndSettle();
 
+    // Tidak lagi no-op: tombol ini maju, sama seperti tombol lain di posisi
+    // itu. Kalau user tidak menekan apa-apa, ia tidak tahu app-nya hidup.
+    expect(find.text('Cara Main'), findsOneWidget);
+
+    await finish(tester);
     final prefs = await SharedPreferences.getInstance();
     expect(prefs.getString('gender'), '');
     // '' berarti baris Periode Haid TETAP tampil di Profil — akhwat yang

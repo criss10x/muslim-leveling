@@ -1845,7 +1845,7 @@ abstract class AppL10n {
   /// No description provided for @onbGenderSkip.
   ///
   /// In id, this message translates to:
-  /// **'Lewati'**
+  /// **'Tidak perlu'**
   String get onbGenderSkip;
 
   /// No description provided for @onbGenderTitle.
@@ -2003,12 +2003,6 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Pengingat Adzan'**
   String get onbNotifTitle;
-
-  /// No description provided for @onbSkip.
-  ///
-  /// In id, this message translates to:
-  /// **'Lewati'**
-  String get onbSkip;
 
   /// No description provided for @onbStepOf.
   ///

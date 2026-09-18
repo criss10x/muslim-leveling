@@ -18,13 +18,15 @@ void main() {
       appWrap(const OnboardingScreen(), locale: const Locale('en')),
     );
 
-    // Halaman 1: bahasa. Lewati ada tapi nonaktif — halaman ini tidak boleh
-    // di-skip (defaultnya "ikut HP" sudah aman, jadi tetap bisa ditinggal).
+    // Halaman 1: bahasa. Tidak ada kontrol skip sama sekali — halaman ini
+    // punya default aman ("ikut HP"), dan onboarding tidak menyediakan jalan
+    // pintas keluar: tiap halaman sudah punya CTA majunya sendiri.
     expect(find.text('Which language do you want?'), findsOneWidget);
-    final skipBtn = tester.widget<TextButton>(
-      find.widgetWithText(TextButton, 'Skip'),
+    expect(
+      find.byType(TextButton),
+      findsNothing,
+      reason: 'tidak ada tombol lewati di onboarding',
     );
-    expect(skipBtn.onPressed, isNull, reason: 'halaman bahasa tak bisa di-skip');
 
     // Halaman 2: nama
     await tester.fling(find.byType(PageView), const Offset(-400, 0), 800);

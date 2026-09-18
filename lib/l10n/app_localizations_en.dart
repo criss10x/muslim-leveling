@@ -954,7 +954,7 @@ class AppL10nEn extends AppL10n {
       'Your answer is only used to hide that menu. You can change it anytime in Profile.';
 
   @override
-  String get onbGenderSkip => 'Skip';
+  String get onbGenderSkip => 'Not needed';
 
   @override
   String get onbGenderTitle => 'Are you Ikhwan or Akhwat?';
@@ -1039,9 +1039,6 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get onbNotifTitle => 'Adhan Reminders';
-
-  @override
-  String get onbSkip => 'Skip';
 
   @override
   String onbStepOf(String step, String total) {

@@ -952,7 +952,7 @@ class AppL10nId extends AppL10n {
       'Jawabanmu cuma dipakai untuk menyembunyikan menu. Kamu bisa ubah kapan saja di Profil.';
 
   @override
-  String get onbGenderSkip => 'Lewati';
+  String get onbGenderSkip => 'Tidak perlu';
 
   @override
   String get onbGenderTitle => 'Kamu Ikhwan atau Akhwat?';
@@ -1037,9 +1037,6 @@ class AppL10nId extends AppL10n {
 
   @override
   String get onbNotifTitle => 'Pengingat Adzan';
-
-  @override
-  String get onbSkip => 'Lewati';
 
   @override
   String onbStepOf(String step, String total) {
