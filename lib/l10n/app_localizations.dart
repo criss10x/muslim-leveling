@@ -1944,11 +1944,29 @@ abstract class AppL10n {
   /// **'MENGAMBIL LOKASI...'**
   String get onbLocationLoading;
 
+  /// No description provided for @onbLocationLater.
+  ///
+  /// In id, this message translates to:
+  /// **'Pakai kota default dulu'**
+  String get onbLocationLater;
+
+  /// No description provided for @onbLocationLaterHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Belum ada lokasi? Jadwal memakai kota default dulu — bisa diubah kapan saja di Profil.'**
+  String get onbLocationLaterHint;
+
   /// No description provided for @onbLocationPickManual.
   ///
   /// In id, this message translates to:
   /// **'Pilih kota manual'**
   String get onbLocationPickManual;
+
+  /// No description provided for @onbLocationRetry.
+  ///
+  /// In id, this message translates to:
+  /// **'Coba lagi'**
+  String get onbLocationRetry;
 
   /// No description provided for @onbLocationTitle.
   ///
@@ -1983,8 +2001,14 @@ abstract class AppL10n {
   /// No description provided for @onbNotifBody.
   ///
   /// In id, this message translates to:
-  /// **'Biar tidak kelewat, kami kirim pengingat saat waktu sholat tiba.'**
+  /// **'Biar tidak kelewat, kami kirim pengingat saat waktu sholat tiba. Cukup izin notifikasi — pengaturan alarm & baterai ditawarkan nanti di Profil, lengkap dengan alasannya.'**
   String get onbNotifBody;
+
+  /// No description provided for @onbNotifDenied.
+  ///
+  /// In id, this message translates to:
+  /// **'Pengingat tidak aktif. Bisa dinyalakan kapan saja di Profil.'**
+  String get onbNotifDenied;
 
   /// No description provided for @onbNotifLoading.
   ///

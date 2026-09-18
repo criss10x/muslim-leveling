@@ -1009,7 +1009,17 @@ class AppL10nEn extends AppL10n {
   String get onbLocationLoading => 'GETTING LOCATION...';
 
   @override
+  String get onbLocationLater => 'Use the default city for now';
+
+  @override
+  String get onbLocationLaterHint =>
+      'No location yet? The schedule uses a default city for now — you can change it anytime in Profile.';
+
+  @override
   String get onbLocationPickManual => 'Pick city manually';
+
+  @override
+  String get onbLocationRetry => 'Try again';
 
   @override
   String get onbLocationTitle => 'We Need Your Location';
@@ -1029,7 +1039,11 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get onbNotifBody =>
-      'So you never miss it, we send a reminder when prayer time comes.';
+      'So you never miss it, we send a reminder when prayer time comes. Notification permission only — alarm & battery settings are offered later in Profile, with their reasons.';
+
+  @override
+  String get onbNotifDenied =>
+      'Reminders are off. You can turn them on anytime in Profile.';
 
   @override
   String get onbNotifLoading => 'ENABLING...';

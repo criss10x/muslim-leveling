@@ -43,6 +43,12 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   bool _busy = false;
   String? _city; // kota hasil deteksi/pilih — tampil sebagai ✓ Nama Kota
 
+  /// Alasan GPS gagal, ditahan di layar (bukan SnackBar yang hilang sendiri).
+  /// Tanpa ini, user yang menolak GPS cuma melihat tombol yang sama dan tidak
+  /// tahu harus apa — padahal Android tidak memunculkan dialog lagi setelah
+  /// permanent-deny.
+  String? _locError;
+
   /// '' = belum dijawab. Dibedakan dari 'male'/'female' karena hanya
   /// 'male' yang menyembunyikan fitur haid — lihat ProfilTab.
   String _gender = '';
@@ -67,16 +73,22 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   /// Halaman lokasi: minta lokasi, sinkron jadwal, tampilkan ✓ kota.
   Future<void> _allowLocation() async {
     if (_busy) return;
-    setState(() => _busy = true);
+    setState(() {
+      _busy = true;
+      _locError = null;
+    });
     try {
       final loc = await PrayerService.getCurrentLocation();
       if (!mounted) return;
       if (loc.failure != null) {
-        // ponytail: jangan simpan default — tampilkan error + fallback manual.
+        // ponytail: jangan simpan default — tampilkan alasan + fallback manual.
         // Bug lama: _syncPrayerSchedule() dipanggil walau failure, dan
         // loadLocation() auto-save "Kota Jakarta" → user luar Jawa salah kota.
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(loc.failure!.message)));
+        //
+        // Alasan ditahan di layar, bukan SnackBar: setelah permanent-deny
+        // dialog OS tidak muncul lagi, jadi user butuh tahu bahwa tombolnya
+        // tidak rusak dan ada jalur lain (pilih kota manual).
+        setState(() => _locError = loc.failure!.message);
         return;
       }
       if (loc.name != null) {
@@ -103,27 +115,33 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   }
 
   /// Halaman terakhir: minta notifikasi (bila diminta), tandai onboarding selesai.
+  ///
+  /// ponytail: HANYA izin notifikasi di sini. Dulu satu tap juga membuka
+  /// Settings "Alarm & pengingat" + dialog battery-optimization — tiga surface
+  /// OS untuk satu janji copy. Sekarang keduanya dipicu di tempat yang jelas
+  /// alasannya: toggle notifikasi di Profil / saat menyimpan jadwal adhan.
   Future<void> _finish({bool enableNotif = true}) async {
     if (_busy) return;
     // Tangkap l10n sebelum await: pakai context setelah await =
     // use_build_context_synchronously (warning = CI merah).
     final l10n = AppL10n.of(context);
     setState(() => _busy = true);
+    // True kalau user menekan "Izinkan Notifikasi" tapi izinnya tidak diberikan
+    // — jalur ini dulu selesai dalam diam, jadi user mengira pengingat aktif.
+    var notifDenied = false;
     try {
       if (enableNotif) {
         try {
           await NotificationService.init();
           final granted = await NotificationService.requestPermission();
           if (granted) {
-            // Sama dengan toggle Profil: tanpa exact alarm jadwal gagal,
-            // tanpa battery exemption OEM (Xiaomi/Oppo/Vivo) membunuh
-            // alarm saat app ditutup → notif mati diam-diam.
-            await NotificationService.ensureExactAlarmPermission();
-            await NotificationService.ensureBatteryUnrestricted();
             await _scheduleAdhanFromPrefs();
+          } else {
+            notifDenied = true;
           }
         } catch (_) {
           // ponytail: onboarding tetap selesai; pengingat bisa diaktifkan di Profil.
+          notifDenied = true;
         }
       }
       final prefs = await SharedPreferences.getInstance();
@@ -137,6 +155,12 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       // di halaman 3 ("cuma dipakai untuk menyembunyikan menu") tetap benar.
       await prefs.setString(kGenderPrefKey, _gender);
       if (!mounted) return;
+      // Kabari sebelum pergi kalau izinnya ditolak: dulu jalur ini selesai
+      // dalam diam dan user mengira pengingat sudah aktif.
+      if (notifDenied) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(l10n.onbNotifDenied)));
+      }
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const DashboardShell()));
     } finally {
@@ -212,7 +236,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           const SizedBox(height: AppSpacing.lg),
           _Title(l10n.onbLangTitle),
           const SizedBox(height: AppSpacing.sm),
-          _Body(l10n.onbLangBody, maxLines: 3),
+          _Body(l10n.onbLangBody),
           const SizedBox(height: AppSpacing.lg),
           // ListenableBuilder: baris terpilih harus pindah saat ditekan.
           ListenableBuilder(
@@ -259,7 +283,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           const SizedBox(height: AppSpacing.lg),
           _Title(l10n.onbNameTitle),
           const SizedBox(height: AppSpacing.sm),
-          _Body(l10n.onbNameBody, maxLines: 3),
+          _Body(l10n.onbNameBody),
           const SizedBox(height: AppSpacing.lg),
           TextField(
             controller: _nickCtrl,
@@ -309,7 +333,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           _Title(l10n.onbGenderTitle),
           const SizedBox(height: AppSpacing.md),
           // Alasan sebenarnya hanya satu: menyembunyikan baris Periode Haid.
-          _Body(l10n.onbGenderWhy, maxLines: 6),
+          _Body(l10n.onbGenderWhy),
           const SizedBox(height: AppSpacing.lg),
           for (final (label, value) in [
             (l10n.onbGenderIkhwan, 'male'),
@@ -321,7 +345,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
               onTap: () => setState(() => _gender = value),
             ),
           const SizedBox(height: AppSpacing.sm),
-          _Body(l10n.onbGenderPrivacy, maxLines: 3),
+          _Body(l10n.onbGenderPrivacy),
           const Spacer(),
           // ponytail: label lama "Lewati" bertabrakan dengan tombol Lewati
           // kanan-atas yang artinya lain (dan tidak maju sama sekali) → user
@@ -356,7 +380,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           const Spacer(),
           _Title(l10n.onbHowTitle),
           const SizedBox(height: AppSpacing.sm),
-          _Body(l10n.onbHowBody, maxLines: 3),
+          _Body(l10n.onbHowBody),
           const SizedBox(height: AppSpacing.lg),
           for (final (icon, title, body) in [
             (AppIcons.checkCircle, l10n.onbHowQuestTitle, l10n.onbHowQuestBody),
@@ -398,27 +422,69 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           const SizedBox(height: AppSpacing.xl),
           _Title(l10n.onbLocationTitle),
           const SizedBox(height: AppSpacing.md),
-          _Body(l10n.onbLocationBody, maxLines: 6),
+          _Body(l10n.onbLocationBody),
           const SizedBox(height: AppSpacing.md),
           if (confirmed)
-            Text(
-              '✓ $_city',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppText.bodyMd().copyWith(color: Colors.green.shade700),
-            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(AppIcons.checkCircle,
+                    size: 18, color: AppColors.primary),
+                const SizedBox(width: AppSpacing.xs),
+                Flexible(
+                  child: Text(
+                    _city!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppText.bodyMd()
+                        .copyWith(color: AppColors.onSurface),
+                  ),
+                ),
+              ],
+            )
+          else if (_locError != null)
+            // Alasan gagal ditahan di layar, dan user diarahkan ke jalur yang
+            // pasti berhasil (pilih kota manual) — bukan disuruh coba lagi
+            // tombol yang dialognya sudah tidak akan muncul lagi.
+            _Body(_locError!),
           const Spacer(),
-          HeroButton(
-              label: _busy
-                  ? l10n.onbLocationLoading
-                  : (confirmed ? l10n.onbContinue : l10n.onbLocationAllow),
-              onPressed:
-                  _busy ? null : (confirmed ? _next : _allowLocation)),
+          // Saat GPS gagal, jalur manual naik jadi aksi utama: itu satu-satunya
+          // yang masih bisa membawa user ke jadwal sholat.
+          if (_locError != null)
+            HeroButton(
+                label: l10n.onbLocationPickManual,
+                trailingIcon: AppIcons.arrowForward,
+                onPressed: _busy ? null : _pickCity)
+          else
+            HeroButton(
+                label: _busy
+                    ? l10n.onbLocationLoading
+                    : (confirmed ? l10n.onbContinue : l10n.onbLocationAllow),
+                onPressed:
+                    _busy ? null : (confirmed ? _next : _allowLocation)),
           const SizedBox(height: AppSpacing.sm),
-          GhostButton(
-              label: l10n.onbLocationPickManual,
-              icon: AppIcons.locationCity,
-              onPressed: _busy ? null : _pickCity),
+          if (_locError != null)
+            GhostButton(
+                label: l10n.onbLocationRetry,
+                icon: AppIcons.myLocation,
+                onPressed: _busy ? null : _allowLocation)
+          else if (!confirmed)
+            GhostButton(
+                label: l10n.onbLocationPickManual,
+                icon: AppIcons.locationCity,
+                onPressed: _busy ? null : _pickCity),
+          if (!confirmed) ...[
+            const SizedBox(height: AppSpacing.sm),
+            // Jalan keluar jujur: menolak lokasi bukan jalan buntu. Kota
+            // default sudah dipakai jadwal (loadLocation() fallback) dan bisa
+            // diganti di Profil — labelnya menyebut konsekuensinya, bukan
+            // "Lewati" yang ambigu.
+            GhostButton(
+                label: l10n.onbLocationLater,
+                onPressed: _busy ? null : _next),
+            const SizedBox(height: AppSpacing.xs),
+            _Body(l10n.onbLocationLaterHint),
+          ],
           const SizedBox(height: AppSpacing.lg),
         ],
       ),
@@ -437,7 +503,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           const SizedBox(height: AppSpacing.xl),
           _Title(l10n.onbNotifTitle),
           const SizedBox(height: AppSpacing.md),
-          _Body(l10n.onbNotifBody, maxLines: 3),
+          _Body(l10n.onbNotifBody),
           const Spacer(),
           HeroButton(
               label: _busy ? l10n.onbNotifLoading : l10n.onbNotifAllow,
@@ -463,25 +529,28 @@ class _Title extends StatelessWidget {
   const _Title(this.text);
 
   @override
-  Widget build(BuildContext context) => Text(
-        text,
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-        style: AppText.titleLg(),
-        textAlign: TextAlign.center,
+  Widget build(BuildContext context) => Semantics(
+        header: true,
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
+          style: AppText.titleLg(),
+        ),
       );
 }
 
+/// Body copy halaman.
+///
+/// Tanpa `maxLines`: halaman sudah bisa di-scroll (_PageBody), jadi teks
+/// panjang dibiarkan wrap. Yang dulu terpotong pertama justru `onbGenderWhy`
+/// — justifikasi untuk pertanyaan yang invasif.
 class _Body extends StatelessWidget {
   final String text;
-  final int maxLines;
-  const _Body(this.text, {required this.maxLines});
+  const _Body(this.text);
 
   @override
   Widget build(BuildContext context) => Text(
         text,
-        maxLines: maxLines,
-        overflow: TextOverflow.ellipsis,
         style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
         textAlign: TextAlign.center,
       );
@@ -563,14 +632,10 @@ class _HowRow extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                   style: AppText.bodyLg().copyWith(color: AppColors.onSurface),
                 ),
                 Text(
                   body,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
                   style: AppText.bodyMd()
                       .copyWith(color: AppColors.onSurfaceVariant),
                 ),
@@ -601,14 +666,26 @@ class _PageBody extends StatelessWidget {
     return Semantics(
       container: true,
       label: semanticsLabel,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: FadeTransition(
-          opacity: fade,
-          child: SlideTransition(
-            position: Tween(begin: const Offset(0, 0.04), end: Offset.zero)
-                .animate(fade),
-            child: child,
+      // LayoutBuilder + ConstrainedBox(minHeight) + IntrinsicHeight: trik baku
+      // supaya Spacer tetap bekerja saat konten pendek, TAPI halaman bisa
+      // di-scroll saat konten tinggi (layar kecil / font besar). Tanpa ini,
+      // Spacer kolaps dan Column jebol — terukur 196px di 320x568 @1.5.
+      child: LayoutBuilder(
+        builder: (context, constraints) => SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: IntrinsicHeight(
+              child: FadeTransition(
+                opacity: fade,
+                child: SlideTransition(
+                  position:
+                      Tween(begin: const Offset(0, 0.04), end: Offset.zero)
+                          .animate(fade),
+                  child: child,
+                ),
+              ),
+            ),
           ),
         ),
       ),

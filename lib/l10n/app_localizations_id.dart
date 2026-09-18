@@ -1007,7 +1007,17 @@ class AppL10nId extends AppL10n {
   String get onbLocationLoading => 'MENGAMBIL LOKASI...';
 
   @override
+  String get onbLocationLater => 'Pakai kota default dulu';
+
+  @override
+  String get onbLocationLaterHint =>
+      'Belum ada lokasi? Jadwal memakai kota default dulu — bisa diubah kapan saja di Profil.';
+
+  @override
   String get onbLocationPickManual => 'Pilih kota manual';
+
+  @override
+  String get onbLocationRetry => 'Coba lagi';
 
   @override
   String get onbLocationTitle => 'Butuh Lokasimu';
@@ -1027,7 +1037,11 @@ class AppL10nId extends AppL10n {
 
   @override
   String get onbNotifBody =>
-      'Biar tidak kelewat, kami kirim pengingat saat waktu sholat tiba.';
+      'Biar tidak kelewat, kami kirim pengingat saat waktu sholat tiba. Cukup izin notifikasi — pengaturan alarm & baterai ditawarkan nanti di Profil, lengkap dengan alasannya.';
+
+  @override
+  String get onbNotifDenied =>
+      'Pengingat tidak aktif. Bisa dinyalakan kapan saja di Profil.';
 
   @override
   String get onbNotifLoading => 'MENYALA...';

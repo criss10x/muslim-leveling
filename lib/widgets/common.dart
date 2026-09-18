@@ -562,18 +562,25 @@ class GhostButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppRadius.xl),
             border: Border.all(color: c.withValues(alpha: 0.4)),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (icon != null) ...[
-                Icon(icon, color: c, size: 18),
-                const SizedBox(width: AppSpacing.xs),
+          // FittedBox: sama seperti HeroButton. Tanpa ini, label panjang
+          // (mis. "LEWATI, NANTI SAJA") jebol horizontal — terukur 242px di
+          // dalam constraint 238px pada textScale 1.5.
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (icon != null) ...[
+                  Icon(icon, color: c, size: 18),
+                  const SizedBox(width: AppSpacing.xs),
+                ],
+                Text(
+                  label.toUpperCase(),
+                  style: AppText.labelCaps().copyWith(color: c),
+                ),
               ],
-              Text(
-                label.toUpperCase(),
-                style: AppText.labelCaps().copyWith(color: c),
-              ),
-            ],
+            ),
           ),
         ),
       ),
