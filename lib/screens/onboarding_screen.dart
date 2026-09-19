@@ -35,6 +35,9 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen>
     with SingleTickerProviderStateMixin {
   static const _total = 6;
+  /// Halaman lokasi (0-based). Dipakai restore untuk tahu apakah kota perlu
+  /// dibaca dari prefs.
+  static const _lokasiPage = 4;
 
   final _pageCtrl = PageController();
   late final AnimationController _entry = AnimationController(
@@ -84,8 +87,17 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     if (_gender.isEmpty) _gender = r.gender;
     final target = r.page >= _total ? _total - 1 : r.page;
     if (target <= 0) return;
+    // Kota sudah tersimpan sejak user memilihnya (PrayerService.saveLocation).
+    // Tanpa dibaca ulang, halaman 5 muncul dengan tombol "Izinkan Lokasi" —
+    // menyuruh mengulang langkah yang sudah selesai — padahal kotanya ada.
+    final city =
+        target >= _lokasiPage ? await PrayerService.savedCityName() : null;
+    if (!mounted) return;
     _pageCtrl.jumpToPage(target);
-    setState(() => _page = target);
+    setState(() {
+      _page = target;
+      _city = city;
+    });
   }
 
   @override
@@ -519,7 +531,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     final confirmed = _city != null;
     return _PageBody(
       entry: _entry,
-      semanticsLabel: l10n.onbStepOf('5', '$_total'),
+      semanticsLabel: l10n.onbStepOf('${_lokasiPage + 1}', '$_total'),
       child: Column(
         children: [
           const Spacer(),

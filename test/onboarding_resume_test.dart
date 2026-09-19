@@ -61,6 +61,25 @@ void main() {
         reason: 'pilihan gender tidak dipulihkan');
   });
 
+  testWidgets('kota yang sudah dipilih ikut dipulihkan', (tester) async {
+    SharedPreferences.setMockInitialValues({
+      _pageKey: 4,
+      'city_id': 'Bali/Kota Denpasar',
+      'city_name': 'Kota Denpasar',
+    });
+    await tester.pumpWidget(appWrap(const OnboardingScreen()));
+    await _settle(tester, 900);
+
+    // Kota tersimpan sejak user memilihnya, tapi UI-nya dulu lupa: halaman 5
+    // muncul dengan "Izinkan Lokasi" dan menyuruh mengulang langkah selesai.
+    expect(find.text('Kota Denpasar'), findsOneWidget,
+        reason: 'kota tidak dipulihkan — user disuruh mengulang langkah lokasi');
+    expect(find.text('Izinkan Lokasi'), findsNothing,
+        reason: 'tombol lokasi muncul padahal kotanya sudah tersimpan');
+    expect(find.text('Lanjut'), findsOneWidget,
+        reason: 'tanpa Lanjut, halaman lokasi buntu lagi setelah dilanjutkan');
+  });
+
   testWidgets('pindah halaman menyimpan progres', (tester) async {
     SharedPreferences.setMockInitialValues({});
     await tester.pumpWidget(appWrap(const OnboardingScreen()));

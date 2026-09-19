@@ -598,6 +598,16 @@ class PrayerService {
     return (id: id, name: name);
   }
 
+  /// Nama kota yang benar-benar dipilih user, atau null kalau belum ada.
+  ///
+  /// Beda dengan [loadLocation] yang memberi default "Kota Jakarta": di sini
+  /// null berarti "belum dijawab" — dipakai onboarding untuk tahu halaman
+  /// lokasi masih perlu diisi atau sudah selesai.
+  static Future<String?> savedCityName() async {
+    final p = await SharedPreferences.getInstance();
+    return p.getString('city_name');
+  }
+
   /// Legacy alias list for heuristic province extraction.
   /// Order matters: more specific names first to avoid false matches.
   static final _aliasProvinsi = [
