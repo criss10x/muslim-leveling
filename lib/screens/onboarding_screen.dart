@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../l10n/app_localizations.dart';
@@ -10,6 +12,7 @@ import '../../widgets/xp_toast.dart';
 import '../../services/game_service.dart';
 import '../../services/locale_service.dart';
 import '../../services/notification_service.dart';
+import '../../services/onboarding_progress.dart';
 import '../../services/prayer_service.dart';
 import 'dashboard_shell.dart';
 import '../theme/app_icons.dart';
@@ -41,6 +44,11 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   int _page = 0;
   bool _busy = false;
+
+  /// true begitu user menyentuh layar (pindah halaman). Dipakai untuk
+  /// membatalkan hasil `_restoreProgress()` yang bisa selesai BELAKANGAN —
+  /// lihat komentar di sana.
+  bool _touched = false;
   String? _city; // kota hasil deteksi/pilih — tampil sebagai ✓ Nama Kota
 
   /// Alasan GPS gagal, ditahan di layar (bukan SnackBar yang hilang sendiri).
@@ -52,6 +60,33 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   /// '' = belum dijawab. Dibedakan dari 'male'/'female' karena hanya
   /// 'male' yang menyembunyikan fitur haid — lihat ProfilTab.
   String _gender = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _restoreProgress();
+  }
+
+  /// Lanjutkan di halaman terakhir user, bukan halaman 1.
+  ///
+  /// Tanpa ini app yang dibunuh OS (atau di-background lalu ditutup, atau HP
+  /// restart) membuang semua halaman yang sudah dilewati. Dulu jawaban baru
+  /// ditulis di halaman 6, jadi keluar di halaman 4 = mulai dari nol.
+  Future<void> _restoreProgress() async {
+    final r = await OnboardingProgress.resume();
+    if (!mounted) return;
+    // ponytail: user yang sudah bergerak menang. Restore async bisa selesai
+    // setelah user menekan Lanjut; tanpa penjaga ini halaman melompat mundur
+    // di bawah jarinya.
+    if (_touched || _page != 0) return;
+    // Gender tidak ditimpa kalau user sudah memilih di sesi ini — restore
+    // tidak boleh menang atas tap yang baru saja terjadi.
+    if (_gender.isEmpty) _gender = r.gender;
+    final target = r.page >= _total ? _total - 1 : r.page;
+    if (target <= 0) return;
+    _pageCtrl.jumpToPage(target);
+    setState(() => _page = target);
+  }
 
   @override
   void dispose() {
@@ -160,6 +195,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       // nickname. Efeknya gender tidak ikut cloud backup, jadi copy privasi
       // di halaman 3 ("cuma dipakai untuk menyembunyikan menu") tetap benar.
       await prefs.setString(kGenderPrefKey, _gender);
+      // Sudah sampai ujung: hapus penanda halaman supaya tidak ada yang
+      // dilanjutkan kalau app dibuka lagi (gender tetap, Profil membacanya).
+      await OnboardingProgress.clear();
 
       if (enableNotif) {
         try {
@@ -244,10 +282,18 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                   controller: _pageCtrl,
                   physics:
                       _busy ? const NeverScrollableScrollPhysics() : null,
-                  onPageChanged: (i) => setState(() {
-                    _page = i;
-                    _entry.forward(from: 0);
-                  }),
+                  onPageChanged: (i) {
+                    _touched = true;
+                    // ponytail: tidak di-await — satu int + satu string di
+                    // SharedPreferences, dan menunggunya bikin pindah halaman
+                    // terasa menggantung. Paling buruk user mundur satu
+                    // halaman, bukan mengulang dari nol.
+                    unawaited(OnboardingProgress.savePage(i, _gender));
+                    setState(() {
+                      _page = i;
+                      _entry.forward(from: 0);
+                    });
+                  },
                   children: [
                     _pageBahasa(),
                     _pageNama(),
