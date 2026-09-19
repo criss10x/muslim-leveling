@@ -118,7 +118,15 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     // Sama seperti _changeLocation di JadwalTab — listener yang fetch sisanya.
     await PrayerService.saveLocation(picked.id, picked.name);
     if (!mounted) return;
-    setState(() => _city = picked.name);
+    // ponytail: _locError dibuang di sini, bukan cuma _city diisi. Cabang CTA
+    // di bawah digerakkan `_locError != null`, jadi tanpa baris ini urutan
+    // "GPS gagal → pilih kota manual" berakhir buntu: kota sudah terisi tapi
+    // tombolnya tetap "Pilih kota manual" dan "Lanjut" tak pernah muncul.
+    // Jejak lama tidak berguna lagi begitu user memilih — bukan ditahan.
+    setState(() {
+      _city = picked.name;
+      _locError = null;
+    });
   }
 
   /// Halaman terakhir: minta notifikasi (bila diminta), tandai onboarding selesai.
@@ -499,9 +507,17 @@ class _OnboardingScreenState extends State<OnboardingScreen>
             // tombol yang dialognya sudah tidak akan muncul lagi.
             _Body(_locError!),
           const Spacer(),
-          // Saat GPS gagal, jalur manual naik jadi aksi utama: itu satu-satunya
-          // yang masih bisa membawa user ke jadwal sholat.
-          if (_locError != null)
+          // ponytail: cabangnya diurut `confirmed` DULU, baru `_locError`.
+          // Urutan sebaliknya (error dulu) bikin buntu: setelah user memilih
+          // kota manual, `_locError` masih ada jejaknya, jadi CTA tetap
+          // "Pilih kota manual" dan "Lanjut" tak pernah muncul. Dengan
+          // `confirmed` di depan, kota yang sudah terisi selalu menang.
+          if (confirmed)
+            HeroButton(
+                label: l10n.onbContinue,
+                trailingIcon: AppIcons.arrowForward,
+                onPressed: _busy ? null : _next)
+          else if (_locError != null)
             HeroButton(
                 label: l10n.onbLocationPickManual,
                 trailingIcon: AppIcons.arrowForward,
@@ -510,11 +526,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
             HeroButton(
                 label: _busy
                     ? l10n.onbLocationLoading
-                    : (confirmed ? l10n.onbContinue : l10n.onbLocationAllow),
-                onPressed:
-                    _busy ? null : (confirmed ? _next : _allowLocation)),
+                    : l10n.onbLocationAllow,
+                onPressed: _busy ? null : _allowLocation),
           const SizedBox(height: AppSpacing.sm),
-          if (_locError != null)
+          if (!confirmed && _locError != null)
             GhostButton(
                 label: l10n.onbLocationRetry,
                 icon: AppIcons.myLocation,

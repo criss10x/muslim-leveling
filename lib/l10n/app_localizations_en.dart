@@ -699,6 +699,13 @@ class AppL10nEn extends AppL10n {
   String get cityPickerNotFound => 'No city found. Try another province.';
 
   @override
+  String get cityPickerLoadFailed =>
+      'Could not load the city list. Check your connection and try again.';
+
+  @override
+  String get cityPickerRetry => 'Try again';
+
+  @override
   String get cityPickerTitleKab => 'Pick a City';
 
   @override

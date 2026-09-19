@@ -1404,6 +1404,18 @@ abstract class AppL10n {
   /// **'Kabupaten/kota tidak ditemukan. Coba pilih provinsi lain.'**
   String get cityPickerNotFound;
 
+  /// No description provided for @cityPickerLoadFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal memuat daftar kabupaten/kota. Periksa koneksi lalu coba lagi.'**
+  String get cityPickerLoadFailed;
+
+  /// No description provided for @cityPickerRetry.
+  ///
+  /// In id, this message translates to:
+  /// **'Coba lagi'**
+  String get cityPickerRetry;
+
   /// No description provided for @cityPickerTitleKab.
   ///
   /// In id, this message translates to:

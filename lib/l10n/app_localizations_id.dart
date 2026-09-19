@@ -698,6 +698,13 @@ class AppL10nId extends AppL10n {
       'Kabupaten/kota tidak ditemukan. Coba pilih provinsi lain.';
 
   @override
+  String get cityPickerLoadFailed =>
+      'Gagal memuat daftar kabupaten/kota. Periksa koneksi lalu coba lagi.';
+
+  @override
+  String get cityPickerRetry => 'Coba lagi';
+
+  @override
   String get cityPickerTitleKab => 'Pilih Kabupaten/Kota';
 
   @override

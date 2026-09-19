@@ -4,7 +4,7 @@ import '../theme/app_theme.dart';
 import '../services/prayer_service.dart';
 import '../theme/app_icons.dart';
 
-typedef CityLoader = Future<List<String>> Function(String province);
+typedef CityLoader = Future<List<String>?> Function(String province);
 
 /// ponytail: shared city picker used by onboarding, jadwal, and profil.
 /// Returns {id, name} or null if cancelled.
@@ -21,7 +21,11 @@ class CityPicker {
     List<String> cities = const [];
     String? selectedProvince;
     bool loading = false;
-    String? error;
+    // true = panggilan gagal (koneksi/timeout). Dibedakan dari daftar kosong:
+    // yang satu soal koneksi, yang lain soal provinsi salah — pesannya tidak
+    // boleh sama, karena menyarankan "coba provinsi lain" saat offline
+    // mengirim user mencoba hal yang tidak akan pernah berhasil.
+    bool failed = false;
 
     return showDialog<({String id, String name})>(
       context: context,
@@ -39,17 +43,15 @@ class CityPicker {
               ctrl.clear();
               cities = const [];
               loading = false;
-              error = null;
+              failed = false;
             });
             setState(() => loading = true);
             final loaded = await loadCities(province);
             if (!ctx.mounted || selectedProvince != province) return;
             setState(() {
-              cities = loaded;
+              cities = loaded ?? const [];
               loading = false;
-              error = loaded.isEmpty
-                  ? l10n.cityPickerNotFound
-                  : null;
+              failed = loaded == null;
             });
           }
 
@@ -59,7 +61,7 @@ class CityPicker {
               ctrl.clear();
               cities = const [];
               loading = false;
-              error = null;
+              failed = false;
             });
           }
 
@@ -135,14 +137,30 @@ class CityPicker {
                         color: AppColors.primary,
                       ),
                     )
-                  else if (error != null)
+                  else if (failed)
                     Padding(
                       padding: const EdgeInsets.all(16),
-                      child: Text(
-                        error!,
-                        style: AppText.bodyMd().copyWith(
-                          color: AppColors.onSurfaceVariant,
-                        ),
+                      child: Column(
+                        children: [
+                          Text(
+                            l10n.cityPickerLoadFailed,
+                            textAlign: TextAlign.center,
+                            style: AppText.bodyMd().copyWith(
+                              color: AppColors.onSurfaceVariant,
+                            ),
+                          ),
+                          const SizedBox(height: AppSpacing.sm),
+                          // Jalur pulang: tanpa ini satu paket hilang = user
+                          // menutup dialog dan mengulang dari pemilihan provinsi.
+                          TextButton(
+                            onPressed: () => pickProvince(selectedProvince!),
+                            child: Text(
+                              l10n.cityPickerRetry,
+                              style: AppText.bodyMd()
+                                  .copyWith(color: AppColors.primary),
+                            ),
+                          ),
+                        ],
                       ),
                     )
                   else if (places.isEmpty)

@@ -273,7 +273,13 @@ class PrayerService {
     return 'DKI Jakarta';
   }
 
-  static Future<List<String>> citiesForProvince(String province) async {
+  /// Daftar kabupaten/kota untuk [province].
+  ///
+  /// `null` = panggilan gagal (koneksi/timeout), `[]` = provinsi memang tidak
+  /// punya entri. Dulu kegagalan transport juga mengembalikan `[]`, jadi user
+  /// offline membaca "Kabupaten/kota tidak ditemukan. Coba pilih provinsi lain."
+  /// dan mencoba provinsi lain selamanya, padahal masalahnya koneksi.
+  static Future<List<String>?> citiesForProvince(String province) async {
     if (province.trim().isEmpty) return const [];
     try {
       final uri = Uri.parse('$_equranBase/kabkota');
@@ -281,22 +287,26 @@ class PrayerService {
       req.headers.contentType = ContentType.json;
       req.write(jsonEncode({'provinsi': province}));
       final res = await req.close();
-      if (res.statusCode != 200) return const [];
+      if (res.statusCode != 200) return null;
       final body = await res.transform(utf8.decoder).join();
       final json = jsonDecode(body) as Map<String, dynamic>;
       final list = json['data'] as List?;
       return list?.whereType<String>().toList() ?? const [];
     } catch (_) {
-      return const [];
+      return null;
     }
   }
 
   /// Check if [city] belongs to [provinsi] via Equran's kabkota list.
+  ///
+  /// ponytail: `null` (gagal konek) diperlakukan "tidak cocok" — di sini itu
+  /// jawaban yang aman karena pemanggilnya iterasi provinsi lain sebagai
+  /// fallback. Tanpa `?? false`, null jadi `Null check operator used on a null
+  /// value` di `.any()`.
   static Future<bool> _cityInProvinsi(String provinsi, String city) async {
     final q = city.toLowerCase().trim();
-    return (await citiesForProvince(
-      provinsi,
-    )).any((name) => name.toLowerCase().trim() == q);
+    final list = await citiesForProvince(provinsi);
+    return list?.any((name) => name.toLowerCase().trim() == q) ?? false;
   }
 
   /// Normalize city names to the labels accepted by the Equran API.
@@ -533,7 +543,11 @@ class PrayerService {
       }
 
       final validAreas = await citiesForProvince(province);
-      final area = prayerAreaFromAddress(address, validAreas);
+      // null = koneksi gagal: itu lookupFailed juga, dan pesannya
+      // ("periksa koneksi atau pilih kota manual") memang menyarankan begitu.
+      final area = validAreas == null
+          ? null
+          : prayerAreaFromAddress(address, validAreas);
       if (area == null) {
         return (
           id: null,

@@ -554,6 +554,8 @@
   "cityPickerHintKab": "Ketik nama kabupaten/kota...",
   "cityPickerHintProv": "Ketik nama provinsi...",
   "cityPickerNotFound": "Kabupaten/kota tidak ditemukan. Coba pilih provinsi lain.",
+  "cityPickerLoadFailed": "Gagal memuat daftar kabupaten/kota. Periksa koneksi lalu coba lagi.",
+  "cityPickerRetry": "Coba lagi",
   "cityPickerTitleKab": "Pilih Kabupaten/Kota",
   "cityPickerTitleProv": "Pilih Provinsi",
   "commonClose": "Tutup",

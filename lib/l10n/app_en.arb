@@ -554,6 +554,8 @@
   "cityPickerHintKab": "Type a city name...",
   "cityPickerHintProv": "Type a province name...",
   "cityPickerNotFound": "No city found. Try another province.",
+  "cityPickerLoadFailed": "Could not load the city list. Check your connection and try again.",
+  "cityPickerRetry": "Try again",
   "cityPickerTitleKab": "Pick a City",
   "cityPickerTitleProv": "Pick a Province",
   "commonClose": "Close",
