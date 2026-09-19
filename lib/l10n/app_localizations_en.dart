@@ -12,9 +12,6 @@ class AppL10nEn extends AppL10n {
   String get achBtnAwesome => 'NICE!';
 
   @override
-  String get achBtnShare => 'Share';
-
-  @override
   String get achBtnSkipAll => 'Skip all';
 
   @override
@@ -1524,77 +1521,6 @@ class AppL10nEn extends AppL10n {
   String get settingLanguage => 'Language';
 
   @override
-  String get shareBtnShareAgain => 'Share Again';
-
-  @override
-  String shareCaption(String title) {
-    return 'I unlocked \"$title\" in Muslim Leveling! 🎮🕌';
-  }
-
-  @override
-  String shareEarnedOn(String date) {
-    return 'Earned $date';
-  }
-
-  @override
-  String get shareErrImage => 'Could not render the card image. Try again.';
-
-  @override
-  String get shareErrPrepare => 'Could not prepare the card. Try again.';
-
-  @override
-  String get shareErrShare => 'Could not share the card. Try again.';
-
-  @override
-  String get shareStatAllModules => '📚 All 16 modules complete!';
-
-  @override
-  String get shareStatCollector => '👑 True collector!';
-
-  @override
-  String shareStatComeback(int count) {
-    return 'Total comebacks: $count 💪';
-  }
-
-  @override
-  String get shareStatDhikr => '📿 Dhikr goal reached!';
-
-  @override
-  String get shareStatFajr15 => '🎯 Fajr under 15 minutes';
-
-  @override
-  String get shareStatFajrStreak => 'days of Fajr streak 🔥';
-
-  @override
-  String get shareStatFullCombo => '🔥 5 obligatory + Tilawah + Dhuha';
-
-  @override
-  String get shareStatHeroStreak => 'days of Hero Streak 🔥';
-
-  @override
-  String get shareStatLearning => '📖 Learning started — keep going!';
-
-  @override
-  String shareStatLevel(int level, String rank) {
-    return 'Level $level — $rank';
-  }
-
-  @override
-  String get shareStatOnTime10 => '🎯 10× on-time prayers';
-
-  @override
-  String get shareStatOnTimeFirst => '⚡ On time from the very first';
-
-  @override
-  String get shareStatQuizPerfect => '⭐ Perfect score!';
-
-  @override
-  String get shareStatSunnah => '🏛️ All 8 sunnah collected';
-
-  @override
-  String get shareStatTilawahStreak => 'days of Tilawah streak 🔥';
-
-  @override
   String get sunnahBadiyahDzuhurDesc => 'Sunnah after Dhuhr';
 
   @override
@@ -1650,4 +1576,85 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get tabQuran => 'Quran';
+
+  @override
+  String get dlTitle => 'Today\'s Reflection';
+
+  @override
+  String get dlBack => 'Back';
+
+  @override
+  String dlCiteSurah(String surah, int ayah) {
+    return 'Quran $surah:$ayah';
+  }
+
+  @override
+  String get dlCiteHadis => 'HADITH OF THE DAY';
+
+  @override
+  String dlCiteDoa(String name) {
+    return 'DUA · $name';
+  }
+
+  @override
+  String dlCiteUlama(String name) {
+    return 'SCHOLAR\'S WORDS · $name';
+  }
+
+  @override
+  String get dlActListen => 'Listen';
+
+  @override
+  String get dlActPause => 'Pause';
+
+  @override
+  String get dlActSave => 'Save';
+
+  @override
+  String get dlActSaved => 'Saved';
+
+  @override
+  String get dlActTafsir => 'Tafsir';
+
+  @override
+  String get dlErrLoad =>
+      'Today\'s reflection couldn\'t be loaded.\nConnect to the internet and try again.';
+
+  @override
+  String get dlErrTafsir => 'Couldn\'t load the tafsir. Try again.';
+
+  @override
+  String get dlDone => 'Today\'s reflection complete';
+
+  @override
+  String dlProgress(int done, int count) {
+    return '$done of $count reflections read · swipe to continue';
+  }
+
+  @override
+  String get qsTitle => 'Share Verse';
+
+  @override
+  String get qsShare => 'Share';
+
+  @override
+  String get qsPreparing => 'Preparing…';
+
+  @override
+  String get qsErr => 'Couldn\'t share the verse. Try again.';
+
+  @override
+  String get qsModeSolid => 'Solid';
+
+  @override
+  String get qsModeGradient => 'Gradient';
+
+  @override
+  String get qsModeEsthetic => 'Esthetic';
+
+  @override
+  String get qsContentArabic => 'Arabic';
+
+  @override
+  String get qsContentTranslation => 'Translation';
 }

@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../l10n/app_localizations.dart';
 import '../services/quran_data.dart';
 import '../theme/app_theme.dart';
 
@@ -14,8 +15,10 @@ import '../theme/app_theme.dart';
 
 enum _QShareBgKind { solid, gradient, esthetic }
 
+/// ponytail: label TIDAK disimpan di sini. 17 preset cuma punya 3 nilai
+/// label (solid/gradasi/estetik) — menyimpannya 17x berarti 17 tempat untuk
+/// lupa diterjemahkan. Labelnya diturunkan dari [kind] lewat `_modeLabel`.
 class _BgPreset {
-  final String label;
   final IconData icon;
   final _QShareBgKind kind;
   final BoxDecoration decoration;
@@ -27,7 +30,6 @@ class _BgPreset {
   /// 0 = tanpa scrim.
   final double scrim;
   const _BgPreset(
-    this.label,
     this.icon,
     this.kind,
     this.decoration,
@@ -44,7 +46,6 @@ const _kSub = Color(0xFFE7EAE8);
 final List<_BgPreset> _bgPresets = [
   // Solid
   _BgPreset(
-    'Solid',
     Icons.circle,
     _QShareBgKind.solid,
     const BoxDecoration(
@@ -58,7 +59,6 @@ final List<_BgPreset> _bgPresets = [
     _kSub,
   ),
   _BgPreset(
-    'Solid',
     Icons.circle,
     _QShareBgKind.solid,
     const BoxDecoration(
@@ -72,7 +72,6 @@ final List<_BgPreset> _bgPresets = [
     _kSub,
   ),
   _BgPreset(
-    'Solid',
     Icons.circle,
     _QShareBgKind.solid,
     const BoxDecoration(
@@ -86,7 +85,6 @@ final List<_BgPreset> _bgPresets = [
     _kSub,
   ),
   _BgPreset(
-    'Solid',
     Icons.circle,
     _QShareBgKind.solid,
     const BoxDecoration(
@@ -101,7 +99,6 @@ final List<_BgPreset> _bgPresets = [
   ),
   // Gradient
   _BgPreset(
-    'Gradasi',
     Icons.gradient,
     _QShareBgKind.gradient,
     const BoxDecoration(
@@ -116,7 +113,6 @@ final List<_BgPreset> _bgPresets = [
     _kSub,
   ),
   _BgPreset(
-    'Gradasi',
     Icons.gradient,
     _QShareBgKind.gradient,
     const BoxDecoration(
@@ -131,7 +127,6 @@ final List<_BgPreset> _bgPresets = [
     _kSub,
   ),
   _BgPreset(
-    'Gradasi',
     Icons.gradient,
     _QShareBgKind.gradient,
     const BoxDecoration(
@@ -145,7 +140,6 @@ final List<_BgPreset> _bgPresets = [
     _kSub,
   ),
   _BgPreset(
-    'Gradasi',
     Icons.gradient,
     _QShareBgKind.gradient,
     const BoxDecoration(
@@ -160,7 +154,6 @@ final List<_BgPreset> _bgPresets = [
   ),
   // Estetik
   _BgPreset(
-    'Estetik',
     Icons.image,
     _QShareBgKind.esthetic,
     const BoxDecoration(
@@ -174,7 +167,6 @@ final List<_BgPreset> _bgPresets = [
     scrim: 0.78,
   ),
   _BgPreset(
-    'Estetik',
     Icons.image,
     _QShareBgKind.esthetic,
     const BoxDecoration(
@@ -188,7 +180,6 @@ final List<_BgPreset> _bgPresets = [
     scrim: 0.62,
   ),
   _BgPreset(
-    'Estetik',
     Icons.image,
     _QShareBgKind.esthetic,
     const BoxDecoration(
@@ -202,7 +193,6 @@ final List<_BgPreset> _bgPresets = [
     scrim: 0.68,
   ),
   _BgPreset(
-    'Estetik',
     Icons.image,
     _QShareBgKind.esthetic,
     const BoxDecoration(
@@ -216,7 +206,6 @@ final List<_BgPreset> _bgPresets = [
     scrim: 0.30,
   ),
   _BgPreset(
-    'Estetik',
     Icons.image,
     _QShareBgKind.esthetic,
     const BoxDecoration(
@@ -230,7 +219,6 @@ final List<_BgPreset> _bgPresets = [
     scrim: 0.55,
   ),
   _BgPreset(
-    'Estetik',
     Icons.image,
     _QShareBgKind.esthetic,
     const BoxDecoration(
@@ -244,7 +232,6 @@ final List<_BgPreset> _bgPresets = [
     scrim: 0.65,
   ),
   _BgPreset(
-    'Estetik',
     Icons.image,
     _QShareBgKind.esthetic,
     const BoxDecoration(
@@ -258,7 +245,6 @@ final List<_BgPreset> _bgPresets = [
     scrim: 0.55,
   ),
   _BgPreset(
-    'Estetik',
     Icons.image,
     _QShareBgKind.esthetic,
     const BoxDecoration(
@@ -272,7 +258,6 @@ final List<_BgPreset> _bgPresets = [
     scrim: 0.62,
   ),
   _BgPreset(
-    'Estetik',
     Icons.image,
     _QShareBgKind.esthetic,
     const BoxDecoration(
@@ -362,6 +347,7 @@ class _QShareCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
     final accent =
         AppColors.secondaryFixedDim; // bright gold, card bg always dark
     return Container(
@@ -501,7 +487,7 @@ class _QShareCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      'QS ${surah.nameLatin} · Ayat ${ayah.ayah}',
+                      l10n.dlCiteSurah(surah.nameLatin, ayah.ayah),
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
@@ -596,6 +582,14 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
 
   _BgPreset get _preset => _bgPresets[_presetIdx];
 
+  /// Label mode dari l10n, bukan dari tabel preset — lihat catatan di
+  /// [_BgPreset] soal kenapa field label dihapus.
+  String _modeLabel(_QShareBgKind kind) => switch (kind) {
+    _QShareBgKind.solid => AppL10n.of(context).qsModeSolid,
+    _QShareBgKind.gradient => AppL10n.of(context).qsModeGradient,
+    _QShareBgKind.esthetic => AppL10n.of(context).qsModeEsthetic,
+  };
+
   List<_BgPreset> _presetsFor(_QShareBgKind kind) =>
       _bgPresets.where((p) => p.kind == kind).toList();
 
@@ -609,6 +603,7 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
   }
 
   Future<void> _share() async {
+    final l10n = AppL10n.of(context);
     setState(() => _sharing = true);
     try {
       final boundary =
@@ -633,14 +628,16 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
       const channel = MethodChannel('muslim_leveling/share');
       await channel.invokeMethod('shareFile', {
         'filePath': file.path,
+        // ponytail: sitasi sama dengan yang tercetak di kartu — satu sumber,
+        // jadi caption WA/IG tidak bisa beda dari gambarnya.
         'text':
-            'QS ${widget.surah.nameLatin} Ayat ${widget.ayah.ayah} — Muslim Leveling',
+            '${l10n.dlCiteSurah(widget.surah.nameLatin, widget.ayah.ayah)} — Muslim Leveling',
       });
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Gagal membagikan ayat. Coba lagi.')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.qsErr)));
       }
     }
     if (mounted) setState(() => _sharing = false);
@@ -648,6 +645,7 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
     final kind = _preset.kind;
     final presets = _presetsFor(kind);
 
@@ -655,7 +653,7 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.surfaceContainerLow,
-        title: Text('Bagikan Ayat', style: AppText.titleLg()),
+        title: Text(l10n.qsTitle, style: AppText.titleLg()),
       ),
       body: SafeArea(
         top: false, // AppBar sudah handle atas
@@ -692,13 +690,21 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _modeChip(_QShareBgKind.solid, 'Solid', Icons.circle),
+                      _modeChip(
+                        _QShareBgKind.solid,
+                        l10n.qsModeSolid,
+                        Icons.circle,
+                      ),
                       _modeChip(
                         _QShareBgKind.gradient,
-                        'Gradasi',
+                        l10n.qsModeGradient,
                         Icons.gradient,
                       ),
-                      _modeChip(_QShareBgKind.esthetic, 'Estetik', Icons.image),
+                      _modeChip(
+                        _QShareBgKind.esthetic,
+                        l10n.qsModeEsthetic,
+                        Icons.image,
+                      ),
                     ],
                   ),
                   const SizedBox(height: 12),
@@ -712,8 +718,8 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
                         Semantics(
                           button: true,
                           label: presets.length == 1
-                              ? presets[k].label
-                              : '${presets[k].label} ${k + 1}',
+                              ? _modeLabel(presets[k].kind)
+                              : '${_modeLabel(presets[k].kind)} ${k + 1}',
                           selected:
                               _bgPresets.indexOf(presets[k]) == _presetIdx,
                           child: InkWell(
@@ -754,7 +760,7 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       _contentChip(
-                        label: 'Arab',
+                        label: l10n.qsContentArabic,
                         icon: Icons.translate,
                         selected: _showArabic,
                         onTap: () {
@@ -765,7 +771,7 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
                       ),
                       const SizedBox(width: 8),
                       _contentChip(
-                        label: 'Terjemahan',
+                        label: l10n.qsContentTranslation,
                         icon: Icons.menu_book,
                         selected: _showTranslation,
                         onTap: () {
@@ -790,7 +796,7 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
                             )
                           : const Icon(Icons.share),
                       label: Text(
-                        _sharing ? 'Menyiapkan…' : 'Bagikan',
+                        _sharing ? l10n.qsPreparing : l10n.qsShare,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,

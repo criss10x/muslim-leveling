@@ -2,6 +2,19 @@
 
 All notable user-facing changes. Newest first.
 
+## [Unreleased]
+
+### Removed
+- Achievement share button (unlock popup + medal detail dialog) and the
+  `share_card.dart` achievement card behind it. Sharing an achievement pushed
+  the user's streak/level in other people's faces — medals are a private
+  milestone now. Verse sharing (`quran_share_sheet.dart`) is unchanged.
+
+### Fixed
+- Quran share sheet and Daily Highlight were hardcoded Indonesian: English
+  users saw "Bagikan Ayat", "Gradasi", "Terjemahan". All strings now come
+  from ARB.
+
 ## [1.9.1] - 2026-07-23
 
 ### Fixed

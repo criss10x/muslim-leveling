@@ -306,39 +306,7 @@
       }
     }
   },
-  "@shareCaption": {
-    "placeholders": {
-      "title": {
-        "type": "String"
-      }
-    }
-  },
-  "@shareEarnedOn": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "@shareStatComeback": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@shareStatLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      },
-      "rank": {
-        "type": "String"
-      }
-    }
-  },
   "achBtnAwesome": "MANTAP!",
-  "achBtnShare": "Bagikan",
   "achBtnSkipAll": "Lewati semua",
   "achEarnedOn": "Terbuka {date} • {tier}",
   "achHintFallback": "Selesaikan: {desc}.",
@@ -794,27 +762,6 @@
   "profilXpToNext": "{xp} XP lagi → LVL {level}",
   "profilXpWithinLevel": "{current}/{needed} XP",
   "settingLanguage": "Bahasa",
-  "shareBtnShareAgain": "Bagikan Lagi",
-  "shareCaption": "Aku unlock \"{title}\" di Muslim Leveling! 🎮🕌",
-  "shareEarnedOn": "Diraih {date}",
-  "shareErrImage": "Gagal membuat gambar kartu. Coba lagi.",
-  "shareErrPrepare": "Gagal menyiapkan kartu. Coba lagi.",
-  "shareErrShare": "Gagal membagikan kartu. Coba lagi.",
-  "shareStatAllModules": "📚 Semua 16 modul selesai!",
-  "shareStatCollector": "👑 Kolektor sejati!",
-  "shareStatComeback": "Total comeback: {count} kali 💪",
-  "shareStatDhikr": "📿 Target zikir tercapai!",
-  "shareStatFajr15": "🎯 Subuh sebelum 15 menit",
-  "shareStatFajrStreak": "hari Subuh beruntun 🔥",
-  "shareStatFullCombo": "🔥 5 wajib + Tilawah + Dhuha",
-  "shareStatHeroStreak": "hari Hero Streak 🔥",
-  "shareStatLearning": "📖 Mulai belajar — teruskan!",
-  "shareStatLevel": "Level {level} — {rank}",
-  "shareStatOnTime10": "🎯 10× sholat tepat waktu",
-  "shareStatOnTimeFirst": "⚡ Tepat waktu sejak pertama",
-  "shareStatQuizPerfect": "⭐ Skor sempurna!",
-  "shareStatSunnah": "🏛️ Semua 8 sunnah terkumpul",
-  "shareStatTilawahStreak": "hari Tilawah beruntun 🔥",
   "sunnahBadiyahDzuhurDesc": "Sunnah sesudah Dzuhur",
   "sunnahBadiyahDzuhurName": "Ba'diyah Dzuhur",
   "sunnahBadiyahIsyaDesc": "Sunnah sesudah Isya",
@@ -833,5 +780,63 @@
   "sunnahTahajjudName": "Tahajjud",
   "tabHome": "Beranda",
   "tabJadwal": "Jadwal",
-  "tabQuran": "Al-Quran"
+  "tabQuran": "Al-Quran",
+  "dlTitle": "Renungan Hari Ini",
+  "dlBack": "Kembali",
+  "dlCiteSurah": "QS. {surah} : {ayah}",
+  "dlCiteHadis": "HADIS HARI INI",
+  "dlCiteDoa": "DOA · {name}",
+  "dlCiteUlama": "KATA ULAMA · {name}",
+  "dlActListen": "Dengar",
+  "dlActPause": "Jeda",
+  "dlActSave": "Simpan",
+  "dlActSaved": "Tersimpan",
+  "dlActTafsir": "Tafsir",
+  "dlErrLoad": "Renungan hari ini belum bisa dimuat.\nSambungkan internet lalu coba lagi.",
+  "dlErrTafsir": "Tafsir tidak bisa dimuat. Coba lagi.",
+  "dlDone": "Renungan hari ini tuntas",
+  "dlProgress": "{done} dari {count} renungan dibaca · swipe untuk lanjut",
+  "qsTitle": "Bagikan Ayat",
+  "qsShare": "Bagikan",
+  "qsPreparing": "Menyiapkan…",
+  "qsErr": "Gagal membagikan ayat. Coba lagi.",
+  "qsModeSolid": "Solid",
+  "qsModeGradient": "Gradasi",
+  "qsModeEsthetic": "Estetik",
+  "qsContentArabic": "Arab",
+  "qsContentTranslation": "Terjemahan",
+  "@dlCiteSurah": {
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      },
+      "ayah": {
+        "type": "int"
+      }
+    }
+  },
+  "@dlCiteDoa": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@dlCiteUlama": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@dlProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

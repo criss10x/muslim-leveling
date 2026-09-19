@@ -12,9 +12,6 @@ class AppL10nId extends AppL10n {
   String get achBtnAwesome => 'MANTAP!';
 
   @override
-  String get achBtnShare => 'Bagikan';
-
-  @override
   String get achBtnSkipAll => 'Lewati semua';
 
   @override
@@ -1520,77 +1517,6 @@ class AppL10nId extends AppL10n {
   String get settingLanguage => 'Bahasa';
 
   @override
-  String get shareBtnShareAgain => 'Bagikan Lagi';
-
-  @override
-  String shareCaption(String title) {
-    return 'Aku unlock \"$title\" di Muslim Leveling! 🎮🕌';
-  }
-
-  @override
-  String shareEarnedOn(String date) {
-    return 'Diraih $date';
-  }
-
-  @override
-  String get shareErrImage => 'Gagal membuat gambar kartu. Coba lagi.';
-
-  @override
-  String get shareErrPrepare => 'Gagal menyiapkan kartu. Coba lagi.';
-
-  @override
-  String get shareErrShare => 'Gagal membagikan kartu. Coba lagi.';
-
-  @override
-  String get shareStatAllModules => '📚 Semua 16 modul selesai!';
-
-  @override
-  String get shareStatCollector => '👑 Kolektor sejati!';
-
-  @override
-  String shareStatComeback(int count) {
-    return 'Total comeback: $count kali 💪';
-  }
-
-  @override
-  String get shareStatDhikr => '📿 Target zikir tercapai!';
-
-  @override
-  String get shareStatFajr15 => '🎯 Subuh sebelum 15 menit';
-
-  @override
-  String get shareStatFajrStreak => 'hari Subuh beruntun 🔥';
-
-  @override
-  String get shareStatFullCombo => '🔥 5 wajib + Tilawah + Dhuha';
-
-  @override
-  String get shareStatHeroStreak => 'hari Hero Streak 🔥';
-
-  @override
-  String get shareStatLearning => '📖 Mulai belajar — teruskan!';
-
-  @override
-  String shareStatLevel(int level, String rank) {
-    return 'Level $level — $rank';
-  }
-
-  @override
-  String get shareStatOnTime10 => '🎯 10× sholat tepat waktu';
-
-  @override
-  String get shareStatOnTimeFirst => '⚡ Tepat waktu sejak pertama';
-
-  @override
-  String get shareStatQuizPerfect => '⭐ Skor sempurna!';
-
-  @override
-  String get shareStatSunnah => '🏛️ Semua 8 sunnah terkumpul';
-
-  @override
-  String get shareStatTilawahStreak => 'hari Tilawah beruntun 🔥';
-
-  @override
   String get sunnahBadiyahDzuhurDesc => 'Sunnah sesudah Dzuhur';
 
   @override
@@ -1646,4 +1572,85 @@ class AppL10nId extends AppL10n {
 
   @override
   String get tabQuran => 'Al-Quran';
+
+  @override
+  String get dlTitle => 'Renungan Hari Ini';
+
+  @override
+  String get dlBack => 'Kembali';
+
+  @override
+  String dlCiteSurah(String surah, int ayah) {
+    return 'QS. $surah : $ayah';
+  }
+
+  @override
+  String get dlCiteHadis => 'HADIS HARI INI';
+
+  @override
+  String dlCiteDoa(String name) {
+    return 'DOA · $name';
+  }
+
+  @override
+  String dlCiteUlama(String name) {
+    return 'KATA ULAMA · $name';
+  }
+
+  @override
+  String get dlActListen => 'Dengar';
+
+  @override
+  String get dlActPause => 'Jeda';
+
+  @override
+  String get dlActSave => 'Simpan';
+
+  @override
+  String get dlActSaved => 'Tersimpan';
+
+  @override
+  String get dlActTafsir => 'Tafsir';
+
+  @override
+  String get dlErrLoad =>
+      'Renungan hari ini belum bisa dimuat.\nSambungkan internet lalu coba lagi.';
+
+  @override
+  String get dlErrTafsir => 'Tafsir tidak bisa dimuat. Coba lagi.';
+
+  @override
+  String get dlDone => 'Renungan hari ini tuntas';
+
+  @override
+  String dlProgress(int done, int count) {
+    return '$done dari $count renungan dibaca · swipe untuk lanjut';
+  }
+
+  @override
+  String get qsTitle => 'Bagikan Ayat';
+
+  @override
+  String get qsShare => 'Bagikan';
+
+  @override
+  String get qsPreparing => 'Menyiapkan…';
+
+  @override
+  String get qsErr => 'Gagal membagikan ayat. Coba lagi.';
+
+  @override
+  String get qsModeSolid => 'Solid';
+
+  @override
+  String get qsModeGradient => 'Gradasi';
+
+  @override
+  String get qsModeEsthetic => 'Estetik';
+
+  @override
+  String get qsContentArabic => 'Arab';
+
+  @override
+  String get qsContentTranslation => 'Terjemahan';
 }

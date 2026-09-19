@@ -306,39 +306,7 @@
       }
     }
   },
-  "@shareCaption": {
-    "placeholders": {
-      "title": {
-        "type": "String"
-      }
-    }
-  },
-  "@shareEarnedOn": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "@shareStatComeback": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@shareStatLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      },
-      "rank": {
-        "type": "String"
-      }
-    }
-  },
   "achBtnAwesome": "NICE!",
-  "achBtnShare": "Share",
   "achBtnSkipAll": "Skip all",
   "achEarnedOn": "Unlocked {date} • {tier}",
   "achHintFallback": "Complete: {desc}.",
@@ -794,27 +762,6 @@
   "profilXpToNext": "{xp} XP to go → LVL {level}",
   "profilXpWithinLevel": "{current}/{needed} XP",
   "settingLanguage": "Language",
-  "shareBtnShareAgain": "Share Again",
-  "shareCaption": "I unlocked \"{title}\" in Muslim Leveling! 🎮🕌",
-  "shareEarnedOn": "Earned {date}",
-  "shareErrImage": "Could not render the card image. Try again.",
-  "shareErrPrepare": "Could not prepare the card. Try again.",
-  "shareErrShare": "Could not share the card. Try again.",
-  "shareStatAllModules": "📚 All 16 modules complete!",
-  "shareStatCollector": "👑 True collector!",
-  "shareStatComeback": "Total comebacks: {count} 💪",
-  "shareStatDhikr": "📿 Dhikr goal reached!",
-  "shareStatFajr15": "🎯 Fajr under 15 minutes",
-  "shareStatFajrStreak": "days of Fajr streak 🔥",
-  "shareStatFullCombo": "🔥 5 obligatory + Tilawah + Dhuha",
-  "shareStatHeroStreak": "days of Hero Streak 🔥",
-  "shareStatLearning": "📖 Learning started — keep going!",
-  "shareStatLevel": "Level {level} — {rank}",
-  "shareStatOnTime10": "🎯 10× on-time prayers",
-  "shareStatOnTimeFirst": "⚡ On time from the very first",
-  "shareStatQuizPerfect": "⭐ Perfect score!",
-  "shareStatSunnah": "🏛️ All 8 sunnah collected",
-  "shareStatTilawahStreak": "days of Tilawah streak 🔥",
   "sunnahBadiyahDzuhurDesc": "Sunnah after Dhuhr",
   "sunnahBadiyahDzuhurName": "Ba'diyah Dhuhr",
   "sunnahBadiyahIsyaDesc": "Sunnah after Isha",
@@ -833,5 +780,63 @@
   "sunnahTahajjudName": "Tahajjud",
   "tabHome": "Home",
   "tabJadwal": "Schedule",
-  "tabQuran": "Quran"
+  "tabQuran": "Quran",
+  "dlTitle": "Today's Reflection",
+  "dlBack": "Back",
+  "dlCiteSurah": "Quran {surah}:{ayah}",
+  "dlCiteHadis": "HADITH OF THE DAY",
+  "dlCiteDoa": "DUA · {name}",
+  "dlCiteUlama": "SCHOLAR'S WORDS · {name}",
+  "dlActListen": "Listen",
+  "dlActPause": "Pause",
+  "dlActSave": "Save",
+  "dlActSaved": "Saved",
+  "dlActTafsir": "Tafsir",
+  "dlErrLoad": "Today's reflection couldn't be loaded.\nConnect to the internet and try again.",
+  "dlErrTafsir": "Couldn't load the tafsir. Try again.",
+  "dlDone": "Today's reflection complete",
+  "dlProgress": "{done} of {count} reflections read · swipe to continue",
+  "qsTitle": "Share Verse",
+  "qsShare": "Share",
+  "qsPreparing": "Preparing…",
+  "qsErr": "Couldn't share the verse. Try again.",
+  "qsModeSolid": "Solid",
+  "qsModeGradient": "Gradient",
+  "qsModeEsthetic": "Esthetic",
+  "qsContentArabic": "Arabic",
+  "qsContentTranslation": "Translation",
+  "@dlCiteSurah": {
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      },
+      "ayah": {
+        "type": "int"
+      }
+    }
+  },
+  "@dlCiteDoa": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@dlCiteUlama": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@dlProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

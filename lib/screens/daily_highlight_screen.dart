@@ -15,6 +15,7 @@ import '../../services/quran_playlist.dart';
 import '../../services/quran_bookmark.dart';
 import '../../services/quran_api.dart';
 import '../../services/hijri_service.dart';
+import '../../l10n/app_localizations.dart';
 import 'quran_reader.dart';
 
 /// Daily Highlight — halaman penuh (dulu kartu PageView di tab Home).
@@ -70,9 +71,12 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
 
   Future<void> _load() async {
     // Kalender hijriah & bookmark bukan hal kritis — gagal pun halaman jalan.
-    hijriService.today().then((d) {
-      if (mounted && d != null) setState(() => _hijri = hijriLabel(d));
-    }).catchError((_) {});
+    hijriService
+        .today()
+        .then((d) {
+          if (mounted && d != null) setState(() => _hijri = hijriLabel(d));
+        })
+        .catchError((_) {});
     quranBookmarks.load();
 
     try {
@@ -179,7 +183,7 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Tafsir tidak bisa dimuat. Coba lagi.',
+            AppL10n.of(context).dlErrTafsir,
             style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
           ),
           backgroundColor: AppColors.surfaceContainerLowest,
@@ -199,25 +203,44 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
   }
 
   /// Kutipan ulama hari ini — deterministik dari tanggal, sama seperti ayat/doa.
-  UlamaQuote get _quote => ulamaQuotes[highlightIndex(_todayKey, ulamaQuotes.length)];
+  UlamaQuote get _quote =>
+      ulamaQuotes[highlightIndex(_todayKey, ulamaQuotes.length)];
 
   String get _todayKey => GameService.todayStr();
 
   List<({String title, String arabic, String text, bool isArabic})> _pages(
     DailyHighlight h,
-  ) => [
-    (
-      title: 'QS. ${h.surahLatin} : ${h.ayahNumber}',
-      arabic: h.ayahArabic,
-      text: h.ayahIdn,
-      isArabic: true,
-    ),
-    if (h.hadisIdn.isNotEmpty)
-      (title: 'HADIS HARI INI', arabic: '', text: h.hadisIdn, isArabic: false),
-    (title: 'DOA · ${h.doaNama}', arabic: '', text: h.doaIdn, isArabic: false),
-    // ponytail: kutipan ulama dari aset lokal — selalu ada, tanpa network.
-    (title: 'KATA ULAMA · ${_quote.tokoh}', arabic: '', text: _quote.idn, isArabic: false),
-  ];
+  ) {
+    final l10n = AppL10n.of(context);
+    return [
+      (
+        title: l10n.dlCiteSurah(h.surahLatin, h.ayahNumber),
+        arabic: h.ayahArabic,
+        text: h.ayahIdn,
+        isArabic: true,
+      ),
+      if (h.hadisIdn.isNotEmpty)
+        (
+          title: l10n.dlCiteHadis,
+          arabic: '',
+          text: h.hadisIdn,
+          isArabic: false,
+        ),
+      (
+        title: l10n.dlCiteDoa(h.doaNama),
+        arabic: '',
+        text: h.doaIdn,
+        isArabic: false,
+      ),
+      // ponytail: kutipan ulama dari aset lokal — selalu ada, tanpa network.
+      (
+        title: l10n.dlCiteUlama(_quote.tokoh),
+        arabic: '',
+        text: _quote.idn,
+        isArabic: false,
+      ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -262,7 +285,7 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
           IconButton(
             onPressed: () => Navigator.of(context).maybePop(),
             icon: Icon(AppIcons.arrowBack, color: AppColors.onSurface),
-            tooltip: 'Kembali',
+            tooltip: AppL10n.of(context).dlBack,
           ),
           Expanded(
             child: Column(
@@ -273,7 +296,7 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
                   style: AppText.labelCaps().copyWith(color: AppColors.primary),
                 ),
                 Text(
-                  'Renungan Hari Ini',
+                  AppL10n.of(context).dlTitle,
                   style: AppText.headlineLg().copyWith(
                     fontSize: 22,
                     color: AppColors.onSurface,
@@ -297,11 +320,7 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
 
   Widget _empty() {
     // ponytail: ErrorRetry sudah ada & dipakai Doa/Hadis — jangan bikin gaya baru.
-    return ErrorRetry(
-      message: 'Renungan hari ini belum bisa dimuat.\n'
-          'Sambungkan internet lalu coba lagi.',
-      onRetry: _retry,
-    );
+    return ErrorRetry(message: AppL10n.of(context).dlErrLoad, onRetry: _retry);
   }
 
   Future<void> _retry() async {
@@ -339,7 +358,9 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
   }
 
   // ── Lembar 1: AYAT — bintang halaman ini ──────────────────────────
-  Widget _ayatPage(({String title, String arabic, String text, bool isArabic}) p) {
+  Widget _ayatPage(
+    ({String title, String arabic, String text, bool isArabic}) p,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -388,37 +409,35 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
   /// 4 aksi ayat — semuanya dari service yang sudah ada di app.
   Widget _actions() {
     final r = _ref!;
+    final l10n = AppL10n.of(context);
     final saved = quranBookmarks.isBookmarked(r.surah.number, r.ayah.ayah);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         _action(
           icon: quranAudio.isPlaying ? AppIcons.pause : AppIcons.play,
-          label: quranAudio.isPlaying ? 'Jeda' : 'Dengar',
+          label: quranAudio.isPlaying ? l10n.dlActPause : l10n.dlActListen,
           onTap: _toggleAudio,
         ),
         _action(
           icon: AppIcons.bookmarkSimple,
-          label: saved ? 'Tersimpan' : 'Simpan',
+          label: saved ? l10n.dlActSaved : l10n.dlActSave,
           onTap: _toggleBookmark,
           active: saved,
         ),
         _action(
           icon: AppIcons.translate,
-          label: 'Tafsir',
+          label: l10n.dlActTafsir,
           onTap: _openTafsir,
           busy: _tafsirLoading,
         ),
         _action(
           icon: AppIcons.share,
-          label: 'Bagikan',
+          label: l10n.qsShare,
           // ponytail: pakai kartu share Quran yang sudah ada (9:16, siap
           // IG Story) — bukan teks polos; mutunya jauh lebih baik.
-          onTap: () => showQuranShareSheet(
-            context,
-            surah: r.surah,
-            ayah: r.ayah,
-          ),
+          onTap: () =>
+              showQuranShareSheet(context, surah: r.surah, ayah: r.ayah),
         ),
       ],
     );
@@ -447,14 +466,14 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
                 ? SizedBox(
                     width: 20,
                     height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2, color: ink),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: ink,
+                    ),
                   )
                 : Icon(icon, size: 22, color: ink),
             const SizedBox(height: 6),
-            Text(
-              label,
-              style: AppText.labelCapsSm().copyWith(color: ink),
-            ),
+            Text(label, style: AppText.labelCapsSm().copyWith(color: ink)),
           ],
         ),
       ),
@@ -462,7 +481,9 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
   }
 
   // ── Lembar 2 & 3: HADIS / DOA — pendukung, lebih tenang ───────────
-  Widget _supportPage(({String title, String arabic, String text, bool isArabic}) p) {
+  Widget _supportPage(
+    ({String title, String arabic, String text, bool isArabic}) p,
+  ) {
     return Container(
       padding: const EdgeInsets.only(left: AppSpacing.md),
       decoration: BoxDecoration(
@@ -490,10 +511,8 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
     );
   }
 
-  Widget _cite(String text) => Text(
-    text,
-    style: AppText.labelCaps().copyWith(color: AppColors.primary),
-  );
+  Widget _cite(String text) =>
+      Text(text, style: AppText.labelCaps().copyWith(color: AppColors.primary));
 
   Widget _dots(int count) {
     return Row(
@@ -532,12 +551,16 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if (_tuntas(count))
-            Icon(AppIcons.checkCircle, size: 16, color: AppColors.secondaryFixed),
+            Icon(
+              AppIcons.checkCircle,
+              size: 16,
+              color: AppColors.secondaryFixed,
+            ),
           if (_tuntas(count)) const SizedBox(width: 6),
           Text(
             _tuntas(count)
-                ? 'Renungan hari ini tuntas'
-                : '$done dari $count renungan dibaca · swipe untuk lanjut',
+                ? AppL10n.of(context).dlDone
+                : AppL10n.of(context).dlProgress(done, count),
             style: AppText.labelCapsSm().copyWith(
               color: _tuntas(count)
                   ? AppColors.secondaryFixed

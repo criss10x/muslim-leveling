@@ -6,7 +6,6 @@ import '../l10n/app_localizations.dart';
 import '../services/achievement_service.dart';
 import 'announcer_gate.dart';
 import 'common.dart';
-import 'share_card.dart';
 import '../theme/app_icons.dart';
 
 /// Medali achievement ala Mobile Legends — heksagon dengan gradient tier,
@@ -398,46 +397,13 @@ Future<void> showAchievementUnlock(
                       // Tier tidak ditulis ulang: warna medali + Semantics
                       // label sudah membawa informasinya (hapus chrome).
                       const SizedBox(height: AppSpacing.lg),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: HeroButton(
-                              label: l10n.achBtnAwesome,
-                              trailingIcon: AppIcons.emojiEvents,
-                              onPressed: () => Navigator.of(ctx).pop(),
-                            ),
-                          ),
-                          const SizedBox(width: AppSpacing.sm),
-                          OutlinedButton(
-                            onPressed: () => showShareCard(context, def),
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: c1,
-                              side: BorderSide(
-                                color: c1.withValues(alpha: 0.5),
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                  AppRadius.xl,
-                                ),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: AppSpacing.md,
-                                vertical: AppSpacing.md,
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(AppIcons.share, size: 16, color: c1),
-                                const SizedBox(width: 6),
-                                Text(
-                                  l10n.achBtnShare,
-                                  style: AppText.bodyLg().copyWith(color: c1),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                      // ponytail: tombol share dihapus — kartu achievement cuma
+                      // pamer (streak/level orang lain tak perlu tahu). Yang
+                      // tetap bisa dibagikan: kartu ayat (Quran) & Renungan.
+                      HeroButton(
+                        label: l10n.achBtnAwesome,
+                        trailingIcon: AppIcons.emojiEvents,
+                        onPressed: () => Navigator.of(ctx).pop(),
                       ),
                       if (onSkipAll != null)
                         TextButton(
@@ -462,9 +428,7 @@ Future<void> showAchievementUnlock(
             if (!reduceMotion)
               Positioned.fill(
                 child: IgnorePointer(
-                  child: ConfettiBurst(
-                    particleCount: 30 + def.tier.index * 22,
-                  ),
+                  child: ConfettiBurst(particleCount: 30 + def.tier.index * 22),
                 ),
               ),
           ],
@@ -550,31 +514,6 @@ void showAchievementDetail(
                   fontSize: 10,
                 ),
               ),
-              if (unlocked) ...[
-                const SizedBox(height: AppSpacing.md),
-                // Path share utama dari grid: ikon pojok medali cuma penanda
-                // visual (< 44px), tombolnya di sini.
-                OutlinedButton.icon(
-                  onPressed: () {
-                    // P1 critique: share dulu, dialog detail tetap ada di
-                    // belakang share sheet — kalau share gagal, SnackBar
-                    // tampil dan user masih punya jalan kembali.
-                    showShareCard(context, def);
-                  },
-                  icon: Icon(AppIcons.share, size: 16, color: c1),
-                  label: Text(
-                    l10n.achBtnShare,
-                    style: AppText.bodyLg().copyWith(color: c1),
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: c1,
-                    side: BorderSide(color: c1.withValues(alpha: 0.5)),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.xl),
-                    ),
-                  ),
-                ),
-              ],
             ],
           ),
         ),

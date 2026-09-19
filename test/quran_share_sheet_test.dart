@@ -20,10 +20,10 @@ void main() {
   );
 
   // Swatch eksplisit dengan Semantics berlabel "Mode N" (solid 1..4, ll).
-  List<Semantics> swatchOf(WidgetTester t, String label) =>
-      t.widgetList<Semantics>(find.byType(Semantics))
-          .where((s) => s.properties.label == label)
-          .toList();
+  List<Semantics> swatchOf(WidgetTester t, String label) => t
+      .widgetList<Semantics>(find.byType(Semantics))
+      .where((s) => s.properties.label == label)
+      .toList();
 
   bool isSelected(Semantics s) => s.properties.selected ?? false;
 
@@ -31,16 +31,21 @@ void main() {
       find.byWidget(swatchOf(t, label)[idx]);
 
   testWidgets('ganti mode tidak mereset pilihan swatch', (tester) async {
-    await tester.pumpWidget(appWrap(Builder(
-        builder: (context) => Scaffold(
-          body: Center(
-            child: ElevatedButton(
-              onPressed: () =>
-                  showQuranShareSheet(context, surah: surah, ayah: ayah),
-              child: const Text('open'),
+    await tester.pumpWidget(
+      appWrap(
+        Builder(
+          builder: (context) => Scaffold(
+            body: Center(
+              child: ElevatedButton(
+                onPressed: () =>
+                    showQuranShareSheet(context, surah: surah, ayah: ayah),
+                child: const Text('open'),
+              ),
             ),
-          ), ),
-      ),));
+          ),
+        ),
+      ),
+    );
 
     await tester.tap(find.text('open'));
     await tester.pumpAndSettle();
@@ -65,5 +70,84 @@ void main() {
     expect(solid, hasLength(1));
     expect(isSelected(solid.first), isTrue);
     expect(isSelected(swatchOf(tester, 'Solid 1').first), isFalse);
+  });
+
+  // Sebelum ini seluruh sheet hardcode Indonesia — di app berbahasa Inggris
+  // judul, mode, dan tombolnya tetap "Bagikan Ayat"/"Gradasi". Tes ini yang
+  // menahan regresinya.
+  testWidgets('locale en: sheet memakai teks English, bukan hardcode', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      appWrap(
+        Builder(
+          builder: (context) => Scaffold(
+            body: Center(
+              child: ElevatedButton(
+                onPressed: () =>
+                    showQuranShareSheet(context, surah: surah, ayah: ayah),
+                child: const Text('open'),
+              ),
+            ),
+          ),
+        ),
+        locale: const Locale('en'),
+      ),
+    );
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Share Verse'), findsOneWidget);
+    expect(find.text('Share'), findsOneWidget);
+    expect(find.text('Arabic'), findsOneWidget);
+    expect(find.text('Translation'), findsOneWidget);
+    expect(find.text('Gradient'), findsOneWidget);
+    expect(find.text('Esthetic'), findsOneWidget);
+
+    // Sisa hardcode Indonesia harus nol.
+    for (final s in [
+      'Bagikan Ayat',
+      'Bagikan',
+      'Gradasi',
+      'Estetik',
+      'Terjemahan',
+    ]) {
+      expect(find.text(s), findsNothing, reason: 'masih hardcode: $s');
+    }
+  });
+
+  // Label mode dulu disimpan 17x di tabel preset (satu per swatch) padahal
+  // nilainya cuma 3. Sekarang diturunkan dari `kind` → satu tempat l10n.
+  testWidgets('mode Estetik tersedia di kedua locale', (tester) async {
+    for (final (locale, label) in [
+      (const Locale('id'), 'Estetik'),
+      (const Locale('en'), 'Esthetic'),
+    ]) {
+      await tester.pumpWidget(
+        appWrap(
+          Builder(
+            builder: (context) => Scaffold(
+              body: Center(
+                child: ElevatedButton(
+                  onPressed: () =>
+                      showQuranShareSheet(context, surah: surah, ayah: ayah),
+                  child: const Text('open'),
+                ),
+              ),
+            ),
+          ),
+          locale: locale,
+        ),
+      );
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+      expect(
+        find.text(label),
+        findsOneWidget,
+        reason: locale.languageCode,
+      );
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpAndSettle();
+    }
   });
 }

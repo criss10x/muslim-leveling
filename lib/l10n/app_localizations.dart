@@ -103,12 +103,6 @@ abstract class AppL10n {
   /// **'MANTAP!'**
   String get achBtnAwesome;
 
-  /// No description provided for @achBtnShare.
-  ///
-  /// In id, this message translates to:
-  /// **'Bagikan'**
-  String get achBtnShare;
-
   /// No description provided for @achBtnSkipAll.
   ///
   /// In id, this message translates to:
@@ -2844,132 +2838,6 @@ abstract class AppL10n {
   /// **'Bahasa'**
   String get settingLanguage;
 
-  /// No description provided for @shareBtnShareAgain.
-  ///
-  /// In id, this message translates to:
-  /// **'Bagikan Lagi'**
-  String get shareBtnShareAgain;
-
-  /// No description provided for @shareCaption.
-  ///
-  /// In id, this message translates to:
-  /// **'Aku unlock \"{title}\" di Muslim Leveling! 🎮🕌'**
-  String shareCaption(String title);
-
-  /// No description provided for @shareEarnedOn.
-  ///
-  /// In id, this message translates to:
-  /// **'Diraih {date}'**
-  String shareEarnedOn(String date);
-
-  /// No description provided for @shareErrImage.
-  ///
-  /// In id, this message translates to:
-  /// **'Gagal membuat gambar kartu. Coba lagi.'**
-  String get shareErrImage;
-
-  /// No description provided for @shareErrPrepare.
-  ///
-  /// In id, this message translates to:
-  /// **'Gagal menyiapkan kartu. Coba lagi.'**
-  String get shareErrPrepare;
-
-  /// No description provided for @shareErrShare.
-  ///
-  /// In id, this message translates to:
-  /// **'Gagal membagikan kartu. Coba lagi.'**
-  String get shareErrShare;
-
-  /// No description provided for @shareStatAllModules.
-  ///
-  /// In id, this message translates to:
-  /// **'📚 Semua 16 modul selesai!'**
-  String get shareStatAllModules;
-
-  /// No description provided for @shareStatCollector.
-  ///
-  /// In id, this message translates to:
-  /// **'👑 Kolektor sejati!'**
-  String get shareStatCollector;
-
-  /// No description provided for @shareStatComeback.
-  ///
-  /// In id, this message translates to:
-  /// **'Total comeback: {count} kali 💪'**
-  String shareStatComeback(int count);
-
-  /// No description provided for @shareStatDhikr.
-  ///
-  /// In id, this message translates to:
-  /// **'📿 Target zikir tercapai!'**
-  String get shareStatDhikr;
-
-  /// No description provided for @shareStatFajr15.
-  ///
-  /// In id, this message translates to:
-  /// **'🎯 Subuh sebelum 15 menit'**
-  String get shareStatFajr15;
-
-  /// No description provided for @shareStatFajrStreak.
-  ///
-  /// In id, this message translates to:
-  /// **'hari Subuh beruntun 🔥'**
-  String get shareStatFajrStreak;
-
-  /// No description provided for @shareStatFullCombo.
-  ///
-  /// In id, this message translates to:
-  /// **'🔥 5 wajib + Tilawah + Dhuha'**
-  String get shareStatFullCombo;
-
-  /// No description provided for @shareStatHeroStreak.
-  ///
-  /// In id, this message translates to:
-  /// **'hari Hero Streak 🔥'**
-  String get shareStatHeroStreak;
-
-  /// No description provided for @shareStatLearning.
-  ///
-  /// In id, this message translates to:
-  /// **'📖 Mulai belajar — teruskan!'**
-  String get shareStatLearning;
-
-  /// No description provided for @shareStatLevel.
-  ///
-  /// In id, this message translates to:
-  /// **'Level {level} — {rank}'**
-  String shareStatLevel(int level, String rank);
-
-  /// No description provided for @shareStatOnTime10.
-  ///
-  /// In id, this message translates to:
-  /// **'🎯 10× sholat tepat waktu'**
-  String get shareStatOnTime10;
-
-  /// No description provided for @shareStatOnTimeFirst.
-  ///
-  /// In id, this message translates to:
-  /// **'⚡ Tepat waktu sejak pertama'**
-  String get shareStatOnTimeFirst;
-
-  /// No description provided for @shareStatQuizPerfect.
-  ///
-  /// In id, this message translates to:
-  /// **'⭐ Skor sempurna!'**
-  String get shareStatQuizPerfect;
-
-  /// No description provided for @shareStatSunnah.
-  ///
-  /// In id, this message translates to:
-  /// **'🏛️ Semua 8 sunnah terkumpul'**
-  String get shareStatSunnah;
-
-  /// No description provided for @shareStatTilawahStreak.
-  ///
-  /// In id, this message translates to:
-  /// **'hari Tilawah beruntun 🔥'**
-  String get shareStatTilawahStreak;
-
   /// No description provided for @sunnahBadiyahDzuhurDesc.
   ///
   /// In id, this message translates to:
@@ -3083,6 +2951,150 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Al-Quran'**
   String get tabQuran;
+
+  /// No description provided for @dlTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Renungan Hari Ini'**
+  String get dlTitle;
+
+  /// No description provided for @dlBack.
+  ///
+  /// In id, this message translates to:
+  /// **'Kembali'**
+  String get dlBack;
+
+  /// No description provided for @dlCiteSurah.
+  ///
+  /// In id, this message translates to:
+  /// **'QS. {surah} : {ayah}'**
+  String dlCiteSurah(String surah, int ayah);
+
+  /// No description provided for @dlCiteHadis.
+  ///
+  /// In id, this message translates to:
+  /// **'HADIS HARI INI'**
+  String get dlCiteHadis;
+
+  /// No description provided for @dlCiteDoa.
+  ///
+  /// In id, this message translates to:
+  /// **'DOA · {name}'**
+  String dlCiteDoa(String name);
+
+  /// No description provided for @dlCiteUlama.
+  ///
+  /// In id, this message translates to:
+  /// **'KATA ULAMA · {name}'**
+  String dlCiteUlama(String name);
+
+  /// No description provided for @dlActListen.
+  ///
+  /// In id, this message translates to:
+  /// **'Dengar'**
+  String get dlActListen;
+
+  /// No description provided for @dlActPause.
+  ///
+  /// In id, this message translates to:
+  /// **'Jeda'**
+  String get dlActPause;
+
+  /// No description provided for @dlActSave.
+  ///
+  /// In id, this message translates to:
+  /// **'Simpan'**
+  String get dlActSave;
+
+  /// No description provided for @dlActSaved.
+  ///
+  /// In id, this message translates to:
+  /// **'Tersimpan'**
+  String get dlActSaved;
+
+  /// No description provided for @dlActTafsir.
+  ///
+  /// In id, this message translates to:
+  /// **'Tafsir'**
+  String get dlActTafsir;
+
+  /// No description provided for @dlErrLoad.
+  ///
+  /// In id, this message translates to:
+  /// **'Renungan hari ini belum bisa dimuat.\nSambungkan internet lalu coba lagi.'**
+  String get dlErrLoad;
+
+  /// No description provided for @dlErrTafsir.
+  ///
+  /// In id, this message translates to:
+  /// **'Tafsir tidak bisa dimuat. Coba lagi.'**
+  String get dlErrTafsir;
+
+  /// No description provided for @dlDone.
+  ///
+  /// In id, this message translates to:
+  /// **'Renungan hari ini tuntas'**
+  String get dlDone;
+
+  /// No description provided for @dlProgress.
+  ///
+  /// In id, this message translates to:
+  /// **'{done} dari {count} renungan dibaca · swipe untuk lanjut'**
+  String dlProgress(int done, int count);
+
+  /// No description provided for @qsTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Bagikan Ayat'**
+  String get qsTitle;
+
+  /// No description provided for @qsShare.
+  ///
+  /// In id, this message translates to:
+  /// **'Bagikan'**
+  String get qsShare;
+
+  /// No description provided for @qsPreparing.
+  ///
+  /// In id, this message translates to:
+  /// **'Menyiapkan…'**
+  String get qsPreparing;
+
+  /// No description provided for @qsErr.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal membagikan ayat. Coba lagi.'**
+  String get qsErr;
+
+  /// No description provided for @qsModeSolid.
+  ///
+  /// In id, this message translates to:
+  /// **'Solid'**
+  String get qsModeSolid;
+
+  /// No description provided for @qsModeGradient.
+  ///
+  /// In id, this message translates to:
+  /// **'Gradasi'**
+  String get qsModeGradient;
+
+  /// No description provided for @qsModeEsthetic.
+  ///
+  /// In id, this message translates to:
+  /// **'Estetik'**
+  String get qsModeEsthetic;
+
+  /// No description provided for @qsContentArabic.
+  ///
+  /// In id, this message translates to:
+  /// **'Arab'**
+  String get qsContentArabic;
+
+  /// No description provided for @qsContentTranslation.
+  ///
+  /// In id, this message translates to:
+  /// **'Terjemahan'**
+  String get qsContentTranslation;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {
