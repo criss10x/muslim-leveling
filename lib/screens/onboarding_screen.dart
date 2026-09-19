@@ -35,14 +35,16 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen>
     with SingleTickerProviderStateMixin {
   static const _total = 6;
+
   /// Halaman lokasi (0-based). Dipakai restore untuk tahu apakah kota perlu
   /// dibaca dari prefs.
   static const _lokasiPage = 4;
 
   final _pageCtrl = PageController();
   late final AnimationController _entry = AnimationController(
-      vsync: this, duration: const Duration(milliseconds: 600))
-    ..forward();
+    vsync: this,
+    duration: const Duration(milliseconds: 600),
+  )..forward();
   final _nickCtrl = TextEditingController();
 
   int _page = 0;
@@ -90,8 +92,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     // Kota sudah tersimpan sejak user memilihnya (PrayerService.saveLocation).
     // Tanpa dibaca ulang, halaman 5 muncul dengan tombol "Izinkan Lokasi" —
     // menyuruh mengulang langkah yang sudah selesai — padahal kotanya ada.
-    final city =
-        target >= _lokasiPage ? await PrayerService.savedCityName() : null;
+    final city = target >= _lokasiPage
+        ? await PrayerService.savedCityName()
+        : null;
     if (!mounted) return;
     _pageCtrl.jumpToPage(target);
     setState(() {
@@ -113,15 +116,17 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   Future<void> _next() async {
     if (_isLast) return;
     await _pageCtrl.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOutCubic);
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOutCubic,
+    );
   }
 
   Future<void> _prev() async {
     if (_page == 0) return;
     await _pageCtrl.previousPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOutCubic);
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOutCubic,
+    );
   }
 
   /// Halaman lokasi: minta lokasi, sinkron jadwal, tampilkan ✓ kota.
@@ -178,10 +183,12 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   /// Halaman terakhir: minta notifikasi (bila diminta), tandai onboarding selesai.
   ///
-  /// ponytail: HANYA izin notifikasi di sini. Dulu satu tap juga membuka
-  /// Settings "Alarm & pengingat" + dialog battery-optimization — tiga surface
-  /// OS untuk satu janji copy. Sekarang keduanya dipicu di tempat yang jelas
-  /// alasannya: toggle notifikasi di Profil / saat menyimpan jadwal adhan.
+  /// ponytail: izin notifikasi + pengecualian baterai. Dua surface OS ini
+  /// ditanggung bersama karena keduanya soal "notifnya benar-benar bunyi":
+  /// tanpa exemption, OEM (Xiaomi/Oppo/Vivo/Realme) membunuh alarm saat app
+  /// ditutup — penyebab #1 adzan tak pernah muncul, tanpa fallback apa pun.
+  /// Izin "Alarm & pengingat" (Android 12+) tetap di Profil: penjadwalan sudah
+  /// fallback ke inexactAllowWhileIdle, jadi ia bukan syarat bunyi atau tidak.
   Future<void> _finish({bool enableNotif = true}) async {
     if (_busy) return;
     // Tangkap l10n sebelum await: pakai context setelah await =
@@ -216,6 +223,12 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           await NotificationService.init();
           final granted = await NotificationService.requestPermission();
           if (granted) {
+            // Kembalikan jalur yang dibuang di 01a15fc: tanpa exemption baterai,
+            // OEM membunuh alarm begitu app ditutup dan adzan tak pernah bunyi.
+            // Tanpa fallback — jadi ini diminta di sini, bukan cuma di Profil.
+            // ponytail: kegagalan exemption tidak memblokir onboarding; user
+            // tetap masuk, pengingatnya tinggal tidak sekuat mestinya.
+            await NotificationService.ensureBatteryUnrestricted();
             await _scheduleAdhanFromPrefs();
           } else {
             notifDenied = true;
@@ -229,11 +242,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       // Kabari sebelum pergi kalau izinnya ditolak: dulu jalur ini selesai
       // dalam diam dan user mengira pengingat sudah aktif.
       if (notifDenied) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(l10n.onbNotifDenied)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.onbNotifDenied)));
       }
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const DashboardShell()));
+        MaterialPageRoute(builder: (_) => const DashboardShell()),
+      );
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -243,20 +258,23 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     final location = await PrayerService.loadLocation();
     if (location == null) return;
     final schedule = await PrayerService.fetchSchedule(
-        cityId: location.id, cityName: location.name);
+      cityId: location.id,
+      cityName: location.name,
+    );
     if (schedule != null) {
-      await GameService.setTimings(Timings(
-        imsak: schedule['imsak'] ?? '04:30',
-        subuh: schedule['subuh'] ?? '04:42',
-        terbit: schedule['terbit'] ?? '05:55',
-        dhuha: schedule['dhuha'] ?? '06:20',
-        dzuhur: schedule['dzuhur'] ?? '12:01',
-        ashar: schedule['ashar'] ?? '15:20',
-        maghrib: schedule['maghrib'] ?? '17:55',
-        isya: schedule['isya'] ?? '19:08',
-      ));
-      await NotificationService.scheduleAdhanReminders(
-          location.name, schedule);
+      await GameService.setTimings(
+        Timings(
+          imsak: schedule['imsak'] ?? '04:30',
+          subuh: schedule['subuh'] ?? '04:42',
+          terbit: schedule['terbit'] ?? '05:55',
+          dhuha: schedule['dhuha'] ?? '06:20',
+          dzuhur: schedule['dzuhur'] ?? '12:01',
+          ashar: schedule['ashar'] ?? '15:20',
+          maghrib: schedule['maghrib'] ?? '17:55',
+          isya: schedule['isya'] ?? '19:08',
+        ),
+      );
+      await NotificationService.scheduleAdhanReminders(location.name, schedule);
     }
   }
 
@@ -285,15 +303,16 @@ class _OnboardingScreenState extends State<OnboardingScreen>
               Padding(
                 padding: const EdgeInsets.fromLTRB(24, AppSpacing.md, 24, 0),
                 child: ExcludeSemantics(
-                  child: HudHeader(l10n.onbProgressLabel,
-                      meta: '${_page + 1}/$_total'),
+                  child: HudHeader(
+                    l10n.onbProgressLabel,
+                    meta: '${_page + 1}/$_total',
+                  ),
                 ),
               ),
               Expanded(
                 child: PageView(
                   controller: _pageCtrl,
-                  physics:
-                      _busy ? const NeverScrollableScrollPhysics() : null,
+                  physics: _busy ? const NeverScrollableScrollPhysics() : null,
                   onPageChanged: (i) {
                     _touched = true;
                     // ponytail: tidak di-await — satu int + satu string di
@@ -364,9 +383,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           ),
           const Spacer(),
           HeroButton(
-              label: l10n.onbContinue,
-              trailingIcon: AppIcons.arrowForward,
-              onPressed: _next),
+            label: l10n.onbContinue,
+            trailingIcon: AppIcons.arrowForward,
+            onPressed: _next,
+          ),
           const SizedBox(height: AppSpacing.lg),
         ],
       ),
@@ -395,19 +415,26 @@ class _OnboardingScreenState extends State<OnboardingScreen>
             // Counter ditampilkan (dulu counterText: ''): karakter ke-21
             // ditolak diam-diam, jadi user tidak tahu kenapa ketikannya macet.
             // ponytail: pakai counter bawaan TextField, bukan widget sendiri.
-            buildCounter: (_, {required currentLength, required isFocused, maxLength}) =>
-                Text('$currentLength/$maxLength',
-                    style: AppText.labelCapsSm()
-                        .copyWith(color: AppColors.onSurfaceVariant)),
+            buildCounter:
+                (_, {required currentLength, required isFocused, maxLength}) =>
+                    Text(
+                      '$currentLength/$maxLength',
+                      style: AppText.labelCapsSm().copyWith(
+                        color: AppColors.onSurfaceVariant,
+                      ),
+                    ),
             textCapitalization: TextCapitalization.words,
             style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
             decoration: InputDecoration(
               hintText: l10n.onbNicknameHint,
               hintStyle: AppText.bodyMd().copyWith(
-                  color: AppColors.onSurfaceVariant.withValues(alpha: 0.6)),
+                color: AppColors.onSurfaceVariant.withValues(alpha: 0.6),
+              ),
               isDense: true,
               contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 14, vertical: 12),
+                horizontal: 14,
+                vertical: 12,
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppRadius.md),
                 borderSide: BorderSide(color: AppColors.outlineVariant),
@@ -416,9 +443,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           ),
           const Spacer(),
           HeroButton(
-              label: l10n.onbContinue,
-              trailingIcon: AppIcons.arrowForward,
-              onPressed: _next),
+            label: l10n.onbContinue,
+            trailingIcon: AppIcons.arrowForward,
+            onPressed: _next,
+          ),
           const SizedBox(height: AppSpacing.lg),
         ],
       ),
@@ -462,16 +490,18 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           // Sekarang: label menyebut fungsinya, dan ia maju seperti tombol
           // mana pun di posisi itu. Ikon dihapus — halaman ini zero-ikon.
           GhostButton(
-              label: l10n.onbGenderSkip,
-              onPressed: () {
-                setState(() => _gender = '');
-                _next();
-              }),
+            label: l10n.onbGenderSkip,
+            onPressed: () {
+              setState(() => _gender = '');
+              _next();
+            },
+          ),
           const SizedBox(height: AppSpacing.sm),
           HeroButton(
-              label: l10n.onbContinue,
-              trailingIcon: AppIcons.arrowForward,
-              onPressed: _next),
+            label: l10n.onbContinue,
+            trailingIcon: AppIcons.arrowForward,
+            onPressed: _next,
+          ),
           const SizedBox(height: AppSpacing.lg),
         ],
       ),
@@ -503,23 +533,28 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(AppIcons.touchApp,
-                  size: 16, color: AppColors.onSurfaceVariant),
+              Icon(
+                AppIcons.touchApp,
+                size: 16,
+                color: AppColors.onSurfaceVariant,
+              ),
               const SizedBox(width: AppSpacing.xs),
               Flexible(
                 child: Text(
                   l10n.onbHowDemoHint,
-                  style: AppText.bodyMd()
-                      .copyWith(color: AppColors.onSurfaceVariant),
+                  style: AppText.bodyMd().copyWith(
+                    color: AppColors.onSurfaceVariant,
+                  ),
                 ),
               ),
             ],
           ),
           const Spacer(),
           HeroButton(
-              label: l10n.onbContinue,
-              trailingIcon: AppIcons.arrowForward,
-              onPressed: _next),
+            label: l10n.onbContinue,
+            trailingIcon: AppIcons.arrowForward,
+            onPressed: _next,
+          ),
           const SizedBox(height: AppSpacing.lg),
         ],
       ),
@@ -545,16 +580,16 @@ class _OnboardingScreenState extends State<OnboardingScreen>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(AppIcons.checkCircle,
-                    size: 18, color: AppColors.primary),
+                Icon(AppIcons.checkCircle, size: 18, color: AppColors.primary),
                 const SizedBox(width: AppSpacing.xs),
                 Flexible(
                   child: Text(
                     _city!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: AppText.bodyMd()
-                        .copyWith(color: AppColors.onSurface),
+                    style: AppText.bodyMd().copyWith(
+                      color: AppColors.onSurface,
+                    ),
                   ),
                 ),
               ],
@@ -572,31 +607,34 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           // `confirmed` di depan, kota yang sudah terisi selalu menang.
           if (confirmed)
             HeroButton(
-                label: l10n.onbContinue,
-                trailingIcon: AppIcons.arrowForward,
-                onPressed: _busy ? null : _next)
+              label: l10n.onbContinue,
+              trailingIcon: AppIcons.arrowForward,
+              onPressed: _busy ? null : _next,
+            )
           else if (_locError != null)
             HeroButton(
-                label: l10n.onbLocationPickManual,
-                trailingIcon: AppIcons.arrowForward,
-                onPressed: _busy ? null : _pickCity)
+              label: l10n.onbLocationPickManual,
+              trailingIcon: AppIcons.arrowForward,
+              onPressed: _busy ? null : _pickCity,
+            )
           else
             HeroButton(
-                label: _busy
-                    ? l10n.onbLocationLoading
-                    : l10n.onbLocationAllow,
-                onPressed: _busy ? null : _allowLocation),
+              label: _busy ? l10n.onbLocationLoading : l10n.onbLocationAllow,
+              onPressed: _busy ? null : _allowLocation,
+            ),
           const SizedBox(height: AppSpacing.sm),
           if (!confirmed && _locError != null)
             GhostButton(
-                label: l10n.onbLocationRetry,
-                icon: AppIcons.myLocation,
-                onPressed: _busy ? null : _allowLocation)
+              label: l10n.onbLocationRetry,
+              icon: AppIcons.myLocation,
+              onPressed: _busy ? null : _allowLocation,
+            )
           else if (!confirmed)
             GhostButton(
-                label: l10n.onbLocationPickManual,
-                icon: AppIcons.locationCity,
-                onPressed: _busy ? null : _pickCity),
+              label: l10n.onbLocationPickManual,
+              icon: AppIcons.locationCity,
+              onPressed: _busy ? null : _pickCity,
+            ),
           if (!confirmed) ...[
             const SizedBox(height: AppSpacing.sm),
             // Jalan keluar jujur: menolak lokasi bukan jalan buntu. Kota
@@ -604,8 +642,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
             // diganti di Profil — labelnya menyebut konsekuensinya, bukan
             // "Lewati" yang ambigu.
             GhostButton(
-                label: l10n.onbLocationLater,
-                onPressed: _busy ? null : _next),
+              label: l10n.onbLocationLater,
+              onPressed: _busy ? null : _next,
+            ),
             const SizedBox(height: AppSpacing.xs),
             _Body(l10n.onbLocationLaterHint),
           ],
@@ -630,16 +669,18 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           _Body(l10n.onbNotifBody),
           const Spacer(),
           HeroButton(
-              label: _busy ? l10n.onbNotifLoading : l10n.onbNotifAllow,
-              trailingIcon: AppIcons.notificationsActiveOutlined,
-              onPressed: _busy ? null : () => _finish(enableNotif: true)),
+            label: _busy ? l10n.onbNotifLoading : l10n.onbNotifAllow,
+            trailingIcon: AppIcons.notificationsActiveOutlined,
+            onPressed: _busy ? null : () => _finish(enableNotif: true),
+          ),
           const SizedBox(height: AppSpacing.sm),
           // P0: escape dari halaman terakhir — sebelumnya Lewati di-disable
           // tanpa alternatif visible (user terjebak di permission notif).
           GhostButton(
-              label: l10n.onbNotifSkip,
-              icon: AppIcons.close,
-              onPressed: _busy ? null : () => _finish(enableNotif: false)),
+            label: l10n.onbNotifSkip,
+            icon: AppIcons.close,
+            onPressed: _busy ? null : () => _finish(enableNotif: false),
+          ),
           const SizedBox(height: AppSpacing.lg),
         ],
       ),
@@ -654,13 +695,9 @@ class _Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Semantics(
-        header: true,
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: AppText.titleLg(),
-        ),
-      );
+    header: true,
+    child: Text(text, textAlign: TextAlign.center, style: AppText.titleLg()),
+  );
 }
 
 /// Body copy halaman.
@@ -674,10 +711,10 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Text(
-        text,
-        style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
-        textAlign: TextAlign.center,
-      );
+    text,
+    style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
+    textAlign: TextAlign.center,
+  );
 }
 
 /// Kartu pilihan Ikhwan/Akhwat — target besar, satu baris, tanpa ikon.
@@ -760,8 +797,9 @@ class _HowRow extends StatelessWidget {
                 ),
                 Text(
                   body,
-                  style: AppText.bodyMd()
-                      .copyWith(color: AppColors.onSurfaceVariant),
+                  style: AppText.bodyMd().copyWith(
+                    color: AppColors.onSurfaceVariant,
+                  ),
                 ),
               ],
             ),
@@ -803,9 +841,10 @@ class _PageBody extends StatelessWidget {
               child: FadeTransition(
                 opacity: fade,
                 child: SlideTransition(
-                  position:
-                      Tween(begin: const Offset(0, 0.04), end: Offset.zero)
-                          .animate(fade),
+                  position: Tween(
+                    begin: const Offset(0, 0.04),
+                    end: Offset.zero,
+                  ).animate(fade),
                   child: child,
                 ),
               ),
@@ -848,8 +887,9 @@ class _MockXpCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.surfaceContainer,
               borderRadius: BorderRadius.circular(AppRadius.lg),
-              border:
-                  Border.all(color: AppColors.primary.withValues(alpha: 0.25)),
+              border: Border.all(
+                color: AppColors.primary.withValues(alpha: 0.25),
+              ),
               boxShadow: [
                 BoxShadow(
                   color: AppColors.primary.withValues(alpha: 0.12),
@@ -867,13 +907,16 @@ class _MockXpCard extends StatelessWidget {
                   '${l10n.prayerSubuh} ✓',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style:
-                      AppText.labelCaps().copyWith(color: AppColors.onSurface),
+                  style: AppText.labelCaps().copyWith(
+                    color: AppColors.onSurface,
+                  ),
                 ),
                 const SizedBox(width: 10),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 9,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.primary,
                     borderRadius: BorderRadius.circular(99),
@@ -882,8 +925,9 @@ class _MockXpCard extends StatelessWidget {
                     '+50 XP',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: AppText.labelCapsSm()
-                        .copyWith(color: AppColors.surfaceContainerLowest),
+                    style: AppText.labelCapsSm().copyWith(
+                      color: AppColors.surfaceContainerLowest,
+                    ),
                   ),
                 ),
               ],
@@ -906,5 +950,6 @@ class _Mascot extends StatelessWidget {
   const _Mascot({required this.icon});
 
   @override
-  Widget build(BuildContext context) => Icon(icon, size: 64, color: AppColors.primary);
+  Widget build(BuildContext context) =>
+      Icon(icon, size: 64, color: AppColors.primary);
 }
