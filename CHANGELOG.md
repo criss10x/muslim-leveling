@@ -2,7 +2,11 @@
 
 All notable user-facing changes. Newest first.
 
-## [Unreleased]
+## [1.1.3] - 2026-09-19
+
+### Added
+- Onboarding resumes where you left off (page + gender + city) instead of
+  starting over when Android kills the app mid-flow.
 
 ### Removed
 - Achievement share button (unlock popup + medal detail dialog) and the
@@ -14,6 +18,8 @@ All notable user-facing changes. Newest first.
 - Quran share sheet and Daily Highlight were hardcoded Indonesian: English
   users saw "Bagikan Ayat", "Gradasi", "Terjemahan". All strings now come
   from ARB.
+- Onboarding page 5 could dead-end when the city list failed to load; offline
+  was reported as "city not found" instead of a retry.
 
 ## [1.9.1] - 2026-07-23
 
