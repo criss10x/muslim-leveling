@@ -81,3 +81,6 @@ release/
 
 # bahan riset mentah (gambar appllama, link kedaluwarsa 1 jam)
 research/
+
+# ponytail: state hash terjemahan, lokal saja (per-dev).
+.arb_ai_state.json

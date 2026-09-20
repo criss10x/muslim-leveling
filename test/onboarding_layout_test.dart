@@ -15,8 +15,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:muslim_leveling/l10n/app_localizations.dart';
 import 'package:muslim_leveling/screens/onboarding_screen.dart';
 
-Widget _wrap(Widget child, double scale) => MaterialApp(
-      locale: const Locale('id'),
+Widget _wrap(Widget child, double scale, [Locale locale = const Locale('id')]) =>
+    MaterialApp(
+      locale: locale,
       supportedLocales: AppL10n.supportedLocales,
       localizationsDelegates: AppL10n.localizationsDelegates,
       debugShowCheckedModeBanner: false,
@@ -37,11 +38,16 @@ Future<void> _settle(WidgetTester tester, int ms) async {
 void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
 
-  for (final (label, size, scale) in [
-    ('360x800@1.0 (baseline)', const Size(360, 800), 1.0),
-    ('320x568@1.0', const Size(320, 568), 1.0),
-    ('320x568@1.3', const Size(320, 568), 1.3),
-    ('320x568@1.5', const Size(320, 568), 1.5),
+  for (final (label, size, scale, locale) in [
+    ('360x800@1.0 (baseline)', const Size(360, 800), 1.0, const Locale('id')),
+    ('320x568@1.0', const Size(320, 568), 1.0, const Locale('id')),
+    ('320x568@1.3', const Size(320, 568), 1.3, const Locale('id')),
+    ('320x568@1.5', const Size(320, 568), 1.5, const Locale('id')),
+    // Batch bahasa: halaman 1 naik dari 3 → 5 baris, dan teks tr/ms lebih
+    // panjang dari id. Kasus terburuk (layar terkecil + font terbesar) harus
+    // tetap tanpa overflow — ini yang biasanya jebol saat menambah bahasa.
+    ('320x568@1.5 tr', const Size(320, 568), 1.5, const Locale('tr')),
+    ('320x568@1.5 ms', const Size(320, 568), 1.5, const Locale('ms')),
   ]) {
     testWidgets('tanpa overflow + bisa scroll: $label', (tester) async {
       SharedPreferences.setMockInitialValues({});
@@ -50,7 +56,7 @@ void main() {
       await tester.pumpWidget(const SizedBox());
       tester.view.devicePixelRatio = 1.0;
       tester.view.physicalSize = size;
-      await tester.pumpWidget(_wrap(const OnboardingScreen(), scale));
+      await tester.pumpWidget(_wrap(const OnboardingScreen(), scale, locale));
       await _settle(tester, 900);
 
       final pv = tester.widget<PageView>(find.byType(PageView));

@@ -46,6 +46,23 @@ void main() {
     expect(LocaleNotifier.supported.first, const Locale('en'));
   });
 
+  test('setiap bahasa di supported punya label ARB (bukan kode mentah)', () {
+    // labelFor jatuh ke kode mentah kalau key-nya lupa ditambah — UI akan
+    // menampilkan "tr" alih-alih "Türkçe". Tes ini menangkapnya.
+    for (final locale in LocaleNotifier.supported) {
+      for (final active in ['id', 'en']) {
+        final label = LocaleNotifier.labelFor(
+            lookupAppL10n(Locale(active)), locale);
+        expect(
+          label,
+          isNot(locale.languageCode),
+          reason: 'label ${locale.languageCode} belum ada di app_$active.arb '
+              '(key locale<Negara>)',
+        );
+      }
+    }
+  });
+
   testWidgets('MaterialApp app punya delegate l10n dan locale null (ikut HP)',
       (tester) async {
     await tester.pumpWidget(const MuslimLevelingApp());

@@ -48,9 +48,7 @@ class LocalePicker extends StatelessWidget {
                 for (final locale in LocaleNotifier.supported)
                   LocaleOption(
                     value: locale,
-                    label: locale.languageCode == 'id'
-                        ? l10n.localeIndonesian
-                        : l10n.localeEnglish,
+                    label: LocaleNotifier.labelFor(l10n, locale),
                     current: localeNotifier.override,
                   ),
               ],

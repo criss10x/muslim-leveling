@@ -2,6 +2,29 @@
 
 All notable user-facing changes. Newest first.
 
+## [Unreleased]
+
+### Added
+- Turkish (Türkçe) and Malay (Bahasa Melayu) — the app now ships 4 languages
+  (id, en, tr, ms). Both are picked the same way as English: Profile > App
+  language, or onboarding page 1. Language names are shown in their own
+  language, so someone whose phone is in the wrong language can still find
+  theirs.
+- Automatic ARB translation (`arb_ai.yaml`, run with `arb_ai`). Adding a
+  language is now: add the code to `targets`, run the tool, run
+  `flutter gen-l10n`. Only new/changed keys are sent to the API — re-running
+  after a one-line copy change costs a few seconds, not a full re-translation.
+  The parity test guards every language, not just en.
+- Quotes from the scholars (32) and Hijri month / important-date names are now
+  translated too, so "Kata Ulama" and the Hijri dates stop being Indonesian in
+  the other languages. Scholar names stay as-is (they are proper names).
+
+### Fixed
+- Malay and Indonesian share ~80% of their vocabulary, so the old
+  "is this Indonesian prose?" guard flagged correct Malay as untranslated
+  (149 false positives). Replaced with a measured ratio check that catches the
+  real failure — a locale that is still a copy of the template.
+
 ## [1.1.3] - 2026-09-19
 
 ### Fixed

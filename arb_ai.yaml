@@ -1,0 +1,32 @@
+# Terjemahan ARB otomatis (arb_ai). Jalankan: dart pub global activate arb_ai
+#
+# ponytail: tidak ada API key di repo ini (repo publik). Key dibaca dari env
+# ARB_AI_API_KEY — ambil dari provider di ~/.hermes/config.yaml saat mau run.
+#
+# Alur menambah bahasa:
+#   1. tambah kode di `targets` bawah
+#   2. export ARB_AI_API_KEY=...
+#   3. arb_ai                       (hanya key baru/berubah yang dikirim ke API)
+#   4. flutter gen-l10n
+#   5. tambah Locale('xx') di LocaleNotifier.supported + key locale<Negara> di ARB
+#   6. flutter test test/l10n_arb_parity_test.dart  (guard paritas semua bahasa)
+provider: gemini
+api_key_env: ARB_AI_API_KEY
+model: gemini/gemini-3.5-flash
+base_url: https://ai.sumopod.com
+source_arb: lib/l10n/app_id.arb
+targets:
+  - tr
+  - ms
+# Aplikasi ini app ibadah: pakai register formal, bukan bahasa gaul.
+tone: formal
+batch_size: 100
+# Istilah yang tidak boleh diterjemahkan mesin.
+do_not_translate:
+  - Muslim Leveling
+  - XP
+  - Al-Qur'an
+  - Hadis
+  - Ikhwan
+  - Akhwat
+  - Alhamdulillah
