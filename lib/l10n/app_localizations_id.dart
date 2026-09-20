@@ -1657,4 +1657,316 @@ class AppL10nId extends AppL10n {
 
   @override
   String get qsContentTranslation => 'Terjemahan';
+
+  @override
+  String get quest_subuh_tepat_desc =>
+      'Sholat Subuh tepat waktu (≤30 menit setelah adzan)';
+
+  @override
+  String get quest_five_rings_desc => 'Lengkapin 5/5 sholat hari ini';
+
+  @override
+  String get quest_timely_prayers_desc =>
+      'Sholat tepat waktu (≤10 menit), 3x hari ini';
+
+  @override
+  String get quest_dhuha_before_dzuhur_desc => 'Sholat Dhuha sebelum Dzuhur';
+
+  @override
+  String get quest_rawatib_two_desc => 'Rawatib 2x hari ini';
+
+  @override
+  String get quest_dzuhur_tepat_desc =>
+      'Sholat Dzuhur tepat waktu (≤30 menit setelah adzan)';
+
+  @override
+  String get quest_maghrib_tepat_desc =>
+      'Sholat Maghrib tepat waktu (≤30 menit setelah adzan)';
+
+  @override
+  String get quest_isya_hadir_desc => 'Jangan lewatkan sholat Isya malam ini';
+
+  @override
+  String get quest_any_three_desc =>
+      'Kerjakan 3 sholat wajib hari ini (bebas yang mana)';
+
+  @override
+  String get quest_subuh_isya_desc => 'Kunci dua ujung hari: Subuh + Isya';
+
+  @override
+  String get quest_one_sunnah_desc =>
+      'Kerjakan 1 sholat sunnah apa saja hari ini';
+
+  @override
+  String get quest_rawatib_one_desc =>
+      'Rawatib 1x hari ini (qobliyah/ba\'diyah bebas)';
+
+  @override
+  String get quest_zikir_33_desc => 'Zikir 33x lewat tombol Daily Zikir';
+
+  @override
+  String quest_zikir_goal_desc(Object goal) {
+    return 'Tuntaskan Daily Zikir sampai $goal';
+  }
+
+  @override
+  String get quest_quran_10ayat_desc => 'Baca Quran 10 ayat hari ini';
+
+  @override
+  String get quest_hadis_3_desc => 'Baca 3 hadis hari ini (≥5 dtk tiap hadis)';
+
+  @override
+  String get quest_dzikir_33_subuh_desc =>
+      'Dzikir Subhanallah 33x (tasbih setelah sholat)';
+
+  @override
+  String get quest_quran_1halaman_desc =>
+      'Baca Quran 20 ayat (≈1 halaman mushaf)';
+
+  @override
+  String get quest_hadis_5_desc => 'Baca 5 hadis hari ini (≥5 dtk tiap hadis)';
+
+  @override
+  String get quest_berjamaah_1_desc =>
+      'Sholat berjamaah 1x hari ini (pilih bonus berjamaah saat claim)';
+
+  @override
+  String get quest_hero_streak_7_desc => 'Pertahanin Hero Streak 7 hari! 🔥';
+
+  @override
+  String get questCopy_sholat_1 =>
+      'Kamu mungkin lagi sibuk, tapi tetap nyempetin. Good job.';
+
+  @override
+  String get questCopy_sholat_2 =>
+      'Adzan selesai, kamu langsung jalan. Mantap.';
+
+  @override
+  String get questCopy_sholat_3 =>
+      'Tepat waktu hari ini. Satu hal baik yang kamu jaga.';
+
+  @override
+  String get questCopy_sholat_4 =>
+      'Capek tetap capek. Tapi kamu tetap datang. 🤍';
+
+  @override
+  String get questCopy_sunnah_1 =>
+      'Nggak wajib, tapi kamu tetap memilih untuk melakukannya.';
+
+  @override
+  String get questCopy_sunnah_2 =>
+      'Nggak ada yang maksa. Kamu sendiri yang memilih untuk datang.';
+
+  @override
+  String get questCopy_sunnah_3 => 'Dua rakaat hari ini. Kecil, tapi berarti.';
+
+  @override
+  String get questCopy_sunnah_4 =>
+      'Pelan-pelan, kebiasaan baik seperti ini yang kamu bangun.';
+
+  @override
+  String get questCopy_zikir_1 =>
+      'Di tengah ramainya hari, kamu masih menyempatkan ingat Allah.';
+
+  @override
+  String get questCopy_zikir_2 =>
+      'Berhenti sebentar. Tarik napas. Ingat Allah.';
+
+  @override
+  String get questCopy_zikir_3 =>
+      'Apa pun yang lagi kamu pikirin, kamu tetap meluangkan waktu untuk zikir.';
+
+  @override
+  String get questCopy_zikir_4 =>
+      'Selesai zikir. Semoga hati terasa sedikit lebih ringan. 🤍';
+
+  @override
+  String get questCopy_quran_1 =>
+      'Satu ayat hari ini. Pelan-pelan, yang penting terus.';
+
+  @override
+  String get questCopy_quran_2 =>
+      'Hari ini kamu kembali membuka Al-Quran. Senang lihatnya.';
+
+  @override
+  String get questCopy_quran_3 =>
+      'Nggak harus banyak. Satu halaman pun tetap sebuah langkah.';
+
+  @override
+  String get questCopy_quran_4 =>
+      'Satu halaman selesai. Besok lanjut lagi, ya.';
+
+  @override
+  String get questCopy_hadis_1 =>
+      'Hari ini kamu meluangkan waktu untuk belajar dari sabda Nabi.';
+
+  @override
+  String get questCopy_hadis_2 =>
+      'Satu hadis kamu baca hari ini. Semoga ada yang bisa kamu bawa ke harimu.';
+
+  @override
+  String get questCopy_hadis_3 =>
+      'Nemu hadis yang ngena? Simpan. Siapa tahu kamu butuh mengingatnya lagi.';
+
+  @override
+  String get questCopy_hadis_4 =>
+      'Sedikit belajar hari ini, semoga jadi bekal untuk besok.';
+
+  @override
+  String get questCopy_fiveRings_1 =>
+      'Subuh, Dzuhur, Ashar, Maghrib, Isya. Kamu hadir di semuanya hari ini.';
+
+  @override
+  String get questCopy_fiveRings_2 =>
+      'Lima waktu selesai. Alhamdulillah, hari ini kamu berhasil menjaganya.';
+
+  @override
+  String get questCopy_fiveRings_3 => 'Satu hari, lima waktu. Lengkap. 🤍';
+
+  @override
+  String get questCopy_fiveRings_4 =>
+      'Hari ini selesai dengan baik. Besok kita mulai lagi.';
+
+  @override
+  String get questCopy_subuhIsya_1 =>
+      'Subuh kamu jaga, Isya kamu jaga. Alhamdulillah.';
+
+  @override
+  String get questCopy_subuhIsya_2 =>
+      'Dari awal sampai akhir hari, kamu tetap menyempatkan diri.';
+
+  @override
+  String get questCopy_subuhIsya_3 =>
+      'Dua waktu ini kamu jaga hari ini. Good job.';
+
+  @override
+  String get questCopy_subuhIsya_4 =>
+      'Hari ini kamu berhasil menjaga Subuh dan Isya. Besok lanjut lagi.';
+
+  @override
+  String get questHaid_1 =>
+      'Hari ini waktunya istirahat. Tetap semangat, ya. 🤍';
+
+  @override
+  String get questHaid_2 =>
+      'Nggak apa-apa berhenti sebentar. Kamu tetap bagian dari perjalanan ini.';
+
+  @override
+  String get questHaid_3 =>
+      'Hari ini kamu nggak perlu mengejar quest ini. Jaga diri dan tetap dekat dengan Allah.';
+
+  @override
+  String get questHaid_4 =>
+      'Quest boleh berhenti sebentar. Perjalananmu tetap lanjut.';
+
+  @override
+  String get questClaimAlhamdulillah => 'Alhamdulillah';
+
+  @override
+  String get questClaimContinue => 'Lanjut';
+
+  @override
+  String sqCombinedTitle(Object count) {
+    return 'Alhamdulillah, $count Quest Tuntas!';
+  }
+
+  @override
+  String get sqCombinedDesc =>
+      'Semua quest harian selesai hari ini. Semoga istiqomah!';
+
+  @override
+  String get sqZikirTitle => 'Dzikir 100x Selesai!';
+
+  @override
+  String get sqZikirDesc => 'Konsisten berdzikir hari ini. Istiqomah!';
+
+  @override
+  String get sqTilawahTitle => 'Baca Quran 10 Ayat Selesai!';
+
+  @override
+  String get sqTilawahDesc => 'Tilawah hari ini tuntas. Lanjutkan besok!';
+
+  @override
+  String get sqHadisTitle => 'Belajar 5 Hadis Selesai!';
+
+  @override
+  String get sqHadisDesc => 'Lima hadis baru terbaca hari ini. Terus belajar!';
+
+  @override
+  String get sqBadgeCombined => 'QUEST HARIAN TUNTAS';
+
+  @override
+  String get sqBadgeSingle => 'QUEST SELESAI';
+
+  @override
+  String get sqButton => 'MANTAP!';
+
+  @override
+  String get sqBarrierLabel => 'side quest selesai';
+
+  @override
+  String sqSemantics(Object desc, Object title, Object xp) {
+    return '$title. $desc. Bonus $xp XP.';
+  }
+
+  @override
+  String get sqSourceZikir => 'Dzikir 100x';
+
+  @override
+  String get sqSourceTilawah => 'Baca Quran';
+
+  @override
+  String get sqSourceHadis => 'Belajar Hadis';
+
+  @override
+  String get naikTitle => 'NAIK LEVEL!';
+
+  @override
+  String get naikBadgeSemantics => 'Bulan sabit emas, lambang naik level';
+
+  @override
+  String naikReached(Object level, Object rank) {
+    return 'Masha Allah, kamu mencapai $rank — Level $level';
+  }
+
+  @override
+  String naikFrom(Object source) {
+    return 'dari $source';
+  }
+
+  @override
+  String get naikBack => 'KEMBALI';
+
+  @override
+  String naikRewardSemanticsFull(Object level, Object rank, Object xp) {
+    return 'Hadiah: tambah $xp XP, level $level, gelar baru $rank';
+  }
+
+  @override
+  String naikRewardSemanticsLevel(Object level, Object rank) {
+    return 'Hadiah: level $level, gelar baru $rank';
+  }
+
+  @override
+  String get naikChipLevelJumps => 'Lonjakan';
+
+  @override
+  String get naikChipLevel => 'Level';
+
+  @override
+  String get naikChipRank => 'GELAR BARU';
+
+  @override
+  String naikProgressSemantics(Object have, Object need, Object next) {
+    return 'Menuju level $next: $have dari $need XP';
+  }
+
+  @override
+  String get naikClosing =>
+      'Barakallah — terus istiqomah, level berikutnya menantimu ✨';
+
+  @override
+  String naikLevelLabel(Object level) {
+    return 'Level $level';
+  }
 }

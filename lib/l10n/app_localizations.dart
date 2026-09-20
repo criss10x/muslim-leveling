@@ -3101,6 +3101,510 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Terjemahan'**
   String get qsContentTranslation;
+
+  /// No description provided for @quest_subuh_tepat_desc.
+  ///
+  /// In id, this message translates to:
+  /// **'Sholat Subuh tepat waktu (≤30 menit setelah adzan)'**
+  String get quest_subuh_tepat_desc;
+
+  /// No description provided for @quest_five_rings_desc.
+  ///
+  /// In id, this message translates to:
+  /// **'Lengkapin 5/5 sholat hari ini'**
+  String get quest_five_rings_desc;
+
+  /// No description provided for @quest_timely_prayers_desc.
+  ///
+  /// In id, this message translates to:
+  /// **'Sholat tepat waktu (≤10 menit), 3x hari ini'**
+  String get quest_timely_prayers_desc;
+
+  /// No description provided for @quest_dhuha_before_dzuhur_desc.
+  ///
+  /// In id, this message translates to:
+  /// **'Sholat Dhuha sebelum Dzuhur'**
+  String get quest_dhuha_before_dzuhur_desc;
+
+  /// No description provided for @quest_rawatib_two_desc.
+  ///
+  /// In id, this message translates to:
+  /// **'Rawatib 2x hari ini'**
+  String get quest_rawatib_two_desc;
+
+  /// No description provided for @quest_dzuhur_tepat_desc.
+  ///
+  /// In id, this message translates to:
+  /// **'Sholat Dzuhur tepat waktu (≤30 menit setelah adzan)'**
+  String get quest_dzuhur_tepat_desc;
+
+  /// No description provided for @quest_maghrib_tepat_desc.
+  ///
+  /// In id, this message translates to:
+  /// **'Sholat Maghrib tepat waktu (≤30 menit setelah adzan)'**
+  String get quest_maghrib_tepat_desc;
+
+  /// No description provided for @quest_isya_hadir_desc.
+  ///
+  /// In id, this message translates to:
+  /// **'Jangan lewatkan sholat Isya malam ini'**
+  String get quest_isya_hadir_desc;
+
+  /// No description provided for @quest_any_three_desc.
+  ///
+  /// In id, this message translates to:
+  /// **'Kerjakan 3 sholat wajib hari ini (bebas yang mana)'**
+  String get quest_any_three_desc;
+
+  /// No description provided for @quest_subuh_isya_desc.
+  ///
+  /// In id, this message translates to:
+  /// **'Kunci dua ujung hari: Subuh + Isya'**
+  String get quest_subuh_isya_desc;
+
+  /// No description provided for @quest_one_sunnah_desc.
+  ///
+  /// In id, this message translates to:
+  /// **'Kerjakan 1 sholat sunnah apa saja hari ini'**
+  String get quest_one_sunnah_desc;
+
+  /// No description provided for @quest_rawatib_one_desc.
+  ///
+  /// In id, this message translates to:
+  /// **'Rawatib 1x hari ini (qobliyah/ba\'diyah bebas)'**
+  String get quest_rawatib_one_desc;
+
+  /// No description provided for @quest_zikir_33_desc.
+  ///
+  /// In id, this message translates to:
+  /// **'Zikir 33x lewat tombol Daily Zikir'**
+  String get quest_zikir_33_desc;
+
+  /// No description provided for @quest_zikir_goal_desc.
+  ///
+  /// In id, this message translates to:
+  /// **'Tuntaskan Daily Zikir sampai {goal}'**
+  String quest_zikir_goal_desc(Object goal);
+
+  /// No description provided for @quest_quran_10ayat_desc.
+  ///
+  /// In id, this message translates to:
+  /// **'Baca Quran 10 ayat hari ini'**
+  String get quest_quran_10ayat_desc;
+
+  /// No description provided for @quest_hadis_3_desc.
+  ///
+  /// In id, this message translates to:
+  /// **'Baca 3 hadis hari ini (≥5 dtk tiap hadis)'**
+  String get quest_hadis_3_desc;
+
+  /// No description provided for @quest_dzikir_33_subuh_desc.
+  ///
+  /// In id, this message translates to:
+  /// **'Dzikir Subhanallah 33x (tasbih setelah sholat)'**
+  String get quest_dzikir_33_subuh_desc;
+
+  /// No description provided for @quest_quran_1halaman_desc.
+  ///
+  /// In id, this message translates to:
+  /// **'Baca Quran 20 ayat (≈1 halaman mushaf)'**
+  String get quest_quran_1halaman_desc;
+
+  /// No description provided for @quest_hadis_5_desc.
+  ///
+  /// In id, this message translates to:
+  /// **'Baca 5 hadis hari ini (≥5 dtk tiap hadis)'**
+  String get quest_hadis_5_desc;
+
+  /// No description provided for @quest_berjamaah_1_desc.
+  ///
+  /// In id, this message translates to:
+  /// **'Sholat berjamaah 1x hari ini (pilih bonus berjamaah saat claim)'**
+  String get quest_berjamaah_1_desc;
+
+  /// No description provided for @quest_hero_streak_7_desc.
+  ///
+  /// In id, this message translates to:
+  /// **'Pertahanin Hero Streak 7 hari! 🔥'**
+  String get quest_hero_streak_7_desc;
+
+  /// No description provided for @questCopy_sholat_1.
+  ///
+  /// In id, this message translates to:
+  /// **'Kamu mungkin lagi sibuk, tapi tetap nyempetin. Good job.'**
+  String get questCopy_sholat_1;
+
+  /// No description provided for @questCopy_sholat_2.
+  ///
+  /// In id, this message translates to:
+  /// **'Adzan selesai, kamu langsung jalan. Mantap.'**
+  String get questCopy_sholat_2;
+
+  /// No description provided for @questCopy_sholat_3.
+  ///
+  /// In id, this message translates to:
+  /// **'Tepat waktu hari ini. Satu hal baik yang kamu jaga.'**
+  String get questCopy_sholat_3;
+
+  /// No description provided for @questCopy_sholat_4.
+  ///
+  /// In id, this message translates to:
+  /// **'Capek tetap capek. Tapi kamu tetap datang. 🤍'**
+  String get questCopy_sholat_4;
+
+  /// No description provided for @questCopy_sunnah_1.
+  ///
+  /// In id, this message translates to:
+  /// **'Nggak wajib, tapi kamu tetap memilih untuk melakukannya.'**
+  String get questCopy_sunnah_1;
+
+  /// No description provided for @questCopy_sunnah_2.
+  ///
+  /// In id, this message translates to:
+  /// **'Nggak ada yang maksa. Kamu sendiri yang memilih untuk datang.'**
+  String get questCopy_sunnah_2;
+
+  /// No description provided for @questCopy_sunnah_3.
+  ///
+  /// In id, this message translates to:
+  /// **'Dua rakaat hari ini. Kecil, tapi berarti.'**
+  String get questCopy_sunnah_3;
+
+  /// No description provided for @questCopy_sunnah_4.
+  ///
+  /// In id, this message translates to:
+  /// **'Pelan-pelan, kebiasaan baik seperti ini yang kamu bangun.'**
+  String get questCopy_sunnah_4;
+
+  /// No description provided for @questCopy_zikir_1.
+  ///
+  /// In id, this message translates to:
+  /// **'Di tengah ramainya hari, kamu masih menyempatkan ingat Allah.'**
+  String get questCopy_zikir_1;
+
+  /// No description provided for @questCopy_zikir_2.
+  ///
+  /// In id, this message translates to:
+  /// **'Berhenti sebentar. Tarik napas. Ingat Allah.'**
+  String get questCopy_zikir_2;
+
+  /// No description provided for @questCopy_zikir_3.
+  ///
+  /// In id, this message translates to:
+  /// **'Apa pun yang lagi kamu pikirin, kamu tetap meluangkan waktu untuk zikir.'**
+  String get questCopy_zikir_3;
+
+  /// No description provided for @questCopy_zikir_4.
+  ///
+  /// In id, this message translates to:
+  /// **'Selesai zikir. Semoga hati terasa sedikit lebih ringan. 🤍'**
+  String get questCopy_zikir_4;
+
+  /// No description provided for @questCopy_quran_1.
+  ///
+  /// In id, this message translates to:
+  /// **'Satu ayat hari ini. Pelan-pelan, yang penting terus.'**
+  String get questCopy_quran_1;
+
+  /// No description provided for @questCopy_quran_2.
+  ///
+  /// In id, this message translates to:
+  /// **'Hari ini kamu kembali membuka Al-Quran. Senang lihatnya.'**
+  String get questCopy_quran_2;
+
+  /// No description provided for @questCopy_quran_3.
+  ///
+  /// In id, this message translates to:
+  /// **'Nggak harus banyak. Satu halaman pun tetap sebuah langkah.'**
+  String get questCopy_quran_3;
+
+  /// No description provided for @questCopy_quran_4.
+  ///
+  /// In id, this message translates to:
+  /// **'Satu halaman selesai. Besok lanjut lagi, ya.'**
+  String get questCopy_quran_4;
+
+  /// No description provided for @questCopy_hadis_1.
+  ///
+  /// In id, this message translates to:
+  /// **'Hari ini kamu meluangkan waktu untuk belajar dari sabda Nabi.'**
+  String get questCopy_hadis_1;
+
+  /// No description provided for @questCopy_hadis_2.
+  ///
+  /// In id, this message translates to:
+  /// **'Satu hadis kamu baca hari ini. Semoga ada yang bisa kamu bawa ke harimu.'**
+  String get questCopy_hadis_2;
+
+  /// No description provided for @questCopy_hadis_3.
+  ///
+  /// In id, this message translates to:
+  /// **'Nemu hadis yang ngena? Simpan. Siapa tahu kamu butuh mengingatnya lagi.'**
+  String get questCopy_hadis_3;
+
+  /// No description provided for @questCopy_hadis_4.
+  ///
+  /// In id, this message translates to:
+  /// **'Sedikit belajar hari ini, semoga jadi bekal untuk besok.'**
+  String get questCopy_hadis_4;
+
+  /// No description provided for @questCopy_fiveRings_1.
+  ///
+  /// In id, this message translates to:
+  /// **'Subuh, Dzuhur, Ashar, Maghrib, Isya. Kamu hadir di semuanya hari ini.'**
+  String get questCopy_fiveRings_1;
+
+  /// No description provided for @questCopy_fiveRings_2.
+  ///
+  /// In id, this message translates to:
+  /// **'Lima waktu selesai. Alhamdulillah, hari ini kamu berhasil menjaganya.'**
+  String get questCopy_fiveRings_2;
+
+  /// No description provided for @questCopy_fiveRings_3.
+  ///
+  /// In id, this message translates to:
+  /// **'Satu hari, lima waktu. Lengkap. 🤍'**
+  String get questCopy_fiveRings_3;
+
+  /// No description provided for @questCopy_fiveRings_4.
+  ///
+  /// In id, this message translates to:
+  /// **'Hari ini selesai dengan baik. Besok kita mulai lagi.'**
+  String get questCopy_fiveRings_4;
+
+  /// No description provided for @questCopy_subuhIsya_1.
+  ///
+  /// In id, this message translates to:
+  /// **'Subuh kamu jaga, Isya kamu jaga. Alhamdulillah.'**
+  String get questCopy_subuhIsya_1;
+
+  /// No description provided for @questCopy_subuhIsya_2.
+  ///
+  /// In id, this message translates to:
+  /// **'Dari awal sampai akhir hari, kamu tetap menyempatkan diri.'**
+  String get questCopy_subuhIsya_2;
+
+  /// No description provided for @questCopy_subuhIsya_3.
+  ///
+  /// In id, this message translates to:
+  /// **'Dua waktu ini kamu jaga hari ini. Good job.'**
+  String get questCopy_subuhIsya_3;
+
+  /// No description provided for @questCopy_subuhIsya_4.
+  ///
+  /// In id, this message translates to:
+  /// **'Hari ini kamu berhasil menjaga Subuh dan Isya. Besok lanjut lagi.'**
+  String get questCopy_subuhIsya_4;
+
+  /// No description provided for @questHaid_1.
+  ///
+  /// In id, this message translates to:
+  /// **'Hari ini waktunya istirahat. Tetap semangat, ya. 🤍'**
+  String get questHaid_1;
+
+  /// No description provided for @questHaid_2.
+  ///
+  /// In id, this message translates to:
+  /// **'Nggak apa-apa berhenti sebentar. Kamu tetap bagian dari perjalanan ini.'**
+  String get questHaid_2;
+
+  /// No description provided for @questHaid_3.
+  ///
+  /// In id, this message translates to:
+  /// **'Hari ini kamu nggak perlu mengejar quest ini. Jaga diri dan tetap dekat dengan Allah.'**
+  String get questHaid_3;
+
+  /// No description provided for @questHaid_4.
+  ///
+  /// In id, this message translates to:
+  /// **'Quest boleh berhenti sebentar. Perjalananmu tetap lanjut.'**
+  String get questHaid_4;
+
+  /// No description provided for @questClaimAlhamdulillah.
+  ///
+  /// In id, this message translates to:
+  /// **'Alhamdulillah'**
+  String get questClaimAlhamdulillah;
+
+  /// No description provided for @questClaimContinue.
+  ///
+  /// In id, this message translates to:
+  /// **'Lanjut'**
+  String get questClaimContinue;
+
+  /// No description provided for @sqCombinedTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Alhamdulillah, {count} Quest Tuntas!'**
+  String sqCombinedTitle(Object count);
+
+  /// No description provided for @sqCombinedDesc.
+  ///
+  /// In id, this message translates to:
+  /// **'Semua quest harian selesai hari ini. Semoga istiqomah!'**
+  String get sqCombinedDesc;
+
+  /// No description provided for @sqZikirTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Dzikir 100x Selesai!'**
+  String get sqZikirTitle;
+
+  /// No description provided for @sqZikirDesc.
+  ///
+  /// In id, this message translates to:
+  /// **'Konsisten berdzikir hari ini. Istiqomah!'**
+  String get sqZikirDesc;
+
+  /// No description provided for @sqTilawahTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Baca Quran 10 Ayat Selesai!'**
+  String get sqTilawahTitle;
+
+  /// No description provided for @sqTilawahDesc.
+  ///
+  /// In id, this message translates to:
+  /// **'Tilawah hari ini tuntas. Lanjutkan besok!'**
+  String get sqTilawahDesc;
+
+  /// No description provided for @sqHadisTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Belajar 5 Hadis Selesai!'**
+  String get sqHadisTitle;
+
+  /// No description provided for @sqHadisDesc.
+  ///
+  /// In id, this message translates to:
+  /// **'Lima hadis baru terbaca hari ini. Terus belajar!'**
+  String get sqHadisDesc;
+
+  /// No description provided for @sqBadgeCombined.
+  ///
+  /// In id, this message translates to:
+  /// **'QUEST HARIAN TUNTAS'**
+  String get sqBadgeCombined;
+
+  /// No description provided for @sqBadgeSingle.
+  ///
+  /// In id, this message translates to:
+  /// **'QUEST SELESAI'**
+  String get sqBadgeSingle;
+
+  /// No description provided for @sqButton.
+  ///
+  /// In id, this message translates to:
+  /// **'MANTAP!'**
+  String get sqButton;
+
+  /// No description provided for @sqBarrierLabel.
+  ///
+  /// In id, this message translates to:
+  /// **'side quest selesai'**
+  String get sqBarrierLabel;
+
+  /// No description provided for @sqSemantics.
+  ///
+  /// In id, this message translates to:
+  /// **'{title}. {desc}. Bonus {xp} XP.'**
+  String sqSemantics(Object desc, Object title, Object xp);
+
+  /// No description provided for @sqSourceZikir.
+  ///
+  /// In id, this message translates to:
+  /// **'Dzikir 100x'**
+  String get sqSourceZikir;
+
+  /// No description provided for @sqSourceTilawah.
+  ///
+  /// In id, this message translates to:
+  /// **'Baca Quran'**
+  String get sqSourceTilawah;
+
+  /// No description provided for @sqSourceHadis.
+  ///
+  /// In id, this message translates to:
+  /// **'Belajar Hadis'**
+  String get sqSourceHadis;
+
+  /// No description provided for @naikTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'NAIK LEVEL!'**
+  String get naikTitle;
+
+  /// No description provided for @naikBadgeSemantics.
+  ///
+  /// In id, this message translates to:
+  /// **'Bulan sabit emas, lambang naik level'**
+  String get naikBadgeSemantics;
+
+  /// No description provided for @naikReached.
+  ///
+  /// In id, this message translates to:
+  /// **'Masha Allah, kamu mencapai {rank} — Level {level}'**
+  String naikReached(Object level, Object rank);
+
+  /// No description provided for @naikFrom.
+  ///
+  /// In id, this message translates to:
+  /// **'dari {source}'**
+  String naikFrom(Object source);
+
+  /// No description provided for @naikBack.
+  ///
+  /// In id, this message translates to:
+  /// **'KEMBALI'**
+  String get naikBack;
+
+  /// No description provided for @naikRewardSemanticsFull.
+  ///
+  /// In id, this message translates to:
+  /// **'Hadiah: tambah {xp} XP, level {level}, gelar baru {rank}'**
+  String naikRewardSemanticsFull(Object level, Object rank, Object xp);
+
+  /// No description provided for @naikRewardSemanticsLevel.
+  ///
+  /// In id, this message translates to:
+  /// **'Hadiah: level {level}, gelar baru {rank}'**
+  String naikRewardSemanticsLevel(Object level, Object rank);
+
+  /// No description provided for @naikChipLevelJumps.
+  ///
+  /// In id, this message translates to:
+  /// **'Lonjakan'**
+  String get naikChipLevelJumps;
+
+  /// No description provided for @naikChipLevel.
+  ///
+  /// In id, this message translates to:
+  /// **'Level'**
+  String get naikChipLevel;
+
+  /// No description provided for @naikChipRank.
+  ///
+  /// In id, this message translates to:
+  /// **'GELAR BARU'**
+  String get naikChipRank;
+
+  /// No description provided for @naikProgressSemantics.
+  ///
+  /// In id, this message translates to:
+  /// **'Menuju level {next}: {have} dari {need} XP'**
+  String naikProgressSemantics(Object have, Object need, Object next);
+
+  /// No description provided for @naikClosing.
+  ///
+  /// In id, this message translates to:
+  /// **'Barakallah — terus istiqomah, level berikutnya menantimu ✨'**
+  String get naikClosing;
+
+  /// No description provided for @naikLevelLabel.
+  ///
+  /// In id, this message translates to:
+  /// **'Level {level}'**
+  String naikLevelLabel(Object level);
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

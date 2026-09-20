@@ -1661,4 +1661,312 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get qsContentTranslation => 'Translation';
+
+  @override
+  String get quest_subuh_tepat_desc =>
+      'Pray Fajr on time (within 30 minutes of the adhan)';
+
+  @override
+  String get quest_five_rings_desc => 'Complete all 5/5 prayers today';
+
+  @override
+  String get quest_timely_prayers_desc =>
+      'Pray on time (within 10 minutes), 3x today';
+
+  @override
+  String get quest_dhuha_before_dzuhur_desc => 'Pray Dhuha before Dhuhr';
+
+  @override
+  String get quest_rawatib_two_desc => 'Pray 2 rawatib today';
+
+  @override
+  String get quest_dzuhur_tepat_desc =>
+      'Pray Dhuhr on time (within 30 minutes of the adhan)';
+
+  @override
+  String get quest_maghrib_tepat_desc =>
+      'Pray Maghrib on time (within 30 minutes of the adhan)';
+
+  @override
+  String get quest_isya_hadir_desc => 'Don\'t miss Isha tonight';
+
+  @override
+  String get quest_any_three_desc =>
+      'Complete 3 obligatory prayers today (any of them)';
+
+  @override
+  String get quest_subuh_isya_desc => 'Lock both ends of the day: Fajr + Isha';
+
+  @override
+  String get quest_one_sunnah_desc => 'Pray 1 sunnah prayer today, any kind';
+
+  @override
+  String get quest_rawatib_one_desc =>
+      'Pray 1 rawatib today (qobliyah/ba\'diyah, either)';
+
+  @override
+  String get quest_zikir_33_desc => 'Dhikr 33x using the Daily Dhikr button';
+
+  @override
+  String quest_zikir_goal_desc(Object goal) {
+    return 'Finish Daily Dhikr up to $goal';
+  }
+
+  @override
+  String get quest_quran_10ayat_desc => 'Read 10 Quran verses today';
+
+  @override
+  String get quest_hadis_3_desc => 'Read 3 hadith today (≥5 sec each)';
+
+  @override
+  String get quest_dzikir_33_subuh_desc =>
+      'Dhikr Subhanallah 33x (tasbih after prayer)';
+
+  @override
+  String get quest_quran_1halaman_desc =>
+      'Read 20 Quran verses (≈1 mushaf page)';
+
+  @override
+  String get quest_hadis_5_desc => 'Read 5 hadith today (≥5 sec each)';
+
+  @override
+  String get quest_berjamaah_1_desc =>
+      'Pray in congregation once today (pick the jamaah bonus when claiming)';
+
+  @override
+  String get quest_hero_streak_7_desc =>
+      'Keep your 7-day Hero Streak alive! 🔥';
+
+  @override
+  String get questCopy_sholat_1 =>
+      'You were probably busy, but you made time anyway. Good job.';
+
+  @override
+  String get questCopy_sholat_2 =>
+      'The adhan ended and you moved right away. Solid.';
+
+  @override
+  String get questCopy_sholat_3 =>
+      'On time today. One good thing you kept safe.';
+
+  @override
+  String get questCopy_sholat_4 =>
+      'Tired is still tired. But you showed up anyway. 🤍';
+
+  @override
+  String get questCopy_sunnah_1 =>
+      'Not required, yet you chose to do it anyway.';
+
+  @override
+  String get questCopy_sunnah_2 =>
+      'Nobody forced you. You chose to come on your own.';
+
+  @override
+  String get questCopy_sunnah_3 => 'Two rakaat today. Small, but it counts.';
+
+  @override
+  String get questCopy_sunnah_4 =>
+      'Slowly — this is the kind of habit you are building.';
+
+  @override
+  String get questCopy_zikir_1 =>
+      'In the middle of a loud day, you still made room to remember Allah.';
+
+  @override
+  String get questCopy_zikir_2 =>
+      'Pause for a moment. Breathe. Remember Allah.';
+
+  @override
+  String get questCopy_zikir_3 =>
+      'Whatever is on your mind, you still made time for dhikr.';
+
+  @override
+  String get questCopy_zikir_4 =>
+      'Dhikr done. May your heart feel a little lighter. 🤍';
+
+  @override
+  String get questCopy_quran_1 =>
+      'One verse today. Slowly — what matters is that you keep going.';
+
+  @override
+  String get questCopy_quran_2 =>
+      'You opened the Quran again today. Good to see.';
+
+  @override
+  String get questCopy_quran_3 =>
+      'It does not have to be much. One page is still a step.';
+
+  @override
+  String get questCopy_quran_4 => 'One page down. Pick it up again tomorrow.';
+
+  @override
+  String get questCopy_hadis_1 =>
+      'Today you made time to learn from the words of the Prophet.';
+
+  @override
+  String get questCopy_hadis_2 =>
+      'You read a hadith today. May something from it stay with you.';
+
+  @override
+  String get questCopy_hadis_3 =>
+      'Found one that hits home? Save it. You may need the reminder again.';
+
+  @override
+  String get questCopy_hadis_4 =>
+      'A little learning today, may it carry you into tomorrow.';
+
+  @override
+  String get questCopy_fiveRings_1 =>
+      'Fajr, Dhuhr, Asr, Maghrib, Isha. You showed up for every one today.';
+
+  @override
+  String get questCopy_fiveRings_2 =>
+      'All five done. Alhamdulillah, you kept them today.';
+
+  @override
+  String get questCopy_fiveRings_3 => 'One day, five prayers. Complete. 🤍';
+
+  @override
+  String get questCopy_fiveRings_4 =>
+      'Today closed well. Tomorrow we start again.';
+
+  @override
+  String get questCopy_subuhIsya_1 =>
+      'You kept Fajr, you kept Isha. Alhamdulillah.';
+
+  @override
+  String get questCopy_subuhIsya_2 =>
+      'From the start of the day to the end, you still made time.';
+
+  @override
+  String get questCopy_subuhIsya_3 => 'You kept these two today. Good job.';
+
+  @override
+  String get questCopy_subuhIsya_4 =>
+      'You kept Fajr and Isha today. Keep it going tomorrow.';
+
+  @override
+  String get questHaid_1 => 'Today is for resting. Stay strong. 🤍';
+
+  @override
+  String get questHaid_2 =>
+      'It is okay to pause. You are still part of this journey.';
+
+  @override
+  String get questHaid_3 =>
+      'You do not need to chase this quest today. Take care of yourself and stay close to Allah.';
+
+  @override
+  String get questHaid_4 => 'The quest can wait. Your journey still continues.';
+
+  @override
+  String get questClaimAlhamdulillah => 'Alhamdulillah';
+
+  @override
+  String get questClaimContinue => 'Continue';
+
+  @override
+  String sqCombinedTitle(Object count) {
+    return 'Alhamdulillah, $count Quests Done!';
+  }
+
+  @override
+  String get sqCombinedDesc =>
+      'All daily quests finished today. May you stay consistent!';
+
+  @override
+  String get sqZikirTitle => 'Dhikr 100x Done!';
+
+  @override
+  String get sqZikirDesc => 'Consistent in dhikr today. Keep it up!';
+
+  @override
+  String get sqTilawahTitle => 'Read 10 Quran Verses — Done!';
+
+  @override
+  String get sqTilawahDesc => 'Recitation done for today. Continue tomorrow!';
+
+  @override
+  String get sqHadisTitle => 'Study 5 Hadith — Done!';
+
+  @override
+  String get sqHadisDesc => 'Five new hadith read today. Keep learning!';
+
+  @override
+  String get sqBadgeCombined => 'ALL DAILY QUESTS DONE';
+
+  @override
+  String get sqBadgeSingle => 'QUEST COMPLETE';
+
+  @override
+  String get sqButton => 'NICE!';
+
+  @override
+  String get sqBarrierLabel => 'side quest complete';
+
+  @override
+  String sqSemantics(Object desc, Object title, Object xp) {
+    return '$title. $desc. Bonus $xp XP.';
+  }
+
+  @override
+  String get sqSourceZikir => 'Dhikr 100x';
+
+  @override
+  String get sqSourceTilawah => 'Read Quran';
+
+  @override
+  String get sqSourceHadis => 'Study Hadith';
+
+  @override
+  String get naikTitle => 'LEVEL UP!';
+
+  @override
+  String get naikBadgeSemantics => 'Golden crescent, the mark of a level up';
+
+  @override
+  String naikReached(Object level, Object rank) {
+    return 'Masha Allah, you reached $rank — Level $level';
+  }
+
+  @override
+  String naikFrom(Object source) {
+    return 'from $source';
+  }
+
+  @override
+  String get naikBack => 'BACK';
+
+  @override
+  String naikRewardSemanticsFull(Object level, Object rank, Object xp) {
+    return 'Reward: +$xp XP, level $level, new title $rank';
+  }
+
+  @override
+  String naikRewardSemanticsLevel(Object level, Object rank) {
+    return 'Reward: level $level, new title $rank';
+  }
+
+  @override
+  String get naikChipLevelJumps => 'Jump';
+
+  @override
+  String get naikChipLevel => 'Level';
+
+  @override
+  String get naikChipRank => 'NEW TITLE';
+
+  @override
+  String naikProgressSemantics(Object have, Object need, Object next) {
+    return 'Toward level $next: $have of $need XP';
+  }
+
+  @override
+  String get naikClosing =>
+      'Barakallah — stay consistent, the next level is waiting ✨';
+
+  @override
+  String naikLevelLabel(Object level) {
+    return 'Level $level';
+  }
 }

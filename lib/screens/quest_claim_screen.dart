@@ -4,6 +4,8 @@ import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../services/game_service.dart';
 import '../theme/app_icons.dart';
+import '../l10n/app_localizations.dart';
+import '../l10n/quest_texts.g.dart';
 
 /// Quest Harian Claim — layar singkat hangat setelah klaim quest harian.
 /// Berbeda dari NaikLevelScreen (event langka, confetti): ini event harian
@@ -75,18 +77,17 @@ class _QuestClaimScreenState extends State<QuestClaimScreen>
   /// Copy dorongan — spesifik untuk daily quest rotasi, bukan generik.
   /// Pilih berdasarkan kategori quest (A-G), fallback ke H, dengan
   /// round-robin per quest.id (deterministic, terasa 'tercatat').
-  String _encouragement() {
-    if (widget.isHaidMode) {
-      final i = widget.quest.id.hashCode.abs() % _haidPool.length;
-      return _haidPool[i];
-    }
-    final lines = _copyPool[_category] ?? _copyPool[_QuestCategory.sholat]!;
-    final i = widget.quest.id.hashCode.abs() % lines.length;
-    return lines[i];
+  String _encouragement(AppL10n l10n) {
+    // Index round-robin deterministik per quest.id — 'terasa tercatat',
+    // tidak berubah tiap rebuild. Panjang pool diurus bridge.
+    final i = widget.quest.id.hashCode.abs();
+    return questCopy(l10n, _category.name, i, haid: widget.isHaidMode) ??
+        l10n.questCopy_sholat_1;
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
     final reduceMotion = MediaQuery.of(context).disableAnimations;
     final quote = _pickQuote();
     final cat = _category;
@@ -126,14 +127,14 @@ class _QuestClaimScreenState extends State<QuestClaimScreen>
                             ),
                             const SizedBox(height: AppSpacing.md),
                             Text(
-                              'Alhamdulillah',
+                              l10n.questClaimAlhamdulillah,
                               style: AppText.headlineLg().copyWith(
                                 color: AppColors.onSurface,
                               ),
                             ),
                             const SizedBox(height: AppSpacing.xs),
                             Text(
-                              widget.quest.desc,
+                              widget.quest.localizedDesc(AppL10n.of(context)),
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.center,
@@ -167,9 +168,9 @@ class _QuestClaimScreenState extends State<QuestClaimScreen>
                     const SizedBox(height: AppSpacing.xl),
                     // ── Bottom: Dorongan ──
                     Semantics(
-                      label: _encouragement(),
+                      label: _encouragement(l10n),
                       child: Text(
-                        _encouragement(),
+                        _encouragement(l10n),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,
@@ -180,7 +181,7 @@ class _QuestClaimScreenState extends State<QuestClaimScreen>
                     ),
                     const SizedBox(height: AppSpacing.xl),
                     HeroButton(
-                      label: 'Lanjut',
+                      label: l10n.questClaimContinue,
                       trailingIcon: AppIcons.arrowForward,
                       onPressed: reduceMotion
                           ? () => Navigator.of(context).pop()
@@ -311,64 +312,6 @@ const _quotes = <_QuestCategory, List<_Quote>>{
     ),
   ],
 };
-
-/// Copy dorongan per kategori quest — round-robin per quest.id (deterministic).
-/// Spesifik untuk daily quest rotasi, bukan generik. Tone: 'hangat, pendek,
-/// humble, supportive' — bukan 'memberi penilaian dari atas'. Emoji sangat
-/// sedikit (🤍 🌙 ✨), hindari klaim teologis spesifik yang belum ada dasar.
-const _copyPool = <_QuestCategory, List<String>>{
-  _QuestCategory.sholat: [
-    'Kamu mungkin lagi sibuk, tapi tetap nyempetin. Good job.',
-    'Adzan selesai, kamu langsung jalan. Mantap.',
-    'Tepat waktu hari ini. Satu hal baik yang kamu jaga.',
-    'Capek tetap capek. Tapi kamu tetap datang. 🤍',
-  ],
-  _QuestCategory.sunnah: [
-    'Nggak wajib, tapi kamu tetap memilih untuk melakukannya.',
-    'Nggak ada yang maksa. Kamu sendiri yang memilih untuk datang.',
-    'Dua rakaat hari ini. Kecil, tapi berarti.',
-    'Pelan-pelan, kebiasaan baik seperti ini yang kamu bangun.',
-  ],
-  _QuestCategory.zikir: [
-    'Di tengah ramainya hari, kamu masih menyempatkan ingat Allah.',
-    'Berhenti sebentar. Tarik napas. Ingat Allah.',
-    'Apa pun yang lagi kamu pikirin, kamu tetap meluangkan waktu untuk zikir.',
-    'Selesai zikir. Semoga hati terasa sedikit lebih ringan. 🤍',
-  ],
-  _QuestCategory.quran: [
-    'Satu ayat hari ini. Pelan-pelan, yang penting terus.',
-    'Hari ini kamu kembali membuka Al-Quran. Senang lihatnya.',
-    'Nggak harus banyak. Satu halaman pun tetap sebuah langkah.',
-    'Satu halaman selesai. Besok lanjut lagi, ya.',
-  ],
-  _QuestCategory.hadis: [
-    'Hari ini kamu meluangkan waktu untuk belajar dari sabda Nabi.',
-    'Satu hadis kamu baca hari ini. Semoga ada yang bisa kamu bawa ke harimu.',
-    'Nemu hadis yang ngena? Simpan. Siapa tahu kamu butuh mengingatnya lagi.',
-    'Sedikit belajar hari ini, semoga jadi bekal untuk besok.',
-  ],
-  _QuestCategory.fiveRings: [
-    'Subuh, Dzuhur, Ashar, Maghrib, Isya. Kamu hadir di semuanya hari ini.',
-    'Lima waktu selesai. Alhamdulillah, hari ini kamu berhasil menjaganya.',
-    'Satu hari, lima waktu. Lengkap. 🤍',
-    'Hari ini selesai dengan baik. Besok kita mulai lagi.',
-  ],
-  _QuestCategory.subuhIsya: [
-    'Subuh kamu jaga, Isya kamu jaga. Alhamdulillah.',
-    'Dari awal sampai akhir hari, kamu tetap menyempatkan diri.',
-    'Dua waktu ini kamu jaga hari ini. Good job.',
-    'Hari ini kamu berhasil menjaga Subuh dan Isya. Besok lanjut lagi.',
-  ],
-};
-
-/// haidMode — round-robin 4 baris. Hindari klaim teologis ('niatmu dihitung'),
-/// fokus pada dukungan personal ('kamu tetap bagian dari perjalanan ini').
-const _haidPool = [
-  'Hari ini waktunya istirahat. Tetap semangat, ya. 🤍',
-  'Nggak apa-apa berhenti sebentar. Kamu tetap bagian dari perjalanan ini.',
-  'Hari ini kamu nggak perlu mengejar quest ini. Jaga diri dan tetap dekat dengan Allah.',
-  'Quest boleh berhenti sebentar. Perjalananmu tetap lanjut.',
-];
 
 /// Kartu kertas ala Mushaf — light surface di tengah canvas dark,
 /// supaya mata istirahat dari hitam pekat + identitas islami kuat.

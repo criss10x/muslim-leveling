@@ -394,7 +394,7 @@ class _HomeTabState extends State<HomeTab> {
           builder: (_) => NaikLevelScreen(
               xpGained: q.xpReward,
               levelsGained: levelsGained,
-              source: q.desc),
+              source: q.localizedDesc(AppL10n.of(context))),
         ),
       );
     } else if (mounted) {
@@ -1176,7 +1176,7 @@ class _HomeTabState extends State<HomeTab> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        q.desc,
+                        q.localizedDesc(AppL10n.of(context)),
                         style: AppText.bodyMd().copyWith(
                           color: q.claimed
                               ? AppColors.onSurfaceVariant

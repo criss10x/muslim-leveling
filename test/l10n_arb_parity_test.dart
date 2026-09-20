@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:muslim_leveling/l10n/ach_texts.g.dart';
 import 'package:muslim_leveling/l10n/app_localizations.dart';
+import 'package:muslim_leveling/l10n/quest_texts.g.dart';
 import 'package:muslim_leveling/services/achievement_service.dart';
+import 'package:muslim_leveling/services/game_service.dart';
 
 /// Guard ARB: tanpa ini, key yang lupa diterjemahkan jatuh ke fallback
 /// (string Indonesia muncul di UI English) dan baru ketahuan dari laporan user.
@@ -45,11 +47,18 @@ void main() {
     for (final locale in AppL10n.supportedLocales) {
       final l10n = lookupAppL10n(locale);
       for (final d in AchievementService.defs) {
-        expect(achText(l10n, d.id, 'title'), isNotNull,
-            reason: 'ach_${d.id}_title hilang (jalankan: '
-                'python3 tool/gen_medal_arb.py)');
-        expect(achText(l10n, d.id, 'desc'), isNotNull,
-            reason: 'ach_${d.id}_desc hilang');
+        expect(
+          achText(l10n, d.id, 'title'),
+          isNotNull,
+          reason:
+              'ach_${d.id}_title hilang (jalankan: '
+              'python3 tool/gen_medal_arb.py)',
+        );
+        expect(
+          achText(l10n, d.id, 'desc'),
+          isNotNull,
+          reason: 'ach_${d.id}_desc hilang',
+        );
       }
     }
   });
@@ -65,10 +74,38 @@ void main() {
     // kalimat Indonesia dan tidak pernah ada di teks English. Daftar ini
     // stabil (tidak tumbuh tiap batch), beda dengan allowlist per-key.
     const indonesiaMarkers = {
-      'di', 'dan', 'yang', 'untuk', 'ini', 'itu', 'hari', 'kamu', 'dengan',
-      'dari', 'tidak', 'sudah', 'bisa', 'saat', 'agar', 'akan', 'adalah',
-      'atau', 'karena', 'setelah', 'sebelum', 'tanpa', 'lagi', 'kak', 'nya',
-      'juga', 'masih', 'hanya', 'semua', 'lebih', 'bila', 'jika',
+      'di',
+      'dan',
+      'yang',
+      'untuk',
+      'ini',
+      'itu',
+      'hari',
+      'kamu',
+      'dengan',
+      'dari',
+      'tidak',
+      'sudah',
+      'bisa',
+      'saat',
+      'agar',
+      'akan',
+      'adalah',
+      'atau',
+      'karena',
+      'setelah',
+      'sebelum',
+      'tanpa',
+      'lagi',
+      'kak',
+      'nya',
+      'juga',
+      'masih',
+      'hanya',
+      'semua',
+      'lebih',
+      'bila',
+      'jika',
     };
 
     final id = readArb('id');
@@ -96,10 +133,91 @@ void main() {
     );
   });
 
+  test('setiap quest punya desc di kedua locale', () {
+    // Sama seperti guard medali: desc quest dicari dari Quest.id lewat
+    // jembatan quest_texts.g.dart. Kalau key ARB hilang, UI jatuh ke teks
+    // Indonesia yang tersimpan di disk — halaman English jadi separuh.
+    for (final locale in AppL10n.supportedLocales) {
+      final l10n = lookupAppL10n(locale);
+      // SEMUA id, bukan pool hari ini: pool cuma 5 dari 21 (shuffle harian),
+      // jadi quest di luar pool tak pernah diperiksa dan case yang hilang
+      // di jembatan lolos tanpa ketahuan.
+      for (final id in questAllIds) {
+        expect(
+          questDesc(l10n, id, zikirGoal: GameService.zikirGoal),
+          isNotNull,
+          reason:
+              'quest_${id}_desc hilang '
+              '(jalankan: python3 tool/gen_quest_arb.py)',
+        );
+      }
+    }
+  });
+
+  test('desc quest English tidak mengandung prosa Indonesia', () {
+    // Negatif-kontrol untuk jembatan: kalau questDesc diam-diam mengembalikan
+    // `desc` Dart (jalur fallback), tes ini yang gagal — guard di atas lolos
+    // palsu karena `desc` selalu ada.
+    final l10n = lookupAppL10n(const Locale('en'));
+    final leaks = <String>[];
+    for (final id in questAllIds) {
+      final text = questDesc(l10n, id, zikirGoal: GameService.zikirGoal)!;
+      for (final marker in [
+        'Sholat',
+        'hari ini',
+        'Baca ',
+        'Jangan ',
+        'Kerjakan',
+        'Lengkapin',
+        'Tuntaskan',
+        'Pertahanin',
+      ]) {
+        if (text.contains(marker)) leaks.add('$id: "$text"');
+      }
+    }
+    expect(leaks, isEmpty, reason: 'desc quest masih Indonesia di locale en');
+  });
+
+  test('pool copy quest lengkap di kedua locale', () {
+    for (final locale in AppL10n.supportedLocales) {
+      final l10n = lookupAppL10n(locale);
+      for (final cat in [
+        'sholat',
+        'sunnah',
+        'zikir',
+        'quran',
+        'hadis',
+        'fiveRings',
+        'subuhIsya',
+      ]) {
+        for (var i = 0; i < questCopyPoolSize; i++) {
+          expect(
+            questCopy(l10n, cat, i),
+            isNotNull,
+            reason: 'questCopy_${cat}_${i + 1} hilang',
+          );
+        }
+      }
+      for (var i = 0; i < questCopyPoolSize; i++) {
+        expect(
+          questCopy(l10n, 'sholat', i, haid: true),
+          isNotNull,
+          reason: 'questHaid_${i + 1} hilang',
+        );
+      }
+      // Index di luar jangkauan harus di-modulo, bukan crash.
+      expect(questCopy(l10n, 'sholat', 99), isNotNull);
+      // Kategori tak dikenal → null (pemanggil punya fallback).
+      expect(questCopy(l10n, 'tidakAda', 0), isNull);
+    }
+  });
+
   test('medali tanpa unlockHint memakai kalimat fallback dari ARB', () {
     final l10n = lookupAppL10n(const Locale('en'));
-    final def = AchievementService.defs
-        .firstWhere((d) => d.unlockHint == null, orElse: () => throw 'kosong');
+    final def = AchievementService.defs.firstWhere(
+      (d) => d.unlockHint == null,
+      orElse: () => throw 'kosong',
+    );
     expect(def.localizedHint(l10n), startsWith('Complete: '));
   });
 }

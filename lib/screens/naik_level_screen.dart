@@ -4,6 +4,7 @@ import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../services/game_service.dart';
 import '../theme/app_icons.dart';
+import '../l10n/app_localizations.dart';
 
 /// Naik Level — selebrasi rank-up, satu layar crescendo.
 /// Multi-level (levelsGained > 1) dikompres jadi satu layar "+N LEVEL",
@@ -25,6 +26,7 @@ class NaikLevelScreen extends StatefulWidget {
 class _NaikLevelScreenState extends State<NaikLevelScreen> {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
     final reduceMotion = MediaQuery.of(context).disableAnimations;
     final state = GameService.current;
     final info = GameService.getLevelInfo(state.xp);
@@ -70,7 +72,7 @@ class _NaikLevelScreenState extends State<NaikLevelScreen> {
                             ? Duration.zero
                             : const Duration(milliseconds: 250),
                         child: Text(
-                          'NAIK LEVEL!',
+                          l10n.naikTitle,
                           textAlign: TextAlign.center,
                           style: AppText.displayHero(40).copyWith(
                             color: AppColors.secondaryFixed,
@@ -89,7 +91,7 @@ class _NaikLevelScreenState extends State<NaikLevelScreen> {
                     ),
                     const SizedBox(height: AppSpacing.lg),
                     Semantics(
-                      label: 'Bulan sabit emas, lambang naik level',
+                      label: l10n.naikBadgeSemantics,
                       child: Entrance(
                         delay: Duration.zero, // badge langsung terlihat dulu
                         child: const _CrescentBadge(size: 150),
@@ -101,7 +103,7 @@ class _NaikLevelScreenState extends State<NaikLevelScreen> {
                           ? Duration.zero
                           : const Duration(milliseconds: 400),
                       child: Text(
-                        'Masha Allah, kamu mencapai $rankTitle — Level $level',
+                        l10n.naikReached(rankTitle, level),
                         textAlign: TextAlign.center,
                         style: AppText.bodyLg().copyWith(
                           color: AppColors.onSurfaceVariant,
@@ -115,7 +117,7 @@ class _NaikLevelScreenState extends State<NaikLevelScreen> {
                             ? Duration.zero
                             : const Duration(milliseconds: 480),
                         child: Text(
-                          'dari ${widget.source}',
+                          l10n.naikFrom(widget.source!),
                           textAlign: TextAlign.center,
                           style: AppText.bodyMd().copyWith(
                             color: AppColors.primary,
@@ -129,14 +131,14 @@ class _NaikLevelScreenState extends State<NaikLevelScreen> {
                       delay: reduceMotion
                           ? Duration.zero
                           : const Duration(milliseconds: 550),
-                      child: _rewards(level, rankTitle),
+                      child: _rewards(AppL10n.of(context), level, rankTitle),
                     ),
                     const SizedBox(height: AppSpacing.xl),
                     Entrance(
                       delay: reduceMotion
                           ? Duration.zero
                           : const Duration(milliseconds: 700),
-                      child: _closing(level),
+                      child: _closing(AppL10n.of(context), level),
                     ),
                     const SizedBox(height: AppSpacing.xl),
                     Entrance(
@@ -144,7 +146,7 @@ class _NaikLevelScreenState extends State<NaikLevelScreen> {
                           ? Duration.zero
                           : const Duration(milliseconds: 850),
                       child: HeroButton(
-                        label: 'KEMBALI',
+                        label: l10n.naikBack,
                         trailingIcon: AppIcons.arrowForward,
                         onPressed: () => Navigator.of(context).pop(),
                       ),
@@ -165,11 +167,11 @@ class _NaikLevelScreenState extends State<NaikLevelScreen> {
   /// Baris reward — semua angka milik level-up INI (satu layar crescendo,
   /// tidak ada mismatch step-1-dari-3 seperti versi lama).
   /// Chip XP disembunyikan bila xpGained null — jangan pernah tampil "+0".
-  Widget _rewards(int level, String rankTitle) {
+  Widget _rewards(AppL10n l10n, int level, String rankTitle) {
     return Semantics(
       label: widget.xpGained != null
-          ? 'Hadiah: tambah ${widget.xpGained} XP, level $level, gelar baru $rankTitle'
-          : 'Hadiah: level $level, gelar baru $rankTitle',
+          ? l10n.naikRewardSemanticsFull(widget.xpGained!, level, rankTitle)
+          : l10n.naikRewardSemanticsLevel(level, rankTitle),
       child: Wrap(
         alignment: WrapAlignment.center,
         spacing: AppSpacing.sm,
@@ -178,10 +180,10 @@ class _NaikLevelScreenState extends State<NaikLevelScreen> {
           if (widget.xpGained != null)
             _rewardChip('+${widget.xpGained}', 'XP', AppColors.primary, AppIcons.bolt),
           if (widget.levelsGained > 1)
-            _rewardChip('+${widget.levelsGained} LEVEL', 'Lonjakan',
+            _rewardChip('+${widget.levelsGained} LEVEL', l10n.naikChipLevelJumps,
                 AppColors.tertiary, AppIcons.doubleArrow),
-          _rewardChip('Lv $level', 'Level', AppColors.secondaryFixed, AppIcons.trendingUp),
-          _rewardChip(rankTitle, 'GELAR BARU', AppColors.tertiary, AppIcons.autoAwesome),
+          _rewardChip('Lv $level', l10n.naikChipLevel, AppColors.secondaryFixed, AppIcons.trendingUp),
+          _rewardChip(rankTitle, l10n.naikChipRank, AppColors.tertiary, AppIcons.autoAwesome),
         ],
       ),
     );
@@ -233,18 +235,18 @@ class _NaikLevelScreenState extends State<NaikLevelScreen> {
 
   /// Closing beat menggantikan panel "STATUS TERBARU" lama: satu baris
   /// progres menuju level berikutnya, bukan dashboard berkostum pesta.
-  Widget _closing(int level) {
+  Widget _closing(AppL10n l10n, int level) {
     final info = GameService.getLevelInfo(GameService.current.xp);
     final progress = info.xpNeededForNextLevel > 0
         ? info.xpInCurrentLevel / info.xpNeededForNextLevel
         : 0.0;
     return Semantics(
-      label:
-          'Menuju level ${level + 1}: ${info.xpInCurrentLevel} dari ${info.xpNeededForNextLevel} XP',
+      label: l10n.naikProgressSemantics(
+          level + 1, info.xpInCurrentLevel, info.xpNeededForNextLevel),
       child: Column(
         children: [
           Text(
-            'Barakallah — terus istiqomah, level berikutnya menantimu ✨',
+            l10n.naikClosing,
             textAlign: TextAlign.center,
             style:
                 AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
@@ -257,7 +259,7 @@ class _NaikLevelScreenState extends State<NaikLevelScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Level ${level + 1}',
+                    Text(l10n.naikLevelLabel(level + 1),
                         style: AppText.labelCaps()
                             .copyWith(color: AppColors.primary)),
                     Text(

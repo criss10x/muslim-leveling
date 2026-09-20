@@ -10,6 +10,7 @@ import 'cosmetic_service.dart';
 import 'quran_data.dart';
 import 'achievement_service.dart';
 import '../l10n/app_localizations.dart';
+import '../l10n/quest_texts.g.dart';
 
 // ponytail: single-file game state. No riverpod, no bloc.
 // Port dari V3 GameViewModel logic. State persisted as JSON di SharedPreferences.
@@ -257,6 +258,15 @@ class Quest {
     'completed': completed,
     'claimed': claimed,
   };
+
+  /// Desc untuk bahasa aktif. null → teks Indonesia di [desc].
+  ///
+  /// Sama polanya dengan AchievementDef.localizedDesc: teks hidup di ARB,
+  /// [desc] tinggal fallback (dan sumber Indonesia saat render id).
+  /// [desc] yang tersimpan di prefs tidak pernah dibaca UI lagi — hanya dipakai
+  /// kalau id quest tidak dikenal jembatan (data lebih tua dari versi app).
+  String localizedDesc(AppL10n l10n) =>
+      questDesc(l10n, id, zikirGoal: GameService.zikirGoal) ?? desc;
 }
 
 class LevelInfo {
@@ -1578,7 +1588,7 @@ class GameService {
       ),
       Quest(
         id: 'quest_zikir_goal',
-        desc: 'Tuntaskan Daily Zikir sampai $zikirGoal',
+        desc: 'Tuntaskan Daily Zikir sampai $zikirGoal', // ARB: quest_zikir_goal_desc
         xpReward: 60,
         target: zikirGoal,
         progress: 0,

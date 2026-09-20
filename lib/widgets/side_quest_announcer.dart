@@ -6,6 +6,7 @@ import '../screens/naik_level_screen.dart';
 import 'announcer_gate.dart';
 import 'common.dart';
 import '../theme/app_icons.dart';
+import '../l10n/app_localizations.dart';
 
 /// Popup selebrasi side quest selesai (dzikir 100x, baca Quran 10 ayat,
 /// belajar 5 hadis) — pola sama dengan AchievementAnnouncerOverlay:
@@ -75,11 +76,7 @@ class _SideQuestAnnouncerOverlayState
               MaterialPageRoute(
                 builder: (_) => NaikLevelScreen(
                   levelsGained: levels,
-                  source: switch (all.first.$1) {
-                    'zikir100' => 'Dzikir 100x',
-                    'tilawah' => 'Baca Quran',
-                    _ => 'Belajar Hadis',
-                  },
+                  source: _sourceLabel(AppL10n.of(context), all.first.$1),
                 ),
               ),
             );
@@ -96,7 +93,15 @@ class _SideQuestAnnouncerOverlayState
 }
 
 /// Popup selebrasi — quest tunggal atau runtuhannya. Await sampai ditutup.
+/// Label amal pemicu untuk layar Naik Level (ARB: sqSourceZikir dll).
+String _sourceLabel(AppL10n l10n, String questId) => switch (questId) {
+      'zikir100' => l10n.sqSourceZikir,
+      'tilawah' => l10n.sqSourceTilawah,
+      _ => l10n.sqSourceHadis,
+    };
+
 Future<void> _show(BuildContext context, List<String> quests) async {
+  final l10n = AppL10n.of(context);
   final reduceMotion = MediaQuery.of(context).disableAnimations;
   final combined = quests.length > 1;
   // ponytail: +15 XP per quest adalah konstanta side quest di GameService;
@@ -105,27 +110,27 @@ Future<void> _show(BuildContext context, List<String> quests) async {
 
   final (title, desc, icon, color) = combined
       ? (
-          'Alhamdulillah, ${quests.length} Quest Tuntas!',
-          'Semua quest harian selesai hari ini. Semoga istiqomah!',
+          l10n.sqCombinedTitle(quests.length),
+          l10n.sqCombinedDesc,
           AppIcons.militaryTech,
           AppColors.secondaryFixed,
         )
       : switch (quests.single) {
           'zikir100' => (
-              'Dzikir 100x Selesai!',
-              'Konsisten berdzikir hari ini. Istiqomah!',
+              l10n.sqZikirTitle,
+              l10n.sqZikirDesc,
               AppIcons.selfImprovement,
               AppColors.primary,
             ),
           'tilawah' => (
-              'Baca Quran 10 Ayat Selesai!',
-              'Tilawah hari ini tuntas. Lanjutkan besok!',
+              l10n.sqTilawahTitle,
+              l10n.sqTilawahDesc,
               AppIcons.menuBook,
               AppColors.tertiary,
             ),
           _ => (
-              'Belajar 5 Hadis Selesai!',
-              'Lima hadis baru terbaca hari ini. Terus belajar!',
+              l10n.sqHadisTitle,
+              l10n.sqHadisDesc,
               AppIcons.autoStories,
               AppColors.secondaryFixed,
             ),
@@ -134,7 +139,7 @@ Future<void> _show(BuildContext context, List<String> quests) async {
   await showGeneralDialog(
     context: context,
     barrierDismissible: true,
-    barrierLabel: 'side quest selesai',
+    barrierLabel: l10n.sqBarrierLabel,
     barrierColor: Colors.black.withValues(alpha: 0.55),
     transitionDuration: const Duration(milliseconds: 350),
     transitionBuilder: (_, anim, __, child) => FadeTransition(
@@ -153,7 +158,7 @@ Future<void> _show(BuildContext context, List<String> quests) async {
             Padding(
               padding: const EdgeInsets.all(AppSpacing.xl),
               child: Semantics(
-                label: '$title. $desc. Bonus $xp XP.',
+                label: l10n.sqSemantics(title, desc, xp),
                 child: GlassPanel(
                   padding: const EdgeInsets.all(AppSpacing.xl),
                   borderColor: color.withValues(alpha: 0.5),
@@ -161,7 +166,7 @@ Future<void> _show(BuildContext context, List<String> quests) async {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        combined ? 'QUEST HARIAN TUNTAS' : 'QUEST SELESAI',
+                        combined ? l10n.sqBadgeCombined : l10n.sqBadgeSingle,
                         style: AppText.labelCaps().copyWith(
                           color: color,
                           letterSpacing: 2,
@@ -224,7 +229,7 @@ Future<void> _show(BuildContext context, List<String> quests) async {
                       ),
                       const SizedBox(height: AppSpacing.lg),
                       HeroButton(
-                        label: 'MANTAP!',
+                        label: l10n.sqButton,
                         trailingIcon: AppIcons.emojiEvents,
                         onPressed: () => Navigator.of(ctx).pop(),
                       ),
