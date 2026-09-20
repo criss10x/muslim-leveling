@@ -12,6 +12,11 @@ All notable user-facing changes. Newest first.
   adhan alarm whenever the app was closed.
 
 ### Added
+- Onboarding page 3 spells out what the Arabic terms mean ("Ikhwan is Arabic
+  for male, akhwat for female") instead of asking the question bare — the old
+  copy was only answerable by people who already knew the words, and the
+  English build was worse off than the Indonesian one. The gender sheet in
+  Profile carries the same gloss.
 - Onboarding resumes where you left off (page + gender + city) instead of
   starting over when Android kills the app mid-flow.
 

@@ -974,6 +974,10 @@ class AppL10nId extends AppL10n {
   String get onbGenderIkhwan => 'IKHWAN';
 
   @override
+  String get onbGenderMeaning =>
+      'Ikhwan artinya laki-laki, akhwat artinya perempuan.';
+
+  @override
   String get onbGenderPrivacy =>
       'Jawabanmu cuma dipakai untuk menyembunyikan menu. Kamu bisa ubah kapan saja di Profil.';
 
@@ -1199,7 +1203,7 @@ class AppL10nId extends AppL10n {
 
   @override
   String get profilGenderExplain =>
-      'Dipakai untuk menyembunyikan atau menampilkan menu Periode Haid. Tidak ikut sinkron ke cloud.';
+      'Ikhwan = laki-laki, akhwat = perempuan. Dipakai untuk menyembunyikan atau menampilkan menu Periode Haid. Tidak ikut sinkron ke cloud.';
 
   @override
   String get profilGenderIkhwan => 'Ikhwan';

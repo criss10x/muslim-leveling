@@ -468,6 +468,11 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         children: [
           const Spacer(),
           _Title(l10n.onbGenderTitle),
+          const SizedBox(height: AppSpacing.sm),
+          // Glosarium: judulnya bertanya pakai istilah Arab, jadi artinya harus
+          // ada di layar ini — kalau tidak, pertanyaannya cuma bisa dijawab
+          // orang yang sudah tahu artinya (dan versi English lebih parah).
+          _Body(l10n.onbGenderMeaning),
           const SizedBox(height: AppSpacing.md),
           // Alasan sebenarnya hanya satu: menyembunyikan baris Periode Haid.
           _Body(l10n.onbGenderWhy),

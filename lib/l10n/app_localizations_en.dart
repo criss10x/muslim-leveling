@@ -975,6 +975,10 @@ class AppL10nEn extends AppL10n {
   String get onbGenderIkhwan => 'IKHWAN';
 
   @override
+  String get onbGenderMeaning =>
+      'Ikhwan is Arabic for male, akhwat for female.';
+
+  @override
   String get onbGenderPrivacy =>
       'Your answer is only used to hide that menu. You can change it anytime in Profile.';
 
@@ -1201,7 +1205,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get profilGenderExplain =>
-      'Used to show or hide the Menstrual Period menu. It is not synced to the cloud.';
+      'Ikhwan = male, akhwat = female. Used to show or hide the Menstrual Period menu. It is not synced to the cloud.';
 
   @override
   String get profilGenderIkhwan => 'Ikhwan';

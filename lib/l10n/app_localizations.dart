@@ -1884,6 +1884,12 @@ abstract class AppL10n {
   /// **'IKHWAN'**
   String get onbGenderIkhwan;
 
+  /// No description provided for @onbGenderMeaning.
+  ///
+  /// In id, this message translates to:
+  /// **'Ikhwan artinya laki-laki, akhwat artinya perempuan.'**
+  String get onbGenderMeaning;
+
   /// No description provided for @onbGenderPrivacy.
   ///
   /// In id, this message translates to:
@@ -2301,7 +2307,7 @@ abstract class AppL10n {
   /// No description provided for @profilGenderExplain.
   ///
   /// In id, this message translates to:
-  /// **'Dipakai untuk menyembunyikan atau menampilkan menu Periode Haid. Tidak ikut sinkron ke cloud.'**
+  /// **'Ikhwan = laki-laki, akhwat = perempuan. Dipakai untuk menyembunyikan atau menampilkan menu Periode Haid. Tidak ikut sinkron ke cloud.'**
   String get profilGenderExplain;
 
   /// No description provided for @profilGenderIkhwan.
