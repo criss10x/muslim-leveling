@@ -5,6 +5,7 @@ import '../../widgets/common.dart';
 import '../../services/hadis_api.dart';
 import '../../services/game_service.dart';
 import '../../services/daily_highlight.dart';
+import '../../l10n/app_localizations.dart';
 import '../theme/app_icons.dart';
 
 /// Hadis — explore list (5/page) + search + hadis acak. API myquran v3.
@@ -15,6 +16,9 @@ class HadisScreen extends StatefulWidget {
 }
 
 class _HadisScreenState extends State<HadisScreen> {
+  // ponytail: pesan error disimpan sebagai kunci, bukan teks — locale bisa
+  // berganti saat pesan sedang tampil (lihat _errorText).
+  AppL10n get _l10n => AppL10n.of(context);
   final _searchCtrl = TextEditingController();
   final List<HadisItem> _items = [];
   int _page = 1;
@@ -70,12 +74,12 @@ class _HadisScreenState extends State<HadisScreen> {
       });
       // ponytail: server balas 200 dgn daftar kosong saat di luar jangkauan —
       // jangan tampil "Tidak ada hadis ditemukan" (itu copy hasil pencarian).
-      if (items.isEmpty) _toast('Tidak ada hadis di halaman ini.');
+      if (items.isEmpty) _toast(_l10n.hdEmptyPage);
     } catch (_) {
       if (!mounted) return;
       setState(() {
         _loading = false;
-        if (_items.isEmpty) _error = 'Gagal memuat hadis.';
+        if (_items.isEmpty) _error = _l10n.hdLoadFailed;
       });
     }
   }
@@ -107,11 +111,11 @@ class _HadisScreenState extends State<HadisScreen> {
       if (!mounted) return;
       setState(() {
         _loading = false;
-        if (_items.isEmpty) _error = 'Gagal memuat hadis.';
+        if (_items.isEmpty) _error = _l10n.hdLoadFailed;
       });
       // ponytail: dulu gagal di halaman ke-2+ senyap total — tombol "Muat
       // Lagi" terasa tidak merespons. Sekarang selalu kasih umpan balik.
-      if (_items.isNotEmpty) _toast('Gagal memuat hadis. Coba lagi.');
+      if (_items.isNotEmpty) _toast(_l10n.hdLoadFailedRetry);
     }
   }
 
@@ -141,7 +145,7 @@ class _HadisScreenState extends State<HadisScreen> {
       if (!mounted) return;
       setState(() {
         _loading = false;
-        if (_items.isEmpty) _error = 'Gagal mencari hadis.';
+        if (_items.isEmpty) _error = _l10n.hdSearchFailed;
       });
     }
   }
@@ -160,10 +164,10 @@ class _HadisScreenState extends State<HadisScreen> {
       if (!mounted) return;
       setState(() {
         _loading = false;
-        if (_items.isEmpty) _error = 'Gagal memuat hadis.';
+        if (_items.isEmpty) _error = _l10n.hdLoadFailed;
       });
       // ponytail: "Acak" gagal saat daftar sudah terisi dulu senyap total.
-      if (_items.isNotEmpty) _toast('Gagal mengambil hadis acak. Coba lagi.');
+      if (_items.isNotEmpty) _toast(_l10n.hdRandomFailed);
     }
   }
 
@@ -198,7 +202,7 @@ class _HadisScreenState extends State<HadisScreen> {
                         color: AppColors.onBackground,
                       ),
                       decoration: InputDecoration(
-                        hintText: 'Cari hadis…',
+                        hintText: _l10n.hdSearchHint,
                         hintStyle: AppText.bodyMd().copyWith(
                           color: AppColors.onSurfaceVariant,
                         ),
@@ -247,7 +251,7 @@ class _HadisScreenState extends State<HadisScreen> {
                   AppSpacing.sm,
                 ),
                 child: Text(
-                  '$_searchTotal hadis ditemukan',
+                  _l10n.hdSearchFound('$_searchTotal'),
                   style: AppText.labelCaps().copyWith(
                     color: AppColors.onSurfaceVariant,
                     fontSize: 10,
@@ -320,7 +324,7 @@ class _HadisScreenState extends State<HadisScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Tidak ada hadis ditemukan.',
+                _l10n.hdSearchEmpty,
                 style: AppText.bodyMd().copyWith(
                   color: AppColors.onSurfaceVariant,
                 ),
@@ -331,7 +335,7 @@ class _HadisScreenState extends State<HadisScreen> {
                     _searchCtrl.clear();
                     _load();
                   },
-                  child: const Text('Kembali ke daftar'),
+                  child: Text(_l10n.hdBackToList),
                 ),
             ],
           ),
@@ -367,7 +371,7 @@ class _HadisScreenState extends State<HadisScreen> {
                     : TextButton.icon(
                         onPressed: _loadMore,
                         icon: const Icon(AppIcons.expandMore, size: 18),
-                        label: const Text('Muat Lagi'),
+                        label: Text(_l10n.hdLoadMore),
                       ),
               ),
             );
@@ -395,7 +399,7 @@ class _HadisScreenState extends State<HadisScreen> {
                         if (item.grade.isNotEmpty) _gradeChip(item.grade),
                         const Spacer(),
                         Text(
-                          'no. ${item.id}',
+                          _l10n.hdNumber('${item.id}'),
                           style: AppText.labelCaps().copyWith(
                             color: AppColors.onSurfaceVariant,
                             fontSize: 10,
@@ -464,6 +468,7 @@ class HadisDetailScreen extends StatefulWidget {
 }
 
 class _HadisDetailScreenState extends State<HadisDetailScreen> {
+  AppL10n get _l10n => AppL10n.of(context);
   Timer? _xpTimer;
 
   @override
@@ -498,7 +503,7 @@ class _HadisDetailScreenState extends State<HadisDetailScreen> {
               child: Row(
                 children: [
                   IconButton(
-                    tooltip: 'Kembali',
+                    tooltip: _l10n.dlBack,
                     icon: Icon(
                       AppIcons.arrowBack,
                       color: AppColors.onBackground,
@@ -507,7 +512,7 @@ class _HadisDetailScreenState extends State<HadisDetailScreen> {
                   ),
                   Expanded(
                     child: Text(
-                      'Hadis no. ${item.id}',
+                      _l10n.hdDetailTitle('${item.id}'),
                       style: AppText.titleLg().copyWith(
                         fontSize: 16,
                         color: AppColors.primary,

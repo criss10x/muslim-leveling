@@ -986,5 +986,136 @@
   "hjToday": "Hari ini!",
   "hjPassed": "Sudah lewat",
   "hjDaysLeft": "{days} hari lagi",
-  "hjHijriSuffix": "H"
+  "hjHijriSuffix": "H",
+  "qiblaCalibrationHint": "💡 Kalibrasi kompas: putar perangkat membentuk angka 8 beberapa kali untuk akurasi terbaik.",
+  "qiblaCompassLabel": "KOMPAS KIBLAT",
+  "qiblaTitle": "Arah Kiblat",
+  "qiblaAligned": "🎯 Pas! Tahan posisi ini",
+  "qiblaTurnRight": "Putar {degrees}° ke kanan →",
+  "@qiblaTurnRight": {
+    "placeholders": {
+      "degrees": {
+        "type": "String"
+      }
+    }
+  },
+  "qiblaTurnLeft": "← Putar {degrees}° ke kiri",
+  "@qiblaTurnLeft": {
+    "placeholders": {
+      "degrees": {
+        "type": "String"
+      }
+    }
+  },
+  "qiblaNoSensorTitle": "Sensor Kompas Tidak Tersedia",
+  "qiblaNoSensorBody": "Perangkat ini tidak memiliki sensor magnetometer. Gunakan panduan arah di bawah ini sebagai alternatif.",
+  "qiblaAlignedTitle": "Sudah Menghadap Kiblat!",
+  "qiblaAimTitle": "Arahkan Perangkat ke Kiblat",
+  "qiblaStatTitle": "ARAH KIBLAT",
+  "qiblaDistanceTitle": "JARAK KA'BAH",
+  "qiblaCityDistance": "📍 {city} • {km} km ke Ka'bah",
+  "@qiblaCityDistance": {
+    "placeholders": {
+      "city": {
+        "type": "String"
+      },
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "qiblaCityBearing": "Arah Kiblat dari {city}:",
+  "@qiblaCityBearing": {
+    "placeholders": {
+      "city": {
+        "type": "String"
+      }
+    }
+  },
+  "qiblaNorthDegrees": "{degrees}° dari Utara",
+  "@qiblaNorthDegrees": {
+    "placeholders": {
+      "degrees": {
+        "type": "String"
+      }
+    }
+  },
+  "qiblaTurnInstruction": "Putar perangkat {degrees}° searah jarum jam dari utara untuk menghadap kiblat.",
+  "@qiblaTurnInstruction": {
+    "placeholders": {
+      "degrees": {
+        "type": "String"
+      }
+    }
+  },
+  "qiblaOffset": "Selisih {degrees}° dari kiblat",
+  "@qiblaOffset": {
+    "placeholders": {
+      "degrees": {
+        "type": "String"
+      }
+    }
+  },
+  "dzResetTitle": "Reset counter?",
+  "dzResetBody": "Counter \"{item}\" akan di-nolkan dari 0.\\nTotal dzikir hari ini TETAP dihitung.",
+  "@dzResetBody": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "dzResetCancel": "BATAL",
+  "dzResetConfirm": "RESET",
+  "dzTapHint": "Ketuk di mana saja untuk berdzikir",
+  "dzToday": "Hari ini: {total}",
+  "@dzToday": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "dzVibrateOff": "Matikan getar",
+  "dzVibrateOn": "Nyalakan getar",
+  "dzResetThis": "Reset counter ini",
+  "dzTargetDone": "TARGET TERCAPAI",
+  "hdEmptyPage": "Tidak ada hadis di halaman ini.",
+  "hdLoadFailed": "Gagal memuat hadis.",
+  "hdLoadFailedRetry": "Gagal memuat hadis. Coba lagi.",
+  "hdSearchFailed": "Gagal mencari hadis.",
+  "hdRandomFailed": "Gagal mengambil hadis acak. Coba lagi.",
+  "hdSearchHint": "Cari hadis…",
+  "hdSearchFound": "{total} hadis ditemukan",
+  "@hdSearchFound": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "hdSearchEmpty": "Tidak ada hadis ditemukan.",
+  "hdBackToList": "Kembali ke daftar",
+  "hdLoadMore": "Muat Lagi",
+  "hdNumber": "no. {id}",
+  "@hdNumber": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "hdDetailTitle": "Hadis no. {id}",
+  "@hdDetailTitle": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "dzTransSubhanallah": "Maha Suci Allah",
+  "dzTransAlhamdulillah": "Segala puji bagi Allah",
+  "dzTransAllahuakbar": "Allah Maha Besar",
+  "dzTransAstaghfirullah": "Aku memohon ampun kepada Allah",
+  "dzTransHawla": "Tiada daya & kekuatan kecuali dengan Allah"
 }

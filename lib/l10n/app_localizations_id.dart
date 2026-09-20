@@ -2193,4 +2193,162 @@ class AppL10nId extends AppL10n {
 
   @override
   String get hjHijriSuffix => 'H';
+
+  @override
+  String get qiblaCalibrationHint =>
+      '💡 Kalibrasi kompas: putar perangkat membentuk angka 8 beberapa kali untuk akurasi terbaik.';
+
+  @override
+  String get qiblaCompassLabel => 'KOMPAS KIBLAT';
+
+  @override
+  String get qiblaTitle => 'Arah Kiblat';
+
+  @override
+  String get qiblaAligned => '🎯 Pas! Tahan posisi ini';
+
+  @override
+  String qiblaTurnRight(String degrees) {
+    return 'Putar $degrees° ke kanan →';
+  }
+
+  @override
+  String qiblaTurnLeft(String degrees) {
+    return '← Putar $degrees° ke kiri';
+  }
+
+  @override
+  String get qiblaNoSensorTitle => 'Sensor Kompas Tidak Tersedia';
+
+  @override
+  String get qiblaNoSensorBody =>
+      'Perangkat ini tidak memiliki sensor magnetometer. Gunakan panduan arah di bawah ini sebagai alternatif.';
+
+  @override
+  String get qiblaAlignedTitle => 'Sudah Menghadap Kiblat!';
+
+  @override
+  String get qiblaAimTitle => 'Arahkan Perangkat ke Kiblat';
+
+  @override
+  String get qiblaStatTitle => 'ARAH KIBLAT';
+
+  @override
+  String get qiblaDistanceTitle => 'JARAK KA\'BAH';
+
+  @override
+  String qiblaCityDistance(String city, String km) {
+    return '📍 $city • $km km ke Ka\'bah';
+  }
+
+  @override
+  String qiblaCityBearing(String city) {
+    return 'Arah Kiblat dari $city:';
+  }
+
+  @override
+  String qiblaNorthDegrees(String degrees) {
+    return '$degrees° dari Utara';
+  }
+
+  @override
+  String qiblaTurnInstruction(String degrees) {
+    return 'Putar perangkat $degrees° searah jarum jam dari utara untuk menghadap kiblat.';
+  }
+
+  @override
+  String qiblaOffset(String degrees) {
+    return 'Selisih $degrees° dari kiblat';
+  }
+
+  @override
+  String get dzResetTitle => 'Reset counter?';
+
+  @override
+  String dzResetBody(String item) {
+    return 'Counter \"$item\" akan di-nolkan dari 0.\\nTotal dzikir hari ini TETAP dihitung.';
+  }
+
+  @override
+  String get dzResetCancel => 'BATAL';
+
+  @override
+  String get dzResetConfirm => 'RESET';
+
+  @override
+  String get dzTapHint => 'Ketuk di mana saja untuk berdzikir';
+
+  @override
+  String dzToday(String total) {
+    return 'Hari ini: $total';
+  }
+
+  @override
+  String get dzVibrateOff => 'Matikan getar';
+
+  @override
+  String get dzVibrateOn => 'Nyalakan getar';
+
+  @override
+  String get dzResetThis => 'Reset counter ini';
+
+  @override
+  String get dzTargetDone => 'TARGET TERCAPAI';
+
+  @override
+  String get hdEmptyPage => 'Tidak ada hadis di halaman ini.';
+
+  @override
+  String get hdLoadFailed => 'Gagal memuat hadis.';
+
+  @override
+  String get hdLoadFailedRetry => 'Gagal memuat hadis. Coba lagi.';
+
+  @override
+  String get hdSearchFailed => 'Gagal mencari hadis.';
+
+  @override
+  String get hdRandomFailed => 'Gagal mengambil hadis acak. Coba lagi.';
+
+  @override
+  String get hdSearchHint => 'Cari hadis…';
+
+  @override
+  String hdSearchFound(String total) {
+    return '$total hadis ditemukan';
+  }
+
+  @override
+  String get hdSearchEmpty => 'Tidak ada hadis ditemukan.';
+
+  @override
+  String get hdBackToList => 'Kembali ke daftar';
+
+  @override
+  String get hdLoadMore => 'Muat Lagi';
+
+  @override
+  String hdNumber(String id) {
+    return 'no. $id';
+  }
+
+  @override
+  String hdDetailTitle(String id) {
+    return 'Hadis no. $id';
+  }
+
+  @override
+  String get dzTransSubhanallah => 'Maha Suci Allah';
+
+  @override
+  String get dzTransAlhamdulillah => 'Segala puji bagi Allah';
+
+  @override
+  String get dzTransAllahuakbar => 'Allah Maha Besar';
+
+  @override
+  String get dzTransAstaghfirullah => 'Aku memohon ampun kepada Allah';
+
+  @override
+  String get dzTransHawla => 'Tiada daya & kekuatan kecuali dengan Allah';
 }

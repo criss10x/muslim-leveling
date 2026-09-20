@@ -986,5 +986,136 @@
   "hjToday": "Today!",
   "hjPassed": "Passed",
   "hjDaysLeft": "{days} days left",
-  "hjHijriSuffix": "AH"
+  "hjHijriSuffix": "AH",
+  "qiblaCalibrationHint": "💡 Compass calibration: rotate your device in a figure-8 motion a few times for best accuracy.",
+  "qiblaCompassLabel": "QIBLA COMPASS",
+  "qiblaTitle": "Qibla Direction",
+  "qiblaAligned": "🎯 Locked! Hold this position",
+  "qiblaTurnRight": "Turn {degrees}° right →",
+  "@qiblaTurnRight": {
+    "placeholders": {
+      "degrees": {
+        "type": "String"
+      }
+    }
+  },
+  "qiblaTurnLeft": "← Turn {degrees}° left",
+  "@qiblaTurnLeft": {
+    "placeholders": {
+      "degrees": {
+        "type": "String"
+      }
+    }
+  },
+  "qiblaNoSensorTitle": "Compass Sensor Unavailable",
+  "qiblaNoSensorBody": "This device has no magnetometer sensor. Use the direction guide below instead.",
+  "qiblaAlignedTitle": "Facing the Qibla!",
+  "qiblaAimTitle": "Point Your Device at the Qibla",
+  "qiblaStatTitle": "QIBLA DIRECTION",
+  "qiblaDistanceTitle": "DISTANCE TO KAABA",
+  "qiblaCityDistance": "📍 {city} • {km} km to the Kaaba",
+  "@qiblaCityDistance": {
+    "placeholders": {
+      "city": {
+        "type": "String"
+      },
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "qiblaCityBearing": "Qibla direction from {city}:",
+  "@qiblaCityBearing": {
+    "placeholders": {
+      "city": {
+        "type": "String"
+      }
+    }
+  },
+  "qiblaNorthDegrees": "{degrees}° from North",
+  "@qiblaNorthDegrees": {
+    "placeholders": {
+      "degrees": {
+        "type": "String"
+      }
+    }
+  },
+  "qiblaTurnInstruction": "Rotate your device {degrees}° clockwise from north to face the qibla.",
+  "@qiblaTurnInstruction": {
+    "placeholders": {
+      "degrees": {
+        "type": "String"
+      }
+    }
+  },
+  "qiblaOffset": "{degrees}° off from the qibla",
+  "@qiblaOffset": {
+    "placeholders": {
+      "degrees": {
+        "type": "String"
+      }
+    }
+  },
+  "dzResetTitle": "Reset counter?",
+  "dzResetBody": "The \"{item}\" counter will be reset to 0.\\nToday's dzikir total still counts.",
+  "@dzResetBody": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "dzResetCancel": "CANCEL",
+  "dzResetConfirm": "RESET",
+  "dzTapHint": "Tap anywhere to do dzikir",
+  "dzToday": "Today: {total}",
+  "@dzToday": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "dzVibrateOff": "Turn off vibration",
+  "dzVibrateOn": "Turn on vibration",
+  "dzResetThis": "Reset this counter",
+  "dzTargetDone": "TARGET REACHED",
+  "hdEmptyPage": "No hadith on this page.",
+  "hdLoadFailed": "Failed to load hadith.",
+  "hdLoadFailedRetry": "Failed to load hadith. Try again.",
+  "hdSearchFailed": "Failed to search hadith.",
+  "hdRandomFailed": "Failed to fetch a random hadith. Try again.",
+  "hdSearchHint": "Search hadith…",
+  "hdSearchFound": "{total} hadith found",
+  "@hdSearchFound": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "hdSearchEmpty": "No hadith found.",
+  "hdBackToList": "Back to list",
+  "hdLoadMore": "Load More",
+  "hdNumber": "no. {id}",
+  "@hdNumber": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "hdDetailTitle": "Hadith no. {id}",
+  "@hdDetailTitle": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "dzTransSubhanallah": "Glorified is Allah",
+  "dzTransAlhamdulillah": "All praise is due to Allah",
+  "dzTransAllahuakbar": "Allah is the Greatest",
+  "dzTransAstaghfirullah": "I seek forgiveness from Allah",
+  "dzTransHawla": "There is no power or strength except with Allah"
 }

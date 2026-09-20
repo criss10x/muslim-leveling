@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sensors_plus/sensors_plus.dart';
+import '../../l10n/app_localizations.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../theme/app_icons.dart';
@@ -129,6 +130,8 @@ class QiblaScreen extends StatefulWidget {
 
 class _QiblaScreenState extends State<QiblaScreen>
     with SingleTickerProviderStateMixin {
+  // ponytail: dibaca sekali per build; semua sub-builder pakai ini.
+  AppL10n get _l10n => AppL10n.of(context);
   /// Azimuth mentah hasil sensor (target), dan yang dirender (smoothed).
   double _targetAzimuth = 0;
   double _displayAzimuth = 0;
@@ -281,6 +284,7 @@ class _QiblaScreenState extends State<QiblaScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = _l10n;
     final aligned = _isAligned;
 
     return Scaffold(
@@ -289,21 +293,21 @@ class _QiblaScreenState extends State<QiblaScreen>
         child: SafeArea(
           child: Column(
             children: [
-              Entrance(child: _header()),
+              Entrance(child: _header(l10n)),
               if (!_sensorAvailable)
-                _sensorUnavailableCard()
+                _sensorUnavailableCard(l10n)
               else ...[
                 Expanded(
                   child: Center(
                     child: Entrance(
                       delay: const Duration(milliseconds: 120),
-                      child: _compass(aligned),
+                      child: _compass(l10n, aligned),
                     ),
                   ),
                 ),
                 Entrance(
                   delay: const Duration(milliseconds: 200),
-                  child: _turnHint(aligned),
+                  child: _turnHint(l10n, aligned),
                 ),
                 const SizedBox(height: AppSpacing.md),
               ],
@@ -314,16 +318,16 @@ class _QiblaScreenState extends State<QiblaScreen>
                   children: [
                     Entrance(
                       delay: const Duration(milliseconds: 280),
-                      child: _alignmentCard(aligned),
+                      child: _alignmentCard(l10n, aligned),
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     Entrance(
                       delay: const Duration(milliseconds: 360),
-                      child: _statChips(),
+                      child: _statChips(l10n),
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     Text(
-                      '💡 Kalibrasi kompas: putar perangkat membentuk angka 8 beberapa kali untuk akurasi terbaik.',
+                      _l10n.qiblaCalibrationHint,
                       textAlign: TextAlign.center,
                       style: AppText.bodyMd().copyWith(
                         color: AppColors.onSurfaceVariant,
@@ -341,7 +345,7 @@ class _QiblaScreenState extends State<QiblaScreen>
     );
   }
 
-  Widget _header() {
+  Widget _header(AppL10n l10n) {
     return Padding(
       padding: const EdgeInsets.all(AppSpacing.md),
       child: Row(
@@ -366,13 +370,14 @@ class _QiblaScreenState extends State<QiblaScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('KOMPAS KIBLAT',
+                Text(_l10n.qiblaCompassLabel,
                     style: AppText.labelCaps()
                         .copyWith(color: AppColors.primary, fontSize: 10)),
                 const SizedBox(height: 2),
-                Text('Arah Kiblat', style: AppText.displayHero(24)),
+                Text(_l10n.qiblaTitle, style: AppText.displayHero(24)),
                 Text(
-                  '📍 ${widget.cityName} • ${_distance.toStringAsFixed(0)} km ke Ka\'bah',
+                  l10n.qiblaCityDistance(
+                    widget.cityName, _distance.toStringAsFixed(0)),
                   style: AppText.bodyMd().copyWith(
                     color: AppColors.onSurfaceVariant,
                     fontSize: 11,
@@ -386,7 +391,7 @@ class _QiblaScreenState extends State<QiblaScreen>
     );
   }
 
-  Widget _compass(bool aligned) {
+  Widget _compass(AppL10n l10n, bool aligned) {
     // Dial selalu mint (identitas app + logo). Jarum cyan saat mencari,
     // mengunci ke mint saat sejajar — pasangan mint/cyan = gradient logo.
     final compassColor = AppColors.primary;
@@ -416,14 +421,14 @@ class _QiblaScreenState extends State<QiblaScreen>
   }
 
   /// Chip petunjuk arah putar — memberi tahu aksi konkret, bukan cuma angka.
-  Widget _turnHint(bool aligned) {
+  Widget _turnHint(AppL10n l10n, bool aligned) {
     final rel = _relativeAngle;
     final degrees = rel.abs().round();
     final (label, color) = aligned
-        ? ('🎯 Pas! Tahan posisi ini', AppColors.primary)
+        ? (l10n.qiblaAligned, AppColors.primary)
         : rel > 0
-            ? ('Putar $degrees° ke kanan →', AppColors.tertiary)
-            : ('← Putar $degrees° ke kiri', AppColors.tertiary);
+            ? (l10n.qiblaTurnRight('$degrees'), AppColors.tertiary)
+            : (l10n.qiblaTurnLeft('$degrees'), AppColors.tertiary);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),
@@ -444,7 +449,7 @@ class _QiblaScreenState extends State<QiblaScreen>
     );
   }
 
-  Widget _sensorUnavailableCard() {
+  Widget _sensorUnavailableCard(AppL10n l10n) {
     return Expanded(
       child: Center(
         child: Padding(
@@ -459,23 +464,23 @@ class _QiblaScreenState extends State<QiblaScreen>
                   const Text('⚠️', style: TextStyle(fontSize: 48)),
                   const SizedBox(height: AppSpacing.md),
                   Text(
-                    'Sensor Kompas Tidak Tersedia',
+                    l10n.qiblaNoSensorTitle,
                     style: AppText.titleLg().copyWith(color: AppColors.tertiary),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   Text(
-                    'Perangkat ini tidak memiliki sensor magnetometer. Gunakan panduan arah di bawah ini sebagai alternatif.',
+                    l10n.qiblaNoSensorBody,
                     textAlign: TextAlign.center,
                     style: AppText.bodyMd().copyWith(
                         color: AppColors.onSurfaceVariant, height: 1.5),
                   ),
                   const SizedBox(height: AppSpacing.lg),
-                  Text('Arah Kiblat dari ${widget.cityName}:',
+                  Text(l10n.qiblaCityBearing(widget.cityName),
                       style: AppText.bodyMd()),
                   const SizedBox(height: AppSpacing.xs),
                   Text(
-                    '${_qiblaBearing.toInt()}° dari Utara',
+                    l10n.qiblaNorthDegrees('${_qiblaBearing.toInt()}'),
                     style: AppText.displayHero(36).copyWith(
                       color: AppColors.tertiary,
                       fontFamily: 'monospace',
@@ -483,7 +488,7 @@ class _QiblaScreenState extends State<QiblaScreen>
                   ),
                   const SizedBox(height: AppSpacing.md),
                   Text(
-                    'Putar perangkat ${_qiblaBearing.toInt()}° searah jarum jam dari utara untuk menghadap kiblat.',
+                    l10n.qiblaTurnInstruction('${_qiblaBearing.toInt()}'),
                     textAlign: TextAlign.center,
                     style: AppText.bodyMd().copyWith(
                         color: AppColors.onSurfaceVariant,
@@ -499,7 +504,7 @@ class _QiblaScreenState extends State<QiblaScreen>
     );
   }
 
-  Widget _alignmentCard(bool aligned) {
+  Widget _alignmentCard(AppL10n l10n, bool aligned) {
     final color = aligned ? AppColors.primary : AppColors.onSurface;
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
@@ -549,12 +554,12 @@ class _QiblaScreenState extends State<QiblaScreen>
               children: [
                 Text(
                   aligned
-                      ? 'Sudah Menghadap Kiblat!'
-                      : 'Arahkan Perangkat ke Kiblat',
+                      ? l10n.qiblaAlignedTitle
+                      : l10n.qiblaAimTitle,
                   style: AppText.titleLg().copyWith(color: color, fontSize: 15),
                 ),
                 Text(
-                  'Selisih ${_relativeAngle.abs().toStringAsFixed(1)}° dari kiblat',
+                  l10n.qiblaOffset(_relativeAngle.abs().toStringAsFixed(1)),
                   style: AppText.bodyMd().copyWith(
                       color: AppColors.onSurfaceVariant, fontSize: 11),
                 ),
@@ -566,7 +571,7 @@ class _QiblaScreenState extends State<QiblaScreen>
     );
   }
 
-  Widget _statChips() {
+  Widget _statChips(AppL10n l10n) {
     Widget chip(String label, String value, Color color) {
       return Expanded(
         child: GlassPanel(
@@ -592,9 +597,10 @@ class _QiblaScreenState extends State<QiblaScreen>
 
     return Row(
       children: [
-        chip('ARAH KIBLAT', '${_qiblaBearing.toInt()}°', AppColors.tertiary),
+        chip(l10n.qiblaStatTitle, '${_qiblaBearing.toInt()}°', AppColors.tertiary),
         const SizedBox(width: AppSpacing.sm),
-        chip('JARAK KA\'BAH', '${_distance.toStringAsFixed(0)} km', AppColors.primary),
+        chip(l10n.qiblaDistanceTitle, '${_distance.toStringAsFixed(0)} km',
+            AppColors.primary),
       ],
     );
   }

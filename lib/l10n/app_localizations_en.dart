@@ -2193,4 +2193,162 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get hjHijriSuffix => 'AH';
+
+  @override
+  String get qiblaCalibrationHint =>
+      '💡 Compass calibration: rotate your device in a figure-8 motion a few times for best accuracy.';
+
+  @override
+  String get qiblaCompassLabel => 'QIBLA COMPASS';
+
+  @override
+  String get qiblaTitle => 'Qibla Direction';
+
+  @override
+  String get qiblaAligned => '🎯 Locked! Hold this position';
+
+  @override
+  String qiblaTurnRight(String degrees) {
+    return 'Turn $degrees° right →';
+  }
+
+  @override
+  String qiblaTurnLeft(String degrees) {
+    return '← Turn $degrees° left';
+  }
+
+  @override
+  String get qiblaNoSensorTitle => 'Compass Sensor Unavailable';
+
+  @override
+  String get qiblaNoSensorBody =>
+      'This device has no magnetometer sensor. Use the direction guide below instead.';
+
+  @override
+  String get qiblaAlignedTitle => 'Facing the Qibla!';
+
+  @override
+  String get qiblaAimTitle => 'Point Your Device at the Qibla';
+
+  @override
+  String get qiblaStatTitle => 'QIBLA DIRECTION';
+
+  @override
+  String get qiblaDistanceTitle => 'DISTANCE TO KAABA';
+
+  @override
+  String qiblaCityDistance(String city, String km) {
+    return '📍 $city • $km km to the Kaaba';
+  }
+
+  @override
+  String qiblaCityBearing(String city) {
+    return 'Qibla direction from $city:';
+  }
+
+  @override
+  String qiblaNorthDegrees(String degrees) {
+    return '$degrees° from North';
+  }
+
+  @override
+  String qiblaTurnInstruction(String degrees) {
+    return 'Rotate your device $degrees° clockwise from north to face the qibla.';
+  }
+
+  @override
+  String qiblaOffset(String degrees) {
+    return '$degrees° off from the qibla';
+  }
+
+  @override
+  String get dzResetTitle => 'Reset counter?';
+
+  @override
+  String dzResetBody(String item) {
+    return 'The \"$item\" counter will be reset to 0.\\nToday\'s dzikir total still counts.';
+  }
+
+  @override
+  String get dzResetCancel => 'CANCEL';
+
+  @override
+  String get dzResetConfirm => 'RESET';
+
+  @override
+  String get dzTapHint => 'Tap anywhere to do dzikir';
+
+  @override
+  String dzToday(String total) {
+    return 'Today: $total';
+  }
+
+  @override
+  String get dzVibrateOff => 'Turn off vibration';
+
+  @override
+  String get dzVibrateOn => 'Turn on vibration';
+
+  @override
+  String get dzResetThis => 'Reset this counter';
+
+  @override
+  String get dzTargetDone => 'TARGET REACHED';
+
+  @override
+  String get hdEmptyPage => 'No hadith on this page.';
+
+  @override
+  String get hdLoadFailed => 'Failed to load hadith.';
+
+  @override
+  String get hdLoadFailedRetry => 'Failed to load hadith. Try again.';
+
+  @override
+  String get hdSearchFailed => 'Failed to search hadith.';
+
+  @override
+  String get hdRandomFailed => 'Failed to fetch a random hadith. Try again.';
+
+  @override
+  String get hdSearchHint => 'Search hadith…';
+
+  @override
+  String hdSearchFound(String total) {
+    return '$total hadith found';
+  }
+
+  @override
+  String get hdSearchEmpty => 'No hadith found.';
+
+  @override
+  String get hdBackToList => 'Back to list';
+
+  @override
+  String get hdLoadMore => 'Load More';
+
+  @override
+  String hdNumber(String id) {
+    return 'no. $id';
+  }
+
+  @override
+  String hdDetailTitle(String id) {
+    return 'Hadith no. $id';
+  }
+
+  @override
+  String get dzTransSubhanallah => 'Glorified is Allah';
+
+  @override
+  String get dzTransAlhamdulillah => 'All praise is due to Allah';
+
+  @override
+  String get dzTransAllahuakbar => 'Allah is the Greatest';
+
+  @override
+  String get dzTransAstaghfirullah => 'I seek forgiveness from Allah';
+
+  @override
+  String get dzTransHawla => 'There is no power or strength except with Allah';
 }

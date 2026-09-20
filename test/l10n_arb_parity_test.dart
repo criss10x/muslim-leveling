@@ -325,6 +325,25 @@ void main() {
     }
   });
 
+  test('apostrof tidak digandakan (bocor ke layar sebagai \'\')', () {
+    // Temuan nyata: model terjemahan menulis "Kabe''ye"/"Al-Qur''an" karena
+    // escape Dart; ARB tidak butuh itu, jadi '' bocor utuh ke layar.
+    for (final code in codes) {
+      final arb = readArb(code);
+      final bad = arb.entries
+          .where((e) => !e.key.startsWith('@'))
+          .where((e) => e.value is String && (e.value as String).contains("''"))
+          .map((e) => e.key)
+          .toList();
+      expect(
+        bad,
+        isEmpty,
+        reason: '\$code: apostrof ganda di \${bad.take(3).join(", ")} — '
+            'satu apostrof saja di ARB',
+      );
+    }
+  });
+
   test('medali tanpa unlockHint memakai kalimat fallback dari ARB', () {
     final l10n = lookupAppL10n(const Locale('en'));
     final def = AchievementService.defs.firstWhere(

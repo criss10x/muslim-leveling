@@ -1611,7 +1611,7 @@ class AppL10nTr extends AppL10n {
 
   @override
   String dlCiteSurah(String surah, int ayah) {
-    return 'Al-Qur\'\'an $surah:$ayah';
+    return 'Al-Qur\'an $surah:$ayah';
   }
 
   @override
@@ -2215,4 +2215,163 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get hjHijriSuffix => 'H';
+
+  @override
+  String get qiblaCalibrationHint =>
+      '💡 Pusula kalibrasyonu: En iyi doğruluk için cihazı birkaç kez 8 çizecek şekilde döndürün.';
+
+  @override
+  String get qiblaCompassLabel => 'KIBLE PUSULASI';
+
+  @override
+  String get qiblaTitle => 'Kıble Yönü';
+
+  @override
+  String get qiblaAligned => '🎯 Tam isabet! Bu pozisyonu koruyun';
+
+  @override
+  String qiblaTurnRight(String degrees) {
+    return 'Sağa $degrees° döndürün →';
+  }
+
+  @override
+  String qiblaTurnLeft(String degrees) {
+    return '← Sola $degrees° döndürün';
+  }
+
+  @override
+  String get qiblaNoSensorTitle => 'Pusula Sensörü Mevcut Değil';
+
+  @override
+  String get qiblaNoSensorBody =>
+      'Bu cihazda manyetometre sensörü bulunmamaktadır. Alternatif olarak aşağıdaki yön kılavuzunu kullanabilirsiniz.';
+
+  @override
+  String get qiblaAlignedTitle => 'Kıbleye Yönelindi!';
+
+  @override
+  String get qiblaAimTitle => 'Cihazı Kıbleye Doğrultun';
+
+  @override
+  String get qiblaStatTitle => 'KIBLE YÖNÜ';
+
+  @override
+  String get qiblaDistanceTitle => 'KABE MESAFESİ';
+
+  @override
+  String qiblaCityDistance(String city, String km) {
+    return '📍 $city • Kabe\'ye $km km';
+  }
+
+  @override
+  String qiblaCityBearing(String city) {
+    return '$city için Kıble Yönü:';
+  }
+
+  @override
+  String qiblaNorthDegrees(String degrees) {
+    return 'Kuzeyden $degrees°';
+  }
+
+  @override
+  String qiblaTurnInstruction(String degrees) {
+    return 'Kıbleye yönelmek için cihazı kuzeyden saat yönünde $degrees° döndürün.';
+  }
+
+  @override
+  String qiblaOffset(String degrees) {
+    return 'Kıbleden $degrees° sapma';
+  }
+
+  @override
+  String get dzResetTitle => 'Sayaç sıfırlansın mı?';
+
+  @override
+  String dzResetBody(String item) {
+    return '\"$item\" sayacı sıfırlanacaktır.\\nBugünkü toplam zikir sayısı YİNE DE hesaplanacaktır.';
+  }
+
+  @override
+  String get dzResetCancel => 'İPTAL';
+
+  @override
+  String get dzResetConfirm => 'SIFIRLA';
+
+  @override
+  String get dzTapHint => 'Zikir çekmek için herhangi bir yere dokunun';
+
+  @override
+  String dzToday(String total) {
+    return 'Bugün: $total';
+  }
+
+  @override
+  String get dzVibrateOff => 'Titreşimi kapat';
+
+  @override
+  String get dzVibrateOn => 'Titreşimi aç';
+
+  @override
+  String get dzResetThis => 'Bu sayacı sıfırla';
+
+  @override
+  String get dzTargetDone => 'HEDEFE ULAŞILDI';
+
+  @override
+  String get hdEmptyPage => 'Bu sayfada Hadis bulunmamaktadır.';
+
+  @override
+  String get hdLoadFailed => 'Hadis yüklenemedi.';
+
+  @override
+  String get hdLoadFailedRetry => 'Hadis yüklenemedi. Lütfen tekrar deneyin.';
+
+  @override
+  String get hdSearchFailed => 'Hadis araması başarısız oldu.';
+
+  @override
+  String get hdRandomFailed =>
+      'Rastgele Hadis alınamadı. Lütfen tekrar deneyin.';
+
+  @override
+  String get hdSearchHint => 'Hadis ara…';
+
+  @override
+  String hdSearchFound(String total) {
+    return '$total Hadis bulundu';
+  }
+
+  @override
+  String get hdSearchEmpty => 'Hiçbir Hadis bulunamadı.';
+
+  @override
+  String get hdBackToList => 'Listeye geri dön';
+
+  @override
+  String get hdLoadMore => 'Daha Fazla Yükle';
+
+  @override
+  String hdNumber(String id) {
+    return 'No. $id';
+  }
+
+  @override
+  String hdDetailTitle(String id) {
+    return 'Hadis No. $id';
+  }
+
+  @override
+  String get dzTransSubhanallah => 'Allah her türlü eksiklikten uzaktır';
+
+  @override
+  String get dzTransAlhamdulillah => 'Hamd, Allah\'a mahsustur';
+
+  @override
+  String get dzTransAllahuakbar => 'Allah en büyüktür';
+
+  @override
+  String get dzTransAstaghfirullah => 'Allah\'tan bağışlanma dilerim';
+
+  @override
+  String get dzTransHawla => 'Güç ve kuvvet ancak Allah\'a aittir';
 }

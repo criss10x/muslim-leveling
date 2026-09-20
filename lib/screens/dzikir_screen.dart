@@ -3,22 +3,34 @@ import 'package:flutter/material.dart';
 import 'package:vibration/vibration.dart';
 import '../../theme/app_theme.dart';
 import '../../services/game_service.dart';
+import '../../l10n/app_localizations.dart';
 import '../theme/app_icons.dart';
 
 class DzikirItem {
   final String key;
   final String arabic;
   final String translit;
-  final String translation;
-  const DzikirItem(this.key, this.arabic, this.translit, this.translation);
+  const DzikirItem(this.key, this.arabic, this.translit);
+
+  /// Terjemahan mengikuti locale aktif — teks hidup di ARB, bukan di sini.
+  /// ponytail: lookup via switch; kunci dari daftar tetap di atas, jadi key
+  /// ARB yang hilang = error compile, bukan fallback senyap ke Indonesia.
+  String translation(AppL10n l10n) => switch (key) {
+        'subhanallah' => l10n.dzTransSubhanallah,
+        'alhamdulillah' => l10n.dzTransAlhamdulillah,
+        'allahuakbar' => l10n.dzTransAllahuakbar,
+        'astaghfirullah' => l10n.dzTransAstaghfirullah,
+        'hawla' => l10n.dzTransHawla,
+        _ => translit,
+      };
 }
 
 const dzikirItems = [
-  DzikirItem('subhanallah', 'سُبْحَانَ اللَّهِ', 'Subhanallah', 'Maha Suci Allah'),
-  DzikirItem('alhamdulillah', 'الْحَمْدُ لِلَّهِ', 'Alhamdulillah', 'Segala puji bagi Allah'),
-  DzikirItem('allahuakbar', 'اللَّهُ أَكْبَرُ', 'Allahu Akbar', 'Allah Maha Besar'),
-  DzikirItem('astaghfirullah', 'أَسْتَغْفِرُ اللَّهَ', 'Astaghfirullah', 'Aku memohon ampun kepada Allah'),
-  DzikirItem('hawla', 'لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ', 'La hawla wala quwwata illa billah', 'Tiada daya & kekuatan kecuali dengan Allah'),
+  DzikirItem('subhanallah', 'سُبْحَانَ اللَّهِ', 'Subhanallah'),
+  DzikirItem('alhamdulillah', 'الْحَمْدُ لِلَّهِ', 'Alhamdulillah'),
+  DzikirItem('allahuakbar', 'اللَّهُ أَكْبَرُ', 'Allahu Akbar'),
+  DzikirItem('astaghfirullah', 'أَسْتَغْفِرُ اللَّهَ', 'Astaghfirullah'),
+  DzikirItem('hawla', 'لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ', 'La hawla wala quwwata illa billah'),
 ];
 
 class DzikirTarget {
@@ -44,6 +56,8 @@ class DzikirScreen extends StatefulWidget {
 
 class _DzikirScreenState extends State<DzikirScreen>
     with SingleTickerProviderStateMixin {
+  // ponytail: dibaca sekali per build; sub-builder menerima l10n sebagai param.
+  AppL10n get _l10n => AppL10n.of(context);
   int _dzikirIdx = 0;
   int _targetIdx = 0;
   bool _busy = false;
@@ -97,12 +111,15 @@ class _DzikirScreenState extends State<DzikirScreen>
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Reset counter?'),
-        content: Text(
-            'Counter "${_dzikir.translit}" akan di-nolkan dari 0.\nTotal dzikir hari ini TETAP dihitung.'),
+        title: Text(_l10n.dzResetTitle),
+        content: Text(_l10n.dzResetBody(_dzikir.translit)),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('BATAL')),
-          TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('RESET')),
+          TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: Text(_l10n.dzResetCancel)),
+          TextButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: Text(_l10n.dzResetConfirm)),
         ],
       ),
     );
@@ -114,6 +131,7 @@ class _DzikirScreenState extends State<DzikirScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = _l10n;
     final total = GameService.zikirCountToday;
     final counts = GameService.zikirCountsToday;
     final current = counts[_dzikir.key] ?? 0;
@@ -151,7 +169,7 @@ class _DzikirScreenState extends State<DzikirScreen>
                         style: AppText.titleLg().copyWith(color: AppColors.primary),
                       ),
                       Text(
-                        _dzikir.translation,
+                        _dzikir.translation(l10n),
                         textAlign: TextAlign.center,
                         style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
                       ),
@@ -170,7 +188,7 @@ class _DzikirScreenState extends State<DzikirScreen>
                               size: 16, color: AppColors.onSurfaceVariant.withValues(alpha: 0.7)),
                           const SizedBox(width: AppSpacing.xs),
                           Text(
-                            'Ketuk di mana saja untuk berdzikir',
+                            _l10n.dzTapHint,
                             style: AppText.bodyMd().copyWith(
                               color: AppColors.onSurfaceVariant,
                               fontSize: 12,
@@ -211,7 +229,7 @@ class _DzikirScreenState extends State<DzikirScreen>
               borderRadius: BorderRadius.circular(AppRadius.pill),
             ),
             child: Text(
-              'Hari ini: $total',
+              _l10n.dzToday('$total'),
               style: AppText.labelCapsSm().copyWith(color: AppColors.onSurfaceVariant),
             ),
           ),
@@ -221,7 +239,9 @@ class _DzikirScreenState extends State<DzikirScreen>
               await GameService.setZikirVibrate(!GameService.zikirVibrate);
               setState(() {});
             },
-            tooltip: GameService.zikirVibrate ? 'Matikan getar' : 'Nyalakan getar',
+            tooltip: GameService.zikirVibrate
+                ? _l10n.dzVibrateOff
+                : _l10n.dzVibrateOn,
             icon: Icon(
               GameService.zikirVibrate ? AppIcons.vibration : AppIcons.smartphone,
               color: GameService.zikirVibrate ? AppColors.primary : AppColors.onSurfaceVariant,
@@ -229,7 +249,7 @@ class _DzikirScreenState extends State<DzikirScreen>
           ),
           IconButton(
             onPressed: current == 0 ? null : _reset,
-            tooltip: 'Reset counter ini',
+            tooltip: _l10n.dzResetThis,
             icon: const Icon(AppIcons.restartAlt),
           ),
         ],
@@ -271,7 +291,7 @@ class _DzikirScreenState extends State<DzikirScreen>
                 Padding(
                   padding: const EdgeInsets.only(top: AppSpacing.xs),
                   child: Text(
-                    'TARGET TERCAPAI',
+                    _l10n.dzTargetDone,
                     style: AppText.labelCapsSm().copyWith(color: AppColors.secondaryFixed),
                   ),
                 ),

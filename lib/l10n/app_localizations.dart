@@ -3987,6 +3987,270 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'H'**
   String get hjHijriSuffix;
+
+  /// No description provided for @qiblaCalibrationHint.
+  ///
+  /// In id, this message translates to:
+  /// **'💡 Kalibrasi kompas: putar perangkat membentuk angka 8 beberapa kali untuk akurasi terbaik.'**
+  String get qiblaCalibrationHint;
+
+  /// No description provided for @qiblaCompassLabel.
+  ///
+  /// In id, this message translates to:
+  /// **'KOMPAS KIBLAT'**
+  String get qiblaCompassLabel;
+
+  /// No description provided for @qiblaTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Arah Kiblat'**
+  String get qiblaTitle;
+
+  /// No description provided for @qiblaAligned.
+  ///
+  /// In id, this message translates to:
+  /// **'🎯 Pas! Tahan posisi ini'**
+  String get qiblaAligned;
+
+  /// No description provided for @qiblaTurnRight.
+  ///
+  /// In id, this message translates to:
+  /// **'Putar {degrees}° ke kanan →'**
+  String qiblaTurnRight(String degrees);
+
+  /// No description provided for @qiblaTurnLeft.
+  ///
+  /// In id, this message translates to:
+  /// **'← Putar {degrees}° ke kiri'**
+  String qiblaTurnLeft(String degrees);
+
+  /// No description provided for @qiblaNoSensorTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Sensor Kompas Tidak Tersedia'**
+  String get qiblaNoSensorTitle;
+
+  /// No description provided for @qiblaNoSensorBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Perangkat ini tidak memiliki sensor magnetometer. Gunakan panduan arah di bawah ini sebagai alternatif.'**
+  String get qiblaNoSensorBody;
+
+  /// No description provided for @qiblaAlignedTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Sudah Menghadap Kiblat!'**
+  String get qiblaAlignedTitle;
+
+  /// No description provided for @qiblaAimTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Arahkan Perangkat ke Kiblat'**
+  String get qiblaAimTitle;
+
+  /// No description provided for @qiblaStatTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'ARAH KIBLAT'**
+  String get qiblaStatTitle;
+
+  /// No description provided for @qiblaDistanceTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'JARAK KA\'BAH'**
+  String get qiblaDistanceTitle;
+
+  /// No description provided for @qiblaCityDistance.
+  ///
+  /// In id, this message translates to:
+  /// **'📍 {city} • {km} km ke Ka\'bah'**
+  String qiblaCityDistance(String city, String km);
+
+  /// No description provided for @qiblaCityBearing.
+  ///
+  /// In id, this message translates to:
+  /// **'Arah Kiblat dari {city}:'**
+  String qiblaCityBearing(String city);
+
+  /// No description provided for @qiblaNorthDegrees.
+  ///
+  /// In id, this message translates to:
+  /// **'{degrees}° dari Utara'**
+  String qiblaNorthDegrees(String degrees);
+
+  /// No description provided for @qiblaTurnInstruction.
+  ///
+  /// In id, this message translates to:
+  /// **'Putar perangkat {degrees}° searah jarum jam dari utara untuk menghadap kiblat.'**
+  String qiblaTurnInstruction(String degrees);
+
+  /// No description provided for @qiblaOffset.
+  ///
+  /// In id, this message translates to:
+  /// **'Selisih {degrees}° dari kiblat'**
+  String qiblaOffset(String degrees);
+
+  /// No description provided for @dzResetTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Reset counter?'**
+  String get dzResetTitle;
+
+  /// No description provided for @dzResetBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Counter \"{item}\" akan di-nolkan dari 0.\\nTotal dzikir hari ini TETAP dihitung.'**
+  String dzResetBody(String item);
+
+  /// No description provided for @dzResetCancel.
+  ///
+  /// In id, this message translates to:
+  /// **'BATAL'**
+  String get dzResetCancel;
+
+  /// No description provided for @dzResetConfirm.
+  ///
+  /// In id, this message translates to:
+  /// **'RESET'**
+  String get dzResetConfirm;
+
+  /// No description provided for @dzTapHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Ketuk di mana saja untuk berdzikir'**
+  String get dzTapHint;
+
+  /// No description provided for @dzToday.
+  ///
+  /// In id, this message translates to:
+  /// **'Hari ini: {total}'**
+  String dzToday(String total);
+
+  /// No description provided for @dzVibrateOff.
+  ///
+  /// In id, this message translates to:
+  /// **'Matikan getar'**
+  String get dzVibrateOff;
+
+  /// No description provided for @dzVibrateOn.
+  ///
+  /// In id, this message translates to:
+  /// **'Nyalakan getar'**
+  String get dzVibrateOn;
+
+  /// No description provided for @dzResetThis.
+  ///
+  /// In id, this message translates to:
+  /// **'Reset counter ini'**
+  String get dzResetThis;
+
+  /// No description provided for @dzTargetDone.
+  ///
+  /// In id, this message translates to:
+  /// **'TARGET TERCAPAI'**
+  String get dzTargetDone;
+
+  /// No description provided for @hdEmptyPage.
+  ///
+  /// In id, this message translates to:
+  /// **'Tidak ada hadis di halaman ini.'**
+  String get hdEmptyPage;
+
+  /// No description provided for @hdLoadFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal memuat hadis.'**
+  String get hdLoadFailed;
+
+  /// No description provided for @hdLoadFailedRetry.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal memuat hadis. Coba lagi.'**
+  String get hdLoadFailedRetry;
+
+  /// No description provided for @hdSearchFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal mencari hadis.'**
+  String get hdSearchFailed;
+
+  /// No description provided for @hdRandomFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal mengambil hadis acak. Coba lagi.'**
+  String get hdRandomFailed;
+
+  /// No description provided for @hdSearchHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Cari hadis…'**
+  String get hdSearchHint;
+
+  /// No description provided for @hdSearchFound.
+  ///
+  /// In id, this message translates to:
+  /// **'{total} hadis ditemukan'**
+  String hdSearchFound(String total);
+
+  /// No description provided for @hdSearchEmpty.
+  ///
+  /// In id, this message translates to:
+  /// **'Tidak ada hadis ditemukan.'**
+  String get hdSearchEmpty;
+
+  /// No description provided for @hdBackToList.
+  ///
+  /// In id, this message translates to:
+  /// **'Kembali ke daftar'**
+  String get hdBackToList;
+
+  /// No description provided for @hdLoadMore.
+  ///
+  /// In id, this message translates to:
+  /// **'Muat Lagi'**
+  String get hdLoadMore;
+
+  /// No description provided for @hdNumber.
+  ///
+  /// In id, this message translates to:
+  /// **'no. {id}'**
+  String hdNumber(String id);
+
+  /// No description provided for @hdDetailTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Hadis no. {id}'**
+  String hdDetailTitle(String id);
+
+  /// No description provided for @dzTransSubhanallah.
+  ///
+  /// In id, this message translates to:
+  /// **'Maha Suci Allah'**
+  String get dzTransSubhanallah;
+
+  /// No description provided for @dzTransAlhamdulillah.
+  ///
+  /// In id, this message translates to:
+  /// **'Segala puji bagi Allah'**
+  String get dzTransAlhamdulillah;
+
+  /// No description provided for @dzTransAllahuakbar.
+  ///
+  /// In id, this message translates to:
+  /// **'Allah Maha Besar'**
+  String get dzTransAllahuakbar;
+
+  /// No description provided for @dzTransAstaghfirullah.
+  ///
+  /// In id, this message translates to:
+  /// **'Aku memohon ampun kepada Allah'**
+  String get dzTransAstaghfirullah;
+
+  /// No description provided for @dzTransHawla.
+  ///
+  /// In id, this message translates to:
+  /// **'Tiada daya & kekuatan kecuali dengan Allah'**
+  String get dzTransHawla;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {
