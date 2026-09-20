@@ -33,12 +33,17 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text("What's your warrior name?"), findsOneWidget);
 
-    // Halaman 3: gender — istilah Arab dipakai apa adanya di kedua bahasa
+    // Halaman 3: gender — istilah Arab dipakai apa adanya di kedua bahasa,
+    // jadi artinya wajib ditulis di layar (versi English paling butuh ini).
     await tester.fling(find.byType(PageView), const Offset(-400, 0), 800);
     await tester.pumpAndSettle();
     expect(find.text('Are you Ikhwan or Akhwat?'), findsOneWidget);
     expect(find.text('IKHWAN'), findsOneWidget);
     expect(find.text('AKHWAT'), findsOneWidget);
+    expect(
+      find.text('Ikhwan is Arabic for male, akhwat for female.'),
+      findsOneWidget,
+    );
 
     // Halaman 4: cara main
     await tester.fling(find.byType(PageView), const Offset(-400, 0), 800);

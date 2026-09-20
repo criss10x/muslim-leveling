@@ -5,8 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'helpers/app_wrap.dart';
 
 void main() {
-  testWidgets('onboarding: 6 halaman, urutan bahasa→nama→gender→cara main',
-      (tester) async {
+  testWidgets('onboarding: 6 halaman, urutan bahasa→nama→gender→cara main', (
+    tester,
+  ) async {
     SharedPreferences.setMockInitialValues({});
     await tester.pumpWidget(appWrap(OnboardingScreen()));
 
@@ -24,11 +25,16 @@ void main() {
     await swipe();
     expect(find.text('Siapa nama pejuangmu?'), findsOneWidget);
 
-    // Halaman 3: Ikhwan/Akhwat pakai istilah Arab
+    // Halaman 3: Ikhwan/Akhwat pakai istilah Arab — artinya harus ada di
+    // layar ini juga, bukan cuma di kepala user yang sudah tahu.
     await swipe();
     expect(find.text('Kamu Ikhwan atau Akhwat?'), findsOneWidget);
     expect(find.text('IKHWAN'), findsOneWidget);
     expect(find.text('AKHWAT'), findsOneWidget);
+    expect(
+      find.text('Ikhwan artinya laki-laki, akhwat artinya perempuan.'),
+      findsOneWidget,
+    );
 
     // Halaman 4: cara main
     await swipe();
