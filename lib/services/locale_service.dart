@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart' show basicLocaleListResolution;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../l10n/app_localizations.dart';
@@ -32,6 +33,18 @@ class LocaleNotifier extends ChangeNotifier {
 
   /// null → ikut device locale.
   Locale? get override => _override;
+
+  /// Bahasa yang benar-benar dipakai sekarang: pilihan user, atau hasil
+  /// resolusi bahasa HP terhadap [supported] — algoritma yang sama dengan
+  /// `MaterialApp` (HP Jepang → `en`, karena itu entri pertama).
+  ///
+  /// Dipakai kode tanpa `BuildContext` (service). Widget yang punya context
+  /// sebaiknya pakai `Localizations.localeOf(context)`: itu yang benar-benar
+  /// dirender, dan tidak bisa berbeda dari UI.
+  Locale get effectiveLocale => basicLocaleListResolution(
+        [_override ?? PlatformDispatcher.instance.locale],
+        supported,
+      );
 
   /// Label bahasa untuk picker. Key ARB mengikuti pola `locale<Negara>`;
   /// kode tak dikenal → kode mentahnya, bukan crash (jaga-jaga kalau ada yang

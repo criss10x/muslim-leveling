@@ -10,10 +10,10 @@ import '../../services/game_service.dart';
 import '../../services/daily_highlight.dart';
 import '../../services/ulama_quotes.dart';
 import '../../services/quran_data.dart';
+import '../../services/quran_api.dart';
 import '../../services/quran_audio_service.dart';
 import '../../services/quran_playlist.dart';
 import '../../services/quran_bookmark.dart';
-import '../../services/quran_api.dart';
 import '../../services/hijri_service.dart';
 import '../../l10n/hijri_texts.g.dart';
 import '../../l10n/app_localizations.dart';
@@ -52,11 +52,24 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
   /// Hasil resolve surah+ayat — dipakai tombol Quran, bagikan, dan simpan.
   ({QuranSurah surah, QuranAyah ayah})? _ref;
 
+  bool _localeReady = false;
+
   @override
   void initState() {
     super.initState();
-    _load();
+    // _load() butuh locale yang sedang dirender untuk memilih terjemahan,
+    // jadi tunggu didChangeDependencies — di initState Localizations belum ada.
     quranBookmarks.addListener(_onBookmarkChanged);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Sekali saja: ganti bahasa saat layar terbuka tidak perlu memuat ulang
+    // di tengah sesi baca (halaman ini berumur pendek).
+    if (_localeReady) return;
+    _localeReady = true;
+    _load();
   }
 
   @override
@@ -81,7 +94,10 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
     quranBookmarks.load();
 
     try {
-      final h = await dailyHighlightService.forToday(GameService.todayStr());
+      final h = await dailyHighlightService.forToday(
+        GameService.todayStr(),
+        english: quranUseEnglish(Localizations.localeOf(context)),
+      );
       if (!mounted) return;
       setState(() {
         _h = h;
@@ -99,9 +115,10 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
   /// Resolve surah+ayat hari ini sekali saja (dipakai 4 aksi).
   Future<void> _resolve(DailyHighlight h) async {
     try {
+      final english = quranUseEnglish(Localizations.localeOf(context));
       final surahs = await quranData.surahs();
       final surah = surahs[highlightIndex(h.date, surahs.length)];
-      final ayahs = await quranData.ayahs(surah.number);
+      final ayahs = await quranData.ayahs(surah.number, english: english);
       if (!mounted) return;
       setState(() {
         _ref = (surah: surah, ayah: ayahs[h.ayahNumber - 1]);
@@ -165,7 +182,10 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
     }
     setState(() => _tafsirLoading = true);
     try {
-      final list = await quranApi.tafsir(r.surah.number);
+      final list = await quranApi.tafsir(
+        r.surah.number,
+        english: quranUseEnglish(Localizations.localeOf(context)),
+      );
       if (!mounted) return;
       final t = list.firstWhere(
         (x) => x.ayah == r.ayah.ayah,

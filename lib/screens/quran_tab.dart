@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../services/quran_data.dart';
 import '../services/quran_progress.dart';
+import '../services/quran_api.dart';
 import '../services/quran_bookmark.dart';
 import 'quran_reader.dart';
 import 'quran_bookmarks_screen.dart';
@@ -83,7 +84,10 @@ class _QuranTabState extends State<QuranTab> {
       if (quranData.search(_all, q).isNotEmpty) return;
       if (!mounted) return;
       try {
-        final res = await quranData.searchVerses(q);
+        final res = await quranData.searchVerses(
+          q,
+          english: quranUseEnglish(Localizations.localeOf(context)),
+        );
         // Hasil lama (query sudah berubah) → buang.
         if (!mounted || seq != _searchSeq) return;
         setState(() {
@@ -713,7 +717,10 @@ class _AyahRefCardState extends State<_AyahRefCard> {
   Future<void> _load() async {
     final r = widget.ref;
     try {
-      final ayahs = await quranData.ayahs(r.surah.number);
+      final ayahs = await quranData.ayahs(
+        r.surah.number,
+        english: quranUseEnglish(Localizations.localeOf(context)),
+      );
       final t = r.ayah >= 1 && r.ayah <= ayahs.length
           ? ayahs[r.ayah - 1].translation
           : '';

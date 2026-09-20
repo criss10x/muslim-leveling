@@ -61,22 +61,33 @@ class DailyHighlight {
 final dailyHighlightService = DailyHighlightService();
 
 class DailyHighlightService {
-  static const _kCache = 'daily_highlight';
+  /// Cache dipisah per bahasa: kartu ayat harian menyimpan teks terjemahan,
+  /// jadi cache Indonesia tak boleh dipakai untuk pembaca Inggris (dan
+  /// sebaliknya). Kunci terpisah = invalidasi otomatis, tanpa field versi.
+  static String _cacheKey(bool english) =>
+      english ? 'daily_highlight_en' : 'daily_highlight';
   DailyHighlight? _mem;
   String? _memDate;
+  bool _memEnglish = false;
 
   // ponytail: reset cache memori antar widget-test (singleton lintas test = flake).
   void resetForTest() {
     _mem = null;
     _memDate = null;
+    _memEnglish = false;
   }
 
-  Future<DailyHighlight> forToday(String todayStr) async {
-    if (_mem != null && _memDate == todayStr) return _mem!;
+  /// [english] dipilih pemanggil (yang punya `BuildContext`), karena service
+  /// ini tak bisa tahu locale apa yang sedang dirender.
+  Future<DailyHighlight> forToday(String todayStr, {bool english = false}) async {
+    if (_mem != null && _memDate == todayStr && _memEnglish == english) {
+      return _mem!;
+    }
+    _memEnglish = english;
     // 1) cache disk — seharian offline setelah load pertama.
     try {
       final p = await SharedPreferences.getInstance();
-      final raw = p.getString(_kCache);
+      final raw = p.getString(_cacheKey(english));
       if (raw != null) {
         final h = DailyHighlight.fromMap(
           jsonDecode(raw) as Map<String, dynamic>,
@@ -91,7 +102,7 @@ class DailyHighlightService {
     // 2) fetch: ayat (lokal) + doa + hadis (deterministik; gagal → kosong).
     final surahs = await quranData.surahs();
     final surah = surahs[highlightIndex(todayStr, surahs.length)];
-    final ayahs = await quranData.ayahs(surah.number);
+    final ayahs = await quranData.ayahs(surah.number, english: english);
     final ayah = ayahs[highlightIndex(todayStr, ayahs.length)];
     final doas = await doaApi.fetchAll();
     final doa = doas[highlightIndex(todayStr, doas.length)];
@@ -128,7 +139,7 @@ class DailyHighlightService {
     _memDate = todayStr;
     try {
       final p = await SharedPreferences.getInstance();
-      await p.setString(_kCache, jsonEncode(h.toMap()));
+      await p.setString(_cacheKey(english), jsonEncode(h.toMap()));
     } catch (_) {}
     return h;
   }

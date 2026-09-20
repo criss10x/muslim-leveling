@@ -48,10 +48,22 @@ class _QuranReaderState extends State<QuranReader> {
   int get _basmalahOffset =>
       widget.surah.number != 1 && widget.surah.number != 9 ? 1 : 0;
 
+  bool _loaded = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // _load() butuh Localizations.localeOf → belum tersedia di initState.
+    // ponytail: guard sekali jalan; locale berubah memicu rebuild teks UI,
+    // bukan muat ulang ayat (cukup keluar-masuk reader).
+    if (_loaded) return;
+    _loaded = true;
+    _load();
+  }
+
   @override
   void initState() {
     super.initState();
-    _load();
     quranAudio.addListener(_onAudioChanged);
     // Anti-farm: lacak ayat di garis 25%; baru jadi kandidat XP setelah
     // bertahan >= 3 detik. Fling cepat → _dwelledAyah tidak maju.
@@ -138,10 +150,12 @@ class _QuranReaderState extends State<QuranReader> {
   Future<void> _load() async {
     final num = widget.surah.number;
     // Fetch ayahs + tafsir from API, fallback ke lokal.
+    // Locale yang benar-benar dirender — bukan tebakan dari bahasa HP.
+    final english = quranUseEnglish(Localizations.localeOf(context));
     try {
       final results = await Future.wait([
-        quranApi.ayahs(num),
-        quranApi.tafsir(num),
+        quranApi.ayahs(num, english: english),
+        quranApi.tafsir(num, english: english),
       ]);
       if (!mounted) return;
       setState(() {
@@ -152,7 +166,7 @@ class _QuranReaderState extends State<QuranReader> {
     } catch (_) {
       // Fallback ke aset lokal
       try {
-        final list = await quranData.ayahs(num);
+        final list = await quranData.ayahs(num, english: english);
         if (!mounted) return;
         setState(() {
           _ayahs = list;

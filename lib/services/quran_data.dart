@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import 'quran_settings.dart';
+// stripBasmalah tinggal di sini: satu tempat untuk logika teks Arab.
+import 'quran_api.dart';
 
 class QuranSurah {
   final int number;
@@ -51,7 +53,7 @@ class QuranAyah {
 /// menyendat main thread saat di-parse.
 class QuranData {
   List<QuranSurah>? _surahs;
-  final Map<int, List<QuranAyah>> _ayahCache = {};
+  final Map<String, List<QuranAyah>> _ayahCache = {};
 
   Future<List<QuranSurah>> surahs() async {
     final cached = _surahs;
@@ -66,17 +68,51 @@ class QuranData {
     return list;
   }
 
-  Future<List<QuranAyah>> ayahs(int surahNumber) async {
-    final cached = _ayahCache[surahNumber];
+  /// Ayat surat [surahNumber].
+  ///
+  /// [english] true → terjemahan Inggris dari `assets/quran/en/surah/<n>.json`
+  /// (dibangkitkan oleh `tool/gen_quran_en_assets.py`); arab tetap dari aset
+  /// Arab — edisi Uthmani yang sama, jadi tidak digandakan di disk.
+  Future<List<QuranAyah>> ayahs(int surahNumber, {bool english = false}) async {
+    final key = '$surahNumber/${english ? 'en' : 'id'}';
+    final cached = _ayahCache[key];
     if (cached != null) return cached;
 
     final raw =
         await rootBundle.loadString('assets/quran/surah/$surahNumber.json');
-    final list = (jsonDecode(raw) as List)
-        .cast<Map<String, dynamic>>()
-        .map(QuranAyah.fromJson)
-        .toList(growable: false);
-    _ayahCache[surahNumber] = list;
+    final ar = (jsonDecode(raw) as List).cast<Map<String, dynamic>>();
+
+    final List<QuranAyah> list;
+    if (english) {
+      final enRaw = await rootBundle
+          .loadString('assets/quran/en/surah/$surahNumber.json');
+      final en = (jsonDecode(enRaw) as List).cast<Map<String, dynamic>>();
+      // ponytail: aset Inggris aset terpisah dari aset Arab; kalau jumlahnya
+      // tak sama, zip hanya sepanjang yang terpendek dan sisanya terjemahan
+      // kosong — lebih baik daripada melempar & membuat layar kosong.
+      list = List.generate(ar.length, (i) {
+        return QuranAyah(
+          ayah: ar[i]['ayah'] as int,
+          arabic: ar[i]['arabic'] as String,
+          translation: i < en.length ? en[i]['translation'] as String : '',
+          latin: ar[i]['latin'] as String?,
+        );
+      }, growable: false);
+    } else {
+      // Aset lokal juga menempelkan basmalah di ayat 1 surat selain 1 & 9,
+      // dan reader merender basmalah sebagai header sendiri → tanpa dibuang
+      // pengguna melihatnya dua kali (dulu hanya terlihat saat offline).
+      list = ar.map((j) {
+        return QuranAyah(
+          ayah: j['ayah'] as int,
+          arabic: stripBasmalah(j['arabic'] as String, surahNumber),
+          translation: j['translation'] as String,
+          latin: j['latin'] as String?,
+        );
+      }).toList(growable: false);
+    }
+
+    _ayahCache[key] = list;
     return list;
   }
 
@@ -147,18 +183,26 @@ class QuranData {
         .toList(growable: false);
   }
 
-  /// Baris indeks pencarian terjemahan. Single-flight: dibangun sekali,
-  /// hanya menyimpan teks (asli + lowercase) — bukan objek [QuranAyah] penuh.
-  Future<List<_IdxRow>>? _indexFuture;
+  /// Baris indeks pencarian terjemahan. Single-flight per bahasa: dibangun
+  /// sekali, hanya menyimpan teks (asli + lowercase) — bukan objek
+  /// [QuranAyah] penuh.
+  final Map<String, Future<List<_IdxRow>>> _indexFutures = {};
 
-  /// Cari kata di dalam terjemahan Indonesia semua ayat.
-  /// Return daftar [surahNumber, ayahNumber, translation] yang match,
-  /// dibatasi 30 hasil; [truncated] true kalau masih ada match tersisa.
-  Future<QuranSearchResult> searchVerses(String query) async {
+  /// Cari kata di dalam terjemahan semua ayat, dalam bahasa yang sama dengan
+  /// yang sedang ditampilkan. Return daftar
+  /// [surahNumber, ayahNumber, translation] yang match, dibatasi 30 hasil;
+  /// [truncated] true kalau masih ada match tersisa.
+  ///
+  /// [english] wajib cocok dengan [ayahs] — kalau tidak, hasil pencarian
+  /// menunjuk ayat yang teksnya berbeda dari yang ditampilkan.
+  Future<QuranSearchResult> searchVerses(
+    String query, {
+    bool english = false,
+  }) async {
     final q = query.trim().toLowerCase();
     if (q.isEmpty) return const QuranSearchResult([], false);
 
-    final rows = await _ensureIndex();
+    final rows = await _ensureIndex(english);
     final hits = <QuranSearchHit>[];
     var truncated = false;
     for (final r in rows) {
@@ -177,21 +221,25 @@ class QuranData {
     return QuranSearchResult(hits, truncated);
   }
 
-  Future<List<_IdxRow>> _ensureIndex() {
-    final f = _indexFuture;
-    if (f != null) return f; // dua panggilan bersamaan → satu build saja
-    final t = _buildIndex();
-    _indexFuture = t;
+  Future<List<_IdxRow>> _ensureIndex(bool english) {
+    final existing = _indexFutures[english ? 'en' : 'id'];
+    if (existing != null) return existing; // dua panggilan bersamaan → satu build
+    final t = _buildIndex(english);
+    _indexFutures[english ? 'en' : 'id'] = t;
     return t;
   }
 
-  Future<List<_IdxRow>> _buildIndex() async {
+  Future<List<_IdxRow>> _buildIndex(bool english) async {
     final rows = <_IdxRow>[];
     // await per file membuat decode menyebar antar-frame (tidak menyendat
     // UI). 114 × ~32KB, parse per file hanya ~1-2ms.
     for (var n = 1; n <= 114; n++) {
       try {
-        final raw = await rootBundle.loadString('assets/quran/surah/$n.json');
+        final raw = await rootBundle.loadString(
+          english
+              ? 'assets/quran/en/surah/$n.json'
+              : 'assets/quran/surah/$n.json',
+        );
         for (final j in (jsonDecode(raw) as List).cast<Map<String, dynamic>>()) {
           final text = j['translation'] as String? ?? '';
           if (text.isEmpty) continue;
