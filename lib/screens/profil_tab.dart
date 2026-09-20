@@ -1585,8 +1585,14 @@ class _ProfilTabState extends State<ProfilTab> {
     final cid = mergedGame['cityId']?.toString();
     final cname = mergedGame['cityName']?.toString();
     if (cid != null && cid.isNotEmpty) {
-      await p.setString('city_id', cid);
-      await p.setString('city_name', cname ?? '');
+      // Lewat saveLocation, bukan tulis prefs langsung: itu satu-satunya
+      // penulis yang sekaligus menyelaraskan mode wilayah + membump
+      // locationVersion supaya jadwal ikut dimuat ulang.
+      await PrayerService.saveLocation(
+        cid,
+        cname ?? '',
+        abroad: PrayerService.deriveAbroad(cid),
+      );
     }
 
     await GameService.load();

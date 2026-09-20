@@ -792,5 +792,20 @@
   "prayerTerbit": "Güneş",
   "notifLocSuffix": " ({city})",
   "blClaimXp": "+{xp} XP Talep Et",
-  "blNotPassed": "Geçilmedi"
+  "blNotPassed": "Geçilmedi",
+  "jdPageTitle": "Namaz Vakitleri",
+  "jdSearchCity": "Şehir Ara",
+  "jdNextPrayer": "SONRAKİ NAMAZ",
+  "jdTodaySchedule": "BUGÜNKÜ VAKİTLER",
+  "jdAdzanSoundTitle": "EZAN SESİ",
+  "jdLoadingShort": "yükleniyor...",
+  "jdCountdownHm": "{hours} sa {minutes} dk kaldı",
+  "jdCountdownM": "{minutes} dk kaldı",
+  "jdCountdownTomorrow": "yarın",
+  "jdRegionTitle": "Bölge Seçin",
+  "jdRegionIndonesia": "Endonezya",
+  "jdRegionAbroad": "Yurt Dışı",
+  "jdAbroadSearchHint": "Yurt dışındaki bir şehrin adını yazın...",
+  "jdAbroadEmpty": "Şehir bulunamadı. Adını İngilizce olarak yazın — örn. London.",
+  "jdFootnoteAbroad": "Aladhan kaynaklı {city} için namaz vakitleri. Hesaplama yöntemi bu şehrin ülkesine göre belirlenir. Sekme açıldığında otomatik olarak güncellenir; konumu değiştirmek için yukarıdaki şehir adına dokunun."
 }

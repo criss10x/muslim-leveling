@@ -99,7 +99,7 @@ void main() {
   });
 
   testWidgets('city picker ikut bahasa aktif', (tester) async {
-    late Future<({String id, String name})?> sel;
+    late Future<({String id, String name, bool abroad})?> sel;
     await tester.pumpWidget(appWrap(
       Builder(
         builder: (c) => TextButton(
@@ -110,6 +110,11 @@ void main() {
       locale: const Locale('en'),
     ));
     await tester.tap(find.text('Buka'));
+    await tester.pumpAndSettle();
+    // Langkah wilayah juga harus ikut bahasa aktif, bukan hanya layar provinsi.
+    expect(find.text('Select Region'), findsOneWidget);
+    expect(find.text('Abroad'), findsOneWidget);
+    await tester.tap(find.text('Indonesia'));
     await tester.pumpAndSettle();
 
     // Dialog ini dulu hardcode Indonesia walau app berbahasa Inggris.

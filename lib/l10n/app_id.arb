@@ -1429,5 +1429,44 @@
       }
     }
   },
-  "blNotPassed": "Belum Lulus"
+  "blNotPassed": "Belum Lulus",
+  "jdPageTitle": "Waktu Sholat",
+  "jdSearchCity": "Cari Kota",
+  "jdNextPrayer": "SHOLAT BERIKUTNYA",
+  "jdTodaySchedule": "JADWAL HARI INI",
+  "jdAdzanSoundTitle": "SUARA ADZAN",
+  "jdLoadingShort": "memuat...",
+  "jdCountdownHm": "{hours}j {minutes}m lagi",
+  "@jdCountdownHm": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "jdCountdownM": "{minutes}m lagi",
+  "@jdCountdownM": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "jdCountdownTomorrow": "besok",
+  "jdRegionTitle": "Pilih Wilayah",
+  "jdRegionIndonesia": "Indonesia",
+  "jdRegionAbroad": "Luar Negeri",
+  "jdAbroadSearchHint": "Ketik nama kota di luar negeri...",
+  "jdAbroadEmpty": "Kota tidak ditemukan. Tulis namanya dalam bahasa Inggris — mis. London.",
+  "jdFootnoteAbroad": "Jadwal dari Aladhan untuk {city}. Metode perhitungan mengikuti negara kota ini. Ter-update otomatis saat tab dibuka; tap nama kota di atas untuk ganti lokasi.",
+  "@jdFootnoteAbroad": {
+    "placeholders": {
+      "city": {
+        "type": "String"
+      }
+    }
+  }
 }

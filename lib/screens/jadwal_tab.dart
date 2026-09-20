@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../widgets/city_picker.dart';
@@ -35,6 +36,9 @@ class _JadwalTabState extends State<JadwalTab> {
   String _adzanVariant = 'adzan';
   // Varian yang sedang diunduh (null = tidak ada).
   String? _downloadingVariant;
+  /// true = jadwal dari Aladhan (luar negeri). Dipakai hanya untuk memilih
+  /// teks footnote; pengambilan data ditentukan PrayerService.
+  bool _abroad = false;
 
   @override
   void initState() {
@@ -78,9 +82,11 @@ class _JadwalTabState extends State<JadwalTab> {
       });
     }
     final loc = await PrayerService.loadLocation();
+    final abroad = await PrayerService.isAbroad();
     // loadLocation() sekarang selalu return non-null (default Jakarta).
     _cityId = loc!.id;
     _cityName = loc.name;
+    if (mounted) setState(() => _abroad = abroad);
     await _fetch();
   }
 
@@ -89,7 +95,13 @@ class _JadwalTabState extends State<JadwalTab> {
     if (picked == null) return;
     // saveLocation membump locationVersion → _loadAndFetch jalan via listener
     // (sekalian home_tab ikut refresh timing + reschedule notif adzan).
-    await PrayerService.saveLocation(picked.id, picked.name);
+    // `abroad` wajib diteruskan: tanpa ini tabel jadwal tetap memakai equran
+    // walau user memilih kota luar negeri.
+    await PrayerService.saveLocation(
+      picked.id,
+      picked.name,
+      abroad: picked.abroad,
+    );
   }
 
   Future<void> _fetch() async {
@@ -128,48 +140,30 @@ class _JadwalTabState extends State<JadwalTab> {
     });
   }
 
-  String _todayLabel() {
-    final d = DateTime.now();
-    const months = [
-      'Januari',
-      'Februari',
-      'Maret',
-      'April',
-      'Mei',
-      'Juni',
-      'Juli',
-      'Agustus',
-      'September',
-      'Oktober',
-      'November',
-      'Desember',
-    ];
-    const days = [
-      'Senin',
-      'Selasa',
-      'Rabu',
-      'Kamis',
-      'Jumat',
-      'Sabtu',
-      'Minggu',
-    ];
-    return '${days[d.weekday - 1]}, ${d.day} ${months[d.month - 1]} ${d.year}';
-  }
+  /// Nama bulan & hari ikut locale aktif lewat `intl` (sudah jadi dependensi
+  /// flutter_localizations) — 'MMMM' + EEEE sudah menyelesaikan keduanya.
+  String _todayLabel(Locale locale) => DateFormat(
+    'EEEE, d MMMM y',
+    locale.toString(),
+  ).format(DateTime.now());
 
   /// Compute next prayer name, time, and countdown (port V3 logic).
-  ({String name, String time, String countdown}) _nextPrayer() {
+  ({String name, String time, String countdown}) _nextPrayer(AppL10n l10n) {
     final j = _jadwal;
     if (j == null || _loading) {
-      return (name: '—', time: '--:--', countdown: 'memuat...');
+      return (name: '—', time: '--:--', countdown: l10n.jdLoadingShort);
     }
 
+    // Nama dari l10n, bukan literal: nama yang sama dipakai _schedule() untuk
+    // menandai baris "BERIKUTNYA" — dua sumber teks berbeda membuat penanda
+    // baris hilang begitu bahasa diganti.
     final now = TimeOfDay.now();
     final prayers = [
-      ('Subuh', j['subuh'] ?? ''),
-      ('Dzuhur', j['dzuhur'] ?? ''),
-      ('Ashar', j['ashar'] ?? ''),
-      ('Maghrib', j['maghrib'] ?? ''),
-      ('Isya', j['isya'] ?? ''),
+      (l10n.prayerSubuh, j['subuh'] ?? ''),
+      (l10n.prayerDzuhur, j['dzuhur'] ?? ''),
+      (l10n.prayerAshar, j['ashar'] ?? ''),
+      (l10n.prayerMaghrib, j['maghrib'] ?? ''),
+      (l10n.prayerIsya, j['isya'] ?? ''),
     ];
 
     final minsNow = now.hour * 60 + now.minute;
@@ -185,17 +179,24 @@ class _JadwalTabState extends State<JadwalTab> {
         final diff = minsP - minsNow;
         final hh = diff ~/ 60;
         final mm = diff % 60;
-        final countdown = hh > 0 ? '${hh}j ${mm}m lagi' : '${mm}m lagi';
+        final countdown = hh > 0
+            ? l10n.jdCountdownHm(hh, mm)
+            : l10n.jdCountdownM(mm);
         return (name: p.$1, time: p.$2, countdown: countdown);
       }
     }
 
     // All passed → Subuh tomorrow
-    return (name: 'Subuh', time: j['subuh'] ?? '04:42', countdown: 'besok');
+    return (
+      name: l10n.prayerSubuh,
+      time: j['subuh'] ?? '04:42',
+      countdown: l10n.jdCountdownTomorrow,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: SafeArea(
@@ -208,21 +209,21 @@ class _JadwalTabState extends State<JadwalTab> {
             padding: const EdgeInsets.only(bottom: 100),
             children: [
               const SizedBox(height: AppSpacing.lg),
-              _header(),
+              _header(l10n),
               const SizedBox(height: AppSpacing.lg),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-                child: _nextPrayerCard(),
+                child: _nextPrayerCard(l10n),
               ),
               const SizedBox(height: AppSpacing.lg),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-                child: _schedule(),
+                child: _schedule(l10n),
               ),
               const SizedBox(height: AppSpacing.lg),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-                child: _adzanSoundCard(context),
+                child: _adzanSoundCard(l10n),
               ),
               const SizedBox(height: AppSpacing.lg),
               Padding(
@@ -236,19 +237,19 @@ class _JadwalTabState extends State<JadwalTab> {
     );
   }
 
-  Widget _header() {
+  Widget _header(AppL10n l10n) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Waktu Sholat',
+            l10n.jdPageTitle,
             style: AppText.displayHero(32).copyWith(color: AppColors.onSurface),
           ),
           const SizedBox(height: 4),
           Text(
-            _todayLabel(),
+            _todayLabel(Localizations.localeOf(context)),
             style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
           ),
           // Tombol Hari Penting Islam — selalu render (data statis,
@@ -264,7 +265,7 @@ class _JadwalTabState extends State<JadwalTab> {
               Expanded(
                 child: _locationButton(
                   icon: AppIcons.search,
-                  label: 'Cari Kota',
+                  label: l10n.jdSearchCity,
                   onTap: _changeLocation,
                 ),
               ),
@@ -412,8 +413,8 @@ class _JadwalTabState extends State<JadwalTab> {
     await PrayerService.saveLocation(result.id!, result.name!);
   }
 
-  Widget _nextPrayerCard() {
-    final next = _nextPrayer();
+  Widget _nextPrayerCard(AppL10n l10n) {
+    final next = _nextPrayer(l10n);
     // Solid raised + primary tint/glow — same language as Home/Belajar/Profil.
     final light = isLightTheme;
     return Container(
@@ -474,7 +475,7 @@ class _JadwalTabState extends State<JadwalTab> {
                       TextButton(
                         onPressed: _fetch,
                         child: Text(
-                          'Coba lagi',
+                          l10n.cityPickerRetry,
                           style: AppText.bodyMd().copyWith(
                             color: AppColors.primary,
                           ),
@@ -494,7 +495,7 @@ class _JadwalTabState extends State<JadwalTab> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'SHOLAT BERIKUTNYA',
+                            l10n.jdNextPrayer,
                             style: AppText.labelCaps().copyWith(
                               color: AppColors.primary,
                             ),
@@ -592,10 +593,10 @@ class _JadwalTabState extends State<JadwalTab> {
     );
   }
 
-  Widget _schedule() {
+  Widget _schedule(AppL10n l10n) {
     final j = _jadwal;
     final now = TimeOfDay.now();
-    final next = _nextPrayer();
+    final next = _nextPrayer(l10n);
     final minsNow = now.hour * 60 + now.minute;
 
     ({
@@ -644,13 +645,13 @@ class _JadwalTabState extends State<JadwalTab> {
     }
 
     final items = [
-      row('Imsak', 'imsak', j?['imsak'] ?? '', AppIcons.hourglassSimple),
-      row('Subuh', 'subuh', j?['subuh'] ?? '', AppIcons.wbTwilight),
-      row('Terbit', 'terbit', j?['terbit'] ?? '', AppIcons.sunDim),
-      row('Dzuhur', 'dzuhur', j?['dzuhur'] ?? '', AppIcons.wbSunny),
-      row('Ashar', 'ashar', j?['ashar'] ?? '', AppIcons.wbCloudy),
-      row('Maghrib', 'maghrib', j?['maghrib'] ?? '', AppIcons.wbTwilight),
-      row('Isya', 'isya', j?['isya'] ?? '', AppIcons.nightlight),
+      row(l10n.prayerImsak, 'imsak', j?['imsak'] ?? '', AppIcons.hourglassSimple),
+      row(l10n.prayerSubuh, 'subuh', j?['subuh'] ?? '', AppIcons.wbTwilight),
+      row(l10n.prayerTerbit, 'terbit', j?['terbit'] ?? '', AppIcons.sunDim),
+      row(l10n.prayerDzuhur, 'dzuhur', j?['dzuhur'] ?? '', AppIcons.wbSunny),
+      row(l10n.prayerAshar, 'ashar', j?['ashar'] ?? '', AppIcons.wbCloudy),
+      row(l10n.prayerMaghrib, 'maghrib', j?['maghrib'] ?? '', AppIcons.wbTwilight),
+      row(l10n.prayerIsya, 'isya', j?['isya'] ?? '', AppIcons.nightlight),
     ];
 
     final logged = items.where((it) => it.isLogged).length;
@@ -658,7 +659,7 @@ class _JadwalTabState extends State<JadwalTab> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         HudHeader(
-          'JADWAL HARI INI',
+          l10n.jdTodaySchedule,
           meta: '$logged/5',
           accent: logged == 5 ? AppColors.primary : null,
         ),
@@ -736,7 +737,7 @@ class _JadwalTabState extends State<JadwalTab> {
                 ),
                 if (isNext)
                   Text(
-                    'BERIKUTNYA',
+                    AppL10n.of(context).homeNext,
                     style: AppText.labelCaps().copyWith(
                       color: AppColors.tertiary,
                       fontSize: 9,
@@ -774,10 +775,12 @@ class _JadwalTabState extends State<JadwalTab> {
   static const _markerIds = {'imsak', 'terbit'};
 
   // Ikon mode suara di kanan tiap baris sholat. Tap = buka picker.
+  // Label tidak disimpan: hanya ikonnya yang dirender (dulu label literal
+  // Indonesia menganggur di sini, terbaca sebagai utang l10n padahal mati).
   static const _soundIcons = {
-    'senyap': (AppIcons.volumeOffRounded, 'Senyap'),
-    'suara': (AppIcons.notificationsRounded, 'Suara'),
-    'adzan': (AppIcons.volumeUpRounded, 'Adzan'),
+    'senyap': AppIcons.volumeOffRounded,
+    'suara': AppIcons.notificationsRounded,
+    'adzan': AppIcons.volumeUpRounded,
   };
 
   Widget _soundIcon(String sound, String prayerId) {
@@ -790,8 +793,8 @@ class _JadwalTabState extends State<JadwalTab> {
         color: AppColors.onSurfaceVariant.withValues(alpha: 0.5),
       );
     }
-    final (iconData, label) = _soundIcons[sound] ??
-        (AppIcons.notificationsNoneRounded, AppL10n.of(context).jdSoundFollowGlobal);
+    final iconData = _soundIcons[sound] ??
+        AppIcons.notificationsNoneRounded;
     return GestureDetector(
       onTap: () => _showSoundPicker(prayerId, sound),
       child: Icon(iconData, size: 20, color: AppColors.onSurfaceVariant),
@@ -909,11 +912,11 @@ class _JadwalTabState extends State<JadwalTab> {
   /// Kartu pilihan suara adzan: radio per varian + tombol tes.
   /// Varian selain default diunduh on-demand (~1-2MB) lalu dipakai
   /// sebagai suara channel notifikasi.
-  Widget _adzanSoundCard(BuildContext context) {
+  Widget _adzanSoundCard(AppL10n l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        HudHeader('SUARA ADZAN'),
+        HudHeader(l10n.jdAdzanSoundTitle),
         Container(
           padding: const EdgeInsets.all(AppSpacing.md),
           decoration: BoxDecoration(
@@ -932,10 +935,10 @@ class _JadwalTabState extends State<JadwalTab> {
                 width: double.infinity,
                 child: TextButton.icon(
                   onPressed: _downloadingVariant == null
-                      ? () => NotificationService.sendTestAdzanSound(AppL10n.of(context))
+                      ? () => NotificationService.sendTestAdzanSound(l10n)
                       : null,
                   icon: const Icon(AppIcons.playCircleOutline, size: 18),
-                  label: Text(AppL10n.of(context).jdTesSuara),
+                  label: Text(l10n.jdTesSuara),
                 ),
               ),
             ],
@@ -1034,8 +1037,11 @@ class _JadwalTabState extends State<JadwalTab> {
 
   Widget _infoCard() {
     // Footnote tenang, bukan kartu — sumber data cukup sekali dibaca.
+    // Sumbernya beda per wilayah: menyebut KEMENAG untuk jadwal luar negeri
+    // adalah klaim yang salah.
+    final l10n = AppL10n.of(context);
     return Text(
-      AppL10n.of(context).jdFootnote(_cityName),
+      _abroad ? l10n.jdFootnoteAbroad(_cityName) : l10n.jdFootnote(_cityName),
       style: AppText.bodyMd().copyWith(
         color: AppColors.onSurfaceVariant.withValues(alpha: 0.7),
         fontSize: 11,

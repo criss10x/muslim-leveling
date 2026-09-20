@@ -792,5 +792,20 @@
   "prayerTerbit": "Syuruk",
   "notifLocSuffix": " di {city}",
   "blClaimXp": "TUNTUT +{xp} XP",
-  "blNotPassed": "Belum Lulus"
+  "blNotPassed": "Belum Lulus",
+  "jdPageTitle": "Waktu Solat",
+  "jdSearchCity": "Cari Bandar",
+  "jdNextPrayer": "SOLAT SETERUSNYA",
+  "jdTodaySchedule": "JADUAL HARI INI",
+  "jdAdzanSoundTitle": "SUARA AZAN",
+  "jdLoadingShort": "memuatkan...",
+  "jdCountdownHm": "{hours}j {minutes}m lagi",
+  "jdCountdownM": "{minutes}m lagi",
+  "jdCountdownTomorrow": "esok",
+  "jdRegionTitle": "Pilih Wilayah",
+  "jdRegionIndonesia": "Indonesia",
+  "jdRegionAbroad": "Luar Negara",
+  "jdAbroadSearchHint": "Taip nama bandar di luar negara...",
+  "jdAbroadEmpty": "Bandar tidak ditemui. Tulis namanya dalam bahasa Inggeris — cth. London.",
+  "jdFootnoteAbroad": "Jadual daripada Aladhan untuk {city}. Kaedah pengiraan mengikut negara bandar ini. Dikemas kini secara automatik apabila tab dibuka; ketik nama bandar di atas untuk menukar lokasi."
 }

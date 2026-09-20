@@ -32,6 +32,8 @@ extension CurrentLocationFailureMessage on CurrentLocationFailure {
 class PrayerService {
   static const _equranBase = 'https://equran.id/api/v2/shalat';
   static const _myquranBase = 'https://api.myquran.com/v3/sholat';
+  static const _aladhanBase = 'https://api.aladhan.com/v1';
+  static const _nominatimBase = 'https://nominatim.openstreetmap.org';
   static const _cacheKey = 'prayer_cache_v2';
   static final _client = HttpClient()
     ..connectionTimeout = const Duration(seconds: 8);
@@ -116,6 +118,24 @@ class PrayerService {
     final cached = await _loadCache(cityId, dateStr);
     if (cached != null) return cached;
 
+    // Cabang wilayah: luar negeri → Aladhan (cityId = "lat,lon").
+    if (await isAbroad()) {
+      final coords = _parseCoords(cityId);
+      if (coords != null) {
+        final abroad = await _fetchAladhan(
+          lat: coords.$1,
+          lon: coords.$2,
+          date: d,
+          label: cityName ?? '',
+        );
+        if (abroad != null) {
+          await _saveCache(cityId, dateStr, abroad);
+          return abroad;
+        }
+      }
+      return _loadAnyCache(cityId);
+    }
+
     final equran = await _fetchEquran(cityName: cityName ?? '', date: d);
     if (equran != null) {
       await _saveCache(cityId, dateStr, equran);
@@ -159,6 +179,169 @@ class PrayerService {
     } catch (_) {
       return null;
     }
+  }
+
+  /// Penanda mode wilayah. `true` = pakai Aladhan (luar negeri), `false` =
+  /// equran.id (Indonesia).
+  ///
+  /// Lokal saja, sama seperti city_id — CloudSync hanya menyinkron blob
+  /// game/learning/achievements, bukan lokasi. Ganti HP = pilih ulang.
+  static const _abroadKey = 'prayer_abroad';
+
+  static Future<bool> isAbroad() async {
+    final p = await SharedPreferences.getInstance();
+    return p.getBool(_abroadKey) ?? false;
+  }
+
+  static Future<void> setAbroad(bool value) async {
+    final p = await SharedPreferences.getInstance();
+    await p.setBool(_abroadKey, value);
+  }
+
+  /// Turunkan mode dari bentuk cityId. Kota Indonesia = "Provinsi/Kota",
+  /// luar negeri = "lat,lon". Dipakai saat restore cloud menulis city_id
+  /// langsung — tanpa ini mode dan lokasi bisa tidak cocok, dan jadwal luar
+  /// negeri dicari lewat equran (selalu gagal).
+  static bool deriveAbroad(String cityId) => _parseCoords(cityId) != null;
+
+  /// Jadwal luar negeri via Aladhan (keyless). Nama kunci sengaja sama
+  /// (subuh/dzuhur/...) supaya seluruh layar jadwal tidak perlu tahu API mana
+  /// yang mengisi — Aladhan memakai Fajr/Dhuhr/Asr/Maghrib/Isha.
+  ///
+  /// `method` TIDAK dikirim: Aladhan memilih otomatis dari koordinat
+  /// (Jakarta→Kemenag RI, London→MWL, New York→ISNA, Makkah→Umm Al-Qura),
+  /// jadi tidak ada metode yang perlu ditebak atau dipilih user.
+  static Future<Map<String, String>?> _fetchAladhan({
+    required double lat,
+    required double lon,
+    required DateTime date,
+    required String label,
+  }) async {
+    try {
+      final d =
+          '${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.year}';
+      final uri = Uri.parse('$_aladhanBase/timings/$d').replace(
+        queryParameters: {'latitude': '$lat', 'longitude': '$lon'},
+      );
+      final req = await _client.getUrl(uri);
+      req.headers.set('User-Agent', 'MuslimLeveling/1.1');
+      final res = await req.close();
+      if (res.statusCode != 200) return null;
+      final body = await res.transform(utf8.decoder).join();
+      final json = jsonDecode(body) as Map<String, dynamic>;
+      if ((json['code'] as int?) != 200) return null;
+      final data = json['data'] as Map<String, dynamic>;
+      final t = data['timings'] as Map<String, dynamic>;
+      final mapped = mapAladhanTimings(t);
+      return {
+        ...mapped,
+        'tanggal':
+            '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}',
+        'lokasi': label,
+        'daerah': '',
+      };
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Petakan kunci Aladhan → kunci equran. Murni & publik supaya bisa diuji
+  /// tanpa jaringan — inilah bagian yang paling gampang salah diam-diam.
+  ///
+  /// Aladhan mengembalikan '04:49 (BST)' / '02:32 (+1)'; ambil HANYA pola jam
+  /// di depan, kalau tidak seluruh jadwal jadi '--:--'.
+  static Map<String, String> mapAladhanTimings(Map<String, dynamic> t) {
+    String clean(Object? v) {
+      final m = RegExp(r'(\d{1,2}):(\d{2})').firstMatch('${v ?? ''}');
+      if (m == null) return '--:--';
+      return '${m.group(1)!.padLeft(2, '0')}:${m.group(2)}';
+    }
+
+    return {
+      'imsak': clean(t['Imsak']),
+      'subuh': clean(t['Fajr']),
+      'terbit': clean(t['Sunrise']),
+      // Aladhan tidak menyediakan Dhuha; equran punya. Pakai terbit + 25m
+      // agar quest Dhuha di Home tetap punya jendela waktu.
+      'dhuha': _dhuhaFrom(clean(t['Sunrise'])),
+      'dzuhur': clean(t['Dhuhr']),
+      'ashar': clean(t['Asr']),
+      'maghrib': clean(t['Maghrib']),
+      'isya': clean(t['Isha']),
+    };
+  }
+
+  /// Dhuha ≈ 25 menit setelah terbit. ponytail: offset tetap; equran memakai
+  /// ~15-25 menit, dan jendela Dhuha memang longgar sampai sebelum dzuhur.
+  static String _dhuhaFrom(String terbit) {
+    final parts = terbit.split(':');
+    if (parts.length != 2) return terbit;
+    final h = int.tryParse(parts[0]);
+    final m = int.tryParse(parts[1]);
+    if (h == null || m == null) return terbit;
+    final total = (h * 60 + m + 25) % (24 * 60);
+    return '${(total ~/ 60).toString().padLeft(2, '0')}:${(total % 60).toString().padLeft(2, '0')}';
+  }
+
+  /// Cari kota luar negeri → koordinat, lewat Nominatim (peta yang sama sudah
+  /// dipakai reverse-geocode GPS; tanpa API key).
+  ///
+  /// Kembalian `(id, name)` dengan id = "lat,lon" supaya jalur simpan/cache
+  /// tetap satu bentuk dengan mode Indonesia.
+  static Future<List<({String id, String name})>> searchAbroadCities(
+    String query,
+  ) async {
+    final q = query.trim();
+    if (q.length < 3) return const [];
+    try {
+      final uri = Uri.parse('$_nominatimBase/search').replace(
+        queryParameters: {
+          'q': q,
+          'format': 'json',
+          'limit': '8',
+          'addressdetails': '1',
+        },
+      );
+      final req = await _client.getUrl(uri);
+      req.headers.set('User-Agent', 'MuslimLeveling/1.1');
+      final res = await req.close();
+      if (res.statusCode != 200) return const [];
+      final body = await res.transform(utf8.decoder).join();
+      final list = jsonDecode(body) as List;
+      final out = <({String id, String name})>[];
+      for (final raw in list) {
+        final m = raw as Map<String, dynamic>;
+        final lat = m['lat'] as String?;
+        final lon = m['lon'] as String?;
+        if (lat == null || lon == null) continue;
+        final addr = m['address'] as Map<String, dynamic>?;
+        // Nama pendek lebih enak dibaca daripada display_name penuh
+        // ("Greater London, England, United Kingdom").
+        final city =
+            (addr?['city'] ?? addr?['town'] ?? addr?['village'] ?? addr?['state'] ?? m['name'])
+                as String?;
+        final country = addr?['country'] as String?;
+        final name = [
+          if (city != null && city.isNotEmpty) city,
+          if (country != null && country.isNotEmpty) country,
+        ].join(', ');
+        out.add((id: '$lat,$lon', name: name.isEmpty ? '$city' : name));
+      }
+      return out;
+    } catch (_) {
+      return const [];
+    }
+  }
+
+  /// cityId mode luar negeri berbentuk "lat,lon".
+  static (double, double)? _parseCoords(String id) {
+    final parts = id.split(',');
+    if (parts.length != 2) return null;
+    final lat = double.tryParse(parts[0]);
+    final lon = double.tryParse(parts[1]);
+    if (lat == null || lon == null) return null;
+    if (lat.abs() > 90 || lon.abs() > 180) return null;
+    return (lat, lon);
   }
 
   static Future<Map<String, String>?> _fetchEquran({
@@ -530,6 +713,24 @@ class PrayerService {
       final geoBody = await geoRes.transform(utf8.decoder).join();
       final geoJson = jsonDecode(geoBody) as Map<String, dynamic>;
       final address = geoJson['address'] as Map<String, dynamic>?;
+      final countryCode =
+          (address?['country_code'] as String?)?.toLowerCase() ?? '';
+      // Luar negeri: tidak ada provinsi/kabkota Indonesia, jadi jalur equran
+      // tidak mungkin cocok. Simpan koordinat dan pakai Aladhan.
+      if (countryCode.isNotEmpty && countryCode != 'id') {
+        final label = [
+          (address?['city'] ?? address?['town'] ?? address?['state']),
+          address?['country'],
+        ].whereType<String>().where((s) => s.isNotEmpty).join(', ');
+        final coords = '${pos.latitude},${pos.longitude}';
+        final name = label.isEmpty
+            ? geoJson['display_name'] as String? ?? ''
+            : label;
+        await saveLocation(coords, name, abroad: true);
+        // id/name dikembalikan terisi: pemanggil memakai `result.id!`, dan
+        // null di sini adalah crash — bukan "sudah disimpan di dalam".
+        return (id: coords, name: name, failure: null);
+      }
       final state = address?['state'] as String? ?? '';
       final province = provinceFromState(state);
       if (province.isEmpty) {
@@ -570,10 +771,17 @@ class PrayerService {
     }
   }
 
-  static Future<void> saveLocation(String id, String name) async {
+  /// simpan mode wilayah + lokasi sekaligus. [abroad] null = jangan ubah mode
+  /// (dipakai pemanggil lama yang hanya mengganti kota dalam mode yang sama).
+  static Future<void> saveLocation(
+    String id,
+    String name, {
+    bool? abroad,
+  }) async {
     final p = await SharedPreferences.getInstance();
     await p.setString('city_id', id);
     await p.setString('city_name', name);
+    if (abroad != null) await p.setBool(_abroadKey, abroad);
     locationVersion.value++;
     // Sync ke GameState supaya ikut cloud backup.
     await GameService.updateLocation(id, name);

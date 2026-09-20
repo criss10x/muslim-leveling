@@ -10,7 +10,7 @@ void main() {
   testWidgets('picker requires province before filtering kabupaten kota', (
     tester,
   ) async {
-    late Future<({String id, String name})?> selection;
+    late Future<({String id, String name, bool abroad})?> selection;
     await tester.pumpWidget(
       appWrap(Builder(
           builder: (context) => TextButton(
@@ -25,6 +25,12 @@ void main() {
 
     await tester.tap(find.text('Buka'));
     await tester.pumpAndSettle();
+    // Langkah pertama sekarang pilih wilayah; Indonesia masuk ke alur lama.
+    expect(find.text('Pilih Wilayah'), findsOneWidget);
+    expect(find.text('Luar Negeri'), findsOneWidget);
+    expect(find.text('Indonesia'), findsOneWidget);
+    await tester.tap(find.text('Indonesia'));
+    await tester.pumpAndSettle();
     expect(find.text('Pilih Provinsi'), findsOneWidget);
     expect(find.text('Pilih Kabupaten/Kota'), findsNothing);
 
@@ -37,7 +43,10 @@ void main() {
     await tester.enterText(find.byType(TextField), 'badung');
     await tester.pump();
     await tester.tap(find.text('Kab. Badung'));
-    expect(await selection, (id: 'Bali/Kab. Badung', name: 'Kab. Badung'));
+    expect(
+      await selection,
+      (id: 'Bali/Kab. Badung', name: 'Kab. Badung', abroad: false),
+    );
   });
 
   testWidgets('picker ignores a stale city result after changing province', (
@@ -60,10 +69,13 @@ void main() {
 
     await tester.tap(find.text('Buka'));
     await tester.pumpAndSettle();
+    await tester.tap(find.text('Indonesia'));
+    await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField), 'bali');
     await tester.pump();
     await tester.tap(find.text('Bali'));
     await tester.pump();
+    // panah balik sekarang satu tingkat: kabkota → provinsi (bukan → wilayah)
     await tester.tap(find.byIcon(AppIcons.arrowBack));
     await tester.pump();
     await tester.enterText(find.byType(TextField), 'banten');

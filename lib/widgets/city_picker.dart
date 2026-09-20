@@ -8,8 +8,12 @@ typedef CityLoader = Future<List<String>?> Function(String province);
 
 /// ponytail: shared city picker used by onboarding, jadwal, and profil.
 /// Returns {id, name} or null if cancelled.
+///
+/// Langkah pertama = pilih wilayah (Indonesia / Luar Negeri). Indonesia
+/// memakai alur provinsi→kabkota yang sudah ada; Luar Negeri mencari lewat
+/// Nominatim dan mengembalikan koordinat (id = "lat,lon").
 class CityPicker {
-  static Future<({String id, String name})?> show(
+  static Future<({String id, String name, bool abroad})?> show(
     BuildContext context, {
     CityLoader? cityLoader,
   }) async {
@@ -19,6 +23,8 @@ class CityPicker {
     final ctrl = TextEditingController();
     final loadCities = cityLoader ?? PrayerService.citiesForProvince;
     List<String> cities = const [];
+    List<({String id, String name})> abroadHits = const [];
+    bool? abroad; // null = belum dipilih → tampilkan pemilih wilayah
     String? selectedProvince;
     bool loading = false;
     // true = panggilan gagal (koneksi/timeout). Dibedakan dari daftar kosong:
@@ -27,15 +33,39 @@ class CityPicker {
     // mengirim user mencoba hal yang tidak akan pernah berhasil.
     bool failed = false;
 
-    return showDialog<({String id, String name})>(
+    return showDialog<({String id, String name, bool abroad})>(
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setState) {
-          final pickingProvince = selectedProvince == null;
+          final pickingRegion = abroad == null;
+          final pickingProvince = abroad == false && selectedProvince == null;
           final query = ctrl.text.trim().toLowerCase();
-          final places = (pickingProvince ? PrayerService.provinces : cities)
-              .where((name) => name.toLowerCase().contains(query))
-              .toList();
+          final places = abroad == true
+              ? const <String>[]
+              : (pickingProvince ? PrayerService.provinces : cities)
+                    .where((name) => name.toLowerCase().contains(query))
+                    .toList();
+
+          void resetSearch() {
+            ctrl.clear();
+            cities = const [];
+            abroadHits = const [];
+            loading = false;
+            failed = false;
+          }
+
+          Future<void> searchAbroad() async {
+            setState(() {
+              loading = true;
+              failed = false;
+            });
+            final hits = await PrayerService.searchAbroadCities(ctrl.text);
+            if (!ctx.mounted) return;
+            setState(() {
+              abroadHits = hits;
+              loading = false;
+            });
+          }
 
           Future<void> pickProvince(String province) async {
             setState(() {
@@ -55,29 +85,35 @@ class CityPicker {
             });
           }
 
-          void backToProvince() {
-            setState(() {
-              selectedProvince = null;
-              ctrl.clear();
-              cities = const [];
-              loading = false;
-              failed = false;
-            });
-          }
-
           return AlertDialog(
             backgroundColor: AppColors.surfaceContainerHigh,
             title: Row(
               children: [
-                if (!pickingProvince)
+                if (!pickingRegion)
                   IconButton(
                     icon: const Icon(AppIcons.arrowBack),
                     color: AppColors.primary,
-                    onPressed: backToProvince,
+                    // Bertingkat: kabkota → provinsi dulu, baru provinsi →
+                    // pemilih wilayah. Satu lompatan langsung ke wilayah
+                    // memaksa user memilih Indonesia lagi hanya untuk
+                    // berpindah kabupaten.
+                    onPressed: () => setState(() {
+                      if (selectedProvince != null && abroad == false) {
+                        selectedProvince = null;
+                      } else {
+                        abroad = null;
+                        selectedProvince = null;
+                      }
+                      resetSearch();
+                    }),
                   ),
                 Expanded(
                   child: Text(
-                    pickingProvince
+                    pickingRegion
+                        ? l10n.jdRegionTitle
+                        : abroad == true
+                        ? l10n.jdRegionAbroad
+                        : pickingProvince
                         ? l10n.cityPickerTitleProv
                         : l10n.cityPickerTitleKab,
                     style: AppText.titleLg(),
@@ -90,7 +126,7 @@ class CityPicker {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (!pickingProvince) ...[
+                  if (abroad == false && !pickingProvince) ...[
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -102,33 +138,48 @@ class CityPicker {
                     ),
                     const SizedBox(height: 8),
                   ],
-                  TextField(
-                    controller: ctrl,
-                    autofocus: true,
-                    style: AppText.bodyLg(),
-                    decoration: InputDecoration(
-                      hintText: pickingProvince
-                          ? l10n.cityPickerHintProv
-                          : l10n.cityPickerHintKab,
-                      hintStyle: AppText.bodyMd().copyWith(
-                        color: AppColors.onSurfaceVariant,
-                      ),
-                      prefixIcon: Icon(
-                        AppIcons.search,
-                        color: AppColors.primary,
-                        size: 20,
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColors.primary.withValues(alpha: 0.4),
+                  if (!pickingRegion)
+                    TextField(
+                      controller: ctrl,
+                      autofocus: true,
+                      textInputAction: abroad == true
+                          ? TextInputAction.search
+                          : TextInputAction.none,
+                      style: AppText.bodyLg(),
+                      decoration: InputDecoration(
+                        hintText: abroad == true
+                            ? l10n.jdAbroadSearchHint
+                            : pickingProvince
+                            ? l10n.cityPickerHintProv
+                            : l10n.cityPickerHintKab,
+                        hintStyle: AppText.bodyMd().copyWith(
+                          color: AppColors.onSurfaceVariant,
+                        ),
+                        suffixIcon: abroad == true
+                            ? IconButton(
+                                icon: const Icon(AppIcons.search),
+                                onPressed: searchAbroad,
+                              )
+                            : null,
+                        prefixIcon: Icon(
+                          AppIcons.search,
+                          color: AppColors.primary,
+                          size: 20,
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: AppColors.primary.withValues(alpha: 0.4),
+                          ),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.primary),
                         ),
                       ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.primary),
-                      ),
+                      onChanged: (_) => setState(() {}),
+                      onSubmitted: abroad == true
+                          ? (_) => searchAbroad()
+                          : null,
                     ),
-                    onChanged: (_) => setState(() {}),
-                  ),
                   const SizedBox(height: 12),
                   if (loading)
                     Padding(
@@ -136,6 +187,30 @@ class CityPicker {
                       child: CircularProgressIndicator(
                         color: AppColors.primary,
                       ),
+                    )
+                  else if (pickingRegion)
+                    // Langkah pertama: pilih wilayah. Indonesia tetap satu-
+                    // satunya jalur yang butuh pemilihan provinsi & kabkota.
+                    ListView(
+                      shrinkWrap: true,
+                      children: [
+                        _regionTile(
+                          icon: AppIcons.locationOn,
+                          label: l10n.jdRegionIndonesia,
+                          onTap: () => setState(() {
+                            abroad = false;
+                            resetSearch();
+                          }),
+                        ),
+                        _regionTile(
+                          icon: AppIcons.mapOutlined,
+                          label: l10n.jdRegionAbroad,
+                          onTap: () => setState(() {
+                            abroad = true;
+                            resetSearch();
+                          }),
+                        ),
+                      ],
                     )
                   else if (failed)
                     Padding(
@@ -163,6 +238,44 @@ class CityPicker {
                         ],
                       ),
                     )
+                  else if (abroad == true)
+                    // Hasil Nominatim. Kosong = nama tidak dikenali; pesannya
+                    // menyarankan menulis dalam bahasa Inggris karena itulah
+                    // yang paling sering menjadi sebabnya.
+                    if (abroadHits.isEmpty)
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Text(
+                          l10n.jdAbroadEmpty,
+                          style: AppText.bodyMd().copyWith(
+                            color: AppColors.onSurfaceVariant,
+                          ),
+                        ),
+                      )
+                    else
+                      Flexible(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: abroadHits.length,
+                          itemBuilder: (_, i) {
+                            final hit = abroadHits[i];
+                            return ListTile(
+                              dense: true,
+                              leading: Icon(
+                                AppIcons.locationOn,
+                                color: AppColors.primary,
+                                size: 18,
+                              ),
+                              title: Text(hit.name, style: AppText.bodyMd()),
+                              onTap: () => Navigator.pop(ctx, (
+                                id: hit.id,
+                                name: hit.name,
+                                abroad: true,
+                              )),
+                            );
+                          },
+                        ),
+                      )
                   else if (places.isEmpty)
                     Padding(
                       padding: const EdgeInsets.all(16),
@@ -200,6 +313,7 @@ class CityPicker {
                               Navigator.pop(ctx, (
                                 id: '$selectedProvince/$name',
                                 name: name,
+                                abroad: false,
                               ));
                             },
                           );
@@ -223,6 +337,21 @@ class CityPicker {
           );
         },
       ),
+    );
+  }
+
+  /// Baris pilihan wilayah (Indonesia / Luar Negeri) di langkah pertama.
+  static Widget _regionTile({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      dense: true,
+      leading: Icon(icon, color: AppColors.primary, size: 20),
+      title: Text(label, style: AppText.bodyLg()),
+      trailing: const Icon(AppIcons.arrowForward, size: 18),
+      onTap: onTap,
     );
   }
 }

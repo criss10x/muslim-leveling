@@ -79,6 +79,9 @@ void main() {
     // 2) Pilih kota manual yang BERHASIL (network hidup via mock).
     await tester.tap(find.text('Pilih kota manual'));
     await _settle(tester, 500);
+    // Langkah wilayah muncul lebih dulu; Indonesia → alur provinsi seperti dulu.
+    await tester.tap(find.text('Indonesia'));
+    await _settle(tester, 200);
     await tester.enterText(find.byType(TextField), 'bali');
     await _settle(tester, 300);
     await tester.tap(find.text('Bali'));
@@ -134,6 +137,8 @@ void main() {
     ));
     await tester.tap(find.text('buka'));
     await _settle(tester, 500);
+    await tester.tap(find.text('Indonesia'));
+    await _settle(tester, 200);
     await tester.enterText(find.byType(TextField), 'bali');
     await _settle(tester, 300);
     await tester.tap(find.text('Bali'));

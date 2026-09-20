@@ -792,5 +792,20 @@
   "prayerTerbit": "Sunrise",
   "notifLocSuffix": " in {city}",
   "blClaimXp": "CLAIM +{xp} XP",
-  "blNotPassed": "Not Passed"
+  "blNotPassed": "Not Passed",
+  "jdPageTitle": "Prayer Times",
+  "jdSearchCity": "Search City",
+  "jdNextPrayer": "NEXT PRAYER",
+  "jdTodaySchedule": "TODAY'S SCHEDULE",
+  "jdAdzanSoundTitle": "ADHAN SOUND",
+  "jdLoadingShort": "loading...",
+  "jdCountdownHm": "{hours}h {minutes}m left",
+  "jdCountdownM": "{minutes}m left",
+  "jdCountdownTomorrow": "tomorrow",
+  "jdRegionTitle": "Select Region",
+  "jdRegionIndonesia": "Indonesia",
+  "jdRegionAbroad": "Abroad",
+  "jdAbroadSearchHint": "Type the name of a city abroad...",
+  "jdAbroadEmpty": "City not found. Enter the name in English — e.g., London.",
+  "jdFootnoteAbroad": "Schedule from Aladhan for {city}. The calculation method follows this city's country. Automatically updated when the tab is opened; tap the city name above to change the location."
 }

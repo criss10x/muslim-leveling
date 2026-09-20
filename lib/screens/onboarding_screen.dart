@@ -170,7 +170,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     final picked = await CityPicker.show(context);
     if (picked == null) return;
     // Sama seperti _changeLocation di JadwalTab — listener yang fetch sisanya.
-    await PrayerService.saveLocation(picked.id, picked.name);
+    await PrayerService.saveLocation(picked.id, picked.name, abroad: picked.abroad);
     if (!mounted) return;
     // ponytail: _locError dibuang di sini, bukan cuma _city diisi. Cabang CTA
     // di bawah digerakkan `_locError != null`, jadi tanpa baris ini urutan

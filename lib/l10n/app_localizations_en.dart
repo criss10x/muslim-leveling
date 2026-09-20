@@ -2733,4 +2733,56 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get blNotPassed => 'Not Passed';
+
+  @override
+  String get jdPageTitle => 'Prayer Times';
+
+  @override
+  String get jdSearchCity => 'Search City';
+
+  @override
+  String get jdNextPrayer => 'NEXT PRAYER';
+
+  @override
+  String get jdTodaySchedule => 'TODAY\'S SCHEDULE';
+
+  @override
+  String get jdAdzanSoundTitle => 'ADHAN SOUND';
+
+  @override
+  String get jdLoadingShort => 'loading...';
+
+  @override
+  String jdCountdownHm(int hours, int minutes) {
+    return '${hours}h ${minutes}m left';
+  }
+
+  @override
+  String jdCountdownM(int minutes) {
+    return '${minutes}m left';
+  }
+
+  @override
+  String get jdCountdownTomorrow => 'tomorrow';
+
+  @override
+  String get jdRegionTitle => 'Select Region';
+
+  @override
+  String get jdRegionIndonesia => 'Indonesia';
+
+  @override
+  String get jdRegionAbroad => 'Abroad';
+
+  @override
+  String get jdAbroadSearchHint => 'Type the name of a city abroad...';
+
+  @override
+  String get jdAbroadEmpty =>
+      'City not found. Enter the name in English — e.g., London.';
+
+  @override
+  String jdFootnoteAbroad(String city) {
+    return 'Schedule from Aladhan for $city. The calculation method follows this city\'s country. Automatically updated when the tab is opened; tap the city name above to change the location.';
+  }
 }

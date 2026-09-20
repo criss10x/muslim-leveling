@@ -2757,4 +2757,56 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get blNotPassed => 'Geçilmedi';
+
+  @override
+  String get jdPageTitle => 'Namaz Vakitleri';
+
+  @override
+  String get jdSearchCity => 'Şehir Ara';
+
+  @override
+  String get jdNextPrayer => 'SONRAKİ NAMAZ';
+
+  @override
+  String get jdTodaySchedule => 'BUGÜNKÜ VAKİTLER';
+
+  @override
+  String get jdAdzanSoundTitle => 'EZAN SESİ';
+
+  @override
+  String get jdLoadingShort => 'yükleniyor...';
+
+  @override
+  String jdCountdownHm(int hours, int minutes) {
+    return '$hours sa $minutes dk kaldı';
+  }
+
+  @override
+  String jdCountdownM(int minutes) {
+    return '$minutes dk kaldı';
+  }
+
+  @override
+  String get jdCountdownTomorrow => 'yarın';
+
+  @override
+  String get jdRegionTitle => 'Bölge Seçin';
+
+  @override
+  String get jdRegionIndonesia => 'Endonezya';
+
+  @override
+  String get jdRegionAbroad => 'Yurt Dışı';
+
+  @override
+  String get jdAbroadSearchHint => 'Yurt dışındaki bir şehrin adını yazın...';
+
+  @override
+  String get jdAbroadEmpty =>
+      'Şehir bulunamadı. Adını İngilizce olarak yazın — örn. London.';
+
+  @override
+  String jdFootnoteAbroad(String city) {
+    return 'Aladhan kaynaklı $city için namaz vakitleri. Hesaplama yöntemi bu şehrin ülkesine göre belirlenir. Sekme açıldığında otomatik olarak güncellenir; konumu değiştirmek için yukarıdaki şehir adına dokunun.';
+  }
 }

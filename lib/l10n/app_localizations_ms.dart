@@ -2740,4 +2740,56 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get blNotPassed => 'Belum Lulus';
+
+  @override
+  String get jdPageTitle => 'Waktu Solat';
+
+  @override
+  String get jdSearchCity => 'Cari Bandar';
+
+  @override
+  String get jdNextPrayer => 'SOLAT SETERUSNYA';
+
+  @override
+  String get jdTodaySchedule => 'JADUAL HARI INI';
+
+  @override
+  String get jdAdzanSoundTitle => 'SUARA AZAN';
+
+  @override
+  String get jdLoadingShort => 'memuatkan...';
+
+  @override
+  String jdCountdownHm(int hours, int minutes) {
+    return '${hours}j ${minutes}m lagi';
+  }
+
+  @override
+  String jdCountdownM(int minutes) {
+    return '${minutes}m lagi';
+  }
+
+  @override
+  String get jdCountdownTomorrow => 'esok';
+
+  @override
+  String get jdRegionTitle => 'Pilih Wilayah';
+
+  @override
+  String get jdRegionIndonesia => 'Indonesia';
+
+  @override
+  String get jdRegionAbroad => 'Luar Negara';
+
+  @override
+  String get jdAbroadSearchHint => 'Taip nama bandar di luar negara...';
+
+  @override
+  String get jdAbroadEmpty =>
+      'Bandar tidak ditemui. Tulis namanya dalam bahasa Inggeris — cth. London.';
+
+  @override
+  String jdFootnoteAbroad(String city) {
+    return 'Jadual daripada Aladhan untuk $city. Kaedah pengiraan mengikut negara bandar ini. Dikemas kini secara automatik apabila tab dibuka; ketik nama bandar di atas untuk menukar lokasi.';
+  }
 }

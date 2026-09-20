@@ -4863,6 +4863,96 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Belum Lulus'**
   String get blNotPassed;
+
+  /// No description provided for @jdPageTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Waktu Sholat'**
+  String get jdPageTitle;
+
+  /// No description provided for @jdSearchCity.
+  ///
+  /// In id, this message translates to:
+  /// **'Cari Kota'**
+  String get jdSearchCity;
+
+  /// No description provided for @jdNextPrayer.
+  ///
+  /// In id, this message translates to:
+  /// **'SHOLAT BERIKUTNYA'**
+  String get jdNextPrayer;
+
+  /// No description provided for @jdTodaySchedule.
+  ///
+  /// In id, this message translates to:
+  /// **'JADWAL HARI INI'**
+  String get jdTodaySchedule;
+
+  /// No description provided for @jdAdzanSoundTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'SUARA ADZAN'**
+  String get jdAdzanSoundTitle;
+
+  /// No description provided for @jdLoadingShort.
+  ///
+  /// In id, this message translates to:
+  /// **'memuat...'**
+  String get jdLoadingShort;
+
+  /// No description provided for @jdCountdownHm.
+  ///
+  /// In id, this message translates to:
+  /// **'{hours}j {minutes}m lagi'**
+  String jdCountdownHm(int hours, int minutes);
+
+  /// No description provided for @jdCountdownM.
+  ///
+  /// In id, this message translates to:
+  /// **'{minutes}m lagi'**
+  String jdCountdownM(int minutes);
+
+  /// No description provided for @jdCountdownTomorrow.
+  ///
+  /// In id, this message translates to:
+  /// **'besok'**
+  String get jdCountdownTomorrow;
+
+  /// No description provided for @jdRegionTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Pilih Wilayah'**
+  String get jdRegionTitle;
+
+  /// No description provided for @jdRegionIndonesia.
+  ///
+  /// In id, this message translates to:
+  /// **'Indonesia'**
+  String get jdRegionIndonesia;
+
+  /// No description provided for @jdRegionAbroad.
+  ///
+  /// In id, this message translates to:
+  /// **'Luar Negeri'**
+  String get jdRegionAbroad;
+
+  /// No description provided for @jdAbroadSearchHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Ketik nama kota di luar negeri...'**
+  String get jdAbroadSearchHint;
+
+  /// No description provided for @jdAbroadEmpty.
+  ///
+  /// In id, this message translates to:
+  /// **'Kota tidak ditemukan. Tulis namanya dalam bahasa Inggris — mis. London.'**
+  String get jdAbroadEmpty;
+
+  /// No description provided for @jdFootnoteAbroad.
+  ///
+  /// In id, this message translates to:
+  /// **'Jadwal dari Aladhan untuk {city}. Metode perhitungan mengikuti negara kota ini. Ter-update otomatis saat tab dibuka; tap nama kota di atas untuk ganti lokasi.'**
+  String jdFootnoteAbroad(String city);
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {
