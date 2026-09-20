@@ -16,6 +16,7 @@ model: gemini/gemini-3.5-flash
 base_url: https://ai.sumopod.com
 source_arb: lib/l10n/app_id.arb
 targets:
+  - en
   - tr
   - ms
 # Aplikasi ini app ibadah: pakai register formal, bukan bahasa gaul.

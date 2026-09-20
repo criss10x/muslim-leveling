@@ -3,6 +3,7 @@ import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../services/game_service.dart';
 import '../theme/app_icons.dart';
+import '../l10n/app_localizations.dart';
 
 /// Dapet EXP — celebration screen after claiming quiz XP (no level-up).
 /// Mirrors the Naik Level victory screen but themed for the Belajar tab:
@@ -53,7 +54,7 @@ class DapetExpScreen extends StatelessWidget {
                   Entrance(
                     delay: const Duration(milliseconds: 250),
                     child: Text(
-                      'DAPET EXP!',
+                      AppL10n.of(context).deExpTitle,
                       textAlign: TextAlign.center,
                       style: AppText.displayHero(40).copyWith(
                         color: AppColors.tertiary,
@@ -80,12 +81,12 @@ class DapetExpScreen extends StatelessWidget {
                   const SizedBox(height: AppSpacing.xl),
                   Entrance(
                     delay: const Duration(milliseconds: 550),
-                    child: _rewards(info),
+                    child: _rewards(context, info),
                   ),
                   const SizedBox(height: AppSpacing.xl),
                   Entrance(
                     delay: const Duration(milliseconds: 700),
-                    child: _levelProgress(info),
+                    child: _levelProgress(context, info),
                   ),
                   const Spacer(),
                   Entrance(
@@ -142,18 +143,18 @@ class DapetExpScreen extends StatelessWidget {
     );
   }
 
-  Widget _rewards(LevelInfo info) {
+  Widget _rewards(BuildContext context, LevelInfo info) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _rewardChip('+$xpGained', 'XP', AppColors.primary, AppIcons.bolt),
-        _rewardChip('$score%', 'Skor Quiz', AppColors.tertiary, AppIcons.quiz),
-        _rewardChip('Lv ${info.level}', 'Level', AppColors.secondaryFixed, AppIcons.trendingUp),
+        _rewardChip(context, '+$xpGained', 'XP', AppColors.primary, AppIcons.bolt),
+        _rewardChip(context, '$score%', 'Skor Quiz', AppColors.tertiary, AppIcons.quiz),
+        _rewardChip(context, AppL10n.of(context).deLevelShort(info.level), 'Level', AppColors.secondaryFixed, AppIcons.trendingUp),
       ],
     );
   }
 
-  Widget _rewardChip(String value, String label, Color color, IconData icon) {
+  Widget _rewardChip(BuildContext context, String value, String label, Color color, IconData icon) {
     final light = isLightTheme;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
@@ -193,7 +194,7 @@ class DapetExpScreen extends StatelessWidget {
     );
   }
 
-  Widget _levelProgress(LevelInfo info) {
+  Widget _levelProgress(BuildContext context, LevelInfo info) {
     final progress = info.xpNeededForNextLevel > 0
         ? info.xpInCurrentLevel / info.xpNeededForNextLevel
         : 0.0;
@@ -213,7 +214,7 @@ class DapetExpScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Level ${info.level}',
+              Text(AppL10n.of(context).deLevel(info.level),
                   style: AppText.titleLg().copyWith(fontSize: 16)),
               Text('${info.xpInCurrentLevel} / ${info.xpNeededForNextLevel} XP',
                   style: AppText.labelCaps().copyWith(color: AppColors.onSurfaceVariant)),

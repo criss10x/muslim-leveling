@@ -4,6 +4,7 @@ import '../../widgets/common.dart';
 import '../../services/learning_content.dart';
 import 'belajar_result.dart';
 import '../theme/app_icons.dart';
+import '../l10n/app_localizations.dart';
 
 /// Quiz screen — 5 questions per module, ABCD options, instant feedback.
 class BelajarQuizScreen extends StatefulWidget {
@@ -78,7 +79,7 @@ class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Modul tidak ditemukan', style: AppText.titleLg()),
+                Text(AppL10n.of(context).bqModulNotFound, style: AppText.titleLg()),
                 const SizedBox(height: AppSpacing.md),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
@@ -98,7 +99,7 @@ class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Quiz belum tersedia', style: AppText.titleLg()),
+                Text(AppL10n.of(context).bqQuizUnavailable, style: AppText.titleLg()),
                 const SizedBox(height: AppSpacing.md),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
@@ -124,7 +125,7 @@ class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('PERTANYAAN ${_current + 1}/${_questions.length}',
+                    Text(AppL10n.of(context).bqQuestionOf(_current + 1, _questions.length),
                         style: AppText.labelCaps().copyWith(color: AppColors.tertiary)),
                     const SizedBox(height: AppSpacing.sm),
                     Text(q.question,
@@ -278,7 +279,7 @@ class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
               Icon(wasCorrect ? AppIcons.checkCircle : AppIcons.lightbulb,
                   color: wasCorrect ? AppColors.primary : AppColors.tertiary, size: 18),
               const SizedBox(width: AppSpacing.xs),
-              Text(wasCorrect ? 'BENAR!' : 'Belum tepat',
+              Text(wasCorrect ? 'BENAR!' : AppL10n.of(context).bqNotYetRight,
                   style: AppText.titleLg().copyWith(
                       fontSize: 14, color: wasCorrect ? AppColors.primary : AppColors.tertiary)),
             ],

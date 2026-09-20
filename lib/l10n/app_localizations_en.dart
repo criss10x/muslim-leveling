@@ -2351,4 +2351,138 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get dzTransHawla => 'There is no power or strength except with Allah';
+
+  @override
+  String get blModulNotFound => 'Module not found';
+
+  @override
+  String get blModulDone => 'Module Completed!';
+
+  @override
+  String get blKnowledgeUp => 'Your knowledge has increased.';
+
+  @override
+  String get blMinScore70 =>
+      'A minimum score of 70% is required to pass. Please try again!';
+
+  @override
+  String get blReadAgain =>
+      'Read the article again, then try the quiz again. You can do it!';
+
+  @override
+  String get blBackToHub => 'Back to Hub';
+
+  @override
+  String get qdArabicSize => 'Arabic text size';
+
+  @override
+  String get qdTransSize => 'Translation size';
+
+  @override
+  String get qdLatinHint => 'Transliteration to assist in reading Arabic';
+
+  @override
+  String get qdTajwidColors => 'Tajweed colors';
+
+  @override
+  String get qdTafsirMuyassar =>
+      'Tafsir Muyassar (concise, easy to understand)';
+
+  @override
+  String get qdTafsirKemenag => 'Tafsir Kemenag (comprehensive)';
+
+  @override
+  String get ppUnlockSkins => 'Unlock all premium skins';
+
+  @override
+  String get ppActivateDev => 'Activate Pro (dev)';
+
+  @override
+  String get deExpTitle => 'XP EARNED!';
+
+  @override
+  String get bqModulNotFound => 'Module not found';
+
+  @override
+  String get bqQuizUnavailable => 'Quiz is not yet available';
+
+  @override
+  String get bqNotYetRight => 'Incorrect';
+
+  @override
+  String get qpPrevAyah => 'Previous Ayah';
+
+  @override
+  String get qpNextAyah => 'Next Ayah';
+
+  @override
+  String get qpMurrotalSettings => 'Murottal settings';
+
+  @override
+  String get qpbRepeatRange => 'Repeat range';
+
+  @override
+  String get qpbSleepTimer => 'Sleep timer';
+
+  @override
+  String get qpbEndOfSurah => 'End of Surah';
+
+  @override
+  String get qbNoBookmark => 'No bookmarks yet';
+
+  @override
+  String get qbDeleteBookmark => 'Delete bookmark';
+
+  @override
+  String get qacDeleteBookmark => 'Delete bookmark';
+
+  @override
+  String get phPrevMonth => 'Previous month';
+
+  @override
+  String get phNextMonth => 'Next month';
+
+  @override
+  String get clProLocked => 'Pro locked';
+
+  @override
+  String get clCompleteQuest =>
+      'Complete daily quests to unlock skins from the Daily Chest.';
+
+  @override
+  String get qdTajwidLegend => 'Red=Ghunnah, Blue=Qalqalah/Idgham, Green=Mad';
+
+  @override
+  String get ppProPitch =>
+      'Exclusive shields, auras, and titles. A new style for your avatar — without affecting your XP, streak, or rank.';
+
+  @override
+  String deQuizDone(String moduleTitle) {
+    return 'You completed the $moduleTitle quiz!';
+  }
+
+  @override
+  String deLevelShort(int level) {
+    return 'Lv $level';
+  }
+
+  @override
+  String deLevel(int level) {
+    return 'Level $level';
+  }
+
+  @override
+  String bqQuestionOf(int current, int total) {
+    return 'QUESTION $current/$total';
+  }
+
+  @override
+  String qbSurahName(int number) {
+    return 'Surah $number';
+  }
+
+  @override
+  String qacAyahNumber(int number) {
+    return 'Ayah $number';
+  }
 }

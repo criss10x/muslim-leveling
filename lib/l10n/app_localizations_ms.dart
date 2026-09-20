@@ -2362,4 +2362,136 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get dzTransHawla => 'Tiada daya & kekuatan melainkan dengan Allah';
+
+  @override
+  String get blModulNotFound => 'Modul tidak ditemui';
+
+  @override
+  String get blModulDone => 'Modul Selesai!';
+
+  @override
+  String get blKnowledgeUp => 'Pengetahuan anda semakin bertambah.';
+
+  @override
+  String get blMinScore70 => 'Minimum 70% untuk lulus. Cuba lagi!';
+
+  @override
+  String get blReadAgain =>
+      'Baca semula artikel, kemudian cuba kuiz lagi. Anda pasti boleh!';
+
+  @override
+  String get blBackToHub => 'Kembali ke Hub';
+
+  @override
+  String get qdArabicSize => 'Saiz teks Arab';
+
+  @override
+  String get qdTransSize => 'Saiz terjemahan';
+
+  @override
+  String get qdLatinHint => 'Bacaan rumi untuk membantu membaca Arab';
+
+  @override
+  String get qdTajwidColors => 'Warna Tajwid';
+
+  @override
+  String get qdTafsirMuyassar => 'Tafsir Muyassar (ringkas, mudah difahami)';
+
+  @override
+  String get qdTafsirKemenag => 'Tafsir Kemenag (lengkap)';
+
+  @override
+  String get ppUnlockSkins => 'Nyahkunci semua skin premium';
+
+  @override
+  String get ppActivateDev => 'Aktifkan Pro (dev)';
+
+  @override
+  String get deExpTitle => 'DAPAT XP!';
+
+  @override
+  String get bqModulNotFound => 'Modul tidak ditemui';
+
+  @override
+  String get bqQuizUnavailable => 'Kuiz belum tersedia';
+
+  @override
+  String get bqNotYetRight => 'Belum tepat';
+
+  @override
+  String get qpPrevAyah => 'Ayat sebelumnya';
+
+  @override
+  String get qpNextAyah => 'Ayat berikutnya';
+
+  @override
+  String get qpMurrotalSettings => 'Tetapan murattal';
+
+  @override
+  String get qpbRepeatRange => 'Ulangi julat';
+
+  @override
+  String get qpbSleepTimer => 'Pemasa tidur';
+
+  @override
+  String get qpbEndOfSurah => 'Akhir surah';
+
+  @override
+  String get qbNoBookmark => 'Tiada penanda buku';
+
+  @override
+  String get qbDeleteBookmark => 'Padam penanda buku';
+
+  @override
+  String get qacDeleteBookmark => 'Padam penanda buku';
+
+  @override
+  String get phPrevMonth => 'Bulan sebelumnya';
+
+  @override
+  String get phNextMonth => 'Bulan berikutnya';
+
+  @override
+  String get clProLocked => 'Pro dikunci';
+
+  @override
+  String get clCompleteQuest =>
+      'Selesaikan misi harian untuk membuka skin daripada Daily Chest.';
+
+  @override
+  String get qdTajwidLegend => 'Merah=Ghunnah, Biru=Qalqalah/Idgham, Hijau=Mad';
+
+  @override
+  String get ppProPitch =>
+      'Perisai, aura dan gelaran eksklusif. Gaya baharu untuk avatar anda — tanpa mempengaruhi XP, streak atau kedudukan anda.';
+
+  @override
+  String deQuizDone(String moduleTitle) {
+    return 'Anda telah menyelesaikan kuiz $moduleTitle!';
+  }
+
+  @override
+  String deLevelShort(int level) {
+    return 'Lv $level';
+  }
+
+  @override
+  String deLevel(int level) {
+    return 'Tahap $level';
+  }
+
+  @override
+  String bqQuestionOf(int current, int total) {
+    return 'SOALAN $current/$total';
+  }
+
+  @override
+  String qbSurahName(int number) {
+    return 'Surah $number';
+  }
+
+  @override
+  String qacAyahNumber(int number) {
+    return 'Ayat $number';
+  }
 }

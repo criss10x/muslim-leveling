@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:muslim_leveling/services/game_service.dart';
 import 'package:muslim_leveling/theme/app_theme.dart';
 import '../theme/app_icons.dart';
+import '../l10n/app_localizations.dart';
 
 /// Agregasi jumlah sholat wajib per tanggal (key 'YYYY-MM-DD'), 0..5.
 /// Sunnah/rawatib/tilawah/sedekah diabaikan — khusus wajib saja.
@@ -89,12 +90,12 @@ class _PrayerHeatmapState extends State<PrayerHeatmap> {
             ),
             IconButton(
               icon: Icon(AppIcons.chevronLeft, color: AppColors.primary),
-              tooltip: 'Bulan sebelumnya',
+              tooltip: AppL10n.of(context).phPrevMonth,
               onPressed: () => _geser(-1),
             ),
             IconButton(
               icon: Icon(AppIcons.chevronRight, color: AppColors.primary),
-              tooltip: 'Bulan berikutnya',
+              tooltip: AppL10n.of(context).phNextMonth,
               onPressed: () => _geser(1),
             ),
           ],

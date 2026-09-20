@@ -4,6 +4,7 @@ import '../theme/app_theme.dart';
 import '../services/quran_data.dart';
 import '../services/quran_settings.dart';
 import '../services/quran_bookmark.dart';
+import '../l10n/app_localizations.dart';
 
 class QuranAyahCard extends StatelessWidget {
   final QuranAyah ayah;
@@ -58,7 +59,7 @@ class QuranAyahCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(AppRadius.pill),
                     ),
                     child: Text(
-                      'Ayat ${ayah.ayah}',
+                      AppL10n.of(context).qacAyahNumber(ayah.ayah),
                       style: AppText.labelCapsSm()
                           .copyWith(color: AppColors.primary),
                     ),
@@ -73,7 +74,7 @@ class QuranAyahCard extends StatelessWidget {
                     color: bookmarked
                         ? AppColors.secondaryFixed
                         : AppColors.onSurfaceVariant.withValues(alpha: 0.6),
-                    tooltip: bookmarked ? 'Hapus bookmark' : 'Bookmark ayat',
+                    tooltip: bookmarked ? AppL10n.of(context).qacDeleteBookmark : 'Bookmark ayat',
                     visualDensity: VisualDensity.compact,
                   ),
                   if (onTafsir != null)

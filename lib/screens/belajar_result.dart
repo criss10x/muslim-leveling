@@ -7,6 +7,7 @@ import '../../services/game_service.dart';
 import 'naik_level_screen.dart';
 import 'dapet_exp_screen.dart';
 import '../theme/app_icons.dart';
+import '../l10n/app_localizations.dart';
 
 /// Quiz result — redesigned per spec: victory badge, glass score card,
 /// gradient heading, float animation, hero + ghost action buttons.
@@ -65,7 +66,7 @@ class _BelajarResultScreenState extends State<BelajarResultScreen>
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Modul tidak ditemukan', style: AppText.titleLg()),
+                Text(AppL10n.of(context).blModulNotFound, style: AppText.titleLg()),
                 const SizedBox(height: AppSpacing.md),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
@@ -223,7 +224,7 @@ class _BelajarResultScreenState extends State<BelajarResultScreen>
 
   Widget _heading() {
     final light = isLightTheme;
-    final title = _passed ? 'Modul Selesai!' : 'Belum Lulus';
+    final title = _passed ? AppL10n.of(context).blModulDone : 'Belum Lulus';
     if (light) {
       return Text(
         title,
@@ -257,7 +258,7 @@ class _BelajarResultScreenState extends State<BelajarResultScreen>
 
   Widget _subheading() {
     return Text(
-      _passed ? 'Pengetahuanmu semakin bertambah.' : 'Minimal 70% untuk lulus. Coba lagi ya!',
+      _passed ? AppL10n.of(context).blKnowledgeUp : AppL10n.of(context).blMinScore70,
       textAlign: TextAlign.center,
       style: AppText.bodyLg().copyWith(color: AppColors.onSurfaceVariant),
     );
@@ -416,7 +417,7 @@ class _BelajarResultScreenState extends State<BelajarResultScreen>
           Icon(AppIcons.lightbulb, color: AppColors.tertiary, size: 20),
           const SizedBox(width: 12),
           Expanded(
-            child: Text('Baca lagi artikelnya, lalu coba quiz lagi. Kamu pasti bisa!',
+            child: Text(AppL10n.of(context).blReadAgain,
                 style: AppText.bodyMd().copyWith(color: AppColors.tertiary)),
           ),
         ],
@@ -430,7 +431,7 @@ class _BelajarResultScreenState extends State<BelajarResultScreen>
         SizedBox(
           width: double.infinity,
           child: HeroButton(
-            label: 'Kembali ke Hub',
+            label: AppL10n.of(context).blBackToHub,
             trailingIcon: AppIcons.arrowForward,
             onPressed: () => Navigator.of(context).popUntil((route) => route.isFirst),
           ),

@@ -5,6 +5,7 @@ import '../services/cosmetic_service.dart';
 import '../services/game_service.dart';
 import '../services/entitlement_service.dart';
 import '../theme/app_icons.dart';
+import '../l10n/app_localizations.dart';
 
 const _slotLabels = {CosmeticSlot.aura: 'Aura', CosmeticSlot.title: 'Title'};
 
@@ -208,7 +209,7 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
                   '${c.name}, ${selected
                       ? 'dipakai'
                       : locked
-                      ? 'Pro terkunci'
+                      ? AppL10n.of(context).clProLocked
                       : 'tersedia'}',
               child: InkWell(
                 onTap: () => _onTap(c),
@@ -297,7 +298,7 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
                 const SizedBox(width: AppSpacing.sm),
                 Expanded(
                   child: Text(
-                    'Selesaikan quest harian untuk membuka skin dari Daily Chest.',
+                    AppL10n.of(context).clCompleteQuest,
                     style: AppText.bodyMd().copyWith(
                       color: AppColors.onSurfaceVariant,
                       fontSize: 12,

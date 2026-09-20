@@ -1117,5 +1117,89 @@
   "dzTransAlhamdulillah": "Segala puji bagi Allah",
   "dzTransAllahuakbar": "Allah Maha Besar",
   "dzTransAstaghfirullah": "Aku memohon ampun kepada Allah",
-  "dzTransHawla": "Tiada daya & kekuatan kecuali dengan Allah"
+  "dzTransHawla": "Tiada daya & kekuatan kecuali dengan Allah",
+  "blModulNotFound": "Modul tidak ditemukan",
+  "blModulDone": "Modul Selesai!",
+  "blKnowledgeUp": "Pengetahuanmu semakin bertambah.",
+  "blMinScore70": "Minimal 70% untuk lulus. Coba lagi ya!",
+  "blReadAgain": "Baca lagi artikelnya, lalu coba quiz lagi. Kamu pasti bisa!",
+  "blBackToHub": "Kembali ke Hub",
+  "qdArabicSize": "Ukuran teks Arab",
+  "qdTransSize": "Ukuran terjemahan",
+  "qdLatinHint": "Bacaan latin untuk membantu membaca Arab",
+  "qdTajwidColors": "Warna Tajwid",
+  "qdTafsirMuyassar": "Tafsir Muyassar (ringkas, mudah dicerna)",
+  "qdTafsirKemenag": "Tafsir Kemenag (lengkap)",
+  "ppUnlockSkins": "Buka semua skin premium",
+  "ppActivateDev": "Aktifkan Pro (dev)",
+  "deExpTitle": "DAPET EXP!",
+  "bqModulNotFound": "Modul tidak ditemukan",
+  "bqQuizUnavailable": "Quiz belum tersedia",
+  "bqNotYetRight": "Belum tepat",
+  "qpPrevAyah": "Ayat sebelumnya",
+  "qpNextAyah": "Ayat berikutnya",
+  "qpMurrotalSettings": "Setelan murrotal",
+  "qpbRepeatRange": "Ulangi rentang",
+  "qpbSleepTimer": "Tidur otomatis",
+  "qpbEndOfSurah": "Akhir surat",
+  "qbNoBookmark": "Belum ada bookmark",
+  "qbDeleteBookmark": "Hapus bookmark",
+  "qacDeleteBookmark": "Hapus bookmark",
+  "phPrevMonth": "Bulan sebelumnya",
+  "phNextMonth": "Bulan berikutnya",
+  "clProLocked": "Pro terkunci",
+  "clCompleteQuest": "Selesaikan quest harian untuk membuka skin dari Daily Chest.",
+  "qdTajwidLegend": "Merah=Ghunnah, Biru=Qalqalah/Idgham, Hijau=Mad",
+  "ppProPitch": "Perisai, aura, dan gelar eksklusif. Gaya baru untuk avatarmu — tanpa memengaruhi XP, streak, atau peringkatmu.",
+  "deQuizDone": "Kamu menyelesaikan quiz {moduleTitle}!",
+  "@deQuizDone": {
+    "placeholders": {
+      "moduleTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "deLevelShort": "Lv {level}",
+  "@deLevelShort": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "deLevel": "Level {level}",
+  "@deLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "bqQuestionOf": "PERTANYAAN {current}/{total}",
+  "@bqQuestionOf": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "qbSurahName": "Surat {number}",
+  "@qbSurahName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "qacAyahNumber": "Ayat {number}",
+  "@qacAyahNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  }
 }

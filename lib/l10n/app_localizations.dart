@@ -4251,6 +4251,240 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Tiada daya & kekuatan kecuali dengan Allah'**
   String get dzTransHawla;
+
+  /// No description provided for @blModulNotFound.
+  ///
+  /// In id, this message translates to:
+  /// **'Modul tidak ditemukan'**
+  String get blModulNotFound;
+
+  /// No description provided for @blModulDone.
+  ///
+  /// In id, this message translates to:
+  /// **'Modul Selesai!'**
+  String get blModulDone;
+
+  /// No description provided for @blKnowledgeUp.
+  ///
+  /// In id, this message translates to:
+  /// **'Pengetahuanmu semakin bertambah.'**
+  String get blKnowledgeUp;
+
+  /// No description provided for @blMinScore70.
+  ///
+  /// In id, this message translates to:
+  /// **'Minimal 70% untuk lulus. Coba lagi ya!'**
+  String get blMinScore70;
+
+  /// No description provided for @blReadAgain.
+  ///
+  /// In id, this message translates to:
+  /// **'Baca lagi artikelnya, lalu coba quiz lagi. Kamu pasti bisa!'**
+  String get blReadAgain;
+
+  /// No description provided for @blBackToHub.
+  ///
+  /// In id, this message translates to:
+  /// **'Kembali ke Hub'**
+  String get blBackToHub;
+
+  /// No description provided for @qdArabicSize.
+  ///
+  /// In id, this message translates to:
+  /// **'Ukuran teks Arab'**
+  String get qdArabicSize;
+
+  /// No description provided for @qdTransSize.
+  ///
+  /// In id, this message translates to:
+  /// **'Ukuran terjemahan'**
+  String get qdTransSize;
+
+  /// No description provided for @qdLatinHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Bacaan latin untuk membantu membaca Arab'**
+  String get qdLatinHint;
+
+  /// No description provided for @qdTajwidColors.
+  ///
+  /// In id, this message translates to:
+  /// **'Warna Tajwid'**
+  String get qdTajwidColors;
+
+  /// No description provided for @qdTafsirMuyassar.
+  ///
+  /// In id, this message translates to:
+  /// **'Tafsir Muyassar (ringkas, mudah dicerna)'**
+  String get qdTafsirMuyassar;
+
+  /// No description provided for @qdTafsirKemenag.
+  ///
+  /// In id, this message translates to:
+  /// **'Tafsir Kemenag (lengkap)'**
+  String get qdTafsirKemenag;
+
+  /// No description provided for @ppUnlockSkins.
+  ///
+  /// In id, this message translates to:
+  /// **'Buka semua skin premium'**
+  String get ppUnlockSkins;
+
+  /// No description provided for @ppActivateDev.
+  ///
+  /// In id, this message translates to:
+  /// **'Aktifkan Pro (dev)'**
+  String get ppActivateDev;
+
+  /// No description provided for @deExpTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'DAPET EXP!'**
+  String get deExpTitle;
+
+  /// No description provided for @bqModulNotFound.
+  ///
+  /// In id, this message translates to:
+  /// **'Modul tidak ditemukan'**
+  String get bqModulNotFound;
+
+  /// No description provided for @bqQuizUnavailable.
+  ///
+  /// In id, this message translates to:
+  /// **'Quiz belum tersedia'**
+  String get bqQuizUnavailable;
+
+  /// No description provided for @bqNotYetRight.
+  ///
+  /// In id, this message translates to:
+  /// **'Belum tepat'**
+  String get bqNotYetRight;
+
+  /// No description provided for @qpPrevAyah.
+  ///
+  /// In id, this message translates to:
+  /// **'Ayat sebelumnya'**
+  String get qpPrevAyah;
+
+  /// No description provided for @qpNextAyah.
+  ///
+  /// In id, this message translates to:
+  /// **'Ayat berikutnya'**
+  String get qpNextAyah;
+
+  /// No description provided for @qpMurrotalSettings.
+  ///
+  /// In id, this message translates to:
+  /// **'Setelan murrotal'**
+  String get qpMurrotalSettings;
+
+  /// No description provided for @qpbRepeatRange.
+  ///
+  /// In id, this message translates to:
+  /// **'Ulangi rentang'**
+  String get qpbRepeatRange;
+
+  /// No description provided for @qpbSleepTimer.
+  ///
+  /// In id, this message translates to:
+  /// **'Tidur otomatis'**
+  String get qpbSleepTimer;
+
+  /// No description provided for @qpbEndOfSurah.
+  ///
+  /// In id, this message translates to:
+  /// **'Akhir surat'**
+  String get qpbEndOfSurah;
+
+  /// No description provided for @qbNoBookmark.
+  ///
+  /// In id, this message translates to:
+  /// **'Belum ada bookmark'**
+  String get qbNoBookmark;
+
+  /// No description provided for @qbDeleteBookmark.
+  ///
+  /// In id, this message translates to:
+  /// **'Hapus bookmark'**
+  String get qbDeleteBookmark;
+
+  /// No description provided for @qacDeleteBookmark.
+  ///
+  /// In id, this message translates to:
+  /// **'Hapus bookmark'**
+  String get qacDeleteBookmark;
+
+  /// No description provided for @phPrevMonth.
+  ///
+  /// In id, this message translates to:
+  /// **'Bulan sebelumnya'**
+  String get phPrevMonth;
+
+  /// No description provided for @phNextMonth.
+  ///
+  /// In id, this message translates to:
+  /// **'Bulan berikutnya'**
+  String get phNextMonth;
+
+  /// No description provided for @clProLocked.
+  ///
+  /// In id, this message translates to:
+  /// **'Pro terkunci'**
+  String get clProLocked;
+
+  /// No description provided for @clCompleteQuest.
+  ///
+  /// In id, this message translates to:
+  /// **'Selesaikan quest harian untuk membuka skin dari Daily Chest.'**
+  String get clCompleteQuest;
+
+  /// No description provided for @qdTajwidLegend.
+  ///
+  /// In id, this message translates to:
+  /// **'Merah=Ghunnah, Biru=Qalqalah/Idgham, Hijau=Mad'**
+  String get qdTajwidLegend;
+
+  /// No description provided for @ppProPitch.
+  ///
+  /// In id, this message translates to:
+  /// **'Perisai, aura, dan gelar eksklusif. Gaya baru untuk avatarmu — tanpa memengaruhi XP, streak, atau peringkatmu.'**
+  String get ppProPitch;
+
+  /// No description provided for @deQuizDone.
+  ///
+  /// In id, this message translates to:
+  /// **'Kamu menyelesaikan quiz {moduleTitle}!'**
+  String deQuizDone(String moduleTitle);
+
+  /// No description provided for @deLevelShort.
+  ///
+  /// In id, this message translates to:
+  /// **'Lv {level}'**
+  String deLevelShort(int level);
+
+  /// No description provided for @deLevel.
+  ///
+  /// In id, this message translates to:
+  /// **'Level {level}'**
+  String deLevel(int level);
+
+  /// No description provided for @bqQuestionOf.
+  ///
+  /// In id, this message translates to:
+  /// **'PERTANYAAN {current}/{total}'**
+  String bqQuestionOf(int current, int total);
+
+  /// No description provided for @qbSurahName.
+  ///
+  /// In id, this message translates to:
+  /// **'Surat {number}'**
+  String qbSurahName(int number);
+
+  /// No description provided for @qacAyahNumber.
+  ///
+  /// In id, this message translates to:
+  /// **'Ayat {number}'**
+  String qacAyahNumber(int number);
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

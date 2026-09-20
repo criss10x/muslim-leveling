@@ -2374,4 +2374,137 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get dzTransHawla => 'Güç ve kuvvet ancak Allah\'a aittir';
+
+  @override
+  String get blModulNotFound => 'Modül bulunamadı';
+
+  @override
+  String get blModulDone => 'Modül Tamamlandı!';
+
+  @override
+  String get blKnowledgeUp => 'Bilginiz daha da arttı.';
+
+  @override
+  String get blMinScore70 =>
+      'Geçmek için en az %70 gereklidir. Lütfen tekrar deneyin!';
+
+  @override
+  String get blReadAgain =>
+      'Makaleyi tekrar okuyun ve testi yeniden deneyin. Başarabilirsiniz!';
+
+  @override
+  String get blBackToHub => 'Merkeze Dön';
+
+  @override
+  String get qdArabicSize => 'Arapça metin boyutu';
+
+  @override
+  String get qdTransSize => 'Çeviri boyutu';
+
+  @override
+  String get qdLatinHint => 'Arapça okumaya yardımcı olacak transkripsiyon';
+
+  @override
+  String get qdTajwidColors => 'Tecvid Renkleri';
+
+  @override
+  String get qdTafsirMuyassar => 'Tefsir el-Müyesser (özet, anlaşılması kolay)';
+
+  @override
+  String get qdTafsirKemenag => 'Kemenag Tefsiri (kapsamlı)';
+
+  @override
+  String get ppUnlockSkins => 'Tüm premium görünümlerin kilidini açın';
+
+  @override
+  String get ppActivateDev => 'Pro\'yu Etkinleştir (geliştirici)';
+
+  @override
+  String get deExpTitle => 'XP KAZANILDI!';
+
+  @override
+  String get bqModulNotFound => 'Modül bulunamadı';
+
+  @override
+  String get bqQuizUnavailable => 'Test henüz mevcut değil';
+
+  @override
+  String get bqNotYetRight => 'Henüz doğru değil';
+
+  @override
+  String get qpPrevAyah => 'Önceki ayet';
+
+  @override
+  String get qpNextAyah => 'Sonraki ayet';
+
+  @override
+  String get qpMurrotalSettings => 'Murattal ayarları';
+
+  @override
+  String get qpbRepeatRange => 'Aralığı tekrarla';
+
+  @override
+  String get qpbSleepTimer => 'Uyku zamanlayıcısı';
+
+  @override
+  String get qpbEndOfSurah => 'Sure sonu';
+
+  @override
+  String get qbNoBookmark => 'Henüz yer işareti yok';
+
+  @override
+  String get qbDeleteBookmark => 'Yer işaretini sil';
+
+  @override
+  String get qacDeleteBookmark => 'Yer işaretini sil';
+
+  @override
+  String get phPrevMonth => 'Önceki ay';
+
+  @override
+  String get phNextMonth => 'Sonraki ay';
+
+  @override
+  String get clProLocked => 'Pro kilitli';
+
+  @override
+  String get clCompleteQuest =>
+      'Günlük Sandık\'tan görünümlerin kilidini açmak için günlük görevleri tamamlayın.';
+
+  @override
+  String get qdTajwidLegend => 'Kırmızı=Gunne, Mavi=Kalkale/İdgam, Yeşil=Med';
+
+  @override
+  String get ppProPitch =>
+      'Özel kalkanlar, auralar ve unvanlar. Avatarınız için yeni bir tarz — XP, seriniz veya sıralamanız etkilenmez.';
+
+  @override
+  String deQuizDone(String moduleTitle) {
+    return '$moduleTitle testini tamamladınız!';
+  }
+
+  @override
+  String deLevelShort(int level) {
+    return 'Sv $level';
+  }
+
+  @override
+  String deLevel(int level) {
+    return 'Seviye $level';
+  }
+
+  @override
+  String bqQuestionOf(int current, int total) {
+    return 'SORU $current/$total';
+  }
+
+  @override
+  String qbSurahName(int number) {
+    return 'Sure $number';
+  }
+
+  @override
+  String qacAyahNumber(int number) {
+    return 'Ayet $number';
+  }
 }

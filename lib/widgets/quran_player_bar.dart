@@ -3,6 +3,7 @@ import '../theme/app_theme.dart';
 import '../services/quran_data.dart';
 import '../services/quran_audio_service.dart';
 import 'quran_playback_sheet.dart';
+import '../l10n/app_localizations.dart';
 
 class QuranPlayerBar extends StatelessWidget {
   final QuranSurah surah;
@@ -65,7 +66,7 @@ class QuranPlayerBar extends StatelessWidget {
                         ),
                       ),
                       IconButton(
-                        tooltip: 'Ayat sebelumnya',
+                        tooltip: AppL10n.of(context).qpPrevAyah,
                         icon: const Icon(Icons.skip_previous),
                         color: AppColors.onSurface,
                         onPressed: quranAudio.previous,
@@ -80,13 +81,13 @@ class QuranPlayerBar extends StatelessWidget {
                         onPressed: quranAudio.toggle,
                       ),
                       IconButton(
-                        tooltip: 'Ayat berikutnya',
+                        tooltip: AppL10n.of(context).qpNextAyah,
                         icon: const Icon(Icons.skip_next),
                         color: AppColors.onSurface,
                         onPressed: quranAudio.next,
                       ),
                       IconButton(
-                        tooltip: 'Setelan murrotal',
+                        tooltip: AppL10n.of(context).qpMurrotalSettings,
                         icon: const Icon(Icons.tune),
                         color: AppColors.onSurface,
                         onPressed: () =>

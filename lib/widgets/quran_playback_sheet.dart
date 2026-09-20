@@ -5,6 +5,7 @@ import '../services/quran_audio_service.dart';
 import '../services/quran_playlist.dart';
 import '../services/quran_settings.dart';
 import '../services/quran_qari.dart';
+import '../l10n/app_localizations.dart';
 
 Future<void> showQuranPlaybackSheet(
   BuildContext context, {
@@ -81,7 +82,7 @@ class _PlaybackSheet extends StatelessWidget {
                     contentPadding: EdgeInsets.zero,
                     value: quranAudio.repeatAll,
                     onChanged: (v) => quranAudio.setRepeatAll(v),
-                    title: Text('Ulangi rentang',
+                    title: Text(AppL10n.of(context).qpbRepeatRange,
                         style: AppText.bodyLg()
                             .copyWith(color: AppColors.onSurface)),
                     subtitle: Text(
@@ -120,7 +121,7 @@ class _PlaybackSheet extends StatelessWidget {
                   const SizedBox(height: 20),
 
                   // ── Sleep timer ──
-                  Text('Tidur otomatis',
+                  Text(AppL10n.of(context).qpbSleepTimer,
                       style: AppText.labelCaps()
                           .copyWith(color: AppColors.onSurfaceVariant)),
                   const SizedBox(height: 8),
@@ -130,7 +131,7 @@ class _PlaybackSheet extends StatelessWidget {
                       for (final m in kSleepOptions)
                         ChoiceChip(
                           label: Text(m == -1
-                              ? 'Akhir surat'
+                              ? AppL10n.of(context).qpbEndOfSurah
                               : m == 0
                                   ? 'Off'
                                   : '${m}m'),

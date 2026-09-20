@@ -6,6 +6,7 @@ import '../services/quran_data.dart';
 import '../services/quran_bookmark.dart';
 import '../services/quran_settings.dart';
 import 'quran_reader.dart';
+import '../l10n/app_localizations.dart';
 
 /// Daftar ayat yang di-bookmark — tap buka reader di ayat itu.
 class QuranBookmarksScreen extends StatefulWidget {
@@ -65,7 +66,7 @@ class _QuranBookmarksScreenState extends State<QuranBookmarksScreen> {
                     Icon(Icons.bookmark_border,
                         size: 48, color: AppColors.onSurfaceVariant),
                     const SizedBox(height: AppSpacing.md),
-                    Text('Belum ada bookmark',
+                    Text(AppL10n.of(context).qbNoBookmark,
                         style: AppText.bodyLg()
                             .copyWith(color: AppColors.onSurfaceVariant)),
                     const SizedBox(height: 4),
@@ -107,7 +108,7 @@ class _QuranBookmarksScreenState extends State<QuranBookmarksScreen> {
                             Expanded(
                               child: Text(
                                 surah == null
-                                    ? 'Surat ${b.surah}'
+                                    ? AppL10n.of(context).qbSurahName(b.surah)
                                     : '${surah.nameLatin} : ${b.ayah}',
                                 style: AppText.labelCaps().copyWith(
                                     color: AppColors.primary, fontSize: 11),
@@ -118,7 +119,7 @@ class _QuranBookmarksScreenState extends State<QuranBookmarksScreen> {
                                   b.surah, b.ayah, b.arabic, b.translation),
                               icon: Icon(Icons.bookmark,
                                   size: 18, color: AppColors.secondaryFixed),
-                              tooltip: 'Hapus bookmark',
+                              tooltip: AppL10n.of(context).qbDeleteBookmark,
                               visualDensity: VisualDensity.compact,
                             ),
                           ],

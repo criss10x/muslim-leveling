@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_theme.dart';
 import '../services/quran_settings.dart';
+import '../l10n/app_localizations.dart';
 
 /// Setelan tampilan — diatur saat membaca, terpisah dari setelan murrotal
 /// yang diatur saat menghafal.
@@ -39,7 +40,7 @@ class _DisplaySheet extends StatelessWidget {
                   const SizedBox(height: 16),
                   _preview(),
                   const SizedBox(height: 20),
-                  _label('Ukuran teks Arab'),
+                  _label(AppL10n.of(context).qdArabicSize),
                   Slider(
                     value: quranSettings.arabicFontSize,
                     min: kArabicFontMin,
@@ -48,7 +49,7 @@ class _DisplaySheet extends StatelessWidget {
                     label: quranSettings.arabicFontSize.round().toString(),
                     onChanged: (v) => quranSettings.setArabicFontSize(v),
                   ),
-                  _label('Ukuran terjemahan'),
+                  _label(AppL10n.of(context).qdTransSize),
                   Slider(
                     value: quranSettings.translationFontSize,
                     min: kTranslationFontMin,
@@ -68,14 +69,13 @@ class _DisplaySheet extends StatelessWidget {
                     value: quranSettings.showLatin,
                     onChanged: (v) => quranSettings.setShowLatin(v),
                     title: 'Transliterasi Latin',
-                    subtitle: 'Bacaan latin untuk membantu membaca Arab',
+                    subtitle: AppL10n.of(context).qdLatinHint,
                   ),
                   _switchTile(
                     value: quranSettings.showTajweed,
                     onChanged: (v) => quranSettings.setShowTajweed(v),
-                    title: 'Warna Tajwid',
-                    subtitle: 'Merah=Ghunnah, Biru=Qalqalah/Idgham, '
-                        'Hijau=Mad',
+                    title: AppL10n.of(context).qdTajwidColors,
+                    subtitle: AppL10n.of(context).qdTajwidLegend,
                   ),
                   const Divider(height: 24),
                   _switchTile(
@@ -83,8 +83,8 @@ class _DisplaySheet extends StatelessWidget {
                     onChanged: (v) => quranSettings.setUseShortTafsir(v),
                     title: 'Tafsir Ringkas',
                     subtitle: quranSettings.useShortTafsir
-                        ? 'Tafsir Muyassar (ringkas, mudah dicerna)'
-                        : 'Tafsir Kemenag (lengkap)',
+                        ? AppL10n.of(context).qdTafsirMuyassar
+                        : AppL10n.of(context).qdTafsirKemenag,
                   ),
                 ],
               ),

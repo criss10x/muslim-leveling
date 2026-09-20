@@ -1,311 +1,5 @@
 {
   "@@locale": "en",
-  "@achEarnedOn": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      },
-      "tier": {
-        "type": "String"
-      }
-    }
-  },
-  "@achHintFallback": {
-    "placeholders": {
-      "desc": {
-        "type": "String"
-      }
-    }
-  },
-  "@achLockedTier": {
-    "placeholders": {
-      "tier": {
-        "type": "String"
-      }
-    }
-  },
-  "@achScreenProgress": {
-    "placeholders": {
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "@achSemanticsDetail": {
-    "placeholders": {
-      "state": {
-        "type": "String"
-      },
-      "title": {
-        "type": "String"
-      },
-      "desc": {
-        "type": "String"
-      },
-      "tier": {
-        "type": "String"
-      }
-    }
-  },
-  "@achSemanticsUnlocked": {
-    "placeholders": {
-      "title": {
-        "type": "String"
-      },
-      "desc": {
-        "type": "String"
-      },
-      "tier": {
-        "type": "String"
-      }
-    }
-  },
-  "@homeAskWajibTitle": {
-    "placeholders": {
-      "prayer": {
-        "type": "String"
-      }
-    }
-  },
-  "@homeChestMetaProgress": {
-    "placeholders": {
-      "done": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "@homeLevelUpSource": {
-    "placeholders": {
-      "prayer": {
-        "type": "String"
-      }
-    }
-  },
-  "@homeLockAfterTime": {
-    "placeholders": {
-      "prayer": {
-        "type": "String"
-      }
-    }
-  },
-  "@homeLockBeforeTime": {
-    "placeholders": {
-      "prayer": {
-        "type": "String"
-      },
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "@homeLockSubuh": {
-    "placeholders": {
-      "hours": {
-        "type": "int"
-      },
-      "until": {
-        "type": "String"
-      }
-    }
-  },
-  "@homeQuestClaimable": {
-    "placeholders": {
-      "n": {
-        "type": "int"
-      }
-    }
-  },
-  "@homeQuickActionsMeta": {
-    "placeholders": {
-      "done": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "@homeRevealLevelUp": {
-    "placeholders": {
-      "suffix": {
-        "type": "String"
-      }
-    }
-  },
-  "@homeRevealShieldBody": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@homeSideDzikirSub": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      },
-      "target": {
-        "type": "int"
-      }
-    }
-  },
-  "@homeSideHadisSub": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      },
-      "target": {
-        "type": "int"
-      }
-    }
-  },
-  "@homeSideQuranSub": {
-    "placeholders": {
-      "done": {
-        "type": "int"
-      },
-      "target": {
-        "type": "int"
-      }
-    }
-  },
-  "@onbStepOf": {
-    "placeholders": {
-      "step": {
-        "type": "String"
-      },
-      "total": {
-        "type": "String"
-      }
-    }
-  },
-  "@profilHeroSemantics": {
-    "placeholders": {
-      "tier": {
-        "type": "String"
-      }
-    }
-  },
-  "@profilLevelBadge": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "@profilLoginFailed": {
-    "placeholders": {
-      "msg": {
-        "type": "String"
-      }
-    }
-  },
-  "@profilPhotoFailed": {
-    "placeholders": {
-      "msg": {
-        "type": "String"
-      }
-    }
-  },
-  "@profilRemindersChangeFailed": {
-    "placeholders": {
-      "msg": {
-        "type": "String"
-      }
-    }
-  },
-  "@profilRemindersScheduled": {
-    "placeholders": {
-      "mode": {
-        "type": "String"
-      },
-      "n": {
-        "type": "int"
-      }
-    }
-  },
-  "@profilRemindersScheduledCount": {
-    "placeholders": {
-      "n": {
-        "type": "int"
-      }
-    }
-  },
-  "@profilSaveFailed": {
-    "placeholders": {
-      "msg": {
-        "type": "String"
-      }
-    }
-  },
-  "@profilSettingsOpenFailed": {
-    "placeholders": {
-      "msg": {
-        "type": "String"
-      }
-    }
-  },
-  "@profilStatsSince": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "@profilStreakBest": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@profilStreakSemanticsItem": {
-    "placeholders": {
-      "prayer": {
-        "type": "String"
-      },
-      "days": {
-        "type": "int"
-      }
-    }
-  },
-  "@profilTestNotifFailed": {
-    "placeholders": {
-      "msg": {
-        "type": "String"
-      }
-    }
-  },
-  "@profilVersion": {
-    "placeholders": {
-      "version": {
-        "type": "String"
-      }
-    }
-  },
-  "@profilXpToNext": {
-    "placeholders": {
-      "xp": {
-        "type": "int"
-      },
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "@profilXpWithinLevel": {
-    "placeholders": {
-      "current": {
-        "type": "int"
-      },
-      "needed": {
-        "type": "int"
-      }
-    }
-  },
   "achBtnAwesome": "NICE!",
   "achBtnSkipAll": "Skip all",
   "achEarnedOn": "Unlocked {date} • {tier}",
@@ -808,40 +502,6 @@
   "qsModeEsthetic": "Esthetic",
   "qsContentArabic": "Arabic",
   "qsContentTranslation": "Translation",
-  "@dlCiteSurah": {
-    "placeholders": {
-      "surah": {
-        "type": "String"
-      },
-      "ayah": {
-        "type": "int"
-      }
-    }
-  },
-  "@dlCiteDoa": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "@dlCiteUlama": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "@dlProgress": {
-    "placeholders": {
-      "done": {
-        "type": "int"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "quest_subuh_tepat_desc": "Pray Fajr on time (within 30 minutes of the adhan)",
   "quest_five_rings_desc": "Complete all 5/5 prayers today",
   "quest_timely_prayers_desc": "Pray on time (within 10 minutes), 3x today",
@@ -992,21 +652,7 @@
   "qiblaTitle": "Qibla Direction",
   "qiblaAligned": "🎯 Locked! Hold this position",
   "qiblaTurnRight": "Turn {degrees}° right →",
-  "@qiblaTurnRight": {
-    "placeholders": {
-      "degrees": {
-        "type": "String"
-      }
-    }
-  },
   "qiblaTurnLeft": "← Turn {degrees}° left",
-  "@qiblaTurnLeft": {
-    "placeholders": {
-      "degrees": {
-        "type": "String"
-      }
-    }
-  },
   "qiblaNoSensorTitle": "Compass Sensor Unavailable",
   "qiblaNoSensorBody": "This device has no magnetometer sensor. Use the direction guide below instead.",
   "qiblaAlignedTitle": "Facing the Qibla!",
@@ -1014,68 +660,16 @@
   "qiblaStatTitle": "QIBLA DIRECTION",
   "qiblaDistanceTitle": "DISTANCE TO KAABA",
   "qiblaCityDistance": "📍 {city} • {km} km to the Kaaba",
-  "@qiblaCityDistance": {
-    "placeholders": {
-      "city": {
-        "type": "String"
-      },
-      "km": {
-        "type": "String"
-      }
-    }
-  },
   "qiblaCityBearing": "Qibla direction from {city}:",
-  "@qiblaCityBearing": {
-    "placeholders": {
-      "city": {
-        "type": "String"
-      }
-    }
-  },
   "qiblaNorthDegrees": "{degrees}° from North",
-  "@qiblaNorthDegrees": {
-    "placeholders": {
-      "degrees": {
-        "type": "String"
-      }
-    }
-  },
   "qiblaTurnInstruction": "Rotate your device {degrees}° clockwise from north to face the qibla.",
-  "@qiblaTurnInstruction": {
-    "placeholders": {
-      "degrees": {
-        "type": "String"
-      }
-    }
-  },
   "qiblaOffset": "{degrees}° off from the qibla",
-  "@qiblaOffset": {
-    "placeholders": {
-      "degrees": {
-        "type": "String"
-      }
-    }
-  },
   "dzResetTitle": "Reset counter?",
   "dzResetBody": "The \"{item}\" counter will be reset to 0.\\nToday's dzikir total still counts.",
-  "@dzResetBody": {
-    "placeholders": {
-      "item": {
-        "type": "String"
-      }
-    }
-  },
   "dzResetCancel": "CANCEL",
   "dzResetConfirm": "RESET",
   "dzTapHint": "Tap anywhere to do dzikir",
   "dzToday": "Today: {total}",
-  "@dzToday": {
-    "placeholders": {
-      "total": {
-        "type": "String"
-      }
-    }
-  },
   "dzVibrateOff": "Turn off vibration",
   "dzVibrateOn": "Turn on vibration",
   "dzResetThis": "Reset this counter",
@@ -1087,35 +681,53 @@
   "hdRandomFailed": "Failed to fetch a random hadith. Try again.",
   "hdSearchHint": "Search hadith…",
   "hdSearchFound": "{total} hadith found",
-  "@hdSearchFound": {
-    "placeholders": {
-      "total": {
-        "type": "String"
-      }
-    }
-  },
   "hdSearchEmpty": "No hadith found.",
   "hdBackToList": "Back to list",
   "hdLoadMore": "Load More",
   "hdNumber": "no. {id}",
-  "@hdNumber": {
-    "placeholders": {
-      "id": {
-        "type": "String"
-      }
-    }
-  },
   "hdDetailTitle": "Hadith no. {id}",
-  "@hdDetailTitle": {
-    "placeholders": {
-      "id": {
-        "type": "String"
-      }
-    }
-  },
   "dzTransSubhanallah": "Glorified is Allah",
   "dzTransAlhamdulillah": "All praise is due to Allah",
   "dzTransAllahuakbar": "Allah is the Greatest",
   "dzTransAstaghfirullah": "I seek forgiveness from Allah",
-  "dzTransHawla": "There is no power or strength except with Allah"
+  "dzTransHawla": "There is no power or strength except with Allah",
+  "blModulNotFound": "Module not found",
+  "blModulDone": "Module Completed!",
+  "blKnowledgeUp": "Your knowledge has increased.",
+  "blMinScore70": "A minimum score of 70% is required to pass. Please try again!",
+  "blReadAgain": "Read the article again, then try the quiz again. You can do it!",
+  "blBackToHub": "Back to Hub",
+  "qdArabicSize": "Arabic text size",
+  "qdTransSize": "Translation size",
+  "qdLatinHint": "Transliteration to assist in reading Arabic",
+  "qdTajwidColors": "Tajweed colors",
+  "qdTafsirMuyassar": "Tafsir Muyassar (concise, easy to understand)",
+  "qdTafsirKemenag": "Tafsir Kemenag (comprehensive)",
+  "ppUnlockSkins": "Unlock all premium skins",
+  "ppActivateDev": "Activate Pro (dev)",
+  "deExpTitle": "XP EARNED!",
+  "bqModulNotFound": "Module not found",
+  "bqQuizUnavailable": "Quiz is not yet available",
+  "bqNotYetRight": "Incorrect",
+  "qpPrevAyah": "Previous Ayah",
+  "qpNextAyah": "Next Ayah",
+  "qpMurrotalSettings": "Murottal settings",
+  "qpbRepeatRange": "Repeat range",
+  "qpbSleepTimer": "Sleep timer",
+  "qpbEndOfSurah": "End of Surah",
+  "qbNoBookmark": "No bookmarks yet",
+  "qbDeleteBookmark": "Delete bookmark",
+  "qacDeleteBookmark": "Delete bookmark",
+  "phPrevMonth": "Previous month",
+  "phNextMonth": "Next month",
+  "clProLocked": "Pro locked",
+  "clCompleteQuest": "Complete daily quests to unlock skins from the Daily Chest.",
+  "qdTajwidLegend": "Red=Ghunnah, Blue=Qalqalah/Idgham, Green=Mad",
+  "ppProPitch": "Exclusive shields, auras, and titles. A new style for your avatar — without affecting your XP, streak, or rank.",
+  "deQuizDone": "You completed the {moduleTitle} quiz!",
+  "deLevelShort": "Lv {level}",
+  "deLevel": "Level {level}",
+  "bqQuestionOf": "QUESTION {current}/{total}",
+  "qbSurahName": "Surah {number}",
+  "qacAyahNumber": "Ayah {number}"
 }
