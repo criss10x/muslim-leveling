@@ -2698,4 +2698,55 @@ class AppL10nTr extends AppL10n {
   String notifModeTitle(String mode) {
     return 'Muslim Leveling · $mode';
   }
+
+  @override
+  String notifTitleMarker(String prayer) {
+    return '🕌 $prayer';
+  }
+
+  @override
+  String notifTitlePrayer(String prayer) {
+    return '🕌 $prayer Namazı Vakti';
+  }
+
+  @override
+  String notifBodyImsak(String loc) {
+    return 'İmsak vakti girdi$loc. Lütfen yeme ve içmeyi bırakınız. 🌙';
+  }
+
+  @override
+  String notifBodyTerbit(String loc) {
+    return 'Güneş doğdu$loc. Sabah namazı vakti sona erdi, Duha vakti girdi. ☀️';
+  }
+
+  @override
+  String notifBody30min(String prayer, String loc) {
+    return '$prayer vaktine 30 dakika kaldı$loc. Hazırlanınız! 🔥';
+  }
+
+  @override
+  String notifBody5min(String prayer, String loc) {
+    return '$prayer vaktine 5 dakika kaldı$loc. Lütfen hazırlıklarınızı tamamlayınız! ⚡';
+  }
+
+  @override
+  String notifBody15min(String prayer, String loc) {
+    return '$prayer vaktine 15 dakika kaldı$loc. Hazırlanınız! 🌙';
+  }
+
+  @override
+  String notifBodyNow(String prayer, String loc) {
+    return '$prayer namazı vakti girdi$loc. Serinizi korumayı unutmayınız! 🔥';
+  }
+
+  @override
+  String get prayerImsak => 'İmsak';
+
+  @override
+  String get prayerTerbit => 'Güneş';
+
+  @override
+  String notifLocSuffix(String city) {
+    return ' ($city)';
+  }
 }

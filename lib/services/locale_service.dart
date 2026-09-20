@@ -10,7 +10,7 @@ import '../l10n/app_localizations.dart';
 /// [_override] null = ikut bahasa HP. Itu default yang diinginkan: user
 /// Indonesia langsung dapat ID, HP English langsung dapat EN, tanpa set apa pun.
 class LocaleNotifier extends ChangeNotifier {
-  static const _prefKey = 'app_locale';
+  static const prefKey = 'app_locale';
 
   /// Urutan penting: Flutter memakai entri PERTAMA kalau bahasa HP tidak
   /// cocok dengan satu pun (basicLocaleListResolution). EN dulu → HP Jepang
@@ -48,7 +48,7 @@ class LocaleNotifier extends ChangeNotifier {
 
   Future<void> load() async {
     final prefs = await SharedPreferences.getInstance();
-    _override = _parse(prefs.getString(_prefKey));
+    _override = _parse(prefs.getString(prefKey));
     notifyListeners();
   }
 
@@ -57,9 +57,9 @@ class LocaleNotifier extends ChangeNotifier {
     _override = value;
     final prefs = await SharedPreferences.getInstance();
     if (value == null) {
-      await prefs.remove(_prefKey);
+      await prefs.remove(prefKey);
     } else {
-      await prefs.setString(_prefKey, value.languageCode);
+      await prefs.setString(prefKey, value.languageCode);
     }
     notifyListeners();
   }

@@ -1,4 +1,6 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:muslim_leveling/l10n/app_localizations.dart';
 import 'package:muslim_leveling/services/notification_service.dart';
 
 void main() {
@@ -30,15 +32,25 @@ void main() {
     expect(NotificationService.baseIdFor('terbit'), 70);
   });
 
+  // Teks notifikasi kini dari ARB; delegate dimuat sekali di sini karena
+  // service tak punya BuildContext (dijadwalkan juga saat app tertutup).
+  late AppL10n id;
+
+  setUpAll(() async {
+    id = await AppL10n.delegate.load(const Locale('id'));
+  });
+
   test('judul notif imsak/terbit tidak menyebut "Sholat"', () {
-    expect(NotificationService.titleFor('imsak'), '🕌 Imsak');
-    expect(NotificationService.titleFor('terbit'), '🕌 Terbit');
-    expect(NotificationService.titleFor('subuh'), '🕌 Waktunya Sholat Subuh');
+    expect(NotificationService.titleFor('imsak', id), '🕌 Imsak');
+    expect(NotificationService.titleFor('terbit', id), '🕌 Terbit');
+    expect(NotificationService.titleFor('subuh', id), '🕌 Waktunya Sholat Subuh');
   });
 
   test('body notif imsak/terbit menjelaskan maknanya', () {
-    final imsak = NotificationService.bodyFor('imsak', 'Jakarta', 'seimbang', 0);
-    final terbit = NotificationService.bodyFor('terbit', 'Jakarta', 'seimbang', 0);
+    final imsak =
+        NotificationService.bodyFor('imsak', 'Jakarta', 'seimbang', 0, id);
+    final terbit =
+        NotificationService.bodyFor('terbit', 'Jakarta', 'seimbang', 0, id);
     expect(imsak, contains('imsak'));
     expect(imsak, contains('Jakarta'));
     expect(terbit, contains('terbit'));

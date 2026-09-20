@@ -779,5 +779,16 @@
   "notifTestBody": "Jika azan kedengaran, notifikasi anda sudah sedia! Jika tidak, sila semak kelantangan penggera telefon.",
   "notifTestTitle": "🕌 Ujian Bunyi Azan",
   "notifChannelReminder": "Notifikasi peringatan waktu solat",
-  "notifModeTitle": "Mod Muslim Leveling: {mode}"
+  "notifModeTitle": "Mod Muslim Leveling: {mode}",
+  "notifTitleMarker": "🕌 {prayer}",
+  "notifTitlePrayer": "🕌 Waktu solat {prayer} telah tiba",
+  "notifBodyImsak": "Telah masuk waktu imsak{loc}. Sila berhenti makan dan minum. 🌙",
+  "notifBodyTerbit": "Matahari terbit{loc}. Waktu Subuh telah berakhir, waktu Dhuha telah masuk. ☀️",
+  "notifBody30min": "30 minit lagi sebelum masuk waktu {prayer}{loc}. Sila bersiap sedia! 🔥",
+  "notifBody5min": "5 minit lagi sebelum masuk waktu {prayer}{loc}. Sila bersiap sedia segera! ⚡",
+  "notifBody15min": "15 minit lagi sebelum masuk waktu {prayer}{loc}. Sila bersiap sedia! 🌙",
+  "notifBodyNow": "Telah masuk waktu solat {prayer}{loc}. Mari kekalkan streak! 🔥",
+  "prayerImsak": "Imsak",
+  "prayerTerbit": "Syuruk",
+  "notifLocSuffix": " di {city}"
 }

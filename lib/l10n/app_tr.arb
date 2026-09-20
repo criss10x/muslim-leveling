@@ -779,5 +779,16 @@
   "notifTestBody": "Ezan sesi duyuluyorsa bildirimleriniz hazır demektir! Duyulmuyorsa telefonunuzun alarm ses seviyesini kontrol edin.",
   "notifTestTitle": "🕌 Ezan Sesi Testi",
   "notifChannelReminder": "Namaz vakti hatırlatıcı bildirimleri",
-  "notifModeTitle": "Muslim Leveling · {mode}"
+  "notifModeTitle": "Muslim Leveling · {mode}",
+  "notifTitleMarker": "🕌 {prayer}",
+  "notifTitlePrayer": "🕌 {prayer} Namazı Vakti",
+  "notifBodyImsak": "İmsak vakti girdi{loc}. Lütfen yeme ve içmeyi bırakınız. 🌙",
+  "notifBodyTerbit": "Güneş doğdu{loc}. Sabah namazı vakti sona erdi, Duha vakti girdi. ☀️",
+  "notifBody30min": "{prayer} vaktine 30 dakika kaldı{loc}. Hazırlanınız! 🔥",
+  "notifBody5min": "{prayer} vaktine 5 dakika kaldı{loc}. Lütfen hazırlıklarınızı tamamlayınız! ⚡",
+  "notifBody15min": "{prayer} vaktine 15 dakika kaldı{loc}. Hazırlanınız! 🌙",
+  "notifBodyNow": "{prayer} namazı vakti girdi{loc}. Serinizi korumayı unutmayınız! 🔥",
+  "prayerImsak": "İmsak",
+  "prayerTerbit": "Güneş",
+  "notifLocSuffix": " ({city})"
 }

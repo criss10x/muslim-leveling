@@ -779,5 +779,16 @@
   "notifTestBody": "If you hear the call to prayer, your notifications are ready! If not, please check your device's alarm volume.",
   "notifTestTitle": "🕌 Call to Prayer Sound Test",
   "notifChannelReminder": "Prayer time reminder notifications",
-  "notifModeTitle": "Muslim Leveling Mode: {mode}"
+  "notifModeTitle": "Muslim Leveling Mode: {mode}",
+  "notifTitleMarker": "🕌 {prayer}",
+  "notifTitlePrayer": "🕌 Time for {prayer} Prayer",
+  "notifBodyImsak": "It is now Imsak{loc}. Please stop eating and drinking. 🌙",
+  "notifBodyTerbit": "Sunrise{loc}. Fajr time has ended, and Dhuha has begun. ☀️",
+  "notifBody30min": "30 minutes remaining until {prayer} prayer{loc}. Please prepare yourself. 🔥",
+  "notifBody5min": "5 minutes remaining until {prayer} prayer{loc}. Please get ready. ⚡",
+  "notifBody15min": "15 minutes remaining until {prayer} prayer{loc}. Please prepare yourself. 🌙",
+  "notifBodyNow": "It is now time for {prayer} prayer{loc}. Let's maintain your streak! 🔥",
+  "prayerImsak": "Imsak",
+  "prayerTerbit": "Sunrise",
+  "notifLocSuffix": " in {city}"
 }

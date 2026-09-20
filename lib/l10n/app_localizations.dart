@@ -4785,6 +4785,72 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Muslim Leveling Mode: {mode}'**
   String notifModeTitle(String mode);
+
+  /// No description provided for @notifTitleMarker.
+  ///
+  /// In id, this message translates to:
+  /// **'🕌 {prayer}'**
+  String notifTitleMarker(String prayer);
+
+  /// No description provided for @notifTitlePrayer.
+  ///
+  /// In id, this message translates to:
+  /// **'🕌 Waktunya Sholat {prayer}'**
+  String notifTitlePrayer(String prayer);
+
+  /// No description provided for @notifBodyImsak.
+  ///
+  /// In id, this message translates to:
+  /// **'Sudah masuk imsak{loc}. Berhenti makan & minum ya. 🌙'**
+  String notifBodyImsak(String loc);
+
+  /// No description provided for @notifBodyTerbit.
+  ///
+  /// In id, this message translates to:
+  /// **'Matahari terbit{loc}. Waktu Subuh berakhir, Dhuha sudah masuk. ☀️'**
+  String notifBodyTerbit(String loc);
+
+  /// No description provided for @notifBody30min.
+  ///
+  /// In id, this message translates to:
+  /// **'30 menit lagi masuk waktu {prayer}{loc}. Persiapan ya! 🔥'**
+  String notifBody30min(String prayer, String loc);
+
+  /// No description provided for @notifBody5min.
+  ///
+  /// In id, this message translates to:
+  /// **'5 menit lagi masuk waktu {prayer}{loc}. Segera siap! ⚡'**
+  String notifBody5min(String prayer, String loc);
+
+  /// No description provided for @notifBody15min.
+  ///
+  /// In id, this message translates to:
+  /// **'15 menit lagi masuk waktu {prayer}{loc}. Persiapan ya! 🌙'**
+  String notifBody15min(String prayer, String loc);
+
+  /// No description provided for @notifBodyNow.
+  ///
+  /// In id, this message translates to:
+  /// **'Sudah masuk waktu sholat {prayer}{loc}. Yuk jaga streak! 🔥'**
+  String notifBodyNow(String prayer, String loc);
+
+  /// No description provided for @prayerImsak.
+  ///
+  /// In id, this message translates to:
+  /// **'Imsak'**
+  String get prayerImsak;
+
+  /// No description provided for @prayerTerbit.
+  ///
+  /// In id, this message translates to:
+  /// **'Terbit'**
+  String get prayerTerbit;
+
+  /// No description provided for @notifLocSuffix.
+  ///
+  /// In id, this message translates to:
+  /// **' di {city}'**
+  String notifLocSuffix(String city);
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

@@ -2681,4 +2681,55 @@ class AppL10nMs extends AppL10n {
   String notifModeTitle(String mode) {
     return 'Mod Muslim Leveling: $mode';
   }
+
+  @override
+  String notifTitleMarker(String prayer) {
+    return '🕌 $prayer';
+  }
+
+  @override
+  String notifTitlePrayer(String prayer) {
+    return '🕌 Waktu solat $prayer telah tiba';
+  }
+
+  @override
+  String notifBodyImsak(String loc) {
+    return 'Telah masuk waktu imsak$loc. Sila berhenti makan dan minum. 🌙';
+  }
+
+  @override
+  String notifBodyTerbit(String loc) {
+    return 'Matahari terbit$loc. Waktu Subuh telah berakhir, waktu Dhuha telah masuk. ☀️';
+  }
+
+  @override
+  String notifBody30min(String prayer, String loc) {
+    return '30 minit lagi sebelum masuk waktu $prayer$loc. Sila bersiap sedia! 🔥';
+  }
+
+  @override
+  String notifBody5min(String prayer, String loc) {
+    return '5 minit lagi sebelum masuk waktu $prayer$loc. Sila bersiap sedia segera! ⚡';
+  }
+
+  @override
+  String notifBody15min(String prayer, String loc) {
+    return '15 minit lagi sebelum masuk waktu $prayer$loc. Sila bersiap sedia! 🌙';
+  }
+
+  @override
+  String notifBodyNow(String prayer, String loc) {
+    return 'Telah masuk waktu solat $prayer$loc. Mari kekalkan streak! 🔥';
+  }
+
+  @override
+  String get prayerImsak => 'Imsak';
+
+  @override
+  String get prayerTerbit => 'Syuruk';
+
+  @override
+  String notifLocSuffix(String city) {
+    return ' di $city';
+  }
 }

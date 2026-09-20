@@ -1,3 +1,4 @@
+import 'dart:ui' show Locale, PlatformDispatcher;
 import 'adzan_sound_store.dart';
 import 'dart:convert';
 import 'package:android_intent_plus/android_intent.dart';
@@ -10,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import '../l10n/app_localizations.dart';
+import 'locale_service.dart';
 
 /// Notification & Adzan Reminder service.
 /// Port dari NotificationScheduler.kt + AdhanReminderReceiver.kt + BootReceiver.kt (main Kotlin).
@@ -128,10 +130,10 @@ class NotificationService {
   @visibleForTesting
   static int baseIdFor(String prayer) => _baseIdFor(prayer);
   @visibleForTesting
-  static String titleFor(String prayer) => _titleFor(prayer);
+  static String titleFor(String prayer, AppL10n l10n) => _titleFor(prayer, l10n);
   @visibleForTesting
-  static String bodyFor(String prayer, String city, String mode, int i) =>
-      _bodyFor(prayer, city, mode, i);
+  static String bodyFor(String prayer, String city, String mode, int i, AppL10n l10n) =>
+      _bodyFor(prayer, city, mode, i, l10n);
 
   /// ID notifikasi tetap per waktu (index × 10, + offset reminder 0–2).
   /// String.hashCode tidak dijamin stabil antar-run, jadi jangan dipakai.
@@ -424,7 +426,7 @@ class NotificationService {
       }
     }
 
-    await _scheduleAlarms(city, timings);
+    await _scheduleAlarms(await _l10n(), city, timings);
     debugPrint('[NotificationService] scheduled ${timings.length} adhan reminders for $city');
   }
 
@@ -434,6 +436,20 @@ class NotificationService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_prefEnabled, false);
     debugPrint('[NotificationService] cancelled all adhan reminders');
+  }
+
+  /// Terjemahan untuk teks notifikasi. Service ini jalan juga saat app
+  /// tertutup dan dari prefs (reschedule), jadi tak ada BuildContext —
+  /// locale dibaca dari prefs yang sama dengan LocaleNotifier.
+  /// ponytail: 1 titik baca prefs yang sudah ada; kalau locale jadi
+  /// per-akun, ganti isi helper ini saja.
+  static Future<AppL10n> _l10n() async {
+    final prefs = await SharedPreferences.getInstance();
+    final code = prefs.getString(LocaleNotifier.prefKey);
+    final locale = (code == null || code.isEmpty)
+        ? PlatformDispatcher.instance.locale
+        : Locale(code);
+    return AppL10n.delegate.load(locale);
   }
 
   /// Enable/disable without clearing saved timings.
@@ -449,7 +465,7 @@ class NotificationService {
       final city = prefs.getString(_prefCity) ?? '';
       final timings = await _readTimingsFromPrefs(prefs);
       if (city.isNotEmpty && timings.isNotEmpty) {
-        await _scheduleAlarms(city, timings);
+        await _scheduleAlarms(await _l10n(), city, timings);
       }
     }
   }
@@ -546,7 +562,7 @@ class NotificationService {
       final city = prefs.getString(_prefCity) ?? '';
       final timings = await _readTimingsFromPrefs(prefs);
       if (city.isNotEmpty && timings.isNotEmpty) {
-        await _scheduleAlarms(city, timings);
+        await _scheduleAlarms(await _l10n(), city, timings);
       }
     }
   }
@@ -562,7 +578,7 @@ class NotificationService {
       final city = prefs.getString(_prefCity) ?? '';
       final timings = await _readTimingsFromPrefs(prefs);
       if (city.isNotEmpty && timings.isNotEmpty) {
-        await _scheduleAlarms(city, timings);
+        await _scheduleAlarms(await _l10n(), city, timings);
       }
     }
   }
@@ -621,7 +637,7 @@ class NotificationService {
       final city = prefs.getString(_prefCity) ?? '';
       final timings = await _readTimingsFromPrefs(prefs);
       if (city.isNotEmpty && timings.isNotEmpty) {
-        await _scheduleAlarms(city, timings);
+        await _scheduleAlarms(await _l10n(), city, timings);
       }
     }
   }
@@ -631,6 +647,7 @@ class NotificationService {
   // ═══════════════════════════════════════════
 
   static Future<void> _scheduleAlarms(
+    AppL10n l10n,
     String city,
     Map<String, String> timings,
   ) async {
@@ -656,8 +673,8 @@ class NotificationService {
       try {
         await _scheduleOne(
           id: _baseIdFor(marker),
-          title: _titleFor(marker),
-          body: _bodyFor(marker, city, mode, 0),
+          title: _titleFor(marker, l10n),
+          body: _bodyFor(marker, city, mode, 0, l10n),
           scheduledTime: scheduledTime,
           sound: _NotifSound.silent,
         );
@@ -702,8 +719,8 @@ class NotificationService {
         try {
           await _scheduleOne(
             id: notifId + i, // unique ID per reminder
-            title: _titleFor(prayer),
-            body: _bodyFor(prayer, city, mode, i),
+            title: _titleFor(prayer, l10n),
+            body: _bodyFor(prayer, city, mode, i, l10n),
             scheduledTime: scheduledTime,
             sound: sound,
           );
@@ -746,32 +763,52 @@ class NotificationService {
     }
   }
 
-  static String _titleFor(String prayer) {
-    final cap = prayer[0].toUpperCase() + prayer.substring(1);
+  /// Nama waktu sholat dalam bahasa aktif. Kunci ARB `prayer<X>`.
+  static String _prayerName(String prayer, AppL10n l10n) => switch (prayer) {
+        'subuh' => l10n.prayerSubuh,
+        'dzuhur' => l10n.prayerDzuhur,
+        'ashar' => l10n.prayerAshar,
+        'maghrib' => l10n.prayerMaghrib,
+        'isya' => l10n.prayerIsya,
+        'imsak' => l10n.prayerImsak,
+        'terbit' => l10n.prayerTerbit,
+        _ => prayer,
+      };
+
+  /// Gabungan kata depan + kota untuk body: " di Jakarta" / "" bila kosong.
+  /// Diterjemahkan apa adanya (termasuk titik) supaya urutan kata bisa
+  /// berbeda antar bahasa tanpa mengubah Dart.
+  static String _locSuffix(String city, AppL10n l10n) =>
+      city.isEmpty ? '' : l10n.notifLocSuffix(city);
+
+  static String _titleFor(String prayer, AppL10n l10n) {
+    final name = _prayerName(prayer, l10n);
     // ponytail: imsak & terbit bukan sholat — judulnya jangan "Waktunya Sholat".
-    if (_markerList.contains(prayer)) return '🕌 $cap';
-    return '🕌 Waktunya Sholat $cap';
+    if (_markerList.contains(prayer)) return l10n.notifTitleMarker(name);
+    return l10n.notifTitlePrayer(name);
   }
 
-  static String _bodyFor(String prayer, String city, String mode, int reminderIndex) {
-    final loc = city.isNotEmpty ? 'di $city. ' : '';
+  static String _bodyFor(
+      String prayer, String city, String mode, int reminderIndex, AppL10n l10n) {
+    final loc = _locSuffix(city, l10n);
     switch (prayer) {
       case 'imsak':
-        return 'Sudah masuk imsak ${loc}Berhenti makan & minum ya. 🌙';
+        return l10n.notifBodyImsak(loc);
       case 'terbit':
-        return 'Matahari terbit ${loc}Waktu Subuh berakhir, Dhuha sudah masuk. ☀️';
+        return l10n.notifBodyTerbit(loc);
     }
+    final name = _prayerName(prayer, l10n);
     switch (mode) {
       case 'intensif':
-        if (reminderIndex == 0) return '30 menit lagi masuk waktu $prayer ${loc}Persiapan ya! 🔥';
-        if (reminderIndex == 1) return '5 menit lagi masuk waktu $prayer ${loc}Segera siap! ⚡';
-        return 'Sudah masuk waktu sholat $prayer ${loc}Yuk jaga streak! 🔥';
+        if (reminderIndex == 0) return l10n.notifBody30min(name, loc);
+        if (reminderIndex == 1) return l10n.notifBody5min(name, loc);
+        return l10n.notifBodyNow(name, loc);
       case 'fokus':
-        return 'Sudah masuk waktu sholat $prayer ${loc}Yuk jaga streak! 🔥';
+        return l10n.notifBodyNow(name, loc);
       case 'seimbang':
       default:
-        if (reminderIndex == 0) return '15 menit lagi masuk waktu $prayer ${loc}Persiapan ya! 🌙';
-        return 'Sudah masuk waktu sholat $prayer ${loc}Yuk jaga streak! 🔥';
+        if (reminderIndex == 0) return l10n.notifBody15min(name, loc);
+        return l10n.notifBodyNow(name, loc);
     }
   }
 

@@ -1334,5 +1334,91 @@
         "type": "String"
       }
     }
+  },
+  "notifTitleMarker": "🕌 {prayer}",
+  "@notifTitleMarker": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      }
+    }
+  },
+  "notifTitlePrayer": "🕌 Waktunya Sholat {prayer}",
+  "@notifTitlePrayer": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      }
+    }
+  },
+  "notifBodyImsak": "Sudah masuk imsak{loc}. Berhenti makan & minum ya. 🌙",
+  "@notifBodyImsak": {
+    "placeholders": {
+      "loc": {
+        "type": "String"
+      }
+    }
+  },
+  "notifBodyTerbit": "Matahari terbit{loc}. Waktu Subuh berakhir, Dhuha sudah masuk. ☀️",
+  "@notifBodyTerbit": {
+    "placeholders": {
+      "loc": {
+        "type": "String"
+      }
+    }
+  },
+  "notifBody30min": "30 menit lagi masuk waktu {prayer}{loc}. Persiapan ya! 🔥",
+  "@notifBody30min": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      },
+      "loc": {
+        "type": "String"
+      }
+    }
+  },
+  "notifBody5min": "5 menit lagi masuk waktu {prayer}{loc}. Segera siap! ⚡",
+  "@notifBody5min": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      },
+      "loc": {
+        "type": "String"
+      }
+    }
+  },
+  "notifBody15min": "15 menit lagi masuk waktu {prayer}{loc}. Persiapan ya! 🌙",
+  "@notifBody15min": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      },
+      "loc": {
+        "type": "String"
+      }
+    }
+  },
+  "notifBodyNow": "Sudah masuk waktu sholat {prayer}{loc}. Yuk jaga streak! 🔥",
+  "@notifBodyNow": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      },
+      "loc": {
+        "type": "String"
+      }
+    }
+  },
+  "prayerImsak": "Imsak",
+  "prayerTerbit": "Terbit",
+  "notifLocSuffix": " di {city}",
+  "@notifLocSuffix": {
+    "placeholders": {
+      "city": {
+        "type": "String"
+      }
+    }
   }
 }
