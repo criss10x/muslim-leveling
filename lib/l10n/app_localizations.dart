@@ -2049,7 +2049,7 @@ abstract class AppL10n {
   /// No description provided for @onbNotifBody.
   ///
   /// In id, this message translates to:
-  /// **'Biar tidak kelewat, kami kirim pengingat saat waktu sholat tiba. Cukup izin notifikasi — pengaturan alarm & baterai ditawarkan nanti di Profil, lengkap dengan alasannya.'**
+  /// **'Biar tidak kelewat, kami kirim pengingat saat waktu sholat tiba. Kami minta izin notifikasi + pengecualian baterai — tanpa itu ponsel bisa mematikan pengingat diam-diam saat app ditutup.'**
   String get onbNotifBody;
 
   /// No description provided for @onbNotifDenied.

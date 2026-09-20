@@ -1064,7 +1064,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get onbNotifBody =>
-      'So you never miss it, we send a reminder when prayer time comes. Notification permission only — alarm & battery settings are offered later in Profile, with their reasons.';
+      'So you never miss it, we send a reminder when prayer time comes. We ask for notification permission plus a battery exemption — without it your phone can silently kill reminders when the app is closed.';
 
   @override
   String get onbNotifDenied =>

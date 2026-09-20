@@ -4,6 +4,13 @@ All notable user-facing changes. Newest first.
 
 ## [1.1.3] - 2026-09-19
 
+### Fixed
+- Onboarding asks for the battery exemption again (the "no restrictions"
+  dialog). It was dropped in 01a15fc along with the exact-alarm prompt, but
+  the two are not equivalent: exact-alarm falls back to `inexactAllowWhileIdle`
+  while the battery exemption has no fallback, so Xiaomi/Oppo/Vivo killed the
+  adhan alarm whenever the app was closed.
+
 ### Added
 - Onboarding resumes where you left off (page + gender + city) instead of
   starting over when Android kills the app mid-flow.

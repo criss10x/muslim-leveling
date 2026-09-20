@@ -630,7 +630,7 @@
   "onbNameTitle": "What's your warrior name?",
   "onbNicknameHint": "Warrior name (optional — blank: Pejuang)",
   "onbNotifAllow": "Allow Notifications",
-  "onbNotifBody": "So you never miss it, we send a reminder when prayer time comes. Notification permission only — alarm & battery settings are offered later in Profile, with their reasons.",
+  "onbNotifBody": "So you never miss it, we send a reminder when prayer time comes. We ask for notification permission plus a battery exemption — without it your phone can silently kill reminders when the app is closed.",
   "onbNotifDenied": "Reminders are off. You can turn them on anytime in Profile.",
   "onbNotifLoading": "ENABLING...",
   "onbNotifSkip": "Skip for now",

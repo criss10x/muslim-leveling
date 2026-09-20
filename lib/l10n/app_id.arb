@@ -630,7 +630,7 @@
   "onbNameTitle": "Siapa nama pejuangmu?",
   "onbNicknameHint": "Nama pejuang (opsional — kosong: Pejuang)",
   "onbNotifAllow": "Izinkan Notifikasi",
-  "onbNotifBody": "Biar tidak kelewat, kami kirim pengingat saat waktu sholat tiba. Cukup izin notifikasi — pengaturan alarm & baterai ditawarkan nanti di Profil, lengkap dengan alasannya.",
+  "onbNotifBody": "Biar tidak kelewat, kami kirim pengingat saat waktu sholat tiba. Kami minta izin notifikasi + pengecualian baterai — tanpa itu ponsel bisa mematikan pengingat diam-diam saat app ditutup.",
   "onbNotifDenied": "Pengingat tidak aktif. Bisa dinyalakan kapan saja di Profil.",
   "onbNotifLoading": "MENYALA...",
   "onbNotifSkip": "Lewati, nanti saja",

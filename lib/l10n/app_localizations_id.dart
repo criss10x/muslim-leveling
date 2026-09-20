@@ -1063,7 +1063,7 @@ class AppL10nId extends AppL10n {
 
   @override
   String get onbNotifBody =>
-      'Biar tidak kelewat, kami kirim pengingat saat waktu sholat tiba. Cukup izin notifikasi — pengaturan alarm & baterai ditawarkan nanti di Profil, lengkap dengan alasannya.';
+      'Biar tidak kelewat, kami kirim pengingat saat waktu sholat tiba. Kami minta izin notifikasi + pengecualian baterai — tanpa itu ponsel bisa mematikan pengingat diam-diam saat app ditutup.';
 
   @override
   String get onbNotifDenied =>
