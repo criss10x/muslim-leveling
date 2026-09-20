@@ -182,7 +182,7 @@ class _NaikLevelScreenState extends State<NaikLevelScreen> {
           if (widget.levelsGained > 1)
             _rewardChip('+${widget.levelsGained} LEVEL', l10n.naikChipLevelJumps,
                 AppColors.tertiary, AppIcons.doubleArrow),
-          _rewardChip('Lv $level', l10n.naikChipLevel, AppColors.secondaryFixed, AppIcons.trendingUp),
+          _rewardChip(AppL10n.of(context).nlLevelShort(level), l10n.naikChipLevel, AppColors.secondaryFixed, AppIcons.trendingUp),
           _rewardChip(rankTitle, l10n.naikChipRank, AppColors.tertiary, AppIcons.autoAwesome),
         ],
       ),

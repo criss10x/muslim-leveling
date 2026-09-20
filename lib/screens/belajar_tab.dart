@@ -5,6 +5,7 @@ import '../../widgets/common.dart';
 import '../../services/learning_content.dart';
 import 'belajar_article.dart';
 import '../theme/app_icons.dart';
+import '../l10n/app_localizations.dart';
 
 /// Belajar / Learning Hub — konten Modul: kategori + daftar modul + progress
 /// (dari V3 BelajarScreen.kt).
@@ -58,7 +59,7 @@ class _BelajarTabState extends State<BelajarTab> {
                       style: AppText.headlineLg()
                           .copyWith(fontSize: 28, color: AppColors.onSurface)),
                   const SizedBox(height: 4),
-                  Text('Tingkatkan ilmu, raih lebih banyak XP.',
+                  Text(AppL10n.of(context).btSubtitle,
                       style: AppText.bodyMd()
                           .copyWith(color: AppColors.onSurfaceVariant)),
                 ],
@@ -292,7 +293,7 @@ class _BelajarTabState extends State<BelajarTab> {
                                 fontSize: 10)),
                         if (completed) ...[
                           const SizedBox(width: AppSpacing.sm),
-                          Text('Quiz: $quizScore%',
+                          Text(AppL10n.of(context).btQuizScore(quizScore),
                               style: AppText.labelCaps().copyWith(
                                   color: AppColors.primary, fontSize: 10)),
                         ],

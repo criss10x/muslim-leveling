@@ -4485,6 +4485,180 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Ayat {number}'**
   String qacAyahNumber(int number);
+
+  /// No description provided for @jdLoadFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal memuat jadwal. Periksa koneksi.'**
+  String get jdLoadFailed;
+
+  /// No description provided for @jdAlreadyLogged.
+  ///
+  /// In id, this message translates to:
+  /// **'✓ SUDAH DILOG'**
+  String get jdAlreadyLogged;
+
+  /// No description provided for @jdTesSuara.
+  ///
+  /// In id, this message translates to:
+  /// **'Tes suara'**
+  String get jdTesSuara;
+
+  /// No description provided for @jdAdzanDownloadFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal mengunduh suara adzan. Periksa koneksi lalu coba lagi.'**
+  String get jdAdzanDownloadFailed;
+
+  /// No description provided for @qtLoadFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal memuat data Quran'**
+  String get qtLoadFailed;
+
+  /// No description provided for @qtSurahNotFound.
+  ///
+  /// In id, this message translates to:
+  /// **'Surat tidak ditemukan'**
+  String get qtSurahNotFound;
+
+  /// No description provided for @qtContinueReading.
+  ///
+  /// In id, this message translates to:
+  /// **'Lanjutkan membaca'**
+  String get qtContinueReading;
+
+  /// No description provided for @spTagline.
+  ///
+  /// In id, this message translates to:
+  /// **'Level Up iman, Level Up Kehidupanmu'**
+  String get spTagline;
+
+  /// No description provided for @spLoading.
+  ///
+  /// In id, this message translates to:
+  /// **'MEMUAT DATA PEJUANG...'**
+  String get spLoading;
+
+  /// No description provided for @btSubtitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Tingkatkan ilmu, raih lebih banyak XP.'**
+  String get btSubtitle;
+
+  /// No description provided for @doaLoadFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal memuat doa.'**
+  String get doaLoadFailed;
+
+  /// No description provided for @taProSignature.
+  ///
+  /// In id, this message translates to:
+  /// **'Pro signature finish'**
+  String get taProSignature;
+
+  /// No description provided for @tpSelected.
+  ///
+  /// In id, this message translates to:
+  /// **'Tema dipilih'**
+  String get tpSelected;
+
+  /// No description provided for @qrDisplaySettings.
+  ///
+  /// In id, this message translates to:
+  /// **'Setelan tampilan'**
+  String get qrDisplaySettings;
+
+  /// No description provided for @jdSoundFollowGlobal.
+  ///
+  /// In id, this message translates to:
+  /// **'Mengikuti global'**
+  String get jdSoundFollowGlobal;
+
+  /// No description provided for @jdNotifFor.
+  ///
+  /// In id, this message translates to:
+  /// **'Notifikasi {prayer}'**
+  String jdNotifFor(String prayer);
+
+  /// No description provided for @jdSoundSilent.
+  ///
+  /// In id, this message translates to:
+  /// **'Senyap — tanpa suara'**
+  String get jdSoundSilent;
+
+  /// No description provided for @jdSoundNormal.
+  ///
+  /// In id, this message translates to:
+  /// **'Suara — notifikasi standar HP'**
+  String get jdSoundNormal;
+
+  /// No description provided for @jdSoundAdzan.
+  ///
+  /// In id, this message translates to:
+  /// **'Adzan — suara adzan penuh'**
+  String get jdSoundAdzan;
+
+  /// No description provided for @jdSoundGlobalOption.
+  ///
+  /// In id, this message translates to:
+  /// **'Ikuti pengaturan global'**
+  String get jdSoundGlobalOption;
+
+  /// No description provided for @jdFootnote.
+  ///
+  /// In id, this message translates to:
+  /// **'Jadwal dari data KEMENAG RI via api.myquran.com untuk {city}. Ter-update otomatis saat tab dibuka; tap nama kota di atas untuk ganti lokasi.'**
+  String jdFootnote(String city);
+
+  /// No description provided for @qtSearchEmpty.
+  ///
+  /// In id, this message translates to:
+  /// **'Tidak ditemukan. Coba kata lain di terjemahan, atau tulis nama surat + nomor ayat — mis. {example}.'**
+  String qtSearchEmpty(String example);
+
+  /// No description provided for @qtOpenSurah.
+  ///
+  /// In id, this message translates to:
+  /// **'Buka surat {surah}'**
+  String qtOpenSurah(String surah);
+
+  /// No description provided for @qtAyahOf.
+  ///
+  /// In id, this message translates to:
+  /// **'Ayat {ayah} dari {total}'**
+  String qtAyahOf(int ayah, int total);
+
+  /// No description provided for @qtSurahAyah.
+  ///
+  /// In id, this message translates to:
+  /// **'Surat {surah} · Ayat {ayah}'**
+  String qtSurahAyah(int surah, int ayah);
+
+  /// No description provided for @btQuizScore.
+  ///
+  /// In id, this message translates to:
+  /// **'Quiz: {score}%'**
+  String btQuizScore(int score);
+
+  /// No description provided for @nlLevelShort.
+  ///
+  /// In id, this message translates to:
+  /// **'Lv {level}'**
+  String nlLevelShort(int level);
+
+  /// No description provided for @homeLevelShort.
+  ///
+  /// In id, this message translates to:
+  /// **'LV {level}'**
+  String homeLevelShort(int level);
+
+  /// No description provided for @qtsTafsirAyah.
+  ///
+  /// In id, this message translates to:
+  /// **'Tafsir Ayat {ayah}'**
+  String qtsTafsirAyah(int ayah);
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

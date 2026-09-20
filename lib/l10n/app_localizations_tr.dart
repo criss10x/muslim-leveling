@@ -2507,4 +2507,113 @@ class AppL10nTr extends AppL10n {
   String qacAyahNumber(int number) {
     return 'Ayet $number';
   }
+
+  @override
+  String get jdLoadFailed =>
+      'Namaz vakitleri yüklenemedi. Bağlantınızı kontrol edin.';
+
+  @override
+  String get jdAlreadyLogged => '✓ KAYDEDİLDİ';
+
+  @override
+  String get jdTesSuara => 'Ses testi';
+
+  @override
+  String get jdAdzanDownloadFailed =>
+      'Ezan sesi indirilemedi. Bağlantınızı kontrol edip tekrar deneyin.';
+
+  @override
+  String get qtLoadFailed => 'Al-Qur\'an verileri yüklenemedi';
+
+  @override
+  String get qtSurahNotFound => 'Sure bulunamadı';
+
+  @override
+  String get qtContinueReading => 'Okumaya devam et';
+
+  @override
+  String get spTagline => 'İmanınızı Yükseltin, Hayatınızı Güzelleştirin';
+
+  @override
+  String get spLoading => 'MÜCADELECİ VERİLERİ YÜKLENİYOR...';
+
+  @override
+  String get btSubtitle => 'Bilginizi artırın, daha fazla XP kazanın.';
+
+  @override
+  String get doaLoadFailed => 'Dualar yüklenemedi.';
+
+  @override
+  String get taProSignature => 'Pro imza tamamlandı';
+
+  @override
+  String get tpSelected => 'Tema seçildi';
+
+  @override
+  String get qrDisplaySettings => 'Görünüm ayarları';
+
+  @override
+  String get jdSoundFollowGlobal => 'Genel ayarlara uyar';
+
+  @override
+  String jdNotifFor(String prayer) {
+    return '$prayer vakti bildirimi';
+  }
+
+  @override
+  String get jdSoundSilent => 'Sessiz — ses yok';
+
+  @override
+  String get jdSoundNormal => 'Sesli — standart telefon bildirimi';
+
+  @override
+  String get jdSoundAdzan => 'Ezan — tam ezan sesi';
+
+  @override
+  String get jdSoundGlobalOption => 'Genel ayarları takip et';
+
+  @override
+  String jdFootnote(String city) {
+    return '$city için namaz vakitleri api.myquran.com aracılığıyla KEMENAG RI verilerinden alınmıştır. Sekme açıldığında otomatik olarak güncellenir; konumu değiştirmek için yukarıdaki şehir adına dokunun.';
+  }
+
+  @override
+  String qtSearchEmpty(String example) {
+    return 'Sonuç bulunamadı. Çeviride başka bir kelime aramayı deneyin veya sure adı + ayet numarası yazın — örneğin: $example.';
+  }
+
+  @override
+  String qtOpenSurah(String surah) {
+    return '$surah suresini aç';
+  }
+
+  @override
+  String qtAyahOf(int ayah, int total) {
+    return '$total ayet içinden $ayah. ayet';
+  }
+
+  @override
+  String qtSurahAyah(int surah, int ayah) {
+    return '$surah Suresi · $ayah. Ayet';
+  }
+
+  @override
+  String btQuizScore(int score) {
+    return 'Test: %$score';
+  }
+
+  @override
+  String nlLevelShort(int level) {
+    return 'Svy $level';
+  }
+
+  @override
+  String homeLevelShort(int level) {
+    return 'SVY $level';
+  }
+
+  @override
+  String qtsTafsirAyah(int ayah) {
+    return '$ayah. Ayet Tefsiri';
+  }
 }

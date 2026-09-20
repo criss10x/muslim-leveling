@@ -1201,5 +1201,110 @@
         "type": "int"
       }
     }
+  },
+  "jdLoadFailed": "Gagal memuat jadwal. Periksa koneksi.",
+  "jdAlreadyLogged": "✓ SUDAH DILOG",
+  "jdTesSuara": "Tes suara",
+  "jdAdzanDownloadFailed": "Gagal mengunduh suara adzan. Periksa koneksi lalu coba lagi.",
+  "qtLoadFailed": "Gagal memuat data Quran",
+  "qtSurahNotFound": "Surat tidak ditemukan",
+  "qtContinueReading": "Lanjutkan membaca",
+  "spTagline": "Level Up iman, Level Up Kehidupanmu",
+  "spLoading": "MEMUAT DATA PEJUANG...",
+  "btSubtitle": "Tingkatkan ilmu, raih lebih banyak XP.",
+  "doaLoadFailed": "Gagal memuat doa.",
+  "taProSignature": "Pro signature finish",
+  "tpSelected": "Tema dipilih",
+  "qrDisplaySettings": "Setelan tampilan",
+  "jdSoundFollowGlobal": "Mengikuti global",
+  "jdNotifFor": "Notifikasi {prayer}",
+  "@jdNotifFor": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      }
+    }
+  },
+  "jdSoundSilent": "Senyap — tanpa suara",
+  "jdSoundNormal": "Suara — notifikasi standar HP",
+  "jdSoundAdzan": "Adzan — suara adzan penuh",
+  "jdSoundGlobalOption": "Ikuti pengaturan global",
+  "jdFootnote": "Jadwal dari data KEMENAG RI via api.myquran.com untuk {city}. Ter-update otomatis saat tab dibuka; tap nama kota di atas untuk ganti lokasi.",
+  "@jdFootnote": {
+    "placeholders": {
+      "city": {
+        "type": "String"
+      }
+    }
+  },
+  "qtSearchEmpty": "Tidak ditemukan. Coba kata lain di terjemahan, atau tulis nama surat + nomor ayat — mis. {example}.",
+  "@qtSearchEmpty": {
+    "placeholders": {
+      "example": {
+        "type": "String"
+      }
+    }
+  },
+  "qtOpenSurah": "Buka surat {surah}",
+  "@qtOpenSurah": {
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      }
+    }
+  },
+  "qtAyahOf": "Ayat {ayah} dari {total}",
+  "@qtAyahOf": {
+    "placeholders": {
+      "ayah": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "qtSurahAyah": "Surat {surah} · Ayat {ayah}",
+  "@qtSurahAyah": {
+    "placeholders": {
+      "surah": {
+        "type": "int"
+      },
+      "ayah": {
+        "type": "int"
+      }
+    }
+  },
+  "btQuizScore": "Quiz: {score}%",
+  "@btQuizScore": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "nlLevelShort": "Lv {level}",
+  "@nlLevelShort": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "homeLevelShort": "LV {level}",
+  "@homeLevelShort": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "qtsTafsirAyah": "Tafsir Ayat {ayah}",
+  "@qtsTafsirAyah": {
+    "placeholders": {
+      "ayah": {
+        "type": "int"
+      }
+    }
   }
 }

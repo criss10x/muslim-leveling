@@ -8,6 +8,7 @@ import '../services/quran_bookmark.dart';
 import 'quran_reader.dart';
 import 'quran_bookmarks_screen.dart';
 import '../widgets/rub_el_hizb_badge.dart';
+import '../l10n/app_localizations.dart';
 
 class QuranTab extends StatefulWidget {
   const QuranTab({super.key});
@@ -129,7 +130,7 @@ class _QuranTabState extends State<QuranTab> {
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.lg),
           child: Text(
-            'Gagal memuat data Quran',
+            AppL10n.of(context).qtLoadFailed,
             style: AppText.bodyLg().copyWith(color: AppColors.onSurfaceVariant),
           ),
         ),
@@ -283,9 +284,7 @@ class _QuranTabState extends State<QuranTab> {
                         hasScrollBody: false,
                         child: Center(
                           child: Text(
-                            'Tidak ditemukan. Coba kata lain di terjemahan, '
-                            'atau tulis nama surat + nomor ayat — mis. '
-                            '${QuranData.exampleAyahRef}',
+                            AppL10n.of(context).qtSearchEmpty(QuranData.exampleAyahRef),
                             style: AppText.bodyMd().copyWith(
                               color: AppColors.onSurfaceVariant,
                             ),
@@ -336,7 +335,7 @@ class _QuranTabState extends State<QuranTab> {
               hasScrollBody: false,
               child: Center(
                 child: Text(
-                  'Surat tidak ditemukan',
+                  AppL10n.of(context).qtSurahNotFound,
                   style: AppText.bodyMd().copyWith(
                     color: AppColors.onSurfaceVariant,
                   ),
@@ -425,7 +424,7 @@ class _ResumeReadingCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Lanjutkan membaca',
+                        AppL10n.of(context).qtContinueReading,
                         style: AppText.bodyLg().copyWith(
                           fontWeight: FontWeight.w600,
                           color: AppColors.onSurface,
@@ -460,7 +459,7 @@ class _SurahRow extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: AppSpacing.xs),
       child: Semantics(
         button: true,
-        label: 'Buka surat ${surah.nameLatin}',
+        label: AppL10n.of(context).qtOpenSurah(surah.nameLatin),
         child: Material(
           color: AppColors.surfaceContainerLow,
           borderRadius: BorderRadius.circular(AppRadius.xxl),
@@ -765,7 +764,7 @@ class _AyahRefCardState extends State<_AyahRefCard> {
                           ),
                           const SizedBox(height: AppSpacing.xs),
                           Text(
-                            'Ayat ${r.ayah} dari ${r.surah.ayahCount}',
+                            AppL10n.of(context).qtAyahOf(r.ayah, r.surah.ayahCount),
                             style: AppText.labelCaps().copyWith(
                               color: AppColors.primary,
                             ),
@@ -918,7 +917,7 @@ class _VerseHitRow extends StatelessWidget {
                     children: [
                       Text(
                         surah == null
-                            ? 'Surat ${hit.surahNumber} · Ayat ${hit.ayahNumber}'
+                            ? AppL10n.of(context).qtSurahAyah(hit.surahNumber, hit.ayahNumber)
                             : '${surah!.nameLatin} · Ayat ${hit.ayahNumber}',
                         style: AppText.bodyMd().copyWith(
                           color: AppColors.onSurfaceVariant,

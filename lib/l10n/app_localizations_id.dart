@@ -2483,4 +2483,112 @@ class AppL10nId extends AppL10n {
   String qacAyahNumber(int number) {
     return 'Ayat $number';
   }
+
+  @override
+  String get jdLoadFailed => 'Gagal memuat jadwal. Periksa koneksi.';
+
+  @override
+  String get jdAlreadyLogged => '✓ SUDAH DILOG';
+
+  @override
+  String get jdTesSuara => 'Tes suara';
+
+  @override
+  String get jdAdzanDownloadFailed =>
+      'Gagal mengunduh suara adzan. Periksa koneksi lalu coba lagi.';
+
+  @override
+  String get qtLoadFailed => 'Gagal memuat data Quran';
+
+  @override
+  String get qtSurahNotFound => 'Surat tidak ditemukan';
+
+  @override
+  String get qtContinueReading => 'Lanjutkan membaca';
+
+  @override
+  String get spTagline => 'Level Up iman, Level Up Kehidupanmu';
+
+  @override
+  String get spLoading => 'MEMUAT DATA PEJUANG...';
+
+  @override
+  String get btSubtitle => 'Tingkatkan ilmu, raih lebih banyak XP.';
+
+  @override
+  String get doaLoadFailed => 'Gagal memuat doa.';
+
+  @override
+  String get taProSignature => 'Pro signature finish';
+
+  @override
+  String get tpSelected => 'Tema dipilih';
+
+  @override
+  String get qrDisplaySettings => 'Setelan tampilan';
+
+  @override
+  String get jdSoundFollowGlobal => 'Mengikuti global';
+
+  @override
+  String jdNotifFor(String prayer) {
+    return 'Notifikasi $prayer';
+  }
+
+  @override
+  String get jdSoundSilent => 'Senyap — tanpa suara';
+
+  @override
+  String get jdSoundNormal => 'Suara — notifikasi standar HP';
+
+  @override
+  String get jdSoundAdzan => 'Adzan — suara adzan penuh';
+
+  @override
+  String get jdSoundGlobalOption => 'Ikuti pengaturan global';
+
+  @override
+  String jdFootnote(String city) {
+    return 'Jadwal dari data KEMENAG RI via api.myquran.com untuk $city. Ter-update otomatis saat tab dibuka; tap nama kota di atas untuk ganti lokasi.';
+  }
+
+  @override
+  String qtSearchEmpty(String example) {
+    return 'Tidak ditemukan. Coba kata lain di terjemahan, atau tulis nama surat + nomor ayat — mis. $example.';
+  }
+
+  @override
+  String qtOpenSurah(String surah) {
+    return 'Buka surat $surah';
+  }
+
+  @override
+  String qtAyahOf(int ayah, int total) {
+    return 'Ayat $ayah dari $total';
+  }
+
+  @override
+  String qtSurahAyah(int surah, int ayah) {
+    return 'Surat $surah · Ayat $ayah';
+  }
+
+  @override
+  String btQuizScore(int score) {
+    return 'Quiz: $score%';
+  }
+
+  @override
+  String nlLevelShort(int level) {
+    return 'Lv $level';
+  }
+
+  @override
+  String homeLevelShort(int level) {
+    return 'LV $level';
+  }
+
+  @override
+  String qtsTafsirAyah(int ayah) {
+    return 'Tafsir Ayat $ayah';
+  }
 }

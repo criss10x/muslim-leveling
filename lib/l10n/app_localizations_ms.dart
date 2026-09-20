@@ -2494,4 +2494,112 @@ class AppL10nMs extends AppL10n {
   String qacAyahNumber(int number) {
     return 'Ayat $number';
   }
+
+  @override
+  String get jdLoadFailed => 'Gagal memuatkan jadual. Sila periksa sambungan.';
+
+  @override
+  String get jdAlreadyLogged => '✓ TELAH DIREKODKAN';
+
+  @override
+  String get jdTesSuara => 'Uji bunyi';
+
+  @override
+  String get jdAdzanDownloadFailed =>
+      'Gagal memuat turun laungan azan. Periksa sambungan internet dan cuba lagi.';
+
+  @override
+  String get qtLoadFailed => 'Gagal memuatkan data Al-Qur\'an';
+
+  @override
+  String get qtSurahNotFound => 'Surah tidak ditemui';
+
+  @override
+  String get qtContinueReading => 'Teruskan membaca';
+
+  @override
+  String get spTagline => 'Tingkatkan iman, Tingkatkan Kehidupan anda';
+
+  @override
+  String get spLoading => 'MEMUATKAN DATA PEJUANG...';
+
+  @override
+  String get btSubtitle => 'Tingkatkan ilmu, raih lebih banyak XP.';
+
+  @override
+  String get doaLoadFailed => 'Gagal memuatkan doa.';
+
+  @override
+  String get taProSignature => 'Kemasan tandatangan Pro';
+
+  @override
+  String get tpSelected => 'Tema dipilih';
+
+  @override
+  String get qrDisplaySettings => 'Tetapan paparan';
+
+  @override
+  String get jdSoundFollowGlobal => 'Mengikut tetapan global';
+
+  @override
+  String jdNotifFor(String prayer) {
+    return 'Notifikasi $prayer';
+  }
+
+  @override
+  String get jdSoundSilent => 'Senyap — tanpa bunyi';
+
+  @override
+  String get jdSoundNormal => 'Bunyi — notifikasi standard telefon';
+
+  @override
+  String get jdSoundAdzan => 'Azan — laungan azan penuh';
+
+  @override
+  String get jdSoundGlobalOption => 'Ikut tetapan global';
+
+  @override
+  String jdFootnote(String city) {
+    return 'Jadual daripada data KEMENAG RI melalui api.myquran.com untuk $city. Dikemas kini secara automatik apabila tab dibuka; ketik nama bandar di atas untuk menukar lokasi.';
+  }
+
+  @override
+  String qtSearchEmpty(String example) {
+    return 'Tidak ditemui. Cuba kata kunci lain dalam terjemahan, atau tulis nama surah + nombor ayat — cth. $example.';
+  }
+
+  @override
+  String qtOpenSurah(String surah) {
+    return 'Buka surah $surah';
+  }
+
+  @override
+  String qtAyahOf(int ayah, int total) {
+    return 'Ayat $ayah daripada $total';
+  }
+
+  @override
+  String qtSurahAyah(int surah, int ayah) {
+    return 'Surah $surah · Ayat $ayah';
+  }
+
+  @override
+  String btQuizScore(int score) {
+    return 'Kuiz: $score%';
+  }
+
+  @override
+  String nlLevelShort(int level) {
+    return 'Lv $level';
+  }
+
+  @override
+  String homeLevelShort(int level) {
+    return 'LV $level';
+  }
+
+  @override
+  String qtsTafsirAyah(int ayah) {
+    return 'Tafsir Ayat $ayah';
+  }
 }

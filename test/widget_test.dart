@@ -17,7 +17,7 @@ void main() {
   testWidgets('SplashScreen tints its logo mark with the theme primary', (
     tester,
   ) async {
-    await tester.pumpWidget(const MaterialApp(home: SplashScreen()));
+    await tester.pumpWidget(appWrap(const SplashScreen()));
 
     final tintedMark = find.byWidgetPredicate(
       (widget) =>

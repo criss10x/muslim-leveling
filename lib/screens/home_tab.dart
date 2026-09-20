@@ -2040,7 +2040,7 @@ class _RankMedallion extends StatelessWidget {
                 Positioned(
                   bottom: 7,
                   child: Text(
-                    'LV $level',
+                    AppL10n.of(context).homeLevelShort(level),
                     style: AppText.labelCapsSm().copyWith(
                       color: AppColors.onSurfaceVariant,
                       fontSize: 8,

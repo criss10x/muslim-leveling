@@ -5,6 +5,7 @@ import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import 'onboarding_screen.dart';
 import 'dashboard_shell.dart';
+import '../l10n/app_localizations.dart';
 
 /// Splash screen — pulsing shield + animated loading bar.
 /// Logo, copy, and progress enter once before routing.
@@ -194,7 +195,7 @@ class _SplashScreenState extends State<SplashScreen>
                 FadeTransition(
                   opacity: copyEntry,
                   child: Text(
-                    'Level Up iman, Level Up Kehidupanmu',
+                    AppL10n.of(context).spTagline,
                     textAlign: TextAlign.center,
                     style: AppText.bodyMd().copyWith(
                       color: AppColors.onSurface,
@@ -268,7 +269,7 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                 ),
                 Text(
-                  'MEMUAT DATA PEJUANG...',
+                  AppL10n.of(context).spLoading,
                   style: AppText.labelCaps().copyWith(
                     color: AppColors.onSurfaceVariant,
                   ),

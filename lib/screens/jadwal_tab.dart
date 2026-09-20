@@ -121,7 +121,7 @@ class _JadwalTabState extends State<JadwalTab> {
       _loading = false;
       _jadwal = j;
       if (j == null) {
-        _error = 'Gagal memuat jadwal. Periksa koneksi.';
+        _error = AppL10n.of(context).jdLoadFailed;
       } else if (j['lokasi']?.isNotEmpty == true) {
         _cityName = j['lokasi']!;
       }
@@ -743,7 +743,7 @@ class _JadwalTabState extends State<JadwalTab> {
                   )
                 else if (isLogged)
                   Text(
-                    '✓ SUDAH DILOG',
+                    AppL10n.of(context).jdAlreadyLogged,
                     style: AppText.labelCaps().copyWith(
                       color: AppColors.primary.withValues(alpha: 0.7),
                       fontSize: 9,
@@ -790,7 +790,7 @@ class _JadwalTabState extends State<JadwalTab> {
       );
     }
     final (iconData, label) = _soundIcons[sound] ??
-        (AppIcons.notificationsNoneRounded, 'Mengikuti global');
+        (AppIcons.notificationsNoneRounded, AppL10n.of(context).jdSoundFollowGlobal);
     return GestureDetector(
       onTap: () => _showSoundPicker(prayerId, sound),
       child: Icon(iconData, size: 20, color: AppColors.onSurfaceVariant),
@@ -817,24 +817,24 @@ class _JadwalTabState extends State<JadwalTab> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Notifikasi $prayerId',
+                AppL10n.of(context).jdNotifFor(prayerId),
                 style: AppText.titleLg().copyWith(
                   color: AppColors.onSurface,
                 ),
               ),
               const SizedBox(height: AppSpacing.md),
               _soundOption(prayerId, isOverride && current == 'senyap', 'senyap',
-                  AppIcons.volumeOffRounded, 'Senyap — tanpa suara'),
+                  AppIcons.volumeOffRounded, AppL10n.of(context).jdSoundSilent),
               _soundOption(prayerId, isOverride && current == 'suara', 'suara',
-                  AppIcons.notificationsRounded, 'Suara — notifikasi standar HP'),
+                  AppIcons.notificationsRounded, AppL10n.of(context).jdSoundNormal),
               _soundOption(prayerId, isOverride && current == 'adzan', 'adzan',
-                  AppIcons.volumeUpRounded, 'Adzan — suara adzan penuh'),
+                  AppIcons.volumeUpRounded, AppL10n.of(context).jdSoundAdzan),
               _soundOption(
                 prayerId,
                 !isOverride,
                 _globalSound,
                 AppIcons.notificationsNoneRounded,
-                'Ikuti pengaturan global',
+                AppL10n.of(context).jdSoundGlobalOption,
               ),
             ],
           ),
@@ -934,7 +934,7 @@ class _JadwalTabState extends State<JadwalTab> {
                       ? NotificationService.sendTestAdzanSound
                       : null,
                   icon: const Icon(AppIcons.playCircleOutline, size: 18),
-                  label: const Text('Tes suara'),
+                  label: Text(AppL10n.of(context).jdTesSuara),
                 ),
               ),
             ],
@@ -1019,7 +1019,7 @@ class _JadwalTabState extends State<JadwalTab> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Gagal mengunduh suara adzan. Periksa koneksi lalu coba lagi.',
+              AppL10n.of(context).jdAdzanDownloadFailed,
               style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
             ),
             backgroundColor: AppColors.surfaceContainerLowest,
@@ -1034,8 +1034,7 @@ class _JadwalTabState extends State<JadwalTab> {
   Widget _infoCard() {
     // Footnote tenang, bukan kartu — sumber data cukup sekali dibaca.
     return Text(
-      'Jadwal dari data KEMENAG RI via api.myquran.com untuk $_cityName. '
-      'Ter-update otomatis saat tab dibuka; tap nama kota di atas untuk ganti lokasi.',
+      AppL10n.of(context).jdFootnote(_cityName),
       style: AppText.bodyMd().copyWith(
         color: AppColors.onSurfaceVariant.withValues(alpha: 0.7),
         fontSize: 11,

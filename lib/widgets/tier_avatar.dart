@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../services/cosmetic_catalog.dart';
 import '../theme/app_icons.dart';
 import '../theme/app_theme.dart';
+import '../l10n/app_localizations.dart';
 
 /// Builds the avatar outline for a given [FrameShape]. Circle uses an oval,
 /// square uses a rounded rect, shield tapers to a point at bottom-center.
@@ -409,7 +410,7 @@ class _TierProfileAvatarState extends State<TierProfileAvatar>
             if (widget.isPro)
               Semantics(
                 container: true,
-                label: 'Pro signature finish',
+                label: AppL10n.of(context).taProSignature,
                 child: IgnorePointer(
                   child: SizedBox(
                     width: extraSize,

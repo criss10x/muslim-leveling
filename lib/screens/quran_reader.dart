@@ -14,6 +14,7 @@ import '../widgets/quran_display_sheet.dart';
 import '../widgets/quran_player_bar.dart';
 import '../widgets/quran_share_sheet.dart';
 import '../widgets/quran_tafsir_sheet.dart';
+import '../l10n/app_localizations.dart';
 
 class QuranReader extends StatefulWidget {
   final QuranSurah surah;
@@ -245,7 +246,7 @@ class _QuranReaderState extends State<QuranReader> {
         ),
         actions: [
           IconButton(
-            tooltip: 'Setelan tampilan',
+            tooltip: AppL10n.of(context).qrDisplaySettings,
             icon: const Icon(Icons.settings),
             onPressed: () => showQuranDisplaySheet(context),
           ),

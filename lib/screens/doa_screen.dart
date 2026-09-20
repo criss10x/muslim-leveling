@@ -3,6 +3,7 @@ import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../services/doa_api.dart';
 import '../theme/app_icons.dart';
+import '../l10n/app_localizations.dart';
 
 /// Doa — level 1: daftar grup doa (dari API equran.id).
 class DoaScreen extends StatefulWidget {
@@ -27,7 +28,7 @@ class _DoaScreenState extends State<DoaScreen> {
       final groups = await doaApi.fetchGroups();
       if (mounted) setState(() => _groups = groups);
     } catch (_) {
-      if (mounted) setState(() => _error = 'Gagal memuat doa.');
+      if (mounted) setState(() => _error = AppL10n.of(context).doaLoadFailed);
     }
   }
 

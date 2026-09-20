@@ -2485,4 +2485,113 @@ class AppL10nEn extends AppL10n {
   String qacAyahNumber(int number) {
     return 'Ayah $number';
   }
+
+  @override
+  String get jdLoadFailed =>
+      'Failed to load schedule. Please check your connection.';
+
+  @override
+  String get jdAlreadyLogged => '✓ LOGGED';
+
+  @override
+  String get jdTesSuara => 'Sound test';
+
+  @override
+  String get jdAdzanDownloadFailed =>
+      'Failed to download Adhan audio. Please check your connection and try again.';
+
+  @override
+  String get qtLoadFailed => 'Failed to load Al-Qur\'an data';
+
+  @override
+  String get qtSurahNotFound => 'Surah not found';
+
+  @override
+  String get qtContinueReading => 'Continue reading';
+
+  @override
+  String get spTagline => 'Level up your faith, level up your life';
+
+  @override
+  String get spLoading => 'LOADING WARRIOR DATA...';
+
+  @override
+  String get btSubtitle => 'Increase your knowledge, earn more XP.';
+
+  @override
+  String get doaLoadFailed => 'Failed to load supplication.';
+
+  @override
+  String get taProSignature => 'Pro signature finish';
+
+  @override
+  String get tpSelected => 'Theme selected';
+
+  @override
+  String get qrDisplaySettings => 'Display settings';
+
+  @override
+  String get jdSoundFollowGlobal => 'Follow global';
+
+  @override
+  String jdNotifFor(String prayer) {
+    return 'Notification for $prayer';
+  }
+
+  @override
+  String get jdSoundSilent => 'Silent — no sound';
+
+  @override
+  String get jdSoundNormal => 'Sound — standard phone notification';
+
+  @override
+  String get jdSoundAdzan => 'Adhan — full Adhan sound';
+
+  @override
+  String get jdSoundGlobalOption => 'Follow global settings';
+
+  @override
+  String jdFootnote(String city) {
+    return 'Schedule from Ministry of Religious Affairs (KEMENAG RI) data via api.myquran.com for $city. Automatically updated when the tab is opened; tap the city name above to change location.';
+  }
+
+  @override
+  String qtSearchEmpty(String example) {
+    return 'No results found. Try another word in the translation, or type the Surah name + Ayah number — e.g., $example.';
+  }
+
+  @override
+  String qtOpenSurah(String surah) {
+    return 'Open Surah $surah';
+  }
+
+  @override
+  String qtAyahOf(int ayah, int total) {
+    return 'Ayah $ayah of $total';
+  }
+
+  @override
+  String qtSurahAyah(int surah, int ayah) {
+    return 'Surah $surah · Ayah $ayah';
+  }
+
+  @override
+  String btQuizScore(int score) {
+    return 'Quiz: $score%';
+  }
+
+  @override
+  String nlLevelShort(int level) {
+    return 'Lv $level';
+  }
+
+  @override
+  String homeLevelShort(int level) {
+    return 'LV $level';
+  }
+
+  @override
+  String qtsTafsirAyah(int ayah) {
+    return 'Tafsir of Ayah $ayah';
+  }
 }

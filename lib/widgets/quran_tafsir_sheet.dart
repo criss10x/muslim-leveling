@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../services/quran_data.dart';
+import '../l10n/app_localizations.dart';
 
 /// Sheet tafsir untuk satu ayat.
 Future<void> showTafsirSheet(BuildContext context, QuranTafsir tafsir) {
@@ -22,7 +23,7 @@ Future<void> showTafsirSheet(BuildContext context, QuranTafsir tafsir) {
               children: [
                 Expanded(
                   child: Text(
-                    'Tafsir Ayat ${tafsir.ayah}',
+                    AppL10n.of(context).qtsTafsirAyah(tafsir.ayah),
                     style: AppText.headlineMd()
                         .copyWith(color: AppColors.onSurface),
                   ),

@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:muslim_leveling/services/cosmetic_catalog.dart';
 import 'package:muslim_leveling/widgets/tier_avatar.dart';
 
+import 'helpers/app_wrap.dart';
+
 void main() {
   test('tier presentation keeps free palettes distinct', () {
     final master = getTierVisualConfig('Master');
@@ -163,9 +165,8 @@ void main() {
     tester,
   ) async {
     await tester.pumpWidget(
-      const Directionality(
-        textDirection: TextDirection.ltr,
-        child: TierProfileAvatar(
+      appWrap(
+        const TierProfileAvatar(
           tierName: 'Epic',
           displayName: 'Ahmad Fikri',
           equippedFrameId: 'frame_subuh',
