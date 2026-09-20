@@ -7,6 +7,7 @@ import '../../services/prayer_service.dart';
 import '../../services/game_service.dart';
 import '../../services/notification_service.dart';
 import '../../services/hijri_service.dart';
+import '../../l10n/app_localizations.dart';
 import 'hari_penting_screen.dart';
 import '../theme/app_icons.dart';
 
@@ -349,12 +350,13 @@ class _JadwalTabState extends State<JadwalTab> {
   /// Touch target ≥44px (SizedBox height 44 + padding horizontal).
   /// Semantics label eksplisit untuk TalkBack.
   Widget _hariPentingButton() {
+    final l10n = AppL10n.of(context);
     final label = _hijriToday != null
-        ? hijriLabel(_hijriToday!)
-        : 'Hari Penting Islam';
+        ? hijriLabel(l10n, _hijriToday!)
+        : l10n.hjHariPentingTitle;
     return Semantics(
       button: true,
-      label: 'Tanggal Hijriah, buka Hari Penting Islam',
+      label: l10n.hjHariPentingSemantics,
       child: PressableScale(
         onTap: () => Navigator.of(context).push(MaterialPageRoute(
           builder: (_) => const HariPentingScreen(),

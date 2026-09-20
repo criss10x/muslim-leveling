@@ -953,6 +953,12 @@ class AppL10nId extends AppL10n {
   String get localeIndonesian => 'Bahasa Indonesia';
 
   @override
+  String get localeMalay => 'Bahasa Melayu';
+
+  @override
+  String get localeTurkish => 'Türkçe';
+
+  @override
   String get localePicked => 'Bahasa dipilih';
 
   @override
@@ -1969,4 +1975,222 @@ class AppL10nId extends AppL10n {
   String naikLevelLabel(Object level) {
     return 'Level $level';
   }
+
+  @override
+  String get uq_ulama_ilmu_itu_lebih_baik_daripada_harta_ilmu =>
+      'Ilmu itu lebih baik daripada harta. Ilmu menjaga kamu, sedangkan harta justru kamu yang menjaganya.';
+
+  @override
+  String get uq_ulama_orang_berilmu_itu_hidup_walau_sudah_wafa =>
+      'Orang berilmu itu hidup walau sudah wafat, sedangkan orang bodoh itu mati walau masih hidup.';
+
+  @override
+  String get uq_ulama_jangan_melihat_siapa_yang_berbicara_tapi =>
+      'Jangan melihat siapa yang berbicara, tapi lihatlah apa yang dia katakan.';
+
+  @override
+  String get uq_ulama_nilai_seseorang_diukur_dari_apa_yang_dia =>
+      'Nilai seseorang diukur dari apa yang dia tekuni dengan sungguh-sungguh.';
+
+  @override
+  String get uq_ulama_hisablah_dirimu_sendiri_sebelum_kamu_dih =>
+      'Hisablah dirimu sendiri sebelum kamu dihisab, dan timbanglah amalmu sebelum ditimbang.';
+
+  @override
+  String get uq_ulama_aku_tidak_pernah_menyesal_karena_diam_ta =>
+      'Aku tidak pernah menyesal karena diam, tapi aku sering menyesal karena berbicara.';
+
+  @override
+  String get uq_ulama_kehormatanmu_adalah_agamamu_dan_harga_di =>
+      'Kehormatanmu adalah agamamu, dan harga dirimu adalah akhlakmu.';
+
+  @override
+  String get uq_ulama_waktu_itu_seperti_pedang_kalau_kamu_tida =>
+      'Waktu itu seperti pedang — kalau kamu tidak memotongnya, dia yang memotongmu.';
+
+  @override
+  String get uq_ulama_ilmu_bukanlah_yang_dihafal_tetapi_ilmu_a =>
+      'Ilmu bukanlah yang dihafal, tetapi ilmu adalah yang memberi manfaat.';
+
+  @override
+  String get uq_ulama_ilmu_itu_cahaya_dan_cahaya_allah_tidak_a =>
+      'Ilmu itu cahaya, dan cahaya Allah tidak akan masuk ke dalam hati orang yang bermaksiat.';
+
+  @override
+  String get uq_ulama_barangsiapa_tidak_tahan_lelahnya_belajar =>
+      'Barangsiapa tidak tahan lelahnya belajar, dia harus tahan perihnya kebodohan.';
+
+  @override
+  String get uq_ulama_aku_tidak_berhenti_belajar_sejak_aku_men =>
+      'Aku tidak berhenti belajar sejak aku menyadari bahwa aku masih bodoh.';
+
+  @override
+  String get uq_ulama_aku_tidak_memberi_fatwa_sampai_aku_berta =>
+      'Aku tidak memberi fatwa sampai aku bertanya kepada orang yang lebih berilmu dariku.';
+
+  @override
+  String get uq_ulama_manusia_lebih_membutuhkan_ilmu_daripada =>
+      'Manusia lebih membutuhkan ilmu daripada makanan dan minuman.';
+
+  @override
+  String get uq_ulama_aku_tidak_menulis_satu_hadis_pun_melaink =>
+      'Aku tidak menulis satu hadis pun melainkan aku amalkan dulu isinya.';
+
+  @override
+  String get uq_ulama_ilmu_tanpa_amal_seperti_pohon_tanpa_buah =>
+      'Ilmu tanpa amal seperti pohon tanpa buah.';
+
+  @override
+  String get uq_ulama_anak_adam_hanyalah_kumpulan_hari_hari_se =>
+      'Anak Adam hanyalah kumpulan hari-hari. Setiap satu hari berlalu, sebagian dari dirinya ikut pergi.';
+
+  @override
+  String get uq_ulama_barangsiapa_mengenal_allah_dia_akan_menc =>
+      'Barangsiapa mengenal Allah, dia akan mencintai-Nya; dan yang mencintai-Nya akan sibuk dengan-Nya.';
+
+  @override
+  String get uq_ulama_sesungguhnya_dunia_ini_hanya_sebentar_ja =>
+      'Sesungguhnya dunia ini hanya sebentar, jangan sampai kita bekerja untuknya seolah selamanya.';
+
+  @override
+  String get uq_ulama_jadikan_dunia_ini_cukup_berada_di_tangan =>
+      'Jadikan dunia ini cukup berada di tanganmu, jangan sampai masuk ke dalam hatimu.';
+
+  @override
+  String get uq_ulama_perbanyaklah_mengingat_mati_karena_itu_m =>
+      'Perbanyaklah mengingat mati, karena itu menghapus cinta kepada dunia.';
+
+  @override
+  String get uq_ulama_aku_tidak_mengobati_sesuatu_yang_lebih_b =>
+      'Aku tidak mengobati sesuatu yang lebih berat daripada niatku sendiri.';
+
+  @override
+  String get uq_ulama_ilmu_itu_untuk_diamalkan_kalau_tidak_dia =>
+      'Ilmu itu untuk diamalkan; kalau tidak diamalkan, dia akan pergi.';
+
+  @override
+  String get uq_ulama_diam_adalah_hikmah_tapi_sedikit_orang_ya =>
+      'Diam adalah hikmah, tapi sedikit orang yang mau mengamalkannya.';
+
+  @override
+  String get uq_ulama_sebaik_baik_hati_adalah_yang_dipenuhi_ra =>
+      'Sebaik-baik hati adalah yang dipenuhi rasa takut dan harap kepada Allah.';
+
+  @override
+  String get uq_ulama_tidak_ada_yang_lebih_bermanfaat_bagi_hat =>
+      'Tidak ada yang lebih bermanfaat bagi hati daripada membaca Al-Qur\'an dengan tadabbur.';
+
+  @override
+  String get uq_ulama_hati_bisa_sakit_seperti_badan_sakit_dan =>
+      'Hati bisa sakit seperti badan sakit, dan obatnya adalah istigfar.';
+
+  @override
+  String get uq_ulama_kesabaran_itu_cahaya_dengannya_jalan_yan =>
+      'Kesabaran itu cahaya — dengannya jalan yang sempit terasa lapang.';
+
+  @override
+  String get uq_ulama_ilmu_tanpa_amal_adalah_sia_sia_dan_amal =>
+      'Ilmu tanpa amal adalah sia-sia, dan amal tanpa ilmu tidak akan sempurna.';
+
+  @override
+  String get uq_ulama_kebahagiaan_bukan_pada_banyaknya_harta_t =>
+      'Kebahagiaan bukan pada banyaknya harta, tetapi pada lapangnya hati.';
+
+  @override
+  String get uq_ulama_siapa_yang_menuntut_ilmu_semata_untuk_me =>
+      'Siapa yang menuntut ilmu semata untuk membanggakan diri, ilmunya akan menjadi hujjah atas dirinya.';
+
+  @override
+  String get uq_ulama_jaga_hatimu_karena_allah_melihat_bukan_h =>
+      'Jaga hatimu, karena Allah melihat bukan hanya amalmu, tapi juga apa yang ada di dalamnya.';
+
+  @override
+  String get uq_month_1 => 'Muharam';
+
+  @override
+  String get uq_month_2 => 'Safar';
+
+  @override
+  String get uq_month_3 => 'Rabiulawal';
+
+  @override
+  String get uq_month_4 => 'Rabiulakhir';
+
+  @override
+  String get uq_month_5 => 'Jumadilawal';
+
+  @override
+  String get uq_month_6 => 'Jumadilakhir';
+
+  @override
+  String get uq_month_7 => 'Rajab';
+
+  @override
+  String get uq_month_8 => 'Syaban';
+
+  @override
+  String get uq_month_9 => 'Ramadan';
+
+  @override
+  String get uq_month_10 => 'Syawal';
+
+  @override
+  String get uq_month_11 => 'Zulkaidah';
+
+  @override
+  String get uq_month_12 => 'Zulhijah';
+
+  @override
+  String get uq_ev_1_1 => 'Tahun Baru Hijriah';
+
+  @override
+  String get uq_ev_1_10 => 'Hari Asyura';
+
+  @override
+  String get uq_ev_3_12 => 'Maulid Nabi';
+
+  @override
+  String get uq_ev_7_27 => 'Isra Mikraj';
+
+  @override
+  String get uq_ev_8_15 => 'Nisfu Syaban';
+
+  @override
+  String get uq_ev_9_1 => 'Awal Ramadan';
+
+  @override
+  String get uq_ev_9_17 => 'Nuzulul Quran';
+
+  @override
+  String get uq_ev_10_1 => 'Idulfitri';
+
+  @override
+  String get uq_ev_12_9 => 'Hari Arafah';
+
+  @override
+  String get uq_ev_12_10 => 'Iduladha';
+
+  @override
+  String get hjHariPentingTitle => 'Hari Penting Islam';
+
+  @override
+  String get hjHariPentingEmpty => 'Tidak bisa memuat tanggal penting.';
+
+  @override
+  String get hjHariPentingSemantics =>
+      'Tanggal Hijriah, buka Hari Penting Islam';
+
+  @override
+  String get hjToday => 'Hari ini!';
+
+  @override
+  String get hjPassed => 'Sudah lewat';
+
+  @override
+  String hjDaysLeft(Object days) {
+    return '$days hari lagi';
+  }
+
+  @override
+  String get hjHijriSuffix => 'H';
 }

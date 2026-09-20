@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../theme/app_theme.dart';
 import '../../services/hijri_service.dart';
+import '../../l10n/app_localizations.dart';
 import '../theme/app_icons.dart';
 
 /// Hari Penting Islam — replace HijriCalendarScreen (month-grid lama).
@@ -33,6 +35,7 @@ class _HariPentingScreenState extends State<HariPentingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -43,14 +46,14 @@ class _HariPentingScreenState extends State<HariPentingScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          'Hari Penting Islam',
+          l10n.hjHariPentingTitle,
           style: AppText.headlineMd().copyWith(color: AppColors.onSurface),
         ),
       ),
       body: _loading
           ? _buildLoading()
           : _dates == null || _dates!.isEmpty
-              ? _buildEmpty()
+              ? _buildEmpty(l10n)
               : RefreshIndicator(
                   onRefresh: _load,
                   color: AppColors.primary,
@@ -71,6 +74,7 @@ class _HariPentingScreenState extends State<HariPentingScreen> {
   }
 
   Widget _buildCard(ImportantHijriDate d) {
+    final l10n = AppL10n.of(context);
     final daysUntil = d.daysUntil;
     final isPast = daysUntil != null && daysUntil < 0;
     final isToday = daysUntil == 0;
@@ -122,7 +126,8 @@ class _HariPentingScreenState extends State<HariPentingScreen> {
                     ),
                   ),
                   Text(
-                    _gregMonthShort(d.gDate!.month),
+                    DateFormat('MMM', Localizations.localeOf(context).toString())
+                        .format(d.gDate!),
                     style: AppText.bodyMd().copyWith(
                       color: AppColors.onSurfaceVariant,
                       fontSize: 10,
@@ -138,7 +143,7 @@ class _HariPentingScreenState extends State<HariPentingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    d.label,
+                    d.labelFor(l10n),
                     style: AppText.bodyLg().copyWith(
                       color: isPast
                           ? AppColors.onSurfaceVariant
@@ -148,7 +153,7 @@ class _HariPentingScreenState extends State<HariPentingScreen> {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    d.hijriLabel,
+                    d.hijriLabel(l10n),
                     style: AppText.bodyMd().copyWith(
                       color: AppColors.onSurfaceVariant,
                       fontSize: 11,
@@ -165,7 +170,7 @@ class _HariPentingScreenState extends State<HariPentingScreen> {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                d.statusText,
+                d.statusText(l10n),
                 style: AppText.bodyMd().copyWith(
                   color: badgeColor,
                   fontWeight: FontWeight.w600,
@@ -179,13 +184,8 @@ class _HariPentingScreenState extends State<HariPentingScreen> {
     );
   }
 
-  String _gregMonthShort(int m) {
-    const names = [
-      '', 'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
-      'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des',
-    ];
-    return m >= 1 && m <= 12 ? names[m] : '?';
-  }
+  // ponytail: _gregMonthShort dihapus — pakai intl supaya "Agu" jadi "Aug"
+  // di locale en, tanpa daftar nama bulan kedua yang bisa basi.
 
   // --- States ---
 
@@ -204,7 +204,7 @@ class _HariPentingScreenState extends State<HariPentingScreen> {
     );
   }
 
-  Widget _buildEmpty() {
+  Widget _buildEmpty(AppL10n l10n) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -213,13 +213,13 @@ class _HariPentingScreenState extends State<HariPentingScreen> {
               size: 48, color: AppColors.onSurfaceVariant),
           const SizedBox(height: 12),
           Text(
-            'Tidak bisa memuat tanggal penting.',
+            l10n.hjHariPentingEmpty,
             style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
           ),
           const SizedBox(height: 8),
           TextButton(
             onPressed: _load,
-            child: Text('Coba lagi',
+            child: Text(l10n.onbLocationRetry,
                 style: AppText.bodyMd().copyWith(color: AppColors.primary)),
           ),
         ],

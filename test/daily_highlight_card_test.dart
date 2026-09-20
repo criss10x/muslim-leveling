@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,6 +7,8 @@ import 'package:muslim_leveling/screens/daily_highlight_screen.dart';
 import 'package:muslim_leveling/services/daily_highlight.dart';
 import 'package:muslim_leveling/services/game_service.dart';
 import 'package:muslim_leveling/services/quran_data.dart';
+import 'package:muslim_leveling/l10n/app_localizations.dart';
+import 'package:muslim_leveling/l10n/hijri_texts.g.dart';
 import 'package:muslim_leveling/services/ulama_quotes.dart';
 import 'helpers/app_wrap.dart';
 
@@ -100,15 +103,18 @@ void main() {
   // ponytail: PageView.builder cuma membangun halaman yang terlihat, jadi blok
   // ke-4 tak bisa dicari lewat finder. Uji datanya langsung.
   test('kutipan ulama: pool tidak kosong & deterministik per tanggal', () {
-    expect(ulamaQuotes.length, greaterThanOrEqualTo(10));
-    for (final q in ulamaQuotes) {
-      expect(q.tokoh, isNotEmpty);
-      expect(q.idn, isNotEmpty);
+    expect(ulamaQuoteTokens.length, greaterThanOrEqualTo(10));
+    for (final t in ulamaQuoteTokens) {
+      expect(t, isNotEmpty);
     }
-    final a = ulamaQuotes[highlightIndex('2026-08-16', ulamaQuotes.length)];
-    final b = ulamaQuotes[highlightIndex('2026-08-16', ulamaQuotes.length)];
-    expect(a.tokoh, b.tokoh);
-    expect(a.idn, b.idn);
+    // Teksnya tidak lagi disimpan di pool — diambil per-locale dari ARB.
+    final a =
+        ulamaQuoteTokens[highlightIndex('2026-08-16', ulamaQuoteTokens.length)];
+    final b =
+        ulamaQuoteTokens[highlightIndex('2026-08-16', ulamaQuoteTokens.length)];
+    expect(a, b);
+    final en = lookupAppL10n(const Locale('en'));
+    expect(ulamaQuoteTexts(en).length, ulamaQuoteTokens.length);
   });
 
   // ponytail: bug nyata — footer dulu mencetak BITMASK mentah sebagai angka

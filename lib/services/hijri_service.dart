@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../l10n/app_localizations.dart';
+import '../l10n/hijri_texts.g.dart';
+
 /// Kalender Hijriah — konversi Gregorian → Hijriah via aladhan.com,
 /// cache disk per bulan Gregorian (offline-proof setelah load pertama).
 class HijriDay {
@@ -15,72 +18,34 @@ class HijriDay {
   });
 }
 
-/// Nama bulan Hijriah (penulisan Kemenag) index 1..12.
-const hijriMonthNames = [
-  '',
-  'Muharam',
-  'Safar',
-  'Rabiulawal',
-  'Rabiulakhir',
-  'Jumadilawal',
-  'Jumadilakhir',
-  'Rajab',
-  'Syaban',
-  'Ramadan',
-  'Syawal',
-  'Zulkaidah',
-  'Zulhijah',
+/// Nama bulan Hijriah (penulisan Kemenag) index 1..12 ada di ARB, karena harus
+/// ikut bahasa aktif — lihat `hijriMonthName(l10n, bulan)` di
+/// `lib/l10n/hijri_texts.g.dart`. Index 0 tetap kosong di sana.
+///
+/// ponytail: `hijriMonthArabic` (aksen judul kartu), `gregorianMonthNames`,
+/// dan getter `gregorianLabel` dihapus — semuanya 0 pemanggil. Nama bulan
+/// Gregorian di UI sekarang dari `intl` (lihat hari_penting_screen).
+
+/// Tanggal penting statis `(bulan, hari)` → label dibaca dari ARB.
+/// Deterministik, tanpa API. Nama-nama momennya hidup di
+/// `lib/l10n/app_<locale>.arb` (key `uq_ev_<bulan>_<hari>`) dan diambil lewat
+/// `hijriEventLabel(l10n, bulan, hari)` — lihat `lib/l10n/hijri_texts.g.dart`.
+const hijriImportantDates = <(int, int)>[
+  (1, 1),
+  (1, 10),
+  (3, 12),
+  (7, 27),
+  (8, 15),
+  (9, 1),
+  (9, 17),
+  (10, 1),
+  (12, 9),
+  (12, 10),
 ];
 
-/// Nama bulan Gregorian dalam Bahasa Indonesia.
-const gregorianMonthNames = [
-  'Januari',
-  'Februari',
-  'Maret',
-  'April',
-  'Mei',
-  'Juni',
-  'Juli',
-  'Agustus',
-  'September',
-  'Oktober',
-  'November',
-  'Desember',
-];
-
-/// Nama bulan Hijriah dalam huruf Arab (aksen judul kartu).
-const hijriMonthArabic = [
-  '',
-  'محرم',
-  'صفر',
-  'ربيع الأول',
-  'ربيع الآخر',
-  'جمادى الأولى',
-  'جمادى الآخرة',
-  'رجب',
-  'شعبان',
-  'رمضان',
-  'شوال',
-  'ذو القعدة',
-  'ذو الحجة',
-];
-
-/// Tanggal penting statis (bulan, hari) → label. Deterministik, tanpa API.
-const hijriImportantDates = <(int, int), String>{
-  (1, 1): 'Tahun Baru Hijriah',
-  (1, 10): 'Hari Asyura',
-  (3, 12): 'Maulid Nabi',
-  (7, 27): 'Isra Mikraj',
-  (8, 15): 'Nisfu Syaban',
-  (9, 1): 'Awal Ramadan',
-  (9, 17): 'Nuzulul Quran',
-  (10, 1): 'Idulfitri',
-  (12, 9): 'Hari Arafah',
-  (12, 10): 'Iduladha',
-};
-
-String hijriLabel(HijriDay d) =>
-    '${d.hDay} ${hijriMonthNames[d.hMonth]} ${d.hYear} H';
+/// Tanggal Hijriah ringkas: "17 Safar 1448 H" — nama bulan ikut locale aktif.
+String hijriLabel(AppL10n l10n, HijriDay d) =>
+    hijriDateLabel(l10n, d.hDay, d.hMonth, d.hYear);
 
 final hijriService = HijriService();
 
@@ -178,9 +143,7 @@ class HijriService {
     }
 
     final results = <ImportantHijriDate>[];
-    for (final entry in hijriImportantDates.entries) {
-      final (hMonth, hDay) = entry.key;
-      final label = entry.value;
+    for (final (hMonth, hDay) in hijriImportantDates) {
       DateTime? gDate;
       try {
         final req = await _client.getUrl(Uri.parse(
@@ -207,7 +170,6 @@ class HijriService {
         hMonth: hMonth,
         hYear: hYear,
         gDate: gDate,
-        label: label,
       ));
     }
 
@@ -228,32 +190,36 @@ class HijriService {
 
   /// Fallback kalau tidak bisa dapat Hijri year — tampilkan tanpa Gregorian.
   List<ImportantHijriDate> _fallbackImportantDates(int hYear) {
-    return hijriImportantDates.entries.map((e) {
-      final (hMonth, hDay) = e.key;
-      return ImportantHijriDate(
-        hDay: hDay,
-        hMonth: hMonth,
-        hYear: hYear,
-        gDate: null,
-        label: e.value,
-      );
-    }).toList();
+    return [
+      for (final (hMonth, hDay) in hijriImportantDates)
+        ImportantHijriDate(
+          hDay: hDay,
+          hMonth: hMonth,
+          hYear: hYear,
+          gDate: null,
+        ),
+    ];
   }
 }
 
 /// Model untuk satu tanggal penting Islam.
+///
+/// Teks tidak disimpan di sini: label momen & nama bulan diambil dari ARB lewat
+/// [labelFor] / [statusText] / [hijriLabel] yang butuh [AppL10n]. Yang disimpan
+/// adalah kunci (bulan, hari) + tanggalnya.
 class ImportantHijriDate {
   final int hDay, hMonth, hYear;
   final DateTime? gDate; // null = API gagal
-  final String label;
 
   const ImportantHijriDate({
     required this.hDay,
     required this.hMonth,
     required this.hYear,
     required this.gDate,
-    required this.label,
   });
+
+  /// Nama momen (mis. "Idulfitri" / "Eid al-Fitr"); '' kalau tidak terdaftar.
+  String labelFor(AppL10n l10n) => hijriEventLabel(l10n, hMonth, hDay) ?? '';
 
   /// Hari tersisa (negatif = sudah lewat). Null kalau gDate tidak tersedia.
   int? get daysUntil {
@@ -264,27 +230,21 @@ class ImportantHijriDate {
   }
 
   /// Status badge text.
-  String get statusText {
+  String statusText(AppL10n l10n) {
     final d = daysUntil;
     if (d == null) return '—';
-    if (d == 0) return 'Hari ini!';
-    if (d < 0) return 'Sudah lewat';
-    return '$d hari lagi';
-  }
-
-  /// Tanggal Gregorian formatted: "27 Agustus 2025".
-  String get gregorianLabel {
-    if (gDate == null) return '';
-    return '${gDate!.day} ${gregorianMonthNames[gDate!.month - 1]} ${gDate!.year}';
+    if (d == 0) return l10n.hjToday;
+    if (d < 0) return l10n.hjPassed;
+    return l10n.hjDaysLeft(d);
   }
 
   /// Tanggal Hijri formatted: "27 Rajab 1447 H".
-  String get hijriLabel => '$hDay ${hijriMonthNames[hMonth]} $hYear H';
+  String hijriLabel(AppL10n l10n) =>
+      hijriDateLabel(l10n, hDay, hMonth, hYear);
 
   Map<String, dynamic> toJson() => {
     'hDay': hDay, 'hMonth': hMonth, 'hYear': hYear,
     'gDate': gDate?.toIso8601String(),
-    'label': label,
   };
 
   factory ImportantHijriDate.fromJson(Map<String, dynamic> j) =>
@@ -293,6 +253,5 @@ class ImportantHijriDate {
       hMonth: j['hMonth'] as int,
       hYear: j['hYear'] as int,
       gDate: j['gDate'] != null ? DateTime.parse(j['gDate'] as String) : null,
-      label: j['label'] as String,
     );
 }

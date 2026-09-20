@@ -15,6 +15,7 @@ import '../../services/quran_playlist.dart';
 import '../../services/quran_bookmark.dart';
 import '../../services/quran_api.dart';
 import '../../services/hijri_service.dart';
+import '../../l10n/hijri_texts.g.dart';
 import '../../l10n/app_localizations.dart';
 import 'quran_reader.dart';
 
@@ -42,7 +43,7 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
   /// bitmask di GameService — ini cuma salinan untuk menggambar penutup.
   late int _claimed = GameService.highlightSwipeClaimedToday;
 
-  String _hijri = '';
+  HijriDay? _hijri;
 
   /// Tafsir untuk ayat hari ini, dimuat malas (baru saat tombol ditekan).
   QuranTafsir? _tafsir;
@@ -74,7 +75,7 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
     hijriService
         .today()
         .then((d) {
-          if (mounted && d != null) setState(() => _hijri = hijriLabel(d));
+          if (mounted && d != null) setState(() => _hijri = d);
         })
         .catchError((_) {});
     quranBookmarks.load();
@@ -202,9 +203,9 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
     );
   }
 
-  /// Kutipan ulama hari ini — deterministik dari tanggal, sama seperti ayat/doa.
-  UlamaQuote get _quote =>
-      ulamaQuotes[highlightIndex(_todayKey, ulamaQuotes.length)];
+  /// Index kutipan ulama hari ini — deterministik dari tanggal, sama seperti
+  /// ayat/doa. Teksnya diambil per-locale saat render (lihat [_pages]).
+  int get _quoteIndex => highlightIndex(_todayKey, ulamaQuoteTokens.length);
 
   String get _todayKey => GameService.todayStr();
 
@@ -233,10 +234,11 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
         isArabic: false,
       ),
       // ponytail: kutipan ulama dari aset lokal — selalu ada, tanpa network.
+      // Teksnya ikut locale aktif; nama tokohnya tidak (nama diri).
       (
-        title: l10n.dlCiteUlama(_quote.tokoh),
+        title: l10n.dlCiteUlama(ulamaQuoteTokens[_quoteIndex]),
         arabic: '',
-        text: _quote.idn,
+        text: ulamaQuoteTexts(l10n)[_quoteIndex].text,
         isArabic: false,
       ),
     ];
@@ -303,9 +305,11 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
                   ),
                 ),
                 // Tanggal hijriah: bikin header terasa "hari ini", bukan template.
-                if (_hijri.isNotEmpty)
+                // Nama bulan dihitung saat render supaya ikut locale aktif.
+                if (_hijri case final h?)
                   Text(
-                    _hijri,
+                    hijriDateLabel(
+                        AppL10n.of(context), h.hDay, h.hMonth, h.hYear),
                     style: AppText.labelCapsSm().copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),

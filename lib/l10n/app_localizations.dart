@@ -7,6 +7,8 @@ import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_en.dart';
 import 'app_localizations_id.dart';
+import 'app_localizations_ms.dart';
+import 'app_localizations_tr.dart';
 
 // ignore_for_file: type=lint
 
@@ -95,6 +97,8 @@ abstract class AppL10n {
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
     Locale('id'),
+    Locale('ms'),
+    Locale('tr'),
   ];
 
   /// No description provided for @achBtnAwesome.
@@ -1841,6 +1845,18 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Bahasa Indonesia'**
   String get localeIndonesian;
+
+  /// No description provided for @localeMalay.
+  ///
+  /// In id, this message translates to:
+  /// **'Bahasa Melayu'**
+  String get localeMalay;
+
+  /// No description provided for @localeTurkish.
+  ///
+  /// In id, this message translates to:
+  /// **'Türkçe'**
+  String get localeTurkish;
 
   /// No description provided for @localePicked.
   ///
@@ -3605,6 +3621,372 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Level {level}'**
   String naikLevelLabel(Object level);
+
+  /// No description provided for @uq_ulama_ilmu_itu_lebih_baik_daripada_harta_ilmu.
+  ///
+  /// In id, this message translates to:
+  /// **'Ilmu itu lebih baik daripada harta. Ilmu menjaga kamu, sedangkan harta justru kamu yang menjaganya.'**
+  String get uq_ulama_ilmu_itu_lebih_baik_daripada_harta_ilmu;
+
+  /// No description provided for @uq_ulama_orang_berilmu_itu_hidup_walau_sudah_wafa.
+  ///
+  /// In id, this message translates to:
+  /// **'Orang berilmu itu hidup walau sudah wafat, sedangkan orang bodoh itu mati walau masih hidup.'**
+  String get uq_ulama_orang_berilmu_itu_hidup_walau_sudah_wafa;
+
+  /// No description provided for @uq_ulama_jangan_melihat_siapa_yang_berbicara_tapi.
+  ///
+  /// In id, this message translates to:
+  /// **'Jangan melihat siapa yang berbicara, tapi lihatlah apa yang dia katakan.'**
+  String get uq_ulama_jangan_melihat_siapa_yang_berbicara_tapi;
+
+  /// No description provided for @uq_ulama_nilai_seseorang_diukur_dari_apa_yang_dia.
+  ///
+  /// In id, this message translates to:
+  /// **'Nilai seseorang diukur dari apa yang dia tekuni dengan sungguh-sungguh.'**
+  String get uq_ulama_nilai_seseorang_diukur_dari_apa_yang_dia;
+
+  /// No description provided for @uq_ulama_hisablah_dirimu_sendiri_sebelum_kamu_dih.
+  ///
+  /// In id, this message translates to:
+  /// **'Hisablah dirimu sendiri sebelum kamu dihisab, dan timbanglah amalmu sebelum ditimbang.'**
+  String get uq_ulama_hisablah_dirimu_sendiri_sebelum_kamu_dih;
+
+  /// No description provided for @uq_ulama_aku_tidak_pernah_menyesal_karena_diam_ta.
+  ///
+  /// In id, this message translates to:
+  /// **'Aku tidak pernah menyesal karena diam, tapi aku sering menyesal karena berbicara.'**
+  String get uq_ulama_aku_tidak_pernah_menyesal_karena_diam_ta;
+
+  /// No description provided for @uq_ulama_kehormatanmu_adalah_agamamu_dan_harga_di.
+  ///
+  /// In id, this message translates to:
+  /// **'Kehormatanmu adalah agamamu, dan harga dirimu adalah akhlakmu.'**
+  String get uq_ulama_kehormatanmu_adalah_agamamu_dan_harga_di;
+
+  /// No description provided for @uq_ulama_waktu_itu_seperti_pedang_kalau_kamu_tida.
+  ///
+  /// In id, this message translates to:
+  /// **'Waktu itu seperti pedang — kalau kamu tidak memotongnya, dia yang memotongmu.'**
+  String get uq_ulama_waktu_itu_seperti_pedang_kalau_kamu_tida;
+
+  /// No description provided for @uq_ulama_ilmu_bukanlah_yang_dihafal_tetapi_ilmu_a.
+  ///
+  /// In id, this message translates to:
+  /// **'Ilmu bukanlah yang dihafal, tetapi ilmu adalah yang memberi manfaat.'**
+  String get uq_ulama_ilmu_bukanlah_yang_dihafal_tetapi_ilmu_a;
+
+  /// No description provided for @uq_ulama_ilmu_itu_cahaya_dan_cahaya_allah_tidak_a.
+  ///
+  /// In id, this message translates to:
+  /// **'Ilmu itu cahaya, dan cahaya Allah tidak akan masuk ke dalam hati orang yang bermaksiat.'**
+  String get uq_ulama_ilmu_itu_cahaya_dan_cahaya_allah_tidak_a;
+
+  /// No description provided for @uq_ulama_barangsiapa_tidak_tahan_lelahnya_belajar.
+  ///
+  /// In id, this message translates to:
+  /// **'Barangsiapa tidak tahan lelahnya belajar, dia harus tahan perihnya kebodohan.'**
+  String get uq_ulama_barangsiapa_tidak_tahan_lelahnya_belajar;
+
+  /// No description provided for @uq_ulama_aku_tidak_berhenti_belajar_sejak_aku_men.
+  ///
+  /// In id, this message translates to:
+  /// **'Aku tidak berhenti belajar sejak aku menyadari bahwa aku masih bodoh.'**
+  String get uq_ulama_aku_tidak_berhenti_belajar_sejak_aku_men;
+
+  /// No description provided for @uq_ulama_aku_tidak_memberi_fatwa_sampai_aku_berta.
+  ///
+  /// In id, this message translates to:
+  /// **'Aku tidak memberi fatwa sampai aku bertanya kepada orang yang lebih berilmu dariku.'**
+  String get uq_ulama_aku_tidak_memberi_fatwa_sampai_aku_berta;
+
+  /// No description provided for @uq_ulama_manusia_lebih_membutuhkan_ilmu_daripada.
+  ///
+  /// In id, this message translates to:
+  /// **'Manusia lebih membutuhkan ilmu daripada makanan dan minuman.'**
+  String get uq_ulama_manusia_lebih_membutuhkan_ilmu_daripada;
+
+  /// No description provided for @uq_ulama_aku_tidak_menulis_satu_hadis_pun_melaink.
+  ///
+  /// In id, this message translates to:
+  /// **'Aku tidak menulis satu hadis pun melainkan aku amalkan dulu isinya.'**
+  String get uq_ulama_aku_tidak_menulis_satu_hadis_pun_melaink;
+
+  /// No description provided for @uq_ulama_ilmu_tanpa_amal_seperti_pohon_tanpa_buah.
+  ///
+  /// In id, this message translates to:
+  /// **'Ilmu tanpa amal seperti pohon tanpa buah.'**
+  String get uq_ulama_ilmu_tanpa_amal_seperti_pohon_tanpa_buah;
+
+  /// No description provided for @uq_ulama_anak_adam_hanyalah_kumpulan_hari_hari_se.
+  ///
+  /// In id, this message translates to:
+  /// **'Anak Adam hanyalah kumpulan hari-hari. Setiap satu hari berlalu, sebagian dari dirinya ikut pergi.'**
+  String get uq_ulama_anak_adam_hanyalah_kumpulan_hari_hari_se;
+
+  /// No description provided for @uq_ulama_barangsiapa_mengenal_allah_dia_akan_menc.
+  ///
+  /// In id, this message translates to:
+  /// **'Barangsiapa mengenal Allah, dia akan mencintai-Nya; dan yang mencintai-Nya akan sibuk dengan-Nya.'**
+  String get uq_ulama_barangsiapa_mengenal_allah_dia_akan_menc;
+
+  /// No description provided for @uq_ulama_sesungguhnya_dunia_ini_hanya_sebentar_ja.
+  ///
+  /// In id, this message translates to:
+  /// **'Sesungguhnya dunia ini hanya sebentar, jangan sampai kita bekerja untuknya seolah selamanya.'**
+  String get uq_ulama_sesungguhnya_dunia_ini_hanya_sebentar_ja;
+
+  /// No description provided for @uq_ulama_jadikan_dunia_ini_cukup_berada_di_tangan.
+  ///
+  /// In id, this message translates to:
+  /// **'Jadikan dunia ini cukup berada di tanganmu, jangan sampai masuk ke dalam hatimu.'**
+  String get uq_ulama_jadikan_dunia_ini_cukup_berada_di_tangan;
+
+  /// No description provided for @uq_ulama_perbanyaklah_mengingat_mati_karena_itu_m.
+  ///
+  /// In id, this message translates to:
+  /// **'Perbanyaklah mengingat mati, karena itu menghapus cinta kepada dunia.'**
+  String get uq_ulama_perbanyaklah_mengingat_mati_karena_itu_m;
+
+  /// No description provided for @uq_ulama_aku_tidak_mengobati_sesuatu_yang_lebih_b.
+  ///
+  /// In id, this message translates to:
+  /// **'Aku tidak mengobati sesuatu yang lebih berat daripada niatku sendiri.'**
+  String get uq_ulama_aku_tidak_mengobati_sesuatu_yang_lebih_b;
+
+  /// No description provided for @uq_ulama_ilmu_itu_untuk_diamalkan_kalau_tidak_dia.
+  ///
+  /// In id, this message translates to:
+  /// **'Ilmu itu untuk diamalkan; kalau tidak diamalkan, dia akan pergi.'**
+  String get uq_ulama_ilmu_itu_untuk_diamalkan_kalau_tidak_dia;
+
+  /// No description provided for @uq_ulama_diam_adalah_hikmah_tapi_sedikit_orang_ya.
+  ///
+  /// In id, this message translates to:
+  /// **'Diam adalah hikmah, tapi sedikit orang yang mau mengamalkannya.'**
+  String get uq_ulama_diam_adalah_hikmah_tapi_sedikit_orang_ya;
+
+  /// No description provided for @uq_ulama_sebaik_baik_hati_adalah_yang_dipenuhi_ra.
+  ///
+  /// In id, this message translates to:
+  /// **'Sebaik-baik hati adalah yang dipenuhi rasa takut dan harap kepada Allah.'**
+  String get uq_ulama_sebaik_baik_hati_adalah_yang_dipenuhi_ra;
+
+  /// No description provided for @uq_ulama_tidak_ada_yang_lebih_bermanfaat_bagi_hat.
+  ///
+  /// In id, this message translates to:
+  /// **'Tidak ada yang lebih bermanfaat bagi hati daripada membaca Al-Qur\'an dengan tadabbur.'**
+  String get uq_ulama_tidak_ada_yang_lebih_bermanfaat_bagi_hat;
+
+  /// No description provided for @uq_ulama_hati_bisa_sakit_seperti_badan_sakit_dan.
+  ///
+  /// In id, this message translates to:
+  /// **'Hati bisa sakit seperti badan sakit, dan obatnya adalah istigfar.'**
+  String get uq_ulama_hati_bisa_sakit_seperti_badan_sakit_dan;
+
+  /// No description provided for @uq_ulama_kesabaran_itu_cahaya_dengannya_jalan_yan.
+  ///
+  /// In id, this message translates to:
+  /// **'Kesabaran itu cahaya — dengannya jalan yang sempit terasa lapang.'**
+  String get uq_ulama_kesabaran_itu_cahaya_dengannya_jalan_yan;
+
+  /// No description provided for @uq_ulama_ilmu_tanpa_amal_adalah_sia_sia_dan_amal.
+  ///
+  /// In id, this message translates to:
+  /// **'Ilmu tanpa amal adalah sia-sia, dan amal tanpa ilmu tidak akan sempurna.'**
+  String get uq_ulama_ilmu_tanpa_amal_adalah_sia_sia_dan_amal;
+
+  /// No description provided for @uq_ulama_kebahagiaan_bukan_pada_banyaknya_harta_t.
+  ///
+  /// In id, this message translates to:
+  /// **'Kebahagiaan bukan pada banyaknya harta, tetapi pada lapangnya hati.'**
+  String get uq_ulama_kebahagiaan_bukan_pada_banyaknya_harta_t;
+
+  /// No description provided for @uq_ulama_siapa_yang_menuntut_ilmu_semata_untuk_me.
+  ///
+  /// In id, this message translates to:
+  /// **'Siapa yang menuntut ilmu semata untuk membanggakan diri, ilmunya akan menjadi hujjah atas dirinya.'**
+  String get uq_ulama_siapa_yang_menuntut_ilmu_semata_untuk_me;
+
+  /// No description provided for @uq_ulama_jaga_hatimu_karena_allah_melihat_bukan_h.
+  ///
+  /// In id, this message translates to:
+  /// **'Jaga hatimu, karena Allah melihat bukan hanya amalmu, tapi juga apa yang ada di dalamnya.'**
+  String get uq_ulama_jaga_hatimu_karena_allah_melihat_bukan_h;
+
+  /// No description provided for @uq_month_1.
+  ///
+  /// In id, this message translates to:
+  /// **'Muharam'**
+  String get uq_month_1;
+
+  /// No description provided for @uq_month_2.
+  ///
+  /// In id, this message translates to:
+  /// **'Safar'**
+  String get uq_month_2;
+
+  /// No description provided for @uq_month_3.
+  ///
+  /// In id, this message translates to:
+  /// **'Rabiulawal'**
+  String get uq_month_3;
+
+  /// No description provided for @uq_month_4.
+  ///
+  /// In id, this message translates to:
+  /// **'Rabiulakhir'**
+  String get uq_month_4;
+
+  /// No description provided for @uq_month_5.
+  ///
+  /// In id, this message translates to:
+  /// **'Jumadilawal'**
+  String get uq_month_5;
+
+  /// No description provided for @uq_month_6.
+  ///
+  /// In id, this message translates to:
+  /// **'Jumadilakhir'**
+  String get uq_month_6;
+
+  /// No description provided for @uq_month_7.
+  ///
+  /// In id, this message translates to:
+  /// **'Rajab'**
+  String get uq_month_7;
+
+  /// No description provided for @uq_month_8.
+  ///
+  /// In id, this message translates to:
+  /// **'Syaban'**
+  String get uq_month_8;
+
+  /// No description provided for @uq_month_9.
+  ///
+  /// In id, this message translates to:
+  /// **'Ramadan'**
+  String get uq_month_9;
+
+  /// No description provided for @uq_month_10.
+  ///
+  /// In id, this message translates to:
+  /// **'Syawal'**
+  String get uq_month_10;
+
+  /// No description provided for @uq_month_11.
+  ///
+  /// In id, this message translates to:
+  /// **'Zulkaidah'**
+  String get uq_month_11;
+
+  /// No description provided for @uq_month_12.
+  ///
+  /// In id, this message translates to:
+  /// **'Zulhijah'**
+  String get uq_month_12;
+
+  /// No description provided for @uq_ev_1_1.
+  ///
+  /// In id, this message translates to:
+  /// **'Tahun Baru Hijriah'**
+  String get uq_ev_1_1;
+
+  /// No description provided for @uq_ev_1_10.
+  ///
+  /// In id, this message translates to:
+  /// **'Hari Asyura'**
+  String get uq_ev_1_10;
+
+  /// No description provided for @uq_ev_3_12.
+  ///
+  /// In id, this message translates to:
+  /// **'Maulid Nabi'**
+  String get uq_ev_3_12;
+
+  /// No description provided for @uq_ev_7_27.
+  ///
+  /// In id, this message translates to:
+  /// **'Isra Mikraj'**
+  String get uq_ev_7_27;
+
+  /// No description provided for @uq_ev_8_15.
+  ///
+  /// In id, this message translates to:
+  /// **'Nisfu Syaban'**
+  String get uq_ev_8_15;
+
+  /// No description provided for @uq_ev_9_1.
+  ///
+  /// In id, this message translates to:
+  /// **'Awal Ramadan'**
+  String get uq_ev_9_1;
+
+  /// No description provided for @uq_ev_9_17.
+  ///
+  /// In id, this message translates to:
+  /// **'Nuzulul Quran'**
+  String get uq_ev_9_17;
+
+  /// No description provided for @uq_ev_10_1.
+  ///
+  /// In id, this message translates to:
+  /// **'Idulfitri'**
+  String get uq_ev_10_1;
+
+  /// No description provided for @uq_ev_12_9.
+  ///
+  /// In id, this message translates to:
+  /// **'Hari Arafah'**
+  String get uq_ev_12_9;
+
+  /// No description provided for @uq_ev_12_10.
+  ///
+  /// In id, this message translates to:
+  /// **'Iduladha'**
+  String get uq_ev_12_10;
+
+  /// No description provided for @hjHariPentingTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Hari Penting Islam'**
+  String get hjHariPentingTitle;
+
+  /// No description provided for @hjHariPentingEmpty.
+  ///
+  /// In id, this message translates to:
+  /// **'Tidak bisa memuat tanggal penting.'**
+  String get hjHariPentingEmpty;
+
+  /// No description provided for @hjHariPentingSemantics.
+  ///
+  /// In id, this message translates to:
+  /// **'Tanggal Hijriah, buka Hari Penting Islam'**
+  String get hjHariPentingSemantics;
+
+  /// No description provided for @hjToday.
+  ///
+  /// In id, this message translates to:
+  /// **'Hari ini!'**
+  String get hjToday;
+
+  /// No description provided for @hjPassed.
+  ///
+  /// In id, this message translates to:
+  /// **'Sudah lewat'**
+  String get hjPassed;
+
+  /// No description provided for @hjDaysLeft.
+  ///
+  /// In id, this message translates to:
+  /// **'{days} hari lagi'**
+  String hjDaysLeft(Object days);
+
+  /// No description provided for @hjHijriSuffix.
+  ///
+  /// In id, this message translates to:
+  /// **'H'**
+  String get hjHijriSuffix;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {
@@ -3617,7 +3999,7 @@ class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['en', 'id'].contains(locale.languageCode);
+      <String>['en', 'id', 'ms', 'tr'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppL10nDelegate old) => false;
@@ -3630,6 +4012,10 @@ AppL10n lookupAppL10n(Locale locale) {
       return AppL10nEn();
     case 'id':
       return AppL10nId();
+    case 'ms':
+      return AppL10nMs();
+    case 'tr':
+      return AppL10nTr();
   }
 
   throw FlutterError(
