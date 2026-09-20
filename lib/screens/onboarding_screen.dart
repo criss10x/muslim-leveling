@@ -131,6 +131,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   /// Halaman lokasi: minta lokasi, sinkron jadwal, tampilkan ✓ kota.
   Future<void> _allowLocation() async {
+    // Ditangkap sebelum await — pesan galat lokal dipakai setelah gap.
+    final l10n = AppL10n.of(context);
     if (_busy) return;
     setState(() {
       _busy = true;
@@ -147,7 +149,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         // Alasan ditahan di layar, bukan SnackBar: setelah permanent-deny
         // dialog OS tidak muncul lagi, jadi user butuh tahu bahwa tombolnya
         // tidak rusak dan ada jalur lain (pilih kota manual).
-        setState(() => _locError = loc.failure!.message);
+        setState(() => _locError = loc.failure!.message(l10n));
         return;
       }
       if (loc.name != null) {

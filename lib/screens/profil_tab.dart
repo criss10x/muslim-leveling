@@ -609,7 +609,7 @@ class _ProfilTabState extends State<ProfilTab> {
                                   // reschedule (itu tugas Simpan). Dulu tombol
                                   // ini mati diam-diam saat reschedule throw.
                                   try {
-                                    await NotificationService.sendTestNotification(
+                                    await NotificationService.sendTestNotification(l10n, 
                                       mode,
                                       soundModeOverride: soundMode,
                                     );
@@ -646,7 +646,7 @@ class _ProfilTabState extends State<ProfilTab> {
                         child: TextButton.icon(
                           onPressed: enabled
                               ? () async {
-                                  await NotificationService.sendTestAdzanSound();
+                                  await NotificationService.sendTestAdzanSound(l10n);
                                 }
                               : null,
                           icon: Icon(
@@ -1484,7 +1484,7 @@ class _ProfilTabState extends State<ProfilTab> {
     if (_googleLoginLoading) return;
     setState(() => _googleLoginLoading = true);
     try {
-      final uid = await AuthService.signInWithGoogle();
+      final uid = await AuthService.signInWithGoogle(l10n);
       if (uid == null) {
         final err =
             AuthService.lastError ?? l10n.profilLoginCancelled;

@@ -4659,6 +4659,132 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Tafsir Ayat {ayah}'**
   String qtsTafsirAyah(int ayah);
+
+  /// No description provided for @locFailureDisabled.
+  ///
+  /// In id, this message translates to:
+  /// **'Aktifkan layanan lokasi perangkat, lalu coba lagi.'**
+  String get locFailureDisabled;
+
+  /// No description provided for @locFailureDenied.
+  ///
+  /// In id, this message translates to:
+  /// **'Izinkan akses lokasi untuk menggunakan lokasi saat ini.'**
+  String get locFailureDenied;
+
+  /// No description provided for @locFailureDeniedForever.
+  ///
+  /// In id, this message translates to:
+  /// **'Izin lokasi diblokir. Buka Pengaturan untuk mengizinkannya.'**
+  String get locFailureDeniedForever;
+
+  /// No description provided for @locFailureTimeout.
+  ///
+  /// In id, this message translates to:
+  /// **'Lokasi terlalu lama ditemukan. Coba lagi di area terbuka.'**
+  String get locFailureTimeout;
+
+  /// No description provided for @locFailureLookup.
+  ///
+  /// In id, this message translates to:
+  /// **'Kota tidak dapat ditemukan. Periksa koneksi atau pilih kota manual.'**
+  String get locFailureLookup;
+
+  /// No description provided for @authNoIdToken.
+  ///
+  /// In id, this message translates to:
+  /// **'Google tidak kirim idToken. Cek SHA-1 di Firebase Console.'**
+  String get authNoIdToken;
+
+  /// No description provided for @authEmptyUser.
+  ///
+  /// In id, this message translates to:
+  /// **'Firebase Auth gagal — user kosong.'**
+  String get authEmptyUser;
+
+  /// No description provided for @authDevError10.
+  ///
+  /// In id, this message translates to:
+  /// **'Google DEVELOPER_ERROR (10): SHA-1 belum terdaftar di Firebase Console.'**
+  String get authDevError10;
+
+  /// No description provided for @authMisconfigured.
+  ///
+  /// In id, this message translates to:
+  /// **'Google Sign-In misconfigured. Cek OAuth consent + SHA-1.'**
+  String get authMisconfigured;
+
+  /// No description provided for @authNetworkError.
+  ///
+  /// In id, this message translates to:
+  /// **'Jaringan error saat login Google.'**
+  String get authNetworkError;
+
+  /// No description provided for @authCredInvalid.
+  ///
+  /// In id, this message translates to:
+  /// **'Firebase Auth gagal validasi credential.'**
+  String get authCredInvalid;
+
+  /// No description provided for @authNotEnabled.
+  ///
+  /// In id, this message translates to:
+  /// **'Google Sign-In belum diaktifkan di Firebase Console.'**
+  String get authNotEnabled;
+
+  /// No description provided for @authEmailInUse.
+  ///
+  /// In id, this message translates to:
+  /// **'Email sudah terdaftar dengan metode lain.'**
+  String get authEmailInUse;
+
+  /// No description provided for @notifModeFokus.
+  ///
+  /// In id, this message translates to:
+  /// **'Mode Fokus aktif! Pengingat hanya saat masuk waktu adzan.'**
+  String get notifModeFokus;
+
+  /// No description provided for @notifModeSeimbang.
+  ///
+  /// In id, this message translates to:
+  /// **'Mode Seimbang aktif! Pengingat semua sholat wajib 15 menit sebelum adzan.'**
+  String get notifModeSeimbang;
+
+  /// No description provided for @notifModeIntensif.
+  ///
+  /// In id, this message translates to:
+  /// **'Mode Intensif aktif! Diingetin 30 menit & 5 menit sebelum sholat. Pertahanin streak! 🔥'**
+  String get notifModeIntensif;
+
+  /// No description provided for @notifReady.
+  ///
+  /// In id, this message translates to:
+  /// **'Notifikasi Muslim Leveling siap! 🔔'**
+  String get notifReady;
+
+  /// No description provided for @notifTestBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Kalau adzan terdengar, notifikasi kamu siap! Kalau tidak, cek volume alarm HP.'**
+  String get notifTestBody;
+
+  /// No description provided for @notifTestTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'🕌 Tes Suara Adzan'**
+  String get notifTestTitle;
+
+  /// No description provided for @notifChannelReminder.
+  ///
+  /// In id, this message translates to:
+  /// **'Notifikasi pengingat waktu sholat'**
+  String get notifChannelReminder;
+
+  /// No description provided for @notifModeTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Muslim Leveling Mode: {mode}'**
+  String notifModeTitle(String mode);
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

@@ -2616,4 +2616,86 @@ class AppL10nTr extends AppL10n {
   String qtsTafsirAyah(int ayah) {
     return '$ayah. Ayet Tefsiri';
   }
+
+  @override
+  String get locFailureDisabled =>
+      'Cihaz konum servislerini etkinleştirin ve tekrar deneyin.';
+
+  @override
+  String get locFailureDenied =>
+      'Mevcut konumu kullanmak için konum erişimine izin verin.';
+
+  @override
+  String get locFailureDeniedForever =>
+      'Konum izni engellendi. İzin vermek için Ayarlar\'ı açın.';
+
+  @override
+  String get locFailureTimeout =>
+      'Konum tespiti çok uzun sürdü. Açık bir alanda tekrar deneyin.';
+
+  @override
+  String get locFailureLookup =>
+      'Şehir bulunamadı. Bağlantınızı kontrol edin veya şehri manuel olarak seçin.';
+
+  @override
+  String get authNoIdToken =>
+      'Google idToken göndermedi. Firebase Konsolu\'ndaki SHA-1 değerini kontrol edin.';
+
+  @override
+  String get authEmptyUser =>
+      'Firebase Kimlik Doğrulaması başarısız oldu — kullanıcı boş.';
+
+  @override
+  String get authDevError10 =>
+      'Google DEVELOPER_ERROR (10): SHA-1, Firebase Konsolu\'nda kayıtlı değil.';
+
+  @override
+  String get authMisconfigured =>
+      'Google ile Oturum Açma yanlış yapılandırıldı. OAuth izin ekranını ve SHA-1 değerini kontrol edin.';
+
+  @override
+  String get authNetworkError =>
+      'Google ile giriş yapılırken ağ hatası oluştu.';
+
+  @override
+  String get authCredInvalid =>
+      'Firebase Kimlik Doğrulaması kimlik bilgilerini doğrulayamadı.';
+
+  @override
+  String get authNotEnabled =>
+      'Google ile Oturum Açma, Firebase Konsolu\'nda henüz etkinleştirilmemiş.';
+
+  @override
+  String get authEmailInUse =>
+      'E-posta adresi zaten başka bir yöntemle kayıt edilmiş.';
+
+  @override
+  String get notifModeFokus =>
+      'Odak Modu aktif! Hatırlatıcılar yalnızca ezan vaktinde gönderilir.';
+
+  @override
+  String get notifModeSeimbang =>
+      'Dengeli Mod aktif! Tüm farz namazlar için hatırlatıcılar ezandan 15 dakika önce gönderilir.';
+
+  @override
+  String get notifModeIntensif =>
+      'Yoğun Mod aktif! Namazdan 30 dakika ve 5 dakika önce hatırlatılırsınız. Serinizi koruyun! 🔥';
+
+  @override
+  String get notifReady => 'Muslim Leveling bildirimleri hazır! 🔔';
+
+  @override
+  String get notifTestBody =>
+      'Ezan sesi duyuluyorsa bildirimleriniz hazır demektir! Duyulmuyorsa telefonunuzun alarm ses seviyesini kontrol edin.';
+
+  @override
+  String get notifTestTitle => '🕌 Ezan Sesi Testi';
+
+  @override
+  String get notifChannelReminder => 'Namaz vakti hatırlatıcı bildirimleri';
+
+  @override
+  String notifModeTitle(String mode) {
+    return 'Muslim Leveling · $mode';
+  }
 }

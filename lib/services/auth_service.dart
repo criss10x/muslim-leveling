@@ -8,6 +8,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../firebase_options.dart';
 import 'cloud_sync.dart';
+import '../l10n/app_localizations.dart';
 
 /// Auth: Google Sign-In → Firebase Auth → CloudSync.
 class AuthService {
@@ -82,19 +83,19 @@ class AuthService {
     return false;
   }
 
-  static Future<String?> signInWithGoogle() async {
+  static Future<String?> signInWithGoogle(AppL10n l10n) async {
     _lastError = null;
     if (!await ensureFirebaseReady()) return null;
-    return _signInNative();
+    return _signInNative(l10n);
   }
 
-  static Future<String?> _signInNative() async {
+  static Future<String?> _signInNative(AppL10n l10n) async {
     try {
       // ponytail: tidak signOut() dulu — GoogleSignIn pakai cached account
       // (akun sebelumnya), supaya tidak re-prompt OAuth tiap login.
       final googleUser = await _google.signIn();
       if (googleUser == null) {
-        _lastError = 'Login dibatalkan.';
+        _lastError = l10n.profilLoginCancelled;
         return null;
       }
 
@@ -102,7 +103,7 @@ class AuthService {
       final idToken = auth.idToken;
       if (idToken == null || idToken.isEmpty) {
         _lastError =
-            'Google tidak kirim idToken. Cek SHA-1 di Firebase Console.';
+            l10n.authNoIdToken;
         Sentry.captureMessage(_lastError!,
             level: SentryLevel.error,
             withScope: (scope) =>
@@ -118,7 +119,7 @@ class AuthService {
           await fb.FirebaseAuth.instance.signInWithCredential(credential);
       final uid = res.user?.uid;
       if (uid == null) {
-        _lastError = 'Firebase Auth gagal — user kosong.';
+        _lastError = l10n.authEmptyUser;
         Sentry.captureMessage(_lastError!,
             level: SentryLevel.error,
             withScope: (scope) =>
@@ -130,7 +131,7 @@ class AuthService {
       CloudSync.recordAuthenticatedUser(uid);
       return uid;
     } catch (e) {
-      _lastError = _mapError(e);
+      _lastError = _mapError(e, l10n);
       debugPrint('[Auth] sign-in gagal: $e');
       Sentry.captureException(
         e,
@@ -173,25 +174,25 @@ class AuthService {
     return p.getString(_prefEmail);
   }
 
-  static String _mapError(Object e) {
+  static String _mapError(Object e, AppL10n l10n) {
     final s = e.toString();
     if (s.contains('ApiException: 10') || s.contains('DEVELOPER_ERROR')) {
-      return 'Google DEVELOPER_ERROR (10): SHA-1 belum terdaftar di Firebase Console.';
+      return l10n.authDevError10;
     }
     if (s.contains('ApiException: 12500') || s.contains('12501')) {
-      return 'Google Sign-In misconfigured. Cek OAuth consent + SHA-1.';
+      return l10n.authMisconfigured;
     }
     if (s.contains('ApiException: 7') || s.contains('NETWORK_ERROR')) {
-      return 'Jaringan error saat login Google.';
+      return l10n.authNetworkError;
     }
     if (s.contains('invalid-credential')) {
-      return 'Firebase Auth gagal validasi credential.';
+      return l10n.authCredInvalid;
     }
     if (s.contains('operation-not-allowed')) {
-      return 'Google Sign-In belum diaktifkan di Firebase Console.';
+      return l10n.authNotEnabled;
     }
     if (s.contains('account-exists-with-different-credential')) {
-      return 'Email sudah terdaftar dengan metode lain.';
+      return l10n.authEmailInUse;
     }
     return 'Error: $e';
   }

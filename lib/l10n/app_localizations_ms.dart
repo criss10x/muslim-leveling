@@ -2602,4 +2602,83 @@ class AppL10nMs extends AppL10n {
   String qtsTafsirAyah(int ayah) {
     return 'Tafsir Ayat $ayah';
   }
+
+  @override
+  String get locFailureDisabled =>
+      'Aktifkan perkhidmatan lokasi peranti, kemudian cuba lagi.';
+
+  @override
+  String get locFailureDenied =>
+      'Benarkan akses lokasi untuk menggunakan lokasi semasa.';
+
+  @override
+  String get locFailureDeniedForever =>
+      'Kebenaran lokasi disekat. Buka Tetapan untuk membenarkannya.';
+
+  @override
+  String get locFailureTimeout =>
+      'Masa untuk mengesan lokasi telah tamat. Cuba lagi di kawasan terbuka.';
+
+  @override
+  String get locFailureLookup =>
+      'Bandar tidak dapat ditemui. Sila periksa sambungan atau pilih bandar secara manual.';
+
+  @override
+  String get authNoIdToken =>
+      'Google tidak menghantar idToken. Sila semak SHA-1 di Firebase Console.';
+
+  @override
+  String get authEmptyUser => 'Firebase Auth gagal — pengguna kosong.';
+
+  @override
+  String get authDevError10 =>
+      'Google DEVELOPER_ERROR (10): SHA-1 belum didaftarkan di Firebase Console.';
+
+  @override
+  String get authMisconfigured =>
+      'Google Sign-In salah konfigurasi. Sila semak keizinan OAuth + SHA-1.';
+
+  @override
+  String get authNetworkError =>
+      'Ralat rangkaian berlaku semasa log masuk Google.';
+
+  @override
+  String get authCredInvalid => 'Firebase Auth gagal mengesahkan kredensial.';
+
+  @override
+  String get authNotEnabled =>
+      'Google Sign-In belum diaktifkan di Firebase Console.';
+
+  @override
+  String get authEmailInUse => 'E-mel sudah didaftarkan dengan kaedah lain.';
+
+  @override
+  String get notifModeFokus =>
+      'Mod Fokus aktif! Peringatan hanya apabila masuk waktu azan.';
+
+  @override
+  String get notifModeSeimbang =>
+      'Mod Seimbang aktif! Peringatan untuk semua solat fardu 15 minit sebelum azan.';
+
+  @override
+  String get notifModeIntensif =>
+      'Mod Intensif aktif! Peringatan 30 minit & 5 minit sebelum solat. Kekalkan streak anda! 🔥';
+
+  @override
+  String get notifReady => 'Notifikasi Muslim Leveling sedia! 🔔';
+
+  @override
+  String get notifTestBody =>
+      'Jika azan kedengaran, notifikasi anda sudah sedia! Jika tidak, sila semak kelantangan penggera telefon.';
+
+  @override
+  String get notifTestTitle => '🕌 Ujian Bunyi Azan';
+
+  @override
+  String get notifChannelReminder => 'Notifikasi peringatan waktu solat';
+
+  @override
+  String notifModeTitle(String mode) {
+    return 'Mod Muslim Leveling: $mode';
+  }
 }

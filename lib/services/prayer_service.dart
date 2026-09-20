@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'game_service.dart';
+import '../l10n/app_localizations.dart';
 
 /// ponytail: stdlib HttpClient + SharedPreferences. No dio, no riverpod.
 /// Primary API: equran.id/api/v2/shalat (Kemenag proxy).
@@ -17,17 +18,14 @@ enum CurrentLocationFailure {
 }
 
 extension CurrentLocationFailureMessage on CurrentLocationFailure {
-  String get message => switch (this) {
-    CurrentLocationFailure.serviceDisabled =>
-      'Aktifkan layanan lokasi perangkat, lalu coba lagi.',
-    CurrentLocationFailure.permissionDenied =>
-      'Izinkan akses lokasi untuk menggunakan lokasi saat ini.',
-    CurrentLocationFailure.permissionDeniedForever =>
-      'Izin lokasi diblokir. Buka Pengaturan untuk mengizinkannya.',
-    CurrentLocationFailure.timeout =>
-      'Lokasi terlalu lama ditemukan. Coba lagi di area terbuka.',
-    CurrentLocationFailure.lookupFailed =>
-      'Kota tidak dapat ditemukan. Periksa koneksi atau pilih kota manual.',
+  /// Pesan siap-tampil. Service tidak punya BuildContext, jadi `l10n`
+  /// diteruskan pemanggil — pola yang sama dengan GameService.sunnahHint.
+  String message(AppL10n l10n) => switch (this) {
+    CurrentLocationFailure.serviceDisabled => l10n.locFailureDisabled,
+    CurrentLocationFailure.permissionDenied => l10n.locFailureDenied,
+    CurrentLocationFailure.permissionDeniedForever => l10n.locFailureDeniedForever,
+    CurrentLocationFailure.timeout => l10n.locFailureTimeout,
+    CurrentLocationFailure.lookupFailed => l10n.locFailureLookup,
   };
 }
 

@@ -8,6 +8,8 @@ import 'package:muslim_leveling/services/prayer_service.dart';
 import 'package:muslim_leveling/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:muslim_leveling/theme/app_icons.dart';
+import 'package:muslim_leveling/l10n/app_localizations.dart';
+
 import 'helpers/app_wrap.dart';
 
 void main() {
@@ -15,13 +17,16 @@ void main() {
     activeThemePreset = AppThemePreset.darkEmerald;
   });
 
-  test('location failure messages identify the blocked step', () {
+  test('location failure messages identify the blocked step', () async {
+    // message() sekarang butuh l10n (service tanpa BuildContext), jadi load
+    // delegate-nya sungguhan — bukan cek getter statis.
+    final l10n = await AppL10n.delegate.load(const Locale('id'));
     expect(
-      CurrentLocationFailure.permissionDenied.message,
+      CurrentLocationFailure.permissionDenied.message(l10n),
       'Izinkan akses lokasi untuk menggunakan lokasi saat ini.',
     );
     expect(
-      CurrentLocationFailure.serviceDisabled.message,
+      CurrentLocationFailure.serviceDisabled.message(l10n),
       'Aktifkan layanan lokasi perangkat, lalu coba lagi.',
     );
   });

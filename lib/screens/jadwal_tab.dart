@@ -222,7 +222,7 @@ class _JadwalTabState extends State<JadwalTab> {
               const SizedBox(height: AppSpacing.lg),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-                child: _adzanSoundCard(),
+                child: _adzanSoundCard(context),
               ),
               const SizedBox(height: AppSpacing.lg),
               Padding(
@@ -394,13 +394,14 @@ class _JadwalTabState extends State<JadwalTab> {
 
   Future<void> _currentLocation() async {
     // GPS → save → auto-refresh via listener
+    final l10n = AppL10n.of(context);
     final result = await PrayerService.getCurrentLocation();
     if (result.failure != null) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            result.failure!.message,
+            result.failure!.message(l10n),
             style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
           ),
           backgroundColor: AppColors.surfaceContainerLowest,
@@ -908,7 +909,7 @@ class _JadwalTabState extends State<JadwalTab> {
   /// Kartu pilihan suara adzan: radio per varian + tombol tes.
   /// Varian selain default diunduh on-demand (~1-2MB) lalu dipakai
   /// sebagai suara channel notifikasi.
-  Widget _adzanSoundCard() {
+  Widget _adzanSoundCard(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -931,7 +932,7 @@ class _JadwalTabState extends State<JadwalTab> {
                 width: double.infinity,
                 child: TextButton.icon(
                   onPressed: _downloadingVariant == null
-                      ? NotificationService.sendTestAdzanSound
+                      ? () => NotificationService.sendTestAdzanSound(AppL10n.of(context))
                       : null,
                   icon: const Icon(AppIcons.playCircleOutline, size: 18),
                   label: Text(AppL10n.of(context).jdTesSuara),

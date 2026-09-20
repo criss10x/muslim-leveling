@@ -1306,5 +1306,33 @@
         "type": "int"
       }
     }
+  },
+  "locFailureDisabled": "Aktifkan layanan lokasi perangkat, lalu coba lagi.",
+  "locFailureDenied": "Izinkan akses lokasi untuk menggunakan lokasi saat ini.",
+  "locFailureDeniedForever": "Izin lokasi diblokir. Buka Pengaturan untuk mengizinkannya.",
+  "locFailureTimeout": "Lokasi terlalu lama ditemukan. Coba lagi di area terbuka.",
+  "locFailureLookup": "Kota tidak dapat ditemukan. Periksa koneksi atau pilih kota manual.",
+  "authNoIdToken": "Google tidak kirim idToken. Cek SHA-1 di Firebase Console.",
+  "authEmptyUser": "Firebase Auth gagal — user kosong.",
+  "authDevError10": "Google DEVELOPER_ERROR (10): SHA-1 belum terdaftar di Firebase Console.",
+  "authMisconfigured": "Google Sign-In misconfigured. Cek OAuth consent + SHA-1.",
+  "authNetworkError": "Jaringan error saat login Google.",
+  "authCredInvalid": "Firebase Auth gagal validasi credential.",
+  "authNotEnabled": "Google Sign-In belum diaktifkan di Firebase Console.",
+  "authEmailInUse": "Email sudah terdaftar dengan metode lain.",
+  "notifModeFokus": "Mode Fokus aktif! Pengingat hanya saat masuk waktu adzan.",
+  "notifModeSeimbang": "Mode Seimbang aktif! Pengingat semua sholat wajib 15 menit sebelum adzan.",
+  "notifModeIntensif": "Mode Intensif aktif! Diingetin 30 menit & 5 menit sebelum sholat. Pertahanin streak! 🔥",
+  "notifReady": "Notifikasi Muslim Leveling siap! 🔔",
+  "notifTestBody": "Kalau adzan terdengar, notifikasi kamu siap! Kalau tidak, cek volume alarm HP.",
+  "notifTestTitle": "🕌 Tes Suara Adzan",
+  "notifChannelReminder": "Notifikasi pengingat waktu sholat",
+  "notifModeTitle": "Muslim Leveling Mode: {mode}",
+  "@notifModeTitle": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
   }
 }

@@ -2594,4 +2594,84 @@ class AppL10nEn extends AppL10n {
   String qtsTafsirAyah(int ayah) {
     return 'Tafsir of Ayah $ayah';
   }
+
+  @override
+  String get locFailureDisabled =>
+      'Please enable device location services and try again.';
+
+  @override
+  String get locFailureDenied =>
+      'Please grant location access to use your current location.';
+
+  @override
+  String get locFailureDeniedForever =>
+      'Location permission is blocked. Please open Settings to enable it.';
+
+  @override
+  String get locFailureTimeout =>
+      'Location request timed out. Please try again in an open area.';
+
+  @override
+  String get locFailureLookup =>
+      'The city could not be found. Please check your connection or select a city manually.';
+
+  @override
+  String get authNoIdToken =>
+      'Google did not return an idToken. Please check the SHA-1 fingerprint in the Firebase Console.';
+
+  @override
+  String get authEmptyUser => 'Firebase Auth failed — user is empty.';
+
+  @override
+  String get authDevError10 =>
+      'Google DEVELOPER_ERROR (10): The SHA-1 fingerprint is not registered in the Firebase Console.';
+
+  @override
+  String get authMisconfigured =>
+      'Google Sign-In is misconfigured. Please check the OAuth consent screen and SHA-1 fingerprint.';
+
+  @override
+  String get authNetworkError =>
+      'A network error occurred during Google Sign-In.';
+
+  @override
+  String get authCredInvalid => 'Firebase Auth failed to validate credentials.';
+
+  @override
+  String get authNotEnabled =>
+      'Google Sign-In is not enabled in the Firebase Console.';
+
+  @override
+  String get authEmailInUse =>
+      'This email address is already registered using another sign-in method.';
+
+  @override
+  String get notifModeFokus =>
+      'Focus Mode is active! Reminders will only be sent at the start of prayer times.';
+
+  @override
+  String get notifModeSeimbang =>
+      'Balanced Mode is active! Reminders for all obligatory prayers will be sent 15 minutes before the call to prayer.';
+
+  @override
+  String get notifModeIntensif =>
+      'Intensive Mode is active! You will be reminded 30 minutes and 5 minutes before prayer. Keep up your streak! 🔥';
+
+  @override
+  String get notifReady => 'Muslim Leveling notifications are ready! 🔔';
+
+  @override
+  String get notifTestBody =>
+      'If you hear the call to prayer, your notifications are ready! If not, please check your device\'s alarm volume.';
+
+  @override
+  String get notifTestTitle => '🕌 Call to Prayer Sound Test';
+
+  @override
+  String get notifChannelReminder => 'Prayer time reminder notifications';
+
+  @override
+  String notifModeTitle(String mode) {
+    return 'Muslim Leveling Mode: $mode';
+  }
 }

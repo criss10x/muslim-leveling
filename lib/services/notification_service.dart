@@ -9,6 +9,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import '../l10n/app_localizations.dart';
 
 /// Notification & Adzan Reminder service.
 /// Port dari NotificationScheduler.kt + AdhanReminderReceiver.kt + BootReceiver.kt (main Kotlin).
@@ -909,15 +910,15 @@ class NotificationService {
   /// langsung dengar hasil setting-nya.
   /// [soundModeOverride]: preview pilihan di dialog TANPA menyimpan/
   /// reschedule apa pun — tombol Tes murni menampilkan notif.
-  static Future<void> sendTestNotification(String mode,
+  static Future<void> sendTestNotification(AppL10n l10n, String mode,
       {String? soundModeOverride}) async {
     if (!_initialized) await init();
 
     final message = switch (mode) {
-      'fokus' => 'Mode Fokus aktif! Pengingat hanya saat masuk waktu adzan.',
-      'seimbang' => 'Mode Seimbang aktif! Pengingat semua sholat wajib 15 menit sebelum adzan.',
-      'intensif' => 'Mode Intensif aktif! Diingetin 30 menit & 5 menit sebelum sholat. Pertahanin streak! 🔥',
-      _ => 'Notifikasi Muslim Leveling siap! 🔔',
+      'fokus' => l10n.notifModeFokus,
+      'seimbang' => l10n.notifModeSeimbang,
+      'intensif' => l10n.notifModeIntensif,
+      _ => l10n.notifReady,
     };
 
     final soundMode = soundModeOverride ?? await getSoundMode();
@@ -930,7 +931,7 @@ class NotificationService {
     final cap = mode[0].toUpperCase() + mode.substring(1);
     await _plugin.show(
       99,
-      'Muslim Leveling Mode: $cap',
+      l10n.notifModeTitle(cap),
       message,
       details,
     );
@@ -938,13 +939,13 @@ class NotificationService {
 
   /// Tes suara adzan — bunyikan notifikasi lewat channel adzan sekarang juga,
   /// supaya user bisa verifikasi suara tanpa menunggu waktu sholat.
-  static Future<void> sendTestAdzanSound() async {
+  static Future<void> sendTestAdzanSound(AppL10n l10n) async {
     if (!_initialized) await init();
 
     await _plugin.show(
       98,
-      '🕌 Tes Suara Adzan',
-      'Kalau adzan terdengar, notifikasi kamu siap! Kalau tidak, cek volume alarm HP.',
+      l10n.notifTestTitle,
+      l10n.notifTestBody,
       _detailsFor(_NotifSound.adzan),
     );
   }
