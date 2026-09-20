@@ -1420,5 +1420,14 @@
         "type": "String"
       }
     }
-  }
+  },
+  "blClaimXp": "KLAIM +{xp} XP",
+  "@blClaimXp": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "blNotPassed": "Belum Lulus"
 }

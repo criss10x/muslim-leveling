@@ -71,7 +71,7 @@ class DapetExpScreen extends StatelessWidget {
                   Entrance(
                     delay: const Duration(milliseconds: 400),
                     child: Text(
-                      'Kamu menyelesaikan quiz $moduleTitle!',
+                      AppL10n.of(context).deQuizDone(moduleTitle),
                       textAlign: TextAlign.center,
                       style: AppText.bodyLg().copyWith(
                         color: AppColors.onSurfaceVariant,

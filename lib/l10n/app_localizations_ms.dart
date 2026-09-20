@@ -2732,4 +2732,12 @@ class AppL10nMs extends AppL10n {
   String notifLocSuffix(String city) {
     return ' di $city';
   }
+
+  @override
+  String blClaimXp(int xp) {
+    return 'TUNTUT +$xp XP';
+  }
+
+  @override
+  String get blNotPassed => 'Belum Lulus';
 }

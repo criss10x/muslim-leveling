@@ -2725,4 +2725,12 @@ class AppL10nEn extends AppL10n {
   String notifLocSuffix(String city) {
     return ' in $city';
   }
+
+  @override
+  String blClaimXp(int xp) {
+    return 'CLAIM +$xp XP';
+  }
+
+  @override
+  String get blNotPassed => 'Not Passed';
 }

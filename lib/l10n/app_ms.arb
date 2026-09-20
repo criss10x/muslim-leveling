@@ -790,5 +790,7 @@
   "notifBodyNow": "Telah masuk waktu solat {prayer}{loc}. Mari kekalkan streak! 🔥",
   "prayerImsak": "Imsak",
   "prayerTerbit": "Syuruk",
-  "notifLocSuffix": " di {city}"
+  "notifLocSuffix": " di {city}",
+  "blClaimXp": "TUNTUT +{xp} XP",
+  "blNotPassed": "Belum Lulus"
 }

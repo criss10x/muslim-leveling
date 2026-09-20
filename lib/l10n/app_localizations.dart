@@ -4851,6 +4851,18 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **' di {city}'**
   String notifLocSuffix(String city);
+
+  /// No description provided for @blClaimXp.
+  ///
+  /// In id, this message translates to:
+  /// **'KLAIM +{xp} XP'**
+  String blClaimXp(int xp);
+
+  /// No description provided for @blNotPassed.
+  ///
+  /// In id, this message translates to:
+  /// **'Belum Lulus'**
+  String get blNotPassed;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

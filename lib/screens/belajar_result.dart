@@ -224,7 +224,7 @@ class _BelajarResultScreenState extends State<BelajarResultScreen>
 
   Widget _heading() {
     final light = isLightTheme;
-    final title = _passed ? AppL10n.of(context).blModulDone : 'Belum Lulus';
+    final title = _passed ? AppL10n.of(context).blModulDone : AppL10n.of(context).blNotPassed;
     if (light) {
       return Text(
         title,
@@ -356,7 +356,7 @@ class _BelajarResultScreenState extends State<BelajarResultScreen>
     return SizedBox(
       width: double.infinity,
       child: HeroButton(
-        label: 'KLAIM +${module.xpReward} XP',
+        label: AppL10n.of(context).blClaimXp(module.xpReward),
         trailingIcon: AppIcons.stars,
         onPressed: _processing ? null : () => _claimXp(module),
       ),

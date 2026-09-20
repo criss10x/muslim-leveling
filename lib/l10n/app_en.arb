@@ -790,5 +790,7 @@
   "notifBodyNow": "It is now time for {prayer} prayer{loc}. Let's maintain your streak! 🔥",
   "prayerImsak": "Imsak",
   "prayerTerbit": "Sunrise",
-  "notifLocSuffix": " in {city}"
+  "notifLocSuffix": " in {city}",
+  "blClaimXp": "CLAIM +{xp} XP",
+  "blNotPassed": "Not Passed"
 }

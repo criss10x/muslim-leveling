@@ -2749,4 +2749,12 @@ class AppL10nTr extends AppL10n {
   String notifLocSuffix(String city) {
     return ' ($city)';
   }
+
+  @override
+  String blClaimXp(int xp) {
+    return '+$xp XP Talep Et';
+  }
+
+  @override
+  String get blNotPassed => 'Geçilmedi';
 }

@@ -790,5 +790,7 @@
   "notifBodyNow": "{prayer} namazı vakti girdi{loc}. Serinizi korumayı unutmayınız! 🔥",
   "prayerImsak": "İmsak",
   "prayerTerbit": "Güneş",
-  "notifLocSuffix": " ({city})"
+  "notifLocSuffix": " ({city})",
+  "blClaimXp": "+{xp} XP Talep Et",
+  "blNotPassed": "Geçilmedi"
 }
