@@ -60,7 +60,8 @@ class QuranPlayerBar extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          'QS ${surah.nameLatin} : ${current.ayah}',
+                          AppL10n.of(context)
+                              .qpNowPlaying(surah.nameLatin, current.ayah),
                           style: AppText.bodyLg()
                               .copyWith(color: AppColors.onSurface),
                         ),
@@ -72,7 +73,9 @@ class QuranPlayerBar extends StatelessWidget {
                         onPressed: quranAudio.previous,
                       ),
                       IconButton(
-                        tooltip: quranAudio.isPlaying ? 'Jeda' : 'Putar',
+                        tooltip: quranAudio.isPlaying
+                            ? AppL10n.of(context).dlActPause
+                            : AppL10n.of(context).qpPlay,
                         icon: Icon(quranAudio.isPlaying
                             ? Icons.pause_circle_filled
                             : Icons.play_circle_fill),

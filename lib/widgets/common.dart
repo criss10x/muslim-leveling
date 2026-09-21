@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 import '../services/theme_service.dart';
 import '../theme/app_icons.dart';
@@ -112,7 +113,7 @@ class ErrorRetry extends StatelessWidget {
           TextButton.icon(
             onPressed: onRetry,
             icon: const Icon(AppIcons.refresh, size: 18),
-            label: const Text('Coba lagi'),
+            label: Text(AppL10n.of(context).commonRetry),
           ),
         ],
       ),

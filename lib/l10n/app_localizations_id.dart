@@ -2568,7 +2568,7 @@ class AppL10nId extends AppL10n {
   }
 
   @override
-  String qtSurahAyah(int surah, int ayah) {
+  String qtSurahAyah(String surah, int ayah) {
     return 'Surat $surah · Ayat $ayah';
   }
 
@@ -2779,5 +2779,455 @@ class AppL10nId extends AppL10n {
   @override
   String jdFootnoteAbroad(String city) {
     return 'Jadwal dari Aladhan untuk $city. Metode perhitungan mengikuti negara kota ini. Ter-update otomatis saat tab dibuka; tap nama kota di atas untuk ganti lokasi.';
+  }
+
+  @override
+  String get commonRetry => 'Coba lagi';
+
+  @override
+  String qtSearchHint(String example) {
+    return 'Cari surat, kata, atau ayat — mis. $example';
+  }
+
+  @override
+  String qtVerseHits(int count) {
+    return '$count ayat ditemukan di terjemahan';
+  }
+
+  @override
+  String qtVerseHitsTruncated(int count) {
+    return '$count+ ayat ditemukan — persempit kata kunci';
+  }
+
+  @override
+  String get qtBookmarkTooltip => 'Bookmark ayat';
+
+  @override
+  String get qtSubtitle => '114 surat · 30 juz';
+
+  @override
+  String get qbTitle => 'Bookmark';
+
+  @override
+  String get qbEmptyHint => 'Tap ikon bookmark di ayat yang mau disimpan.';
+
+  @override
+  String get qacPlayFromHere => 'Putar dari ayat ini';
+
+  @override
+  String get qrBasmalah =>
+      'Dengan nama Allah Yang Maha Pengasih, Maha Penyayang';
+
+  @override
+  String get qs_meaning_1 => 'Pembukaan';
+
+  @override
+  String get qs_meaning_2 => 'Sapi';
+
+  @override
+  String get qs_meaning_3 => 'Keluarga Imran';
+
+  @override
+  String get qs_meaning_4 => 'Wanita';
+
+  @override
+  String get qs_meaning_5 => 'Hidangan';
+
+  @override
+  String get qs_meaning_6 => 'Binatang Ternak';
+
+  @override
+  String get qs_meaning_7 => 'Tempat Tertinggi';
+
+  @override
+  String get qs_meaning_8 => 'Rampasan Perang';
+
+  @override
+  String get qs_meaning_9 => 'Pengampunan';
+
+  @override
+  String get qs_meaning_10 => 'Yunus';
+
+  @override
+  String get qs_meaning_11 => 'Hud';
+
+  @override
+  String get qs_meaning_12 => 'Yusuf';
+
+  @override
+  String get qs_meaning_13 => 'Guruh';
+
+  @override
+  String get qs_meaning_14 => 'Ibrahim';
+
+  @override
+  String get qs_meaning_15 => 'Hijr';
+
+  @override
+  String get qs_meaning_16 => 'Lebah';
+
+  @override
+  String get qs_meaning_17 => 'Memperjalankan Malam Hari';
+
+  @override
+  String get qs_meaning_18 => 'Goa';
+
+  @override
+  String get qs_meaning_19 => 'Maryam';
+
+  @override
+  String get qs_meaning_20 => 'Taha';
+
+  @override
+  String get qs_meaning_21 => 'Para Nabi';
+
+  @override
+  String get qs_meaning_22 => 'Haji';
+
+  @override
+  String get qs_meaning_23 => 'Orang-Orang Mukmin';
+
+  @override
+  String get qs_meaning_24 => 'Cahaya';
+
+  @override
+  String get qs_meaning_25 => 'Pembeda';
+
+  @override
+  String get qs_meaning_26 => 'Para Penyair';
+
+  @override
+  String get qs_meaning_27 => 'Semut-semut';
+
+  @override
+  String get qs_meaning_28 => 'Kisah-Kisah';
+
+  @override
+  String get qs_meaning_29 => 'Laba-Laba';
+
+  @override
+  String get qs_meaning_30 => 'Romawi';
+
+  @override
+  String get qs_meaning_31 => 'Luqman';
+
+  @override
+  String get qs_meaning_32 => 'Sajdah';
+
+  @override
+  String get qs_meaning_33 => 'Golongan Yang Bersekutu';
+
+  @override
+  String get qs_meaning_34 => 'Saba\'';
+
+  @override
+  String get qs_meaning_35 => 'Maha Pencipta';
+
+  @override
+  String get qs_meaning_36 => 'Yasin';
+
+  @override
+  String get qs_meaning_37 => 'Barisan-Barisan';
+
+  @override
+  String get qs_meaning_38 => 'Sad';
+
+  @override
+  String get qs_meaning_39 => 'Rombongan';
+
+  @override
+  String get qs_meaning_40 => 'Maha Pengampun';
+
+  @override
+  String get qs_meaning_41 => 'Yang Dijelaskan';
+
+  @override
+  String get qs_meaning_42 => 'Musyawarah';
+
+  @override
+  String get qs_meaning_43 => 'Perhiasan';
+
+  @override
+  String get qs_meaning_44 => 'Kabut';
+
+  @override
+  String get qs_meaning_45 => 'Berlutut';
+
+  @override
+  String get qs_meaning_46 => 'Bukit Pasir';
+
+  @override
+  String get qs_meaning_47 => 'Muhammad';
+
+  @override
+  String get qs_meaning_48 => 'Kemenangan';
+
+  @override
+  String get qs_meaning_49 => 'Kamar-Kamar';
+
+  @override
+  String get qs_meaning_50 => 'Qaf';
+
+  @override
+  String get qs_meaning_51 => 'Angin yang Menerbangkan';
+
+  @override
+  String get qs_meaning_52 => 'Bukit Tursina';
+
+  @override
+  String get qs_meaning_53 => 'Bintang';
+
+  @override
+  String get qs_meaning_54 => 'Bulan';
+
+  @override
+  String get qs_meaning_55 => 'Maha Pengasih';
+
+  @override
+  String get qs_meaning_56 => 'Hari Kiamat';
+
+  @override
+  String get qs_meaning_57 => 'Besi';
+
+  @override
+  String get qs_meaning_58 => 'Gugatan';
+
+  @override
+  String get qs_meaning_59 => 'Pengusiran';
+
+  @override
+  String get qs_meaning_60 => 'Wanita Yang Diuji';
+
+  @override
+  String get qs_meaning_61 => 'Barisan';
+
+  @override
+  String get qs_meaning_62 => 'Jumat';
+
+  @override
+  String get qs_meaning_63 => 'Orang-Orang Munafik';
+
+  @override
+  String get qs_meaning_64 => 'Pengungkapan Kesalahan';
+
+  @override
+  String get qs_meaning_65 => 'Talak';
+
+  @override
+  String get qs_meaning_66 => 'Pengharaman';
+
+  @override
+  String get qs_meaning_67 => 'Kerajaan';
+
+  @override
+  String get qs_meaning_68 => 'Pena';
+
+  @override
+  String get qs_meaning_69 => 'Hari Kiamat';
+
+  @override
+  String get qs_meaning_70 => 'Tempat Naik';
+
+  @override
+  String get qs_meaning_71 => 'Nuh';
+
+  @override
+  String get qs_meaning_72 => 'Jin';
+
+  @override
+  String get qs_meaning_73 => 'Orang Yang Berselimut';
+
+  @override
+  String get qs_meaning_74 => 'Orang Yang Berkemul';
+
+  @override
+  String get qs_meaning_75 => 'Hari Kiamat';
+
+  @override
+  String get qs_meaning_76 => 'Manusia';
+
+  @override
+  String get qs_meaning_77 => 'Malaikat Yang Diutus';
+
+  @override
+  String get qs_meaning_78 => 'Berita Besar';
+
+  @override
+  String get qs_meaning_79 => 'Malaikat Yang Mencabut';
+
+  @override
+  String get qs_meaning_80 => 'Bermuka Masam';
+
+  @override
+  String get qs_meaning_81 => 'Penggulungan';
+
+  @override
+  String get qs_meaning_82 => 'Terbelah';
+
+  @override
+  String get qs_meaning_83 => 'Orang-Orang Curang';
+
+  @override
+  String get qs_meaning_84 => 'Terbelah';
+
+  @override
+  String get qs_meaning_85 => 'Gugusan Bintang';
+
+  @override
+  String get qs_meaning_86 => 'Yang Datang Di Malam Hari';
+
+  @override
+  String get qs_meaning_87 => 'Maha Tinggi';
+
+  @override
+  String get qs_meaning_88 => 'Hari Kiamat';
+
+  @override
+  String get qs_meaning_89 => 'Fajar';
+
+  @override
+  String get qs_meaning_90 => 'Negeri';
+
+  @override
+  String get qs_meaning_91 => 'Matahari';
+
+  @override
+  String get qs_meaning_92 => 'Malam';
+
+  @override
+  String get qs_meaning_93 => 'Duha';
+
+  @override
+  String get qs_meaning_94 => 'Lapang';
+
+  @override
+  String get qs_meaning_95 => 'Buah Tin';
+
+  @override
+  String get qs_meaning_96 => 'Segumpal Darah';
+
+  @override
+  String get qs_meaning_97 => 'Kemuliaan';
+
+  @override
+  String get qs_meaning_98 => 'Bukti Nyata';
+
+  @override
+  String get qs_meaning_99 => 'Guncangan';
+
+  @override
+  String get qs_meaning_100 => 'Kuda Yang Berlari Kencang';
+
+  @override
+  String get qs_meaning_101 => 'Hari Kiamat';
+
+  @override
+  String get qs_meaning_102 => 'Bermegah-Megahan';
+
+  @override
+  String get qs_meaning_103 => 'Masa';
+
+  @override
+  String get qs_meaning_104 => 'Pengumpat';
+
+  @override
+  String get qs_meaning_105 => 'Gajah';
+
+  @override
+  String get qs_meaning_106 => 'Quraisy';
+
+  @override
+  String get qs_meaning_107 => 'Barang Yang Berguna';
+
+  @override
+  String get qs_meaning_108 => 'Pemberian Yang Banyak';
+
+  @override
+  String get qs_meaning_109 => 'Orang-Orang kafir';
+
+  @override
+  String get qs_meaning_110 => 'Pertolongan';
+
+  @override
+  String get qs_meaning_111 => 'Api Yang Bergejolak';
+
+  @override
+  String get qs_meaning_112 => 'Ikhlas';
+
+  @override
+  String get qs_meaning_113 => 'Subuh';
+
+  @override
+  String get qs_meaning_114 => 'Manusia';
+
+  @override
+  String get qsRevelationMeccan => 'Makkiyah';
+
+  @override
+  String get qsRevelationMedinan => 'Madaniyah';
+
+  @override
+  String qtContinueReadingDetail(String surah, int ayah) {
+    return 'Lanjutkan membaca $surah ayat $ayah';
+  }
+
+  @override
+  String qtOpenSurahAyah(String surah, int ayah) {
+    return 'Buka $surah ayat $ayah';
+  }
+
+  @override
+  String get qpbAyahRange => 'Rentang ayat';
+
+  @override
+  String get qpbFrom => 'Dari';
+
+  @override
+  String get qpbTo => 'Sampai';
+
+  @override
+  String qpbRepeatRangeDetail(int from, int to) {
+    return 'Kembali ke ayat $from setelah ayat $to selesai';
+  }
+
+  @override
+  String get qpbSpeed => 'Kecepatan';
+
+  @override
+  String get qpbQari => 'Qari';
+
+  @override
+  String get qpbOff => 'Nonaktif';
+
+  @override
+  String qpbMinutes(int m) {
+    return '$m mnt';
+  }
+
+  @override
+  String get qdTitle => 'Pengaturan Tampilan';
+
+  @override
+  String get qdTranslationLabel => 'Terjemahan Indonesia';
+
+  @override
+  String get qdTransliteration => 'Transliterasi Latin';
+
+  @override
+  String get qdTafsirBrief => 'Tafsir Ringkas';
+
+  @override
+  String get qdBasmalahLatin => 'Bismillaahir Rahmaanir Raheem';
+
+  @override
+  String get qdBasmalahTranslation =>
+      'Dengan menyebut nama Allah Yang Maha Pemurah lagi Maha Penyayang.';
+
+  @override
+  String get qpPlay => 'Putar';
+
+  @override
+  String qpNowPlaying(String surah, int ayah) {
+    return 'QS $surah : $ayah';
   }
 }

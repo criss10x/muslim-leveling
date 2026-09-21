@@ -2593,7 +2593,7 @@ class AppL10nTr extends AppL10n {
   }
 
   @override
-  String qtSurahAyah(int surah, int ayah) {
+  String qtSurahAyah(String surah, int ayah) {
     return '$surah Suresi · $ayah. Ayet';
   }
 
@@ -2808,5 +2808,454 @@ class AppL10nTr extends AppL10n {
   @override
   String jdFootnoteAbroad(String city) {
     return 'Aladhan kaynaklı $city için namaz vakitleri. Hesaplama yöntemi bu şehrin ülkesine göre belirlenir. Sekme açıldığında otomatik olarak güncellenir; konumu değiştirmek için yukarıdaki şehir adına dokunun.';
+  }
+
+  @override
+  String get commonRetry => 'Tekrar deneyin';
+
+  @override
+  String qtSearchHint(String example) {
+    return 'Sure, kelime veya ayet arayın — örn. $example';
+  }
+
+  @override
+  String qtVerseHits(int count) {
+    return 'Mealde $count ayet bulundu';
+  }
+
+  @override
+  String qtVerseHitsTruncated(int count) {
+    return '$count+ ayet bulundu — anahtar kelimeyi daraltın';
+  }
+
+  @override
+  String get qtBookmarkTooltip => 'Ayeti yer işaretlerine ekleyin';
+
+  @override
+  String get qtSubtitle => '114 sure · 30 cüz';
+
+  @override
+  String get qbTitle => 'Yer İşaretleri';
+
+  @override
+  String get qbEmptyHint =>
+      'Kaydetmek istediğiniz ayetteki yer işareti simgesine dokunun.';
+
+  @override
+  String get qacPlayFromHere => 'Bu ayetten itibaren oynat';
+
+  @override
+  String get qrBasmalah => 'Rahmân ve Rahîm olan Allah\'ın adıyla';
+
+  @override
+  String get qs_meaning_1 => 'Açılış';
+
+  @override
+  String get qs_meaning_2 => 'Sığır';
+
+  @override
+  String get qs_meaning_3 => 'İmran Ailesi';
+
+  @override
+  String get qs_meaning_4 => 'Kadınlar';
+
+  @override
+  String get qs_meaning_5 => 'Sofra';
+
+  @override
+  String get qs_meaning_6 => 'Davarlar';
+
+  @override
+  String get qs_meaning_7 => 'Yüksek Yerler';
+
+  @override
+  String get qs_meaning_8 => 'Savaş Ganimetleri';
+
+  @override
+  String get qs_meaning_9 => 'Bağışlanma';
+
+  @override
+  String get qs_meaning_10 => 'Yunus';
+
+  @override
+  String get qs_meaning_11 => 'Hûd';
+
+  @override
+  String get qs_meaning_12 => 'Yusuf';
+
+  @override
+  String get qs_meaning_13 => 'Gök Gürlemesi';
+
+  @override
+  String get qs_meaning_14 => 'İbrahim';
+
+  @override
+  String get qs_meaning_15 => 'Hicr';
+
+  @override
+  String get qs_meaning_16 => 'Bal Arısı';
+
+  @override
+  String get qs_meaning_17 => 'Gece Yürüyüşü';
+
+  @override
+  String get qs_meaning_18 => 'Mağara';
+
+  @override
+  String get qs_meaning_19 => 'Meryem';
+
+  @override
+  String get qs_meaning_20 => 'Tâ-Hâ';
+
+  @override
+  String get qs_meaning_21 => 'Peygamberler';
+
+  @override
+  String get qs_meaning_22 => 'Hac';
+
+  @override
+  String get qs_meaning_23 => 'Müminler';
+
+  @override
+  String get qs_meaning_24 => 'Nur';
+
+  @override
+  String get qs_meaning_25 => 'Furkan';
+
+  @override
+  String get qs_meaning_26 => 'Şairler';
+
+  @override
+  String get qs_meaning_27 => 'Karıncalar';
+
+  @override
+  String get qs_meaning_28 => 'Kıssalar';
+
+  @override
+  String get qs_meaning_29 => 'Örümcek';
+
+  @override
+  String get qs_meaning_30 => 'Romalılar';
+
+  @override
+  String get qs_meaning_31 => 'Lokman';
+
+  @override
+  String get qs_meaning_32 => 'Secde';
+
+  @override
+  String get qs_meaning_33 => 'Müttefik Gruplar';
+
+  @override
+  String get qs_meaning_34 => 'Sebe';
+
+  @override
+  String get qs_meaning_35 => 'Yaratıcı';
+
+  @override
+  String get qs_meaning_36 => 'Yâ-Sîn';
+
+  @override
+  String get qs_meaning_37 => 'Sıra Sıra Duranlar';
+
+  @override
+  String get qs_meaning_38 => 'Sâd';
+
+  @override
+  String get qs_meaning_39 => 'Zümreler';
+
+  @override
+  String get qs_meaning_40 => 'Bağışlayan';
+
+  @override
+  String get qs_meaning_41 => 'Detaylı Açıklanan';
+
+  @override
+  String get qs_meaning_42 => 'Danışma';
+
+  @override
+  String get qs_meaning_43 => 'Süs ve Ziynet';
+
+  @override
+  String get qs_meaning_44 => 'Duman';
+
+  @override
+  String get qs_meaning_45 => 'Diz Çöken';
+
+  @override
+  String get qs_meaning_46 => 'Kum Tepeleri';
+
+  @override
+  String get qs_meaning_47 => 'Muhammed';
+
+  @override
+  String get qs_meaning_48 => 'Zafer';
+
+  @override
+  String get qs_meaning_49 => 'Odalar';
+
+  @override
+  String get qs_meaning_50 => 'Kâf';
+
+  @override
+  String get qs_meaning_51 => 'Tozutup Savuran Rüzgarlar';
+
+  @override
+  String get qs_meaning_52 => 'Tur Dağı';
+
+  @override
+  String get qs_meaning_53 => 'Yıldız';
+
+  @override
+  String get qs_meaning_54 => 'Ay';
+
+  @override
+  String get qs_meaning_55 => 'Rahmân';
+
+  @override
+  String get qs_meaning_56 => 'Kıyamet Günü';
+
+  @override
+  String get qs_meaning_57 => 'Demir';
+
+  @override
+  String get qs_meaning_58 => 'Tartışma';
+
+  @override
+  String get qs_meaning_59 => 'Sürgün';
+
+  @override
+  String get qs_meaning_60 => 'İmtihan Edilen Kadın';
+
+  @override
+  String get qs_meaning_61 => 'Saf Tutma';
+
+  @override
+  String get qs_meaning_62 => 'Cuma';
+
+  @override
+  String get qs_meaning_63 => 'Münafıklar';
+
+  @override
+  String get qs_meaning_64 => 'Karşılıklı Aldanma';
+
+  @override
+  String get qs_meaning_65 => 'Boşanma';
+
+  @override
+  String get qs_meaning_66 => 'Haram Kılma';
+
+  @override
+  String get qs_meaning_67 => 'Mülk';
+
+  @override
+  String get qs_meaning_68 => 'Kalem';
+
+  @override
+  String get qs_meaning_69 => 'Kıyamet Günü';
+
+  @override
+  String get qs_meaning_70 => 'Yükselme Dereceleri';
+
+  @override
+  String get qs_meaning_71 => 'Nûh';
+
+  @override
+  String get qs_meaning_72 => 'Cin';
+
+  @override
+  String get qs_meaning_73 => 'Örtüsüne Bürünen';
+
+  @override
+  String get qs_meaning_74 => 'Örtüsüne Bürünen';
+
+  @override
+  String get qs_meaning_75 => 'Kıyamet Günü';
+
+  @override
+  String get qs_meaning_76 => 'İnsan';
+
+  @override
+  String get qs_meaning_77 => 'Gönderilenler';
+
+  @override
+  String get qs_meaning_78 => 'Büyük Haber';
+
+  @override
+  String get qs_meaning_79 => 'Söküp Çıkaranlar';
+
+  @override
+  String get qs_meaning_80 => 'Yüzünü Ekşitti';
+
+  @override
+  String get qs_meaning_81 => 'Dürülme';
+
+  @override
+  String get qs_meaning_82 => 'Yarılma';
+
+  @override
+  String get qs_meaning_83 => 'Ölçü ve Tartıda Hile Yapanlar';
+
+  @override
+  String get qs_meaning_84 => 'Yarılma';
+
+  @override
+  String get qs_meaning_85 => 'Burçlar';
+
+  @override
+  String get qs_meaning_86 => 'Gece Gelen Yıldız';
+
+  @override
+  String get qs_meaning_87 => 'En Yüce';
+
+  @override
+  String get qs_meaning_88 => 'Kuşatan';
+
+  @override
+  String get qs_meaning_89 => 'Tan Vakti';
+
+  @override
+  String get qs_meaning_90 => 'Şehir';
+
+  @override
+  String get qs_meaning_91 => 'Güneş';
+
+  @override
+  String get qs_meaning_92 => 'Gece';
+
+  @override
+  String get qs_meaning_93 => 'Kuşluk Vakti';
+
+  @override
+  String get qs_meaning_94 => 'Genişleme';
+
+  @override
+  String get qs_meaning_95 => 'İncir';
+
+  @override
+  String get qs_meaning_96 => 'Kan Pıhtısı';
+
+  @override
+  String get qs_meaning_97 => 'Yücelik';
+
+  @override
+  String get qs_meaning_98 => 'Apaçık Delil';
+
+  @override
+  String get qs_meaning_99 => 'Sarsıntı';
+
+  @override
+  String get qs_meaning_100 => 'Koşan Atlar';
+
+  @override
+  String get qs_meaning_101 => 'Kıyamet Günü';
+
+  @override
+  String get qs_meaning_102 => 'Çokluk Yarışı';
+
+  @override
+  String get qs_meaning_103 => 'Zaman';
+
+  @override
+  String get qs_meaning_104 => 'Arkadan Çekiştiren';
+
+  @override
+  String get qs_meaning_105 => 'Fil';
+
+  @override
+  String get qs_meaning_106 => 'Kureyş';
+
+  @override
+  String get qs_meaning_107 => 'Faydalı Şeyler';
+
+  @override
+  String get qs_meaning_108 => 'Bol Nimet';
+
+  @override
+  String get qs_meaning_109 => 'Kafirler';
+
+  @override
+  String get qs_meaning_110 => 'Yardım';
+
+  @override
+  String get qs_meaning_111 => 'Alevli Ateş';
+
+  @override
+  String get qs_meaning_112 => 'İhlas';
+
+  @override
+  String get qs_meaning_113 => 'Sabah';
+
+  @override
+  String get qs_meaning_114 => 'İnsanlar';
+
+  @override
+  String get qsRevelationMeccan => 'Mekki';
+
+  @override
+  String get qsRevelationMedinan => 'Medeni';
+
+  @override
+  String qtContinueReadingDetail(String surah, int ayah) {
+    return '$surah suresi $ayah. ayetten okumaya devam edin';
+  }
+
+  @override
+  String qtOpenSurahAyah(String surah, int ayah) {
+    return '$surah suresi $ayah. ayeti açın';
+  }
+
+  @override
+  String get qpbAyahRange => 'Ayet aralığı';
+
+  @override
+  String get qpbFrom => 'Başlangıç';
+
+  @override
+  String get qpbTo => 'Bitiş';
+
+  @override
+  String qpbRepeatRangeDetail(int from, int to) {
+    return '$to. ayet bittikten sonra $from. ayete geri dönün';
+  }
+
+  @override
+  String get qpbSpeed => 'Hız';
+
+  @override
+  String get qpbQari => 'Kari';
+
+  @override
+  String get qpbOff => 'Kapalı';
+
+  @override
+  String qpbMinutes(int m) {
+    return '$m dk';
+  }
+
+  @override
+  String get qdTitle => 'Görünüm Ayarları';
+
+  @override
+  String get qdTranslationLabel => 'Türkçe Çeviri';
+
+  @override
+  String get qdTransliteration => 'Transliterasyon';
+
+  @override
+  String get qdTafsirBrief => 'Kısa Tefsir';
+
+  @override
+  String get qdBasmalahLatin => 'Bismillahirrahmanirrahim';
+
+  @override
+  String get qdBasmalahTranslation => 'Rahman ve Rahim olan Allah\'ın adıyla.';
+
+  @override
+  String get qpPlay => 'Oynat';
+
+  @override
+  String qpNowPlaying(String surah, int ayah) {
+    return 'Sure $surah : $ayah';
   }
 }

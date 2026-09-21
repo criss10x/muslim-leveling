@@ -2571,7 +2571,7 @@ class AppL10nEn extends AppL10n {
   }
 
   @override
-  String qtSurahAyah(int surah, int ayah) {
+  String qtSurahAyah(String surah, int ayah) {
     return 'Surah $surah · Ayah $ayah';
   }
 
@@ -2784,5 +2784,456 @@ class AppL10nEn extends AppL10n {
   @override
   String jdFootnoteAbroad(String city) {
     return 'Schedule from Aladhan for $city. The calculation method follows this city\'s country. Automatically updated when the tab is opened; tap the city name above to change the location.';
+  }
+
+  @override
+  String get commonRetry => 'Retry';
+
+  @override
+  String qtSearchHint(String example) {
+    return 'Search surah, word, or verse — e.g., $example';
+  }
+
+  @override
+  String qtVerseHits(int count) {
+    return '$count verses found in translation';
+  }
+
+  @override
+  String qtVerseHitsTruncated(int count) {
+    return '$count+ verses found — refine your search';
+  }
+
+  @override
+  String get qtBookmarkTooltip => 'Bookmark verse';
+
+  @override
+  String get qtSubtitle => '114 surahs · 30 juz';
+
+  @override
+  String get qbTitle => 'Bookmarks';
+
+  @override
+  String get qbEmptyHint =>
+      'Tap the bookmark icon on the verses you wish to save.';
+
+  @override
+  String get qacPlayFromHere => 'Play from this verse';
+
+  @override
+  String get qrBasmalah =>
+      'In the name of Allah, the Most Gracious, the Most Merciful';
+
+  @override
+  String get qs_meaning_1 => 'The Opening';
+
+  @override
+  String get qs_meaning_2 => 'The Cow';
+
+  @override
+  String get qs_meaning_3 => 'The Family of Imran';
+
+  @override
+  String get qs_meaning_4 => 'The Women';
+
+  @override
+  String get qs_meaning_5 => 'The Table Spread';
+
+  @override
+  String get qs_meaning_6 => 'The Cattle';
+
+  @override
+  String get qs_meaning_7 => 'The Heights';
+
+  @override
+  String get qs_meaning_8 => 'The Spoils of War';
+
+  @override
+  String get qs_meaning_9 => 'The Repentance';
+
+  @override
+  String get qs_meaning_10 => 'Jonah';
+
+  @override
+  String get qs_meaning_11 => 'Hud';
+
+  @override
+  String get qs_meaning_12 => 'Joseph';
+
+  @override
+  String get qs_meaning_13 => 'The Thunder';
+
+  @override
+  String get qs_meaning_14 => 'Abraham';
+
+  @override
+  String get qs_meaning_15 => 'The Rocky Tract';
+
+  @override
+  String get qs_meaning_16 => 'The Bee';
+
+  @override
+  String get qs_meaning_17 => 'The Night Journey';
+
+  @override
+  String get qs_meaning_18 => 'The Cave';
+
+  @override
+  String get qs_meaning_19 => 'Mary';
+
+  @override
+  String get qs_meaning_20 => 'Ta-Ha';
+
+  @override
+  String get qs_meaning_21 => 'The Prophets';
+
+  @override
+  String get qs_meaning_22 => 'The Pilgrimage';
+
+  @override
+  String get qs_meaning_23 => 'The Believers';
+
+  @override
+  String get qs_meaning_24 => 'The Light';
+
+  @override
+  String get qs_meaning_25 => 'The Criterion';
+
+  @override
+  String get qs_meaning_26 => 'The Poets';
+
+  @override
+  String get qs_meaning_27 => 'The Ants';
+
+  @override
+  String get qs_meaning_28 => 'The Stories';
+
+  @override
+  String get qs_meaning_29 => 'The Spider';
+
+  @override
+  String get qs_meaning_30 => 'The Romans';
+
+  @override
+  String get qs_meaning_31 => 'Luqman';
+
+  @override
+  String get qs_meaning_32 => 'The Prostration';
+
+  @override
+  String get qs_meaning_33 => 'The Combined Forces';
+
+  @override
+  String get qs_meaning_34 => 'Sheba';
+
+  @override
+  String get qs_meaning_35 => 'The Originator';
+
+  @override
+  String get qs_meaning_36 => 'Ya-Sin';
+
+  @override
+  String get qs_meaning_37 => 'Those Ranged in Ranks';
+
+  @override
+  String get qs_meaning_38 => 'Sad';
+
+  @override
+  String get qs_meaning_39 => 'The Crowds';
+
+  @override
+  String get qs_meaning_40 => 'The Forgiver';
+
+  @override
+  String get qs_meaning_41 => 'Explained in Detail';
+
+  @override
+  String get qs_meaning_42 => 'The Consultation';
+
+  @override
+  String get qs_meaning_43 => 'The Ornaments of Gold';
+
+  @override
+  String get qs_meaning_44 => 'The Smoke';
+
+  @override
+  String get qs_meaning_45 => 'The Kneeling';
+
+  @override
+  String get qs_meaning_46 => 'The Wind-Curved Sandhills';
+
+  @override
+  String get qs_meaning_47 => 'Muhammad';
+
+  @override
+  String get qs_meaning_48 => 'The Victory';
+
+  @override
+  String get qs_meaning_49 => 'The Rooms';
+
+  @override
+  String get qs_meaning_50 => 'Qaf';
+
+  @override
+  String get qs_meaning_51 => 'The Winnowing Winds';
+
+  @override
+  String get qs_meaning_52 => 'The Mount';
+
+  @override
+  String get qs_meaning_53 => 'The Star';
+
+  @override
+  String get qs_meaning_54 => 'The Moon';
+
+  @override
+  String get qs_meaning_55 => 'The Beneficent';
+
+  @override
+  String get qs_meaning_56 => 'The Inevitable';
+
+  @override
+  String get qs_meaning_57 => 'The Iron';
+
+  @override
+  String get qs_meaning_58 => 'The Pleading Woman';
+
+  @override
+  String get qs_meaning_59 => 'The Exile';
+
+  @override
+  String get qs_meaning_60 => 'The Examined One';
+
+  @override
+  String get qs_meaning_61 => 'The Ranks';
+
+  @override
+  String get qs_meaning_62 => 'Friday';
+
+  @override
+  String get qs_meaning_63 => 'The Hypocrites';
+
+  @override
+  String get qs_meaning_64 => 'The Mutual Disillusion';
+
+  @override
+  String get qs_meaning_65 => 'The Divorce';
+
+  @override
+  String get qs_meaning_66 => 'The Prohibition';
+
+  @override
+  String get qs_meaning_67 => 'The Sovereignty';
+
+  @override
+  String get qs_meaning_68 => 'The Pen';
+
+  @override
+  String get qs_meaning_69 => 'The Reality';
+
+  @override
+  String get qs_meaning_70 => 'The Ascending Stairways';
+
+  @override
+  String get qs_meaning_71 => 'Noah';
+
+  @override
+  String get qs_meaning_72 => 'The Jinn';
+
+  @override
+  String get qs_meaning_73 => 'The Enshrouded One';
+
+  @override
+  String get qs_meaning_74 => 'The Cloaked One';
+
+  @override
+  String get qs_meaning_75 => 'The Resurrection';
+
+  @override
+  String get qs_meaning_76 => 'Man';
+
+  @override
+  String get qs_meaning_77 => 'The Emissaries';
+
+  @override
+  String get qs_meaning_78 => 'The Great News';
+
+  @override
+  String get qs_meaning_79 => 'Those Who Drag Forth';
+
+  @override
+  String get qs_meaning_80 => 'He Frowned';
+
+  @override
+  String get qs_meaning_81 => 'The Overthrowing';
+
+  @override
+  String get qs_meaning_82 => 'The Cleaving';
+
+  @override
+  String get qs_meaning_83 => 'The Defrauders';
+
+  @override
+  String get qs_meaning_84 => 'The Sundering';
+
+  @override
+  String get qs_meaning_85 => 'The Constellations';
+
+  @override
+  String get qs_meaning_86 => 'The Nightcomer';
+
+  @override
+  String get qs_meaning_87 => 'The Most High';
+
+  @override
+  String get qs_meaning_88 => 'The Overwhelming';
+
+  @override
+  String get qs_meaning_89 => 'The Dawn';
+
+  @override
+  String get qs_meaning_90 => 'The City';
+
+  @override
+  String get qs_meaning_91 => 'The Sun';
+
+  @override
+  String get qs_meaning_92 => 'The Night';
+
+  @override
+  String get qs_meaning_93 => 'The Morning Hours';
+
+  @override
+  String get qs_meaning_94 => 'The Relief';
+
+  @override
+  String get qs_meaning_95 => 'The Fig';
+
+  @override
+  String get qs_meaning_96 => 'The Clot';
+
+  @override
+  String get qs_meaning_97 => 'The Power';
+
+  @override
+  String get qs_meaning_98 => 'The Clear Proof';
+
+  @override
+  String get qs_meaning_99 => 'The Earthquake';
+
+  @override
+  String get qs_meaning_100 => 'The Chargers';
+
+  @override
+  String get qs_meaning_101 => 'The Calamity';
+
+  @override
+  String get qs_meaning_102 => 'The Rivalry in World Increase';
+
+  @override
+  String get qs_meaning_103 => 'The Time';
+
+  @override
+  String get qs_meaning_104 => 'The Slanderer';
+
+  @override
+  String get qs_meaning_105 => 'The Elephant';
+
+  @override
+  String get qs_meaning_106 => 'Quraysh';
+
+  @override
+  String get qs_meaning_107 => 'The Small Kindnesses';
+
+  @override
+  String get qs_meaning_108 => 'Abundance';
+
+  @override
+  String get qs_meaning_109 => 'The Disbelievers';
+
+  @override
+  String get qs_meaning_110 => 'The Help';
+
+  @override
+  String get qs_meaning_111 => 'The Flame';
+
+  @override
+  String get qs_meaning_112 => 'Sincerity';
+
+  @override
+  String get qs_meaning_113 => 'The Daybreak';
+
+  @override
+  String get qs_meaning_114 => 'Mankind';
+
+  @override
+  String get qsRevelationMeccan => 'Meccan';
+
+  @override
+  String get qsRevelationMedinan => 'Medinan';
+
+  @override
+  String qtContinueReadingDetail(String surah, int ayah) {
+    return 'Continue reading $surah ayah $ayah';
+  }
+
+  @override
+  String qtOpenSurahAyah(String surah, int ayah) {
+    return 'Open $surah ayah $ayah';
+  }
+
+  @override
+  String get qpbAyahRange => 'Ayah range';
+
+  @override
+  String get qpbFrom => 'From';
+
+  @override
+  String get qpbTo => 'To';
+
+  @override
+  String qpbRepeatRangeDetail(int from, int to) {
+    return 'Return to ayah $from after ayah $to is completed';
+  }
+
+  @override
+  String get qpbSpeed => 'Speed';
+
+  @override
+  String get qpbQari => 'Qari';
+
+  @override
+  String get qpbOff => 'Off';
+
+  @override
+  String qpbMinutes(int m) {
+    return '$m min';
+  }
+
+  @override
+  String get qdTitle => 'Display Settings';
+
+  @override
+  String get qdTranslationLabel => 'Indonesian Translation';
+
+  @override
+  String get qdTransliteration => 'Latin Transliteration';
+
+  @override
+  String get qdTafsirBrief => 'Brief Tafsir';
+
+  @override
+  String get qdBasmalahLatin => 'Bismillaahir Rahmaanir Raheem';
+
+  @override
+  String get qdBasmalahTranslation =>
+      'In the name of Allah, the Most Gracious, the Most Merciful.';
+
+  @override
+  String get qpPlay => 'Play';
+
+  @override
+  String qpNowPlaying(String surah, int ayah) {
+    return 'Surah $surah : $ayah';
   }
 }

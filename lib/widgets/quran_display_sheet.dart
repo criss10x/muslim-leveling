@@ -34,11 +34,11 @@ class _DisplaySheet extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text('Pengaturan Tampilan',
+                  Text(AppL10n.of(context).qdTitle,
                       style: AppText.headlineMd()
                           .copyWith(color: AppColors.onSurface)),
                   const SizedBox(height: 16),
-                  _preview(),
+                  _preview(context),
                   const SizedBox(height: 20),
                   _label(AppL10n.of(context).qdArabicSize),
                   Slider(
@@ -63,12 +63,12 @@ class _DisplaySheet extends StatelessWidget {
                   _switchTile(
                     value: quranSettings.showTranslation,
                     onChanged: (v) => quranSettings.setShowTranslation(v),
-                    title: 'Terjemahan Indonesia',
+                    title: AppL10n.of(context).qdTranslationLabel,
                   ),
                   _switchTile(
                     value: quranSettings.showLatin,
                     onChanged: (v) => quranSettings.setShowLatin(v),
-                    title: 'Transliterasi Latin',
+                    title: AppL10n.of(context).qdTransliteration,
                     subtitle: AppL10n.of(context).qdLatinHint,
                   ),
                   _switchTile(
@@ -81,7 +81,7 @@ class _DisplaySheet extends StatelessWidget {
                   _switchTile(
                     value: quranSettings.useShortTafsir,
                     onChanged: (v) => quranSettings.setUseShortTafsir(v),
-                    title: 'Tafsir Ringkas',
+                    title: AppL10n.of(context).qdTafsirBrief,
                     subtitle: quranSettings.useShortTafsir
                         ? AppL10n.of(context).qdTafsirMuyassar
                         : AppL10n.of(context).qdTafsirKemenag,
@@ -122,7 +122,7 @@ class _DisplaySheet extends StatelessWidget {
                     color: AppColors.onSurfaceVariant)),
       );
 
-  Widget _preview() {
+  Widget _preview(BuildContext context) {
     final s = quranSettings;
     return Container(
       padding: const EdgeInsets.all(14),
@@ -146,7 +146,7 @@ class _DisplaySheet extends StatelessWidget {
           if (s.showLatin) ...[
             const SizedBox(height: 4),
             Text(
-              'Bismillaahir Rahmaanir Raheem',
+              AppL10n.of(context).qdBasmalahLatin,
               style: AppText.bodyMd().copyWith(
                 fontStyle: FontStyle.italic,
                 color: AppColors.onSurfaceVariant.withValues(alpha: 0.8),
@@ -156,8 +156,7 @@ class _DisplaySheet extends StatelessWidget {
           if (s.showTranslation) ...[
             const SizedBox(height: 8),
             Text(
-              'Dengan menyebut nama Allah Yang Maha Pemurah lagi '
-              'Maha Penyayang.',
+              AppL10n.of(context).qdBasmalahTranslation,
               style: AppText.bodyMd().copyWith(
                 fontSize: s.translationFontSize,
                 color: AppColors.onSurfaceVariant,

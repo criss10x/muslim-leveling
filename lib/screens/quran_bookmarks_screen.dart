@@ -46,8 +46,10 @@ class _QuranBookmarksScreenState extends State<QuranBookmarksScreen> {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.surfaceContainerLow,
-        title: Text('Bookmark',
-            style: AppText.headlineMd().copyWith(color: AppColors.onSurface)),
+        title: Text(
+          AppL10n.of(context).qbTitle,
+          style: AppText.headlineMd().copyWith(color: AppColors.onSurface),
+        ),
       ),
       body: ListenableBuilder(
         listenable: quranBookmarks,
@@ -70,10 +72,13 @@ class _QuranBookmarksScreenState extends State<QuranBookmarksScreen> {
                         style: AppText.bodyLg()
                             .copyWith(color: AppColors.onSurfaceVariant)),
                     const SizedBox(height: 4),
-                    Text('Tap ikon bookmark di ayat yang mau disimpan.',
-                        textAlign: TextAlign.center,
-                        style: AppText.bodyMd()
-                            .copyWith(color: AppColors.onSurfaceVariant)),
+                    Text(
+                      AppL10n.of(context).qbEmptyHint,
+                      textAlign: TextAlign.center,
+                      style: AppText.bodyMd().copyWith(
+                        color: AppColors.onSurfaceVariant,
+                      ),
+                    ),
                   ],
                 ),
               ),

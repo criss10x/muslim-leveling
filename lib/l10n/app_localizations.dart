@@ -4634,7 +4634,7 @@ abstract class AppL10n {
   ///
   /// In id, this message translates to:
   /// **'Surat {surah} · Ayat {ayah}'**
-  String qtSurahAyah(int surah, int ayah);
+  String qtSurahAyah(String surah, int ayah);
 
   /// No description provided for @btQuizScore.
   ///
@@ -4953,6 +4953,870 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Jadwal dari Aladhan untuk {city}. Metode perhitungan mengikuti negara kota ini. Ter-update otomatis saat tab dibuka; tap nama kota di atas untuk ganti lokasi.'**
   String jdFootnoteAbroad(String city);
+
+  /// No description provided for @commonRetry.
+  ///
+  /// In id, this message translates to:
+  /// **'Coba lagi'**
+  String get commonRetry;
+
+  /// No description provided for @qtSearchHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Cari surat, kata, atau ayat — mis. {example}'**
+  String qtSearchHint(String example);
+
+  /// No description provided for @qtVerseHits.
+  ///
+  /// In id, this message translates to:
+  /// **'{count} ayat ditemukan di terjemahan'**
+  String qtVerseHits(int count);
+
+  /// No description provided for @qtVerseHitsTruncated.
+  ///
+  /// In id, this message translates to:
+  /// **'{count}+ ayat ditemukan — persempit kata kunci'**
+  String qtVerseHitsTruncated(int count);
+
+  /// No description provided for @qtBookmarkTooltip.
+  ///
+  /// In id, this message translates to:
+  /// **'Bookmark ayat'**
+  String get qtBookmarkTooltip;
+
+  /// No description provided for @qtSubtitle.
+  ///
+  /// In id, this message translates to:
+  /// **'114 surat · 30 juz'**
+  String get qtSubtitle;
+
+  /// No description provided for @qbTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Bookmark'**
+  String get qbTitle;
+
+  /// No description provided for @qbEmptyHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Tap ikon bookmark di ayat yang mau disimpan.'**
+  String get qbEmptyHint;
+
+  /// No description provided for @qacPlayFromHere.
+  ///
+  /// In id, this message translates to:
+  /// **'Putar dari ayat ini'**
+  String get qacPlayFromHere;
+
+  /// No description provided for @qrBasmalah.
+  ///
+  /// In id, this message translates to:
+  /// **'Dengan nama Allah Yang Maha Pengasih, Maha Penyayang'**
+  String get qrBasmalah;
+
+  /// No description provided for @qs_meaning_1.
+  ///
+  /// In id, this message translates to:
+  /// **'Pembukaan'**
+  String get qs_meaning_1;
+
+  /// No description provided for @qs_meaning_2.
+  ///
+  /// In id, this message translates to:
+  /// **'Sapi'**
+  String get qs_meaning_2;
+
+  /// No description provided for @qs_meaning_3.
+  ///
+  /// In id, this message translates to:
+  /// **'Keluarga Imran'**
+  String get qs_meaning_3;
+
+  /// No description provided for @qs_meaning_4.
+  ///
+  /// In id, this message translates to:
+  /// **'Wanita'**
+  String get qs_meaning_4;
+
+  /// No description provided for @qs_meaning_5.
+  ///
+  /// In id, this message translates to:
+  /// **'Hidangan'**
+  String get qs_meaning_5;
+
+  /// No description provided for @qs_meaning_6.
+  ///
+  /// In id, this message translates to:
+  /// **'Binatang Ternak'**
+  String get qs_meaning_6;
+
+  /// No description provided for @qs_meaning_7.
+  ///
+  /// In id, this message translates to:
+  /// **'Tempat Tertinggi'**
+  String get qs_meaning_7;
+
+  /// No description provided for @qs_meaning_8.
+  ///
+  /// In id, this message translates to:
+  /// **'Rampasan Perang'**
+  String get qs_meaning_8;
+
+  /// No description provided for @qs_meaning_9.
+  ///
+  /// In id, this message translates to:
+  /// **'Pengampunan'**
+  String get qs_meaning_9;
+
+  /// No description provided for @qs_meaning_10.
+  ///
+  /// In id, this message translates to:
+  /// **'Yunus'**
+  String get qs_meaning_10;
+
+  /// No description provided for @qs_meaning_11.
+  ///
+  /// In id, this message translates to:
+  /// **'Hud'**
+  String get qs_meaning_11;
+
+  /// No description provided for @qs_meaning_12.
+  ///
+  /// In id, this message translates to:
+  /// **'Yusuf'**
+  String get qs_meaning_12;
+
+  /// No description provided for @qs_meaning_13.
+  ///
+  /// In id, this message translates to:
+  /// **'Guruh'**
+  String get qs_meaning_13;
+
+  /// No description provided for @qs_meaning_14.
+  ///
+  /// In id, this message translates to:
+  /// **'Ibrahim'**
+  String get qs_meaning_14;
+
+  /// No description provided for @qs_meaning_15.
+  ///
+  /// In id, this message translates to:
+  /// **'Hijr'**
+  String get qs_meaning_15;
+
+  /// No description provided for @qs_meaning_16.
+  ///
+  /// In id, this message translates to:
+  /// **'Lebah'**
+  String get qs_meaning_16;
+
+  /// No description provided for @qs_meaning_17.
+  ///
+  /// In id, this message translates to:
+  /// **'Memperjalankan Malam Hari'**
+  String get qs_meaning_17;
+
+  /// No description provided for @qs_meaning_18.
+  ///
+  /// In id, this message translates to:
+  /// **'Goa'**
+  String get qs_meaning_18;
+
+  /// No description provided for @qs_meaning_19.
+  ///
+  /// In id, this message translates to:
+  /// **'Maryam'**
+  String get qs_meaning_19;
+
+  /// No description provided for @qs_meaning_20.
+  ///
+  /// In id, this message translates to:
+  /// **'Taha'**
+  String get qs_meaning_20;
+
+  /// No description provided for @qs_meaning_21.
+  ///
+  /// In id, this message translates to:
+  /// **'Para Nabi'**
+  String get qs_meaning_21;
+
+  /// No description provided for @qs_meaning_22.
+  ///
+  /// In id, this message translates to:
+  /// **'Haji'**
+  String get qs_meaning_22;
+
+  /// No description provided for @qs_meaning_23.
+  ///
+  /// In id, this message translates to:
+  /// **'Orang-Orang Mukmin'**
+  String get qs_meaning_23;
+
+  /// No description provided for @qs_meaning_24.
+  ///
+  /// In id, this message translates to:
+  /// **'Cahaya'**
+  String get qs_meaning_24;
+
+  /// No description provided for @qs_meaning_25.
+  ///
+  /// In id, this message translates to:
+  /// **'Pembeda'**
+  String get qs_meaning_25;
+
+  /// No description provided for @qs_meaning_26.
+  ///
+  /// In id, this message translates to:
+  /// **'Para Penyair'**
+  String get qs_meaning_26;
+
+  /// No description provided for @qs_meaning_27.
+  ///
+  /// In id, this message translates to:
+  /// **'Semut-semut'**
+  String get qs_meaning_27;
+
+  /// No description provided for @qs_meaning_28.
+  ///
+  /// In id, this message translates to:
+  /// **'Kisah-Kisah'**
+  String get qs_meaning_28;
+
+  /// No description provided for @qs_meaning_29.
+  ///
+  /// In id, this message translates to:
+  /// **'Laba-Laba'**
+  String get qs_meaning_29;
+
+  /// No description provided for @qs_meaning_30.
+  ///
+  /// In id, this message translates to:
+  /// **'Romawi'**
+  String get qs_meaning_30;
+
+  /// No description provided for @qs_meaning_31.
+  ///
+  /// In id, this message translates to:
+  /// **'Luqman'**
+  String get qs_meaning_31;
+
+  /// No description provided for @qs_meaning_32.
+  ///
+  /// In id, this message translates to:
+  /// **'Sajdah'**
+  String get qs_meaning_32;
+
+  /// No description provided for @qs_meaning_33.
+  ///
+  /// In id, this message translates to:
+  /// **'Golongan Yang Bersekutu'**
+  String get qs_meaning_33;
+
+  /// No description provided for @qs_meaning_34.
+  ///
+  /// In id, this message translates to:
+  /// **'Saba\''**
+  String get qs_meaning_34;
+
+  /// No description provided for @qs_meaning_35.
+  ///
+  /// In id, this message translates to:
+  /// **'Maha Pencipta'**
+  String get qs_meaning_35;
+
+  /// No description provided for @qs_meaning_36.
+  ///
+  /// In id, this message translates to:
+  /// **'Yasin'**
+  String get qs_meaning_36;
+
+  /// No description provided for @qs_meaning_37.
+  ///
+  /// In id, this message translates to:
+  /// **'Barisan-Barisan'**
+  String get qs_meaning_37;
+
+  /// No description provided for @qs_meaning_38.
+  ///
+  /// In id, this message translates to:
+  /// **'Sad'**
+  String get qs_meaning_38;
+
+  /// No description provided for @qs_meaning_39.
+  ///
+  /// In id, this message translates to:
+  /// **'Rombongan'**
+  String get qs_meaning_39;
+
+  /// No description provided for @qs_meaning_40.
+  ///
+  /// In id, this message translates to:
+  /// **'Maha Pengampun'**
+  String get qs_meaning_40;
+
+  /// No description provided for @qs_meaning_41.
+  ///
+  /// In id, this message translates to:
+  /// **'Yang Dijelaskan'**
+  String get qs_meaning_41;
+
+  /// No description provided for @qs_meaning_42.
+  ///
+  /// In id, this message translates to:
+  /// **'Musyawarah'**
+  String get qs_meaning_42;
+
+  /// No description provided for @qs_meaning_43.
+  ///
+  /// In id, this message translates to:
+  /// **'Perhiasan'**
+  String get qs_meaning_43;
+
+  /// No description provided for @qs_meaning_44.
+  ///
+  /// In id, this message translates to:
+  /// **'Kabut'**
+  String get qs_meaning_44;
+
+  /// No description provided for @qs_meaning_45.
+  ///
+  /// In id, this message translates to:
+  /// **'Berlutut'**
+  String get qs_meaning_45;
+
+  /// No description provided for @qs_meaning_46.
+  ///
+  /// In id, this message translates to:
+  /// **'Bukit Pasir'**
+  String get qs_meaning_46;
+
+  /// No description provided for @qs_meaning_47.
+  ///
+  /// In id, this message translates to:
+  /// **'Muhammad'**
+  String get qs_meaning_47;
+
+  /// No description provided for @qs_meaning_48.
+  ///
+  /// In id, this message translates to:
+  /// **'Kemenangan'**
+  String get qs_meaning_48;
+
+  /// No description provided for @qs_meaning_49.
+  ///
+  /// In id, this message translates to:
+  /// **'Kamar-Kamar'**
+  String get qs_meaning_49;
+
+  /// No description provided for @qs_meaning_50.
+  ///
+  /// In id, this message translates to:
+  /// **'Qaf'**
+  String get qs_meaning_50;
+
+  /// No description provided for @qs_meaning_51.
+  ///
+  /// In id, this message translates to:
+  /// **'Angin yang Menerbangkan'**
+  String get qs_meaning_51;
+
+  /// No description provided for @qs_meaning_52.
+  ///
+  /// In id, this message translates to:
+  /// **'Bukit Tursina'**
+  String get qs_meaning_52;
+
+  /// No description provided for @qs_meaning_53.
+  ///
+  /// In id, this message translates to:
+  /// **'Bintang'**
+  String get qs_meaning_53;
+
+  /// No description provided for @qs_meaning_54.
+  ///
+  /// In id, this message translates to:
+  /// **'Bulan'**
+  String get qs_meaning_54;
+
+  /// No description provided for @qs_meaning_55.
+  ///
+  /// In id, this message translates to:
+  /// **'Maha Pengasih'**
+  String get qs_meaning_55;
+
+  /// No description provided for @qs_meaning_56.
+  ///
+  /// In id, this message translates to:
+  /// **'Hari Kiamat'**
+  String get qs_meaning_56;
+
+  /// No description provided for @qs_meaning_57.
+  ///
+  /// In id, this message translates to:
+  /// **'Besi'**
+  String get qs_meaning_57;
+
+  /// No description provided for @qs_meaning_58.
+  ///
+  /// In id, this message translates to:
+  /// **'Gugatan'**
+  String get qs_meaning_58;
+
+  /// No description provided for @qs_meaning_59.
+  ///
+  /// In id, this message translates to:
+  /// **'Pengusiran'**
+  String get qs_meaning_59;
+
+  /// No description provided for @qs_meaning_60.
+  ///
+  /// In id, this message translates to:
+  /// **'Wanita Yang Diuji'**
+  String get qs_meaning_60;
+
+  /// No description provided for @qs_meaning_61.
+  ///
+  /// In id, this message translates to:
+  /// **'Barisan'**
+  String get qs_meaning_61;
+
+  /// No description provided for @qs_meaning_62.
+  ///
+  /// In id, this message translates to:
+  /// **'Jumat'**
+  String get qs_meaning_62;
+
+  /// No description provided for @qs_meaning_63.
+  ///
+  /// In id, this message translates to:
+  /// **'Orang-Orang Munafik'**
+  String get qs_meaning_63;
+
+  /// No description provided for @qs_meaning_64.
+  ///
+  /// In id, this message translates to:
+  /// **'Pengungkapan Kesalahan'**
+  String get qs_meaning_64;
+
+  /// No description provided for @qs_meaning_65.
+  ///
+  /// In id, this message translates to:
+  /// **'Talak'**
+  String get qs_meaning_65;
+
+  /// No description provided for @qs_meaning_66.
+  ///
+  /// In id, this message translates to:
+  /// **'Pengharaman'**
+  String get qs_meaning_66;
+
+  /// No description provided for @qs_meaning_67.
+  ///
+  /// In id, this message translates to:
+  /// **'Kerajaan'**
+  String get qs_meaning_67;
+
+  /// No description provided for @qs_meaning_68.
+  ///
+  /// In id, this message translates to:
+  /// **'Pena'**
+  String get qs_meaning_68;
+
+  /// No description provided for @qs_meaning_69.
+  ///
+  /// In id, this message translates to:
+  /// **'Hari Kiamat'**
+  String get qs_meaning_69;
+
+  /// No description provided for @qs_meaning_70.
+  ///
+  /// In id, this message translates to:
+  /// **'Tempat Naik'**
+  String get qs_meaning_70;
+
+  /// No description provided for @qs_meaning_71.
+  ///
+  /// In id, this message translates to:
+  /// **'Nuh'**
+  String get qs_meaning_71;
+
+  /// No description provided for @qs_meaning_72.
+  ///
+  /// In id, this message translates to:
+  /// **'Jin'**
+  String get qs_meaning_72;
+
+  /// No description provided for @qs_meaning_73.
+  ///
+  /// In id, this message translates to:
+  /// **'Orang Yang Berselimut'**
+  String get qs_meaning_73;
+
+  /// No description provided for @qs_meaning_74.
+  ///
+  /// In id, this message translates to:
+  /// **'Orang Yang Berkemul'**
+  String get qs_meaning_74;
+
+  /// No description provided for @qs_meaning_75.
+  ///
+  /// In id, this message translates to:
+  /// **'Hari Kiamat'**
+  String get qs_meaning_75;
+
+  /// No description provided for @qs_meaning_76.
+  ///
+  /// In id, this message translates to:
+  /// **'Manusia'**
+  String get qs_meaning_76;
+
+  /// No description provided for @qs_meaning_77.
+  ///
+  /// In id, this message translates to:
+  /// **'Malaikat Yang Diutus'**
+  String get qs_meaning_77;
+
+  /// No description provided for @qs_meaning_78.
+  ///
+  /// In id, this message translates to:
+  /// **'Berita Besar'**
+  String get qs_meaning_78;
+
+  /// No description provided for @qs_meaning_79.
+  ///
+  /// In id, this message translates to:
+  /// **'Malaikat Yang Mencabut'**
+  String get qs_meaning_79;
+
+  /// No description provided for @qs_meaning_80.
+  ///
+  /// In id, this message translates to:
+  /// **'Bermuka Masam'**
+  String get qs_meaning_80;
+
+  /// No description provided for @qs_meaning_81.
+  ///
+  /// In id, this message translates to:
+  /// **'Penggulungan'**
+  String get qs_meaning_81;
+
+  /// No description provided for @qs_meaning_82.
+  ///
+  /// In id, this message translates to:
+  /// **'Terbelah'**
+  String get qs_meaning_82;
+
+  /// No description provided for @qs_meaning_83.
+  ///
+  /// In id, this message translates to:
+  /// **'Orang-Orang Curang'**
+  String get qs_meaning_83;
+
+  /// No description provided for @qs_meaning_84.
+  ///
+  /// In id, this message translates to:
+  /// **'Terbelah'**
+  String get qs_meaning_84;
+
+  /// No description provided for @qs_meaning_85.
+  ///
+  /// In id, this message translates to:
+  /// **'Gugusan Bintang'**
+  String get qs_meaning_85;
+
+  /// No description provided for @qs_meaning_86.
+  ///
+  /// In id, this message translates to:
+  /// **'Yang Datang Di Malam Hari'**
+  String get qs_meaning_86;
+
+  /// No description provided for @qs_meaning_87.
+  ///
+  /// In id, this message translates to:
+  /// **'Maha Tinggi'**
+  String get qs_meaning_87;
+
+  /// No description provided for @qs_meaning_88.
+  ///
+  /// In id, this message translates to:
+  /// **'Hari Kiamat'**
+  String get qs_meaning_88;
+
+  /// No description provided for @qs_meaning_89.
+  ///
+  /// In id, this message translates to:
+  /// **'Fajar'**
+  String get qs_meaning_89;
+
+  /// No description provided for @qs_meaning_90.
+  ///
+  /// In id, this message translates to:
+  /// **'Negeri'**
+  String get qs_meaning_90;
+
+  /// No description provided for @qs_meaning_91.
+  ///
+  /// In id, this message translates to:
+  /// **'Matahari'**
+  String get qs_meaning_91;
+
+  /// No description provided for @qs_meaning_92.
+  ///
+  /// In id, this message translates to:
+  /// **'Malam'**
+  String get qs_meaning_92;
+
+  /// No description provided for @qs_meaning_93.
+  ///
+  /// In id, this message translates to:
+  /// **'Duha'**
+  String get qs_meaning_93;
+
+  /// No description provided for @qs_meaning_94.
+  ///
+  /// In id, this message translates to:
+  /// **'Lapang'**
+  String get qs_meaning_94;
+
+  /// No description provided for @qs_meaning_95.
+  ///
+  /// In id, this message translates to:
+  /// **'Buah Tin'**
+  String get qs_meaning_95;
+
+  /// No description provided for @qs_meaning_96.
+  ///
+  /// In id, this message translates to:
+  /// **'Segumpal Darah'**
+  String get qs_meaning_96;
+
+  /// No description provided for @qs_meaning_97.
+  ///
+  /// In id, this message translates to:
+  /// **'Kemuliaan'**
+  String get qs_meaning_97;
+
+  /// No description provided for @qs_meaning_98.
+  ///
+  /// In id, this message translates to:
+  /// **'Bukti Nyata'**
+  String get qs_meaning_98;
+
+  /// No description provided for @qs_meaning_99.
+  ///
+  /// In id, this message translates to:
+  /// **'Guncangan'**
+  String get qs_meaning_99;
+
+  /// No description provided for @qs_meaning_100.
+  ///
+  /// In id, this message translates to:
+  /// **'Kuda Yang Berlari Kencang'**
+  String get qs_meaning_100;
+
+  /// No description provided for @qs_meaning_101.
+  ///
+  /// In id, this message translates to:
+  /// **'Hari Kiamat'**
+  String get qs_meaning_101;
+
+  /// No description provided for @qs_meaning_102.
+  ///
+  /// In id, this message translates to:
+  /// **'Bermegah-Megahan'**
+  String get qs_meaning_102;
+
+  /// No description provided for @qs_meaning_103.
+  ///
+  /// In id, this message translates to:
+  /// **'Masa'**
+  String get qs_meaning_103;
+
+  /// No description provided for @qs_meaning_104.
+  ///
+  /// In id, this message translates to:
+  /// **'Pengumpat'**
+  String get qs_meaning_104;
+
+  /// No description provided for @qs_meaning_105.
+  ///
+  /// In id, this message translates to:
+  /// **'Gajah'**
+  String get qs_meaning_105;
+
+  /// No description provided for @qs_meaning_106.
+  ///
+  /// In id, this message translates to:
+  /// **'Quraisy'**
+  String get qs_meaning_106;
+
+  /// No description provided for @qs_meaning_107.
+  ///
+  /// In id, this message translates to:
+  /// **'Barang Yang Berguna'**
+  String get qs_meaning_107;
+
+  /// No description provided for @qs_meaning_108.
+  ///
+  /// In id, this message translates to:
+  /// **'Pemberian Yang Banyak'**
+  String get qs_meaning_108;
+
+  /// No description provided for @qs_meaning_109.
+  ///
+  /// In id, this message translates to:
+  /// **'Orang-Orang kafir'**
+  String get qs_meaning_109;
+
+  /// No description provided for @qs_meaning_110.
+  ///
+  /// In id, this message translates to:
+  /// **'Pertolongan'**
+  String get qs_meaning_110;
+
+  /// No description provided for @qs_meaning_111.
+  ///
+  /// In id, this message translates to:
+  /// **'Api Yang Bergejolak'**
+  String get qs_meaning_111;
+
+  /// No description provided for @qs_meaning_112.
+  ///
+  /// In id, this message translates to:
+  /// **'Ikhlas'**
+  String get qs_meaning_112;
+
+  /// No description provided for @qs_meaning_113.
+  ///
+  /// In id, this message translates to:
+  /// **'Subuh'**
+  String get qs_meaning_113;
+
+  /// No description provided for @qs_meaning_114.
+  ///
+  /// In id, this message translates to:
+  /// **'Manusia'**
+  String get qs_meaning_114;
+
+  /// No description provided for @qsRevelationMeccan.
+  ///
+  /// In id, this message translates to:
+  /// **'Makkiyah'**
+  String get qsRevelationMeccan;
+
+  /// No description provided for @qsRevelationMedinan.
+  ///
+  /// In id, this message translates to:
+  /// **'Madaniyah'**
+  String get qsRevelationMedinan;
+
+  /// No description provided for @qtContinueReadingDetail.
+  ///
+  /// In id, this message translates to:
+  /// **'Lanjutkan membaca {surah} ayat {ayah}'**
+  String qtContinueReadingDetail(String surah, int ayah);
+
+  /// No description provided for @qtOpenSurahAyah.
+  ///
+  /// In id, this message translates to:
+  /// **'Buka {surah} ayat {ayah}'**
+  String qtOpenSurahAyah(String surah, int ayah);
+
+  /// No description provided for @qpbAyahRange.
+  ///
+  /// In id, this message translates to:
+  /// **'Rentang ayat'**
+  String get qpbAyahRange;
+
+  /// No description provided for @qpbFrom.
+  ///
+  /// In id, this message translates to:
+  /// **'Dari'**
+  String get qpbFrom;
+
+  /// No description provided for @qpbTo.
+  ///
+  /// In id, this message translates to:
+  /// **'Sampai'**
+  String get qpbTo;
+
+  /// No description provided for @qpbRepeatRangeDetail.
+  ///
+  /// In id, this message translates to:
+  /// **'Kembali ke ayat {from} setelah ayat {to} selesai'**
+  String qpbRepeatRangeDetail(int from, int to);
+
+  /// No description provided for @qpbSpeed.
+  ///
+  /// In id, this message translates to:
+  /// **'Kecepatan'**
+  String get qpbSpeed;
+
+  /// No description provided for @qpbQari.
+  ///
+  /// In id, this message translates to:
+  /// **'Qari'**
+  String get qpbQari;
+
+  /// No description provided for @qpbOff.
+  ///
+  /// In id, this message translates to:
+  /// **'Nonaktif'**
+  String get qpbOff;
+
+  /// No description provided for @qpbMinutes.
+  ///
+  /// In id, this message translates to:
+  /// **'{m} mnt'**
+  String qpbMinutes(int m);
+
+  /// No description provided for @qdTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Pengaturan Tampilan'**
+  String get qdTitle;
+
+  /// No description provided for @qdTranslationLabel.
+  ///
+  /// In id, this message translates to:
+  /// **'Terjemahan Indonesia'**
+  String get qdTranslationLabel;
+
+  /// No description provided for @qdTransliteration.
+  ///
+  /// In id, this message translates to:
+  /// **'Transliterasi Latin'**
+  String get qdTransliteration;
+
+  /// No description provided for @qdTafsirBrief.
+  ///
+  /// In id, this message translates to:
+  /// **'Tafsir Ringkas'**
+  String get qdTafsirBrief;
+
+  /// No description provided for @qdBasmalahLatin.
+  ///
+  /// In id, this message translates to:
+  /// **'Bismillaahir Rahmaanir Raheem'**
+  String get qdBasmalahLatin;
+
+  /// No description provided for @qdBasmalahTranslation.
+  ///
+  /// In id, this message translates to:
+  /// **'Dengan menyebut nama Allah Yang Maha Pemurah lagi Maha Penyayang.'**
+  String get qdBasmalahTranslation;
+
+  /// No description provided for @qpPlay.
+  ///
+  /// In id, this message translates to:
+  /// **'Putar'**
+  String get qpPlay;
+
+  /// No description provided for @qpNowPlaying.
+  ///
+  /// In id, this message translates to:
+  /// **'QS {surah} : {ayah}'**
+  String qpNowPlaying(String surah, int ayah);
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

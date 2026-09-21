@@ -10,6 +10,7 @@ import 'quran_reader.dart';
 import 'quran_bookmarks_screen.dart';
 import '../widgets/rub_el_hizb_badge.dart';
 import '../l10n/app_localizations.dart';
+import '../l10n/quran_texts.g.dart';
 
 class QuranTab extends StatefulWidget {
   const QuranTab({super.key});
@@ -164,7 +165,7 @@ class _QuranTabState extends State<QuranTab> {
                     children: [
                       Expanded(
                         child: Text(
-                          'Al-Quran',
+                          AppL10n.of(context).tabQuran,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: AppText.headlineMd().copyWith(
@@ -197,7 +198,7 @@ class _QuranTabState extends State<QuranTab> {
                       ),
                       const SizedBox(width: AppSpacing.sm),
                       IconButton(
-                        tooltip: 'Bookmark ayat',
+                        tooltip: AppL10n.of(context).qtBookmarkTooltip,
                         onPressed: () => Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) => const QuranBookmarksScreen(),
@@ -213,7 +214,7 @@ class _QuranTabState extends State<QuranTab> {
                   ),
                   const SizedBox(height: AppSpacing.xs),
                   Text(
-                    '114 surat · 30 juz',
+                    AppL10n.of(context).qtSubtitle,
                     style: AppText.bodyMd().copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -247,9 +248,8 @@ class _QuranTabState extends State<QuranTab> {
                 onChanged: _onQueryChanged,
                 style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
                 decoration: InputDecoration(
-                  hintText:
-                      'Cari surat, kata, atau ayat — mis. '
-                      '${QuranData.exampleAyahRef}',
+                  hintText: AppL10n.of(context)
+                      .qtSearchHint(QuranData.exampleAyahRef),
                   hintStyle: AppText.bodyMd().copyWith(
                     color: AppColors.onSurfaceVariant,
                   ),
@@ -313,10 +313,10 @@ class _QuranTabState extends State<QuranTab> {
                                 ),
                                 child: Text(
                                   _truncated
-                                      ? '${_verseHits.length}+ ayat ditemukan '
-                                          '— persempit kata kunci'
-                                      : '${_verseHits.length} ayat ditemukan '
-                                          'di terjemahan',
+                                      ? AppL10n.of(context)
+                                          .qtVerseHitsTruncated(_verseHits.length)
+                                      : AppL10n.of(context)
+                                          .qtVerseHits(_verseHits.length),
                                   style: AppText.labelCaps().copyWith(
                                     color: AppColors.onSurfaceVariant,
                                   ),
@@ -399,7 +399,8 @@ class _ResumeReadingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      label: 'Lanjutkan membaca ${surah.nameLatin} ayat $ayah',
+      label: AppL10n.of(context)
+          .qtContinueReadingDetail(surah.nameLatin, ayah),
       child: Material(
         color: AppColors.primary.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(AppRadius.xxl),
@@ -436,7 +437,7 @@ class _ResumeReadingCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        '${surah.nameLatin} · Ayat $ayah',
+                        AppL10n.of(context).qtSurahAyah(surah.nameLatin, ayah),
                         style: AppText.bodyMd().copyWith(
                           color: AppColors.onSurfaceVariant,
                         ),
@@ -502,7 +503,7 @@ class _SurahRow extends StatelessWidget {
                             ),
                             const SizedBox(height: AppSpacing.xs),
                             Text(
-                              surah.meaning,
+                              surahMeaning(AppL10n.of(context), surah.number),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: AppText.bodyMd().copyWith(
@@ -517,7 +518,10 @@ class _SurahRow extends StatelessWidget {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  _RevelationChip(label: surah.revelation),
+                                  _RevelationChip(
+                                    label: surahRevelation(
+                                        AppL10n.of(context), surah.revelation),
+                                  ),
                                   const SizedBox(width: AppSpacing.sm),
                                   Icon(
                                     Icons.auto_stories,
@@ -737,7 +741,7 @@ class _AyahRefCardState extends State<_AyahRefCard> {
     final r = widget.ref;
     return Semantics(
       button: true,
-      label: 'Buka ${r.surah.nameLatin} ayat ${r.ayah}',
+      label: AppL10n.of(context).qtOpenSurahAyah(r.surah.nameLatin, r.ayah),
       child: Material(
         color: AppColors.surfaceContainerLow,
         borderRadius: BorderRadius.circular(AppRadius.xxl),
@@ -923,9 +927,12 @@ class _VerseHitRow extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
+                        // Nama surat belum termuat → sebut nomornya saja.
                         surah == null
-                            ? AppL10n.of(context).qtSurahAyah(hit.surahNumber, hit.ayahNumber)
-                            : '${surah!.nameLatin} · Ayat ${hit.ayahNumber}',
+                            ? AppL10n.of(context)
+                                .qbSurahName(hit.surahNumber)
+                            : AppL10n.of(context)
+                                .qtSurahAyah(surah!.nameLatin, hit.ayahNumber),
                         style: AppText.bodyMd().copyWith(
                           color: AppColors.onSurfaceVariant,
                           fontSize: 13,

@@ -223,7 +223,7 @@ class _QuranReaderState extends State<QuranReader> {
         SnackBar(
           content: Text(err),
           action: SnackBarAction(
-            label: 'Coba lagi',
+            label: AppL10n.of(context).commonRetry,
             onPressed: () {
               _shownError = null;
               quranAudio.retry();
@@ -335,7 +335,7 @@ class _QuranReaderState extends State<QuranReader> {
           if (showTr) ...[
             const SizedBox(height: 4),
             Text(
-              'Dengan nama Allah Yang Maha Pengasih, Maha Penyayang',
+              AppL10n.of(context).qrBasmalah,
               textAlign: TextAlign.center,
               style: AppText.bodyMd().copyWith(
                 fontSize: quranSettings.translationFontSize - 2,

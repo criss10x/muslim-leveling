@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../l10n/app_localizations.dart';
+import '../l10n/quran_texts.g.dart';
 import '../services/quran_data.dart';
 import '../theme/app_theme.dart';
 
@@ -412,7 +413,8 @@ class _QShareCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 1),
                       Text(
-                        surah.meaning,
+                        // Kartu share ikut bahasa aktif, sama seperti daftar.
+                        surahMeaning(AppL10n.of(context), surah.number),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 9,

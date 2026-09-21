@@ -42,13 +42,13 @@ class _PlaybackSheet extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text('Setelan Murrotal',
+                  Text(AppL10n.of(context).qpMurrotalSettings,
                       style: AppText.headlineMd()
                           .copyWith(color: AppColors.onSurface)),
                   const SizedBox(height: 16),
 
                   // ── Range ayat ──
-                  Text('Rentang ayat',
+                  Text(AppL10n.of(context).qpbAyahRange,
                       style: AppText.labelCaps()
                           .copyWith(color: AppColors.onSurfaceVariant)),
                   const SizedBox(height: 8),
@@ -56,7 +56,7 @@ class _PlaybackSheet extends StatelessWidget {
                     children: [
                       Expanded(
                         child: _AyahDropdown(
-                          label: 'Dari',
+                          label: AppL10n.of(context).qpbFrom,
                           value: range.from,
                           max: surah.ayahCount,
                           onChanged: (v) =>
@@ -66,7 +66,7 @@ class _PlaybackSheet extends StatelessWidget {
                       const SizedBox(width: 12),
                       Expanded(
                         child: _AyahDropdown(
-                          label: 'Sampai',
+                          label: AppL10n.of(context).qpbTo,
                           value: range.to,
                           max: surah.ayahCount,
                           onChanged: (v) =>
@@ -86,8 +86,8 @@ class _PlaybackSheet extends StatelessWidget {
                         style: AppText.bodyLg()
                             .copyWith(color: AppColors.onSurface)),
                     subtitle: Text(
-                      'Kembali ke ayat ${range.from} setelah ayat '
-                      '${range.to} selesai',
+                      AppL10n.of(context)
+                          .qpbRepeatRangeDetail(range.from, range.to),
                       style: AppText.bodyMd()
                           .copyWith(color: AppColors.onSurfaceVariant),
                     ),
@@ -95,7 +95,7 @@ class _PlaybackSheet extends StatelessWidget {
                   const SizedBox(height: 12),
 
                   // ── Kecepatan ──
-                  Text('Kecepatan',
+                  Text(AppL10n.of(context).qpbSpeed,
                       style: AppText.labelCaps()
                           .copyWith(color: AppColors.onSurfaceVariant)),
                   const SizedBox(height: 8),
@@ -113,7 +113,7 @@ class _PlaybackSheet extends StatelessWidget {
                   const SizedBox(height: 20),
 
                   // ── Qari ──
-                  Text('Qari',
+                  Text(AppL10n.of(context).qpbQari,
                       style: AppText.labelCaps()
                           .copyWith(color: AppColors.onSurfaceVariant)),
                   const SizedBox(height: 8),
@@ -133,8 +133,8 @@ class _PlaybackSheet extends StatelessWidget {
                           label: Text(m == -1
                               ? AppL10n.of(context).qpbEndOfSurah
                               : m == 0
-                                  ? 'Off'
-                                  : '${m}m'),
+                                  ? AppL10n.of(context).qpbOff
+                                  : AppL10n.of(context).qpbMinutes(m)),
                           selected: quranSettings.sleepMinutes == m,
                           onSelected: (_) {
                             quranSettings.setSleepMinutes(m);
