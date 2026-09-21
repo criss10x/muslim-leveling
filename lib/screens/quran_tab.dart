@@ -146,6 +146,10 @@ class _QuranTabState extends State<QuranTab> {
     // Saat acuan ayat aktif, daftar surat disembunyikan supaya kartu ayatnya
     // yang jadi jawaban tunggal — bukan tenggelam di bawah 114 baris surat.
     final list = ref != null ? const <QuranSurah>[] : quranData.search(_all, _query);
+    // Aksen disembunyikan saat teks sistem membesar: di 1,5× judul butuh 180px
+    // sementara slotnya hanya 133,8px (320dp) — dekorasi tidak lagi kebagian
+    // ruang. Judul membawa informasi, kaligrafi tidak.
+    final showKhat = MediaQuery.textScalerOf(context).scale(24) <= 30;
 
     return SafeArea(
       child: CustomScrollView(
@@ -164,38 +168,58 @@ class _QuranTabState extends State<QuranTab> {
                   Row(
                     children: [
                       Expanded(
-                        child: Text(
-                          AppL10n.of(context).tabQuran,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppText.headlineMd().copyWith(
-                            color: AppColors.onSurface,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: AppSpacing.xs),
-                      // Kaligrafi sebagai aksen, bukan informasi — karena itu
-                      // diredupkan dan tidak diberi semantik. Expanded+FittedBox:
-                      // menyusut saat layar sempit/teks besar, jangan overflow.
-                      // Expanded (bukan Flexible): fit loose menyisakan ruang
-                      // sisa Row yang menumpuk di kanan dan mendorong tombol
-                      // bookmark 12px ke kiri dari tepi konten.
-                      Expanded(
-                        child: ExcludeSemantics(
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              'القرآن',
-                              textDirection: TextDirection.rtl,
-                              maxLines: 1,
-                              style: AppText.headlineMd().copyWith(
-                                color:
-                                    AppColors.goldInk.withValues(alpha: 0.75),
-                              ),
+                        // FittedBox(scaleDown) sudah jadi pola di app ini untuk
+                        // label yang harus utuh (HeroButton, common.dart). Ia
+                        // melayout anaknya tanpa batas lalu menskalakan saat
+                        // paint, jadi judul tak pernah ter-ellipsis — hanya
+                        // mengecil seperlunya. Terukur 2026-09-21 dgn font
+                        // bundel asli: di 320dp @2,0x judul butuh 232,8px
+                        // sedangkan tanpa kaligrafi pun hanya tersedia 228px —
+                        // satu baris mustahil, dan yang salah bukan ukurannya
+                        // melainkan keputusan mengorbankan informasi demi aksen.
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            AppL10n.of(context).tabQuran,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppText.headlineMd().copyWith(
+                              color: AppColors.onSurface,
                             ),
                           ),
                         ),
                       ),
+                      const SizedBox(width: AppSpacing.xs),
+                      if (showKhat)
+                        // Kaligrafi sebagai aksen, bukan informasi — karena itu
+                        // diredupkan dan tidak diberi semantik. FittedBox menjaga
+                        // agar aksen tak pernah overflow.
+                        //
+                        // Lebarnya DIBATASI 96px, BUKAN Expanded: Expanded
+                        // memberinya setengah ruang Row (130px di 360dp) padahal
+                        // tintanya hanya ~86px — ruang mati yang direbut dari
+                        // judul, yang lalu terpotong "Al-Qur…" karena hanya dapat
+                        // 110px di 320dp. Terukur 2026-09-21 dgn font bundel asli:
+                        // judul butuh 116,4px (id) / 121,2px (tr, ms). Judul
+                        // membawa informasi, aksen tidak — judul yang menyusut.
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 96),
+                          child: ExcludeSemantics(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                'القرآن',
+                                textDirection: TextDirection.rtl,
+                                maxLines: 1,
+                                style: AppText.headlineMd().copyWith(
+                                  color:
+                                      AppColors.goldInk.withValues(alpha: 0.75),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       const SizedBox(width: AppSpacing.sm),
                       IconButton(
                         tooltip: AppL10n.of(context).qtBookmarkTooltip,
