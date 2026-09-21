@@ -248,9 +248,18 @@ class _QuranTabState extends State<QuranTab> {
                 onChanged: _onQueryChanged,
                 style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
                 decoration: InputDecoration(
-                  hintText: AppL10n.of(context)
-                      .qtSearchHint(QuranData.exampleAyahRef),
+                  // Hint pendek supaya tak pernah terpotong; contoh format
+                  // pindah ke helperText (lihat catatan di _SearchHeader).
+                  hintText: AppL10n.of(context).qtSearchHint,
                   hintStyle: AppText.bodyMd().copyWith(
+                    color: AppColors.onSurfaceVariant,
+                  ),
+                  helperText: AppL10n.of(
+                    context,
+                  ).qtSearchHelper(QuranData.exampleAyahRef),
+                  // ponytail: helper 1 baris. Di ≥2,0× pada 320dp contohnya
+                  // ter-ellipsis; naikkan helperMaxLines + extentFor kalau perlu.
+                  helperStyle: AppText.bodyMd().copyWith(
                     color: AppColors.onSurfaceVariant,
                   ),
                   prefixIcon: Icon(

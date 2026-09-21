@@ -1470,8 +1470,9 @@
     }
   },
   "commonRetry": "Coba lagi",
-  "qtSearchHint": "Cari surat, kata, atau ayat — mis. {example}",
-  "@qtSearchHint": {"placeholders": {"example": {"type": "String"}}},
+  "qtSearchHint": "Cari surat atau ayat",
+  "qtSearchHelper": "mis. {example}",
+  "@qtSearchHelper": {"placeholders": {"example": {"type": "String"}}},
   "qtVerseHits": "{count} ayat ditemukan di terjemahan",
   "@qtVerseHits": {"placeholders": {"count": {"type": "int"}}},
   "qtVerseHitsTruncated": "{count}+ ayat ditemukan — persempit kata kunci",

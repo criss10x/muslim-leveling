@@ -2797,8 +2797,11 @@ class AppL10nMs extends AppL10n {
   String get commonRetry => 'Cuba lagi';
 
   @override
-  String qtSearchHint(String example) {
-    return 'Cari surah, perkataan, atau ayat — cth. $example';
+  String get qtSearchHint => 'Cari surah atau ayat';
+
+  @override
+  String qtSearchHelper(String example) {
+    return 'cth. $example';
   }
 
   @override

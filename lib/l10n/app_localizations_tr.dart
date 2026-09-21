@@ -2814,8 +2814,11 @@ class AppL10nTr extends AppL10n {
   String get commonRetry => 'Tekrar deneyin';
 
   @override
-  String qtSearchHint(String example) {
-    return 'Sure, kelime veya ayet arayın — örn. $example';
+  String get qtSearchHint => 'Sure veya ayet ara';
+
+  @override
+  String qtSearchHelper(String example) {
+    return 'örn. $example';
   }
 
   @override

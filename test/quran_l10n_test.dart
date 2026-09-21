@@ -118,9 +118,40 @@ void main() {
 
       final field = tester.widget<TextField>(find.byType(TextField));
       final hint = field.decoration!.hintText!;
+      final helper = field.decoration!.helperText!;
       expect(hint, contains('Search'));
-      expect(hint, contains('Al-Baqarah 286')); // contoh ayat tetap sama
+      expect(helper, contains('Al-Baqarah 286')); // contoh ayat tetap sama
+      expect(helper, startsWith('e.g.'));
       expect(hint.contains('Cari'), isFalse);
+    });
+
+    testWidgets('hint muat tanpa ellipsis di layar sempit (320dp)', (tester) async {
+      // Dulu hint memuat "…— mis. Al-Baqarah 286" dan terpotong 30% di 360dp.
+      // Sekarang hint pendek + contoh di helperText: keduanya harus utuh.
+      tester.view.physicalSize = const Size(320 * 3, 800 * 3);
+      tester.view.devicePixelRatio = 3.0;
+      addTearDown(tester.view.reset);
+
+      for (final loc in const [Locale('id'), Locale('en'), Locale('tr'), Locale('ms')]) {
+        await tester.pumpWidget(
+          appWrap(const Scaffold(body: QuranTab()), locale: loc),
+        );
+        await tester.pumpAndSettle();
+
+        final field = tester.widget<TextField>(find.byType(TextField));
+        final d = field.decoration!;
+        final fieldRect = tester.getRect(find.byType(TextField));
+        // Helper harus dirender utuh di dalam kotak field, bukan dipangkas.
+        final helper = find.text(d.helperText!);
+        expect(helper, findsOneWidget, reason: '${loc.languageCode}: helper tak dirender');
+        final hRect = tester.getRect(helper);
+        expect(hRect.bottom, lessThanOrEqualTo(fieldRect.bottom + 0.5),
+            reason: '${loc.languageCode}: helper keluar dari field');
+        // Lebar render < lebar tersedia → teks tidak di-ellipsis.
+        final avail = fieldRect.width - 32;
+        expect(hRect.width, lessThan(avail),
+            reason: '${loc.languageCode}: helper ter-ellipsis (${hRect.width} vs $avail)');
+      }
     });
 
     testWidgets('en: arti surat di daftar jadi English', (tester) async {

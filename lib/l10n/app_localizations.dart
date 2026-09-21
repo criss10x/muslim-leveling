@@ -4963,8 +4963,14 @@ abstract class AppL10n {
   /// No description provided for @qtSearchHint.
   ///
   /// In id, this message translates to:
-  /// **'Cari surat, kata, atau ayat — mis. {example}'**
-  String qtSearchHint(String example);
+  /// **'Cari surat atau ayat'**
+  String get qtSearchHint;
+
+  /// No description provided for @qtSearchHelper.
+  ///
+  /// In id, this message translates to:
+  /// **'mis. {example}'**
+  String qtSearchHelper(String example);
 
   /// No description provided for @qtVerseHits.
   ///

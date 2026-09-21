@@ -2790,8 +2790,11 @@ class AppL10nEn extends AppL10n {
   String get commonRetry => 'Retry';
 
   @override
-  String qtSearchHint(String example) {
-    return 'Search surah, word, or verse — e.g., $example';
+  String get qtSearchHint => 'Search surah or verse';
+
+  @override
+  String qtSearchHelper(String example) {
+    return 'e.g., $example';
   }
 
   @override
