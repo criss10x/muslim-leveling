@@ -1604,6 +1604,12 @@ class AppL10nTr extends AppL10n {
   String get tabQuran => 'Al-Qur\'an';
 
   @override
+  String get tabBelajar => 'Öğren';
+
+  @override
+  String get tabProfil => 'Profil';
+
+  @override
   String get dlTitle => 'Günün Tefekkürü';
 
   @override
@@ -2814,11 +2820,11 @@ class AppL10nTr extends AppL10n {
   String get commonRetry => 'Tekrar deneyin';
 
   @override
-  String get qtSearchHint => 'Sure veya ayet ara';
+  String get qtSearchHint => 'Sure veya ayet arayın';
 
   @override
   String qtSearchHelper(String example) {
-    return 'örn. $example';
+    return 'Örn. $example';
   }
 
   @override

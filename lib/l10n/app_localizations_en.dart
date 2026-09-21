@@ -1588,6 +1588,12 @@ class AppL10nEn extends AppL10n {
   String get tabQuran => 'Quran';
 
   @override
+  String get tabBelajar => 'Learn';
+
+  @override
+  String get tabProfil => 'Profile';
+
+  @override
   String get dlTitle => 'Today\'s Reflection';
 
   @override

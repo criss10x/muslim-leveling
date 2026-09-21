@@ -10,6 +10,7 @@ import 'quran_tab.dart';
 import 'belajar_tab.dart';
 import 'profil_tab.dart';
 import '../theme/app_icons.dart';
+import '../l10n/app_localizations.dart';
 
 /// Main shell — bottom nav with 4 tabs and the persistent top app bar.
 class DashboardShell extends StatefulWidget {
@@ -29,13 +30,25 @@ class _DashboardShellState extends State<DashboardShell> {
     _tab = widget.initialTab;
   }
 
+  /// Ikon saja — label dibaca dari ARB di `_navItem`, bukan disimpan di sini:
+  /// dulu ke-5 label hardcoded ('HOME'/'JADWAL'/...) sehingga nav tetap
+  /// Indonesia di locale en/tr/ms.
   static const _items = [
-    (AppIcons.homeOutlined, AppIcons.home, 'HOME'),
-    (AppIcons.scheduleOutlined, AppIcons.schedule, 'JADWAL'),
-    (AppIcons.autoStoriesOutlined, AppIcons.autoStories, 'QURAN'),
-    (AppIcons.menuBookOutlined, AppIcons.menuBook, 'BELAJAR'),
-    (AppIcons.personOutline, AppIcons.person, 'PROFIL'),
+    (AppIcons.homeOutlined, AppIcons.home),
+    (AppIcons.scheduleOutlined, AppIcons.schedule),
+    (AppIcons.autoStoriesOutlined, AppIcons.autoStories),
+    (AppIcons.menuBookOutlined, AppIcons.menuBook),
+    (AppIcons.personOutline, AppIcons.person),
   ];
+
+  /// Label nav per indeks dari ARB. Urutan wajib sama dengan [_items].
+  static List<String> _labels(AppL10n l10n) => [
+        l10n.tabHome,
+        l10n.tabJadwal,
+        l10n.tabQuran,
+        l10n.tabBelajar,
+        l10n.tabProfil,
+      ];
 
   // Indeks bernama, bukan angka telanjang: Profil bergeser dari 3 ke 4 saat
   // tab Quran disisipkan, dan lompatan dari Home diam-diam salah sasaran.
@@ -103,7 +116,7 @@ class _DashboardShellState extends State<DashboardShell> {
                 child: Row(
                   children: List.generate(
                     _items.length,
-                    (i) => Expanded(child: _navItem(i)),
+                    (i) => Expanded(child: _navItem(context, i)),
                   ),
                 ),
               ),
@@ -114,8 +127,9 @@ class _DashboardShellState extends State<DashboardShell> {
     );
   }
 
-  Widget _navItem(int i) {
-    final (iconOff, iconOn, label) = _items[i];
+  Widget _navItem(BuildContext context, int i) {
+    final (iconOff, iconOn) = _items[i];
+    final label = _labels(AppL10n.of(context))[i].toUpperCase();
     final selected = _tab == i;
     final light = isLightTheme;
     return Semantics(

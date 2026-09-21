@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:muslim_leveling/screens/dashboard_shell.dart';
 import 'package:muslim_leveling/screens/home_tab.dart';
+import 'package:muslim_leveling/l10n/app_localizations.dart';
 import 'helpers/app_wrap.dart';
 
 void main() {
@@ -40,7 +41,17 @@ void main() {
 
     // Scroll tiap tab sampai mentok bawah, lalu pastikan item terakhir
     // benar-benar berhenti DI ATAS nav bar — bukan di belakangnya.
-    for (final label in ['JADWAL', 'QURAN', 'BELAJAR', 'PROFIL']) {
+    // Label dari ARB, bukan literal: nav sudah tidak lagi hardcoded, dan
+    // daftar ini akan basi setiap kali copy berubah (id tabQuran = "Al-Quran").
+    final l10n = lookupAppL10n(const Locale('id'));
+    final tabs = [
+      l10n.tabHome,
+      l10n.tabJadwal,
+      l10n.tabQuran,
+      l10n.tabBelajar,
+      l10n.tabProfil,
+    ].skip(1).map((s) => s.toUpperCase());
+    for (final label in tabs) {
       await tester.tap(find.text(label));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 350));

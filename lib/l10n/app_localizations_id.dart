@@ -1584,6 +1584,12 @@ class AppL10nId extends AppL10n {
   String get tabQuran => 'Al-Quran';
 
   @override
+  String get tabBelajar => 'Belajar';
+
+  @override
+  String get tabProfil => 'Profil';
+
+  @override
   String get dlTitle => 'Renungan Hari Ini';
 
   @override

@@ -2974,6 +2974,18 @@ abstract class AppL10n {
   /// **'Al-Quran'**
   String get tabQuran;
 
+  /// No description provided for @tabBelajar.
+  ///
+  /// In id, this message translates to:
+  /// **'Belajar'**
+  String get tabBelajar;
+
+  /// No description provided for @tabProfil.
+  ///
+  /// In id, this message translates to:
+  /// **'Profil'**
+  String get tabProfil;
+
   /// No description provided for @dlTitle.
   ///
   /// In id, this message translates to:

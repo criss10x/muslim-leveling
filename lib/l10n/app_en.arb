@@ -478,6 +478,8 @@
   "tabHome": "Home",
   "tabJadwal": "Schedule",
   "tabQuran": "Quran",
+  "tabBelajar": "Learn",
+  "tabProfil": "Profile",
   "dlTitle": "Today's Reflection",
   "dlBack": "Back",
   "dlCiteSurah": "Quran {surah}:{ayah}",
