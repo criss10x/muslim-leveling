@@ -15,6 +15,7 @@ import '../../services/achievement_service.dart';
 import '../../services/learning_content.dart';
 import '../../services/cloud_sync.dart';
 import '../../services/backup_merge.dart';
+import '../../services/quran_bookmark.dart';
 import '../../services/auth_service.dart';
 import '../../widgets/achievement_medal.dart';
 import '../../widgets/tier_avatar.dart';
@@ -1538,6 +1539,10 @@ class _ProfilTabState extends State<ProfilTab> {
     await LearningService.load();
     await AchievementService.load(force: true);
 
+    // Bookmark & pengaturan notifikasi: isi dari cloud hanya kalau lokal
+    // kosong, supaya HP baru/reinstall tidak memulai dari nol.
+    await quranBookmarks.restoreFromRemote(remote);
+    await NotificationService.restoreFromRemote(remote);
     final localGame = GameService.current.toMap();
     final localLearning = LearningService.current.toMap();
     final p = await SharedPreferences.getInstance();

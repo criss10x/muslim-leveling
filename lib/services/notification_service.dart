@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import '../l10n/app_localizations.dart';
+import 'cloud_sync.dart';
 import 'locale_service.dart';
 
 /// Notification & Adzan Reminder service.
@@ -497,6 +498,7 @@ class NotificationService {
     if (!_initialized) await init();
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_prefNotifMode, mode);
+    _mirrorNotifPrefs(prefs);
     // Reschedule with new mode if enabled
     if (await isRemindersEnabled()) {
       final city = prefs.getString(_prefCity) ?? '';
@@ -525,6 +527,7 @@ class NotificationService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_prefNotifMode, mode);
     await prefs.setString(_prefSoundMode, soundMode);
+    _mirrorNotifPrefs(prefs);
     if (await isRemindersEnabled()) {
       final city = prefs.getString(_prefCity) ?? '';
       final timings = await _readTimingsFromPrefs(prefs);
@@ -534,9 +537,43 @@ class NotificationService {
     }
   }
 
+  /// Cermin pengaturan notifikasi ke cloud (fire-and-forget) supaya ganti HP
+  /// tak mengulang setelan dari nol. Lokal tetap sumber kebenaran.
+  static void _mirrorNotifPrefs(SharedPreferences prefs) {
+    CloudSync.saveNotifPrefs({
+      'mode': prefs.getString(_prefNotifMode) ?? 'seimbang',
+      'sound': prefs.getString(_prefSoundMode) ?? 'adzan',
+      'perPrayer': prefs.getString(_prefPerPrayerSounds) ?? '',
+    });
+  }
+
+  /// Pulihkan pengaturan notifikasi dari dokumen cloud yang sudah di tangan
+  /// (jalur login, bukan read sendiri). Hanya mengisi yang masih kosong —
+  /// setelan lokal yang sudah ada menang.
+  static Future<void> restoreFromRemote(Map<String, dynamic>? doc) async {
+    final n = doc?['notif'];
+    if (n is! Map) return;
+    final prefs = await SharedPreferences.getInstance();
+    final mode = n['mode']?.toString();
+    if (prefs.getString(_prefNotifMode) == null &&
+        const ['fokus', 'seimbang', 'intensif'].contains(mode)) {
+      await prefs.setString(_prefNotifMode, mode!);
+    }
+    final sound = n['sound']?.toString();
+    if (prefs.getString(_prefSoundMode) == null &&
+        const ['senyap', 'suara', 'adzan'].contains(sound)) {
+      await prefs.setString(_prefSoundMode, sound!);
+    }
+    final per = n['perPrayer']?.toString();
+    if (prefs.getString(_prefPerPrayerSounds) == null &&
+        per != null &&
+        per.isNotEmpty) {
+      await prefs.setString(_prefPerPrayerSounds, per);
+    }
+  }
+
   /// Mode suara per sholat (override global). Key = nama sholat
   /// ('subuh'..'isya'), value = 'senyap'/'suara'/'adzan'.
-  /// Empty map = semua sholat ikut mode global dari tab Profil.
   static Future<Map<String, String>> getPerPrayerSounds() async {
     final prefs = await SharedPreferences.getInstance();
     final raw = prefs.getString(_prefPerPrayerSounds);
@@ -558,6 +595,7 @@ class NotificationService {
     final map = await getPerPrayerSounds();
     map[prayer] = sound;
     await prefs.setString(_prefPerPrayerSounds, jsonEncode(map));
+    _mirrorNotifPrefs(prefs);
     if (await isRemindersEnabled()) {
       final city = prefs.getString(_prefCity) ?? '';
       final timings = await _readTimingsFromPrefs(prefs);
@@ -574,6 +612,7 @@ class NotificationService {
     final map = await getPerPrayerSounds();
     map.remove(prayer);
     await prefs.setString(_prefPerPrayerSounds, jsonEncode(map));
+    _mirrorNotifPrefs(prefs);
     if (await isRemindersEnabled()) {
       final city = prefs.getString(_prefCity) ?? '';
       final timings = await _readTimingsFromPrefs(prefs);

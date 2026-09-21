@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'cloud_sync.dart';
+
 /// Bookmark ayat Quran — simpan snapshot teks (arab + terjemah) di prefs,
 /// jadi layar daftar render instan tanpa load per-surat.
 class QuranBookmark {
@@ -56,6 +58,27 @@ class QuranBookmarks extends ChangeNotifier {
     }
   }
 
+  /// Pulihkan dari dokumen cloud yang sudah di tangan (jalur login, bukan
+  /// read sendiri). Lokal yang sudah ada menang — cloud cuma isi kekosongan
+  /// setelah reinstall/ganti HP.
+  Future<void> restoreFromRemote(Map<String, dynamic>? doc) async {
+    if (_items.isNotEmpty) return;
+    final list = doc?['bookmarks'];
+    if (list is! List || list.isEmpty) return;
+    try {
+      _items = list
+          .whereType<Map>()
+          .map((m) => QuranBookmark.fromJson(Map<String, dynamic>.from(m)))
+          .toList(growable: false);
+      final p = await SharedPreferences.getInstance();
+      await p.setStringList(
+          _kKey, _items.map((b) => jsonEncode(b.toJson())).toList());
+      notifyListeners();
+    } catch (_) {
+      // ponytail: payload cloud rusak → biarkan lokal apa adanya.
+    }
+  }
+
   Future<void> toggle(int surah, int ayah, String arabic, String translation) async {
     if (isBookmarked(surah, ayah)) {
       _items = _items
@@ -78,6 +101,8 @@ class QuranBookmarks extends ChangeNotifier {
       final p = await SharedPreferences.getInstance();
       await p.setStringList(
           _kKey, _items.map((b) => jsonEncode(b.toJson())).toList());
+      CloudSync.saveBookmarks(
+          _items.map((b) => b.toJson()).toList()); // fire-and-forget
     } catch (_) {
       // ponytail: gagal tulis prefs → state in-memory tetap valid sesi ini.
     }

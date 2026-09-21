@@ -114,6 +114,14 @@ class CloudSync {
   static Future<bool> saveAchievements(Map<String, dynamic> data) =>
       _upsert({'achievements': data});
 
+  /// Bookmark ayat & pengaturan notifikasi — ikut backup supaya ganti HP
+  /// tidak menghapusnya. Lokal tetap sumber kebenaran; cloud cuma cermin.
+  static Future<bool> saveBookmarks(List<Map<String, dynamic>> items) =>
+      _upsert({'bookmarks': items});
+
+  static Future<bool> saveNotifPrefs(Map<String, dynamic> data) =>
+      _upsert({'notif': data});
+
   static bool allSaved(Iterable<bool> results) =>
       results.every((saved) => saved);
 
