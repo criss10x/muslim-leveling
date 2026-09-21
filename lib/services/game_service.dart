@@ -558,19 +558,19 @@ class GameService {
     } else {
       // Device ini berprogres jauh lebih rendah daripada cloud (mis. HP yang
       // sempat menimpa cloud dengan state kosong). Pulihkan dari cloud alih-alih
-      // mendorong state rendah itu naik. XP cloud sudah dibaca `initWithUser`
-      // saat startup → tidak ada read tambahan di jalur normal.
-      final cloudXp = CloudSync.knownCloudGameXp;
+      // mendorong state rendah itu naik. Snapshot cloud sudah dibaca
+      // `initWithUser` saat startup → tidak ada read tambahan di jalur normal.
+      final cloudGame = CloudSync.knownCloudGame;
       final localXp = _cache.xp;
-      if (cloudXp != null && isXpRegression(_cache.toMap(), {'xp': cloudXp})) {
+      if (cloudGame != null && isHistoryRegression(_cache.toMap(), cloudGame)) {
         final remote = await CloudSync.loadGame();
         if (remote != null) {
           final merged = pickRicherGame(_cache.toMap(), remote);
           _cache = GameState.fromMap(merged);
           await p.setString(_key, jsonEncode(merged));
-          Sentry.captureMessage(
+          await Sentry.captureMessage(
             'GameService: progres lokal tertinggal ($localXp XP), '
-            'dipulihkan dari cloud ($cloudXp XP)',
+            'dipulihkan dari cloud (${cloudGame['xp']} XP)',
             level: SentryLevel.warning,
           );
         }

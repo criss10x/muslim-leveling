@@ -36,6 +36,80 @@ void main() {
     });
   });
 
+  group('isHistoryRegression', () {
+    final remote3 = List.filled(3, {'date': '2026-09-21', 'prayer': 'subuh'});
+
+    test('regresi lapangan: 158 XP/3 log → 0 XP/0 log tertangkap', () {
+      // Drop XP cuma 158 → di bawah ambang, dulu LOLOS dan menghapus riwayat.
+      expect(
+        isHistoryRegression({'xp': 0, 'prayerLog': []}, {
+          'xp': 158,
+          'prayerLog': remote3,
+        }),
+        isTrue,
+      );
+    });
+
+    test('unlog sah (hapus 1 log hari ini) tetap diizinkan', () {
+      final remote = List.filled(10, 'x');
+      expect(
+        isHistoryRegression({'xp': 90, 'prayerLog': remote.sublist(1)}, {
+          'xp': 120,
+          'prayerLog': remote,
+        }),
+        isFalse,
+      );
+    });
+
+    test('kerugian >1 log = regresi walau XP naik', () {
+      expect(
+        isHistoryRegression({'xp': 99999, 'prayerLog': []}, {
+          'xp': 100,
+          'prayerLog': List.filled(9, 'x'),
+        }),
+        isTrue,
+        reason: 'XP naik tak menghalalkan hilangnya riwayat',
+      );
+    });
+
+    test('cloud tanpa prayerLog tidak dianggap regresi riwayat', () {
+      expect(
+        isHistoryRegression({'xp': 100, 'prayerLog': []}, {'xp': 50}),
+        isFalse,
+      );
+    });
+
+    test('regresi XP lama (10400 → 53) tetap tertangkap', () {
+      expect(
+        isHistoryRegression({'xp': 53, 'prayerLog': []}, {
+          'xp': 10400,
+          'prayerLog': List.filled(236, 'x'),
+        }),
+        isTrue,
+      );
+    });
+  });
+
+  test('saveGame menolak push yang menghapus riwayat cloud (158 XP → 0)',
+      () async {
+    final written = <Map<String, dynamic>>[];
+    CloudSync.documentReader = (_) async => {
+          'game': {
+            'xp': 158,
+            'prayerLog': List.filled(3, {'date': '2026-09-21', 'prayer': 'subuh'}),
+          },
+        };
+    CloudSync.documentWriter = (_, data) async => written.add(data);
+    await CloudSync.initWithUser('krsnsuryana');
+
+    expect(await CloudSync.saveGame({'xp': 0, 'prayerLog': []}), isTrue);
+
+    expect(written, hasLength(1));
+    expect(written.single['game']['xp'], 158, reason: 'cloud menang');
+    expect(written.single['game']['prayerLog'], hasLength(3),
+        reason: 'riwayat cloud dipertahankan');
+  });
+
   test('saveGame menolak menimpa cloud berprogres lebih tinggi', () async {
     final written = <Map<String, dynamic>>[];
     CloudSync.documentReader = (_) async => {
@@ -73,5 +147,31 @@ void main() {
 
     await CloudSync.saveGame({'xp': 150}); // maju → tak perlu read
     expect(reads, 1);
+  });
+
+  test('push kosong saat login di jendela pra-merge ditahan', () async {
+    // Skenario lapangan 20:08:01: HP belum merge, tapi `_save` menembak state
+    // kosong ke cloud yang masih punya 3 log. Harus ditahan + diheal.
+    final written = <Map<String, dynamic>>[];
+    CloudSync.documentReader = (_) async => {
+          'game': {
+            'xp': 158,
+            'prayerLog': List.filled(3, {'date': '2026-09-21', 'prayer': 'subuh'}),
+            'lifeTotals': {'subuh': 3},
+          },
+        };
+    CloudSync.documentWriter = (_, data) async => written.add(data);
+    await CloudSync.initWithUser('krsnsuryana');
+
+    final saved = await CloudSync.saveGame({
+      'xp': 0,
+      'prayerLog': <dynamic>[],
+      'lifeTotals': <String, dynamic>{},
+    });
+
+    expect(saved, isTrue);
+    expect(written.single['game']['xp'], 158);
+    expect(written.single['game']['lifeTotals'], {'subuh': 3},
+        reason: 'lifeTotals cloud ikut diselamatkan');
   });
 }

@@ -196,3 +196,22 @@ bool isXpRegression(
   final rx = (remote['xp'] as num?)?.toInt() ?? 0;
   return rx - lx > maxLegitDrop;
 }
+
+/// True bila push [local] akan MENGHAPUS riwayat yang masih ada di cloud.
+///
+/// ponytail: ambang XP saja tidak cukup — regresi level 3 → level 1 (158 → 0 XP)
+/// drop-nya cuma 158, di bawah [maxLegitXpDrop], jadi lolos dan SELURUH
+/// riwayat terhapus (terbukti di lapangan: cloud 158 XP/3 log → 0 XP/0 log).
+/// Riwayat `prayerLog` bersifat monoton (tak ada pruning), dan satu-satunya
+/// jalur sah yang menghapus entri (`unlogPrayer`) menghapus TEPAT SATU hari-ini
+/// — jadi cloud yang punya ≥2 entri lebih banyak pasti bukan hasil unlog.
+bool isHistoryRegression(
+  Map<String, dynamic> local,
+  Map<String, dynamic> remote, {
+  int maxLegitDrop = maxLegitXpDrop,
+}) {
+  if (isXpRegression(local, remote, maxLegitDrop: maxLegitDrop)) return true;
+  final localLogs = (local['prayerLog'] as List?)?.length ?? 0;
+  final remoteLogs = (remote['prayerLog'] as List?)?.length ?? 0;
+  return remoteLogs > localLogs + 1;
+}

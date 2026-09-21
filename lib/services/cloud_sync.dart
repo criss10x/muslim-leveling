@@ -17,9 +17,11 @@ class CloudSync {
   static Future<void> Function(String id, Map<String, dynamic> data)
       _writeDocument = _writeFirestoreDocument;
 
-  /// XP terakhir yang diketahui ada di cloud (dari setiap read sukses).
-  /// Dipakai menolak push yang akan meregresi progres cloud.
-  static int? _cloudGameXp;
+  /// Snapshot map `game` terakhir yang diketahui ada di cloud — garis dasar
+  /// untuk menilai apakah sebuah push akan menghapus progres.
+  /// Null = cloud belum pernah terbaca ATAU dokumennya memang tanpa `game`
+  /// (user baru) → tulis bebas.
+  static Map<String, dynamic>? _cloudGame;
 
   /// True only after Firebase Auth and a strict Firestore read both succeed.
   static bool get canSync =>
@@ -41,7 +43,7 @@ class CloudSync {
   static void recordAuthenticatedUser(String userId) {
     if (_pendingUserId != userId) {
       _validatedUserId = null;
-      _cloudGameXp = null; // akun berbeda → garis dasar XP berbeda
+      _cloudGame = null; // akun berbeda → garis dasar progres berbeda
       _validationVersion++;
     }
     _pendingUserId = userId;
@@ -70,7 +72,7 @@ class CloudSync {
   static void clearUser() {
     _pendingUserId = null;
     _validatedUserId = null;
-    _cloudGameXp = null; // akun lain = garis dasar XP lain
+    _cloudGame = null; // akun lain = garis dasar progres lain
     _validationVersion++;
   }
 
@@ -81,8 +83,8 @@ class CloudSync {
   /// last-write-wins) sehingga device berprogres rendah menimpa cloud level 31
   /// → level 2. Guard di sini (choke point semua pemanggil) bukan di tiap caller.
   static Future<bool> saveGame(Map<String, dynamic> data) async {
-    final known = _cloudGameXp;
-    if (known != null && isXpRegression(data, {'xp': known})) {
+    final known = _cloudGame;
+    if (known != null && isHistoryRegression(data, known)) {
       // Auto-heal: ambil state cloud, gabung (max-XP menang + data lokal
       // yang lebih kaya dipertahankan), lalu push hasil gabungan.
       final remote = (await load())?['game'];
@@ -90,16 +92,19 @@ class CloudSync {
       final merged = pickRicherGame(data, Map<String, dynamic>.from(remote));
       unawaited(
         Sentry.captureMessage(
-          'CloudSync: blokir regresi XP lokal=${data['xp']} cloud=$known',
+          'CloudSync: blokir regresi lokal(xp=${data['xp']}, '
+          'log=${(data['prayerLog'] as List?)?.length ?? 0}) '
+          'cloud(xp=${known['xp']}, '
+          'log=${(known['prayerLog'] as List?)?.length ?? 0})',
           level: SentryLevel.warning,
         ),
       );
       final saved = await _upsert({'game': merged});
-      if (saved) _cloudGameXp = (merged['xp'] as num?)?.toInt() ?? known;
+      if (saved) _rememberCloudGame({'game': merged});
       return saved;
     }
     final saved = await _upsert({'game': data});
-    if (saved) _cloudGameXp = (data['xp'] as num?)?.toInt();
+    if (saved) _rememberCloudGame({'game': data});
     return saved;
   }
 
@@ -121,7 +126,7 @@ class CloudSync {
     if (id == null || id.isEmpty) return null;
     try {
       final row = await _readDocument(id);
-      _rememberCloudXp(row);
+      _rememberCloudGame(row);
       return row;
     } catch (_) {
       if (failOnError) rethrow;
@@ -129,13 +134,13 @@ class CloudSync {
     }
   }
 
-  /// Catat XP game yang benar-benar ada di cloud. Null (doc kosong) sengaja
-  /// TIDAK menghapus nilai lama — garis dasar tetap dari read terakhir yang sah.
-  static void _rememberCloudXp(Map<String, dynamic>? row) {
+  /// Catat map `game` yang benar-benar ada di cloud. Null (doc kosong / tanpa
+  /// `game`) sengaja TIDAK menghapus nilai lama — garis dasar tetap dari read
+  /// terakhir yang sah.
+  static void _rememberCloudGame(Map<String, dynamic>? row) {
     final game = row?['game'];
     if (game is! Map) return;
-    final xp = (game['xp'] as num?)?.toInt();
-    if (xp != null) _cloudGameXp = xp;
+    _cloudGame = Map<String, dynamic>.from(game);
   }
 
   static Future<Map<String, dynamic>?> _readFirestoreDocument(String id) async {
@@ -162,10 +167,10 @@ class CloudSync {
   @visibleForTesting
   static void resetDocumentWriter() => _writeDocument = _writeFirestoreDocument;
 
-  /// XP game terakhir yang diketahui ada di cloud (null bila belum pernah
-  /// terbaca). Dipakai `GameService.load()` untuk heal di tempat tanpa read
-  /// tambahan di jalur normal.
-  static int? get knownCloudGameXp => _cloudGameXp;
+  /// Snapshot map `game` terakhir yang diketahui ada di cloud (null bila belum
+  /// pernah terbaca). Dipakai `GameService.load()` untuk heal di tempat tanpa
+  /// read tambahan di jalur normal.
+  static Map<String, dynamic>? get knownCloudGame => _cloudGame;
 
   static Future<Map<String, dynamic>?> loadGame() async {
     final row = await load();
