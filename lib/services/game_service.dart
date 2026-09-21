@@ -431,9 +431,13 @@ class GameState {
           (k, v) => MapEntry(k.toString(), v.toString()),
         ) ??
         <String, String>{};
+    final xp = (m['xp'] as num?)?.toInt() ?? 0;
     return GameState(
-      xp: m['xp'] ?? 0,
-      level: m['level'] ?? 1,
+      xp: xp,
+      // ponytail: level SELALU turunan xp, jangan dibaca dari map. Restore
+      // cloud yang menulis xp tanpa menghitung ulang level bikin level basi
+      // (xp 10555 = lv 32 tapi tersimpan lv 31 → tab Profil beda dari Home).
+      level: GameService.getLevelInfo(xp).level,
       timings: m['timings'] != null
           ? Timings.fromMap(m['timings'] as Map<String, dynamic>)
           : Timings(),

@@ -25,4 +25,12 @@ void main() {
     expect(s.equipped, isEmpty);
     expect(s.xp, 100);
   });
+
+  test('level selalu turunan xp, abaikan level basi di map', () {
+    // Restore cloud pernah menulis xp 10555 dengan level 31 (basi) → tab
+    // Profil (state.level) beda dari Home (turunkan dari xp).
+    final s = GameState.fromMap({'xp': 10555, 'level': 31});
+    expect(s.level, GameService.getLevelInfo(10555).level);
+    expect(s.level, 32);
+  });
 }
