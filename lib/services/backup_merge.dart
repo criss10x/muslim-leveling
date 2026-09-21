@@ -153,7 +153,7 @@ Map<String, dynamic> mergeLearning(
   return {'progress': byId.values.toList()};
 }
 
-/// Achievements unlocked map {id: yyyy-MM-dd}: union keys, keep earliest date.
+/// Medali: union keys, tanggal paling awal menang.
 Map<String, String> mergeAchievements(
   Map<String, dynamic> local,
   Map<String, dynamic> remote,
@@ -173,4 +173,26 @@ Map<String, String> mergeAchievements(
   ingest(local);
   ingest(remote);
   return out;
+}
+
+/// Penurunan XP terbesar yang masih SAH dalam satu aksi lokal.
+/// Satu-satunya jalur sah yang menurunkan XP adalah `GameService.unlogPrayer`:
+/// 5 sholat (30+20+20+25+25=120) + hero bonus 50 + bonus tepat waktu/berjamaah
+/// 5x30=150 → ~320 sekali sesi. Di atas ambang ini dianggap kehilangan progres.
+const maxLegitXpDrop = 500;
+
+/// True bila push [local] akan MENIMPA cloud berprogres lebih tinggi —
+/// regresi yang harus ditolak (bukan penurunan sah seperti unlog).
+///
+/// ponytail: ambang, bukan analisis riwayat log penuh — cukup memisahkan
+/// regresi (10.400→53) dari unlog sah (≤~320). Naikkan kalau ada jalur sah
+/// lain yang menurunkan XP lebih besar.
+bool isXpRegression(
+  Map<String, dynamic> local,
+  Map<String, dynamic> remote, {
+  int maxLegitDrop = maxLegitXpDrop,
+}) {
+  final lx = (local['xp'] as num?)?.toInt() ?? 0;
+  final rx = (remote['xp'] as num?)?.toInt() ?? 0;
+  return rx - lx > maxLegitDrop;
 }

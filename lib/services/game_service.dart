@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'cloud_sync.dart';
+import 'backup_merge.dart';
 import 'cosmetic_catalog.dart';
 import 'cosmetic_service.dart';
 import 'quran_data.dart';
@@ -553,6 +554,26 @@ class GameService {
       if (remote != null) {
         _cache = GameState.fromMap(remote);
         await p.setString(_key, jsonEncode(remote));
+      }
+    } else {
+      // Device ini berprogres jauh lebih rendah daripada cloud (mis. HP yang
+      // sempat menimpa cloud dengan state kosong). Pulihkan dari cloud alih-alih
+      // mendorong state rendah itu naik. XP cloud sudah dibaca `initWithUser`
+      // saat startup → tidak ada read tambahan di jalur normal.
+      final cloudXp = CloudSync.knownCloudGameXp;
+      final localXp = _cache.xp;
+      if (cloudXp != null && isXpRegression(_cache.toMap(), {'xp': cloudXp})) {
+        final remote = await CloudSync.loadGame();
+        if (remote != null) {
+          final merged = pickRicherGame(_cache.toMap(), remote);
+          _cache = GameState.fromMap(merged);
+          await p.setString(_key, jsonEncode(merged));
+          Sentry.captureMessage(
+            'GameService: progres lokal tertinggal ($localXp XP), '
+            'dipulihkan dari cloud ($cloudXp XP)',
+            level: SentryLevel.warning,
+          );
+        }
       }
     }
     // ponytail: migrate legacy `rewards` → ownedCosmetics on every successful
