@@ -70,7 +70,7 @@ class _BelajarResultScreenState extends State<BelajarResultScreen>
                 const SizedBox(height: AppSpacing.md),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Kembali'),
+                  child: Text(AppL10n.of(context).dlBack),
                 ),
               ],
             ),
@@ -302,7 +302,7 @@ class _BelajarResultScreenState extends State<BelajarResultScreen>
             ),
           ),
           Text(
-            'HASIL QUIZ',
+            AppL10n.of(context).blResultCaps,
             style: AppText.labelCaps().copyWith(color: accent, letterSpacing: 3),
           ),
           const SizedBox(height: 12),
@@ -342,7 +342,7 @@ class _BelajarResultScreenState extends State<BelajarResultScreen>
               children: [
                 Icon(AppIcons.verified, color: AppColors.primary, size: 18),
                 const SizedBox(width: 8),
-                Text('${widget.correct}/${widget.total} Benar',
+                Text(AppL10n.of(context).blCorrectCount(widget.correct, widget.total),
                     style: AppText.titleLg().copyWith(color: AppColors.primary, fontSize: 18)),
               ],
             ),
@@ -398,7 +398,8 @@ class _BelajarResultScreenState extends State<BelajarResultScreen>
           Text('+${module.xpReward} XP',
               style: AppText.headlineMd().copyWith(color: AppColors.primary, fontSize: 22)),
           const SizedBox(width: 8),
-          Text('Diperoleh', style: AppText.labelCaps().copyWith(color: AppColors.onSurfaceVariant)),
+          Text(AppL10n.of(context).blEarned,
+              style: AppText.labelCaps().copyWith(color: AppColors.onSurfaceVariant)),
         ],
       ),
     );
@@ -441,7 +442,7 @@ class _BelajarResultScreenState extends State<BelajarResultScreen>
           SizedBox(
             width: double.infinity,
             child: GhostButton(
-              label: 'COBA LAGI', icon: AppIcons.replay,
+              label: AppL10n.of(context).blTryAgain, icon: AppIcons.replay,
               onPressed: () { Navigator.of(context).pop(); Navigator.of(context).pop(); },
               color: AppColors.tertiary,
             ),

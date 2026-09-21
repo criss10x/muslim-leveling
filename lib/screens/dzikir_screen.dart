@@ -216,10 +216,10 @@ class _DzikirScreenState extends State<DzikirScreen>
           IconButton(
             onPressed: () => Navigator.pop(context),
             icon: const Icon(AppIcons.arrowBack),
-            tooltip: 'Kembali',
+            tooltip: AppL10n.of(context).dlBack,
           ),
           const SizedBox(width: AppSpacing.xs),
-          Text('Dzikir', style: AppText.headlineMd()),
+          Text(AppL10n.of(context).homeQuickDzikir, style: AppText.headlineMd()),
           const Spacer(),
           // Total hari ini — pill compact.
           Container(
@@ -308,7 +308,8 @@ class _DzikirScreenState extends State<DzikirScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('DZIKIR', style: AppText.labelCapsSm().copyWith(color: AppColors.onSurfaceVariant)),
+          Text(AppL10n.of(context).homeQuickDzikir.toUpperCase(),
+              style: AppText.labelCapsSm().copyWith(color: AppColors.onSurfaceVariant)),
           const SizedBox(height: AppSpacing.sm),
           SizedBox(
             height: 40,
@@ -329,7 +330,7 @@ class _DzikirScreenState extends State<DzikirScreen>
           const SizedBox(height: AppSpacing.sm),
           Row(
             children: [
-              Text('TARGET',
+              Text(AppL10n.of(context).dzCapsTarget,
                   style: AppText.labelCapsSm().copyWith(color: AppColors.onSurfaceVariant)),
               const SizedBox(width: AppSpacing.sm),
               Expanded(

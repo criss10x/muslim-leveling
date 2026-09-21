@@ -4,6 +4,7 @@ import '../../widgets/common.dart';
 import '../../services/learning_content.dart';
 import 'belajar_quiz.dart';
 import '../theme/app_icons.dart';
+import '../l10n/app_localizations.dart';
 
 /// Article reader — renders ArticleBlock content from V3 LearningContent.
 class BelajarArticleScreen extends StatefulWidget {
@@ -27,6 +28,7 @@ class _BelajarArticleScreenState extends State<BelajarArticleScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
     final module = _module;
     if (module == null) {
       return Scaffold(
@@ -36,11 +38,11 @@ class _BelajarArticleScreenState extends State<BelajarArticleScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Modul tidak ditemukan', style: AppText.titleLg()),
+                Text(l10n.blModulNotFound, style: AppText.titleLg()),
                 const SizedBox(height: AppSpacing.md),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Kembali'),
+                  child: Text(l10n.dlBack),
                 ),
               ],
             ),
@@ -92,6 +94,7 @@ class _BelajarArticleScreenState extends State<BelajarArticleScreen> {
         children: [
           IconButton(
             icon: Icon(AppIcons.arrowBack, color: AppColors.onBackground),
+            tooltip: AppL10n.of(context).dlBack,
             onPressed: () => Navigator.pop(context),
           ),
           Expanded(
@@ -102,7 +105,9 @@ class _BelajarArticleScreenState extends State<BelajarArticleScreen> {
                     style: AppText.titleLg().copyWith(
                         fontSize: 16, color: AppColors.primary),
                     maxLines: 1, overflow: TextOverflow.ellipsis),
-                Text('${module.estimatedMinutes} min baca • +${module.xpReward} XP',
+                Text(
+                    '${AppL10n.of(context).blMinutesRead(module.estimatedMinutes)}'
+                    ' • +${module.xpReward} XP',
                     style: AppText.labelCaps().copyWith(
                         color: AppColors.onSurfaceVariant, fontSize: 10)),
               ],
@@ -212,7 +217,7 @@ class _BelajarArticleScreenState extends State<BelajarArticleScreen> {
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.md),
         child: HeroButton(
-          label: 'LANJUT KE QUIZ',
+          label: AppL10n.of(context).blContinueQuiz,
           trailingIcon: AppIcons.quiz,
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(

@@ -37,6 +37,7 @@ class _BelajarTabState extends State<BelajarTab> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
     final completed = LearningService.completedCount;
     final total = LearningService.totalModules;
     return Scaffold(
@@ -52,14 +53,14 @@ class _BelajarTabState extends State<BelajarTab> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('LEARNING HUB',
+                  Text(l10n.btHubCaps,
                       style: AppText.labelCaps().copyWith(color: AppColors.primary)),
                   const SizedBox(height: 4),
-                  Text('Belajar Bareng',
+                  Text(l10n.btHeroTitle,
                       style: AppText.headlineLg()
                           .copyWith(fontSize: 28, color: AppColors.onSurface)),
                   const SizedBox(height: 4),
-                  Text(AppL10n.of(context).btSubtitle,
+                  Text(l10n.btSubtitle,
                       style: AppText.bodyMd()
                           .copyWith(color: AppColors.onSurfaceVariant)),
                 ],
@@ -67,7 +68,7 @@ class _BelajarTabState extends State<BelajarTab> {
             ),
             // ponytail: Doa & Hadis pindah ke tombol AKSES CEPAT di tab Home,
             // jadi hub tinggal satu konten — selector dihapus, bukan dibiarkan.
-            Expanded(child: _modulContent(completed, total)),
+            Expanded(child: _modulContent(context, completed, total)),
           ],
         ),
       ),
@@ -75,7 +76,7 @@ class _BelajarTabState extends State<BelajarTab> {
   }
 
   /// Konten Modul — ListView scrollable sendiri + RefreshIndicator.
-  Widget _modulContent(int completed, int total) {
+  Widget _modulContent(BuildContext context, int completed, int total) {
     return RefreshIndicator(
       color: AppColors.primary,
       onRefresh: _load,
@@ -84,9 +85,9 @@ class _BelajarTabState extends State<BelajarTab> {
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md)
             .copyWith(bottom: 100),
         children: [
-          _progressCard(completed, total),
+          _progressCard(context, completed, total),
           const SizedBox(height: AppSpacing.lg),
-          _categoryTabs(),
+          _categoryTabs(context),
           const SizedBox(height: AppSpacing.md),
           _moduleList(context),
         ],
@@ -96,7 +97,8 @@ class _BelajarTabState extends State<BelajarTab> {
 
   /// Hero tab Belajar — aksen primary. Light: solid white card (no glow).
   /// Dark: solid raised + primary tint + glow (selaras Home di pure black).
-  Widget _progressCard(int completed, int total) {
+  Widget _progressCard(BuildContext context, int completed, int total) {
+    final l10n = AppL10n.of(context);
     final progress = total > 0 ? completed / total : 0.0;
     final light = isLightTheme;
     return Container(
@@ -141,12 +143,12 @@ class _BelajarTabState extends State<BelajarTab> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('SANTRI DIGITAL',
+                    Text(l10n.btRibbon,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: AppText.labelCaps().copyWith(color: AppColors.primary)),
                     const SizedBox(height: 2),
-                    Text('$completed/$total modul selesai',
+                    Text(l10n.btModulesDone(completed, total),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant)),
@@ -165,7 +167,8 @@ class _BelajarTabState extends State<BelajarTab> {
     );
   }
 
-  Widget _categoryTabs() {
+  Widget _categoryTabs(BuildContext context) {
+    final l10n = AppL10n.of(context);
     return SizedBox(
       height: 44,
       child: ListView.separated(
@@ -189,7 +192,7 @@ class _BelajarTabState extends State<BelajarTab> {
                 children: [
                   Text(cat.icon, style: const TextStyle(fontSize: 16)),
                   const SizedBox(width: 6),
-                  Text(cat.label,
+                  Text(cat.labelFor(l10n),
                       style: AppText.labelCaps().copyWith(
                           color: selected ? AppColors.primary : AppColors.onSurfaceVariant,
                           fontSize: 11)),
@@ -203,6 +206,7 @@ class _BelajarTabState extends State<BelajarTab> {
   }
 
   Widget _moduleList(BuildContext context) {
+    final l10n = AppL10n.of(context);
     final cat = LearningContent.categories[_selectedCat];
     final catDone =
         cat.modules.where((m) => LearningService.isCompleted(m.id)).length;
@@ -215,7 +219,7 @@ class _BelajarTabState extends State<BelajarTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        HudHeader(cat.label.toUpperCase(), meta: '$catDone/${cat.modules.length}'),
+        HudHeader(cat.labelFor(l10n).toUpperCase(), meta: '$catDone/${cat.modules.length}'),
         ...cat.modules.map((mod) {
           final unlocked = LearningService.isUnlocked(mod.id);
           final completed = LearningService.isCompleted(mod.id);
@@ -279,7 +283,7 @@ class _BelajarTabState extends State<BelajarTab> {
                       children: [
                         Icon(AppIcons.schedule, size: 12, color: AppColors.onSurfaceVariant),
                         const SizedBox(width: 4),
-                        Text('${mod.estimatedMinutes} min',
+                        Text(AppL10n.of(context).btMinutes(mod.estimatedMinutes),
                             style: AppText.labelCaps().copyWith(
                                 color: AppColors.onSurfaceVariant, fontSize: 10)),
                         const SizedBox(width: AppSpacing.sm),

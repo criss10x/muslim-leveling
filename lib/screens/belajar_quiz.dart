@@ -83,7 +83,7 @@ class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
                 const SizedBox(height: AppSpacing.md),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Kembali'),
+                  child: Text(AppL10n.of(context).dlBack),
                 ),
               ],
             ),
@@ -103,7 +103,7 @@ class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
                 const SizedBox(height: AppSpacing.md),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Kembali'),
+                  child: Text(AppL10n.of(context).dlBack),
                 ),
               ],
             ),
@@ -279,7 +279,9 @@ class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
               Icon(wasCorrect ? AppIcons.checkCircle : AppIcons.lightbulb,
                   color: wasCorrect ? AppColors.primary : AppColors.tertiary, size: 18),
               const SizedBox(width: AppSpacing.xs),
-              Text(wasCorrect ? 'BENAR!' : AppL10n.of(context).bqNotYetRight,
+              Text(wasCorrect
+                      ? AppL10n.of(context).bqCorrect
+                      : AppL10n.of(context).bqNotYetRight,
                   style: AppText.titleLg().copyWith(
                       fontSize: 14, color: wasCorrect ? AppColors.primary : AppColors.tertiary)),
             ],
@@ -298,8 +300,8 @@ class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
         padding: const EdgeInsets.all(AppSpacing.md),
         child: HeroButton(
           label: _current < _questions.length - 1
-              ? 'PERTANYAAN BERIKUTNYA'
-              : 'LIHAT HASIL',
+              ? AppL10n.of(context).bqNextQuestion
+              : AppL10n.of(context).bqSeeResult,
           trailingIcon: AppIcons.arrowForward,
           onPressed: _next,
         ),

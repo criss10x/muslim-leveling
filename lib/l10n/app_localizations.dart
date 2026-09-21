@@ -5835,6 +5835,138 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'QS {surah} : {ayah}'**
   String qpNowPlaying(String surah, int ayah);
+
+  /// No description provided for @btHubCaps.
+  ///
+  /// In id, this message translates to:
+  /// **'LEARNING HUB'**
+  String get btHubCaps;
+
+  /// No description provided for @btHeroTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Belajar Bareng'**
+  String get btHeroTitle;
+
+  /// No description provided for @btRibbon.
+  ///
+  /// In id, this message translates to:
+  /// **'SANTRI DIGITAL'**
+  String get btRibbon;
+
+  /// No description provided for @btModulesDone.
+  ///
+  /// In id, this message translates to:
+  /// **'{done}/{total} modul selesai'**
+  String btModulesDone(int done, int total);
+
+  /// No description provided for @btMinutes.
+  ///
+  /// In id, this message translates to:
+  /// **'{m} min'**
+  String btMinutes(int m);
+
+  /// No description provided for @blMinutesRead.
+  ///
+  /// In id, this message translates to:
+  /// **'{m} min baca'**
+  String blMinutesRead(int m);
+
+  /// No description provided for @blContinueQuiz.
+  ///
+  /// In id, this message translates to:
+  /// **'LANJUT KE QUIZ'**
+  String get blContinueQuiz;
+
+  /// No description provided for @bqNextQuestion.
+  ///
+  /// In id, this message translates to:
+  /// **'PERTANYAAN BERIKUTNYA'**
+  String get bqNextQuestion;
+
+  /// No description provided for @bqSeeResult.
+  ///
+  /// In id, this message translates to:
+  /// **'LIHAT HASIL'**
+  String get bqSeeResult;
+
+  /// No description provided for @bqCorrect.
+  ///
+  /// In id, this message translates to:
+  /// **'BENAR!'**
+  String get bqCorrect;
+
+  /// No description provided for @blResultCaps.
+  ///
+  /// In id, this message translates to:
+  /// **'HASIL QUIZ'**
+  String get blResultCaps;
+
+  /// No description provided for @blCorrectCount.
+  ///
+  /// In id, this message translates to:
+  /// **'{correct}/{total} Benar'**
+  String blCorrectCount(int correct, int total);
+
+  /// No description provided for @blEarned.
+  ///
+  /// In id, this message translates to:
+  /// **'Diperoleh'**
+  String get blEarned;
+
+  /// No description provided for @blTryAgain.
+  ///
+  /// In id, this message translates to:
+  /// **'COBA LAGI'**
+  String get blTryAgain;
+
+  /// No description provided for @dzCapsTarget.
+  ///
+  /// In id, this message translates to:
+  /// **'TARGET'**
+  String get dzCapsTarget;
+
+  /// No description provided for @tpDark.
+  ///
+  /// In id, this message translates to:
+  /// **'Gelap'**
+  String get tpDark;
+
+  /// No description provided for @tpLight.
+  ///
+  /// In id, this message translates to:
+  /// **'Terang'**
+  String get tpLight;
+
+  /// No description provided for @btCatAkidah.
+  ///
+  /// In id, this message translates to:
+  /// **'Akidah'**
+  String get btCatAkidah;
+
+  /// No description provided for @btCatAlquran.
+  ///
+  /// In id, this message translates to:
+  /// **'Al-Quran'**
+  String get btCatAlquran;
+
+  /// No description provided for @btCatKeyakinan.
+  ///
+  /// In id, this message translates to:
+  /// **'Keyakinan'**
+  String get btCatKeyakinan;
+
+  /// No description provided for @btCatRukunIslam.
+  ///
+  /// In id, this message translates to:
+  /// **'Rukun Islam'**
+  String get btCatRukunIslam;
+
+  /// No description provided for @btCatPraktikIbadah.
+  ///
+  /// In id, this message translates to:
+  /// **'Praktik Ibadah'**
+  String get btCatPraktikIbadah;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'cloud_sync.dart';
+import '../l10n/app_localizations.dart';
 
 // Auto-generated from V3 BelajarScreen.kt — do not edit manually.
 // 19 modules, +3 modul akidah tambahan (keajaiban angka & bukti lain).
@@ -25,14 +26,24 @@ class LearningModule {
 }
 
 class LearningCategory {
-  final String id, label, icon;
+  final String id, icon;
   final List<LearningModule> modules;
   const LearningCategory({
     required this.id,
-    required this.label,
     required this.icon,
     required this.modules,
   });
+
+  /// Label kategori ikut bahasa aktif. Teks hidup di ARB (`btCat*`); kelas ini
+  /// tidak menyimpan salinannya supaya tidak bisa basi — pola sama dengan
+  /// [ImportantHijriDate.labelFor].
+  String labelFor(AppL10n l10n) => switch (id) {
+    'akidah' => l10n.btCatAkidah,
+    'alquran' => l10n.btCatAlquran,
+    'keyakinan' => l10n.btCatKeyakinan,
+    'rukun_islam' => l10n.btCatRukunIslam,
+    _ => l10n.btCatPraktikIbadah,
+  };
 }
 
 // ArticleBlock sealed class hierarchy
@@ -141,7 +152,6 @@ class LearningContent {
   static const categories = <LearningCategory>[
     LearningCategory(
       id: 'akidah',
-      label: 'Akidah',
       icon: '🕋',
       modules: [
         LearningModule(
@@ -180,7 +190,6 @@ class LearningContent {
     ),
     LearningCategory(
       id: 'alquran',
-      label: 'Al-Quran',
       icon: '📖',
       modules: [
         LearningModule(
@@ -244,7 +253,6 @@ class LearningContent {
     ),
     LearningCategory(
       id: 'keyakinan',
-      label: 'Keyakinan',
       icon: '💭',
       modules: [
         LearningModule(
@@ -331,7 +339,6 @@ class LearningContent {
     ),
     LearningCategory(
       id: 'rukun_islam',
-      label: 'Rukun Islam',
       icon: '🕌',
       modules: [
         LearningModule(
@@ -378,7 +385,6 @@ class LearningContent {
     ),
     LearningCategory(
       id: 'praktik_ibadah',
-      label: 'Praktik Ibadah',
       icon: '🤲',
       modules: [
         LearningModule(

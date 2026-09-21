@@ -32,18 +32,18 @@ class ThemePresetPicker extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'Tema aplikasi',
+                  AppL10n.of(context).profilTheme,
                   style: AppText.titleLg().copyWith(color: AppColors.onSurface),
                 ),
                 const SizedBox(height: AppSpacing.md),
                 _PresetGroup(
-                  label: 'Gelap',
+                  label: AppL10n.of(context).tpDark,
                   presets: AppThemePreset.values
                       .where((preset) => !preset.isLight),
                 ),
                 const SizedBox(height: AppSpacing.md),
                 _PresetGroup(
-                  label: 'Terang',
+                  label: AppL10n.of(context).tpLight,
                   presets: AppThemePreset.values
                       .where((preset) => preset.isLight),
                 ),

@@ -3239,4 +3239,78 @@ class AppL10nId extends AppL10n {
   String qpNowPlaying(String surah, int ayah) {
     return 'QS $surah : $ayah';
   }
+
+  @override
+  String get btHubCaps => 'LEARNING HUB';
+
+  @override
+  String get btHeroTitle => 'Belajar Bareng';
+
+  @override
+  String get btRibbon => 'SANTRI DIGITAL';
+
+  @override
+  String btModulesDone(int done, int total) {
+    return '$done/$total modul selesai';
+  }
+
+  @override
+  String btMinutes(int m) {
+    return '$m min';
+  }
+
+  @override
+  String blMinutesRead(int m) {
+    return '$m min baca';
+  }
+
+  @override
+  String get blContinueQuiz => 'LANJUT KE QUIZ';
+
+  @override
+  String get bqNextQuestion => 'PERTANYAAN BERIKUTNYA';
+
+  @override
+  String get bqSeeResult => 'LIHAT HASIL';
+
+  @override
+  String get bqCorrect => 'BENAR!';
+
+  @override
+  String get blResultCaps => 'HASIL QUIZ';
+
+  @override
+  String blCorrectCount(int correct, int total) {
+    return '$correct/$total Benar';
+  }
+
+  @override
+  String get blEarned => 'Diperoleh';
+
+  @override
+  String get blTryAgain => 'COBA LAGI';
+
+  @override
+  String get dzCapsTarget => 'TARGET';
+
+  @override
+  String get tpDark => 'Gelap';
+
+  @override
+  String get tpLight => 'Terang';
+
+  @override
+  String get btCatAkidah => 'Akidah';
+
+  @override
+  String get btCatAlquran => 'Al-Quran';
+
+  @override
+  String get btCatKeyakinan => 'Keyakinan';
+
+  @override
+  String get btCatRukunIslam => 'Rukun Islam';
+
+  @override
+  String get btCatPraktikIbadah => 'Praktik Ibadah';
 }

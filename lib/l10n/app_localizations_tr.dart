@@ -3267,4 +3267,78 @@ class AppL10nTr extends AppL10n {
   String qpNowPlaying(String surah, int ayah) {
     return 'Sure $surah : $ayah';
   }
+
+  @override
+  String get btHubCaps => 'ÖĞRENME MERKEZİ';
+
+  @override
+  String get btHeroTitle => 'Birlikte Öğrenin';
+
+  @override
+  String get btRibbon => 'DİJİTAL ÖĞRENCİ';
+
+  @override
+  String btModulesDone(int done, int total) {
+    return '$done/$total modül tamamlandı';
+  }
+
+  @override
+  String btMinutes(int m) {
+    return '$m dk';
+  }
+
+  @override
+  String blMinutesRead(int m) {
+    return '$m dk okuma';
+  }
+
+  @override
+  String get blContinueQuiz => 'TESTE DEVAM EDİN';
+
+  @override
+  String get bqNextQuestion => 'SONRAKİ SORU';
+
+  @override
+  String get bqSeeResult => 'SONUCU GÖRÜNTÜLE';
+
+  @override
+  String get bqCorrect => 'DOĞRU!';
+
+  @override
+  String get blResultCaps => 'TEST SONUCU';
+
+  @override
+  String blCorrectCount(int correct, int total) {
+    return '$correct/$total Doğru';
+  }
+
+  @override
+  String get blEarned => 'Kazanılan';
+
+  @override
+  String get blTryAgain => 'TEKRAR DENEYİN';
+
+  @override
+  String get dzCapsTarget => 'HEDEF';
+
+  @override
+  String get tpDark => 'Koyu';
+
+  @override
+  String get tpLight => 'Açık';
+
+  @override
+  String get btCatAkidah => 'Akide';
+
+  @override
+  String get btCatAlquran => 'Al-Qur\'an';
+
+  @override
+  String get btCatKeyakinan => 'İnanç';
+
+  @override
+  String get btCatRukunIslam => 'İslam\'ın Şartları';
+
+  @override
+  String get btCatPraktikIbadah => 'İbadet Uygulamaları';
 }
