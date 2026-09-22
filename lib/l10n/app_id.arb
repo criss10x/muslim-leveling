@@ -1675,5 +1675,11 @@
   "lockerSlotAura": "Aura",
   "lockerSlotTitle": "Title",
   "contentNoteIndonesian": "Teks dalam Bahasa Indonesia",
+  "dhCapsDailyHighlight": "DAILY HIGHLIGHT",
+  "naikChipQuizScore": "Skor Quiz",
+  "clCapsEquipped": "DIPAKAI",
+  "clCapsProSignature": "PRO SIGNATURE",
+  "clSemEquipped": "dipakai",
+  "clSemAvailable": "tersedia",
   "contentNoteInEnglish": "Teks dalam Bahasa Inggris"
 }

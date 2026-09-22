@@ -204,9 +204,9 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
             final owned = allowed || CosmeticCatalog.isDefault(c.id);
             final selected = c.id == equippedId;
             final stateLabel = selected
-                ? 'DIPAKAI'
+                ? l10n.clCapsEquipped
                 : locked
-                ? 'PRO SIGNATURE'
+                ? l10n.clCapsProSignature
                 : null;
             final rarityColor = _rarityColor(c.rarity);
 
@@ -215,10 +215,10 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
               selected: selected,
               label:
                   '${c.name}, ${selected
-                      ? 'dipakai'
+                      ? l10n.clSemEquipped
                       : locked
-                      ? AppL10n.of(context).clProLocked
-                      : 'tersedia'}',
+                      ? l10n.clProLocked
+                      : l10n.clSemAvailable}',
               child: InkWell(
                 onTap: () => _onTap(c),
                 borderRadius: BorderRadius.circular(AppRadius.lg),

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -1842,15 +1843,10 @@ class _ProfilTabState extends State<ProfilTab> {
     );
   }
 
-  static const _namaBulan = [
-    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
-  ];
-
   /// Tanggal paling awal antara tanggal instal dan log pertama — proxy
   /// terbaik untuk "sejak kapan", karena install date user lama baru
   /// tercatat saat update ini pertama jalan.
-  static String? _mulaiSejak(List<PrayerLog> logs) {
+  static String? _mulaiSejak(List<PrayerLog> logs, Locale locale) {
     String? sejak;
     final install = GameService.firstInstallDate;
     if (install != null && install.isNotEmpty) sejak = install;
@@ -1862,7 +1858,7 @@ class _ProfilTabState extends State<ProfilTab> {
 
     final d = DateTime.tryParse(sejak);
     if (d == null) return null;
-    return '${d.day} ${_namaBulan[d.month - 1]} ${d.year}';
+    return DateFormat.yMMMMd(locale.toString()).format(d);
   }
 
   Widget _stats() {
@@ -1877,7 +1873,7 @@ class _ProfilTabState extends State<ProfilTab> {
     final tilawahDailyAvg = state.quranXp.readAyatTotal > 0
         ? '${state.quranXp.readAyatTotal.toInt()}'
         : '0';
-    final sejak = _mulaiSejak(logs);
+    final sejak = _mulaiSejak(logs, Localizations.localeOf(context));
     final kosong = wajib == 0;
 
     Widget divider() => Column(

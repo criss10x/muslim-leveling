@@ -6112,6 +6112,42 @@ abstract class AppL10n {
   /// **'Teks dalam Bahasa Indonesia'**
   String get contentNoteIndonesian;
 
+  /// No description provided for @dhCapsDailyHighlight.
+  ///
+  /// In id, this message translates to:
+  /// **'DAILY HIGHLIGHT'**
+  String get dhCapsDailyHighlight;
+
+  /// No description provided for @naikChipQuizScore.
+  ///
+  /// In id, this message translates to:
+  /// **'Skor Quiz'**
+  String get naikChipQuizScore;
+
+  /// No description provided for @clCapsEquipped.
+  ///
+  /// In id, this message translates to:
+  /// **'DIPAKAI'**
+  String get clCapsEquipped;
+
+  /// No description provided for @clCapsProSignature.
+  ///
+  /// In id, this message translates to:
+  /// **'PRO SIGNATURE'**
+  String get clCapsProSignature;
+
+  /// No description provided for @clSemEquipped.
+  ///
+  /// In id, this message translates to:
+  /// **'dipakai'**
+  String get clSemEquipped;
+
+  /// No description provided for @clSemAvailable.
+  ///
+  /// In id, this message translates to:
+  /// **'tersedia'**
+  String get clSemAvailable;
+
   /// No description provided for @contentNoteInEnglish.
   ///
   /// In id, this message translates to:

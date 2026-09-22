@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:muslim_leveling/services/game_service.dart';
 import 'package:muslim_leveling/theme/app_theme.dart';
 import '../theme/app_icons.dart';
@@ -26,12 +27,9 @@ class PrayerHeatmap extends StatefulWidget {
 }
 
 class _PrayerHeatmapState extends State<PrayerHeatmap> {
-  static const _namaBulan = [
-    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
-  ];
-  static const _namaHari = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
-
+  // ponytail: nama bulan & hari dari `intl`, bukan daftar const — daftar
+  // Indonesia tak bisa ikut locale. `intl` sudah jadi dependensi
+  // flutter_localizations, jadi tak ada paket baru.
   late DateTime _bulan; // tanggal-1 bulan aktif
 
   @override
@@ -68,6 +66,19 @@ class _PrayerHeatmapState extends State<PrayerHeatmap> {
     setState(() => _bulan = DateTime(_bulan.year, _bulan.month + delta));
   }
 
+
+  /// Label hari (Sen..Min) dari `intl`, mengikuti locale aktif.
+  /// Senin dihitung dari tanggal-1 bulan aktif — grid selalu mulai Senin.
+  List<String> _hariSingkat(BuildContext context) {
+    final locale = Localizations.localeOf(context).toString();
+    final first = DateTime(_bulan.year, _bulan.month, 1);
+    final senin = first.subtract(Duration(days: first.weekday - 1));
+    return List.generate(
+      7,
+      (i) => DateFormat.E(locale).format(senin.add(Duration(days: i))),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final counts = wajibPerHari(GameService.current.prayerLog);
@@ -84,7 +95,11 @@ class _PrayerHeatmapState extends State<PrayerHeatmap> {
           children: [
             Expanded(
               child: Text(
-                '${_namaBulan[_bulan.month - 1]} ${_bulan.year}',
+                toBeginningOfSentenceCase(
+                  DateFormat.yMMMM(
+                    Localizations.localeOf(context).toString(),
+                  ).format(_bulan),
+                )!,
                 style: AppText.titleLg().copyWith(color: AppColors.onSurface),
               ),
             ),
@@ -102,7 +117,7 @@ class _PrayerHeatmapState extends State<PrayerHeatmap> {
         ),
         const SizedBox(height: AppSpacing.xs),
         Row(
-          children: _namaHari
+          children: _hariSingkat(context)
               .map(
                 (h) => Expanded(
                   child: Center(

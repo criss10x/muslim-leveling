@@ -3389,5 +3389,23 @@ class AppL10nId extends AppL10n {
   String get contentNoteIndonesian => 'Teks dalam Bahasa Indonesia';
 
   @override
+  String get dhCapsDailyHighlight => 'DAILY HIGHLIGHT';
+
+  @override
+  String get naikChipQuizScore => 'Skor Quiz';
+
+  @override
+  String get clCapsEquipped => 'DIPAKAI';
+
+  @override
+  String get clCapsProSignature => 'PRO SIGNATURE';
+
+  @override
+  String get clSemEquipped => 'dipakai';
+
+  @override
+  String get clSemAvailable => 'tersedia';
+
+  @override
   String get contentNoteInEnglish => 'Teks dalam Bahasa Inggris';
 }

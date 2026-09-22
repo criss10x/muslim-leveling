@@ -74,7 +74,9 @@ class QuranAyahCard extends StatelessWidget {
                     color: bookmarked
                         ? AppColors.secondaryFixed
                         : AppColors.onSurfaceVariant.withValues(alpha: 0.6),
-                    tooltip: bookmarked ? AppL10n.of(context).qacDeleteBookmark : 'Bookmark ayat',
+                    tooltip: bookmarked
+                        ? AppL10n.of(context).qacDeleteBookmark
+                        : AppL10n.of(context).qtBookmarkTooltip,
                     visualDensity: VisualDensity.compact,
                   ),
                   if (onTafsir != null)

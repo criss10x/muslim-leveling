@@ -148,8 +148,8 @@ class DapetExpScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         _rewardChip(context, '+$xpGained', 'XP', AppColors.primary, AppIcons.bolt),
-        _rewardChip(context, '$score%', 'Skor Quiz', AppColors.tertiary, AppIcons.quiz),
-        _rewardChip(context, AppL10n.of(context).deLevelShort(info.level), 'Level', AppColors.secondaryFixed, AppIcons.trendingUp),
+        _rewardChip(context, '$score%', AppL10n.of(context).naikChipQuizScore, AppColors.tertiary, AppIcons.quiz),
+        _rewardChip(context, AppL10n.of(context).deLevelShort(info.level), AppL10n.of(context).profilMiniLevel, AppColors.secondaryFixed, AppIcons.trendingUp),
       ],
     );
   }

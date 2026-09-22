@@ -3402,5 +3402,23 @@ class AppL10nMs extends AppL10n {
   String get contentNoteIndonesian => 'Teks dalam Bahasa Indonesia';
 
   @override
+  String get dhCapsDailyHighlight => 'SOROTAN HARIAN';
+
+  @override
+  String get naikChipQuizScore => 'Skor Kuiz';
+
+  @override
+  String get clCapsEquipped => 'DIPAKAI';
+
+  @override
+  String get clCapsProSignature => 'TANDATANGAN PRO';
+
+  @override
+  String get clSemEquipped => 'dipakai';
+
+  @override
+  String get clSemAvailable => 'tersedia';
+
+  @override
   String get contentNoteInEnglish => 'Teks dalam Bahasa Inggeris';
 }

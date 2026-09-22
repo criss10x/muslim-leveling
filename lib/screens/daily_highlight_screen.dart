@@ -314,7 +314,7 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'DAILY HIGHLIGHT',
+                  AppL10n.of(context).dhCapsDailyHighlight,
                   style: AppText.labelCaps().copyWith(color: AppColors.primary),
                 ),
                 Text(

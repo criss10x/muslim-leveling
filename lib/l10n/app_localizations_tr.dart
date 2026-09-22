@@ -3417,5 +3417,23 @@ class AppL10nTr extends AppL10n {
   String get contentNoteIndonesian => 'Endonezce Metin';
 
   @override
+  String get dhCapsDailyHighlight => 'GÜNÜN ÖNE ÇIKANI';
+
+  @override
+  String get naikChipQuizScore => 'Quiz Skoru';
+
+  @override
+  String get clCapsEquipped => 'KUŞANILDI';
+
+  @override
+  String get clCapsProSignature => 'PRO İMZA';
+
+  @override
+  String get clSemEquipped => 'kuşanıldı';
+
+  @override
+  String get clSemAvailable => 'mevcut';
+
+  @override
   String get contentNoteInEnglish => 'İngilizce Metin';
 }
