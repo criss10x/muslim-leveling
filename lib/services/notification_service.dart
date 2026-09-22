@@ -431,6 +431,28 @@ class NotificationService {
     debugPrint('[NotificationService] scheduled ${timings.length} adhan reminders for $city');
   }
 
+  /// Jadwalkan ulang pengingat adzan dengan bahasa yang sedang aktif.
+  ///
+  /// Dipanggil dari [LocaleNotifier.onLocaleChanged] saat user ganti bahasa.
+  /// Payload notif sudah diserahkan ke Android (`matchDateTimeComponents.time`)
+  /// dan BootReceiver me-reschedule payload yang SAMA, jadi tanpa ini teks
+  /// Indonesia berbunyi berhari-hari meski app sudah English.
+  ///
+  /// Locale dibaca dari prefs (bukan BuildContext) supaya jalur ini tetap
+  /// jalan saat app di latar.
+  static Future<void> rescheduleForLocale() async {
+    if (!_initialized) await init();
+    if (!await isRemindersEnabled()) return;
+    final prefs = await SharedPreferences.getInstance();
+    final city = prefs.getString(_prefCity) ?? '';
+    final timings = await _readTimingsFromPrefs(prefs);
+    if (city.isEmpty || timings.isEmpty) return;
+    // ID notif deterministik (10..52) → jadwal baru menimpa yang lama, jadi
+    // tidak perlu cancel dulu; ini juga menghindari celah "tidak ada notif"
+    // kalau reschedule gagal di tengah.
+    await _scheduleAlarms(await _l10n(), city, timings);
+  }
+
   /// Cancel all scheduled adhan reminders.
   static Future<void> cancelAdhanReminders() async {
     await cancelAlarms();

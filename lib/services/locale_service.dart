@@ -31,6 +31,17 @@ class LocaleNotifier extends ChangeNotifier {
 
   Locale? _override;
 
+  /// Dipanggil setelah pilihan bahasa benar-benar berubah (bukan saat sama).
+  ///
+  /// NotificationService memakainya untuk menjadwalkan ulang pengingat adzan:
+  /// teks notif sudah diserahkan ke Android (`matchDateTimeComponents.time`),
+  /// jadi ganti bahasa tidak menyembuhkan payload yang sudah ter-bake — user
+  /// akan dengar notif Indonesia berhari-hari meski app sudah English.
+  ///
+  /// Hook, bukan impor langsung: notification_service.dart sudah mengimpor
+  /// locale_service.dart, jadi memanggilnya dari sini akan melingkar.
+  static Future<void> Function()? onLocaleChanged;
+
   /// null → ikut device locale.
   Locale? get override => _override;
 
@@ -67,6 +78,7 @@ class LocaleNotifier extends ChangeNotifier {
 
   /// null = kembali ikut bahasa HP.
   Future<void> setLocale(Locale? value) async {
+    final changed = _override?.languageCode != value?.languageCode;
     _override = value;
     final prefs = await SharedPreferences.getInstance();
     if (value == null) {
@@ -75,6 +87,9 @@ class LocaleNotifier extends ChangeNotifier {
       await prefs.setString(prefKey, value.languageCode);
     }
     notifyListeners();
+    // Setelah notifyListeners: UI sudah pakai bahasa baru, jadi kalau
+    // reschedule gagal pun user melihat app yang benar.
+    if (changed) await onLocaleChanged?.call();
   }
 
   /// Kode tak dikenal (prefs korup / downgrade) → ikut HP, bukan crash.

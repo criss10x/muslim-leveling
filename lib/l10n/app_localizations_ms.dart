@@ -3230,7 +3230,7 @@ class AppL10nMs extends AppL10n {
   String get qdTitle => 'Tetapan Paparan';
 
   @override
-  String get qdTranslationLabel => 'Terjemahan Bahasa Indonesia';
+  String get qdTranslationLabel => 'Terjemahan Bahasa Inggeris';
 
   @override
   String get qdTransliteration => 'Transliterasi Rumi';
@@ -3326,4 +3326,81 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get btCatPraktikIbadah => 'Amalan Ibadah';
+
+  @override
+  String get homeCapsCurrentRank => 'PANGKAT SEMASA';
+
+  @override
+  String get homeCapsXpProgress => 'KEMAJUAN XP';
+
+  @override
+  String get homeCapsStreak => 'STREAK';
+
+  @override
+  String get homeCapsSunnah => 'SUNNAH';
+
+  @override
+  String get homeCapsLocked => 'TERKUNCI';
+
+  @override
+  String get homeCapsDone => 'SELESAI';
+
+  @override
+  String get homeCapsClaim => 'TUNTUT';
+
+  @override
+  String get homeLabelMenujuWaktu => 'MENUJU WAKTU';
+
+  @override
+  String get homeLabelSunnahDhuha => 'SUNNAH DHUHA';
+
+  @override
+  String get naikCapsProgressLevel => 'TAHAP KEMAJUAN';
+
+  @override
+  String get doaEmpty => 'Kosong';
+
+  @override
+  String get doaSectionTranslit => 'Transliterasi';
+
+  @override
+  String get doaSectionMeaning => 'Maksud';
+
+  @override
+  String get doaSectionSource => 'Sumber';
+
+  @override
+  String get hdRandom => 'Rawak';
+
+  @override
+  String get hdCapsTranslation => 'TERJEMAHAN';
+
+  @override
+  String get hdCapsHikmah => 'HIKMAH';
+
+  @override
+  String get hmLegendLess => 'Kurang';
+
+  @override
+  String get hmLegendFull => 'Lengkap';
+
+  @override
+  String get lockerCapsCollection => 'KOLEKSI';
+
+  @override
+  String lockerUnlockedCount(int n) {
+    return '$n TERBUKA';
+  }
+
+  @override
+  String get lockerSlotAura => 'Aura';
+
+  @override
+  String get lockerSlotTitle => 'Gelaran';
+
+  @override
+  String get contentNoteIndonesian => 'Teks dalam Bahasa Indonesia';
+
+  @override
+  String get contentNoteInEnglish => 'Teks dalam Bahasa Inggeris';
 }

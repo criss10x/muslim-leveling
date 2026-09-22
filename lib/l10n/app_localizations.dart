@@ -5967,6 +5967,156 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Praktik Ibadah'**
   String get btCatPraktikIbadah;
+
+  /// No description provided for @homeCapsCurrentRank.
+  ///
+  /// In id, this message translates to:
+  /// **'CURRENT RANK'**
+  String get homeCapsCurrentRank;
+
+  /// No description provided for @homeCapsXpProgress.
+  ///
+  /// In id, this message translates to:
+  /// **'XP PROGRESS'**
+  String get homeCapsXpProgress;
+
+  /// No description provided for @homeCapsStreak.
+  ///
+  /// In id, this message translates to:
+  /// **'STREAK'**
+  String get homeCapsStreak;
+
+  /// No description provided for @homeCapsSunnah.
+  ///
+  /// In id, this message translates to:
+  /// **'SUNNAH'**
+  String get homeCapsSunnah;
+
+  /// No description provided for @homeCapsLocked.
+  ///
+  /// In id, this message translates to:
+  /// **'LOCKED'**
+  String get homeCapsLocked;
+
+  /// No description provided for @homeCapsDone.
+  ///
+  /// In id, this message translates to:
+  /// **'DONE'**
+  String get homeCapsDone;
+
+  /// No description provided for @homeCapsClaim.
+  ///
+  /// In id, this message translates to:
+  /// **'CLAIM'**
+  String get homeCapsClaim;
+
+  /// No description provided for @homeLabelMenujuWaktu.
+  ///
+  /// In id, this message translates to:
+  /// **'MENUJU WAKTU'**
+  String get homeLabelMenujuWaktu;
+
+  /// No description provided for @homeLabelSunnahDhuha.
+  ///
+  /// In id, this message translates to:
+  /// **'SUNNAH DHUHA'**
+  String get homeLabelSunnahDhuha;
+
+  /// No description provided for @naikCapsProgressLevel.
+  ///
+  /// In id, this message translates to:
+  /// **'PROGRESS LEVEL'**
+  String get naikCapsProgressLevel;
+
+  /// No description provided for @doaEmpty.
+  ///
+  /// In id, this message translates to:
+  /// **'Kosong'**
+  String get doaEmpty;
+
+  /// No description provided for @doaSectionTranslit.
+  ///
+  /// In id, this message translates to:
+  /// **'Transliterasi'**
+  String get doaSectionTranslit;
+
+  /// No description provided for @doaSectionMeaning.
+  ///
+  /// In id, this message translates to:
+  /// **'Artinya'**
+  String get doaSectionMeaning;
+
+  /// No description provided for @doaSectionSource.
+  ///
+  /// In id, this message translates to:
+  /// **'Sumber'**
+  String get doaSectionSource;
+
+  /// No description provided for @hdRandom.
+  ///
+  /// In id, this message translates to:
+  /// **'Acak'**
+  String get hdRandom;
+
+  /// No description provided for @hdCapsTranslation.
+  ///
+  /// In id, this message translates to:
+  /// **'TERJEMAHAN'**
+  String get hdCapsTranslation;
+
+  /// No description provided for @hdCapsHikmah.
+  ///
+  /// In id, this message translates to:
+  /// **'HIKMAH'**
+  String get hdCapsHikmah;
+
+  /// No description provided for @hmLegendLess.
+  ///
+  /// In id, this message translates to:
+  /// **'Kurang'**
+  String get hmLegendLess;
+
+  /// No description provided for @hmLegendFull.
+  ///
+  /// In id, this message translates to:
+  /// **'Lengkap'**
+  String get hmLegendFull;
+
+  /// No description provided for @lockerCapsCollection.
+  ///
+  /// In id, this message translates to:
+  /// **'KOLEKSI'**
+  String get lockerCapsCollection;
+
+  /// No description provided for @lockerUnlockedCount.
+  ///
+  /// In id, this message translates to:
+  /// **'{n} TERBUKA'**
+  String lockerUnlockedCount(int n);
+
+  /// No description provided for @lockerSlotAura.
+  ///
+  /// In id, this message translates to:
+  /// **'Aura'**
+  String get lockerSlotAura;
+
+  /// No description provided for @lockerSlotTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Title'**
+  String get lockerSlotTitle;
+
+  /// No description provided for @contentNoteIndonesian.
+  ///
+  /// In id, this message translates to:
+  /// **'Teks dalam Bahasa Indonesia'**
+  String get contentNoteIndonesian;
+
+  /// No description provided for @contentNoteInEnglish.
+  ///
+  /// In id, this message translates to:
+  /// **'Teks dalam Bahasa Inggris'**
+  String get contentNoteInEnglish;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

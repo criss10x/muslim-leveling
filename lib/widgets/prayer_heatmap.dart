@@ -172,7 +172,7 @@ class _PrayerHeatmapState extends State<PrayerHeatmap> {
     return Row(
       children: [
         Text(
-          'Kurang',
+          AppL10n.of(context).hmLegendLess,
           style: AppText.labelCapsSm().copyWith(
             color: AppColors.onSurfaceVariant,
           ),
@@ -184,7 +184,7 @@ class _PrayerHeatmapState extends State<PrayerHeatmap> {
         ],
         const SizedBox(width: AppSpacing.base),
         Text(
-          'Lengkap',
+          AppL10n.of(context).hmLegendFull,
           style: AppText.labelCapsSm().copyWith(
             color: AppColors.onSurfaceVariant,
           ),

@@ -853,3 +853,68 @@ class NeonProgressBar extends StatelessWidget {
     );
   }
 }
+
+/// Penanda jujur bahwa isi layar masih berbahasa sumber, bukan bahasa aktif.
+///
+/// Dipakai Hadis/Doa/Quran: sumbernya (`myquran v3`, `equran.id`) hanya
+/// mengembalikan teks Indonesia — `?lang=en` sudah diuji dan tetap Indonesia
+/// atau 404. Tanpa penanda, user English mengira teks Indonesia itu memang
+/// terjemahannya.
+///
+/// Hanya tampil kalau bahasa aktif != bahasa konten, jadi di locale `id`
+/// penanda ini tidak muncul sama sekali.
+class ContentLangNote extends StatelessWidget {
+  /// Bahasa yang aktif dirender sekarang.
+  final Locale locale;
+
+  /// true = konten yang ditampilkan berbahasa Inggris; false = Indonesia.
+  final bool contentIsEnglish;
+
+  const ContentLangNote({
+    super.key,
+    required this.locale,
+    required this.contentIsEnglish,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // ponytail: 2 bahasa konten saja (id + en). Kalau nanti ada tafsir Turki,
+    // bandingkan dengan bahasa konten yang benar-benar dimuat, bukan `!= 'id'`.
+    final contentCode = contentIsEnglish ? 'en' : 'id';
+    if (locale.languageCode == contentCode) return const SizedBox.shrink();
+    final l10n = AppL10n.of(context);
+    return Container(
+      margin: const EdgeInsets.only(bottom: AppSpacing.sm),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: 6,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(AppRadius.pill),
+        border: Border.all(
+          color: AppColors.outlineVariant.withValues(alpha: 0.5),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            AppIcons.translate,
+            size: 14,
+            color: AppColors.onSurfaceVariant,
+          ),
+          const SizedBox(width: 6),
+          Text(
+            contentIsEnglish
+                ? l10n.contentNoteInEnglish
+                : l10n.contentNoteIndonesian,
+            style: AppText.labelCapsSm().copyWith(
+              color: AppColors.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

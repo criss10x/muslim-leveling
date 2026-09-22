@@ -14,6 +14,7 @@ import '../widgets/quran_display_sheet.dart';
 import '../widgets/quran_player_bar.dart';
 import '../widgets/quran_share_sheet.dart';
 import '../widgets/quran_tafsir_sheet.dart';
+import '../widgets/common.dart';
 import '../l10n/app_localizations.dart';
 
 class QuranReader extends StatefulWidget {
@@ -268,40 +269,68 @@ class _QuranReaderState extends State<QuranReader> {
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
-          : ScrollablePositionedList.builder(
-              itemScrollController: _scrollController,
-              itemPositionsListener: _positionsListener,
-              initialScrollIndex: _initialIndex,
-              initialAlignment: widget.initialAyah != null ? 0.25 : 0,
-              padding: const EdgeInsets.only(bottom: 120, top: 8),
-              itemCount: _ayahs.length + _basmalahOffset,
-              itemBuilder: (_, i) {
-                if (i == 0 && _basmalahOffset == 1) {
-                  return _basmalahHeader();
-                }
-                final a = _ayahs[i - _basmalahOffset];
-                return QuranAyahCard(
-                  ayah: a,
-                  surahNumber: widget.surah.number,
-                  active: current != null &&
-                      current.surah == widget.surah.number &&
-                      current.ayah == a.ayah,
-                  onPlay: () => _playFrom(a.ayah),
-                  onTafsir: () {
-                    final t = _tafsir.where((e) => e.ayah == a.ayah);
-                    if (t.isNotEmpty) {
-                      showTafsirSheet(context, t.first);
-                    }
-                  },
-                  onShare: () => showQuranShareSheet(
-                    context,
-                    surah: widget.surah,
-                    ayah: a,
+          : Column(
+              children: [
+                // Terjemahan/tafsir cuma 2 bahasa (id + en). Locale tr/ms dapat
+                // Inggris — katakan terus terang, jangan diamkan.
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.md,
+                    8,
+                    AppSpacing.md,
+                    0,
                   ),
-                );
-              },
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: ContentLangNote(
+                      locale: Localizations.localeOf(context),
+                      contentIsEnglish:
+                          quranUseEnglish(Localizations.localeOf(context)),
+                    ),
+                  ),
+                ),
+                Expanded(child: _list(context, current)),
+              ],
             ),
       bottomNavigationBar: QuranPlayerBar(surah: widget.surah),
+    );
+  }
+
+  /// Daftar ayat + basmalah. Dipisah dari `build` supaya badge bahasa di atas
+  /// tidak ikut tergulung saat ayat digulung.
+  Widget _list(BuildContext context, AyahRef? current) {
+    return ScrollablePositionedList.builder(
+      itemScrollController: _scrollController,
+      itemPositionsListener: _positionsListener,
+      initialScrollIndex: _initialIndex,
+      initialAlignment: widget.initialAyah != null ? 0.25 : 0,
+      padding: const EdgeInsets.only(bottom: 120, top: 8),
+      itemCount: _ayahs.length + _basmalahOffset,
+      itemBuilder: (_, i) {
+        if (i == 0 && _basmalahOffset == 1) {
+          return _basmalahHeader();
+        }
+        final a = _ayahs[i - _basmalahOffset];
+        return QuranAyahCard(
+          ayah: a,
+          surahNumber: widget.surah.number,
+          active: current != null &&
+              current.surah == widget.surah.number &&
+              current.ayah == a.ayah,
+          onPlay: () => _playFrom(a.ayah),
+          onTafsir: () {
+            final t = _tafsir.where((e) => e.ayah == a.ayah);
+            if (t.isNotEmpty) {
+              showTafsirSheet(context, t.first);
+            }
+          },
+          onShare: () => showQuranShareSheet(
+            context,
+            surah: widget.surah,
+            ayah: a,
+          ),
+        );
+      },
     );
   }
 

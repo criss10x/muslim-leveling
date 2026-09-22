@@ -105,9 +105,19 @@ class DoaListScreen extends StatelessWidget {
         child: Column(
           children: [
             _appBar(context, grup, '${items.length} doa'),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: ContentLangNote(
+                  locale: Localizations.localeOf(context),
+                  contentIsEnglish: false,
+                ),
+              ),
+            ),
             Expanded(
               child: items.isEmpty
-                  ? const Center(child: Text('Kosong'))
+                  ? Center(child: Text(AppL10n.of(context).doaEmpty))
                   : ListView.builder(
                       padding: const EdgeInsets.all(AppSpacing.md)
                           .copyWith(bottom: 100),
@@ -235,15 +245,15 @@ class DoaDetailScreen extends StatelessWidget {
                         style: const TextStyle(fontSize: 26, height: 1.9)),
                   ),
                   const SizedBox(height: AppSpacing.lg),
-                  _section('Transliterasi', doa.tr,
+                  _section(AppL10n.of(context).doaSectionTranslit, doa.tr,
                       style: AppText.bodyMd().copyWith(
                           fontStyle: FontStyle.italic,
                           color: AppColors.onSurfaceVariant)),
                   const SizedBox(height: AppSpacing.md),
-                  _section('Artinya', doa.idn),
+                  _section(AppL10n.of(context).doaSectionMeaning, doa.idn),
                   if (doa.tentang.isNotEmpty) ...[
                     const SizedBox(height: AppSpacing.md),
-                    _section('Sumber', doa.tentang),
+                    _section(AppL10n.of(context).doaSectionSource, doa.tentang),
                   ],
                 ],
               ),

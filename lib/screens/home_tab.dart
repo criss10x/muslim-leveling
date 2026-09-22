@@ -522,6 +522,7 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget _heroRank(LevelInfo info) {
+    final l10n = AppL10n.of(context);
     final tier = getTierVisualConfig(getTierName(info.level));
     final light = isLightTheme;
     final tierP = tier.inkPrimary;
@@ -595,7 +596,7 @@ class _HomeTabState extends State<HomeTab> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'CURRENT RANK',
+                              l10n.homeCapsCurrentRank,
                               style: AppText.labelCaps().copyWith(
                                 color: AppColors.onSurfaceVariant,
                               ),
@@ -659,7 +660,7 @@ class _HomeTabState extends State<HomeTab> {
                     children: [
                       Expanded(
                         child: Text(
-                          'XP PROGRESS',
+                          l10n.homeCapsXpProgress,
                           style: AppText.labelCaps().copyWith(
                             color: AppColors.onSurfaceVariant,
                           ),
@@ -745,11 +746,9 @@ class _HomeTabState extends State<HomeTab> {
   /// Satu strip HUD datar menggantikan 3 kartu (sholat aktif, next, streak).
   /// Cyan hanya untuk "sekarang", gold hanya untuk streak — disiplin warna.
   Widget _hudStrip() {
-    final current = GameService.currentPrayerInfo(_state.timings);
-    final np = GameService.nextPrayerInfo(_state.timings);
-    final parts = np.split('|');
-    final nextName = parts[0];
-    final nextIn = parts.length > 2 ? parts[2] : '';
+    final l10n = AppL10n.of(context);
+    final current = GameService.currentPrayerInfo(_state.timings, l10n);
+    final np = GameService.nextPrayerInfo(_state.timings, l10n);
 
     Widget cell(String label, String value, String sub, Color valueColor) {
       return Expanded(
@@ -805,13 +804,13 @@ class _HomeTabState extends State<HomeTab> {
             AppColors.tertiary,
           ),
           vDivider(),
-          cell(AppL10n.of(context).homeNext, nextName, nextIn, AppColors.onSurface),
+          cell(l10n.homeNext, np.name, np.countdown, AppColors.onSurface),
           vDivider(),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'STREAK',
+                l10n.homeCapsStreak,
                 style: AppText.labelCapsSm().copyWith(
                   color: AppColors.onSurfaceVariant,
                 ),
@@ -851,6 +850,7 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget _ritualRings() {
+    final l10n = AppL10n.of(context);
     final wajib = GameService.checkedWajibToday;
     final sunnah = GameService.sunnahCountToday;
     // Side quest selesai hari ini — sync dengan _sideQuest() (4 kartu).
@@ -890,10 +890,11 @@ class _HomeTabState extends State<HomeTab> {
                       AppColors.primary,
                     ),
                     const SizedBox(height: AppSpacing.sm),
-                    _ringStat('SUNNAH', '$sunnah/${_sunnahQuests.length}',
-                        AppColors.secondaryFixed),
+                    _ringStat(l10n.homeCapsSunnah,
+                        '$sunnah/${_sunnahQuests.length}', AppColors.secondaryFixed),
                     const SizedBox(height: AppSpacing.sm),
-                    _ringStat('SIDE QUEST', '$sideDone/4', AppColors.tertiary),
+                    _ringStat(l10n.homeSideQuestTitle, '$sideDone/4',
+                        AppColors.tertiary),
                   ],
                 ),
               ),
@@ -993,12 +994,14 @@ class _HomeTabState extends State<HomeTab> {
     bool done = false,
     bool locked = false,
   }) {
+    final l10n = AppL10n.of(context);
     final muted = AppColors.onSurfaceVariant;
     final fg = locked ? muted.withValues(alpha: 0.7) : (done ? muted : accent);
     final bg = locked || done
         ? AppColors.surfaceContainerHigh.withValues(alpha: 0.6)
         : accent.withValues(alpha: 0.14);
-    final label = locked ? 'LOCKED' : (done ? 'DONE' : '+$xp XP');
+    final label =
+        locked ? l10n.homeCapsLocked : (done ? l10n.homeCapsDone : '+$xp XP');
     final glyph = locked ? AppIcons.lock : (done ? AppIcons.check : AppIcons.bolt);
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -1128,6 +1131,7 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget _questCard(Quest q) {
+    final l10n = AppL10n.of(context);
     final claimable = q.completed && !q.claimed;
     final isClaiming = _claimingQuestId == q.id;
     return AnimatedScale(
@@ -1207,7 +1211,7 @@ class _HomeTabState extends State<HomeTab> {
                       borderRadius: BorderRadius.circular(AppRadius.xl),
                     ),
                     child: Text(
-                      'CLAIM',
+                      l10n.homeCapsClaim,
                       style: AppText.labelCaps().copyWith(
                         color: AppColors.onPrimary,
                         fontSize: 10,
@@ -2281,6 +2285,7 @@ class _BonusQuestState extends State<_BonusQuest> {
 
   Widget _xpPillSmall(int xp, Color color, Color onColor,
       {bool done = false, bool locked = false}) {
+    final l10n = AppL10n.of(context);
     // Sama dengan _xpPill quest wajib: DONE + centang saat sudah di-claim.
     final muted = AppColors.onSurfaceVariant;
     final fg = locked ? muted.withValues(alpha: 0.7) : (done ? muted : onColor);
@@ -2304,7 +2309,7 @@ class _BonusQuestState extends State<_BonusQuest> {
             const SizedBox(width: 2),
           ],
           Text(
-            done ? 'DONE' : '+$xp XP',
+            done ? l10n.homeCapsDone : '+$xp XP',
             style: AppText.labelCapsSm().copyWith(color: fg),
           ),
         ],

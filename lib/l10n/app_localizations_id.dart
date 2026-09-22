@@ -3313,4 +3313,81 @@ class AppL10nId extends AppL10n {
 
   @override
   String get btCatPraktikIbadah => 'Praktik Ibadah';
+
+  @override
+  String get homeCapsCurrentRank => 'CURRENT RANK';
+
+  @override
+  String get homeCapsXpProgress => 'XP PROGRESS';
+
+  @override
+  String get homeCapsStreak => 'STREAK';
+
+  @override
+  String get homeCapsSunnah => 'SUNNAH';
+
+  @override
+  String get homeCapsLocked => 'LOCKED';
+
+  @override
+  String get homeCapsDone => 'DONE';
+
+  @override
+  String get homeCapsClaim => 'CLAIM';
+
+  @override
+  String get homeLabelMenujuWaktu => 'MENUJU WAKTU';
+
+  @override
+  String get homeLabelSunnahDhuha => 'SUNNAH DHUHA';
+
+  @override
+  String get naikCapsProgressLevel => 'PROGRESS LEVEL';
+
+  @override
+  String get doaEmpty => 'Kosong';
+
+  @override
+  String get doaSectionTranslit => 'Transliterasi';
+
+  @override
+  String get doaSectionMeaning => 'Artinya';
+
+  @override
+  String get doaSectionSource => 'Sumber';
+
+  @override
+  String get hdRandom => 'Acak';
+
+  @override
+  String get hdCapsTranslation => 'TERJEMAHAN';
+
+  @override
+  String get hdCapsHikmah => 'HIKMAH';
+
+  @override
+  String get hmLegendLess => 'Kurang';
+
+  @override
+  String get hmLegendFull => 'Lengkap';
+
+  @override
+  String get lockerCapsCollection => 'KOLEKSI';
+
+  @override
+  String lockerUnlockedCount(int n) {
+    return '$n TERBUKA';
+  }
+
+  @override
+  String get lockerSlotAura => 'Aura';
+
+  @override
+  String get lockerSlotTitle => 'Title';
+
+  @override
+  String get contentNoteIndonesian => 'Teks dalam Bahasa Indonesia';
+
+  @override
+  String get contentNoteInEnglish => 'Teks dalam Bahasa Inggris';
 }

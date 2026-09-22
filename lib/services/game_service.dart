@@ -1020,14 +1020,15 @@ class GameService {
 
   /// Mengembalikan sholat yang sedang aktif (wajib atau sunnah Dhuha).
   /// Kalau tidak ada wajib yang aktif, tampilkan next wajib atau Dhuha.
+  /// [l10n] wajib: label HUD ikut bahasa aktif, bukan literal Indonesia.
   static ({String name, String time, String label, bool isSunnah})
-  currentPrayerInfo(Timings t) {
+  currentPrayerInfo(Timings t, AppL10n l10n) {
     final now = nowHHmm();
     if (_isBetween(now, t.subuh, t.terbit)) {
       return (
         name: 'Subuh',
         time: t.subuh,
-        label: 'Waktu Sholat',
+        label: l10n.jdPageTitle,
         isSunnah: false,
       );
     }
@@ -1035,7 +1036,7 @@ class GameService {
       return (
         name: 'Dzuhur',
         time: t.dzuhur,
-        label: 'Waktu Sholat',
+        label: l10n.jdPageTitle,
         isSunnah: false,
       );
     }
@@ -1043,7 +1044,7 @@ class GameService {
       return (
         name: 'Ashar',
         time: t.ashar,
-        label: 'Waktu Sholat',
+        label: l10n.jdPageTitle,
         isSunnah: false,
       );
     }
@@ -1051,7 +1052,7 @@ class GameService {
       return (
         name: 'Maghrib',
         time: t.maghrib,
-        label: 'Waktu Sholat',
+        label: l10n.jdPageTitle,
         isSunnah: false,
       );
     }
@@ -1059,7 +1060,7 @@ class GameService {
       return (
         name: 'Isya',
         time: t.isya,
-        label: 'Waktu Sholat',
+        label: l10n.jdPageTitle,
         isSunnah: false,
       );
     }
@@ -1067,7 +1068,7 @@ class GameService {
       return (
         name: 'Dhuha',
         time: t.dhuha,
-        label: 'Sunnah Dhuha',
+        label: l10n.homeLabelSunnahDhuha,
         isSunnah: true,
       );
     }
@@ -1075,7 +1076,7 @@ class GameService {
     return (
       name: 'Subuh',
       time: t.subuh,
-      label: 'Menuju Waktu',
+      label: l10n.homeLabelMenujuWaktu,
       isSunnah: false,
     );
   }
@@ -2200,23 +2201,40 @@ class GameService {
   static bool isPrayerCheckedToday(String prayer) =>
       _cache.prayerLog.any((l) => l.date == todayStr() && l.prayer == prayer);
 
-  static String nextPrayerInfo(Timings t) {
+  /// Sholat wajib berikutnya + countdown-nya.
+  ///
+  /// Dulu mengembalikan string pipe (`'Subuh|04:42|1j 20m lagi'`) yang dipecah
+  /// pemanggil — countdown-nya literal Indonesia dan tak bisa ikut bahasa.
+  /// Sekarang record, dan teksnya dari ARB (key `jdCountdown*` yang sudah
+  /// dipakai tab Jadwal, jadi Home & Jadwal tidak bisa lagi beda bahasa).
+  static ({String name, String time, String countdown}) nextPrayerInfo(
+    Timings t,
+    AppL10n l10n,
+  ) {
     final now = nowHHmm();
     final list = [
-      ('Subuh', t.subuh),
-      ('Dzuhur', t.dzuhur),
-      ('Ashar', t.ashar),
-      ('Maghrib', t.maghrib),
-      ('Isya', t.isya),
+      (l10n.prayerSubuh, t.subuh),
+      (l10n.prayerDzuhur, t.dzuhur),
+      (l10n.prayerAshar, t.ashar),
+      (l10n.prayerMaghrib, t.maghrib),
+      (l10n.prayerIsya, t.isya),
     ];
     for (final (n, time) in list) {
       if (isAfter(time, now)) {
         final diff = minDiff(time, now);
         final h = diff ~/ 60, m = diff % 60;
-        return '$n|$time|${h > 0 ? '${h}j ${m}m' : '${m}m'} lagi';
+        return (
+          name: n,
+          time: time,
+          countdown: h > 0 ? l10n.jdCountdownHm(h, m) : l10n.jdCountdownM(m),
+        );
       }
     }
-    return 'Subuh|${t.subuh}|besok';
+    return (
+      name: l10n.prayerSubuh,
+      time: t.subuh,
+      countdown: l10n.jdCountdownTomorrow,
+    );
   }
 
   // ─── Daily Reward Chest ───

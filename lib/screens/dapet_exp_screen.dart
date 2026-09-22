@@ -92,7 +92,7 @@ class DapetExpScreen extends StatelessWidget {
                   Entrance(
                     delay: const Duration(milliseconds: 850),
                     child: HeroButton(
-                      label: 'KEMBALI',
+                      label: AppL10n.of(context).naikBack,
                       trailingIcon: AppIcons.arrowBack,
                       onPressed: () => Navigator.of(context).pop(),
                     ),
@@ -206,7 +206,7 @@ class DapetExpScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'PROGRESS LEVEL',
+            AppL10n.of(context).naikCapsProgressLevel,
             textAlign: TextAlign.center,
             style: AppText.labelCaps().copyWith(color: AppColors.tertiary),
           ),

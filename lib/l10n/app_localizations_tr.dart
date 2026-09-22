@@ -3246,7 +3246,7 @@ class AppL10nTr extends AppL10n {
   String get qdTitle => 'Görünüm Ayarları';
 
   @override
-  String get qdTranslationLabel => 'Türkçe Çeviri';
+  String get qdTranslationLabel => 'İngilizce Çeviri';
 
   @override
   String get qdTransliteration => 'Transliterasyon';
@@ -3341,4 +3341,81 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get btCatPraktikIbadah => 'İbadet Uygulamaları';
+
+  @override
+  String get homeCapsCurrentRank => 'MEVCUT RÜTBE';
+
+  @override
+  String get homeCapsXpProgress => 'XP İLERLEMESİ';
+
+  @override
+  String get homeCapsStreak => 'SERİ';
+
+  @override
+  String get homeCapsSunnah => 'SÜNNET';
+
+  @override
+  String get homeCapsLocked => 'KİLİTLİ';
+
+  @override
+  String get homeCapsDone => 'TAMAMLANDI';
+
+  @override
+  String get homeCapsClaim => 'TALEP ET';
+
+  @override
+  String get homeLabelMenujuWaktu => 'VAKTE KALAN';
+
+  @override
+  String get homeLabelSunnahDhuha => 'DUHA SÜNNETİ';
+
+  @override
+  String get naikCapsProgressLevel => 'İLERLEME SEVİYESİ';
+
+  @override
+  String get doaEmpty => 'Boş';
+
+  @override
+  String get doaSectionTranslit => 'Transkripsiyon';
+
+  @override
+  String get doaSectionMeaning => 'Anlamı';
+
+  @override
+  String get doaSectionSource => 'Kaynak';
+
+  @override
+  String get hdRandom => 'Rastgele';
+
+  @override
+  String get hdCapsTranslation => 'ÇEVİRİ';
+
+  @override
+  String get hdCapsHikmah => 'HİKMET';
+
+  @override
+  String get hmLegendLess => 'Az';
+
+  @override
+  String get hmLegendFull => 'Çok';
+
+  @override
+  String get lockerCapsCollection => 'KOLEKSİYON';
+
+  @override
+  String lockerUnlockedCount(int n) {
+    return '$n KİLİDİ AÇILDI';
+  }
+
+  @override
+  String get lockerSlotAura => 'Aura';
+
+  @override
+  String get lockerSlotTitle => 'Unvan';
+
+  @override
+  String get contentNoteIndonesian => 'Endonezce Metin';
+
+  @override
+  String get contentNoteInEnglish => 'İngilizce Metin';
 }

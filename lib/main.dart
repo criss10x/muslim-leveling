@@ -124,6 +124,12 @@ class MuslimLevelingAppState extends State<MuslimLevelingApp> {
     super.initState();
     themeNotifier.load();
     localeNotifier.load();
+    // Ganti bahasa → jadwalkan ulang teks notif adzan. Teks notif sudah
+    // diserahkan ke Android (`matchDateTimeComponents.time`), jadi payload lama
+    // tetap berbunyi berhari-hari kalau tidak dijadwalkan ulang di sini.
+    // ponytail: dipasang dari sini, bukan di LocaleNotifier, supaya
+    // locale_service.dart tidak mengimpor notification_service.dart (melingkar).
+    LocaleNotifier.onLocaleChanged = NotificationService.rescheduleForLocale;
   }
 
   @override

@@ -258,6 +258,18 @@ class _HadisScreenState extends State<HadisScreen> {
                   ),
                 ),
               ),
+            // Sumber hadis (myquran v3) hanya Indonesia — beri tahu user
+            // kalau bahasa aktif bukan Indonesia.
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: ContentLangNote(
+                  locale: Localizations.localeOf(context),
+                  contentIsEnglish: false,
+                ),
+              ),
+            ),
             Expanded(child: _body()),
           ],
         ),
@@ -296,7 +308,7 @@ class _HadisScreenState extends State<HadisScreen> {
             Icon(AppIcons.casino, size: 16, color: AppColors.primary),
             const SizedBox(width: 6),
             Text(
-              'Acak',
+              _l10n.hdRandom,
               style: AppText.labelCaps().copyWith(
                 color: AppColors.primary,
                 fontSize: 11,
@@ -554,7 +566,7 @@ class _HadisDetailScreenState extends State<HadisDetailScreen> {
                     ),
                     const SizedBox(height: AppSpacing.lg),
                   ],
-                  HudHeader('TERJEMAHAN', meta: null),
+                  HudHeader(_l10n.hdCapsTranslation, meta: null),
                   Text(
                     item.idn,
                     style: AppText.bodyMd().copyWith(
@@ -564,7 +576,7 @@ class _HadisDetailScreenState extends State<HadisDetailScreen> {
                   ),
                   if (item.hikmah != null && item.hikmah!.isNotEmpty) ...[
                     const SizedBox(height: AppSpacing.lg),
-                    HudHeader('HIKMAH', meta: null),
+                    HudHeader(_l10n.hdCapsHikmah, meta: null),
                     Text(
                       item.hikmah!,
                       style: AppText.bodyMd().copyWith(

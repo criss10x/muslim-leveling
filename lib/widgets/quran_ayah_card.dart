@@ -82,7 +82,7 @@ class QuranAyahCard extends StatelessWidget {
                       onPressed: onTafsir,
                       icon: const Icon(Icons.book_outlined),
                       color: AppColors.onSurfaceVariant.withValues(alpha: 0.6),
-                      tooltip: 'Tafsir',
+                      tooltip: AppL10n.of(context).dlActTafsir,
                       visualDensity: VisualDensity.compact,
                     ),
                   if (onShare != null)

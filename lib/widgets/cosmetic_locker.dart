@@ -7,7 +7,14 @@ import '../services/entitlement_service.dart';
 import '../theme/app_icons.dart';
 import '../l10n/app_localizations.dart';
 
-const _slotLabels = {CosmeticSlot.aura: 'Aura', CosmeticSlot.title: 'Title'};
+/// Label slot dari ARB, bukan map const: nilai const tak bisa ikut locale.
+String _slotLabel(AppL10n l10n, CosmeticSlot s) => switch (s) {
+  CosmeticSlot.aura => l10n.lockerSlotAura,
+  CosmeticSlot.title => l10n.lockerSlotTitle,
+  // frame belum ditampilkan di locker (_visibleSlots) — kalau nanti
+  // ditambahkan, ini yang harus diisi, bukan diam-diam tampil kosong.
+  CosmeticSlot.frame => 'Frame',
+};
 
 const _slotIcons = {
   CosmeticSlot.aura: AppIcons.autoAwesome,
@@ -81,6 +88,7 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
     final isPro = EntitlementService.isPro;
     final state = GameService.current;
     final equippedId = CosmeticService.resolveSlot(state, _slot, isPro: isPro);
@@ -116,7 +124,7 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
                 child: Semantics(
                   button: true,
                   selected: selected,
-                  label: _slotLabels[s]!,
+                  label: _slotLabel(l10n, s),
                   child: InkWell(
                     onTap: () => setState(() => _slot = s),
                     borderRadius: BorderRadius.circular(AppRadius.md),
@@ -146,7 +154,7 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            _slotLabels[s]!,
+                            _slotLabel(l10n, s),
                             style: AppText.labelCapsSm().copyWith(
                               color: selected
                                   ? AppColors.primary
@@ -167,11 +175,11 @@ class _CosmeticLockerState extends State<CosmeticLocker> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'KOLEKSI',
+              l10n.lockerCapsCollection,
               style: AppText.labelCapsSm().copyWith(color: AppColors.onSurface),
             ),
             Text(
-              '${unlockedFree.length} TERBUKA',
+              l10n.lockerUnlockedCount(unlockedFree.length),
               style: AppText.labelCapsSm().copyWith(
                 color: AppColors.onSurfaceVariant,
               ),
