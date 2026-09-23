@@ -3414,4 +3414,35 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get contentNoteInEnglish => 'Text in English';
+
+  @override
+  String get profilRankHeader => 'RANK SYSTEM';
+
+  @override
+  String get profilRankRow => 'Identify your rank color';
+
+  @override
+  String get profilRankSemantics => 'View rank system explanation';
+
+  @override
+  String get profilRankIntro =>
+      'The color of your avatar frame indicates your rank. The higher the rank, the brighter the color.';
+
+  @override
+  String get profilRankNow => 'CURRENT';
+
+  @override
+  String get profilRankDivision => 'Divisions I–V';
+
+  @override
+  String get profilRankNoDivision => 'No division';
+
+  @override
+  String profilRankFromLevel(int level) {
+    return 'Lv. $level';
+  }
+
+  @override
+  String get profilRankFooter =>
+      'Performing the five daily prayers grants XP. The more consistent you are, the faster you will level up — and the color changes accordingly.';
 }

@@ -226,17 +226,36 @@ TierVisualConfig getTierVisualConfig(String tierName) {
   }
 }
 
+/// Tangga tier: (nama, level terendah), tertinggi dulu. Satu-satunya sumber
+/// urutan tier — [getTierName] dan legend tier di Profil membaca list ini,
+/// jadi tangga yang ditampilkan ke user tidak bisa berbeda dari yang dipakai
+/// game. Ambang di sini wajib sama dengan [GameService.getRankTitle].
+const tierLadder = <(String, int)>[
+  ('Mythic Immortal', 95),
+  ('Mythic Glory', 90),
+  ('Mythic Honor', 85),
+  ('Mythic', 80),
+  ('Legend', 60),
+  ('Epic', 40),
+  ('Grandmaster', 30),
+  ('Master', 20),
+  ('Elite', 10),
+  ('Warrior', 1),
+];
+
+/// Level terendah yang masuk [tierName]. `null` kalau nama tidak dikenal.
+int? tierStartLevel(String tierName) {
+  for (final (name, start) in tierLadder) {
+    if (name == tierName) return start;
+  }
+  return null;
+}
+
 /// Returns the tier name for a given level
 String getTierName(int level) {
-  if (level >= 95) return 'Mythic Immortal';
-  if (level >= 90) return 'Mythic Glory';
-  if (level >= 85) return 'Mythic Honor';
-  if (level >= 80) return 'Mythic';
-  if (level >= 60) return 'Legend';
-  if (level >= 40) return 'Epic';
-  if (level >= 30) return 'Grandmaster';
-  if (level >= 20) return 'Master';
-  if (level >= 10) return 'Elite';
+  for (final (name, start) in tierLadder) {
+    if (level >= start) return name;
+  }
   return 'Warrior';
 }
 

@@ -20,6 +20,7 @@ import '../../services/quran_bookmark.dart';
 import '../../services/auth_service.dart';
 import '../../widgets/achievement_medal.dart';
 import '../../widgets/tier_avatar.dart';
+import '../../widgets/tier_legend.dart';
 import '../../widgets/cosmetic_locker.dart';
 import '../../widgets/theme_preset_picker.dart';
 import '../widgets/gender_picker.dart';
@@ -1074,6 +1075,8 @@ class _ProfilTabState extends State<ProfilTab> {
               const SizedBox(height: AppSpacing.md),
               _stats(),
               const SizedBox(height: AppSpacing.md),
+              _rankSystem(),
+              const SizedBox(height: AppSpacing.md),
               _heatmapButton(),
               const SizedBox(height: AppSpacing.md),
               _cosmeticLocker(),
@@ -1661,6 +1664,60 @@ class _ProfilTabState extends State<ProfilTab> {
     );
   }
 
+  /// "Sistem Rank" — legend warna tier. Satu baris per tier, chip warnanya
+  /// dari getTierVisualConfig sehingga selalu sama dengan avatar di hero.
+  void _showRankSystem() {
+    final l10n = AppL10n.of(context);
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.surfaceContainerHigh,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xl)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              HudHeader(l10n.profilRankHeader),
+              const SizedBox(height: AppSpacing.sm),
+              Text(
+                l10n.profilRankIntro,
+                style: AppText.bodyMd().copyWith(
+                  color: AppColors.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.md),
+              TierLegend(currentLevel: GameService.current.level),
+              const SizedBox(height: AppSpacing.md),
+              Text(
+                l10n.profilRankFooter,
+                style: AppText.bodyMd().copyWith(
+                  color: AppColors.onSurfaceVariant,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _rankSystem() {
+    final l10n = AppL10n.of(context);
+    return ProfilRowTile(
+      header: l10n.profilRankHeader,
+      body: l10n.profilRankRow,
+      semantics: l10n.profilRankSemantics,
+      icon: AppIcons.militaryTech,
+      onTap: _showRankSystem,
+    );
+  }
+
   /// Heatmap kalender sholat wajib per bulan — gaya GitHub contribution graph.
   void _showHeatmap() {
     showModalBottomSheet<void>(
@@ -1695,115 +1752,24 @@ class _ProfilTabState extends State<ProfilTab> {
   }
 
   Widget _heatmapButton() {
-    return Semantics(
-      button: true,
-      label: AppL10n.of(context).profilHeatmapSemantics,
+    final l10n = AppL10n.of(context);
+    return ProfilRowTile(
+      header: l10n.profilCalendarHeader,
+      body: l10n.profilHeatmapRow,
+      semantics: l10n.profilHeatmapSemantics,
+      icon: AppIcons.calendarMonth,
       onTap: _showHeatmap,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          HudHeader(AppL10n.of(context).profilCalendarHeader),
-          PressableScale(
-            onTap: _showHeatmap,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.md,
-                vertical: AppSpacing.sm,
-              ),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceContainer,
-                borderRadius: BorderRadius.circular(AppRadius.xxl),
-                border: Border.all(
-                  color: AppColors.outlineVariant.withValues(alpha: 0.3),
-                ),
-              ),
-              child: Row(
-                children: [
-                  Icon(AppIcons.calendarMonth, color: AppColors.primary, size: 22),
-                  const SizedBox(width: AppSpacing.sm),
-                  Expanded(
-                    child: Text(
-                      AppL10n.of(context).profilHeatmapRow,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppText.bodyMd().copyWith(
-                        color: AppColors.onSurfaceVariant,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: AppSpacing.base),
-                  Icon(
-                    AppIcons.arrowForwardIos,
-                    size: 14,
-                    color: AppColors.primary,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
   Widget _cosmeticLocker() {
-    return Semantics(
-      button: true,
-      container: true,
-      excludeSemantics: true,
-      label: AppL10n.of(context).profilLockerSemantics,
+    final l10n = AppL10n.of(context);
+    return ProfilRowTile(
+      header: l10n.profilLockerSkin,
+      body: l10n.profilLockerRow,
+      semantics: l10n.profilLockerSemantics,
+      icon: AppIcons.inventory2Outlined,
       onTap: _showCosmeticLocker,
-      // Bentuknya sengaja sejajar dengan _achievements(): HudHeader + kartu
-      // PressableScale ber-surfaceContainer, chevron kecil. Dua baris ini
-      // duduk berdampingan di Profil, jadi vokabulernya harus satu.
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          HudHeader(AppL10n.of(context).profilLockerSkin),
-          PressableScale(
-            onTap: _showCosmeticLocker,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.md,
-                vertical: AppSpacing.sm,
-              ),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceContainer,
-                borderRadius: BorderRadius.circular(AppRadius.xxl),
-                border: Border.all(
-                  color: AppColors.outlineVariant.withValues(alpha: 0.3),
-                ),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    AppIcons.inventory2Outlined,
-                    color: AppColors.primary,
-                    size: 22,
-                  ),
-                  const SizedBox(width: AppSpacing.sm),
-                  Expanded(
-                    child: Text(
-                      AppL10n.of(context).profilLockerRow,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppText.bodyMd().copyWith(
-                        color: AppColors.onSurfaceVariant,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: AppSpacing.base),
-                  Icon(
-                    AppIcons.arrowForwardIos,
-                    size: 14,
-                    color: AppColors.primary,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 

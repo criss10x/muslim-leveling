@@ -1007,5 +1007,14 @@
   "clCapsProSignature": "PRO SIGNATURE",
   "clSemEquipped": "equipped",
   "clSemAvailable": "available",
-  "contentNoteInEnglish": "Text in English"
+  "contentNoteInEnglish": "Text in English",
+  "profilRankHeader": "RANK SYSTEM",
+  "profilRankRow": "Identify your rank color",
+  "profilRankSemantics": "View rank system explanation",
+  "profilRankIntro": "The color of your avatar frame indicates your rank. The higher the rank, the brighter the color.",
+  "profilRankNow": "CURRENT",
+  "profilRankDivision": "Divisions I–V",
+  "profilRankNoDivision": "No division",
+  "profilRankFromLevel": "Lv. {level}",
+  "profilRankFooter": "Performing the five daily prayers grants XP. The more consistent you are, the faster you will level up — and the color changes accordingly."
 }

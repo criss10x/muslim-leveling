@@ -1007,5 +1007,14 @@
   "clCapsProSignature": "PRO İMZA",
   "clSemEquipped": "kuşanıldı",
   "clSemAvailable": "mevcut",
-  "contentNoteInEnglish": "İngilizce Metin"
+  "contentNoteInEnglish": "İngilizce Metin",
+  "profilRankHeader": "RÜTBE SİSTEMİ",
+  "profilRankRow": "Rütbenizin rengini öğrenin",
+  "profilRankSemantics": "Rütbe sistemi açıklamasını görüntüleyin",
+  "profilRankIntro": "Avatar çerçevenizin rengi rütbenizi gösterir. Rütbeniz ne kadar yüksekse, rengi de o kadar parlak olur.",
+  "profilRankNow": "ŞU ANKİ",
+  "profilRankDivision": "I–V. Küme",
+  "profilRankNoDivision": "Küme yok",
+  "profilRankFromLevel": "Lv {level}",
+  "profilRankFooter": "Beş vakit namaz kılmak XP kazandırır. Ne kadar istikrarlı olursanız, o kadar hızlı yükselirsiniz ve renk de buna göre değişir."
 }

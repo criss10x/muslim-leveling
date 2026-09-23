@@ -1681,5 +1681,15 @@
   "clCapsProSignature": "PRO SIGNATURE",
   "clSemEquipped": "dipakai",
   "clSemAvailable": "tersedia",
-  "contentNoteInEnglish": "Teks dalam Bahasa Inggris"
+  "contentNoteInEnglish": "Teks dalam Bahasa Inggris",
+  "profilRankHeader": "SISTEM RANK",
+  "profilRankRow": "Kenali warna rank kamu",
+  "profilRankSemantics": "Buka penjelasan sistem rank",
+  "profilRankIntro": "Warna bingkai avatar menunjukkan rank kamu. Makin tinggi rank, makin terang warnanya.",
+  "profilRankNow": "SEKARANG",
+  "profilRankDivision": "Divisi I–V",
+  "profilRankNoDivision": "Tanpa divisi",
+  "profilRankFromLevel": "Lv {level}",
+  "profilRankFooter": "Sholat lima waktu memberi XP. Makin konsisten, makin cepat naik — dan warnanya ikut berubah.",
+  "@profilRankFromLevel": {"placeholders": {"level": {"type": "int"}}}
 }

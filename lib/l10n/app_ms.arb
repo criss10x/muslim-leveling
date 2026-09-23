@@ -1007,5 +1007,14 @@
   "clCapsProSignature": "TANDATANGAN PRO",
   "clSemEquipped": "dipakai",
   "clSemAvailable": "tersedia",
-  "contentNoteInEnglish": "Teks dalam Bahasa Inggeris"
+  "contentNoteInEnglish": "Teks dalam Bahasa Inggeris",
+  "profilRankHeader": "SISTEM RANK",
+  "profilRankRow": "Kenali warna rank anda",
+  "profilRankSemantics": "Buka penjelasan sistem rank",
+  "profilRankIntro": "Warna bingkai avatar menunjukkan rank anda. Semakin tinggi rank, semakin terang warnanya.",
+  "profilRankNow": "SEKARANG",
+  "profilRankDivision": "Divisyen I–V",
+  "profilRankNoDivision": "Tanpa divisyen",
+  "profilRankFromLevel": "Lv {level}",
+  "profilRankFooter": "Solat lima waktu memberikan XP. Semakin konsisten, semakin cepat naik — dan warnanya juga akan berubah."
 }

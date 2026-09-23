@@ -32,7 +32,7 @@ void main() {
     final bulan = toBeginningOfSentenceCase(
       DateFormat.yMMMM('en').format(DateTime.now()),
     );
-    expect(find.text('$bulan'), findsOneWidget,
+    expect(find.text(bulan), findsOneWidget,
         reason: 'header heatmap bukan nama bulan English dari intl');
 
     expect(find.text('Mon'), findsOneWidget);
@@ -49,7 +49,7 @@ void main() {
     final bulan = toBeginningOfSentenceCase(
       DateFormat.yMMMM('id').format(DateTime.now()),
     );
-    expect(find.text('$bulan'), findsOneWidget);
+    expect(find.text(bulan), findsOneWidget);
     expect(find.text('Sen'), findsOneWidget,
         reason: 'nama hari Indonesia hilang setelah pindah ke DateFormat');
     expect(find.text('Min'), findsOneWidget);

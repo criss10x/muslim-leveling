@@ -6153,6 +6153,60 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Teks dalam Bahasa Inggris'**
   String get contentNoteInEnglish;
+
+  /// No description provided for @profilRankHeader.
+  ///
+  /// In id, this message translates to:
+  /// **'SISTEM RANK'**
+  String get profilRankHeader;
+
+  /// No description provided for @profilRankRow.
+  ///
+  /// In id, this message translates to:
+  /// **'Kenali warna rank kamu'**
+  String get profilRankRow;
+
+  /// No description provided for @profilRankSemantics.
+  ///
+  /// In id, this message translates to:
+  /// **'Buka penjelasan sistem rank'**
+  String get profilRankSemantics;
+
+  /// No description provided for @profilRankIntro.
+  ///
+  /// In id, this message translates to:
+  /// **'Warna bingkai avatar menunjukkan rank kamu. Makin tinggi rank, makin terang warnanya.'**
+  String get profilRankIntro;
+
+  /// No description provided for @profilRankNow.
+  ///
+  /// In id, this message translates to:
+  /// **'SEKARANG'**
+  String get profilRankNow;
+
+  /// No description provided for @profilRankDivision.
+  ///
+  /// In id, this message translates to:
+  /// **'Divisi I–V'**
+  String get profilRankDivision;
+
+  /// No description provided for @profilRankNoDivision.
+  ///
+  /// In id, this message translates to:
+  /// **'Tanpa divisi'**
+  String get profilRankNoDivision;
+
+  /// No description provided for @profilRankFromLevel.
+  ///
+  /// In id, this message translates to:
+  /// **'Lv {level}'**
+  String profilRankFromLevel(int level);
+
+  /// No description provided for @profilRankFooter.
+  ///
+  /// In id, this message translates to:
+  /// **'Sholat lima waktu memberi XP. Makin konsisten, makin cepat naik — dan warnanya ikut berubah.'**
+  String get profilRankFooter;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

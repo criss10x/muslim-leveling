@@ -3436,4 +3436,35 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get contentNoteInEnglish => 'İngilizce Metin';
+
+  @override
+  String get profilRankHeader => 'RÜTBE SİSTEMİ';
+
+  @override
+  String get profilRankRow => 'Rütbenizin rengini öğrenin';
+
+  @override
+  String get profilRankSemantics => 'Rütbe sistemi açıklamasını görüntüleyin';
+
+  @override
+  String get profilRankIntro =>
+      'Avatar çerçevenizin rengi rütbenizi gösterir. Rütbeniz ne kadar yüksekse, rengi de o kadar parlak olur.';
+
+  @override
+  String get profilRankNow => 'ŞU ANKİ';
+
+  @override
+  String get profilRankDivision => 'I–V. Küme';
+
+  @override
+  String get profilRankNoDivision => 'Küme yok';
+
+  @override
+  String profilRankFromLevel(int level) {
+    return 'Lv $level';
+  }
+
+  @override
+  String get profilRankFooter =>
+      'Beş vakit namaz kılmak XP kazandırır. Ne kadar istikrarlı olursanız, o kadar hızlı yükselirsiniz ve renk de buna göre değişir.';
 }

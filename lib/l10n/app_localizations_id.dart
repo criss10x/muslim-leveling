@@ -3408,4 +3408,35 @@ class AppL10nId extends AppL10n {
 
   @override
   String get contentNoteInEnglish => 'Teks dalam Bahasa Inggris';
+
+  @override
+  String get profilRankHeader => 'SISTEM RANK';
+
+  @override
+  String get profilRankRow => 'Kenali warna rank kamu';
+
+  @override
+  String get profilRankSemantics => 'Buka penjelasan sistem rank';
+
+  @override
+  String get profilRankIntro =>
+      'Warna bingkai avatar menunjukkan rank kamu. Makin tinggi rank, makin terang warnanya.';
+
+  @override
+  String get profilRankNow => 'SEKARANG';
+
+  @override
+  String get profilRankDivision => 'Divisi I–V';
+
+  @override
+  String get profilRankNoDivision => 'Tanpa divisi';
+
+  @override
+  String profilRankFromLevel(int level) {
+    return 'Lv $level';
+  }
+
+  @override
+  String get profilRankFooter =>
+      'Sholat lima waktu memberi XP. Makin konsisten, makin cepat naik — dan warnanya ikut berubah.';
 }
