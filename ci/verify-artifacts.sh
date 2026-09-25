@@ -97,11 +97,25 @@ for FILE in "$@"; do
     if [ "$KIND" = apk ]; then
         CERT_OUT="$("$APKSIGNER" verify --print-certs "$FILE" 2>&1)" \
             || { echo "$CERT_OUT" >&2; fail "$FILE: blok tanda tangan APK tidak valid"; }
-        GOT_DN="$(printf '%s' "$CERT_OUT" | sed -n 's/^Signer #1 certificate DN: //p')"
-        GOT_SHA256="$(printf '%s' "$CERT_OUT" | sed -n 's/^Signer #1 certificate SHA-256 digest: //p')"
-        GOT_SHA1="$(printf '%s' "$CERT_OUT" | sed -n 's/^Signer #1 certificate SHA-1 digest: //p')"
-        [ -n "$GOT_DN" ] && [ -n "$GOT_SHA256" ] || fail "$FILE: sertifikat tidak terbaca dari apksigner"
-        SCHEME_SHOW="$("$APKSIGNER" verify --verbose "$FILE" 2>&1 | sed -n 's/^Verified using \(v[0-9]\) scheme.*: true$/\1/p' | paste -sd, -)"
+        # Label signer berbeda antar versi apksigner — 0.9 (build-tools lama /
+        # paket Ubuntu) mencetak "Signer #1 certificate DN: …", 37.0 (runner CI)
+        # mencetak "V2 Signer: certificate DN: …". Buang prefiksnya dulu, jangan
+        # menulis satu format saja di regex.
+        # Pemisahnya juga berbeda: 37.0 menulis "V2 Signer: certificate DN:",
+        # 0.9 menulis "Signer #1 certificate DN:" (tanpa titik dua setelah #1).
+        CERT_NORM="$(printf '%s' "$CERT_OUT" \
+            | sed -n 's/^\(V[0-9.]* \)\?Signer\( #[0-9]*\)\?[: ]*certificate //p')"
+        [ -n "$CERT_NORM" ] || {
+            printf '%s\n' "$CERT_OUT" >&2
+            fail "$FILE: format keluaran apksigner tidak dikenal"
+        }
+        GOT_DN="$(printf '%s' "$CERT_NORM" | sed -n 's/^DN: //p' | head -1)"
+        GOT_SHA256="$(printf '%s' "$CERT_NORM" | sed -n 's/^SHA-256 digest: //p' | head -1)"
+        GOT_SHA1="$(printf '%s' "$CERT_NORM" | sed -n 's/^SHA-1 digest: //p' | head -1)"
+        [ -n "$GOT_DN" ] && [ -n "$GOT_SHA256" ] && [ -n "$GOT_SHA1" ] \
+            || { printf '%s\n' "$CERT_OUT" >&2; fail "$FILE: sertifikat tidak terbaca dari apksigner"; }
+        SCHEME_SHOW="$("$APKSIGNER" verify --verbose "$FILE" 2>&1 \
+            | sed -n 's/^Verified using \(v[0-9][0-9.]*\) scheme.*: true$/\1/p' | paste -sd, -)"
     else
         CERT_OUT="$("$KEYTOOL" -printcert -jarfile "$FILE" 2>&1)" \
             || { echo "$CERT_OUT" >&2; fail "$FILE: tidak bisa membaca sertifikat"; }
