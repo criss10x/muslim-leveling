@@ -97,14 +97,14 @@ jobs:
       - name: Build release APK (arm64-v8a)
         run: flutter build apk --release --target-platform android-arm64
 
-      # Dicetak supaya SHA-1 yang harus didaftarkan di Google Cloud bisa dibaca
-      # dari log, tanpa perlu memasang APK-nya dulu.
-      - name: Report APK signing certificate
+      # Verifikasi, bukan cuma mencetak: file ini harus benar-benar bertanda
+      # tangan keystore rilis kita (SHA-256 c85160f3...f7ba64) dan utuh. Dulu
+      # blok ini cuma meng-echo sertifikatnya, jadi APK debug-signed atau yang
+      # berubah setelah ditandatangani bisa lolos ke artifact tanpa ketahuan.
+      - name: Verify release APK signature (keystore + integrity)
         run: |
-          APKSIGNER=$(ls -d "$ANDROID_HOME"/build-tools/*/apksigner | tail -1)
-          "$APKSIGNER" verify --print-certs \
-            build/app/outputs/flutter-apk/app-release.apk \
-            | grep -E "certificate DN|SHA-1"
+          chmod +x ci/verify-artifacts.sh
+          ci/verify-artifacts.sh build/app/outputs/flutter-apk/app-release.apk
 
       - uses: actions/upload-artifact@v4
         with:
@@ -169,6 +169,16 @@ jobs:
 
       - name: Build release AAB
         run: flutter build appbundle --release
+
+      # Sama seperti APK: buktikan tanda tangannya milik keystore rilis kita dan
+      # bundle-nya utuh, bukan cuma mencetak sertifikatnya. Ditambah dua hal yang
+      # khusus bundle: bundletool validate, dan bukti R8 benar-benar jalan
+      # (angka obfuscation/optimization/shrinking + proguard.map terbawa) —
+      # Play membaca itu dari BUNDLE-METADATA, dan sejak Feb 2027 menuntut >=25%.
+      - name: Verify release AAB (signature + integrity + R8)
+        run: |
+          chmod +x ci/verify-artifacts.sh
+          ci/verify-artifacts.sh build/app/outputs/bundle/release/app-release.aab
 
       - uses: actions/upload-artifact@v4
         with:
