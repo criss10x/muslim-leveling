@@ -78,10 +78,11 @@ void main() {
     expect(find.byIcon(AppIcons.myLocation), findsOneWidget);
     expect(find.text('Lokasi Saat Ini'), findsNothing);
     expect(find.text('Cari Kota'), findsOneWidget);
-    // Tombol Hari Penting Islam selalu render (fix P1a: tidak di-gate API).
-    // Kalau API hijriah gagal, label fallback 'Hari Penting Islam' muncul.
-    expect(find.byIcon(AppIcons.calendarMonth), findsOneWidget);
-    expect(find.text('Hari Penting Islam'), findsOneWidget);
+    // Tombol Hari Penting DIPINDAH ke tile Akses Cepat di tab Home. Guard ini
+    // dijaga arah sebaliknya supaya tidak diam-diam kembali jadi dua pintu.
+    expect(find.byIcon(AppIcons.calendarMonth), findsNothing,
+        reason: 'Hari Penting sudah pindah ke Home — jangan dirender lagi di sini');
+    expect(find.text('Hari Penting Islam'), findsNothing);
   });
 
   testWidgets('next-prayer name uses light-theme foreground', (tester) async {

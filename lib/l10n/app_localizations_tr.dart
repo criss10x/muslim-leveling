@@ -826,6 +826,9 @@ class AppL10nTr extends AppL10n {
   String get homeQuickActions => 'HIZLI ERİŞİM';
 
   @override
+  String get homeQuickHariPenting => 'Önemli Günler';
+
+  @override
   String homeQuickActionsMeta(int done, int total) {
     return 'TEFEKKÜR $done/$total';
   }

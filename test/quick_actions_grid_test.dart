@@ -49,7 +49,9 @@ void main() {
         .map((b) => b.size)
         .toList();
 
-    expect(boxes.length, 5, reason: 'harus 5 tile (4 pintasan + Renungan)');
+    expect(boxes.length, 6,
+        reason: 'harus 6 tile (5 pintasan + Hari Penting); Kartu Hari Penting '
+            'dipindah dari header Jadwal 2026-09-26');
 
     final widths = boxes.map((s) => s.width).toSet();
     final heights = boxes.map((s) => s.height).toSet();

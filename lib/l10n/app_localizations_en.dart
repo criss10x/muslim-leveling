@@ -816,6 +816,9 @@ class AppL10nEn extends AppL10n {
   String get homeQuickActions => 'QUICK ACCESS';
 
   @override
+  String get homeQuickHariPenting => 'Key Dates';
+
+  @override
   String homeQuickActionsMeta(int done, int total) {
     return 'REFLECTION $done/$total';
   }

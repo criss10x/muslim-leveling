@@ -17,6 +17,7 @@ import 'hadis_screen.dart';
 import 'doa_screen.dart';
 import 'qibla_screen.dart';
 import 'daily_highlight_screen.dart';
+import 'hari_penting_screen.dart';
 import '../theme/app_icons.dart';
 import '../l10n/app_localizations.dart';
 
@@ -1452,41 +1453,58 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  // ── Quick actions: pintasan ke Hadis / Doa / Kiblat / Dzikir / Renungan ──
+  // ── Quick actions: pintasan ke Hadis / Doa / Kiblat / Dzikir / Renungan /
+  //    Hari Penting ──
   // ponytail: dulu tersebar (Hadis+Doa di tab Belajar, Kiblat di tab Jadwal,
   // Dzikir & Renungan sebagai section di Home) — sekarang dikumpulkan di satu
-  // deret supaya Home ringkas dan semuanya sejangkauan jempol.
+  // deret supaya Home ringkas dan semuanya sejangkauan jempol. Hari Penting
+  // menyusul dari header tab Jadwal (dipindah, bukan disalin: satu jalan masuk).
 
   Widget _quickActions() {
     // ponytail: label 'Renungan' (bukan 'Highlight') — halaman tujuannya sudah
     // berjudul "Renungan Hari Ini", dan 'Highlight' bertabrakan dengan kutipan
     // artikel Belajar + sorot hasil cari Quran. Ikonnya buku, bukan sparkle
     // (glyph generik "AI/ajaib").
-    final actions = <({IconData icon, String label, VoidCallback onTap})>[
+    // [daily] menandai tile yang punya progres harian → satu-satunya yang bisa
+    // dapat badge. Dulu ditentukan dengan membandingkan STRING label; sekarang
+    // flag eksplisit supaya label boleh berubah tanpa diam-diam mematikan badge.
+    final actions =
+        <({IconData icon, String label, VoidCallback onTap, bool daily})>[
       (
         icon: AppIcons.autoStories,
         label: AppL10n.of(context).homeQuickHadis,
         onTap: () => _push(const HadisScreen()),
+        daily: false,
       ),
       (
         icon: AppIcons.volunteerActivism,
         label: AppL10n.of(context).homeQuickDoa,
         onTap: () => _push(const DoaScreen()),
+        daily: false,
       ),
       (
         icon: AppIcons.explore,
         label: AppL10n.of(context).homeQuickKiblat,
         onTap: _openQibla,
+        daily: false,
       ),
       (
         icon: AppIcons.dotsNine,
         label: AppL10n.of(context).homeQuickDzikir,
         onTap: () => _push(const DzikirScreen()),
+        daily: false,
       ),
       (
         icon: AppIcons.menuBookOutlined,
         label: AppL10n.of(context).homeQuickRenungan,
         onTap: () => _push(const DailyHighlightScreen()),
+        daily: true,
+      ),
+      (
+        icon: AppIcons.calendarMonth,
+        label: AppL10n.of(context).homeQuickHariPenting,
+        onTap: () => _push(const HariPentingScreen()),
+        daily: false,
       ),
     ];
     // Renungan satu-satunya tile dengan state harian → satu-satunya yang dapat
@@ -1500,7 +1518,7 @@ class _HomeTabState extends State<HomeTab> {
           icon: a.icon,
           label: a.label,
           onTap: a.onTap,
-          done: a.label == AppL10n.of(context).homeQuickRenungan &&
+          done: a.daily &&
               renunganDone == GameService.highlightSwipeMaxPages,
         ),
     ];
@@ -1620,11 +1638,17 @@ class _HomeTabState extends State<HomeTab> {
               ],
             ),
             const SizedBox(height: 6),
-            Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppText.labelCapsSm().copyWith(color: AppColors.onSurface),
+            // FittedBox: label tile tidak boleh dipotong ellipsis di lebar 1/3
+            // kolom. Terukur (JetBrainsMono-Bold 10sp, letterSpacing 1.0) ruang
+            // teks hanya 85,3px @360 dan 94,7px @412 — "Important Dates" 105px,
+            // "Önemli Günler" 91px. Menyusut sedikit lebih baik daripada
+            // "Hari Pent…" yang tak bisa dibaca.
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                label,
+                style: AppText.labelCapsSm().copyWith(color: AppColors.onSurface),
+              ),
             ),
           ],
         ),

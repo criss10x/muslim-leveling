@@ -815,6 +815,9 @@ class AppL10nId extends AppL10n {
   String get homeQuickActions => 'AKSES CEPAT';
 
   @override
+  String get homeQuickHariPenting => 'Hari Penting';
+
+  @override
   String homeQuickActionsMeta(int done, int total) {
     return 'RENUNGAN $done/$total';
   }

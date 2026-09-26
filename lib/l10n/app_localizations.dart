@@ -1612,6 +1612,12 @@ abstract class AppL10n {
   /// **'AKSES CEPAT'**
   String get homeQuickActions;
 
+  /// No description provided for @homeQuickHariPenting.
+  ///
+  /// In id, this message translates to:
+  /// **'Hari Penting'**
+  String get homeQuickHariPenting;
+
   /// No description provided for @homeQuickActionsMeta.
   ///
   /// In id, this message translates to:
