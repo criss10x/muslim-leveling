@@ -2,9 +2,16 @@
 
 All notable user-facing changes. Newest first.
 
-## [Unreleased]
+## [1.1.4] - 2026-09-26
 
 ### Added
+- Home menyambut dengan nama Anda: kartu hero kini dibuka sapaan
+  "Assalamualaikum, {nama}" (Turki: "Selamün Aleyküm"), menggantikan label
+  "CURRENT RANK" yang generik. Kalau nama belum diisi, yang tampil adalah nama
+  default yang sama dengan di onboarding — bukan lagi nama aplikasi.
+- "Hari Penting" (tanggal-tanggal hijriah) pindah dari tombol tersembunyi di tab
+  Jadwal menjadi tile Akses Cepat ke-6 di Home, jadi jatuh tempo puasa/Idul
+  Fitri terlihat tanpa membuka tab lain.
 - Turkish (Türkçe) and Malay (Bahasa Melayu) — the app now ships 4 languages
   (id, en, tr, ms). Both are picked the same way as English: Profile > App
   language, or onboarding page 1. Language names are shown in their own
@@ -19,7 +26,19 @@ All notable user-facing changes. Newest first.
   translated too, so "Kata Ulama" and the Hijri dates stop being Indonesian in
   the other languages. Scholar names stay as-is (they are proper names).
 
+### Changed
+- Baris logo + nama aplikasi + ikon gear di atas kartu hero dihapus. Identitas
+  aplikasi sudah dibawa medallion tier dan label di nav bawah, jadi baris itu
+  mengulang tiga kali di satu layar. Setelan tetap satu ketukan lagi: tab
+  "Profil" di nav bawah.
+- Baris "nama • Lv N" di kartu hero dihapus; angka level pindah sebaris dengan
+  bar progres XP supaya tidak ada dua penunjuk level di satu kartu.
+
 ### Fixed
+- Nama pengguna yang belum diisi tidak lagi ditampilkan sebagai nama aplikasi
+  ("Muslim Leveling • Lv 1") di kartu hero — jatuh ke nama default yang sama
+  dengan onboarding. Tab Profil juga tidak lagi memakai nama default berbeda
+  ("Muslim Warrior") dari yang dipakai layar lain.
 - Malay and Indonesian share ~80% of their vocabulary, so the old
   "is this Indonesian prose?" guard flagged correct Malay as untranslated
   (149 false positives). Replaced with a measured ratio check that catches the
