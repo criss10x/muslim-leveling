@@ -72,8 +72,13 @@ class _ProfilTabState extends State<ProfilTab> {
     final p = await SharedPreferences.getInstance();
     final state = GameService.current;
     if (!mounted) return;
+    final rawNick = p.getString('nickname') ?? '';
+    // ponytail: dulu hardcoded 'Muslim Warrior' — bukan ARB, dan BERBEDA dari
+    // `onbDefaultNickname` ('Pejuang') yang dipakai onboarding + hero Home.
+    // Satu user, dua nama default. Sekarang satu sumber: onbDefaultNickname.
+    final defaultNick = AppL10n.of(context).onbDefaultNickname;
     setState(() {
-      _nickname = p.getString('nickname') ?? 'Muslim Warrior';
+      _nickname = rawNick.isEmpty ? defaultNick : rawNick;
       _avatarPath = p.getString('avatar_path');
       _haidMode = state.haidMode;
       _gender = p.getString(kGenderPrefKey) ?? '';

@@ -3346,13 +3346,12 @@ class AppL10nTr extends AppL10n {
   String get btCatPraktikIbadah => 'İbadet Uygulamaları';
 
   @override
-  String get homeCapsCurrentRank => 'MEVCUT RÜTBE';
-
-  @override
-  String get homeCapsXpProgress => 'XP İLERLEMESİ';
-
-  @override
   String get homeCapsStreak => 'SERİ';
+
+  @override
+  String homeGreeting(String name) {
+    return 'Selamün Aleyküm, $name';
+  }
 
   @override
   String get homeCapsSunnah => 'SÜNNET';

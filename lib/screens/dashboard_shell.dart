@@ -50,10 +50,6 @@ class _DashboardShellState extends State<DashboardShell> {
         l10n.tabProfil,
       ];
 
-  // Indeks bernama, bukan angka telanjang: Profil bergeser dari 3 ke 4 saat
-  // tab Quran disisipkan, dan lompatan dari Home diam-diam salah sasaran.
-  static const _profilTab = 4;
-
   @override
   Widget build(BuildContext context) {
     // ListenableBuilder: theme toggle rebuilds shell + non-const tabs.
@@ -82,9 +78,7 @@ class _DashboardShellState extends State<DashboardShell> {
                 IndexedStack(
                   index: _tab,
                   children: [
-                    HomeTab(
-                        onSettingsPressed: () =>
-                            setState(() => _tab = _profilTab)),
+                    const HomeTab(),
                     JadwalTab(),
                     QuranTab(),
                     BelajarTab(),

@@ -1651,9 +1651,15 @@
   "btCatKeyakinan": "Keyakinan",
   "btCatRukunIslam": "Rukun Islam",
   "btCatPraktikIbadah": "Praktik Ibadah",
-  "homeCapsCurrentRank": "CURRENT RANK",
-  "homeCapsXpProgress": "XP PROGRESS",
   "homeCapsStreak": "STREAK",
+  "homeGreeting": "Assalamualaikum, {name}",
+  "@homeGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeCapsSunnah": "SUNNAH",
   "homeCapsLocked": "LOCKED",
   "homeCapsDone": "DONE",

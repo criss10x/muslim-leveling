@@ -5974,23 +5974,17 @@ abstract class AppL10n {
   /// **'Praktik Ibadah'**
   String get btCatPraktikIbadah;
 
-  /// No description provided for @homeCapsCurrentRank.
-  ///
-  /// In id, this message translates to:
-  /// **'CURRENT RANK'**
-  String get homeCapsCurrentRank;
-
-  /// No description provided for @homeCapsXpProgress.
-  ///
-  /// In id, this message translates to:
-  /// **'XP PROGRESS'**
-  String get homeCapsXpProgress;
-
   /// No description provided for @homeCapsStreak.
   ///
   /// In id, this message translates to:
   /// **'STREAK'**
   String get homeCapsStreak;
+
+  /// No description provided for @homeGreeting.
+  ///
+  /// In id, this message translates to:
+  /// **'Assalamualaikum, {name}'**
+  String homeGreeting(String name);
 
   /// No description provided for @homeCapsSunnah.
   ///

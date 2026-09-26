@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:muslim_leveling/screens/home_tab.dart';
+import 'package:muslim_leveling/theme/app_icons.dart';
 import 'package:muslim_leveling/theme/app_theme.dart';
 import 'package:muslim_leveling/widgets/tier_avatar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -105,7 +106,10 @@ void main() {
       expect(medallionDecoration.boxShadow, isNull);
       expect(medallionInnerDecoration.color, AppColors.primaryContainer);
       expect(medallionStarPainter.color, AppColors.primary);
-      expect(find.text('CURRENT RANK'), findsOneWidget);
+      // Eyebrow hero sekarang SAPAAN, bukan label rank generik. Dijaga arah
+      // sebaliknya supaya 'CURRENT RANK' tidak diam-diam kembali.
+      expect(find.text('CURRENT RANK'), findsNothing,
+          reason: 'eyebrow hero = sapaan Assalamualaikum, bukan label rank');
       expect(tester.takeException(), isNull);
     },
   );
@@ -180,8 +184,10 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Home hero ellipsizes a long stored nickname', (tester) async {
-    const nickname = 'Pejuang Muslim Yang Sangat Panjang Sekali Untuk Hero';
+  testWidgets('Home hero ellipsizes a long stored nickname di sapaan', (
+    tester,
+  ) async {
+    const nickname = 'Abdurrahman Fatah Wijaya';
     SharedPreferences.setMockInitialValues({
       'game_state_v1': '{"xp":0,"level":1}',
       'nickname': nickname,
@@ -191,8 +197,36 @@ void main() {
 
     await pumpHero(tester, preset: AppThemePreset.lightEmerald);
 
-    final metadata = tester.widget<Text>(find.text('$nickname • Lv 1'));
-    expect(metadata.maxLines, 1);
-    expect(metadata.overflow, TextOverflow.ellipsis);
+    // Baris '{nama} • Lv N' DIPINDAH ke sapaan, jadi target ellipsis pindah.
+    // Diukur: "ASSALAMUALAIKUM, " 141,6px + nama 24 char = 343,2px vs budget
+    // @360 sebaris kartu 312px -> harus ter-ellipsis, bukan overflow.
+    final greeting = tester.widget<Text>(
+      find.text('Assalamualaikum, $nickname'),
+    );
+    expect(greeting.maxLines, 1);
+    expect(greeting.overflow, TextOverflow.ellipsis);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Header Home tidak lagi memuat logo, nama app, atau gear', (
+    tester,
+  ) async {
+    await pumpHero(tester, preset: AppThemePreset.darkEmerald);
+
+    expect(
+      find.byIcon(AppIcons.settingsOutlined),
+      findsNothing,
+      reason: 'gear mengarah ke tab Profil yang sudah ada di nav bawah',
+    );
+    expect(
+      find.text('MUSLIM LEVELING'),
+      findsNothing,
+      reason: 'nama app berulang 3x di satu layar; identitas = medallion + nav',
+    );
+    expect(find.text('Muslim Leveling'), findsNothing);
+    // Hero-nya sendiri wajib tetap ada: yang dihapus baris header DI ATASNYA,
+    // bukan hero-nya.
+    expect(find.byKey(const Key('home-hero-card')), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 }

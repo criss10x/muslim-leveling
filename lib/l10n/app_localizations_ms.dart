@@ -3331,13 +3331,12 @@ class AppL10nMs extends AppL10n {
   String get btCatPraktikIbadah => 'Amalan Ibadah';
 
   @override
-  String get homeCapsCurrentRank => 'PANGKAT SEMASA';
-
-  @override
-  String get homeCapsXpProgress => 'KEMAJUAN XP';
-
-  @override
   String get homeCapsStreak => 'STREAK';
+
+  @override
+  String homeGreeting(String name) {
+    return 'Assalamualaikum, $name';
+  }
 
   @override
   String get homeCapsSunnah => 'SUNNAH';

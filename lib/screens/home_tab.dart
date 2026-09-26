@@ -85,8 +85,7 @@ String _prayerName(String key, AppL10n l10n) => switch (key) {
 
 /// Home / Dashboard Utama — live game logic (port V3), design preserved.
 class HomeTab extends StatefulWidget {
-  final VoidCallback? onSettingsPressed;
-  const HomeTab({super.key, this.onSettingsPressed});
+  const HomeTab({super.key});
 
   /// Kunci sunnah yang benar-benar dirender baris Bonus Quest. Dipakai tes
   /// untuk mengunci kesamaan dengan GameService.sunnahKeys + ring denominator.
@@ -443,13 +442,11 @@ class _HomeTabState extends State<HomeTab> {
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.only(top: AppSpacing.lg, bottom: 100),
             children: [
-              _section(0, _appBar(context)),
-              const SizedBox(height: AppSpacing.md),
-              _section(1, _heroRank(info)),
+              _section(0, _heroRank(info)),
               const SizedBox(height: AppSpacing.sm),
-              _section(2, _hudStrip()),
+              _section(1, _hudStrip()),
               const SizedBox(height: AppSpacing.lg),
-              _section(3, _ritualRings()),
+              _section(2, _ritualRings()),
               const SizedBox(height: AppSpacing.lg),
               _section(4, _quickActions()),
               const SizedBox(height: AppSpacing.lg),
@@ -490,37 +487,17 @@ class _HomeTabState extends State<HomeTab> {
   // Redesign minimalis: glow & border HANYA di (1) hero Status Window,
   // (2) baris "aktif sekarang" (cyan hairline), (3) shimmer claimable.
   // Kartu tenang pakai FlatCard, header pakai HudHeader (common.dart).
-
-  Widget _appBar(BuildContext context) {
-    return Row(
-      children: [
-        ColorFiltered(
-          colorFilter: ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
-          child: Image.asset(
-            'assets/images/logo_mark.png',
-            width: 22,
-            height: 22,
-          ),
-        ),
-        const SizedBox(width: AppSpacing.xs),
-        Text(
-          AppL10n.of(context).appTitle.toUpperCase(),
-          style: AppText.labelCaps().copyWith(
-            color: AppColors.onSurface,
-            fontSize: 13,
-          ),
-        ),
-        const Spacer(),
-        IconButton(
-          icon: Icon(
-            AppIcons.settingsOutlined,
-            color: AppColors.onSurfaceVariant,
-          ),
-          onPressed: widget.onSettingsPressed,
-        ),
-      ],
-    );
-  }
+  //
+  // ponytail: baris header (logo 22px + "MUSLIM LEVELING" + gear) DIHAPUS
+  // 2026-09-26. Tiga alasan yang bertahan: (1) identitas app muncul 3x di satu
+  // layar — logo, teks appTitle, dan appTitle lagi sebagai pengganti nama user
+  // yang kosong di baris metadata hero; (2) `appTitle` = "Muslim Leveling" di
+  // KEEMPAT locale, jadi nol informasi di dalam app — label di bawah ikon
+  // launcher sudah menuliskan itu; (3) hero sudah punya anchor sendiri:
+  // _RankMedallion yang warnanya berubah tiap naik tier. Gear-nya juga dihapus
+  // karena kerjanya hanya pindah ke tab Profil yang sudah ada di nav bawah.
+  // Referensi appllama (nav-headers): STEEZY/HuntStand/Brainpal semua memilih
+  // SATU anchor di baris atas, bukan dua.
 
   Widget _heroRank(LevelInfo info) {
     final l10n = AppL10n.of(context);
@@ -588,70 +565,64 @@ class _HomeTabState extends State<HomeTab> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Sapaan lebar penuh — TIDAK dibagi baris dengan medallion.
+                  // ponytail: diukur (JetBrainsMono-Bold 12, letterSpacing 1.2),
+                  // "ASSALAMUALAIKUM, " sendiri sudah 141,6px. Budget sebaris
+                  // medallion cuma 280px @412 / 228px @360 (nama >10 char sudah
+                  // ellipsis di 360 — pasar utama app ini), sedangkan lebar penuh
+                  // kartu 364px @412 / 312px @360 menampung nama sampai ~20 char.
+                  // Nickname di-cap 20 char di onboarding, jadi ellipsis 1 baris
+                  // wajib ada.
+                  Text(
+                    l10n.homeGreeting(
+                      _nickname.isEmpty ? l10n.onbDefaultNickname : _nickname,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppText.labelCaps().copyWith(
+                      color: AppColors.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              l10n.homeCapsCurrentRank,
-                              style: AppText.labelCaps().copyWith(
-                                color: AppColors.onSurfaceVariant,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            // Light: bright tier colors (some are white/gold)
-                            // vanish on the near-white card — use solid ink.
-                            // Dark: keep the tier gradient (gaming identity).
-                            isLightTheme
-                                ? Text(
-                                    GameService.getRankTitle(info.level),
-                                    style: AppText.headlineMd().copyWith(
-                                      color: AppColors.onSurface,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  )
-                                : ShaderMask(
-                                    shaderCallback: (rect) => LinearGradient(
-                                      colors: [tierP, tierS],
-                                    ).createShader(rect),
-                                    child: Text(
-                                      GameService.getRankTitle(info.level),
-                                      style: AppText.headlineMd().copyWith(
-                                        color: Colors.white,
-                                        shadows: [
-                                          Shadow(
-                                            color: tierP.withValues(alpha: 0.5),
-                                            blurRadius: 12,
-                                          ),
-                                        ],
+                        // Light: bright tier colors (some are white/gold)
+                        // vanish on the near-white card — use solid ink.
+                        // Dark: keep the tier gradient (gaming identity).
+                        child: isLightTheme
+                            ? Text(
+                                GameService.getRankTitle(info.level),
+                                style: AppText.headlineMd().copyWith(
+                                  color: AppColors.onSurface,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              )
+                            : ShaderMask(
+                                shaderCallback: (rect) => LinearGradient(
+                                  colors: [tierP, tierS],
+                                ).createShader(rect),
+                                child: Text(
+                                  GameService.getRankTitle(info.level),
+                                  style: AppText.headlineMd().copyWith(
+                                    color: Colors.white,
+                                    shadows: [
+                                      Shadow(
+                                        color: tierP.withValues(alpha: 0.5),
+                                        blurRadius: 12,
                                       ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                                    ],
                                   ),
-                            Text(
-                              '${_nickname.isEmpty ? AppL10n.of(context).appTitle : _nickname} • Lv ${info.level}',
-                              style: AppText.bodyMd().copyWith(
-                                color: AppColors.onSurfaceVariant,
-                                fontSize: 12,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
                       ),
                       const SizedBox(width: AppSpacing.md),
-                      _RankMedallion(
-                        tier: tier,
-                        level: info.level,
-                        light: light,
-                      ),
+                      _RankMedallion(tier: tier, light: light),
                     ],
                   ),
                   const SizedBox(height: AppSpacing.md),
@@ -660,10 +631,18 @@ class _HomeTabState extends State<HomeTab> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
+                        // ponytail: dulu 'XP PROGRESS' — mubazir karena baris di
+                        // bawah bar ini sudah menulis '{n} XP TO NEXT RANK', jadi
+                        // "XP" muncul dua kali. Diganti level: level itu konteks
+                        // dari bar progres, dan setelah baris '{nama} • Lv N'
+                        // dihapus, satu-satunya penunjuk level lain ada di dalam
+                        // medallion pada fontSize 8 (di bawah baseline 12sp).
+                        // Pakai key yang SUDAH ADA (homeLevelShort: 'LV {level}'
+                        // / 'SVY {level}' di tr) — jangan bikin key baru.
                         child: Text(
-                          l10n.homeCapsXpProgress,
+                          l10n.homeLevelShort(info.level),
                           style: AppText.labelCaps().copyWith(
-                            color: AppColors.onSurfaceVariant,
+                            color: AppColors.onSurface,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -2012,14 +1991,9 @@ class _RingsPainter extends CustomPainter {
 
 class _RankMedallion extends StatelessWidget {
   final TierVisualConfig tier;
-  final int level;
   final bool light;
 
-  const _RankMedallion({
-    required this.tier,
-    required this.level,
-    required this.light,
-  });
+  const _RankMedallion({required this.tier, required this.light});
 
   @override
   Widget build(BuildContext context) {
@@ -2052,10 +2026,10 @@ class _RankMedallion extends StatelessWidget {
                   ? AppColors.primaryContainer
                   : AppColors.surfaceContainer,
             ),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                SizedBox.square(
+            child: SizedBox.square(
+              dimension: 68,
+              child: Center(
+                child: SizedBox.square(
                   dimension: 30,
                   child: CustomPaint(
                     painter: _IslamicHeroPatternPainter(
@@ -2065,17 +2039,11 @@ class _RankMedallion extends StatelessWidget {
                     ),
                   ),
                 ),
-                Positioned(
-                  bottom: 7,
-                  child: Text(
-                    AppL10n.of(context).homeLevelShort(level),
-                    style: AppText.labelCapsSm().copyWith(
-                      color: AppColors.onSurfaceVariant,
-                      fontSize: 8,
-                    ),
-                  ),
-                ),
-              ],
+                // ponytail: teks 'LV N' fontSize 8 DIHAPUS dari sini — di bawah
+                // baseline 12sp Material, dibungkus ExcludeSemantics (screen
+                // reader tak melihatnya), dan menggandakan level yang sudah
+                // terbaca di baris XP. Satu tempat, 12px, aksesibel.
+              ),
             ),
           ),
         ),
