@@ -2,7 +2,7 @@
 
 All notable user-facing changes. Newest first.
 
-## [1.1.4] - 2026-09-26
+## [Unreleased]
 
 ### Added
 - Home menyambut dengan nama Anda: kartu hero kini dibuka sapaan
