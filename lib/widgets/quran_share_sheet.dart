@@ -335,6 +335,7 @@ class _QShareCard extends StatelessWidget {
   final Color sub;
   final bool showArabic;
   final bool showTranslation;
+  final Size cardSize;
 
   const _QShareCard({
     required this.surah,
@@ -344,6 +345,7 @@ class _QShareCard extends StatelessWidget {
     required this.sub,
     this.showArabic = true,
     this.showTranslation = true,
+    this.cardSize = const Size(340, 604),
   });
 
   @override
@@ -351,9 +353,15 @@ class _QShareCard extends StatelessWidget {
     final l10n = AppL10n.of(context);
     final accent =
         AppColors.secondaryFixedDim; // bright gold, card bg always dark
+    // Skala proporsional: semua ukuran font & spacing diturunkan dari tinggi
+    // kartu. Kartu 9:16 (604) = 1.0×; kartu 3:4 (453) ≈ 0.75×; 1:1 (340) = 1×
+    // lebar tapi teks lebih besar relatif ruang — pakai rasio terhadap 604
+    // supaya 1:1 tetap enak dibaca tanpa teks tumpang tindih.
+    final s = (cardSize.height / 604).clamp(0.55, 1.0);
+    final q = (cardSize.height / 604).clamp(0.85, 1.15);
     return Container(
-      width: 340,
-      height: 604,
+      width: cardSize.width,
+      height: cardSize.height,
       decoration: preset.decoration.copyWith(
         borderRadius: BorderRadius.circular(20),
       ),
@@ -382,7 +390,10 @@ class _QShareCard extends StatelessWidget {
               ),
             ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 24),
+            padding: EdgeInsets.symmetric(
+              horizontal: 22 * s,
+              vertical: 24 * s,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -395,94 +406,79 @@ class _QShareCard extends StatelessWidget {
                         textAlign: TextAlign.center,
                         textDirection: TextDirection.rtl,
                         style: GoogleFonts.amiriQuran(
-                          fontSize: 24,
+                          fontSize: 24 * q,
                           fontWeight: FontWeight.w700,
                           color: accent,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(height: 2 * s),
                       Text(
                         surah.nameLatin,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 11 * q,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 2,
                           color: fg,
                         ),
                       ),
-                      const SizedBox(height: 1),
+                      SizedBox(height: 1 * s),
                       Text(
                         // Kartu share ikut bahasa aktif, sama seperti daftar.
                         surahMeaning(AppL10n.of(context), surah.number),
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 9,
+                          fontSize: 9 * q,
                           color: sub.withValues(alpha: 0.7),
                         ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10 * s),
                 Divider(color: fg.withValues(alpha: 0.25), height: 1),
-                const SizedBox(height: 10),
-                // ── Arab ayat ──
-                if (showArabic) ...[
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        ayah.arabic,
-                        maxLines: 8,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.right,
-                        textDirection: TextDirection.rtl,
-                        style: GoogleFonts.amiriQuran(
-                          fontSize: 24,
-                          height: 1.7,
-                          color: fg,
-                        ),
-                      ),
-                    ),
-                  ),
-                  if (showTranslation) const SizedBox(height: 12),
-                ],
-                // ── Terjemahan ──
-                if (showTranslation) ...[
-                  showArabic
-                      ? Expanded(
-                          child: Center(
-                            child: Text(
-                              ayah.translation,
-                              maxLines: 6,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 14,
-                                height: 1.55,
-                                color: sub,
-                              ),
-                            ),
+                SizedBox(height: 10 * s),
+                // ── Konten tengah: Arab + terjemahan menyebar merata ──
+                // Satu Expanded tunggal dengan spaceEvenly supaya gap atas-
+                // tengah-bawah identik — tidak ada "lubang" di antara blok.
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      if (showArabic)
+                        Text(
+                          ayah.arabic,
+                          maxLines: 8,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          textDirection: TextDirection.rtl,
+                          style: GoogleFonts.amiriQuran(
+                            fontSize: 24 * q,
+                            height: 1.7,
+                            color: fg,
                           ),
-                        )
-                      : Text(
+                        ),
+                      if (showTranslation)
+                        Text(
                           ayah.translation,
-                          maxLines: 12,
+                          maxLines: 6,
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 16,
-                            height: 1.6,
+                            fontSize: 14 * q,
+                            height: 1.55,
                             color: sub,
                           ),
                         ),
-                ],
-                const Spacer(),
-                // ── Detail ayat ──
+                    ],
+                  ),
+                ),
+                // ── Detail ayat (pill sitasi, nempel ke grup bawah) ──
                 Center(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 6,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 14 * s,
+                      vertical: 6 * s,
                     ),
                     decoration: BoxDecoration(
                       color: Colors.black.withValues(alpha: 0.25),
@@ -491,7 +487,7 @@ class _QShareCard extends StatelessWidget {
                     child: Text(
                       l10n.dlCiteSurah(surah.nameLatin, ayah.ayah),
                       style: TextStyle(
-                        fontSize: 11,
+                        fontSize: 11 * q,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.5,
                         color: fg,
@@ -499,13 +495,13 @@ class _QShareCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 14),
+                SizedBox(height: 14 * s),
                 // ── Footer: GP badge + nama apps ──
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _GooglePlayBadge(compact: 0.85),
-                    const SizedBox(width: 10),
+                    _GooglePlayBadge(compact: 0.85 * s),
+                    SizedBox(width: 10 * s),
                     Flexible(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -516,7 +512,7 @@ class _QShareCard extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 12 * q,
                               fontWeight: FontWeight.w800,
                               color: fg,
                             ),
@@ -526,7 +522,7 @@ class _QShareCard extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontSize: 8,
+                              fontSize: 8 * q,
                               color: sub.withValues(alpha: 0.7),
                             ),
                           ),
@@ -545,6 +541,37 @@ class _QShareCard extends StatelessWidget {
 }
 
 // ── Entry point ───────────────────────────────────────────────────
+
+/// Default preset kartu share (gradient jade), dipakai QSharePreviewCard.
+const int _kShareDefaultPreset = 4;
+
+/// Kartu share yang bisa dipakai di luar file ini (preview, tes).
+/// [aspect] = tinggi/lebar: 9/16, 3/4, atau 1.0.
+class QSharePreviewCard extends StatelessWidget {
+  final QuranSurah surah;
+  final QuranAyah ayah;
+  final double aspect;
+
+  const QSharePreviewCard({
+    super.key,
+    required this.surah,
+    required this.ayah,
+    this.aspect = 9 / 16,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final preset = _bgPresets[_kShareDefaultPreset];
+    return _QShareCard(
+      surah: surah,
+      ayah: ayah,
+      preset: preset,
+      fg: preset.fg,
+      sub: preset.sub,
+      cardSize: Size(340, 340 / aspect),
+    );
+  }
+}
 
 Future<void> showQuranShareSheet(
   BuildContext context, {
@@ -574,8 +601,13 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
   bool _sharing = false;
   bool _showArabic = true;
   bool _showTranslation = true;
+  double _aspect = 9 / 16; // tinggi : lebar kartu share
 
   static const int _kDefaultPreset = 4;
+
+  // Lebar kartu tetap; tinggi mengikuti rasio terpilih.
+  static const double _cardWidth = 340;
+  Size get _cardSize => Size(_cardWidth, _cardWidth / _aspect);
 
   // ponytail: ingat pilihan per-mode biar ganti mode tidak reset pilihan.
   final Map<_QShareBgKind, int> _lastPerKind = {
@@ -678,6 +710,7 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
                         sub: _preset.sub,
                         showArabic: _showArabic,
                         showTranslation: _showTranslation,
+                        cardSize: _cardSize,
                       ),
                     ),
                   ),
@@ -784,6 +817,21 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
                     ],
                   ),
                   const SizedBox(height: 16),
+                  // ── Pilihan rasio: 9:16 / 3:4 / 1:1 ──
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (final (aspect, label) in const [
+                        (9 / 16, '9:16'),
+                        (3 / 4, '3:4'),
+                        (1.0, '1:1'),
+                      ]) ...[
+                        _ratioChip(label, aspect),
+                        const SizedBox(width: 8),
+                      ],
+                    ],
+                  ),
+                  const SizedBox(height: 16),
                   // ── Tombol share ──
                   SizedBox(
                     width: double.infinity,
@@ -851,6 +899,35 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  /// Chip pilihan rasio kartu. Preview update live; gambar yang dibagikan
+  /// mengikuti rasio ini karena diambil dari RepaintBoundary yang sama.
+  Widget _ratioChip(String label, double aspect) {
+    final selected = _aspect == aspect;
+    return InkWell(
+      onTap: () => setState(() => _aspect = aspect),
+      borderRadius: BorderRadius.circular(AppRadius.pill),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        decoration: BoxDecoration(
+          color: selected
+              ? AppColors.primary.withValues(alpha: 0.16)
+              : AppColors.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(AppRadius.pill),
+          border: selected
+              ? Border.all(color: AppColors.primary, width: 1.2)
+              : null,
+        ),
+        child: Text(
+          label,
+          style: AppText.bodyMd().copyWith(
+            fontWeight: FontWeight.w700,
+            color: selected ? AppColors.primary : AppColors.onSurfaceVariant,
+          ),
         ),
       ),
     );
