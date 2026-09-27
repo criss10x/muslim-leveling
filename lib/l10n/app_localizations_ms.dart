@@ -282,7 +282,7 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get ach_hall_of_fame_hint =>
-      'Buka semua pencapaian lain satu demi satu — yang terakhir daripada 87 pingat biasa.';
+      'Buka semua pencapaian lain satu demi satu, hingga yang terakhir daripada 87 pingat biasa.';
 
   @override
   String get ach_hall_of_fame_title => 'HALL OF FAME';
@@ -397,7 +397,7 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get ach_phoenix_desc =>
-      'Bangkit 3× selepas rentetan terputus — tidak pernah menyerah';
+      'Bangkit 3× selepas rentetan terputus. Tidak pernah menyerah';
 
   @override
   String get ach_phoenix_hint =>
@@ -493,11 +493,11 @@ class AppL10nMs extends AppL10n {
   String get ach_rank_master_title => 'MASTER';
 
   @override
-  String get ach_rank_mythic_desc => 'Capai Tahap 80 — Muslim Mythic!';
+  String get ach_rank_mythic_desc => 'Capai Tahap 80, Muslim Mythic!';
 
   @override
   String get ach_rank_mythic_hint =>
-      'Naik tahap melalui XP daripada ibadah harian — peningkatan ke tahap 80 memerlukan masa.';
+      'Naik tahap melalui XP daripada ibadah harian. Peningkatan ke tahap 80 memerlukan masa.';
 
   @override
   String get ach_rank_mythic_title => 'MYTHIC';
@@ -553,7 +553,7 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get ach_subuh_solo_carry_desc =>
-      'Rentetan Subuh 7 hari berturut-turut — laluan paling sukar';
+      'Rentetan Subuh 7 hari berturut-turut, laluan paling sukar';
 
   @override
   String get ach_subuh_solo_carry_title => 'SUBUH SOLO CARRY';
@@ -847,7 +847,7 @@ class AppL10nMs extends AppL10n {
   String get homeRevealCosmetic => 'KOSMETIK BAHARU!';
 
   @override
-  String get homeRevealDuplicate => 'Item pendua — koleksi tetap disimpan 📦';
+  String get homeRevealDuplicate => 'Item pendua, koleksi tetap disimpan 📦';
 
   @override
   String homeRevealLevelUp(String suffix) {
@@ -1044,7 +1044,7 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get onbLocationBody =>
-      'Untuk menghitung jadual solat & arah kiblat yang tepat, kami memerlukan akses lokasi. Lokasi anda tidak akan dikongsi dengan sesiapa — semua pengiraan dilakukan pada peranti anda.';
+      'Untuk menghitung jadual solat & arah kiblat yang tepat, kami memerlukan akses lokasi. Lokasi anda tidak akan dikongsi dengan sesiapa: semua pengiraan dilakukan pada peranti anda.';
 
   @override
   String get onbLocationLoading => 'MENDAPATKAN LOKASI...';
@@ -1054,7 +1054,7 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get onbLocationLaterHint =>
-      'Belum ada lokasi? Jadual akan menggunakan bandar lalai dahulu — boleh diubah pada bila-bila masa di Profil.';
+      'Belum ada lokasi? Jadual akan menggunakan bandar lalai dahulu. Boleh diubah pada bila-bila masa di Profil.';
 
   @override
   String get onbLocationPickManual => 'Pilih bandar secara manual';
@@ -1073,14 +1073,14 @@ class AppL10nMs extends AppL10n {
   String get onbNameTitle => 'Apakah nama pejuang anda?';
 
   @override
-  String get onbNicknameHint => 'Nama pejuang (pilihan — kosong: Pejuang)';
+  String get onbNicknameHint => 'Nama pejuang (pilihan, kosong: Pejuang)';
 
   @override
   String get onbNotifAllow => 'Benarkan Notifikasi';
 
   @override
   String get onbNotifBody =>
-      'Agar tidak terlepas, kami akan menghantar peringatan apabila masuk waktu solat. Kami memerlukan kebenaran notifikasi + pengecualian bateri — tanpa kebenaran ini, peranti anda mungkin mematikan peringatan secara senyap apabila aplikasi ditutup.';
+      'Agar tidak terlepas, kami akan menghantar peringatan apabila masuk waktu solat. Kami memerlukan kebenaran notifikasi + pengecualian bateri. Tanpa kebenaran ini, peranti anda mungkin mematikan peringatan secara senyap apabila aplikasi ditutup.';
 
   @override
   String get onbNotifDenied =>
@@ -1129,7 +1129,7 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get profilAboutBody =>
-      'Ibadah itu adalah tentang konsistensi, bukan kesempurnaan. Muslim Leveling membantu anda membina tabiat solat lima waktu dan membaca Al-Qur\'an dengan cara yang menyeronokkan — setiap solat yang direkodkan memberikan XP, setiap hari tanpa putus meningkatkan streak, dan setiap pencapaian membuka kunci skin avatar baharu.';
+      'Ibadah itu adalah tentang konsistensi, bukan kesempurnaan. Muslim Leveling membantu anda membina tabiat solat lima waktu dan membaca Al-Qur\'an dengan cara yang menyeronokkan: setiap solat yang direkodkan memberikan XP, setiap hari tanpa putus meningkatkan streak, dan setiap pencapaian membuka kunci skin avatar baharu.';
 
   @override
   String get profilAboutFooter =>
@@ -1137,7 +1137,7 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get profilAboutOffline =>
-      'Tiada pelayan, tiada iklan, tiada langganan. Semua data anda disimpan pada peranti — milik anda sepenuhnya.';
+      'Tiada pelayan, tiada iklan, tiada langganan. Semua data anda disimpan pada peranti, milik anda sepenuhnya.';
 
   @override
   String get profilAccountSettings => 'Tetapan Akaun';
@@ -1197,7 +1197,7 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get profilExactAlarmPerm =>
-      'Kebenaran \"Penggera & peringatan\" belum aktif — peringatan mungkin lewat beberapa minit.';
+      'Kebenaran \"Penggera & peringatan\" belum aktif, jadi peringatan mungkin lewat beberapa minit.';
 
   @override
   String get profilFriday => 'Jumaat';
@@ -1226,7 +1226,7 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get profilHeatmapBody =>
-      'Semakin hijau semakin lengkap — 5 rona = 5 solat fardu.';
+      'Semakin hijau semakin lengkap. 5 rona = 5 solat fardu.';
 
   @override
   String get profilHeatmapHeader => 'KALENDAR SOLAT FARDU';
@@ -1239,7 +1239,7 @@ class AppL10nMs extends AppL10n {
 
   @override
   String profilHeroSemantics(String tier) {
-    return 'Wira profil — $tier';
+    return 'Wira profil, $tier';
   }
 
   @override
@@ -1265,8 +1265,7 @@ class AppL10nMs extends AppL10n {
   }
 
   @override
-  String get profilLoginMerged =>
-      '☁️ Log masuk berjaya — kemajuan digabungkan.';
+  String get profilLoginMerged => '☁️ Log masuk berjaya, kemajuan digabungkan.';
 
   @override
   String get profilLoginNotSaved =>
@@ -1359,7 +1358,7 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get profilPrivacyLocalBody =>
-      'Semua data — solat, bacaan Al-Qur\'an, statistik, dan tetapan pilihan — hanya disimpan di dalam telefon anda. Tiada pelayan, tiada storan awan.';
+      'Semua data (solat, bacaan Al-Qur\'an, statistik, dan tetapan pilihan) hanya disimpan di dalam telefon anda. Tiada pelayan, tiada storan awan.';
 
   @override
   String get profilPrivacyLocalTitle => 'Disimpan pada peranti';
@@ -1391,18 +1390,18 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get profilRemindersFailed =>
-      'Gagal menjadualkan peringatan — sila semak kebenaran notifikasi & penggera dalam tetapan telefon.';
+      'Gagal menjadualkan peringatan. Sila semak kebenaran notifikasi & penggera dalam tetapan telefon.';
 
   @override
   String get profilRemindersNone =>
-      'Mod disimpan, tetapi tiada peringatan dijadualkan — sila semak kebenaran notifikasi & penggera dalam tetapan telefon.';
+      'Mod disimpan, tetapi tiada peringatan dijadualkan. Sila semak kebenaran notifikasi & penggera dalam tetapan telefon.';
 
   @override
   String get profilRemindersOff => 'Peringatan azan dimatikan';
 
   @override
   String profilRemindersScheduled(String mode, int n) {
-    return 'Peringatan azan aktif: mod $mode — $n peringatan dijadualkan';
+    return 'Peringatan azan aktif: mod $mode, $n peringatan dijadualkan';
   }
 
   @override
@@ -1454,7 +1453,7 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get profilStatsEmptyBody =>
-      'Tandakan solat pertama anda — statistik akan mula dipaparkan di sini.';
+      'Tandakan solat pertama anda, statistik akan mula dipaparkan di sini.';
 
   @override
   String get profilStatsEmptyTitle => 'Tiada rekod lagi.';
@@ -1953,7 +1952,7 @@ class AppL10nMs extends AppL10n {
 
   @override
   String naikReached(Object level, Object rank) {
-    return 'Masya-Allah, anda mencapai $rank — Level $level';
+    return 'Masya-Allah, anda mencapai $rank, Level $level';
   }
 
   @override
@@ -1990,7 +1989,7 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get naikClosing =>
-      'Barakallah — terus istiqamah, level seterusnya menanti anda ✨';
+      'Barakallah, terus istiqamah, level seterusnya menanti anda ✨';
 
   @override
   String naikLevelLabel(Object level) {
@@ -2027,7 +2026,7 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get uq_ulama_waktu_itu_seperti_pedang_kalau_kamu_tida =>
-      'Waktu itu seperti pedang — jika anda tidak memotongnya, ia akan memotong anda.';
+      'Waktu itu seperti pedang: jika anda tidak memotongnya, ia akan memotong anda.';
 
   @override
   String get uq_ulama_ilmu_bukanlah_yang_dihafal_tetapi_ilmu_a =>
@@ -2107,7 +2106,7 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get uq_ulama_kesabaran_itu_cahaya_dengannya_jalan_yan =>
-      'Kesabaran itu cahaya — dengannya jalan yang sempit terasa lapang.';
+      'Kesabaran itu cahaya, dengannya jalan yang sempit terasa lapang.';
 
   @override
   String get uq_ulama_ilmu_tanpa_amal_adalah_sia_sia_dan_amal =>
@@ -2472,7 +2471,7 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get ppProPitch =>
-      'Perisai, aura dan gelaran eksklusif. Gaya baharu untuk avatar anda — tanpa mempengaruhi XP, streak atau kedudukan anda.';
+      'Perisai, aura dan gelaran eksklusif. Gaya baharu untuk avatar anda, tanpa mempengaruhi XP, streak atau kedudukan anda.';
 
   @override
   String deQuizDone(String moduleTitle) {
@@ -2556,13 +2555,13 @@ class AppL10nMs extends AppL10n {
   }
 
   @override
-  String get jdSoundSilent => 'Senyap — tanpa bunyi';
+  String get jdSoundSilent => 'Senyap: tanpa bunyi';
 
   @override
-  String get jdSoundNormal => 'Bunyi — notifikasi standard telefon';
+  String get jdSoundNormal => 'Bunyi: notifikasi standard telefon';
 
   @override
-  String get jdSoundAdzan => 'Azan — laungan azan penuh';
+  String get jdSoundAdzan => 'Azan: laungan azan penuh';
 
   @override
   String get jdSoundGlobalOption => 'Ikut tetapan global';
@@ -2574,7 +2573,7 @@ class AppL10nMs extends AppL10n {
 
   @override
   String qtSearchEmpty(String example) {
-    return 'Tidak ditemui. Cuba kata kunci lain dalam terjemahan, atau tulis nama surah + nombor ayat — cth. $example.';
+    return 'Tidak ditemui. Cuba kata kunci lain dalam terjemahan, atau tulis nama surah + nombor ayat, cth. $example.';
   }
 
   @override
@@ -2637,7 +2636,7 @@ class AppL10nMs extends AppL10n {
       'Google tidak menghantar idToken. Sila semak SHA-1 di Firebase Console.';
 
   @override
-  String get authEmptyUser => 'Firebase Auth gagal — pengguna kosong.';
+  String get authEmptyUser => 'Firebase Auth gagal, pengguna kosong.';
 
   @override
   String get authDevError10 =>
@@ -2795,7 +2794,7 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get jdAbroadEmpty =>
-      'Bandar tidak ditemui. Tulis namanya dalam bahasa Inggeris — cth. London.';
+      'Bandar tidak ditemui. Tulis namanya dalam bahasa Inggeris, cth. London.';
 
   @override
   String jdFootnoteAbroad(String city) {
@@ -2820,7 +2819,7 @@ class AppL10nMs extends AppL10n {
 
   @override
   String qtVerseHitsTruncated(int count) {
-    return '$count+ ayat ditemui — perincikan kata kunci';
+    return '$count+ ayat ditemui, perincikan kata kunci';
   }
 
   @override
@@ -3453,5 +3452,5 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get profilRankFooter =>
-      'Solat lima waktu memberikan XP. Semakin konsisten, semakin cepat naik — dan warnanya juga akan berubah.';
+      'Solat lima waktu memberikan XP. Semakin konsisten, semakin cepat naik, dan warnanya juga akan berubah.';
 }

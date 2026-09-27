@@ -388,7 +388,7 @@
   "ach_hadis_warrior_desc": "Baca 25 hadis",
   "ach_hadis_warrior_title": "HADIS WARRIOR",
   "ach_hall_of_fame_desc": "Buka semua achievement lainnya 👑",
-  "ach_hall_of_fame_hint": "Buka semua achievement lainnya satu per satu — terakhir dari 87 medali biasa.",
+  "ach_hall_of_fame_hint": "Buka semua achievement lainnya satu per satu, sampai terakhir dari 87 medali biasa.",
   "ach_hall_of_fame_title": "HALL OF FAME",
   "ach_jamaah_champion_desc": "200x sholat berjamaah",
   "ach_jamaah_champion_title": "JAMAAH CHAMPION",
@@ -426,7 +426,7 @@
   "ach_mid_game_title": "MID GAME",
   "ach_night_finisher_desc": "Pertama kali Ba\\'diyah Isya",
   "ach_night_finisher_title": "NIGHT FINISHER",
-  "ach_phoenix_desc": "Bangkit 3× setelah streak putus — gak pernah nyerah",
+  "ach_phoenix_desc": "Bangkit 3× setelah streak putus. Gak pernah nyerah",
   "ach_phoenix_hint": "Setelah streak putus, mulai lagi sampai tercatat 3 kali bangkit.",
   "ach_phoenix_title": "PHOENIX",
   "ach_quiz_mvp_desc": "Skor sempurna 100% di satu quiz",
@@ -457,8 +457,8 @@
   "ach_rank_epic_title": "EPIC",
   "ach_rank_master_desc": "Capai Level 40",
   "ach_rank_master_title": "MASTER",
-  "ach_rank_mythic_desc": "Capai Level 80 — Muslim Mythic!",
-  "ach_rank_mythic_hint": "Naik level lewat XP dari ibadah harian — naik level 80 butuh waktu.",
+  "ach_rank_mythic_desc": "Capai Level 80, Muslim Mythic!",
+  "ach_rank_mythic_hint": "Naik level lewat XP dari ibadah harian. Naik level 80 butuh waktu.",
   "ach_rank_mythic_title": "MYTHIC",
   "ach_rank_warrior_desc": "Capai Level 10",
   "ach_rank_warrior_title": "WARRIOR",
@@ -475,7 +475,7 @@
   "ach_sharpshooter_title": "SHARPSHOOTER",
   "ach_subuh_legend_desc": "Streak Subuh 30 hari",
   "ach_subuh_legend_title": "SUBUH LEGEND",
-  "ach_subuh_solo_carry_desc": "Streak Subuh 7 hari beruntun — lane tersulit",
+  "ach_subuh_solo_carry_desc": "Streak Subuh 7 hari beruntun, lane tersulit",
   "ach_subuh_solo_carry_title": "SUBUH SOLO CARRY",
   "ach_sultan_sunnah_desc": "50 sholat sunnah total",
   "ach_sultan_sunnah_title": "SULTAN SUNNAH",
@@ -566,7 +566,7 @@
   "homeQuickRenungan": "Renungan",
   "homeRevealBtn": "Alhamdulillah! 🤲",
   "homeRevealCosmetic": "KOSMETIK BARU!",
-  "homeRevealDuplicate": "Item duplikat — koleksi tetap tersimpan 📦",
+  "homeRevealDuplicate": "Item duplikat, koleksi tetap tersimpan 📦",
   "homeRevealLevelUp": "⬆️ Level Up!{suffix}",
   "homeRevealReward": "REWARD DIDAPAT!",
   "homeRevealShield": "FREEZE SHIELD!",
@@ -623,18 +623,18 @@
   "onbLangBody": "Kamu bisa ubah kapan saja di Profil.",
   "onbLangTitle": "Mau pakai bahasa apa?",
   "onbLocationAllow": "Izinkan Lokasi",
-  "onbLocationBody": "Untuk menghitung jadwal sholat & arah qiblat yang akurat, kami perlu akses lokasi. Lokasi tidak dibagikan ke siapa pun — semua perhitungan terjadi di HP-mu.",
+  "onbLocationBody": "Untuk menghitung jadwal sholat & arah qiblat yang akurat, kami perlu akses lokasi. Lokasi tidak dibagikan ke siapa pun: semua perhitungan terjadi di HP-mu.",
   "onbLocationLoading": "MENGAMBIL LOKASI...",
   "onbLocationLater": "Pakai kota default dulu",
-  "onbLocationLaterHint": "Belum ada lokasi? Jadwal memakai kota default dulu — bisa diubah kapan saja di Profil.",
+  "onbLocationLaterHint": "Belum ada lokasi? Jadwal memakai kota default dulu. Bisa diubah kapan saja di Profil.",
   "onbLocationPickManual": "Pilih kota manual",
   "onbLocationRetry": "Coba lagi",
   "onbLocationTitle": "Butuh Lokasimu",
   "onbNameBody": "Nama ini muncul di Beranda dan kartu medali. Boleh dikosongkan.",
   "onbNameTitle": "Siapa nama pejuangmu?",
-  "onbNicknameHint": "Nama pejuang (opsional — kosong: Pejuang)",
+  "onbNicknameHint": "Nama pejuang (opsional, kosong: Pejuang)",
   "onbNotifAllow": "Izinkan Notifikasi",
-  "onbNotifBody": "Biar tidak kelewat, kami kirim pengingat saat waktu sholat tiba. Kami minta izin notifikasi + pengecualian baterai — tanpa itu ponsel bisa mematikan pengingat diam-diam saat app ditutup.",
+  "onbNotifBody": "Biar tidak kelewat, kami kirim pengingat saat waktu sholat tiba. Kami minta izin notifikasi + pengecualian baterai. Tanpa itu ponsel bisa mematikan pengingat diam-diam saat app ditutup.",
   "onbNotifDenied": "Pengingat tidak aktif. Bisa dinyalakan kapan saja di Profil.",
   "onbNotifLoading": "MENYALA...",
   "onbNotifSkip": "Lewati, nanti saja",
@@ -649,9 +649,9 @@
   "prayerMaghrib": "Maghrib",
   "prayerSubuh": "Subuh",
   "profilAbout": "Tentang Aplikasi",
-  "profilAboutBody": "Ibadah itu konsisten, bukan sempurna. Muslim Leveling membantu kamu membangun kebiasaan sholat lima waktu dan membaca Quran dengan cara yang seru — setiap sholat yang dicatat memberi XP, setiap hari tanpa putus menambah streak, dan setiap pencapaian membuka skin avatar baru.",
+  "profilAboutBody": "Ibadah itu konsisten, bukan sempurna. Muslim Leveling membantu kamu membangun kebiasaan sholat lima waktu dan membaca Quran dengan cara yang seru: setiap sholat yang dicatat memberi XP, setiap hari tanpa putus menambah streak, dan setiap pencapaian membuka skin avatar baru.",
   "profilAboutFooter": "Dibuat dengan penuh doa untuk setiap pejuang akhirat.",
-  "profilAboutOffline": "Tidak ada server, tidak ada iklan, tidak ada langganan. Semua datamu tinggal di perangkat — milikmu sepenuhnya.",
+  "profilAboutOffline": "Tidak ada server, tidak ada iklan, tidak ada langganan. Semua datamu tinggal di perangkat, milikmu sepenuhnya.",
   "profilAccountSettings": "Pengaturan Akun",
   "profilAlreadyPrayedToday": ", sudah shalat hari ini",
   "profilAndroidNotifSettings": "Pengaturan Notifikasi Android",
@@ -670,7 +670,7 @@
   "profilEditName": "Edit Nama",
   "profilEditProfile": "Edit profil",
   "profilEnableReminders": "Aktifkan pengingat",
-  "profilExactAlarmPerm": "Izin \"Alarm & pengingat\" belum aktif — pengingat bisa telat beberapa menit.",
+  "profilExactAlarmPerm": "Izin \"Alarm & pengingat\" belum aktif, jadi pengingat bisa telat beberapa menit.",
   "profilFriday": "Jumat",
   "profilFromCamera": "Ambil dari Kamera",
   "profilFromGallery": "Pilih dari Galeri",
@@ -679,18 +679,18 @@
   "profilGenderExplain": "Ikhwan = laki-laki, akhwat = perempuan. Dipakai untuk menyembunyikan atau menampilkan menu Periode Haid. Tidak ikut sinkron ke cloud.",
   "profilGenderIkhwan": "Ikhwan",
   "profilGenderUnset": "Belum dipilih",
-  "profilHeatmapBody": "Makin hijau makin lengkap — 5 shade = 5 sholat wajib.",
+  "profilHeatmapBody": "Makin hijau makin lengkap. 5 shade = 5 sholat wajib.",
   "profilHeatmapHeader": "KALENDER SHOLAT WAJIB",
   "profilHeatmapRow": "Heatmap sholat wajib per bulan",
   "profilHeatmapSemantics": "Buka kalender sholat wajib",
-  "profilHeroSemantics": "Profile hero — {tier}",
+  "profilHeroSemantics": "Profile hero, {tier}",
   "profilLevelBadge": "LVL {level}",
   "profilLockerRow": "Atur aura dan gelar aktif",
   "profilLockerSemantics": "Buka loker skin",
   "profilLockerSkin": "LOKER SKIN",
   "profilLoginCancelled": "Login dibatalkan.",
   "profilLoginFailed": "❌ Login gagal: {msg}",
-  "profilLoginMerged": "☁️ Login OK — progress digabung.",
+  "profilLoginMerged": "☁️ Login OK, progress digabung.",
   "profilLoginNotSaved": "⚠️ Login OK, tapi backup belum tersimpan.",
   "profilLoginOffline": "⚠️ Login OK, tapi backup belum aktif (offline).",
   "profilLogoutConfirm": "Hapus data lokal dan kembali ke layar awal?",
@@ -717,7 +717,7 @@
   "profilPrivacy": "Privasi & Data",
   "profilPrivacyDeleteBody": "Masuk Profil → Keluar untuk menghapus semua data lokal sekaligus. Tidak ada yang tersisa di perangkat.",
   "profilPrivacyDeleteTitle": "Hapus kapan saja",
-  "profilPrivacyLocalBody": "Semua data — sholat, bacaan Quran, statistik, dan preferensi — hanya tinggal di HP kamu. Tidak ada server, tidak ada cloud.",
+  "profilPrivacyLocalBody": "Semua data (sholat, bacaan Quran, statistik, dan preferensi) hanya tinggal di HP kamu. Tidak ada server, tidak ada cloud.",
   "profilPrivacyLocalTitle": "Tersimpan di perangkat",
   "profilPrivacyLocationBody": "Lokasi hanya dipakai sekali untuk menentukan jadwal sholat daerahmu. Lokasi tidak disimpan atau dibagikan.",
   "profilPrivacyLocationTitle": "Lokasi privat",
@@ -726,10 +726,10 @@
   "profilReminderMode": "Mode Pengingat",
   "profilReminderTitle": "Pengingat Adzan",
   "profilRemindersChangeFailed": "Gagal mengubah pengingat: {msg}",
-  "profilRemindersFailed": "Gagal menjadwalkan pengingat — cek izin notifikasi & alarm di pengaturan HP.",
-  "profilRemindersNone": "Mode tersimpan, tapi belum ada pengingat terjadwal — cek izin notifikasi & alarm di pengaturan HP.",
+  "profilRemindersFailed": "Gagal menjadwalkan pengingat. Cek izin notifikasi & alarm di pengaturan HP.",
+  "profilRemindersNone": "Mode tersimpan, tapi belum ada pengingat terjadwal. Cek izin notifikasi & alarm di pengaturan HP.",
   "profilRemindersOff": "Pengingat adzan dimatikan",
-  "profilRemindersScheduled": "Pengingat adzan aktif: mode {mode} — {n} pengingat terjadwal",
+  "profilRemindersScheduled": "Pengingat adzan aktif: mode {mode}, {n} pengingat terjadwal",
   "profilRemindersScheduledCount": "{n} pengingat adzan terjadwal 🔔",
   "profilRemovePhoto": "Hapus Foto",
   "profilSaveFailed": "Gagal menyimpan: {msg}",
@@ -743,7 +743,7 @@
   "profilSoundSilent": "🔕 Senyap",
   "profilSoundSilentDesc": "Hanya muncul notifikasi, tanpa suara",
   "profilStatsDailyAvg": "Rata-rata Harian",
-  "profilStatsEmptyBody": "Centang sholat pertamamu — statistik mulai terisi di sini.",
+  "profilStatsEmptyBody": "Centang sholat pertamamu, statistik mulai terisi di sini.",
   "profilStatsEmptyTitle": "Belum ada catatan.",
   "profilStatsHeader": "STATISTIK",
   "profilStatsQuranStreak": "Streak Baca Quran",
@@ -918,7 +918,7 @@
   "sqSourceHadis": "Belajar Hadis",
   "naikTitle": "NAIK LEVEL!",
   "naikBadgeSemantics": "Bulan sabit emas, lambang naik level",
-  "naikReached": "Masha Allah, kamu mencapai {rank} — Level {level}",
+  "naikReached": "Masha Allah, kamu mencapai {rank}, Level {level}",
   "naikFrom": "dari {source}",
   "naikBack": "KEMBALI",
   "naikRewardSemanticsFull": "Hadiah: tambah {xp} XP, level {level}, gelar baru {rank}",
@@ -927,7 +927,7 @@
   "naikChipLevel": "Level",
   "naikChipRank": "GELAR BARU",
   "naikProgressSemantics": "Menuju level {next}: {have} dari {need} XP",
-  "naikClosing": "Barakallah — terus istiqomah, level berikutnya menantimu ✨",
+  "naikClosing": "Barakallah, terus istiqomah, level berikutnya menantimu ✨",
   "naikLevelLabel": "Level {level}",
   "uq_ulama_ilmu_itu_lebih_baik_daripada_harta_ilmu": "Ilmu itu lebih baik daripada harta. Ilmu menjaga kamu, sedangkan harta justru kamu yang menjaganya.",
   "uq_ulama_orang_berilmu_itu_hidup_walau_sudah_wafa": "Orang berilmu itu hidup walau sudah wafat, sedangkan orang bodoh itu mati walau masih hidup.",
@@ -936,7 +936,7 @@
   "uq_ulama_hisablah_dirimu_sendiri_sebelum_kamu_dih": "Hisablah dirimu sendiri sebelum kamu dihisab, dan timbanglah amalmu sebelum ditimbang.",
   "uq_ulama_aku_tidak_pernah_menyesal_karena_diam_ta": "Aku tidak pernah menyesal karena diam, tapi aku sering menyesal karena berbicara.",
   "uq_ulama_kehormatanmu_adalah_agamamu_dan_harga_di": "Kehormatanmu adalah agamamu, dan harga dirimu adalah akhlakmu.",
-  "uq_ulama_waktu_itu_seperti_pedang_kalau_kamu_tida": "Waktu itu seperti pedang — kalau kamu tidak memotongnya, dia yang memotongmu.",
+  "uq_ulama_waktu_itu_seperti_pedang_kalau_kamu_tida": "Waktu itu seperti pedang: kalau kamu tidak memotongnya, dia yang memotongmu.",
   "uq_ulama_ilmu_bukanlah_yang_dihafal_tetapi_ilmu_a": "Ilmu bukanlah yang dihafal, tetapi ilmu adalah yang memberi manfaat.",
   "uq_ulama_ilmu_itu_cahaya_dan_cahaya_allah_tidak_a": "Ilmu itu cahaya, dan cahaya Allah tidak akan masuk ke dalam hati orang yang bermaksiat.",
   "uq_ulama_barangsiapa_tidak_tahan_lelahnya_belajar": "Barangsiapa tidak tahan lelahnya belajar, dia harus tahan perihnya kebodohan.",
@@ -956,7 +956,7 @@
   "uq_ulama_sebaik_baik_hati_adalah_yang_dipenuhi_ra": "Sebaik-baik hati adalah yang dipenuhi rasa takut dan harap kepada Allah.",
   "uq_ulama_tidak_ada_yang_lebih_bermanfaat_bagi_hat": "Tidak ada yang lebih bermanfaat bagi hati daripada membaca Al-Qur'an dengan tadabbur.",
   "uq_ulama_hati_bisa_sakit_seperti_badan_sakit_dan": "Hati bisa sakit seperti badan sakit, dan obatnya adalah istigfar.",
-  "uq_ulama_kesabaran_itu_cahaya_dengannya_jalan_yan": "Kesabaran itu cahaya — dengannya jalan yang sempit terasa lapang.",
+  "uq_ulama_kesabaran_itu_cahaya_dengannya_jalan_yan": "Kesabaran itu cahaya, dengannya jalan yang sempit terasa lapang.",
   "uq_ulama_ilmu_tanpa_amal_adalah_sia_sia_dan_amal": "Ilmu tanpa amal adalah sia-sia, dan amal tanpa ilmu tidak akan sempurna.",
   "uq_ulama_kebahagiaan_bukan_pada_banyaknya_harta_t": "Kebahagiaan bukan pada banyaknya harta, tetapi pada lapangnya hati.",
   "uq_ulama_siapa_yang_menuntut_ilmu_semata_untuk_me": "Siapa yang menuntut ilmu semata untuk membanggakan diri, ilmunya akan menjadi hujjah atas dirinya.",
@@ -1153,7 +1153,7 @@
   "clProLocked": "Pro terkunci",
   "clCompleteQuest": "Selesaikan quest harian untuk membuka skin dari Daily Chest.",
   "qdTajwidLegend": "Merah=Ghunnah, Biru=Qalqalah/Idgham, Hijau=Mad",
-  "ppProPitch": "Perisai, aura, dan gelar eksklusif. Gaya baru untuk avatarmu — tanpa memengaruhi XP, streak, atau peringkatmu.",
+  "ppProPitch": "Perisai, aura, dan gelar eksklusif. Gaya baru untuk avatarmu, tanpa memengaruhi XP, streak, atau peringkatmu.",
   "deQuizDone": "Kamu menyelesaikan quiz {moduleTitle}!",
   "@deQuizDone": {
     "placeholders": {
@@ -1228,9 +1228,9 @@
       }
     }
   },
-  "jdSoundSilent": "Senyap — tanpa suara",
-  "jdSoundNormal": "Suara — notifikasi standar HP",
-  "jdSoundAdzan": "Adzan — suara adzan penuh",
+  "jdSoundSilent": "Senyap: tanpa suara",
+  "jdSoundNormal": "Suara: notifikasi standar HP",
+  "jdSoundAdzan": "Adzan: suara adzan penuh",
   "jdSoundGlobalOption": "Ikuti pengaturan global",
   "jdFootnote": "Jadwal dari data KEMENAG RI via api.myquran.com untuk {city}. Ter-update otomatis saat tab dibuka; tap nama kota di atas untuk ganti lokasi.",
   "@jdFootnote": {
@@ -1240,7 +1240,7 @@
       }
     }
   },
-  "qtSearchEmpty": "Tidak ditemukan. Coba kata lain di terjemahan, atau tulis nama surat + nomor ayat — mis. {example}.",
+  "qtSearchEmpty": "Tidak ditemukan. Coba kata lain di terjemahan, atau tulis nama surat + nomor ayat, mis. {example}.",
   "@qtSearchEmpty": {
     "placeholders": {
       "example": {
@@ -1316,7 +1316,7 @@
   "locFailureTimeout": "Lokasi terlalu lama ditemukan. Coba lagi di area terbuka.",
   "locFailureLookup": "Kota tidak dapat ditemukan. Periksa koneksi atau pilih kota manual.",
   "authNoIdToken": "Google tidak kirim idToken. Cek SHA-1 di Firebase Console.",
-  "authEmptyUser": "Firebase Auth gagal — user kosong.",
+  "authEmptyUser": "Firebase Auth gagal, user kosong.",
   "authDevError10": "Google DEVELOPER_ERROR (10): SHA-1 belum terdaftar di Firebase Console.",
   "authMisconfigured": "Google Sign-In misconfigured. Cek OAuth consent + SHA-1.",
   "authNetworkError": "Jaringan error saat login Google.",
@@ -1463,7 +1463,7 @@
   "jdRegionIndonesia": "Indonesia",
   "jdRegionAbroad": "Luar Negeri",
   "jdAbroadSearchHint": "Ketik nama kota di luar negeri...",
-  "jdAbroadEmpty": "Kota tidak ditemukan. Tulis namanya dalam bahasa Inggris — mis. London.",
+  "jdAbroadEmpty": "Kota tidak ditemukan. Tulis namanya dalam bahasa Inggris, mis. London.",
   "jdFootnoteAbroad": "Jadwal dari Aladhan untuk {city}. Metode perhitungan mengikuti negara kota ini. Ter-update otomatis saat tab dibuka; tap nama kota di atas untuk ganti lokasi.",
   "@jdFootnoteAbroad": {
     "placeholders": {
@@ -1475,11 +1475,29 @@
   "commonRetry": "Coba lagi",
   "qtSearchHint": "Cari surat atau ayat",
   "qtSearchHelper": "mis. {example}",
-  "@qtSearchHelper": {"placeholders": {"example": {"type": "String"}}},
+  "@qtSearchHelper": {
+    "placeholders": {
+      "example": {
+        "type": "String"
+      }
+    }
+  },
   "qtVerseHits": "{count} ayat ditemukan di terjemahan",
-  "@qtVerseHits": {"placeholders": {"count": {"type": "int"}}},
-  "qtVerseHitsTruncated": "{count}+ ayat ditemukan — persempit kata kunci",
-  "@qtVerseHitsTruncated": {"placeholders": {"count": {"type": "int"}}},
+  "@qtVerseHits": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qtVerseHitsTruncated": "{count}+ ayat ditemukan, persempit kata kunci",
+  "@qtVerseHitsTruncated": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "qtBookmarkTooltip": "Bookmark ayat",
   "qtSubtitle": "114 surat · 30 juz",
   "qbTitle": "Bookmark",
@@ -1603,19 +1621,52 @@
   "qsRevelationMeccan": "Makkiyah",
   "qsRevelationMedinan": "Madaniyah",
   "qtContinueReadingDetail": "Lanjutkan membaca {surah} ayat {ayah}",
-  "@qtContinueReadingDetail": {"placeholders": {"surah": {"type": "String"}, "ayah": {"type": "int"}}},
+  "@qtContinueReadingDetail": {
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      },
+      "ayah": {
+        "type": "int"
+      }
+    }
+  },
   "qtOpenSurahAyah": "Buka {surah} ayat {ayah}",
-  "@qtOpenSurahAyah": {"placeholders": {"surah": {"type": "String"}, "ayah": {"type": "int"}}},
+  "@qtOpenSurahAyah": {
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      },
+      "ayah": {
+        "type": "int"
+      }
+    }
+  },
   "qpbAyahRange": "Rentang ayat",
   "qpbFrom": "Dari",
   "qpbTo": "Sampai",
   "qpbRepeatRangeDetail": "Kembali ke ayat {from} setelah ayat {to} selesai",
-  "@qpbRepeatRangeDetail": {"placeholders": {"from": {"type": "int"}, "to": {"type": "int"}}},
+  "@qpbRepeatRangeDetail": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
   "qpbSpeed": "Kecepatan",
   "qpbQari": "Qari",
   "qpbOff": "Nonaktif",
   "qpbMinutes": "{m} mnt",
-  "@qpbMinutes": {"placeholders": {"m": {"type": "int"}}},
+  "@qpbMinutes": {
+    "placeholders": {
+      "m": {
+        "type": "int"
+      }
+    }
+  },
   "qdTitle": "Pengaturan Tampilan",
   "qdTranslationLabel": "Terjemahan Indonesia",
   "qdTransliteration": "Transliterasi Latin",
@@ -1624,23 +1675,62 @@
   "qdBasmalahTranslation": "Dengan menyebut nama Allah Yang Maha Pemurah lagi Maha Penyayang.",
   "qpPlay": "Putar",
   "qpNowPlaying": "QS {surah} : {ayah}",
-  "@qpNowPlaying": {"placeholders": {"surah": {"type": "String"}, "ayah": {"type": "int"}}},
+  "@qpNowPlaying": {
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      },
+      "ayah": {
+        "type": "int"
+      }
+    }
+  },
   "btHubCaps": "LEARNING HUB",
   "btHeroTitle": "Belajar Bareng",
   "btRibbon": "SANTRI DIGITAL",
   "btModulesDone": "{done}/{total} modul selesai",
-  "@btModulesDone": {"placeholders": {"done": {"type": "int"}, "total": {"type": "int"}}},
+  "@btModulesDone": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "btMinutes": "{m} min",
-  "@btMinutes": {"placeholders": {"m": {"type": "int"}}},
+  "@btMinutes": {
+    "placeholders": {
+      "m": {
+        "type": "int"
+      }
+    }
+  },
   "blMinutesRead": "{m} min baca",
-  "@blMinutesRead": {"placeholders": {"m": {"type": "int"}}},
+  "@blMinutesRead": {
+    "placeholders": {
+      "m": {
+        "type": "int"
+      }
+    }
+  },
   "blContinueQuiz": "LANJUT KE QUIZ",
   "bqNextQuestion": "PERTANYAAN BERIKUTNYA",
   "bqSeeResult": "LIHAT HASIL",
   "bqCorrect": "BENAR!",
   "blResultCaps": "HASIL QUIZ",
   "blCorrectCount": "{correct}/{total} Benar",
-  "@blCorrectCount": {"placeholders": {"correct": {"type": "int"}, "total": {"type": "int"}}},
+  "@blCorrectCount": {
+    "placeholders": {
+      "correct": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "blEarned": "Diperoleh",
   "blTryAgain": "COBA LAGI",
   "dzCapsTarget": "TARGET",
@@ -1678,7 +1768,13 @@
   "hmLegendFull": "Lengkap",
   "lockerCapsCollection": "KOLEKSI",
   "lockerUnlockedCount": "{n} TERBUKA",
-  "@lockerUnlockedCount": {"placeholders": {"n": {"type": "int"}}},
+  "@lockerUnlockedCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
   "lockerSlotAura": "Aura",
   "lockerSlotTitle": "Title",
   "contentNoteIndonesian": "Teks dalam Bahasa Indonesia",
@@ -1697,6 +1793,12 @@
   "profilRankDivision": "Divisi I–V",
   "profilRankNoDivision": "Tanpa divisi",
   "profilRankFromLevel": "Lv {level}",
-  "profilRankFooter": "Sholat lima waktu memberi XP. Makin konsisten, makin cepat naik — dan warnanya ikut berubah.",
-  "@profilRankFromLevel": {"placeholders": {"level": {"type": "int"}}}
+  "profilRankFooter": "Sholat lima waktu memberi XP. Makin konsisten, makin cepat naik, dan warnanya ikut berubah.",
+  "@profilRankFromLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  }
 }

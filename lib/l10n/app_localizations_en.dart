@@ -282,7 +282,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get ach_hall_of_fame_hint =>
-      'Unlock every other achievement one by one — the last of 87 regular medals.';
+      'Unlock every other achievement one by one, until the last of 87 regular medals.';
 
   @override
   String get ach_hall_of_fame_title => 'HALL OF FAME';
@@ -397,7 +397,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get ach_phoenix_desc =>
-      'Bounce back 3× after a broken streak — never give up';
+      'Bounce back 3× after a broken streak. Never give up';
 
   @override
   String get ach_phoenix_hint =>
@@ -493,11 +493,11 @@ class AppL10nEn extends AppL10n {
   String get ach_rank_master_title => 'MASTER';
 
   @override
-  String get ach_rank_mythic_desc => 'Reach Level 80 — Muslim Mythic!';
+  String get ach_rank_mythic_desc => 'Reach Level 80, Muslim Mythic!';
 
   @override
   String get ach_rank_mythic_hint =>
-      'Level up through XP from daily worship — reaching level 80 takes time.';
+      'Level up through XP from daily worship. Reaching level 80 takes time.';
 
   @override
   String get ach_rank_mythic_title => 'MYTHIC';
@@ -551,8 +551,7 @@ class AppL10nEn extends AppL10n {
   String get ach_subuh_legend_title => 'SUBUH LEGEND';
 
   @override
-  String get ach_subuh_solo_carry_desc =>
-      '7-day Fajr streak — the hardest lane';
+  String get ach_subuh_solo_carry_desc => '7-day Fajr streak, the hardest lane';
 
   @override
   String get ach_subuh_solo_carry_title => 'SUBUH SOLO CARRY';
@@ -846,7 +845,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get homeRevealDuplicate =>
-      'Duplicate item — your collection keeps it 📦';
+      'Duplicate item, your collection keeps it 📦';
 
   @override
   String homeRevealLevelUp(String suffix) {
@@ -1041,7 +1040,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get onbLocationBody =>
-      'To calculate accurate prayer times and qibla direction we need location access. Your location is not shared with anyone — all calculations happen on your phone.';
+      'To calculate accurate prayer times and qibla direction we need location access. Your location is not shared with anyone: all calculations happen on your phone.';
 
   @override
   String get onbLocationLoading => 'GETTING LOCATION...';
@@ -1051,7 +1050,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get onbLocationLaterHint =>
-      'No location yet? The schedule uses a default city for now — you can change it anytime in Profile.';
+      'No location yet? The schedule uses a default city for now. You can change it anytime in Profile.';
 
   @override
   String get onbLocationPickManual => 'Pick city manually';
@@ -1070,14 +1069,14 @@ class AppL10nEn extends AppL10n {
   String get onbNameTitle => 'What\'s your warrior name?';
 
   @override
-  String get onbNicknameHint => 'Warrior name (optional — blank: Pejuang)';
+  String get onbNicknameHint => 'Warrior name (optional, blank: Pejuang)';
 
   @override
   String get onbNotifAllow => 'Allow Notifications';
 
   @override
   String get onbNotifBody =>
-      'So you never miss it, we send a reminder when prayer time comes. We ask for notification permission plus a battery exemption — without it your phone can silently kill reminders when the app is closed.';
+      'So you never miss it, we send a reminder when prayer time comes. We ask for notification permission plus a battery exemption. Without it your phone can silently kill reminders when the app is closed.';
 
   @override
   String get onbNotifDenied =>
@@ -1126,7 +1125,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get profilAboutBody =>
-      'Worship is about consistency, not perfection. Muslim Leveling helps you build the habit of the five daily prayers and Quran reading in a way that feels fun — every logged prayer earns XP, every unbroken day grows your streak, and every milestone unlocks a new avatar skin.';
+      'Worship is about consistency, not perfection. Muslim Leveling helps you build the habit of the five daily prayers and Quran reading in a way that feels fun: every logged prayer earns XP, every unbroken day grows your streak, and every milestone unlocks a new avatar skin.';
 
   @override
   String get profilAboutFooter =>
@@ -1134,7 +1133,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get profilAboutOffline =>
-      'No server, no ads, no subscription. All your data stays on the device — entirely yours.';
+      'No server, no ads, no subscription. All your data stays on the device, entirely yours.';
 
   @override
   String get profilAccountSettings => 'Account Settings';
@@ -1195,7 +1194,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get profilExactAlarmPerm =>
-      '\"Alarms & reminders\" permission is off — reminders may arrive a few minutes late.';
+      '\"Alarms & reminders\" permission is off, so reminders may arrive a few minutes late.';
 
   @override
   String get profilFriday => 'Friday';
@@ -1224,7 +1223,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get profilHeatmapBody =>
-      'The greener, the more complete — 5 shades = 5 obligatory prayers.';
+      'The greener, the more complete. 5 shades = 5 obligatory prayers.';
 
   @override
   String get profilHeatmapHeader => 'OBLIGATORY PRAYER CALENDAR';
@@ -1237,7 +1236,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String profilHeroSemantics(String tier) {
-    return 'Profile hero — $tier';
+    return 'Profile hero, $tier';
   }
 
   @override
@@ -1263,7 +1262,7 @@ class AppL10nEn extends AppL10n {
   }
 
   @override
-  String get profilLoginMerged => '☁️ Signed in — progress merged.';
+  String get profilLoginMerged => '☁️ Signed in, progress merged.';
 
   @override
   String get profilLoginNotSaved =>
@@ -1357,7 +1356,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get profilPrivacyLocalBody =>
-      'All your data — prayers, Quran reading, stats, and preferences — stays on your phone. No server, no cloud.';
+      'All your data (prayers, Quran reading, stats, and preferences) stays on your phone. No server, no cloud.';
 
   @override
   String get profilPrivacyLocalTitle => 'Stored on your device';
@@ -1389,18 +1388,18 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get profilRemindersFailed =>
-      'Could not schedule reminders — check notification & alarm permissions in your phone settings.';
+      'Could not schedule reminders. Check notification & alarm permissions in your phone settings.';
 
   @override
   String get profilRemindersNone =>
-      'Mode saved, but no reminders are scheduled — check notification & alarm permissions in your phone settings.';
+      'Mode saved, but no reminders are scheduled. Check notification & alarm permissions in your phone settings.';
 
   @override
   String get profilRemindersOff => 'Adhan reminders turned off';
 
   @override
   String profilRemindersScheduled(String mode, int n) {
-    return 'Adhan reminders on: $mode mode — $n reminders scheduled';
+    return 'Adhan reminders on: $mode mode, $n reminders scheduled';
   }
 
   @override
@@ -1451,7 +1450,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get profilStatsEmptyBody =>
-      'Tick your first prayer — your stats start filling in here.';
+      'Tick your first prayer, and your stats start filling in here.';
 
   @override
   String get profilStatsEmptyTitle => 'No records yet.';
@@ -1781,7 +1780,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get questCopy_sunnah_4 =>
-      'Slowly — this is the kind of habit you are building.';
+      'Slowly. This is the kind of habit you are building.';
 
   @override
   String get questCopy_zikir_1 =>
@@ -1801,7 +1800,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get questCopy_quran_1 =>
-      'One verse today. Slowly — what matters is that you keep going.';
+      'One verse today. Slowly, what matters is that you keep going.';
 
   @override
   String get questCopy_quran_2 =>
@@ -1896,13 +1895,13 @@ class AppL10nEn extends AppL10n {
   String get sqZikirDesc => 'Consistent in dhikr today. Keep it up!';
 
   @override
-  String get sqTilawahTitle => 'Read 10 Quran Verses — Done!';
+  String get sqTilawahTitle => 'Read 10 Quran Verses, Done!';
 
   @override
   String get sqTilawahDesc => 'Recitation done for today. Continue tomorrow!';
 
   @override
-  String get sqHadisTitle => 'Study 5 Hadith — Done!';
+  String get sqHadisTitle => 'Study 5 Hadith, Done!';
 
   @override
   String get sqHadisDesc => 'Five new hadith read today. Keep learning!';
@@ -1941,7 +1940,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String naikReached(Object level, Object rank) {
-    return 'Masha Allah, you reached $rank — Level $level';
+    return 'Masha Allah, you reached $rank, Level $level';
   }
 
   @override
@@ -1978,7 +1977,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get naikClosing =>
-      'Barakallah — stay consistent, the next level is waiting ✨';
+      'Barakallah, stay consistent, the next level is waiting ✨';
 
   @override
   String naikLevelLabel(Object level) {
@@ -2015,7 +2014,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get uq_ulama_waktu_itu_seperti_pedang_kalau_kamu_tida =>
-      'Time is like a sword — if you do not cut it, it cuts you.';
+      'Time is like a sword: if you do not cut it, it cuts you.';
 
   @override
   String get uq_ulama_ilmu_bukanlah_yang_dihafal_tetapi_ilmu_a =>
@@ -2095,7 +2094,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get uq_ulama_kesabaran_itu_cahaya_dengannya_jalan_yan =>
-      'Patience is light — with it a narrow road feels wide.';
+      'Patience is light, and with it a narrow road feels wide.';
 
   @override
   String get uq_ulama_ilmu_tanpa_amal_adalah_sia_sia_dan_amal =>
@@ -2463,7 +2462,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get ppProPitch =>
-      'Exclusive shields, auras, and titles. A new style for your avatar — without affecting your XP, streak, or rank.';
+      'Exclusive shields, auras, and titles. A new style for your avatar, without affecting your XP, streak, or rank.';
 
   @override
   String deQuizDone(String moduleTitle) {
@@ -2548,13 +2547,13 @@ class AppL10nEn extends AppL10n {
   }
 
   @override
-  String get jdSoundSilent => 'Silent — no sound';
+  String get jdSoundSilent => 'Silent: no sound';
 
   @override
-  String get jdSoundNormal => 'Sound — standard phone notification';
+  String get jdSoundNormal => 'Sound: standard phone notification';
 
   @override
-  String get jdSoundAdzan => 'Adhan — full Adhan sound';
+  String get jdSoundAdzan => 'Adhan: full Adhan sound';
 
   @override
   String get jdSoundGlobalOption => 'Follow global settings';
@@ -2566,7 +2565,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String qtSearchEmpty(String example) {
-    return 'No results found. Try another word in the translation, or type the Surah name + Ayah number — e.g., $example.';
+    return 'No results found. Try another word in the translation, or type the Surah name + Ayah number, e.g., $example.';
   }
 
   @override
@@ -2629,7 +2628,7 @@ class AppL10nEn extends AppL10n {
       'Google did not return an idToken. Please check the SHA-1 fingerprint in the Firebase Console.';
 
   @override
-  String get authEmptyUser => 'Firebase Auth failed — user is empty.';
+  String get authEmptyUser => 'Firebase Auth failed, user is empty.';
 
   @override
   String get authDevError10 =>
@@ -2788,7 +2787,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get jdAbroadEmpty =>
-      'City not found. Enter the name in English — e.g., London.';
+      'City not found. Enter the name in English, e.g., London.';
 
   @override
   String jdFootnoteAbroad(String city) {
@@ -2813,7 +2812,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String qtVerseHitsTruncated(int count) {
-    return '$count+ verses found — refine your search';
+    return '$count+ verses found, refine your search';
   }
 
   @override
@@ -3446,5 +3445,5 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get profilRankFooter =>
-      'Performing the five daily prayers grants XP. The more consistent you are, the faster you will level up — and the color changes accordingly.';
+      'Performing the five daily prayers grants XP. The more consistent you are, the faster you will level up, and the color changes accordingly.';
 }

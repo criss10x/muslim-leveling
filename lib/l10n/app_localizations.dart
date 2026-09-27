@@ -601,7 +601,7 @@ abstract class AppL10n {
   /// No description provided for @ach_hall_of_fame_hint.
   ///
   /// In id, this message translates to:
-  /// **'Buka semua achievement lainnya satu per satu — terakhir dari 87 medali biasa.'**
+  /// **'Buka semua achievement lainnya satu per satu, sampai terakhir dari 87 medali biasa.'**
   String get ach_hall_of_fame_hint;
 
   /// No description provided for @ach_hall_of_fame_title.
@@ -829,7 +829,7 @@ abstract class AppL10n {
   /// No description provided for @ach_phoenix_desc.
   ///
   /// In id, this message translates to:
-  /// **'Bangkit 3× setelah streak putus — gak pernah nyerah'**
+  /// **'Bangkit 3× setelah streak putus. Gak pernah nyerah'**
   String get ach_phoenix_desc;
 
   /// No description provided for @ach_phoenix_hint.
@@ -1015,13 +1015,13 @@ abstract class AppL10n {
   /// No description provided for @ach_rank_mythic_desc.
   ///
   /// In id, this message translates to:
-  /// **'Capai Level 80 — Muslim Mythic!'**
+  /// **'Capai Level 80, Muslim Mythic!'**
   String get ach_rank_mythic_desc;
 
   /// No description provided for @ach_rank_mythic_hint.
   ///
   /// In id, this message translates to:
-  /// **'Naik level lewat XP dari ibadah harian — naik level 80 butuh waktu.'**
+  /// **'Naik level lewat XP dari ibadah harian. Naik level 80 butuh waktu.'**
   String get ach_rank_mythic_hint;
 
   /// No description provided for @ach_rank_mythic_title.
@@ -1123,7 +1123,7 @@ abstract class AppL10n {
   /// No description provided for @ach_subuh_solo_carry_desc.
   ///
   /// In id, this message translates to:
-  /// **'Streak Subuh 7 hari beruntun — lane tersulit'**
+  /// **'Streak Subuh 7 hari beruntun, lane tersulit'**
   String get ach_subuh_solo_carry_desc;
 
   /// No description provided for @ach_subuh_solo_carry_title.
@@ -1669,7 +1669,7 @@ abstract class AppL10n {
   /// No description provided for @homeRevealDuplicate.
   ///
   /// In id, this message translates to:
-  /// **'Item duplikat — koleksi tetap tersimpan 📦'**
+  /// **'Item duplikat, koleksi tetap tersimpan 📦'**
   String get homeRevealDuplicate;
 
   /// No description provided for @homeRevealLevelUp.
@@ -2011,7 +2011,7 @@ abstract class AppL10n {
   /// No description provided for @onbLocationBody.
   ///
   /// In id, this message translates to:
-  /// **'Untuk menghitung jadwal sholat & arah qiblat yang akurat, kami perlu akses lokasi. Lokasi tidak dibagikan ke siapa pun — semua perhitungan terjadi di HP-mu.'**
+  /// **'Untuk menghitung jadwal sholat & arah qiblat yang akurat, kami perlu akses lokasi. Lokasi tidak dibagikan ke siapa pun: semua perhitungan terjadi di HP-mu.'**
   String get onbLocationBody;
 
   /// No description provided for @onbLocationLoading.
@@ -2029,7 +2029,7 @@ abstract class AppL10n {
   /// No description provided for @onbLocationLaterHint.
   ///
   /// In id, this message translates to:
-  /// **'Belum ada lokasi? Jadwal memakai kota default dulu — bisa diubah kapan saja di Profil.'**
+  /// **'Belum ada lokasi? Jadwal memakai kota default dulu. Bisa diubah kapan saja di Profil.'**
   String get onbLocationLaterHint;
 
   /// No description provided for @onbLocationPickManual.
@@ -2065,7 +2065,7 @@ abstract class AppL10n {
   /// No description provided for @onbNicknameHint.
   ///
   /// In id, this message translates to:
-  /// **'Nama pejuang (opsional — kosong: Pejuang)'**
+  /// **'Nama pejuang (opsional, kosong: Pejuang)'**
   String get onbNicknameHint;
 
   /// No description provided for @onbNotifAllow.
@@ -2077,7 +2077,7 @@ abstract class AppL10n {
   /// No description provided for @onbNotifBody.
   ///
   /// In id, this message translates to:
-  /// **'Biar tidak kelewat, kami kirim pengingat saat waktu sholat tiba. Kami minta izin notifikasi + pengecualian baterai — tanpa itu ponsel bisa mematikan pengingat diam-diam saat app ditutup.'**
+  /// **'Biar tidak kelewat, kami kirim pengingat saat waktu sholat tiba. Kami minta izin notifikasi + pengecualian baterai. Tanpa itu ponsel bisa mematikan pengingat diam-diam saat app ditutup.'**
   String get onbNotifBody;
 
   /// No description provided for @onbNotifDenied.
@@ -2167,7 +2167,7 @@ abstract class AppL10n {
   /// No description provided for @profilAboutBody.
   ///
   /// In id, this message translates to:
-  /// **'Ibadah itu konsisten, bukan sempurna. Muslim Leveling membantu kamu membangun kebiasaan sholat lima waktu dan membaca Quran dengan cara yang seru — setiap sholat yang dicatat memberi XP, setiap hari tanpa putus menambah streak, dan setiap pencapaian membuka skin avatar baru.'**
+  /// **'Ibadah itu konsisten, bukan sempurna. Muslim Leveling membantu kamu membangun kebiasaan sholat lima waktu dan membaca Quran dengan cara yang seru: setiap sholat yang dicatat memberi XP, setiap hari tanpa putus menambah streak, dan setiap pencapaian membuka skin avatar baru.'**
   String get profilAboutBody;
 
   /// No description provided for @profilAboutFooter.
@@ -2179,7 +2179,7 @@ abstract class AppL10n {
   /// No description provided for @profilAboutOffline.
   ///
   /// In id, this message translates to:
-  /// **'Tidak ada server, tidak ada iklan, tidak ada langganan. Semua datamu tinggal di perangkat — milikmu sepenuhnya.'**
+  /// **'Tidak ada server, tidak ada iklan, tidak ada langganan. Semua datamu tinggal di perangkat, milikmu sepenuhnya.'**
   String get profilAboutOffline;
 
   /// No description provided for @profilAccountSettings.
@@ -2293,7 +2293,7 @@ abstract class AppL10n {
   /// No description provided for @profilExactAlarmPerm.
   ///
   /// In id, this message translates to:
-  /// **'Izin \"Alarm & pengingat\" belum aktif — pengingat bisa telat beberapa menit.'**
+  /// **'Izin \"Alarm & pengingat\" belum aktif, jadi pengingat bisa telat beberapa menit.'**
   String get profilExactAlarmPerm;
 
   /// No description provided for @profilFriday.
@@ -2347,7 +2347,7 @@ abstract class AppL10n {
   /// No description provided for @profilHeatmapBody.
   ///
   /// In id, this message translates to:
-  /// **'Makin hijau makin lengkap — 5 shade = 5 sholat wajib.'**
+  /// **'Makin hijau makin lengkap. 5 shade = 5 sholat wajib.'**
   String get profilHeatmapBody;
 
   /// No description provided for @profilHeatmapHeader.
@@ -2371,7 +2371,7 @@ abstract class AppL10n {
   /// No description provided for @profilHeroSemantics.
   ///
   /// In id, this message translates to:
-  /// **'Profile hero — {tier}'**
+  /// **'Profile hero, {tier}'**
   String profilHeroSemantics(String tier);
 
   /// No description provided for @profilLevelBadge.
@@ -2413,7 +2413,7 @@ abstract class AppL10n {
   /// No description provided for @profilLoginMerged.
   ///
   /// In id, this message translates to:
-  /// **'☁️ Login OK — progress digabung.'**
+  /// **'☁️ Login OK, progress digabung.'**
   String get profilLoginMerged;
 
   /// No description provided for @profilLoginNotSaved.
@@ -2575,7 +2575,7 @@ abstract class AppL10n {
   /// No description provided for @profilPrivacyLocalBody.
   ///
   /// In id, this message translates to:
-  /// **'Semua data — sholat, bacaan Quran, statistik, dan preferensi — hanya tinggal di HP kamu. Tidak ada server, tidak ada cloud.'**
+  /// **'Semua data (sholat, bacaan Quran, statistik, dan preferensi) hanya tinggal di HP kamu. Tidak ada server, tidak ada cloud.'**
   String get profilPrivacyLocalBody;
 
   /// No description provided for @profilPrivacyLocalTitle.
@@ -2629,13 +2629,13 @@ abstract class AppL10n {
   /// No description provided for @profilRemindersFailed.
   ///
   /// In id, this message translates to:
-  /// **'Gagal menjadwalkan pengingat — cek izin notifikasi & alarm di pengaturan HP.'**
+  /// **'Gagal menjadwalkan pengingat. Cek izin notifikasi & alarm di pengaturan HP.'**
   String get profilRemindersFailed;
 
   /// No description provided for @profilRemindersNone.
   ///
   /// In id, this message translates to:
-  /// **'Mode tersimpan, tapi belum ada pengingat terjadwal — cek izin notifikasi & alarm di pengaturan HP.'**
+  /// **'Mode tersimpan, tapi belum ada pengingat terjadwal. Cek izin notifikasi & alarm di pengaturan HP.'**
   String get profilRemindersNone;
 
   /// No description provided for @profilRemindersOff.
@@ -2647,7 +2647,7 @@ abstract class AppL10n {
   /// No description provided for @profilRemindersScheduled.
   ///
   /// In id, this message translates to:
-  /// **'Pengingat adzan aktif: mode {mode} — {n} pengingat terjadwal'**
+  /// **'Pengingat adzan aktif: mode {mode}, {n} pengingat terjadwal'**
   String profilRemindersScheduled(String mode, int n);
 
   /// No description provided for @profilRemindersScheduledCount.
@@ -2731,7 +2731,7 @@ abstract class AppL10n {
   /// No description provided for @profilStatsEmptyBody.
   ///
   /// In id, this message translates to:
-  /// **'Centang sholat pertamamu — statistik mulai terisi di sini.'**
+  /// **'Centang sholat pertamamu, statistik mulai terisi di sini.'**
   String get profilStatsEmptyBody;
 
   /// No description provided for @profilStatsEmptyTitle.
@@ -3577,7 +3577,7 @@ abstract class AppL10n {
   /// No description provided for @naikReached.
   ///
   /// In id, this message translates to:
-  /// **'Masha Allah, kamu mencapai {rank} — Level {level}'**
+  /// **'Masha Allah, kamu mencapai {rank}, Level {level}'**
   String naikReached(Object level, Object rank);
 
   /// No description provided for @naikFrom.
@@ -3631,7 +3631,7 @@ abstract class AppL10n {
   /// No description provided for @naikClosing.
   ///
   /// In id, this message translates to:
-  /// **'Barakallah — terus istiqomah, level berikutnya menantimu ✨'**
+  /// **'Barakallah, terus istiqomah, level berikutnya menantimu ✨'**
   String get naikClosing;
 
   /// No description provided for @naikLevelLabel.
@@ -3685,7 +3685,7 @@ abstract class AppL10n {
   /// No description provided for @uq_ulama_waktu_itu_seperti_pedang_kalau_kamu_tida.
   ///
   /// In id, this message translates to:
-  /// **'Waktu itu seperti pedang — kalau kamu tidak memotongnya, dia yang memotongmu.'**
+  /// **'Waktu itu seperti pedang: kalau kamu tidak memotongnya, dia yang memotongmu.'**
   String get uq_ulama_waktu_itu_seperti_pedang_kalau_kamu_tida;
 
   /// No description provided for @uq_ulama_ilmu_bukanlah_yang_dihafal_tetapi_ilmu_a.
@@ -3805,7 +3805,7 @@ abstract class AppL10n {
   /// No description provided for @uq_ulama_kesabaran_itu_cahaya_dengannya_jalan_yan.
   ///
   /// In id, this message translates to:
-  /// **'Kesabaran itu cahaya — dengannya jalan yang sempit terasa lapang.'**
+  /// **'Kesabaran itu cahaya, dengannya jalan yang sempit terasa lapang.'**
   String get uq_ulama_kesabaran_itu_cahaya_dengannya_jalan_yan;
 
   /// No description provided for @uq_ulama_ilmu_tanpa_amal_adalah_sia_sia_dan_amal.
@@ -4465,7 +4465,7 @@ abstract class AppL10n {
   /// No description provided for @ppProPitch.
   ///
   /// In id, this message translates to:
-  /// **'Perisai, aura, dan gelar eksklusif. Gaya baru untuk avatarmu — tanpa memengaruhi XP, streak, atau peringkatmu.'**
+  /// **'Perisai, aura, dan gelar eksklusif. Gaya baru untuk avatarmu, tanpa memengaruhi XP, streak, atau peringkatmu.'**
   String get ppProPitch;
 
   /// No description provided for @deQuizDone.
@@ -4603,19 +4603,19 @@ abstract class AppL10n {
   /// No description provided for @jdSoundSilent.
   ///
   /// In id, this message translates to:
-  /// **'Senyap — tanpa suara'**
+  /// **'Senyap: tanpa suara'**
   String get jdSoundSilent;
 
   /// No description provided for @jdSoundNormal.
   ///
   /// In id, this message translates to:
-  /// **'Suara — notifikasi standar HP'**
+  /// **'Suara: notifikasi standar HP'**
   String get jdSoundNormal;
 
   /// No description provided for @jdSoundAdzan.
   ///
   /// In id, this message translates to:
-  /// **'Adzan — suara adzan penuh'**
+  /// **'Adzan: suara adzan penuh'**
   String get jdSoundAdzan;
 
   /// No description provided for @jdSoundGlobalOption.
@@ -4633,7 +4633,7 @@ abstract class AppL10n {
   /// No description provided for @qtSearchEmpty.
   ///
   /// In id, this message translates to:
-  /// **'Tidak ditemukan. Coba kata lain di terjemahan, atau tulis nama surat + nomor ayat — mis. {example}.'**
+  /// **'Tidak ditemukan. Coba kata lain di terjemahan, atau tulis nama surat + nomor ayat, mis. {example}.'**
   String qtSearchEmpty(String example);
 
   /// No description provided for @qtOpenSurah.
@@ -4717,7 +4717,7 @@ abstract class AppL10n {
   /// No description provided for @authEmptyUser.
   ///
   /// In id, this message translates to:
-  /// **'Firebase Auth gagal — user kosong.'**
+  /// **'Firebase Auth gagal, user kosong.'**
   String get authEmptyUser;
 
   /// No description provided for @authDevError10.
@@ -4963,7 +4963,7 @@ abstract class AppL10n {
   /// No description provided for @jdAbroadEmpty.
   ///
   /// In id, this message translates to:
-  /// **'Kota tidak ditemukan. Tulis namanya dalam bahasa Inggris — mis. London.'**
+  /// **'Kota tidak ditemukan. Tulis namanya dalam bahasa Inggris, mis. London.'**
   String get jdAbroadEmpty;
 
   /// No description provided for @jdFootnoteAbroad.
@@ -4999,7 +4999,7 @@ abstract class AppL10n {
   /// No description provided for @qtVerseHitsTruncated.
   ///
   /// In id, this message translates to:
-  /// **'{count}+ ayat ditemukan — persempit kata kunci'**
+  /// **'{count}+ ayat ditemukan, persempit kata kunci'**
   String qtVerseHitsTruncated(int count);
 
   /// No description provided for @qtBookmarkTooltip.
@@ -6205,7 +6205,7 @@ abstract class AppL10n {
   /// No description provided for @profilRankFooter.
   ///
   /// In id, this message translates to:
-  /// **'Sholat lima waktu memberi XP. Makin konsisten, makin cepat naik — dan warnanya ikut berubah.'**
+  /// **'Sholat lima waktu memberi XP. Makin konsisten, makin cepat naik, dan warnanya ikut berubah.'**
   String get profilRankFooter;
 }
 

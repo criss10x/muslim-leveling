@@ -288,7 +288,7 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get ach_hall_of_fame_hint =>
-      'Diğer tüm başarımları tek tek açın — 87 normal madalyanın sonuncusu.';
+      'Diğer tüm başarımları tek tek açın, 87 normal madalyanın sonuncusuna ulaşın.';
 
   @override
   String get ach_hall_of_fame_title => 'ŞÖHRETLER HOLÜ';
@@ -405,7 +405,7 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get ach_phoenix_desc =>
-      'Seri bozulduktan sonra 3 kez yeniden ayağa kalkın — asla pes etmeyin';
+      'Seri bozulduktan sonra 3 kez yeniden ayağa kalkın, asla pes etmeyin';
 
   @override
   String get ach_phoenix_hint =>
@@ -501,11 +501,11 @@ class AppL10nTr extends AppL10n {
   String get ach_rank_master_title => 'MASTER';
 
   @override
-  String get ach_rank_mythic_desc => '80. Seviyeye ulaşın — Muslim Mythic!';
+  String get ach_rank_mythic_desc => '80. Seviyeye ulaşın, Muslim Mythic!';
 
   @override
   String get ach_rank_mythic_hint =>
-      'Günlük ibadetlerden kazanılan XP ile seviye atlayın — 80. seviyeye ulaşmak zaman alır.';
+      'Günlük ibadetlerden kazanılan XP ile seviye atlayın. 80. seviyeye ulaşmak zaman alır.';
 
   @override
   String get ach_rank_mythic_title => 'MYTHIC';
@@ -560,7 +560,7 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get ach_subuh_solo_carry_desc =>
-      'Üst üste 7 gün Sabah namazı serisi — en zor koridor';
+      'Üst üste 7 gün Sabah namazı serisi, en zor koridor';
 
   @override
   String get ach_subuh_solo_carry_title => 'SABAH SOLO CARRY';
@@ -856,7 +856,7 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get homeRevealDuplicate =>
-      'Yinelenen öge — koleksiyonunuzda saklanmaya devam ediyor 📦';
+      'Yinelenen öge, koleksiyonunuzda saklanmaya devam ediyor 📦';
 
   @override
   String homeRevealLevelUp(String suffix) {
@@ -1084,7 +1084,7 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get onbNicknameHint =>
-      'Savaşçı adı (isteğe bağlı — boş bırakılırsa: Savaşçı)';
+      'Savaşçı adı (isteğe bağlı, boş bırakılırsa: Savaşçı)';
 
   @override
   String get onbNotifAllow => 'Bildirimlere İzin Ver';
@@ -1148,7 +1148,7 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get profilAboutOffline =>
-      'Sunucu yok, reklam yok, abonelik yok. Tüm verileriniz cihazınızda kalır — tamamen size aittir.';
+      'Sunucu yok, reklam yok, abonelik yok. Tüm verileriniz cihazınızda kalır, tamamen size aittir.';
 
   @override
   String get profilAccountSettings => 'Hesap Ayarları';
@@ -1239,7 +1239,7 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get profilHeatmapBody =>
-      'Yeşil tonu arttıkça tamamlanma oranı artar — 5 ton = 5 farz namaz.';
+      'Yeşil tonu arttıkça tamamlanma oranı artar. 5 ton = 5 farz namaz.';
 
   @override
   String get profilHeatmapHeader => 'FARZ NAMAZ TAKVİMİ';
@@ -1252,7 +1252,7 @@ class AppL10nTr extends AppL10n {
 
   @override
   String profilHeroSemantics(String tier) {
-    return 'Profil kahramanı — $tier';
+    return 'Profil kahramanı, $tier';
   }
 
   @override
@@ -1278,7 +1278,7 @@ class AppL10nTr extends AppL10n {
   }
 
   @override
-  String get profilLoginMerged => '☁️ Giriş başarılı — ilerleme birleştirildi.';
+  String get profilLoginMerged => '☁️ Giriş başarılı, ilerleme birleştirildi.';
 
   @override
   String get profilLoginNotSaved =>
@@ -1405,18 +1405,18 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get profilRemindersFailed =>
-      'Hatırlatıcılar planlanamadı — lütfen telefon ayarlarından bildirim ve alarm izinlerini kontrol edin.';
+      'Hatırlatıcılar planlanamadı. Lütfen telefon ayarlarından bildirim ve alarm izinlerini kontrol edin.';
 
   @override
   String get profilRemindersNone =>
-      'Mod kaydedildi ancak henüz planlanmış bir hatırlatıcı yok — lütfen telefon ayarlarından bildirim ve alarm izinlerini kontrol edin.';
+      'Mod kaydedildi ancak henüz planlanmış bir hatırlatıcı yok. Lütfen telefon ayarlarından bildirim ve alarm izinlerini kontrol edin.';
 
   @override
   String get profilRemindersOff => 'Ezan hatırlatıcıları kapatıldı';
 
   @override
   String profilRemindersScheduled(String mode, int n) {
-    return 'Ezan hatırlatıcıları aktif: $mode modu — $n hatırlatıcı planlandı';
+    return 'Ezan hatırlatıcıları aktif: $mode modu, $n hatırlatıcı planlandı';
   }
 
   @override
@@ -1467,7 +1467,7 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get profilStatsEmptyBody =>
-      'İlk namazınızı işaretleyin — istatistikleriniz burada görünmeye başlayacaktır.';
+      'İlk namazınızı işaretleyin, istatistikleriniz burada görünmeye başlayacaktır.';
 
   @override
   String get profilStatsEmptyTitle => 'Henüz kayıt bulunmuyor.';
@@ -1964,7 +1964,7 @@ class AppL10nTr extends AppL10n {
 
   @override
   String naikReached(Object level, Object rank) {
-    return 'Maşallah, $rank unvanına ulaştınız — Seviye $level';
+    return 'Maşallah, $rank unvanına ulaştınız, Seviye $level';
   }
 
   @override
@@ -2001,7 +2001,7 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get naikClosing =>
-      'Barakallah — istikrarınızı koruyun, bir sonraki seviye sizi bekliyor ✨';
+      'Barakallah, istikrarınızı koruyun, bir sonraki seviye sizi bekliyor ✨';
 
   @override
   String naikLevelLabel(Object level) {
@@ -2485,7 +2485,7 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get ppProPitch =>
-      'Özel kalkanlar, auralar ve unvanlar. Avatarınız için yeni bir tarz — XP, seriniz veya sıralamanız etkilenmez.';
+      'Özel kalkanlar, auralar ve unvanlar. Avatarınız için yeni bir tarz, XP, seriniz veya sıralamanız etkilenmez.';
 
   @override
   String deQuizDone(String moduleTitle) {
@@ -2570,13 +2570,13 @@ class AppL10nTr extends AppL10n {
   }
 
   @override
-  String get jdSoundSilent => 'Sessiz — ses yok';
+  String get jdSoundSilent => 'Sessiz: ses yok';
 
   @override
-  String get jdSoundNormal => 'Sesli — standart telefon bildirimi';
+  String get jdSoundNormal => 'Sesli: standart telefon bildirimi';
 
   @override
-  String get jdSoundAdzan => 'Ezan — tam ezan sesi';
+  String get jdSoundAdzan => 'Ezan: tam ezan sesi';
 
   @override
   String get jdSoundGlobalOption => 'Genel ayarları takip et';
@@ -2588,7 +2588,7 @@ class AppL10nTr extends AppL10n {
 
   @override
   String qtSearchEmpty(String example) {
-    return 'Sonuç bulunamadı. Çeviride başka bir kelime aramayı deneyin veya sure adı + ayet numarası yazın — örneğin: $example.';
+    return 'Sonuç bulunamadı. Çeviride başka bir kelime aramayı deneyin veya sure adı + ayet numarası yazın, örneğin: $example.';
   }
 
   @override
@@ -2652,7 +2652,7 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get authEmptyUser =>
-      'Firebase Kimlik Doğrulaması başarısız oldu — kullanıcı boş.';
+      'Firebase Kimlik Doğrulaması başarısız oldu, kullanıcı boş.';
 
   @override
   String get authDevError10 =>
@@ -2812,7 +2812,7 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get jdAbroadEmpty =>
-      'Şehir bulunamadı. Adını İngilizce olarak yazın — örn. London.';
+      'Şehir bulunamadı. Adını İngilizce olarak yazın, örn. London.';
 
   @override
   String jdFootnoteAbroad(String city) {
@@ -2837,7 +2837,7 @@ class AppL10nTr extends AppL10n {
 
   @override
   String qtVerseHitsTruncated(int count) {
-    return '$count+ ayet bulundu — anahtar kelimeyi daraltın';
+    return '$count+ ayet bulundu, anahtar kelimeyi daraltın';
   }
 
   @override

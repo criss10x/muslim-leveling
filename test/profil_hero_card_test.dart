@@ -28,7 +28,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
-    expect(find.bySemanticsLabel('Profile hero — Warrior'), findsOneWidget);
+    expect(find.bySemanticsLabel('Profile hero, Warrior'), findsOneWidget);
     final edit = find.byTooltip('Edit profil');
     expect(tester.getSize(edit).shortestSide, greaterThanOrEqualTo(44));
     semantics.dispose();
@@ -49,13 +49,13 @@ void main() {
     );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
-    expect(find.bySemanticsLabel('Profile hero — Warrior'), findsOneWidget);
+    expect(find.bySemanticsLabel('Profile hero, Warrior'), findsOneWidget);
 
     await GameService.addXp(865);
     await tester.pump();
 
-    expect(find.bySemanticsLabel('Profile hero — Warrior'), findsNothing);
-    expect(find.bySemanticsLabel('Profile hero — Elite'), findsOneWidget);
+    expect(find.bySemanticsLabel('Profile hero, Warrior'), findsNothing);
+    expect(find.bySemanticsLabel('Profile hero, Elite'), findsOneWidget);
     expect(find.bySemanticsLabel('Elite achievement frame'), findsOneWidget);
     semantics.dispose();
   });
