@@ -793,11 +793,6 @@ class AppL10nId extends AppL10n {
   }
 
   @override
-  String homeLockSubuh(int hours, String until) {
-    return 'Quest Subuh terkunci $hours jam setelah adzan (sampai $until). Besok jangan kelewat ya! 💪';
-  }
-
-  @override
   String get homeLogDuplicate => 'Sholat ini udah dicatat hari ini!';
 
   @override
@@ -1680,8 +1675,7 @@ class AppL10nId extends AppL10n {
   String get quest_five_rings_desc => 'Lengkapin 5/5 sholat hari ini';
 
   @override
-  String get quest_timely_prayers_desc =>
-      'Sholat tepat waktu (≤10 menit), 3x hari ini';
+  String get quest_timely_prayers_desc => 'Sholat 3x hari ini (bebas waktu)';
 
   @override
   String get quest_dhuha_before_dzuhur_desc => 'Sholat Dhuha sebelum Dzuhur';

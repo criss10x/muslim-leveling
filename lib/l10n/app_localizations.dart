@@ -1576,12 +1576,6 @@ abstract class AppL10n {
   /// **'Belum masuk waktu {prayer} (adzan {time}).'**
   String homeLockBeforeTime(String prayer, String time);
 
-  /// No description provided for @homeLockSubuh.
-  ///
-  /// In id, this message translates to:
-  /// **'Quest Subuh terkunci {hours} jam setelah adzan (sampai {until}). Besok jangan kelewat ya! 💪'**
-  String homeLockSubuh(int hours, String until);
-
   /// No description provided for @homeLogDuplicate.
   ///
   /// In id, this message translates to:
@@ -3151,7 +3145,7 @@ abstract class AppL10n {
   /// No description provided for @quest_timely_prayers_desc.
   ///
   /// In id, this message translates to:
-  /// **'Sholat tepat waktu (≤10 menit), 3x hari ini'**
+  /// **'Sholat 3x hari ini (bebas waktu)'**
   String get quest_timely_prayers_desc;
 
   /// No description provided for @quest_dhuha_before_dzuhur_desc.

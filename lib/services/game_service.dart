@@ -809,8 +809,8 @@ class GameService {
       };
 
   /// Batas akhir quest wajib: semua quest terkunci jam 03:00 (saat hari
-  /// berganti, lihat dailyDateKey). Subuh lebih ketat: +3 jam setelah adzan.
-  static const subuhLockAfterMin = 180;
+  /// berganti, lihat dailyDateKey). Subuh punya jendela sama dengan yang
+  /// lain: adzan → 03:00; tidak ada lagi lock khusus 3 jam.
   static const wajibDayEndHHmm = '03:00';
 
   // Bonus XP saat claim sholat wajib — dipilih user di bottom sheet.
@@ -829,9 +829,6 @@ class GameService {
     // dari adzan sampai <03:00.
     final adzan = _adzanFor(prayer, t);
     if (adzan.isEmpty || _inLockedSiklik(now, adzan)) return false;
-    if (prayer == 'subuh') {
-      return isBefore(now, addMin(adzan, subuhLockAfterMin));
-    }
     return true;
   }
 
@@ -856,12 +853,9 @@ class GameService {
     if (adzan.isNotEmpty && isBefore(nowHHmm(), adzan)) {
       return l10n.homeLockBeforeTime(name, adzan);
     }
-    if (prayer == 'subuh') {
-      return l10n.homeLockSubuh(
-        subuhLockAfterMin ~/ 60,
-        addMin(t.subuh, subuhLockAfterMin),
-      );
-    }
+    // Semua wajib (termasuk Subuh) terkunci hanya di [03:00, adzan):
+    // setelah adzan lewat, satu-satunya alasan terkunci adalah udah pernah
+    // di luar jendela hari — teksnya sama dengan wajib lain.
     return l10n.homeLockAfterTime(name);
   }
 
@@ -1084,6 +1078,24 @@ class GameService {
 
   /// Re-evaluate daily quest progress from today's prayer logs + zikir count.
   /// Preserves claimed quests (they stay as-is).
+  /// Hanya untuk tes: evaluasi quest di atas state & log yang disuntik.
+  @visibleForTesting
+  static List<Quest> progressQuestsForTest(
+    GameState state,
+    Timings t,
+  ) {
+    final quests = state.quests.isNotEmpty
+        ? state.quests
+        : generateQuestPool();
+    return _reevaluateQuests(
+      quests,
+      state.prayerLog,
+      state.heroStreak,
+      t,
+      state.zikirCounter.count,
+    );
+  }
+
   static List<Quest> _reevaluateQuests(
     List<Quest> current,
     List<PrayerLog> logs,
@@ -1125,13 +1137,9 @@ class GameService {
           }
           break;
         case 'quest_timely_prayers':
-          prog = wajibLogs
-              .where((l) {
-                final adzan = _adzanFor(l.prayer, t);
-                return adzan.isNotEmpty && minDiff(l.time, adzan) <= 10;
-              })
-              .length
-              .clamp(0, 3);
+          // Ambang menit dihapus (≤10 terlalu ketat): progres dari tombol
+          // log sholat wajib, bebas waktu — targetnya disiplin, bukan presisi.
+          prog = wajibLogs.length.clamp(0, 3);
           done = prog >= 3;
           break;
         case 'quest_dhuha_before_dzuhur':
@@ -1523,7 +1531,7 @@ class GameService {
       ),
       Quest(
         id: 'quest_timely_prayers',
-        desc: 'Sholat tepat waktu (≤10 menit), 3x hari ini',
+        desc: 'Sholat 3x hari ini (bebas waktu)',
         xpReward: 60,
         target: 3,
         progress: 0,

@@ -101,16 +101,6 @@
       }
     }
   },
-  "@homeLockSubuh": {
-    "placeholders": {
-      "hours": {
-        "type": "int"
-      },
-      "until": {
-        "type": "String"
-      }
-    }
-  },
   "@homeQuestClaimable": {
     "placeholders": {
       "n": {
@@ -551,7 +541,6 @@
   "homeLevelUpSource": "Sholat {prayer}",
   "homeLockAfterTime": "Waktu {prayer} sudah lewat.",
   "homeLockBeforeTime": "Belum masuk waktu {prayer} (adzan {time}).",
-  "homeLockSubuh": "Quest Subuh terkunci {hours} jam setelah adzan (sampai {until}). Besok jangan kelewat ya! 💪",
   "homeLogDuplicate": "Sholat ini udah dicatat hari ini!",
   "homeNext": "BERIKUTNYA",
   "homeQuestClaimable": "{n} SIAP KLAIM",
@@ -847,7 +836,7 @@
   },
   "quest_subuh_tepat_desc": "Sholat Subuh tepat waktu (≤30 menit setelah adzan)",
   "quest_five_rings_desc": "Lengkapin 5/5 sholat hari ini",
-  "quest_timely_prayers_desc": "Sholat tepat waktu (≤10 menit), 3x hari ini",
+  "quest_timely_prayers_desc": "Sholat 3x hari ini (bebas waktu)",
   "quest_dhuha_before_dzuhur_desc": "Sholat Dhuha sebelum Dzuhur",
   "quest_rawatib_two_desc": "Rawatib 2x hari ini",
   "quest_dzuhur_tepat_desc": "Sholat Dzuhur tepat waktu (≤30 menit setelah adzan)",

@@ -804,11 +804,6 @@ class AppL10nTr extends AppL10n {
   }
 
   @override
-  String homeLockSubuh(int hours, String until) {
-    return 'Sabah namazı görevi ezandan $hours saat sonra ($until vaktine kadar) kilitlenir. Yarın kaçırmayın! 💪';
-  }
-
-  @override
   String get homeLogDuplicate => 'Bu namaz bugün zaten kaydedildi!';
 
   @override
@@ -1702,7 +1697,7 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get quest_timely_prayers_desc =>
-      'Bugün 3 vakit namazı vaktinde (≤10 dakika) kılın';
+      'Bugün 3 vakit namaz kılın (serbest zaman)';
 
   @override
   String get quest_dhuha_before_dzuhur_desc =>

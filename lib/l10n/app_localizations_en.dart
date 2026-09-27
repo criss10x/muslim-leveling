@@ -793,11 +793,6 @@ class AppL10nEn extends AppL10n {
   }
 
   @override
-  String homeLockSubuh(int hours, String until) {
-    return 'The Fajr quest locks $hours hours after adhan (until $until). Do not miss it tomorrow! 💪';
-  }
-
-  @override
   String get homeLogDuplicate => 'This prayer is already logged today!';
 
   @override
@@ -1684,8 +1679,7 @@ class AppL10nEn extends AppL10n {
   String get quest_five_rings_desc => 'Complete all 5/5 prayers today';
 
   @override
-  String get quest_timely_prayers_desc =>
-      'Pray on time (within 10 minutes), 3x today';
+  String get quest_timely_prayers_desc => 'Pray 3 times today (any time)';
 
   @override
   String get quest_dhuha_before_dzuhur_desc => 'Pray Dhuha before Dhuhr';
