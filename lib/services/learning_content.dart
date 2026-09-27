@@ -606,7 +606,7 @@ class LearningContent {
 const _akidah1_1Article = <ArticleBlock>[
   Heading('Kenapa Harus Percaya Ada Tuhan?'),
   Paragraph(
-    'Oke, sebelum ngomongin sholat, puasa, atau ibadah lainnya — kita perlu jawab pertanyaan paling dasar dulu: "Emangnya Tuhan itu ada?"',
+    'Oke, sebelum ngomongin sholat, puasa, atau ibadah lainnya, kita perlu jawab pertanyaan paling dasar dulu: "Emangnya Tuhan itu ada?"',
   ),
   Paragraph(
     'Ini pertanyaan yang wajar banget. Justru bagus kalau kamu mau mikirin ini, karena artinya kamu serius mau cari kebenaran. Yuk kita bahas pakai logika sederhana.',
@@ -614,10 +614,10 @@ const _akidah1_1Article = <ArticleBlock>[
   DividerBlock(),
   Subheading('🔍 Argumen 1: Desain Alam Semesta'),
   Paragraph(
-    'Coba lihat sekeliling kamu. HP yang kamu pegang sekarang — ada layar, prosesor, kamera, baterai. Secanggih itu. Tapi kamu tahu kan pasti ADA yang merancang? Gak mungkin komponen-komponen itu tiba-tiba nongol sendiri dari kosong.',
+    'Coba lihat sekeliling kamu. HP yang kamu pegang sekarang, ada layar, prosesor, kamera, baterai. Secanggih itu. Tapi kamu tahu kan pasti ADA yang merancang? Gak mungkin komponen-komponen itu tiba-tiba nongol sendiri dari kosong.',
   ),
   Paragraph(
-    'Sekarang bayangin: alam semesta ini JAUH lebih kompleks dari HP. Ada triliunan galaksi, masing-masing punya miliaran bintang. Gravitasi, kecepatan cahaya, siklus air, fotosintesis — semuanya bekerja dengan presisi gila. Kalau HP aja butuh perancang, masa alam semesta yang jauh lebih canggih ini kebetulan ada sendiri?',
+    'Sekarang bayangin: alam semesta ini JAUH lebih kompleks dari HP. Ada triliunan galaksi, masing-masing punya miliaran bintang. Gravitasi, kecepatan cahaya, siklus air, fotosintesis, semuanya bekerja dengan presisi gila. Kalau HP aja butuh perancang, masa alam semesta yang jauh lebih canggih ini kebetulan ada sendiri?',
   ),
   Highlight('HP aja butuh yang merancang. Alam semesta? Jauh lebih kompleks.'),
   DividerBlock(),
@@ -626,7 +626,7 @@ const _akidah1_1Article = <ArticleBlock>[
     'Ini hukum paling basic di dunia: segala sesuatu pasti punya penyebab. Meja ada karena ada yang bikin. Pohon tumbuh karena ada biji. Kamu ada karena ada orang tua.',
   ),
   Paragraph(
-    'Kalau kita telusuri terus ke belakang — siapa yang bikin X, siapa yang bikin Y — pasti harus berhenti di satu titik: sesuatu yang GAK butuh penyebab lain. Sesuatu yang udah ada dari awal. Itulah yang kita sebut Tuhan.',
+    'Kalau kita telusuri terus ke belakang, siapa yang bikin X, siapa yang bikin Y, pasti harus berhenti di satu titik: sesuatu yang GAK butuh penyebab lain. Sesuatu yang udah ada dari awal. Itulah yang kita sebut Tuhan.',
   ),
   Paragraph(
     'Bayangin kayak rantai: kalau setiap mata rantai bergantung pada rantai sebelumnya, siapa yang nge-link pertama? Pasti ada sesuatu yang bukan rantai, tapi jadi sumber dari semua rantai itu.',
@@ -660,7 +660,7 @@ const _akidah1_2Article = <ArticleBlock>[
     'Oke, di modul sebelumnya kita udah bahas kalau ada Perancang di balik alam semesta. Pertanyaan selanjutnya: "Emangnya cuma satu? Bisa dong lebih dari satu?"',
   ),
   Paragraph(
-    'Pertanyaan ini penting banget, karena jawabannya ngaruh ke cara kita ngelihat seluruh alam semesta. Yuk kita bahas pakai logika yang sama — santai, gak ribet.',
+    'Pertanyaan ini penting banget, karena jawabannya ngaruh ke cara kita ngelihat seluruh alam semesta. Yuk kita bahas pakai logika yang sama, santai, gak ribet.',
   ),
   DividerBlock(),
   Subheading('🚗 Analogi: Dua Sopir, Satu Kemudi'),
@@ -668,7 +668,7 @@ const _akidah1_2Article = <ArticleBlock>[
     'Bayangin kamu naik mobil. Tiba-tiba ada DUA orang yang megang kemudi. Yang satu mau belok kiri, yang satu mau belok kanan. Apa yang terjadi? Kecelakaan. Kacau. Gak ada yang sampai tujuan.',
   ),
   Paragraph(
-    'Sekarang bayangin alam semesta ini. Ada jutaan hukum fisika yang bekerja bersamaan dengan super presisi — gravitasi, elektromagnetik, gaya nuklir kuat dan lemah. Semuanya saling melengkapi, gak konflik satu sama lain.',
+    'Sekarang bayangin alam semesta ini. Ada jutaan hukum fisika yang bekerja bersamaan dengan super presisi, gravitasi, elektromagnetik, gaya nuklir kuat dan lemah. Semuanya saling melengkapi, gak konflik satu sama lain.',
   ),
   Paragraph(
     'Kalau ada DUA "Tuhan" dengan kehendak berbeda, pasti ada tabrakan di suatu titik. Satu mau atur gravitasi naik, satu mau turun. Satu mau bikin air mengalir ke bawah, satu mau ke atas. Hasilnya? Kekacauan.',
@@ -685,18 +685,18 @@ const _akidah1_2Article = <ArticleBlock>[
     'Kalau ada lebih dari satu "pengatur", mustahil keteraturan ini bisa terjaga konsisten. Bayangin: satu perusahaan aja kalau ada dua CEO yang visinya beda, pasti karyawan bingung. Apalagi alam semesta.',
   ),
   Paragraph(
-    'Jadi logikanya: kalau alam semesta ini teratur dan konsisten, sumbernya pasti SATU. Satu Perancang. Satu Pengatur. Dalam Islam, itu disebut Allah — yang Esa, gak berbilang.',
+    'Jadi logikanya: kalau alam semesta ini teratur dan konsisten, sumbernya pasti SATU. Satu Perancang. Satu Pengatur. Dalam Islam, itu disebut Allah, yang Esa, gak berbilang.',
   ),
   DividerBlock(),
   Subheading('📜 Tauhid di Awal Sejarah'),
   Paragraph(
-    'Menariknya, konsep "Tuhan itu Esa" bukan cuma ajaran Islam. Di awal sejarahnya, hampir semua agama besar ngajarin Tauhid — bahwa Tuhan itu satu.',
+    'Menariknya, konsep "Tuhan itu Esa" bukan cuma ajaran Islam. Di awal sejarahnya, hampir semua agama besar ngajarin Tauhid, bahwa Tuhan itu satu.',
   ),
   Paragraph(
-    'Nabi Ibrahim ajarin Tauhid. Nabi Musa ajarin Tauhid. Nabi Isa ajarin Tauhid. Tapi seiring waktu, ajaran itu berubah karena campur tangan manusia. Islam datang sebagai penyempurnaan — mengembalikan ajaran Tauhid murni yang udah ada sejak awal.',
+    'Nabi Ibrahim ajarin Tauhid. Nabi Musa ajarin Tauhid. Nabi Isa ajarin Tauhid. Tapi seiring waktu, ajaran itu berubah karena campur tangan manusia. Islam datang sebagai penyempurnaan, mengembalikan ajaran Tauhid murni yang udah ada sejak awal.',
   ),
   Highlight(
-    'Tauhid itu ajaran paling tua dalam sejarah manusia. Islam bukan "agama baru" — Islam adalah Tauhid yang asli.',
+    'Tauhid itu ajaran paling tua dalam sejarah manusia. Islam bukan "agama baru", Islam adalah Tauhid yang asli.',
   ),
   DividerBlock(),
   Subheading('📖 Ayat Al-Qur\'an: Surat Al-Ikhlas'),
@@ -707,15 +707,15 @@ const _akidah1_2Article = <ArticleBlock>[
     'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\n\nقُلْ هُوَ اللَّهُ أَحَدٌ ١\nQul huwallahu ahad. (1)\nKatakanlah: Dia-lah Allah, Yang Maha Esa.\n\nاللَّهُ الصَّمَدُ ٢\nAllahus-samad. (2)\nAllah tempat meminta segala sesuatu.\n\nلَمْ يَلِدْ وَلَمْ يُولَدْ ٣\nLam yalid wa lam yuulad. (3)\nDia tidak beranak dan tidak pula diperanakkan.\n\nوَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ ٤\nWa lam yakun lahu kufuwan ahad. (4)\nDan tidak ada sesuatu pun yang setara dengan Dia.',
   ),
   Paragraph(
-    '"Al-Ahad" artinya Yang Maha Esa — bener-bener satu, gak ada duanya, gak ada yang nyamain. "As-Samad" artinya tempat bergantung segala sesuatu — Dia gak butuh siapa-siapa, tapi semua yang ada butuh Dia.',
+    '"Al-Ahad" artinya Yang Maha Esa, bener-bener satu, gak ada duanya, gak ada yang nyamain. "As-Samad" artinya tempat bergantung segala sesuatu, Dia gak butuh siapa-siapa, tapi semua yang ada butuh Dia.',
   ),
   Paragraph(
-    '"Tidak beranak dan tidak diperanakkan" artinya Dia gak lahir dari siapa pun dan gak melahirkan siapa pun. Dia ada tanpa sebab — karena Dia SEBAB dari segalanya.',
+    '"Tidak beranak dan tidak diperanakkan" artinya Dia gak lahir dari siapa pun dan gak melahirkan siapa pun. Dia ada tanpa sebab, karena Dia SEBAB dari segalanya.',
   ),
   DividerBlock(),
   Subheading('💡 Kesimpulan'),
   Paragraph(
-    'Tauhid itu sederhana: Allah itu SATU. Esa. Gak ada duanya. Dan itu bukan cuma soal iman — tapi juga logika. Alam semesta yang teratur ini cuma mungkin kalau sumbernya satu.',
+    'Tauhid itu sederhana: Allah itu SATU. Esa. Gak ada duanya. Dan itu bukan cuma soal iman, tapi juga logika. Alam semesta yang teratur ini cuma mungkin kalau sumbernya satu.',
   ),
   Paragraph(
     'Di modul berikutnya, kita bakal bahas: kalau Allah udah ada dan Esa, terus apa hubungannya sama kita? Dia ngurus kita gak sih? Stay tuned.',
@@ -727,18 +727,18 @@ const _akidah1_2Article = <ArticleBlock>[
 const _akidah1_3Article = <ArticleBlock>[
   Heading('Al-Quran: Firman Tuhan, Bukan Karangan Manusia'),
   Paragraph(
-    'Kita udah bahas kalau Tuhan itu ada dan Esa. Pertanyaan berikutnya yang wajar banget: "Oke, kalau Tuhan ada — dia ngomong sama kita gak? Ada buktinya?"',
+    'Kita udah bahas kalau Tuhan itu ada dan Esa. Pertanyaan berikutnya yang wajar banget: "Oke, kalau Tuhan ada, dia ngomong sama kita gak? Ada buktinya?"',
   ),
   Paragraph(
-    'Kalau kamu Muslim, kamu pasti dengar "Al-Quran itu firman Allah." Tapi kenapa bisa yakin? Apa bedanya sama buku biasa? Yuk kita lihat beberapa hal yang menarik — kamu nilai sendiri.',
+    'Kalau kamu Muslim, kamu pasti dengar "Al-Quran itu firman Allah." Tapi kenapa bisa yakin? Apa bedanya sama buku biasa? Yuk kita lihat beberapa hal yang menarik, kamu nilai sendiri.',
   ),
   DividerBlock(),
   Subheading('1️⃣ Nabi Muhammad ﷺ Gak Bisa Baca-Tulis'),
   Paragraph(
-    'Ini fakta sejarah yang diterima luas oleh para sejarawan, baik Muslim maupun non-Muslim: Muhammad ﷺ itu ummi — gak bisa baca, gak bisa tulis. Tumbuh di jazirah Arab abad ke-7, di mana tingkat literasi sangat rendah.',
+    'Ini fakta sejarah yang diterima luas oleh para sejarawan, baik Muslim maupun non-Muslim: Muhammad ﷺ itu ummi, gak bisa baca, gak bisa tulis. Tumbuh di jazirah Arab abad ke-7, di mana tingkat literasi sangat rendah.',
   ),
   Paragraph(
-    'Sekarang bayangin: orang yang gak pernah baca buku, gak pernah sekolah, gak pernah belajar sastra atau sains — tiba-tiba menghasilkan teks sepanjang 30 juz (6.000+ ayat) dengan bahasa Arab paling tinggi tingkat sastranya, isi yang konsisten, dan pembahasan yang mencakup hukum, sejarah, sains, filsafat, dan spiritualitas.',
+    'Sekarang bayangin: orang yang gak pernah baca buku, gak pernah sekolah, gak pernah belajar sastra atau sains, tiba-tiba menghasilkan teks sepanjang 30 juz (6.000+ ayat) dengan bahasa Arab paling tinggi tingkat sastranya, isi yang konsisten, dan pembahasan yang mencakup hukum, sejarah, sains, filsafat, dan spiritualitas.',
   ),
   Highlight(
     'Secara logika: kalau kamu gak pernah belajar coding, bisakah kamu tiba-tiba bikin app sekompleks Gojek? Sama halnya dengan Al-Quran.',
@@ -746,10 +746,10 @@ const _akidah1_3Article = <ArticleBlock>[
   DividerBlock(),
   Subheading('2️⃣ Keajaiban Bahasa (I\'jaz)'),
   Paragraph(
-    'Al-Quran itu bukan cuma soal isinya — bahasanya pun di luar kemampuan manusia biasa. Zaman Nabi ﷺ, bangsa Arab terkenal sebagai bangsa sastrawan. Puisi dan pidato itu olahraga nasional mereka.',
+    'Al-Quran itu bukan cuma soal isinya, bahasanya pun di luar kemampuan manusia biasa. Zaman Nabi ﷺ, bangsa Arab terkenal sebagai bangsa sastrawan. Puisi dan pidato itu olahraga nasional mereka.',
   ),
   Paragraph(
-    'Tapi ketika Al-Quran dibacakan, para penyair terbaik Arab pada saat itu — yang udah bertahun-tahun bikin puisi — gak bisa menandinginya. Bahkan mereka mengakui: ini bukan karya manusia.',
+    'Tapi ketika Al-Quran dibacakan, para penyair terbaik Arab pada saat itu, yang udah bertahun-tahun bikin puisi, gak bisa menandinginya. Bahkan mereka mengakui: ini bukan karya manusia.',
   ),
   Paragraph(
     'Al-Quran sendiri menantang terbuka: "Coba bikin 1 surah semisal ini kalau kamu sanggup." (QS. Al-Baqarah: 23). Tantangan itu udah ada selama 1.400 tahun. Belum ada yang berhasil.',
@@ -757,13 +757,13 @@ const _akidah1_3Article = <ArticleBlock>[
   DividerBlock(),
   Subheading('3️⃣ Diwahyukan 23 Tahun, Tanpa Kontradiksi'),
   Paragraph(
-    'Bayangin kamu nulis buku — tapi gak sekaligus. Kamu nulisnya sedikit-sedikit selama 23 TAHUN. Di rumah, di perjalanan, di saat perang, di saat damai, di saat senang, di saat susah.',
+    'Bayangin kamu nulis buku, tapi gak sekaligus. Kamu nulisnya sedikit-sedikit selama 23 TAHUN. Di rumah, di perjalanan, di saat perang, di saat damai, di saat senang, di saat susah.',
   ),
   Paragraph(
     'Teks yang dihasilkan harus konsisten. Gak boleh ada yang saling bertentangan. Gak boleh lupa apa yang udah ditulis sebelumnya. Dan harus relevan dengan kejadian yang sedang terjadi saat itu.',
   ),
   Paragraph(
-    'Al-Quran diwahyukan selama 23 tahun, di kondisi yang sangat berbeda-beda — dari Makkah (minoritas tertindas) sampai Madinah (memimpin negara). Tapi isinya konsisten. Gak ada kontradiksi internal. Cobain nulis jurnal 23 tahun tanpa pernah kontradiksi diri sendiri — susah banget kan?',
+    'Al-Quran diwahyukan selama 23 tahun, di kondisi yang sangat berbeda-beda, dari Makkah (minoritas tertindas) sampai Madinah (memimpin negara). Tapi isinya konsisten. Gak ada kontradiksi internal. Cobain nulis jurnal 23 tahun tanpa pernah kontradiksi diri sendiri, susah banget kan?',
   ),
   Highlight(
     '23 tahun. Ribuan ayat. Berbagai kondisi. Nol kontradiksi. Coba lakuin itu pakai buku catatanmu.',
@@ -774,30 +774,30 @@ const _akidah1_3Article = <ArticleBlock>[
     'Ini fakta yang jarang orang sadari: hampir semua kitab suci di dunia pernah mengalami perubahan teks seiring waktu. Manuskrip lama ditemukan dengan variasi. Ada penambahan, pengurangan, atau perbedaan antar versi.',
   ),
   Paragraph(
-    'Al-Quran? Dari awal diturunkan sampai sekarang — 1.400+ tahun — teksnya IDENTIK. Gak ada perbedaan satu huruf pun. Kenapa? Karena Al-Quran dijaga dengan dua cara: ditulis DAN dihafal.',
+    'Al-Quran? Dari awal diturunkan sampai sekarang, 1.400+ tahun, teksnya IDENTIK. Gak ada perbedaan satu huruf pun. Kenapa? Karena Al-Quran dijaga dengan dua cara: ditulis DAN dihafal.',
   ),
   Paragraph(
     'Saat ini ada JUTAAN orang di seluruh dunia yang hafal seluruh 30 juz Al-Quran dari luar. Kalau semua mushaf di dunia hilang sekalipun, Al-Quran bisa ditulis ulang 100% persis sama dari hafalan mereka.',
   ),
   Paragraph(
-    'Gak ada kitab suci lain yang punya sistem preservasi se-ekstrem ini. Ini bukan soal iman — ini fakta historis yang bisa diverifikasi.',
+    'Gak ada kitab suci lain yang punya sistem preservasi se-ekstrem ini. Ini bukan soal iman, ini fakta historis yang bisa diverifikasi.',
   ),
   DividerBlock(),
   Subheading('5️⃣ Informasi yang "Gak Mungkin Diketahui" di Abad ke-7'),
   Paragraph(
-    'Al-Quran berisi beberapa hal yang menarik — sesuatu yang baru bisa diverifikasi oleh sains modern, tapi udah disebutkan 14 abad lalu. Contoh:',
+    'Al-Quran berisi beberapa hal yang menarik, sesuatu yang baru bisa diverifikasi oleh sains modern, tapi udah disebutkan 14 abad lalu. Contoh:',
   ),
   Paragraph(
-    '• Perkembangan janin secara bertahap (QS. Al-Mu\'minun: 12-14) — menggambarkan tahapan embrio dengan detail yang baru bisa diamati lewat mikroskop modern.',
+    '• Perkembangan janin secara bertahap (QS. Al-Mu\'minun: 12-14), menggambarkan tahapan embrio dengan detail yang baru bisa diamati lewat mikroskop modern.',
   ),
   Paragraph(
-    '• Alam semesta yang mengembang (QS. Adz-Dzariyat: 47) — "Dan langit itu Kami bangun dengan kekuatan dan sesungguhnya Kami benar-benar meluaskannya." Fakta ini baru ditemukan astronom Edwin Hubble tahun 1929.',
+    '• Alam semesta yang mengembang (QS. Adz-Dzariyat: 47), "Dan langit itu Kami bangun dengan kekuatan dan sesungguhnya Kami benar-benar meluaskannya." Fakta ini baru ditemukan astronom Edwin Hubble tahun 1929.',
   ),
   Paragraph(
-    '• Siklus air (QS. Az-Zumar: 21) — menggambarkan proses penguapan, pembentukan awan, dan turunnya hujan secara ilmiah, jauh sebelum meteorologi modern.',
+    '• Siklus air (QS. Az-Zumar: 21), menggambarkan proses penguapan, pembentukan awan, dan turunnya hujan secara ilmiah, jauh sebelum meteorologi modern.',
   ),
   EducatorNote(
-    'Catatan penting: ini bukan klaim "Al-Quran = buku sains." Al-Quran adalah kitab petunjuk. Tapi ayat-ayat ini menarik untuk direnungkan — bagaimana seseorang di abad ke-7 bisa tahu hal-hal ini tanpa alat modern? Worth thinking about.',
+    'Catatan penting: ini bukan klaim "Al-Quran = buku sains." Al-Quran adalah kitab petunjuk. Tapi ayat-ayat ini menarik untuk direnungkan, bagaimana seseorang di abad ke-7 bisa tahu hal-hal ini tanpa alat modern? Worth thinking about.',
   ),
   DividerBlock(),
   Subheading('6️⃣ Tantangan Terbuka yang Belum Terjawab'),
@@ -808,7 +808,7 @@ const _akidah1_3Article = <ArticleBlock>[
     'Tantangan ini bukan cuma soal bikin puisi bagus. Kriterianya: harus dalam bahasa Arab yang setara, isinya harus konsisten, harus punya hukum dan petunjuk, dan harus bisa meyakinkan jutaan orang selama berabad-abad.',
   ),
   Paragraph(
-    'Selama 14 abad, banyak yang mencoba. Hasilnya? Gak ada yang bertahan. Para pakar sastra Arab sendiri mengakui: gaya bahasa Al-Quran itu unik — bukan puisi, bukan prosa, bukan pidato. Kategorinya sendiri.',
+    'Selama 14 abad, banyak yang mencoba. Hasilnya? Gak ada yang bertahan. Para pakar sastra Arab sendiri mengakui: gaya bahasa Al-Quran itu unik, bukan puisi, bukan prosa, bukan pidato. Kategorinya sendiri.',
   ),
   DividerBlock(),
   Subheading('💭 Refleksi'),
@@ -816,10 +816,10 @@ const _akidah1_3Article = <ArticleBlock>[
     'Kamu gak harus langsung percaya semua ini. Gak ada yang maksa. Justru bagus kalau kamu mau renungkan pelan-pelan, tanya-tanya, cari tahu sendiri.',
   ),
   Paragraph(
-    'Yang menarik: semua poin di atas — ummi, i\'jaz, 23 tahun konsistensi, preservasi, informasi ilmiah, tantangan terbuka — ini bukan satu argumen lemah. Ini banyak argumen yang saling menguatkan.',
+    'Yang menarik: semua poin di atas, ummi, i\'jaz, 23 tahun konsistensi, preservasi, informasi ilmiah, tantangan terbuka, ini bukan satu argumen lemah. Ini banyak argumen yang saling menguatkan.',
   ),
   Paragraph(
-    'Dan kalau memang Al-Quran beneran dari Tuhan — maka isinya layak banget dibaca pelan-pelan. Mungkin itu langkah berikutnya.',
+    'Dan kalau memang Al-Quran beneran dari Tuhan, maka isinya layak banget dibaca pelan-pelan. Mungkin itu langkah berikutnya.',
   ),
   Cta('Kamu udah selesai baca! Sekarang coba jawab kuisnya. 🎯'),
 ];
@@ -830,15 +830,15 @@ const _akidah1_4Article = <ArticleBlock>[
     'Di modul sebelumnya kita bahas Al-Quran. Sekarang pertanyaan alamiah: siapa orang yang nrima wahyu itu? Kenapa jutaan orang percaya dia utusan Tuhan?',
   ),
   Paragraph(
-    'Kita gak bakal cerita panjang lebar soal sejarah hidupnya — itu buku tersendiri. Tapi ada beberapa hal tentang Muhammad ﷺ yang menarik banget dan worth kamu tahu.',
+    'Kita gak bakal cerita panjang lebar soal sejarah hidupnya, itu buku tersendiri. Tapi ada beberapa hal tentang Muhammad ﷺ yang menarik banget dan worth kamu tahu.',
   ),
   DividerBlock(),
-  Subheading('🤝 Al-Amin — "Yang Terpercaya"'),
+  Subheading('🤝 Al-Amin, "Yang Terpercaya"'),
   Paragraph(
-    'Sebelum jadi nabi di usia 40 tahun, Muhammad ﷺ udah tinggal di Makkah selama 40 tahun. Dan julukannya? Al-Amin — artinya "yang terpercaya." Bukan dikasih sama Muslim, tapi sama seluruh masyarakat Makkah, termasuk yang gak seiman.',
+    'Sebelum jadi nabi di usia 40 tahun, Muhammad ﷺ udah tinggal di Makkah selama 40 tahun. Dan julukannya? Al-Amin, artinya "yang terpercaya." Bukan dikasih sama Muslim, tapi sama seluruh masyarakat Makkah, termasuk yang gak seiman.',
   ),
   Paragraph(
-    'Orang-orang nitip barang berharga sama dia. Mau nyari solusi sengketa? Datang ke Muhammad. Musuh-musuhnya aja — yang kemudian mau ngebunuh dia — sebelum kenal Islam, mereka TETEP percaya dia orang jujur. Bahkan Abu Sufyan, salah satu musuh terbesarnya, ketika ditanya Romawi: "Pernahkah dia berbohong?" Jawab: "Tidak."',
+    'Orang-orang nitip barang berharga sama dia. Mau nyari solusi sengketa? Datang ke Muhammad. Musuh-musuhnya aja, yang kemudian mau ngebunuh dia, sebelum kenal Islam, mereka TETEP percaya dia orang jujur. Bahkan Abu Sufyan, salah satu musuh terbesarnya, ketika ditanya Romawi: "Pernahkah dia berbohong?" Jawab: "Tidak."',
   ),
   Highlight(
     'Bayangin: orang yang mau ngebunuh kamu aja ngakuin kamu gak pernah bohong. Seberapa kuat kredibilitas seseorang kalau musuhnya aja ngakuin kejujurannya?',
@@ -849,16 +849,16 @@ const _akidah1_4Article = <ArticleBlock>[
     'Beberapa alasan kenapa umat Islam percaya Muhammad ﷺ itu utusan terakhir:',
   ),
   Paragraph(
-    '• Al-Quran sendiri yang mengklaim — dan Al-Quran punya bukti keasliannya (yang udah kita bahas di modul sebelumnya).',
+    '• Al-Quran sendiri yang mengklaim, dan Al-Quran punya bukti keasliannya (yang udah kita bahas di modul sebelumnya).',
   ),
   Paragraph(
-    '• Konsistensi karakter — dari muda sampai wafat, gak pernah ada catatan dia berbohong, meskipun itu bisa nguntungin dia secara politik.',
+    '• Konsistensi karakter, dari muda sampai wafat, gak pernah ada catatan dia berbohong, meskipun itu bisa nguntungin dia secara politik.',
   ),
   Paragraph(
-    '• Nubuatan di kitab-kitab sebelumnya — Taurat dan Injil menyebutkan akan datang nabi setelah Musa dan Isa. Banyak ciri-cirinya cocok sama Muhammad ﷺ.',
+    '• Nubuatan di kitab-kitab sebelumnya, Taurat dan Injil menyebutkan akan datang nabi setelah Musa dan Isa. Banyak ciri-cirinya cocok sama Muhammad ﷺ.',
   ),
   Paragraph(
-    '• Kehidupannya terdokumentasi super detail — Hadits (catatan perkataan dan perbuatannya) itu jutaan, diriwayatkan dengan rantai periwayatan yang bisa ditelusuri. Gak ada tokoh sejarah lain yang hidupnya tercatat se-detail ini.',
+    '• Kehidupannya terdokumentasi super detail, Hadits (catatan perkataan dan perbuatannya) itu jutaan, diriwayatkan dengan rantai periwayatan yang bisa ditelusuri. Gak ada tokoh sejarah lain yang hidupnya tercatat se-detail ini.',
   ),
   DividerBlock(),
   Subheading('⚖️ Nabi vs Tokoh Agama Lain'),
@@ -866,7 +866,7 @@ const _akidah1_4Article = <ArticleBlock>[
     'Yang bikin nabi beda dari tokoh agama lain: nabi mengklaim langsung dapat pesan dari Tuhan. Tokoh agama biasanya mengaku punya ilham atau inspirasi, tapi nabi bilang: "Tuhan ngomong langsung ke saya, dan saya harus sampaikan ke kalian."',
   ),
   Paragraph(
-    'Muhammad ﷺ juga beda dari nabi-nabi sebelumnya: dia nabi terakhir. Gak ada nabi setelah dia. Dan risalahnya bukan buat satu kaum aja — tapi buat seluruh manusia, sampai kiamat.',
+    'Muhammad ﷺ juga beda dari nabi-nabi sebelumnya: dia nabi terakhir. Gak ada nabi setelah dia. Dan risalahnya bukan buat satu kaum aja, tapi buat seluruh manusia, sampai kiamat.',
   ),
   Paragraph(
     'Yang menarik: meskipun jadi pemimpin negara dan panglima perang, hidupnya tetep sederhana. Kasurnya dari tikar, makannya sering cuma kurma dan air. Gak kayak raja atau diktator yang hidup mewah. Kekuasaannya gak dipake buat diri sendiri.',
@@ -899,7 +899,7 @@ const _akidah1_5Article = <ArticleBlock>[
     'Iman itu bukan cuma ngomong "aku percaya." Iman itu keyakinan di hati yang diucapkan lisan dan dibuktikan lewat perbuatan. Tiga komponen: hati, lisan, dan amal. Kalau cuma ngomong tapi gak yakin di hati? Belum iman. Kalau yakin di hati tapi gak pernah ngelakuin? Belum sempurna.',
   ),
   Paragraph(
-    'Dalam Islam, ada 6 hal yang wajib dipercaya. Namanya Rukun Iman. "Rukun" artinya tiang penyangga — kalau salah satu copot, bangunan iman goyah.',
+    'Dalam Islam, ada 6 hal yang wajib dipercaya. Namanya Rukun Iman. "Rukun" artinya tiang penyangga, kalau salah satu copot, bangunan iman goyah.',
   ),
   DividerBlock(),
   Subheading('1️⃣ Percaya kepada Allah'),
@@ -919,7 +919,7 @@ const _akidah1_5Article = <ArticleBlock>[
   ),
   Subheading('4️⃣ Percaya kepada Rasul-rasul'),
   Paragraph(
-    'Allah gak ninggalin manusia sendirian. Dia ngasih contoh nyata lewat para rasul — manusia biasa yang dipilih buat nyampein pesan-Nya. Dari Nabi Adam sampai Nabi Muhammad ﷺ, semuanya manusia, bukan Tuhan. Percaya rasul = percaya Allah peduli dan ngasih panutan yang bisa diteladani.',
+    'Allah gak ninggalin manusia sendirian. Dia ngasih contoh nyata lewat para rasul, manusia biasa yang dipilih buat nyampein pesan-Nya. Dari Nabi Adam sampai Nabi Muhammad ﷺ, semuanya manusia, bukan Tuhan. Percaya rasul = percaya Allah peduli dan ngasih panutan yang bisa diteladani.',
   ),
   Subheading('5️⃣ Percaya kepada Hari Akhir'),
   Paragraph(
@@ -927,7 +927,7 @@ const _akidah1_5Article = <ArticleBlock>[
   ),
   Subheading('6️⃣ Percaya kepada Qada dan Qadar'),
   Paragraph(
-    'Qada dan Qadar itu takdir dari Allah — semua yang terjadi udah dalam pengetahuan dan kehendak-Nya. Tapi ini BUKAN berarti kamu pasif. Justru karena Allah udah tahu segalanya, kamu tetep HARUS berusaha. Hasilnya? Itu urusan Allah. Yang penting kamu udah ngelakuin bagianmu.',
+    'Qada dan Qadar itu takdir dari Allah, semua yang terjadi udah dalam pengetahuan dan kehendak-Nya. Tapi ini BUKAN berarti kamu pasif. Justru karena Allah udah tahu segalanya, kamu tetep HARUS berusaha. Hasilnya? Itu urusan Allah. Yang penting kamu udah ngelakuin bagianmu.',
   ),
   Highlight(
     'Qadar itu kayak GPS: rute udah ditentukan, tapi kamu tetep harus nyetir mobilnya.',
@@ -949,15 +949,15 @@ const _akidah1_5Article = <ArticleBlock>[
 const _akidah1_6Article = <ArticleBlock>[
   Heading('Keajaiban Angka dalam Al-Quran (Bagian 1)'),
   Paragraph(
-    'Al-Quran bukan sekadar kitab petunjuk. Di dalamnya, ada pola-pola angka yang menarik banget — sesuatu yang sulit dijelaskan sebagai kebetulan biasa. Mari kita lihat beberapa di antaranya.',
+    'Al-Quran bukan sekadar kitab petunjuk. Di dalamnya, ada pola-pola angka yang menarik banget, sesuatu yang sulit dijelaskan sebagai kebetulan biasa. Mari kita lihat beberapa di antaranya.',
   ),
   Paragraph(
-    'Peringatan: Bagian ini bukan untuk "membuktikan" Al-Quran pakai angka — karena iman seseorang gak bisa diukur dari hitung-hitungan. Tapi bagian ini menarik untuk direnungkan: gimana mungkin seorang ummi di abad ke-7 menghasilkan pola angka serapi ini?',
+    'Peringatan: Bagian ini bukan untuk "membuktikan" Al-Quran pakai angka, karena iman seseorang gak bisa diukur dari hitung-hitungan. Tapi bagian ini menarik untuk direnungkan: gimana mungkin seorang ummi di abad ke-7 menghasilkan pola angka serapi ini?',
   ),
   DividerBlock(),
   Subheading('🔢 Keseimbangan Kata dalam Al-Quran'),
   Paragraph(
-    'Salah satu temuan paling terkenal dari penelitian berbasis komputer terhadap Al-Quran adalah fakta bahwa kata-kata yang berpasangan muncul dalam jumlah yang SAMA. Bukan perkiraan — persis sama.',
+    'Salah satu temuan paling terkenal dari penelitian berbasis komputer terhadap Al-Quran adalah fakta bahwa kata-kata yang berpasangan muncul dalam jumlah yang SAMA. Bukan perkiraan, persis sama.',
   ),
   Paragraph('Beberapa contoh:'),
   Paragraph(
@@ -988,18 +988,18 @@ const _akidah1_6Article = <ArticleBlock>[
     'Ini hanya beberapa contoh. Ada PULUHAN pasangan kata lain yang jumlahnya sama persis. Coba bayangin: seseorang nulis buku setebal 30 juz dalam 23 tahun tanpa komputer, di berbagai situasi, dan pasangan kata-kata ini muncul dengan jumlah identik. Apakah itu kebetulan?',
   ),
   Highlight(
-    'Keseimbangan kata yang konsisten ini sulit dijelaskan hanya sebagai kebetulan — apalagi dari orang yang gak bisa baca-tulis.',
+    'Keseimbangan kata yang konsisten ini sulit dijelaskan hanya sebagai kebetulan, apalagi dari orang yang gak bisa baca-tulis.',
   ),
   DividerBlock(),
   Subheading('📊 Kata "Yawm" (Hari)'),
   Paragraph(
-    'Kata "yawm" (hari) dalam bentuk tunggal disebut 365 kali dalam Al-Quran — tepat sama dengan jumlah hari dalam setahun.',
+    'Kata "yawm" (hari) dalam bentuk tunggal disebut 365 kali dalam Al-Quran, tepat sama dengan jumlah hari dalam setahun.',
   ),
   Paragraph(
-    'Sementara kata "yawm" dalam bentuk jamak ("ayyam" = hari-hari) disebut 30 kali — sama dengan jumlah hari dalam sebulan.',
+    'Sementara kata "yawm" dalam bentuk jamak ("ayyam" = hari-hari) disebut 30 kali, sama dengan jumlah hari dalam sebulan.',
   ),
   Paragraph(
-    'Menariknya, kata "syahr" (bulan) disebut 12 kali — jumlah bulan dalam setahun.',
+    'Menariknya, kata "syahr" (bulan) disebut 12 kali, jumlah bulan dalam setahun.',
   ),
   Paragraph('Kebetulan? Atau memang sengaja dirancang?'),
   DividerBlock(),
@@ -1017,7 +1017,7 @@ const _akidah1_6Article = <ArticleBlock>[
     'Ini baru diketahui manusia setelah teknologi satelit modern. Tapi Al-Quran udah "nyebut" proporsinya sejak 14 abad lalu.',
   ),
   Highlight(
-    'Laut 71%, darat 29% — sama persis dengan proporsi di Al-Quran. Tapi ini baru diketahui setelah satelit modern.',
+    'Laut 71%, darat 29%, sama persis dengan proporsi di Al-Quran. Tapi ini baru diketahui setelah satelit modern.',
   ),
   DividerBlock(),
   Subheading('🧠 Tapi Ingat...'),
@@ -1026,13 +1026,13 @@ const _akidah1_6Article = <ArticleBlock>[
     '1. "Ini bukti Al-Quran dari Allah!" → Mungkin, karena mustahil manusia abad ke-7 bisa bikin pola serumit ini.',
   ),
   Paragraph(
-    '2. "Ini cari-cari pola aja, bisa aja kebetulan." → Juga mungkin — karena manusia emang suka nemuin pola (pattern-seeking).',
+    '2. "Ini cari-cari pola aja, bisa aja kebetulan." → Juga mungkin, karena manusia emang suka nemuin pola (pattern-seeking).',
   ),
   Paragraph(
     'Yang menarik: kedua respons itu sama-sama valid. Tapi coba pikir: jumlah pola dalam Al-Quran itu SANGAT BANYAK dan KONSISTEN. Makin banyak polanya, makin kecil kemungkinan itu cuma kebetulan.',
   ),
   Paragraph(
-    'Di bagian 2, kita bakal lihat lebih dalam — termasuk keajaiban angka 19, hubungan antar surah, dan hal-hal lain yang bikin kamu mikir ulang.',
+    'Di bagian 2, kita bakal lihat lebih dalam, termasuk keajaiban angka 19, hubungan antar surah, dan hal-hal lain yang bikin kamu mikir ulang.',
   ),
   Cta('Selesai baca bagian 1! Lanjut ke bagian 2, atau jawab kuis dulu. 🎯'),
 ];
@@ -1041,15 +1041,15 @@ const _akidah1_6Article = <ArticleBlock>[
 const _akidah1_7Article = <ArticleBlock>[
   Heading('Keajaiban Angka dalam Al-Quran (Bagian 2)'),
   Paragraph(
-    'Di bagian 1 kita udah lihat pasangan kata yang seimbang dan proporsi yang akurat. Sekarang kita masuk ke yang lebih dalam — pola angka 19, struktur surah, dan hubungan antar ayat.',
+    'Di bagian 1 kita udah lihat pasangan kata yang seimbang dan proporsi yang akurat. Sekarang kita masuk ke yang lebih dalam, pola angka 19, struktur surah, dan hubungan antar ayat.',
   ),
   Paragraph(
-    'Disclaimer: Ini bukan "membuktikan" bahwa Al-Quran itu benar. Tapi pola-pola ini layak direnungkan — karena semakin dalam kamu lihat, semakin terasa ada "tangan" di baliknya.',
+    'Disclaimer: Ini bukan "membuktikan" bahwa Al-Quran itu benar. Tapi pola-pola ini layak direnungkan, karena semakin dalam kamu lihat, semakin terasa ada "tangan" di baliknya.',
   ),
   DividerBlock(),
-  Subheading('19 — Angka yang Istimewa'),
+  Subheading('19, Angka yang Istimewa'),
   Paragraph(
-    'Angka 19 punya tempat khusus dalam Al-Quran. Allah berfirman dalam QS. Al-Muddassir: 30 — "Di atasnya ada 19 (malaikat penjaga)." Ayat ini kemudian dijelaskan sebagai ujian bagi orang-orang kafir dan penguat iman bagi orang beriman.',
+    'Angka 19 punya tempat khusus dalam Al-Quran. Allah berfirman dalam QS. Al-Muddassir: 30, "Di atasnya ada 19 (malaikat penjaga)." Ayat ini kemudian dijelaskan sebagai ujian bagi orang-orang kafir dan penguat iman bagi orang beriman.',
   ),
   Paragraph('Beberapa fakta menarik soal angka 19 dalam Al-Quran:'),
   Paragraph(
@@ -1070,17 +1070,17 @@ const _akidah1_7Article = <ArticleBlock>[
   DividerBlock(),
   Subheading('🔗 Hubungan Awal dan Akhir Surah'),
   Paragraph(
-    'Salah satu temuan menarik: surah pertama (Al-Fatihah, 7 ayat) dan surah terakhir (An-Nas, 6 ayat) — kalau dijumlah ayatnya = 13. 13 adalah jumlah total surah yang disebut dalam Al-Quran (seperti Al-Baqarah, Ibrahim, Maryam, dll).',
+    'Salah satu temuan menarik: surah pertama (Al-Fatihah, 7 ayat) dan surah terakhir (An-Nas, 6 ayat), kalau dijumlah ayatnya = 13. 13 adalah jumlah total surah yang disebut dalam Al-Quran (seperti Al-Baqarah, Ibrahim, Maryam, dll).',
   ),
   Paragraph('Contoh lain:'),
   Paragraph(
-    '• Surah Al-Ikhlas (112) — inti tauhid. Nomor surahnya 112. 1 + 1 + 2 = 4. Jumlah ayatnya 4. 4 = 4.',
+    '• Surah Al-Ikhlas (112), inti tauhid. Nomor surahnya 112. 1 + 1 + 2 = 4. Jumlah ayatnya 4. 4 = 4.',
   ),
   Paragraph(
-    '• Surah An-Nas (114) — surah terakhir. Nomor 114. 1 + 1 + 4 = 6. Jumlah ayatnya 6. 6 = 6.',
+    '• Surah An-Nas (114), surah terakhir. Nomor 114. 1 + 1 + 4 = 6. Jumlah ayatnya 6. 6 = 6.',
   ),
   Paragraph(
-    '• Surah Al-Fatihah (1) — surah pertama. Nomor 1. Jumlah ayatnya 7. 7 bukan 1 — karena Al-Fatihah bukan sembarang surah, dia adalah induk Al-Quran (Ummul Kitab).',
+    '• Surah Al-Fatihah (1), surah pertama. Nomor 1. Jumlah ayatnya 7. 7 bukan 1, karena Al-Fatihah bukan sembarang surah, dia adalah induk Al-Quran (Ummul Kitab).',
   ),
   Paragraph(
     'Apakah ini disengaja? Atau kebetulan? Setiap orang boleh menyimpulkan sendiri.',
@@ -1092,16 +1092,16 @@ const _akidah1_7Article = <ArticleBlock>[
     '• Kata "shalawat" (sholat) disebut 5 kali = jumlah sholat wajib sehari semalam.',
   ),
   Paragraph(
-    '• Kata "zakat" disebut 32 kali, dan kata "zakat" dalam bentuk kata kerja disebut 27 kali — total 59. Ini sama dengan jumlah ayat tentang zakat di Al-Quran.',
+    '• Kata "zakat" disebut 32 kali, dan kata "zakat" dalam bentuk kata kerja disebut 27 kali, total 59. Ini sama dengan jumlah ayat tentang zakat di Al-Quran.',
   ),
   Paragraph(
-    '• Kata "Ramadan" disebut 1 kali — pas puasa Ramadan hanya 1 bulan dalam setahun.',
+    '• Kata "Ramadan" disebut 1 kali, pas puasa Ramadan hanya 1 bulan dalam setahun.',
   ),
   Paragraph(
-    '• Kata "sahr" (bulan) disebut 12 kali — jumlah bulan dalam setahun.',
+    '• Kata "sahr" (bulan) disebut 12 kali, jumlah bulan dalam setahun.',
   ),
   Paragraph(
-    '• Kata "yaum" (hari) dalam bentuk tunggal 365 kali — setara hari dalam setahun. Ini udah kita bahas di bagian 1.',
+    '• Kata "yaum" (hari) dalam bentuk tunggal 365 kali, setara hari dalam setahun. Ini udah kita bahas di bagian 1.',
   ),
   DividerBlock(),
   Subheading('🧩 Kombinasi Angka yang Menarik'),
@@ -1113,7 +1113,7 @@ const _akidah1_7Article = <ArticleBlock>[
     '• Atau 114 + 6236 = 6350. 6350 juga habis dibagi 19 (19 × 334,21... tunggu, 19 × 334 = 6346. Kalau pakai Basmalah termasuk, total ayat = 6346, dan 6346 = 19 × 334).',
   ),
   Paragraph(
-    'Pola-pola seperti ini terus muncul — sampai ribuan kombinasi udah ditemukan oleh para peneliti Al-Quran dari berbagai negara.',
+    'Pola-pola seperti ini terus muncul, sampai ribuan kombinasi udah ditemukan oleh para peneliti Al-Quran dari berbagai negara.',
   ),
   Highlight(
     'Ribuan kombinasi matematis ditemukan dalam Al-Quran. Semakin banyak polanya, semakin kecil kemungkinan itu kebetulan.',
@@ -1122,13 +1122,13 @@ const _akidah1_7Article = <ArticleBlock>[
   Subheading('💭 Refleksi'),
   Paragraph('Ada dua kemungkinan:'),
   Paragraph(
-    '1. Pola-pola ini memang sengaja dirancang — ini mendukung klaim bahwa Al-Quran berasal dari Pencipta yang Maha Tahu.',
+    '1. Pola-pola ini memang sengaja dirancang, ini mendukung klaim bahwa Al-Quran berasal dari Pencipta yang Maha Tahu.',
   ),
   Paragraph(
-    '2. Manusia terlalu pandai mencari pola (apophenia) — kita nemuin pola di mana-mana, termasuk di tempat yang mungkin gak ada polanya.',
+    '2. Manusia terlalu pandai mencari pola (apophenia), kita nemuin pola di mana-mana, termasuk di tempat yang mungkin gak ada polanya.',
   ),
   Paragraph(
-    'Tapi ada satu hal yang susah dijelaskan oleh teori "kebetulan": konsistensi polanya. Bukan satu atau dua pola — tapi puluhan, bahkan ratusan. Semakin banyak pola yang konsisten, semakin kecil kemungkinan itu semua cuma kebetulan.',
+    'Tapi ada satu hal yang susah dijelaskan oleh teori "kebetulan": konsistensi polanya. Bukan satu atau dua pola, tapi puluhan, bahkan ratusan. Semakin banyak pola yang konsisten, semakin kecil kemungkinan itu semua cuma kebetulan.',
   ),
   Paragraph(
     'Di modul terakhir kategori Akidah, kita akan lihat bukti-bukti LAIN di luar angka yang memperkuat keyakinan bahwa Al-Quran itu benar-benar firman Allah.',
@@ -1149,55 +1149,55 @@ const _akidah1_8Article = <ArticleBlock>[
   Paragraph(
     'Salah satu ciri kitab dari Tuhan adalah: berita tentang masa depan yang terbukti benar. Al-Quran punya beberapa contoh yang menarik:',
   ),
-  Paragraph('1. Kekalahan Romawi — QS. Ar-Rum: 1-4'),
+  Paragraph('1. Kekalahan Romawi, QS. Ar-Rum: 1-4'),
   Paragraph(
-    'Ayat ini turun di saat Kekaisaran Romawi (Byzantium) kalah telak dari Persia. Secara logika, Romawi udah habis. Tapi Al-Quran bilang: "Romawi akan menang lagi dalam beberapa tahun." Pada saat itu, ini terdengar mustahil. Tapi benar terjadi — Romawi balik menang sekitar 7-9 tahun kemudian.',
+    'Ayat ini turun di saat Kekaisaran Romawi (Byzantium) kalah telak dari Persia. Secara logika, Romawi udah habis. Tapi Al-Quran bilang: "Romawi akan menang lagi dalam beberapa tahun." Pada saat itu, ini terdengar mustahil. Tapi benar terjadi, Romawi balik menang sekitar 7-9 tahun kemudian.',
   ),
   Paragraph(
-    'Sejarawan bilang: Muhammad ﷺ gak mungkin tahu outcome perang ini. Gak ada kabel internet, gak ada koran. Informasi dari medan perang di Suriah-Yordania ke Makkah butuh berminggu-minggu. Tapi Al-Quran berani ngasih prediksi spesifik — dan terbukti.',
+    'Sejarawan bilang: Muhammad ﷺ gak mungkin tahu outcome perang ini. Gak ada kabel internet, gak ada koran. Informasi dari medan perang di Suriah-Yordania ke Makkah butuh berminggu-minggu. Tapi Al-Quran berani ngasih prediksi spesifik, dan terbukti.',
   ),
   Highlight(
     'QS. Ar-Rum: Romawi bakal menang lagi setelah dikalahkan. Semua orang ngira ini gila. Tapi itu terjadi.',
   ),
-  Paragraph('2. Perlindungan Al-Quran — QS. Al-Hijr: 9'),
+  Paragraph('2. Perlindungan Al-Quran, QS. Al-Hijr: 9'),
   Paragraph(
     '"Sesungguhnya Kami-lah yang menurunkan Al-Quran, dan pasti Kami (pula) yang menjaganya."',
   ),
   Paragraph(
-    'Ayat ini turun 14 abad lalu — klaim berani bahwa kitab ini BAKAL TERJAGA. Sementara kitab suci lain udah banyak berubah, Al-Quran sampai sekarang masih asli. Klaim ini terbukti — dan terus dibuktikan setiap hari oleh jutaan penghafal Al-Quran di seluruh dunia.',
+    'Ayat ini turun 14 abad lalu, klaim berani bahwa kitab ini BAKAL TERJAGA. Sementara kitab suci lain udah banyak berubah, Al-Quran sampai sekarang masih asli. Klaim ini terbukti, dan terus dibuktikan setiap hari oleh jutaan penghafal Al-Quran di seluruh dunia.',
   ),
   DividerBlock(),
   Subheading('🌍 Al-Quran dan Sains Modern'),
   Paragraph(
-    'Beberapa ayat Al-Quran baru bisa dipahami sepenuhnya setelah sains modern menemukannya. Ini bukan berarti Al-Quran = buku sains — tapi menunjukkan bahwa sumber Al-Quran bukan manusia abad ke-7.',
+    'Beberapa ayat Al-Quran baru bisa dipahami sepenuhnya setelah sains modern menemukannya. Ini bukan berarti Al-Quran = buku sains, tapi menunjukkan bahwa sumber Al-Quran bukan manusia abad ke-7.',
   ),
   Paragraph('1. Segala sesuatu diciptakan berpasangan'),
   Paragraph(
-    'QS. Adz-Dzariyat: 49 — "Dan segala sesuatu Kami ciptakan berpasang-pasangan, supaya kamu mengingat (kebesaran Allah)."',
+    'QS. Adz-Dzariyat: 49, "Dan segala sesuatu Kami ciptakan berpasang-pasangan, supaya kamu mengingat (kebesaran Allah)."',
   ),
   Paragraph(
-    'Ayat ini turun 14 abad lalu. Zaman dulu orang pikir pasangan cuma laki-perempuan. Tapi sekarang sains tahu: atom punya proton-elektron, muatan positif-negatif, partikel-antipartikel, gen berpasangan di DNA, bahkan galaksi punya pasangan. "Segala sesuatu" berpasangan — ini baru terbukti di era fisika kuantum.',
+    'Ayat ini turun 14 abad lalu. Zaman dulu orang pikir pasangan cuma laki-perempuan. Tapi sekarang sains tahu: atom punya proton-elektron, muatan positif-negatif, partikel-antipartikel, gen berpasangan di DNA, bahkan galaksi punya pasangan. "Segala sesuatu" berpasangan, ini baru terbukti di era fisika kuantum.',
   ),
   Paragraph('2. Gunung sebagai pasak'),
   Paragraph(
-    'QS. An-Naba\' : 6-7 — "Bukankah Kami telah menjadikan bumi sebagai hamparan, dan gunung-gunung sebagai pasak?"',
+    'QS. An-Naba\' : 6-7, "Bukankah Kami telah menjadikan bumi sebagai hamparan, dan gunung-gunung sebagai pasak?"',
   ),
   Paragraph(
-    'Dulu orang kira gunung cuma tonjolan di permukaan bumi. Sekarang geologi modern tahu: gunung punya "akar" yang menjulur jauh ke dalam bumi — kayak pasak yang nge-stabilin lempeng tektonik. Kata "pasak" (autad) dalam bahasa Arab memang berarti pasak yang nancep dalem.',
+    'Dulu orang kira gunung cuma tonjolan di permukaan bumi. Sekarang geologi modern tahu: gunung punya "akar" yang menjulur jauh ke dalam bumi, kayak pasak yang nge-stabilin lempeng tektonik. Kata "pasak" (autad) dalam bahasa Arab memang berarti pasak yang nancep dalem.',
   ),
   Paragraph('3. Perkembangan janin'),
   Paragraph(
-    'QS. Al-Mu\'minun: 12-14 — menggambarkan tahapan embrio dari nutfah (setetes), alaqah (segumpal darah), mudghah (segumpal daging), sampai tulang dan daging.',
+    'QS. Al-Mu\'minun: 12-14, menggambarkan tahapan embrio dari nutfah (setetes), alaqah (segumpal darah), mudghah (segumpal daging), sampai tulang dan daging.',
   ),
   Paragraph(
-    'Deskripsi ini baru bisa diverifikasi setelah mikroskop ditemukan. Kata "alaqah" artinya sesuatu yang bergantung — cocok dengan deskripsi embrio yang nempel di dinding rahim.',
+    'Deskripsi ini baru bisa diverifikasi setelah mikroskop ditemukan. Kata "alaqah" artinya sesuatu yang bergantung, cocok dengan deskripsi embrio yang nempel di dinding rahim.',
   ),
   Paragraph('4. Jejak sidik jari'),
   Paragraph(
-    'QS. Al-Qiyamah: 4 — "Bukan demikian, Kami mampu menyusun kembali jari-jemarinya dengan sempurna."',
+    'QS. Al-Qiyamah: 4, "Bukan demikian, Kami mampu menyusun kembali jari-jemarinya dengan sempurna."',
   ),
   Paragraph(
-    'Kenapa Al-Quran nyebut jari spesifik? Karena sidik jari setiap manusia UNIK — bahkan kembar identik pun beda. Fakta ini baru ditemukan sains di abad ke-19. Al-Quran udah nyebut di abad ke-7.',
+    'Kenapa Al-Quran nyebut jari spesifik? Karena sidik jari setiap manusia UNIK, bahkan kembar identik pun beda. Fakta ini baru ditemukan sains di abad ke-19. Al-Quran udah nyebut di abad ke-7.',
   ),
   Highlight(
     'Ayat-ayat ini bukan bukti "Al-Quran = buku IPA." Tapi ini menarik: gimana seorang di abad ke-7 bisa tahu hal-hal yang baru terverifikasi 12 abad kemudian?',
@@ -1205,10 +1205,10 @@ const _akidah1_8Article = <ArticleBlock>[
   DividerBlock(),
   Subheading('📜 Konsistensi Internal yang Mencengangkan'),
   Paragraph(
-    'Al-Quran diturunkan sedikit demi sedikit selama 23 tahun di dua kota berbeda (Makkah dan Madinah), dalam situasi yang sangat kontras — saat lemah dan saat berkuasa, saat damai dan saat perang, saat miskin dan saat kaya.',
+    'Al-Quran diturunkan sedikit demi sedikit selama 23 tahun di dua kota berbeda (Makkah dan Madinah), dalam situasi yang sangat kontras, saat lemah dan saat berkuasa, saat damai dan saat perang, saat miskin dan saat kaya.',
   ),
   Paragraph(
-    'Logikanya: kalau ini karangan manusia, PASTI ada kontradiksi. Manusia berubah pikiran seiring waktu. Tapi Al-Quran? Nol kontradiksi. Allah sendiri nantang dalam QS. An-Nisa\': 82 — "Kalau Al-Quran ini dari selain Allah, pasti mereka menemukan banyak pertentangan di dalamnya."',
+    'Logikanya: kalau ini karangan manusia, PASTI ada kontradiksi. Manusia berubah pikiran seiring waktu. Tapi Al-Quran? Nol kontradiksi. Allah sendiri nantang dalam QS. An-Nisa\': 82, "Kalau Al-Quran ini dari selain Allah, pasti mereka menemukan banyak pertentangan di dalamnya."',
   ),
   Paragraph(
     'Para orientalis dan kritikus Al-Quran selama 14 abad udah berusaha nemuin kontradiksi. Hasilnya? Yang mereka temuin biasanya karena: (1) salah paham konteks, (2) ayat untuk situasi berbeda, atau (3) gak paham bahasa Arab. Setelah dijelaskan, "kontradiksi" itu hilang.',
@@ -1216,7 +1216,7 @@ const _akidah1_8Article = <ArticleBlock>[
   DividerBlock(),
   Subheading('🧠 Dampak pada Manusia'),
   Paragraph(
-    'Ini mungkin bukti yang paling subjektif — tapi juga paling nyata: jutaan orang di seluruh dunia, dari berbagai ras dan budaya, membaca Al-Quran dan HATI mereka tersentuh.',
+    'Ini mungkin bukti yang paling subjektif, tapi juga paling nyata: jutaan orang di seluruh dunia, dari berbagai ras dan budaya, membaca Al-Quran dan HATI mereka tersentuh.',
   ),
   Paragraph('• Ada yang tadinya ateis, baca Al-Quran, jadi percaya Tuhan.'),
   Paragraph('• Ada yang tadinya benci Islam, pelajari Al-Quran, jadi Muslim.'),
@@ -1224,31 +1224,31 @@ const _akidah1_8Article = <ArticleBlock>[
     '• Ada yang tadinya hidup hampa, denger ayat Al-Quran, nemu ketenangan.',
   ),
   Paragraph(
-    'Bukan cuma orang awam — profesor, ilmuwan, dokter, pengacara — orang-orang pintar yang terbiasa berpikir kritis, banyak yang masuk Islam setelah mempelajari Al-Quran.',
+    'Bukan cuma orang awam, profesor, ilmuwan, dokter, pengacara, orang-orang pintar yang terbiasa berpikir kritis, banyak yang masuk Islam setelah mempelajari Al-Quran.',
   ),
   Paragraph(
     'Kalau Al-Quran cuma karangan manusia abad ke-7, kenapa masih relevan hari ini? Kenapa masih bisa mengubah hati orang-orang di era AI dan robot?',
   ),
   Highlight(
-    'Al-Quran bukan cuma teks kuno. Ini kitab yang hidup — dan terus mengubah hati manusia sampai sekarang.',
+    'Al-Quran bukan cuma teks kuno. Ini kitab yang hidup, dan terus mengubah hati manusia sampai sekarang.',
   ),
   DividerBlock(),
   Subheading('💡 Kesimpulan Akhir: Apa yang Membuat Al-Quran Istimewa?'),
   Paragraph('Kalau kita rangkum, ada 7+ bukti yang saling menguatkan:'),
   Paragraph(
-    '1. Nabi ﷺ ummi — gak bisa baca-tulis, mustahil ngarang teks serumit ini.',
+    '1. Nabi ﷺ ummi, gak bisa baca-tulis, mustahil ngarang teks serumit ini.',
   ),
   Paragraph(
-    '2. Keajaiban bahasa (I\'jaz) — para sastrawan Arab gagal menandingi.',
+    '2. Keajaiban bahasa (I\'jaz), para sastrawan Arab gagal menandingi.',
   ),
-  Paragraph('3. Diwahyukan 23 tahun — tanpa kontradiksi.'),
-  Paragraph('4. Preservasi sempurna — 1.400 tahun, nol perubahan.'),
-  Paragraph('5. Informasi yang melampaui zamannya — sains, sejarah, angka.'),
-  Paragraph('6. Pola matematis yang konsisten — ribuan kombinasi angka.'),
-  Paragraph('7. Nubuatan yang terbukti — Romawi, penjagaan Al-Quran.'),
-  Paragraph('8. Dampak pada manusia — masih mengubah hati sampai hari ini.'),
+  Paragraph('3. Diwahyukan 23 tahun, tanpa kontradiksi.'),
+  Paragraph('4. Preservasi sempurna, 1.400 tahun, nol perubahan.'),
+  Paragraph('5. Informasi yang melampaui zamannya, sains, sejarah, angka.'),
+  Paragraph('6. Pola matematis yang konsisten, ribuan kombinasi angka.'),
+  Paragraph('7. Nubuatan yang terbukti, Romawi, penjagaan Al-Quran.'),
+  Paragraph('8. Dampak pada manusia, masih mengubah hati sampai hari ini.'),
   Paragraph(
-    'Masing-masing bukti ini mungkin bisa "dijawab" sendiri-sendiri. Tapi ketika DELAPAN bukti ini digabung — dan semuanya mengarah ke arah yang sama — sulit untuk bilang ini semua cuma kebetulan.',
+    'Masing-masing bukti ini mungkin bisa "dijawab" sendiri-sendiri. Tapi ketika DELAPAN bukti ini digabung, dan semuanya mengarah ke arah yang sama, sulit untuk bilang ini semua cuma kebetulan.',
   ),
   Paragraph(
     'Pada akhirnya, keputusan ada di tangan kamu. Al-Quran udah ngasih semua bukti. Allah udah ngasih akal buat mikir. Sisanya? Kamu yang mutusin.',
@@ -1267,31 +1267,31 @@ const _rukun2_1Article = <ArticleBlock>[
     'Oke, sekarang kamu udah paham soal dasar kepercayaan (Akidah). Sekarang pertanyaannya: kalau udah percaya, terus ngapain? Jawabannya ada di Rukun Islam.',
   ),
   Paragraph(
-    'Rukun Islam itu 5 hal yang jadi FONDASI hidup seorang Muslim. "Rukun" artinya tiang penopang — kalau satu copot, bangunan goyah. Kelimanya saling ngisi, gak bisa pilih-pilih.',
+    'Rukun Islam itu 5 hal yang jadi FONDASI hidup seorang Muslim. "Rukun" artinya tiang penopang, kalau satu copot, bangunan goyah. Kelimanya saling ngisi, gak bisa pilih-pilih.',
   ),
   DividerBlock(),
-  Subheading('1️⃣ Syahadat — "Aku Bersaksi"'),
+  Subheading('1️⃣ Syahadat, "Aku Bersaksi"'),
   Paragraph(
-    'Ini gerbang masuk Islam. Dua kalimat syahadat: bersaksi bahwa gak ada Tuhan selain Allah, dan Muhammad ﷺ utusan Allah. Bukan cuma diucapkan — tapi diyakini di hati. Ini komitmen seumur hidup, bukan sekadar kata-kata.',
+    'Ini gerbang masuk Islam. Dua kalimat syahadat: bersaksi bahwa gak ada Tuhan selain Allah, dan Muhammad ﷺ utusan Allah. Bukan cuma diucapkan, tapi diyakini di hati. Ini komitmen seumur hidup, bukan sekadar kata-kata.',
   ),
   Highlight(
-    'Syahadat itu kayak "terms & conditions" — tapi yang beneran kamu baca dan setujuin, bukan langsung klik "accept."',
+    'Syahadat itu kayak "terms & conditions", tapi yang beneran kamu baca dan setujuin, bukan langsung klik "accept."',
   ),
-  Subheading('2️⃣ Sholat — 5 Waktu Sehari'),
+  Subheading('2️⃣ Sholat, 5 Waktu Sehari'),
   Paragraph(
-    'Sholat itu cara ngobrol langsung sama Allah, 5 kali sehari. Subuh, Dzuhur, Ashar, Maghrib, Isya. Bukan ritual kosong — ada gerakan, bacaan, dan makna di tiap langkah. Ini "appointment" tetap kamu sama Tuhan. Gak bisa di-delegate, gak bisa di-skip.',
+    'Sholat itu cara ngobrol langsung sama Allah, 5 kali sehari. Subuh, Dzuhur, Ashar, Maghrib, Isya. Bukan ritual kosong, ada gerakan, bacaan, dan makna di tiap langkah. Ini "appointment" tetap kamu sama Tuhan. Gak bisa di-delegate, gak bisa di-skip.',
   ),
-  Subheading('3️⃣ Zakat — Berbagi dari Harta'),
+  Subheading('3️⃣ Zakat, Berbagi dari Harta'),
   Paragraph(
-    'Kalau udah punya harta yang cukup (nisab), wajib ngasih 2.5% ke yang membutuhkan. Bukan pajak — ini pembersihan harta. Konsepnya: harta yang kamu punya gak 100% milikmu, ada hak orang lain di situ. Zakat bikin harta berkah.',
+    'Kalau udah punya harta yang cukup (nisab), wajib ngasih 2.5% ke yang membutuhkan. Bukan pajak, ini pembersihan harta. Konsepnya: harta yang kamu punya gak 100% milikmu, ada hak orang lain di situ. Zakat bikin harta berkah.',
   ),
-  Subheading('4️⃣ Puasa (Ramadan) — Tahan Lapar, Tahan Diri'),
+  Subheading('4️⃣ Puasa (Ramadan), Tahan Lapar, Tahan Diri'),
   Paragraph(
-    'Setiap Ramadan, umat Islam puasa dari terbit sampai terbenam matahari. Gak cuma tahan makan dan minum — tapi juga tahan emosi, gossip, dan hal-hal negatif. Tujuannya: melatih disiplin, empati sama yang kurang mampu, dan deketin diri sama Allah. Satu bulan penuh, setiap tahun.',
+    'Setiap Ramadan, umat Islam puasa dari terbit sampai terbenam matahari. Gak cuma tahan makan dan minum, tapi juga tahan emosi, gossip, dan hal-hal negatif. Tujuannya: melatih disiplin, empati sama yang kurang mampu, dan deketin diri sama Allah. Satu bulan penuh, setiap tahun.',
   ),
-  Subheading('5️⃣ Haji — Sekali Seumur Hidup'),
+  Subheading('5️⃣ Haji, Sekali Seumur Hidup'),
   Paragraph(
-    'Kalau mampu (secara fisik dan finansial), wajib ke Makkah sekali seumur hidup. Ini ibadah terbesar — jutaan orang dari seluruh dunia berkumpul di satu tempat, pakai baju yang sama, ibadah yang sama. Gak ada bedanya kaya-miskin, bos-karyawan. Semuanya sama di depan Allah.',
+    'Kalau mampu (secara fisik dan finansial), wajib ke Makkah sekali seumur hidup. Ini ibadah terbesar, jutaan orang dari seluruh dunia berkumpul di satu tempat, pakai baju yang sama, ibadah yang sama. Gak ada bedanya kaya-miskin, bos-karyawan. Semuanya sama di depan Allah.',
   ),
   DividerBlock(),
   Subheading('💡 Kenapa 5, Bukan 3 atau 7?'),
@@ -1299,7 +1299,7 @@ const _rukun2_1Article = <ArticleBlock>[
     'Lima rukun ini udah ditetapkan langsung oleh Nabi Muhammad ﷺ. Masing-masing ngisi aspek kehidupan yang berbeda: Syahadat = hati, Sholat = waktu, Zakat = harta, Puasa = nafsu, Haji = fisik. Lengkap. Gak kurang, gak lebih.',
   ),
   Paragraph(
-    'Di modul-modul berikutnya, kita bakal bahas satu per satu secara detail — mulai dari Syahadat di modul selanjutnya. Stay tuned!',
+    'Di modul-modul berikutnya, kita bakal bahas satu per satu secara detail, mulai dari Syahadat di modul selanjutnya. Stay tuned!',
   ),
   Cta('Kamu udah paham overview-nya! Sekarang jawab kuis buat klaim XP. 🎯'),
 ];
@@ -1310,12 +1310,12 @@ const _rukun2_2Article = <ArticleBlock>[
     '"Laa ilaaha illallah, Muhammadur Rasulullah." Kamu pasti pernah dengar kalimat ini. Tapi apa artinya sebenernya? Dan kenapa ini jadi rukun pertama?',
   ),
   Paragraph(
-    'Syahadat itu bukan mantra. Bukan jimat. Ini deklarasi — pernyataan resmi dari hati bahwa kamu memilih jalan hidup tertentu. Yuk kita bedah satu per satu.',
+    'Syahadat itu bukan mantra. Bukan jimat. Ini deklarasi, pernyataan resmi dari hati bahwa kamu memilih jalan hidup tertentu. Yuk kita bedah satu per satu.',
   ),
   DividerBlock(),
   Subheading('📜 Kalimat Pertama: Laa Ilaaha Illallah'),
   Paragraph(
-    '"Tidak ada Tuhan (yang layak disembah) selain Allah." Ini inti dari Tauhid yang udah kita bahas di modul 1.2. Bukan cuma bilang "Tuhan itu ada" — tapi juga "Dia aja yang layak aku sembah dan taati."',
+    '"Tidak ada Tuhan (yang layak disembah) selain Allah." Ini inti dari Tauhid yang udah kita bahas di modul 1.2. Bukan cuma bilang "Tuhan itu ada", tapi juga "Dia aja yang layak aku sembah dan taati."',
   ),
   Paragraph(
     'Implikasinya: kamu gak boleh menyembah selain Allah. Gak boleh takut sama selain Allah lebih dari takut sama-Nya. Gak boleh bergantung sama selain Allah lebih dari bergantung sama-Nya. Ini soal prioritas hidup.',
@@ -1328,24 +1328,24 @@ const _rukun2_2Article = <ArticleBlock>[
     '"Muhammad ﷺ adalah utusan Allah." Ini artinya kamu percaya Muhammad ﷺ beneran diutus oleh Allah buat jadi contoh hidup. Dan kalau percaya, konsekuensinya: ikutin ajarannya.',
   ),
   Paragraph(
-    'Bayangin: kamu punya mentor yang udah terbukti jujur, cerdas, dan peduli. Kamu percaya dia. Maka kamu ikutin saran dia. Logis kan? Sama halnya dengan Muhammad ﷺ — kalau beneran percaya dia utusan Tuhan, maka ikutin ajarannya.',
+    'Bayangin: kamu punya mentor yang udah terbukti jujur, cerdas, dan peduli. Kamu percaya dia. Maka kamu ikutin saran dia. Logis kan? Sama halnya dengan Muhammad ﷺ, kalau beneran percaya dia utusan Tuhan, maka ikutin ajarannya.',
   ),
   DividerBlock(),
   Subheading('⚡ Konsekuensi Logis'),
   Paragraph(
-    'Syahadat itu bukan cuma ucapan — tapi komitmen. Begitu kamu ngucapin dan yakinin, ada konsekuensi logis:',
+    'Syahadat itu bukan cuma ucapan, tapi komitmen. Begitu kamu ngucapin dan yakinin, ada konsekuensi logis:',
   ),
   Paragraph(
-    '• Kamu berkomitmen menyembah Allah aja — sholat, berdoa, bersyukur, semuanya ke Allah.',
+    '• Kamu berkomitmen menyembah Allah aja, sholat, berdoa, bersyukur, semuanya ke Allah.',
   ),
   Paragraph(
-    '• Kamu berkomitmen ngikutin ajaran Nabi ﷺ — cara hidup yang udah dia contohin.',
+    '• Kamu berkomitmen ngikutin ajaran Nabi ﷺ, cara hidup yang udah dia contohin.',
   ),
   Paragraph(
-    '• Kamu berkomitmen ninggalin yang dilarang — bukan karena takut hukuman, tapi karena kamu percaya Allah lebih tahu apa yang terbaik buat kamu.',
+    '• Kamu berkomitmen ninggalin yang dilarang, bukan karena takut hukuman, tapi karena kamu percaya Allah lebih tahu apa yang terbaik buat kamu.',
   ),
   Paragraph(
-    'Ini kayak kontrak seumur hidup — tapi kontrak yang bikin hidupmu lebih terarah dan bermakna.',
+    'Ini kayak kontrak seumur hidup, tapi kontrak yang bikin hidupmu lebih terarah dan bermakna.',
   ),
   Highlight(
     'Syahadat itu bukan "slesai" begitu diucapkan. Itu titik awal. Perjalanan baru aja dimulai.',
@@ -1372,18 +1372,18 @@ const _rukun2_3Article = <ArticleBlock>[
     'Inti puasa itu bukan "tahan lapar." Intinya: latihan ngendaliin diri. Kamu pengen makan? Tahan. Kamu pengen marah? Tahan. Kamu pengen gossip? Tahan.',
   ),
   Paragraph(
-    'Bayangin: kalau kamu bisa ngendaliin keinginan yang PALING dasar (makan dan minum), maka kamu juga bisa ngendaliin keinginan yang lebih kompleks — emosi, nafsu, ambisi. Puasa itu gym-nya jiwa.',
+    'Bayangin: kalau kamu bisa ngendaliin keinginan yang PALING dasar (makan dan minum), maka kamu juga bisa ngendaliin keinginan yang lebih kompleks, emosi, nafsu, ambisi. Puasa itu gym-nya jiwa.',
   ),
   Highlight(
-    'Puasa itu bukan soal "gak makan." Tapi soal: "siapa yang pegang kendali — nafsu atau kamu?"',
+    'Puasa itu bukan soal "gak makan." Tapi soal: "siapa yang pegang kendali, nafsu atau kamu?"',
   ),
   Subheading('🤝 Empati sama yang Kurang Mampu'),
   Paragraph(
-    'Kamu pernah ngerasain lapar beneran? Bukan "luput sarapan" — tapi beneran gak makan seharian. Puasa bikin kamu ngerasain apa yang dirasain orang yang gak mampu makan setiap hari. Dari situ muncul empati — dan dorongan buat berbagi.',
+    'Kamu pernah ngerasain lapar beneran? Bukan "luput sarapan", tapi beneran gak makan seharian. Puasa bikin kamu ngerasain apa yang dirasain orang yang gak mampu makan setiap hari. Dari situ muncul empati, dan dorongan buat berbagi.',
   ),
   Subheading('🏥 Manfaat Kesehatan (Secara Umum)'),
   Paragraph(
-    'Banyak penelitian menunjukkan bahwa puasa intermiten (yang polanya mirip puasa Ramadan) punya dampak positif secara umum pada tubuh. Tapi ini bukan klaim medis — setiap orang beda kondisinya. Yang jelas: puasa Ramadan dirancang oleh Allah, dan Allah lebih tahu apa yang terbaik buat hamba-Nya.',
+    'Banyak penelitian menunjukkan bahwa puasa intermiten (yang polanya mirip puasa Ramadan) punya dampak positif secara umum pada tubuh. Tapi ini bukan klaim medis, setiap orang beda kondisinya. Yang jelas: puasa Ramadan dirancang oleh Allah, dan Allah lebih tahu apa yang terbaik buat hamba-Nya.',
   ),
   DividerBlock(),
   Subheading('📋 Siapa yang Wajib Puasa?'),
@@ -1391,14 +1391,14 @@ const _rukun2_3Article = <ArticleBlock>[
     'Semua Muslim yang udah baligh dan sehat wajib puasa. Tapi ada keringanan untuk yang gak mampu:',
   ),
   Paragraph(
-    '• Sakit — boleh gak puasa, tapi wajib qadha (ganti) kalau udah sembuh.',
+    '• Sakit, boleh gak puasa, tapi wajib qadha (ganti) kalau udah sembuh.',
   ),
-  Paragraph('• Musafir (perjalanan jauh) — boleh gak puasa, wajib qadha juga.'),
+  Paragraph('• Musafir (perjalanan jauh), boleh gak puasa, wajib qadha juga.'),
   Paragraph(
-    '• Hamil/menyusui — boleh gak puasa kalau khawatir kebayi, qadha atau fidyah.',
+    '• Hamil/menyusui, boleh gak puasa kalau khawatir kebayi, qadha atau fidyah.',
   ),
   Paragraph(
-    '• Lansia/gak mampu permanen — gak wajib puasa, cukup bayar fidyah (makan orang miskin per hari).',
+    '• Lansia/gak mampu permanen, gak wajib puasa, cukup bayar fidyah (makan orang miskin per hari).',
   ),
   Highlight(
     'Islam itu fleksibel. Ada aturan, tapi ada keringanan. Gak ada yang dipaksain di luar batas kemampuan.',
@@ -1406,7 +1406,7 @@ const _rukun2_3Article = <ArticleBlock>[
   DividerBlock(),
   Subheading('💡 Kesimpulan'),
   Paragraph(
-    'Puasa Ramadan itu bukan hukuman — tapi pelatihan. Melatih disiplin, empati, dan ketergantungan pada Allah. Satu bulan penuh yang bikin 11 bulan sisanya lebih bermakna.',
+    'Puasa Ramadan itu bukan hukuman, tapi pelatihan. Melatih disiplin, empati, dan ketergantungan pada Allah. Satu bulan penuh yang bikin 11 bulan sisanya lebih bermakna.',
   ),
   Cta('Selesai baca! Saatnya kuis. 🎯'),
 ];
@@ -1419,10 +1419,10 @@ const _rukun2_4Article = <ArticleBlock>[
   DividerBlock(),
   Subheading('🧹 Zakat = Pembersih Harta'),
   Paragraph(
-    'Kata "zakat" sendiri artinya "bersih" dan "tumbuh." Konsepnya: harta yang kamu punya itu gak 100% milikmu. Ada hak orang lain di situ — yang butuh, yang kurang mampu. Dengan ngasih zakat, kamu "bersihin" hartamu dari hak mereka.',
+    'Kata "zakat" sendiri artinya "bersih" dan "tumbuh." Konsepnya: harta yang kamu punya itu gak 100% milikmu. Ada hak orang lain di situ, yang butuh, yang kurang mampu. Dengan ngasih zakat, kamu "bersihin" hartamu dari hak mereka.',
   ),
   Paragraph(
-    'Bayangin: kamu punya gelas air yang terus dituang. Kalau gak pernah dibagiin, gelasnya meluap dan tumpah. Zakat itu bikin aliran tetap lancar — kamu terima, kamu bagikan, dan hartamu jadi lebih berkah.',
+    'Bayangin: kamu punya gelas air yang terus dituang. Kalau gak pernah dibagiin, gelasnya meluap dan tumpah. Zakat itu bikin aliran tetap lancar, kamu terima, kamu bagikan, dan hartamu jadi lebih berkah.',
   ),
   Highlight(
     'Zakat bukan "buang duit." Zakat investasi di akhirat dan pembersihan harta di dunia.',
@@ -1430,20 +1430,20 @@ const _rukun2_4Article = <ArticleBlock>[
   Subheading('📊 Beda Zakat, Infaq, dan Sedekah'),
   Paragraph('Ketiganya sama-sama berbagi, tapi beda aturannya:'),
   Paragraph(
-    '• Zakat — WAJIB. Ada nisab (batas minimal harta) dan haul (dimiliki setahun). Besarnya 2.5% dari harta. Ada 8 golongan yang berhak menerima (asnaf).',
+    '• Zakat, WAJIB. Ada nisab (batas minimal harta) dan haul (dimiliki setahun). Besarnya 2.5% dari harta. Ada 8 golongan yang berhak menerima (asnaf).',
   ),
   Paragraph(
-    '• Infaq — SUNNAH. Berbagi dari harta tanpa batasan persentase. Bisa kapan saja, berapa saja, ke siapa saja.',
+    '• Infaq, SUNNAH. Berbagi dari harta tanpa batasan persentase. Bisa kapan saja, berapa saja, ke siapa saja.',
   ),
   Paragraph(
-    '• Sedekah — SUNNAH. Lebih luas dari infaq — bukan cuma uang. Senyum aja udah sedekah. Nolong orang, ngasih ilmu, bahkan buang duri dari jalan itu sedekah.',
+    '• Sedekah, SUNNAH. Lebih luas dari infaq, bukan cuma uang. Senyum aja udah sedekah. Nolong orang, ngasih ilmu, bahkan buang duri dari jalan itu sedekah.',
   ),
   Subheading('🌍 Dampak Sosial: Kurangi Kesenjangan'),
   Paragraph(
     'Zakat itu sistem distribusi kekayaan yang unik. Yang punya lebih → ngasih 2.5% → yang butuh terbantu. Kalau semua orang yang mampu bayar zakat, kesenjangan sosial bisa berkurang signifikan.',
   ),
   Paragraph(
-    'Ini bukan sosialisme ala Barat — ini sistem dari Allah. Dan bedanya: zakat itu MOTIVASINYA cinta, bukan paksaan. Kamu ngasih karena percaya itu hak mereka, dan karena kamu sayang sama hartamu sendiri (maunya yang bersih dan berkah).',
+    'Ini bukan sosialisme ala Barat, ini sistem dari Allah. Dan bedanya: zakat itu MOTIVASINYA cinta, bukan paksaan. Kamu ngasih karena percaya itu hak mereka, dan karena kamu sayang sama hartamu sendiri (maunya yang bersih dan berkah).',
   ),
   Highlight(
     'Zakat: satu sistem yang bersihin hartamu SEKALIGUS bantu sesama. Win-win.',
@@ -1451,7 +1451,7 @@ const _rukun2_4Article = <ArticleBlock>[
   DividerBlock(),
   Subheading('💡 Penutup'),
   Paragraph(
-    'Zakat itu bukan beban — itu hak orang lain yang dititipin di hartamu. Dan ketika kamu ngasih, yang kamu "bersihin" bukan cuma hartamu — tapi juga hatimu.',
+    'Zakat itu bukan beban, itu hak orang lain yang dititipin di hartamu. Dan ketika kamu ngasih, yang kamu "bersihin" bukan cuma hartamu, tapi juga hatimu.',
   ),
   Cta('Kamu udah paham soal zakat! Kuis waktunya. 🎯'),
 ];
@@ -1459,7 +1459,7 @@ const _rukun2_4Article = <ArticleBlock>[
 const _rukun2_5Article = <ArticleBlock>[
   Heading('Haji: Perjalanan Sekali Seumur Hidup'),
   Paragraph(
-    'Ini rukun terakhir. Dan mungkin yang paling "wow" — karena kamu harus beneran pergi ke satu tempat di belahan dunia lain, bersama jutaan orang dari seluruh planet.',
+    'Ini rukun terakhir. Dan mungkin yang paling "wow", karena kamu harus beneran pergi ke satu tempat di belahan dunia lain, bersama jutaan orang dari seluruh planet.',
   ),
   DividerBlock(),
   Subheading('🕋 Apa Itu Haji?'),
@@ -1474,43 +1474,43 @@ const _rukun2_5Article = <ArticleBlock>[
     'Yang bikin haji beda dari ibadah lain: semua orang pakai baju yang SAMA. Putih, tanpa jahitan, gak ada merek, gak ada logo. Namanya ihram.',
   ),
   Paragraph(
-    'Bayangin: Presiden, buruh, dokter, tukang ojek, pengusaha — semuanya pakai baju yang sama. Gak ada yang bisa pamer kekayaan. Gak ada yang bisa pamer jabatan. Di depan Allah, SEMUA SAMA.',
+    'Bayangin: Presiden, buruh, dokter, tukang ojek, pengusaha, semuanya pakai baju yang sama. Gak ada yang bisa pamer kekayaan. Gak ada yang bisa pamer jabatan. Di depan Allah, SEMUA SAMA.',
   ),
   Highlight(
-    'Ihram itu pengingat: di mata Allah, yang membedakan kamu bukan harta atau jabatan — tapi ketakwaanmu.',
+    'Ihram itu pengingat: di mata Allah, yang membedakan kamu bukan harta atau jabatan, tapi ketakwaanmu.',
   ),
   Subheading('⚖️ Makna Simbolis Haji'),
   Paragraph(
     'Haji itu bukan sekadar perjalanan fisik. Tiap ritual punya makna:',
   ),
   Paragraph(
-    '• Tawaf (keliling Ka\'bah 7x) — hidupmu harus berpusat pada Allah, seperti bumi yang mengelilingi matahari.',
+    '• Tawaf (keliling Ka\'bah 7x), hidupmu harus berpusat pada Allah, seperti bumi yang mengelilingi matahari.',
   ),
   Paragraph(
-    '• Wukuf di Arafah — pengingat Hari Kiamat, saat semua manusia berkumpul di padang mahsyar.',
+    '• Wukuf di Arafah, pengingat Hari Kiamat, saat semua manusia berkumpul di padang mahsyar.',
   ),
   Paragraph(
-    '• Melempar jumrah — simbol nolak godaan setan, dari yang kecil sampai yang besar.',
+    '• Melempar jumrah, simbol nolak godaan setan, dari yang kecil sampai yang besar.',
   ),
   Paragraph(
-    '• Sa\'i (lari bolak-balik Safa-Marwa) — mengenang perjuangan Siti Hajar mencari air untuk bayinya, Ismail. Simbol ketekunan dan tawakkal.',
+    '• Sa\'i (lari bolak-balik Safa-Marwa), mengenang perjuangan Siti Hajar mencari air untuk bayinya, Ismail. Simbol ketekunan dan tawakkal.',
   ),
   Subheading('💰 Syarat Wajib Haji'),
   Paragraph('Haji cuma wajib kalau kamu MAMPU. Artinya:'),
   Paragraph(
-    '• Fisik sehat — kuat jalan, berdiri, tahan cuaca panas. Kalau sakit parah, gak wajib.',
+    '• Fisik sehat, kuat jalan, berdiri, tahan cuaca panas. Kalau sakit parah, gak wajib.',
   ),
   Paragraph(
-    '• Finansial cukup — punya biaya pergi DAN keluarga di rumah tetap tercukupi. Gak boleh haji tapi utang menumpuk.',
+    '• Finansial cukup, punya biaya pergi DAN keluarga di rumah tetap tercukupi. Gak boleh haji tapi utang menumpuk.',
   ),
-  Paragraph('• Aman perjalanannya — jalur ke Makkah aman.'),
+  Paragraph('• Aman perjalanannya, jalur ke Makkah aman.'),
   Highlight(
     'Haji itu wajib kalau mampu. Kalau belum mampu, gak dosa. Allah gak membebankan di luar batas kemampuan.',
   ),
   DividerBlock(),
   Subheading('💡 Penutup Kategori Rukun Islam'),
   Paragraph(
-    'Kelima rukun ini — Syahadat, Sholat, Puasa, Zakat, Haji — adalah FONDASI hidup seorang Muslim. Masing-masing ngisi aspek berbeda: hati, waktu, nafsu, harta, dan fisik.',
+    'Kelima rukun ini, Syahadat, Sholat, Puasa, Zakat, Haji, adalah FONDASI hidup seorang Muslim. Masing-masing ngisi aspek berbeda: hati, waktu, nafsu, harta, dan fisik.',
   ),
   Paragraph(
     'Kalau kamu udah paham Akidah dan Rukun Islam, kamu udah punya kerangka yang kuat. Sekarang waktunya masuk ke bagian praktisnya.',
@@ -1523,7 +1523,7 @@ const _rukun2_5Article = <ArticleBlock>[
 const _praktik3_1Article = <ArticleBlock>[
   Heading('Wudhu: Bersih-Bersih Sebelum Menghadap Allah'),
   Paragraph(
-    'Sebelum sholat, kamu harus bersih dulu — bukan cuma fisik, tapi juga "spiritual" (disebut suci dari hadas kecil). Caranya? Wudhu. Ini step-by-step-nya.',
+    'Sebelum sholat, kamu harus bersih dulu, bukan cuma fisik, tapi juga "spiritual" (disebut suci dari hadas kecil). Caranya? Wudhu. Ini step-by-step-nya.',
   ),
   DividerBlock(),
   Subheading('🛐 Niat di Hati'),
@@ -1538,28 +1538,28 @@ const _praktik3_1Article = <ArticleBlock>[
     'Urutan ini harus berurutan sesuai sunnah. Kalau loncat-loncat, wudhunya kurang sempurna:',
   ),
   Paragraph(
-    '① BASUH KEDUA TELAPAK TANGAN — sampai pergelangan, 3 kali. Bersihin kotoran yang nempel.',
+    '① BASUH KEDUA TELAPAK TANGAN, sampai pergelangan, 3 kali. Bersihin kotoran yang nempel.',
   ),
   Paragraph(
-    '② KUMUR-KUMUR (MADHMADHAH) — ambil air, masukin ke mulut, kumur 3 kali. Bersihin mulut dari sisa makanan.',
+    '② KUMUR-KUMUR (MADHMADHAH), ambil air, masukin ke mulut, kumur 3 kali. Bersihin mulut dari sisa makanan.',
   ),
   Paragraph(
-    '③ MASUKKAN AIR KE HIDUNG (ISTINSYAQ) — hirup air ke hidung, keluarkan, 3 kali. Gak enak emang, tapi bagian dari wudhu.',
+    '③ MASUKKAN AIR KE HIDUNG (ISTINSYAQ), hirup air ke hidung, keluarkan, 3 kali. Gak enak emang, tapi bagian dari wudhu.',
   ),
   Paragraph(
-    '④ BASUH WAJAH — dari batas tumbuhnya rambut sampai dagu, dari telinga ke telinga, 3 kali.',
+    '④ BASUH WAJAH, dari batas tumbuhnya rambut sampai dagu, dari telinga ke telinga, 3 kali.',
   ),
   Paragraph(
-    '⑤ BASUH TANGAN SAMPAI SIKU — mulai dari ujung jari sampai siku (termasuk siku), 3 kali. Tangan kanan dulu, baru kiri.',
+    '⑤ BASUH TANGAN SAMPAI SIKU, mulai dari ujung jari sampai siku (termasuk siku), 3 kali. Tangan kanan dulu, baru kiri.',
   ),
   Paragraph(
-    '⑥ USAP KEPALA — pakai tangan basah, usap dari depan ke belakang, balik lagi ke depan. 1 kali aja.',
+    '⑥ USAP KEPALA, pakai tangan basah, usap dari depan ke belakang, balik lagi ke depan. 1 kali aja.',
   ),
   Paragraph(
-    '⑦ USAP TELINGA — jari telunjuk masukin ke lubang telinga, ibu jari usap belakang telinga. 1 kali.',
+    '⑦ USAP TELINGA, jari telunjuk masukin ke lubang telinga, ibu jari usap belakang telinga. 1 kali.',
   ),
   Paragraph(
-    '⑧ BASUH KAKI SAMPAI MATA KAKI — dari ujung jari sampai mata kaki (termasuk mata kaki), 3 kali. Kanan dulu, baru kiri.',
+    '⑧ BASUH KAKI SAMPAI MATA KAKI, dari ujung jari sampai mata kaki (termasuk mata kaki), 3 kali. Kanan dulu, baru kiri.',
   ),
   Highlight(
     'Tips: sambil nginget urutannya, bayangin kamu lagi "nyiram" dari atas ke bawah. Tangan → muka → tangan → kepala → kaki.',
@@ -1594,22 +1594,22 @@ const _praktik3_2Article = <ArticleBlock>[
   DividerBlock(),
   Subheading('📋 Syarat Sah Sholat'),
   Paragraph(
-    'Syarat sah itu hal-hal yang harus DIPENUHI SEBELUM sholat. Kalau gak terpenuhi, sholatnya gak sah — mau gerakannya sempurna sekalipun. Ada 5:',
+    'Syarat sah itu hal-hal yang harus DIPENUHI SEBELUM sholat. Kalau gak terpenuhi, sholatnya gak sah, mau gerakannya sempurna sekalipun. Ada 5:',
   ),
   Paragraph(
-    '① Suci dari hadas besar — kalau junub (habis hubungan suami-istri, mimpi basah, haid), harus mandi besar (mandi junub) dulu. Wudhu aja gak cukup.',
+    '① Suci dari hadas besar, kalau junub (habis hubungan suami-istri, mimpi basah, haid), harus mandi besar (mandi junub) dulu. Wudhu aja gak cukup.',
   ),
   Paragraph(
-    '② Suci dari hadas kecil — ini yang diurus sama wudhu (yang udah kita bahas di modul sebelumnya).',
+    '② Suci dari hadas kecil, ini yang diurus sama wudhu (yang udah kita bahas di modul sebelumnya).',
   ),
   Paragraph(
-    '③ Menutup aurat — laki-laki: pusar sampai lutut. Perempuan: seluruh tubuh kecuali muka dan telapak tangan. Pakai baju yang gak transparan dan gak ketat.',
+    '③ Menutup aurat, laki-laki: pusar sampai lutut. Perempuan: seluruh tubuh kecuali muka dan telapak tangan. Pakai baju yang gak transparan dan gak ketat.',
   ),
   Paragraph(
-    '④ Menghadap kiblat — arah Ka\'bah di Makkah. Dari Indonesia, arahnya barat agak serong ke utara (barat laut). Kalau gak tahu arahnya, pakai fitur Kiblat di tab Jadwal app ini.',
+    '④ Menghadap kiblat, arah Ka\'bah di Makkah. Dari Indonesia, arahnya barat agak serong ke utara (barat laut). Kalau gak tahu arahnya, pakai fitur Kiblat di tab Jadwal app ini.',
   ),
   Paragraph(
-    '⑤ Masuk waktu sholat — setiap sholat punya waktu spesifik. Sholat Subuh sebelum terbit matahari, Dzuhur setelah matahari condong ke barat, dan seterusnya. Sholat di luar waktu = gak sah.',
+    '⑤ Masuk waktu sholat, setiap sholat punya waktu spesifik. Sholat Subuh sebelum terbit matahari, Dzuhur setelah matahari condong ke barat, dan seterusnya. Sholat di luar waktu = gak sah.',
   ),
   Highlight(
     'Syarat sah = hal-hal DI LUAR sholat yang harus dipenuhi dulu. Lupa satu? Sholatnya batal dari awal.',
@@ -1619,34 +1619,34 @@ const _praktik3_2Article = <ArticleBlock>[
   Paragraph(
     'Rukun itu hal-hal yang harus dilakukan DI DALAM sholat. Kalau ada yang ketinggalan, sholatnya gak sah. Ada 13 rukun (sebagian ulama bilang 14):',
   ),
-  Paragraph('① Niat di dalam hati — saat mau takbiratul ihram.'),
+  Paragraph('① Niat di dalam hati, saat mau takbiratul ihram.'),
   Paragraph(
-    '② Takbiratul ihram — ucap "Allahu Akbar" sambil angkat tangan. Ini tanda sholat dimulai.',
+    '② Takbiratul ihram, ucap "Allahu Akbar" sambil angkat tangan. Ini tanda sholat dimulai.',
   ),
   Paragraph(
-    '③ Berdiri tegak (bagi yang mampu) — saat takbiratul ihram dan saat baca Al-Fatihah.',
+    '③ Berdiri tegak (bagi yang mampu), saat takbiratul ihram dan saat baca Al-Fatihah.',
   ),
   Paragraph(
-    '④ Membaca Al-Fatihah — wajib di setiap rakaat, baik imam maupun sendirian.',
+    '④ Membaca Al-Fatihah, wajib di setiap rakaat, baik imam maupun sendirian.',
   ),
-  Paragraph('⑤ Ruku — tunduk, tangan pegang lutut, punggung lurus.'),
-  Paragraph('⑥ I\'tidal — bangun dari ruku, berdiri tegak.'),
+  Paragraph('⑤ Ruku, tunduk, tangan pegang lutut, punggung lurus.'),
+  Paragraph('⑥ I\'tidal, bangun dari ruku, berdiri tegak.'),
   Paragraph(
-    '⑦ Sujud (2 kali per rakaat) — dahi, hidung, kedua telapak tangan, kedua lutut, dan ujung jari kaki menyentuh lantai.',
+    '⑦ Sujud (2 kali per rakaat), dahi, hidung, kedua telapak tangan, kedua lutut, dan ujung jari kaki menyentuh lantai.',
   ),
   Paragraph(
-    '⑧ Duduk antara dua sujud — duduk sebentar setelah sujud pertama, sebelum sujud kedua.',
+    '⑧ Duduk antara dua sujud, duduk sebentar setelah sujud pertama, sebelum sujud kedua.',
   ),
-  Paragraph('⑨ Tasyahud akhir — duduk di rakaat terakhir, baca tasyahud.'),
-  Paragraph('⑩ Membaca sholawat — untuk Nabi Muhammad ﷺ di tasyahud akhir.'),
+  Paragraph('⑨ Tasyahud akhir, duduk di rakaat terakhir, baca tasyahud.'),
+  Paragraph('⑩ Membaca sholawat, untuk Nabi Muhammad ﷺ di tasyahud akhir.'),
   Paragraph(
-    '⑪ Duduk untuk tasyahud akhir dan tasyahud awal — posisi duduk iftirasy (kaki kiri diduduki, kanan tegak).',
+    '⑪ Duduk untuk tasyahud akhir dan tasyahud awal, posisi duduk iftirasy (kaki kiri diduduki, kanan tegak).',
   ),
-  Paragraph('⑫ Membaca dua kalimat syahadat — di tasyahud akhir.'),
+  Paragraph('⑫ Membaca dua kalimat syahadat, di tasyahud akhir.'),
   Paragraph(
-    '⑬ Salam — ucap "Assalamu\'alaikum warahmatullah" ke kanan dan ke kiri. Ini tanda sholat selesai.',
+    '⑬ Salam, ucap "Assalamu\'alaikum warahmatullah" ke kanan dan ke kiri. Ini tanda sholat selesai.',
   ),
-  Paragraph('⑭ Tertib — mengerjakan semua rukun secara berurutan.'),
+  Paragraph('⑭ Tertib, mengerjakan semua rukun secara berurutan.'),
   Highlight(
     'Syarat sah = SEBELUM sholat. Rukun = DI DALAM sholat. Bedanya: syarat sah bikin sholat BOLEH dimulai. Rukun bikin sholat JADI sah.',
   ),
@@ -1663,7 +1663,7 @@ const _praktik3_2Article = <ArticleBlock>[
 const _praktik3_3Article = <ArticleBlock>[
   Heading('Tata Cara Sholat Step-by-Step'),
   Paragraph(
-    'Ini dia yang kamu tunggu-tunggu. Kita bakal bahas sholat 2 rakaat — yang paling dasar. Setelah paham 2 rakaat, tinggal tambah rakaat aja untuk sholat 3 (Maghrib) atau 4 (Dzuhur, Ashar, Isya).',
+    'Ini dia yang kamu tunggu-tunggu. Kita bakal bahas sholat 2 rakaat, yang paling dasar. Setelah paham 2 rakaat, tinggal tambah rakaat aja untuk sholat 3 (Maghrib) atau 4 (Dzuhur, Ashar, Isya).',
   ),
   Paragraph(
     'Tiap gerakan ada deskripsi posisinya. Kalau bingung, tanya teman atau lihat video tutorial. Praktik langsung itu guru terbaik.',
@@ -1786,17 +1786,17 @@ const _praktik3_3Article = <ArticleBlock>[
     '• Gak harus hafal semua bacaan di hari pertama. Mulai dari Al-Fatihah dulu, yang lain nambah pelan-pelan.',
   ),
   Paragraph(
-    '• Sholat itu percakapan sama Allah. Gak perlu perfect — yang penting niat dan usaha. Allah tahu kamu lagi belajar.',
+    '• Sholat itu percakapan sama Allah. Gak perlu perfect, yang penting niat dan usaha. Allah tahu kamu lagi belajar.',
   ),
   Cta(
-    'Kamu udah baca panduan lengkap sholat! 🎉 Sekarang coba praktikkan, dan jawab kuisnya. Gak harus perfect — yang penting mulai. 🚀',
+    'Kamu udah baca panduan lengkap sholat! 🎉 Sekarang coba praktikkan, dan jawab kuisnya. Gak harus perfect, yang penting mulai. 🚀',
   ),
 ];
 
 const _praktik3_4Article = <ArticleBlock>[
   Heading('Bacaan-Bacaan Penting dalam Sholat'),
   Paragraph(
-    'Modul ini cheat-sheet. Semua bacaan sholat dikumpulin di satu tempat biar gampang dicari ulang. Bookmark halaman ini — kamu bakal sering balik ke sini.',
+    'Modul ini cheat-sheet. Semua bacaan sholat dikumpulin di satu tempat biar gampang dicari ulang. Bookmark halaman ini, kamu bakal sering balik ke sini.',
   ),
   DividerBlock(),
   Subheading('🛐 Takbiratul Ihram'),
@@ -1866,29 +1866,29 @@ const _praktik3_5Article = <ArticleBlock>[
   DividerBlock(),
   Subheading('⏰ 5 Waktu Sholat Wajib'),
   Paragraph(
-    '① SUBUH — 2 rakaat\nWaktu: dari terbit fajar (sekitar jam 4:30-an) sampai terbit matahari. Ini sholat paling awal — bangunnya emang berat, tapi pahalanya gede banget.',
+    '① SUBUH, 2 rakaat\nWaktu: dari terbit fajar (sekitar jam 4:30-an) sampai terbit matahari. Ini sholat paling awal, bangunnya emang berat, tapi pahalanya gede banget.',
   ),
   Paragraph(
-    '② DZUHUR — 4 rakaat\nWaktu: setelah matahari condong ke barat (sekitar jam 12:00-an) sampai masuk waktu Ashar. Sholat siang hari, biasanya pas istirahat kerja/kuliah.',
+    '② DZUHUR, 4 rakaat\nWaktu: setelah matahari condong ke barat (sekitar jam 12:00-an) sampai masuk waktu Ashar. Sholat siang hari, biasanya pas istirahat kerja/kuliah.',
   ),
   Paragraph(
-    '③ ASHAR — 4 rakaat\nWaktu: ketika bayangan benda sama panjangnya dengan benda itu sendiri (sekitar jam 15:00-an) sampai terbenam matahari. Nabi ﷺ bilang ini waktu yang sangat dianjurkan.',
+    '③ ASHAR, 4 rakaat\nWaktu: ketika bayangan benda sama panjangnya dengan benda itu sendiri (sekitar jam 15:00-an) sampai terbenam matahari. Nabi ﷺ bilang ini waktu yang sangat dianjurkan.',
   ),
   Paragraph(
-    '④ MAGHRIB — 3 rakaat\nWaktu: setelah matahari terbenam (sekitar jam 18:00-an) sampai hilang mega merah di langit. Satu-satunya sholat wajib 3 rakaat.',
+    '④ MAGHRIB, 3 rakaat\nWaktu: setelah matahari terbenam (sekitar jam 18:00-an) sampai hilang mega merah di langit. Satu-satunya sholat wajib 3 rakaat.',
   ),
   Paragraph(
-    '⑤ ISYA — 4 rakaat\nWaktu: setelah mega merah hilang (sekitar jam 19:15-an) sampai tengah malam (atau terbit fajar menurut sebagian ulama). Sholat terakhir di hari itu.',
+    '⑤ ISYA, 4 rakaat\nWaktu: setelah mega merah hilang (sekitar jam 19:15-an) sampai tengah malam (atau terbit fajar menurut sebagian ulama). Sholat terakhir di hari itu.',
   ),
   Highlight(
-    'Subuh = 2, Dzuhur = 4, Ashar = 4, Maghrib = 3, Isya = 4. Total: 17 rakaat sehari. Cuma 17 — gak banyak kok kalau dibagi sepanjang hari.',
+    'Subuh = 2, Dzuhur = 4, Ashar = 4, Maghrib = 3, Isya = 4. Total: 17 rakaat sehari. Cuma 17, gak banyak kok kalau dibagi sepanjang hari.',
   ),
   Subheading('🤔 Kenapa Rakaatnya Beda-Beda?'),
   Paragraph(
     'Jumlah rakaat ditentukan langsung oleh Nabi Muhammad ﷺ berdasarkan wahyu. Subuh cuma 2 karena waktunya pendek (fajar ke terbit matahari). Maghrib 3 sebagai "transisi" antara siang dan malam. Dzuhur, Ashar, Isya masing-masing 4 karena waktunya lebih panjang.',
   ),
   Paragraph(
-    'Gak ada alasan "kenapa" yang bisa dijelasin secara logika 100% — ini udah ketetapan dari Allah lewat Nabi-Nya. Yang jelas: setiap jumlah rakaat punya hikmah.',
+    'Gak ada alasan "kenapa" yang bisa dijelasin secara logika 100%, ini udah ketetapan dari Allah lewat Nabi-Nya. Yang jelas: setiap jumlah rakaat punya hikmah.',
   ),
   Subheading('📱 Mau Mulai Tracking?'),
   Paragraph(
@@ -1914,7 +1914,7 @@ const _praktik3_6Article = <ArticleBlock>[
   ),
   Subheading('❓ "Gimana kalau gak hafal bacaan panjang?"'),
   Paragraph(
-    'Gak masalah! Yang WAJIB itu Al-Fatihah di setiap rakaat. Surah pendek setelahnya? Boleh baca surah APA SAJA yang kamu hafal. Al-Ikhlas, An-Nas, Al-Falaq, Al-Kautsar, bahkan ayat kursi — bebas.',
+    'Gak masalah! Yang WAJIB itu Al-Fatihah di setiap rakaat. Surah pendek setelahnya? Boleh baca surah APA SAJA yang kamu hafal. Al-Ikhlas, An-Nas, Al-Falaq, Al-Kautsar, bahkan ayat kursi, bebas.',
   ),
   Paragraph(
     'Kalau gak hafal surah pendek sama sekali? Fokus hafalin Al-Fatihah dulu. Itu yang paling wajib. Surah pendek bisa ditambah pelan-pelan. Nabi ﷺ sendiri bilang: "Bacalah apa yang mudah bagimu."',
@@ -1924,13 +1924,13 @@ const _praktik3_6Article = <ArticleBlock>[
     'Ini keringanan khusus untuk orang yang sedang dalam perjalanan (musafir):',
   ),
   Paragraph(
-    '• JAMAK — menggabungkan dua sholat di satu waktu. Jamak taqdim: Dzuhur + Ashar di waktu Dzuhur. Jamak takhir: Maghrib + Isya di waktu Isya. Bisa juga jamak di Arafah (Dzuhur + Ashar) dan di Muzdalifah (Maghrib + Isya).',
+    '• JAMAK, menggabungkan dua sholat di satu waktu. Jamak taqdim: Dzuhur + Ashar di waktu Dzuhur. Jamak takhir: Maghrib + Isya di waktu Isya. Bisa juga jamak di Arafah (Dzuhur + Ashar) dan di Muzdalifah (Maghrib + Isya).',
   ),
   Paragraph(
-    '• QASHAR — meringkas sholat 4 rakaat jadi 2 rakaat. Boleh untuk Dzuhur, Ashar, dan Isya. Syaratnya: musafir (perjalanan jauh, biasanya > 80 km).',
+    '• QASHAR, meringkas sholat 4 rakaat jadi 2 rakaat. Boleh untuk Dzuhur, Ashar, dan Isya. Syaratnya: musafir (perjalanan jauh, biasanya > 80 km).',
   ),
   Paragraph(
-    'Jamak dan qashar boleh digabung. Jadi Dzuhur + Ashar bisa dijamak dan diqashar jadi 2 rakaat + 2 rakaat di satu waktu. Ini keringanan dari Allah — Islam itu gak memberatkan.',
+    'Jamak dan qashar boleh digabung. Jadi Dzuhur + Ashar bisa dijamak dan diqashar jadi 2 rakaat + 2 rakaat di satu waktu. Ini keringanan dari Allah, Islam itu gak memberatkan.',
   ),
   Subheading('❓ "Boleh sholat pakai bahasa Indonesia?"'),
   Paragraph('Ini pertanyaan yang sering banget muncul. Jawabannya:'),
@@ -1938,14 +1938,14 @@ const _praktik3_6Article = <ArticleBlock>[
     'Bacaan rukun sholat (Al-Fatihah, takbir, ruku, sujud, tasyahud, salam) HARUS dalam bahasa Arab. Kenapa? Karena Al-Quran diturunkan dalam bahasa Arab, dan sholat itu ibadah yang udah distandarkan oleh Nabi ﷺ. Mengubah bacaan rukun = mengubah ibadah yang udah ditetapkan.',
   ),
   Paragraph(
-    'TAPI — doa tambahan di luar rukun (misalnya doa setelah tasyahud akhir, sebelum salam) boleh pakai bahasa apa aja, termasuk Indonesia. Jadi kamu bisa berdoa pakai bahasa sendiri setelah selesai bacaan wajib.',
+    'TAPI, doa tambahan di luar rukun (misalnya doa setelah tasyahud akhir, sebelum salam) boleh pakai bahasa apa aja, termasuk Indonesia. Jadi kamu bisa berdoa pakai bahasa sendiri setelah selesai bacaan wajib.',
   ),
   Highlight(
     'Bacaan rukun = Arab (wajib). Doa tambahan = bebas bahasa apa aja. Ini biar sholatmu tetap terstandar tapi tetap bisa curhat sama Allah pakai bahasamu sendiri.',
   ),
   Subheading('❓ "Sholatku belum perfect, sah gak?"'),
   Paragraph(
-    'Kalau syarat sah terpenuhi dan rukunnya ada — sah. Gak harus perfect. Nabi ﷺ sendiri ngajarin orang yang baru masuk Islam pelan-pelan. Allah tahu kamu lagi belajar.',
+    'Kalau syarat sah terpenuhi dan rukunnya ada, sah. Gak harus perfect. Nabi ﷺ sendiri ngajarin orang yang baru masuk Islam pelan-pelan. Allah tahu kamu lagi belajar.',
   ),
   Paragraph(
     'Yang penting: JANGAN BERHENTI. Sholat yang gak perfect itu lebih baik dari gak sholat sama sekali. Lama-lama bakal makin lancar. Semua orang juga mulai dari nol.',
@@ -1953,7 +1953,7 @@ const _praktik3_6Article = <ArticleBlock>[
   DividerBlock(),
   Subheading('🎉 Selamat! Kamu Udah Selesai Semua Kategori!'),
   Paragraph(
-    'Dari "Kenapa harus percaya Tuhan?" sampai "Hal yang bikin bingung pemula" — kamu udah lewatin 19 modul pembelajaran!',
+    'Dari "Kenapa harus percaya Tuhan?" sampai "Hal yang bikin bingung pemula", kamu udah lewatin 19 modul pembelajaran!',
   ),
   Paragraph(
     'Sekarang kamu punya dasar yang kuat: Akidah (kepercayaan), Rukun Islam (fondasi), dan Praktik Ibadah (cara ngelakuin). Tinggal PRAKTIKKAN. Pelan-pelan, konsisten, dan jangan pernah berhenti belajar.',
@@ -2000,7 +2000,7 @@ const _akidah1_1Quiz = <QuizQuestion>[
     ],
     correctIndex: 3,
     explanation:
-        'Hukum alam bekerja konsisten selama miliaran tahun — itu gak mungkin kebetulan. Pasti ada yang ngerancang.',
+        'Hukum alam bekerja konsisten selama miliaran tahun, itu gak mungkin kebetulan. Pasti ada yang ngerancang.',
   ),
   QuizQuestion(
     question: 'Menurut artikel, percaya pada Tuhan itu...',
@@ -2088,7 +2088,7 @@ const _akidah1_2Quiz = <QuizQuestion>[
     ],
     correctIndex: 1,
     explanation:
-        'Allah gak lahir dari siapa pun dan gak melahirkan siapa pun. Dia ada tanpa sebab — karena Dia SEBAB dari segalanya.',
+        'Allah gak lahir dari siapa pun dan gak melahirkan siapa pun. Dia ada tanpa sebab, karena Dia SEBAB dari segalanya.',
   ),
 ];
 
@@ -2117,7 +2117,7 @@ const _akidah1_3Quiz = <QuizQuestion>[
     ],
     correctIndex: 0,
     explanation:
-        'I\'jaz artinya membuat takjub. Bahasa Al-Quran itu unik — bukan puisi, bukan prosa, bukan pidato. Para penyair terbaik Arab pun gagal menandinginya.',
+        'I\'jaz artinya membuat takjub. Bahasa Al-Quran itu unik, bukan puisi, bukan prosa, bukan pidato. Para penyair terbaik Arab pun gagal menandinginya.',
   ),
   QuizQuestion(
     question:
@@ -2130,7 +2130,7 @@ const _akidah1_3Quiz = <QuizQuestion>[
     ],
     correctIndex: 2,
     explanation:
-        '23 tahun di kondisi sangat berbeda (minoritas tertindas → pemimpin negara), tapi isinya konsisten tanpa kontradiksi internal. Cobain nulis jurnal 23 tahun tanpa pernah kontradiksi diri — susah banget.',
+        '23 tahun di kondisi sangat berbeda (minoritas tertindas → pemimpin negara), tapi isinya konsisten tanpa kontradiksi internal. Cobain nulis jurnal 23 tahun tanpa pernah kontradiksi diri, susah banget.',
   ),
   QuizQuestion(
     question:
@@ -2172,7 +2172,7 @@ const _akidah1_4Quiz = <QuizQuestion>[
     ],
     correctIndex: 0,
     explanation:
-        'Al-Amin artinya \'yang terpercaya.\' Julukan ini dikasih oleh seluruh masyarakat Makkah — termasuk yang gak seiman — karena selama 40 tahun hidup di sana, dia gak pernah ketahuan bohong.',
+        'Al-Amin artinya \'yang terpercaya.\' Julukan ini dikasih oleh seluruh masyarakat Makkah, termasuk yang gak seiman, karena selama 40 tahun hidup di sana, dia gak pernah ketahuan bohong.',
   ),
   QuizQuestion(
     question:
@@ -2206,11 +2206,11 @@ const _akidah1_4Quiz = <QuizQuestion>[
       'Bergelimang harta rampasan perang yang terkumpul bertahun-tahun',
       'Berpindah-pindah dari satu kediaman megah ke kediaman lainnya',
       'Dibiayai penuh oleh para sahabatnya yang kaya raya seperti raja',
-      'Tetap sederhana — kasur dari tikar, makan sering cuma kurma dan air',
+      'Tetap sederhana, kasur dari tikar, makan sering cuma kurma dan air',
     ],
     correctIndex: 3,
     explanation:
-        'Meskipun punya kekuasaan besar, hidupnya tetap sederhana. Kekuasaannya gak dipake buat diri sendiri — ini beda banget dari raja atau diktator kebanyakan.',
+        'Meskipun punya kekuasaan besar, hidupnya tetap sederhana. Kekuasaannya gak dipake buat diri sendiri, ini beda banget dari raja atau diktator kebanyakan.',
   ),
   QuizQuestion(
     question:
@@ -2274,7 +2274,7 @@ const _akidah1_5Quiz = <QuizQuestion>[
     ],
     correctIndex: 1,
     explanation:
-        'Percaya Hari Akhir bikin hidup lebih bermakna. Kamu tahu apa yang kamu lakuin sekarang ada konsekuensinya — jadi hidup gak sekadar buat senang-senang.',
+        'Percaya Hari Akhir bikin hidup lebih bermakna. Kamu tahu apa yang kamu lakuin sekarang ada konsekuensinya, jadi hidup gak sekadar buat senang-senang.',
   ),
   QuizQuestion(
     question: 'Qada dan Qadar (takdir) berarti kamu pasif dan gak usah usaha?',
@@ -2282,11 +2282,11 @@ const _akidah1_5Quiz = <QuizQuestion>[
       'Iya, karena hasil akhir semua urusan udah ditulis sejak azali',
       'Iya, usaha itu cuma formalitas karena gak mengubah apa-apa',
       'Engga, tapi takdir cuma berlaku buat hal-hal besar dalam hidup',
-      'Engga — kamu wajib berusaha, hasilnya serahkan ke Allah',
+      'Engga, kamu wajib berusaha, hasilnya serahkan ke Allah',
     ],
     correctIndex: 3,
     explanation:
-        'Qadar itu kayak GPS: rute udah ditentukan, tapi kamu tetep harus nyetir. Kamu WAJIB berusaha — yang penting udah ngelakuin bagianmu, hasilnya urusan Allah.',
+        'Qadar itu kayak GPS: rute udah ditentukan, tapi kamu tetep harus nyetir. Kamu WAJIB berusaha, yang penting udah ngelakuin bagianmu, hasilnya urusan Allah.',
   ),
 ];
 
@@ -2297,7 +2297,7 @@ const _akidah1_6Quiz = <QuizQuestion>[
         'Apa yang menarik dari pasangan kata "ad-dunya" dan "al-akhirah" di Al-Quran?',
     options: [
       'Dua-duanya disebut dalam surah yang sama secara berurutan',
-      'Sama-sama disebut 115 kali — jumlah yang identik',
+      'Sama-sama disebut 115 kali, jumlah yang identik',
       'Dua-duanya cuma disebut di surah-surah Makkiyah aja',
       'Jumlah penyebutan keduanya sama dengan jumlah hari dalam setahun',
     ],
@@ -2309,14 +2309,14 @@ const _akidah1_6Quiz = <QuizQuestion>[
     question:
         'Berapa kali kata "yawm" (hari) dalam bentuk tunggal disebut di Al-Quran?',
     options: [
-      '360 kali — mendekati jumlah hari dalam setahun',
-      '365 kali — tepat sama dengan jumlah hari dalam setahun',
-      '354 kali — sesuai tahun Hijriyah (kalender bulan)',
-      '7 kali — jumlah hari dalam seminggu',
+      '360 kali, mendekati jumlah hari dalam setahun',
+      '365 kali, tepat sama dengan jumlah hari dalam setahun',
+      '354 kali, sesuai tahun Hijriyah (kalender bulan)',
+      '7 kali, jumlah hari dalam seminggu',
     ],
     correctIndex: 1,
     explanation:
-        'Kata "yawm" (hari) dalam bentuk tunggal disebut 365 kali — persis jumlah hari dalam setahun. Sementara bentuk jamaknya (ayyam) disebut 30 kali — jumlah hari dalam sebulan.',
+        'Kata "yawm" (hari) dalam bentuk tunggal disebut 365 kali, persis jumlah hari dalam setahun. Sementara bentuk jamaknya (ayyam) disebut 30 kali, jumlah hari dalam sebulan.',
   ),
   QuizQuestion(
     question:
@@ -2329,7 +2329,7 @@ const _akidah1_6Quiz = <QuizQuestion>[
     ],
     correctIndex: 1,
     explanation:
-        'Laut disebut 32x, darat 13x. Total 45. 32/45 = 71,1% dan 13/45 = 28,9%. Ini cocok dengan proporsi air (71%) dan daratan (29%) di bumi — yang baru diketahui setelah satelit modern.',
+        'Laut disebut 32x, darat 13x. Total 45. 32/45 = 71,1% dan 13/45 = 28,9%. Ini cocok dengan proporsi air (71%) dan daratan (29%) di bumi, yang baru diketahui setelah satelit modern.',
   ),
   QuizQuestion(
     question:
@@ -2337,7 +2337,7 @@ const _akidah1_6Quiz = <QuizQuestion>[
     options: [
       'Harus langsung percaya karena ini bukti paling kuat dari semua bukti',
       'Anggap saja kebetulan karena manusia memang suka mencari pola',
-      'Pikirkan sendiri — dua-duanya valid, tapi makin banyak pola makin kecil kemungkinan kebetulan',
+      'Pikirkan sendiri, dua-duanya valid, tapi makin banyak pola makin kecil kemungkinan kebetulan',
       'Komentari bahwa hitungan ini hanya ditemukan ilmuwan modern jadi gak valid',
     ],
     correctIndex: 2,
@@ -2354,7 +2354,7 @@ const _akidah1_6Quiz = <QuizQuestion>[
     ],
     correctIndex: 2,
     explanation:
-        'Pola-pola ini baru ditemukan setelah penelitian komputer modern yang menganalisis frekuensi kata di seluruh Al-Quran. Ini yang bikin makin menarik — teknologi modern makin ngebuktiin kedalaman Al-Quran.',
+        'Pola-pola ini baru ditemukan setelah penelitian komputer modern yang menganalisis frekuensi kata di seluruh Al-Quran. Ini yang bikin makin menarik, teknologi modern makin ngebuktiin kedalaman Al-Quran.',
   ),
 ];
 
@@ -2366,7 +2366,7 @@ const _akidah1_7Quiz = <QuizQuestion>[
     options: ['7', '19', '99', '313'],
     correctIndex: 1,
     explanation:
-        'QS. Al-Muddassir: 30 — "Di atasnya ada 19 (malaikat penjaga)." Angka 19 muncul dalam banyak pola di Al-Quran: Basmalah 19 huruf, 114 surah (19×6), dll.',
+        'QS. Al-Muddassir: 30, "Di atasnya ada 19 (malaikat penjaga)." Angka 19 muncul dalam banyak pola di Al-Quran: Basmalah 19 huruf, 114 surah (19×6), dll.',
   ),
   QuizQuestion(
     question: 'Berapa jumlah total surah dalam Al-Quran?',
@@ -2378,7 +2378,7 @@ const _akidah1_7Quiz = <QuizQuestion>[
     question:
         'Apa hubungan nomor Surah Al-Ikhlas (112) dengan jumlah ayatnya (4)?',
     options: [
-      'Tidak ada hubungan — ini murni kebetulan biasa',
+      'Tidak ada hubungan, ini murni kebetulan biasa',
       '1+1+2=4, sama dengan jumlah ayatnya',
       '112 - 4 = 108, jumlah surah lain yang belum disebut',
       '112 ÷ 4 = 28, jumlah huruf hijaiyah dalam bahasa Arab',
@@ -2390,14 +2390,14 @@ const _akidah1_7Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'Berapa kali kata "shalawat" (sholat) disebut dalam Al-Quran?',
     options: [
-      '17 kali — jumlah rakaat sholat wajib sehari',
-      '5 kali — jumlah sholat wajib sehari semalam',
-      '3 kali — jumlah sholat yang dijamak saat safar',
-      '12 kali — jumlah rakaat sholat sunnah rawatib',
+      '17 kali, jumlah rakaat sholat wajib sehari',
+      '5 kali, jumlah sholat wajib sehari semalam',
+      '3 kali, jumlah sholat yang dijamak saat safar',
+      '12 kali, jumlah rakaat sholat sunnah rawatib',
     ],
     correctIndex: 1,
     explanation:
-        'Kata "shalawat" (sholat) disebut 5 kali dalam Al-Quran — sama dengan jumlah sholat wajib sehari semalam.',
+        'Kata "shalawat" (sholat) disebut 5 kali dalam Al-Quran, sama dengan jumlah sholat wajib sehari semalam.',
   ),
   QuizQuestion(
     question:
@@ -2410,7 +2410,7 @@ const _akidah1_7Quiz = <QuizQuestion>[
     ],
     correctIndex: 2,
     explanation:
-        'Bukan satu-dua pola — tapi puluhan/ratusan, semuanya konsisten. Semakin banyak polanya, semakin kecil kemungkinan itu semua kebetulan belaka.',
+        'Bukan satu-dua pola, tapi puluhan/ratusan, semuanya konsisten. Semakin banyak polanya, semakin kecil kemungkinan itu semua kebetulan belaka.',
   ),
 ];
 
@@ -2446,13 +2446,13 @@ const _akidah1_8Quiz = <QuizQuestion>[
         'Kenapa Al-Quran nyebut "jari-jemari" secara spesifik dalam QS. Al-Qiyamah: 4?',
     options: [
       'Karena jari adalah anggota tubuh yang paling sering digunakan',
-      'Karena sidik jari setiap manusia unik — bahkan kembar identik pun beda',
+      'Karena sidik jari setiap manusia unik, bahkan kembar identik pun beda',
       'Karena jumlah ruas jari (14) sama dengan jumlah sujud dalam sholat',
       'Karena jari adalah simbol kekuatan dan ketangkasan manusia',
     ],
     correctIndex: 1,
     explanation:
-        'Kenapa Al-Quran spesifik nyebut jari? Karena sidik jari tiap manusia UNIK — fakta yang baru ditemukan sains abad ke-19. Al-Quran udah ngasih tahu 12 abad sebelumnya.',
+        'Kenapa Al-Quran spesifik nyebut jari? Karena sidik jari tiap manusia UNIK, fakta yang baru ditemukan sains abad ke-19. Al-Quran udah ngasih tahu 12 abad sebelumnya.',
   ),
   QuizQuestion(
     question:
@@ -2465,7 +2465,7 @@ const _akidah1_8Quiz = <QuizQuestion>[
     ],
     correctIndex: 2,
     explanation:
-        'Diturunkan 23 tahun, di Makkah dan Madinah, kondisi minoritas vs pemimpin negara — tapi nol kontradiksi. Allah nantang di QS. An-Nisa\': 82 — cari kontradiksi kalau bisa.',
+        'Diturunkan 23 tahun, di Makkah dan Madinah, kondisi minoritas vs pemimpin negara, tapi nol kontradiksi. Allah nantang di QS. An-Nisa\': 82, cari kontradiksi kalau bisa.',
   ),
   QuizQuestion(
     question:
@@ -2478,7 +2478,7 @@ const _akidah1_8Quiz = <QuizQuestion>[
     ],
     correctIndex: 1,
     explanation:
-        'Delapan bukti dari sisi berbeda — bahasa, sejarah, sains, angka, preservasi, nubuatan, dampak manusia — semuanya mengarah ke kesimpulan yang sama. Masing-masing mungkin bisa dijawab, tapi bersama-sama jadi sangat kuat.',
+        'Delapan bukti dari sisi berbeda, bahasa, sejarah, sains, angka, preservasi, nubuatan, dampak manusia, semuanya mengarah ke kesimpulan yang sama. Masing-masing mungkin bisa dijawab, tapi bersama-sama jadi sangat kuat.',
   ),
 ];
 
@@ -2493,19 +2493,19 @@ const _rukun2_1Quiz = <QuizQuestion>[
     ],
     correctIndex: 1,
     explanation:
-        'Rukun artinya tiang penopang. Kelimanya wajib dan saling ngisi — gak bisa pilih-pilih.',
+        'Rukun artinya tiang penopang. Kelimanya wajib dan saling ngisi, gak bisa pilih-pilih.',
   ),
   QuizQuestion(
     question: 'Apa fungsi Sholat dalam kehidupan seorang Muslim?',
     options: [
-      'Cara ngobrol langsung sama Allah — appointment tetap 5 kali sehari',
+      'Cara ngobrol langsung sama Allah, appointment tetap 5 kali sehari',
       'Ritual penghapus dosa yang dilakukan saat merasa bersalah aja',
       'Peregangan badan yang menyehatkan di lima waktu yang berbeda',
       'Kewajiban sosial biar dianggap Muslim yang baik oleh tetangga',
     ],
     correctIndex: 0,
     explanation:
-        'Sholat itu "appointment" tetap kamu sama Tuhan — 5 kali sehari, gak bisa di-delegate atau di-skip.',
+        'Sholat itu "appointment" tetap kamu sama Tuhan, 5 kali sehari, gak bisa di-delegate atau di-skip.',
   ),
   QuizQuestion(
     question: 'Zakat itu beda dari pajak karena...',
@@ -2513,11 +2513,11 @@ const _rukun2_1Quiz = <QuizQuestion>[
       'Zakat jumlahnya jauh lebih besar daripada pajak pemerintah',
       'Zakat cuma dibayarkan setahun sekali pas bulan Ramadan aja',
       'Zakat dikelola langsung oleh masjid tanpa ada aturan tertentu',
-      'Zakat itu pembersihan harta — ada hak orang lain di hartamu',
+      'Zakat itu pembersihan harta, ada hak orang lain di hartamu',
     ],
     correctIndex: 3,
     explanation:
-        'Zakat bukan pajak — ini pembersihan harta. Konsepnya: hartamu gak 100% milikmu, ada hak orang lain di situ.',
+        'Zakat bukan pajak, ini pembersihan harta. Konsepnya: hartamu gak 100% milikmu, ada hak orang lain di situ.',
   ),
   QuizQuestion(
     question:
@@ -2530,7 +2530,7 @@ const _rukun2_1Quiz = <QuizQuestion>[
     ],
     correctIndex: 2,
     explanation:
-        'Puasa melatih disiplin dan empati. Bukan cuma tahan makan — tapi juga tahan emosi, gossip, dan hal negatif.',
+        'Puasa melatih disiplin dan empati. Bukan cuma tahan makan, tapi juga tahan emosi, gossip, dan hal negatif.',
   ),
   QuizQuestion(
     question: 'Kapan wajib Haji?',
@@ -2542,7 +2542,7 @@ const _rukun2_1Quiz = <QuizQuestion>[
     ],
     correctIndex: 0,
     explanation:
-        'Haji wajib sekali seumur hidup kalau mampu. Di sana, jutaan orang dari seluruh dunia berkumpul — gak ada bedanya kaya-miskin.',
+        'Haji wajib sekali seumur hidup kalau mampu. Di sana, jutaan orang dari seluruh dunia berkumpul, gak ada bedanya kaya-miskin.',
   ),
 ];
 
@@ -2557,7 +2557,7 @@ const _rukun2_2Quiz = <QuizQuestion>[
     ],
     correctIndex: 3,
     explanation:
-        'Bukan cuma bilang \'Tuhan ada\' — tapi juga \'Dia aja yang layak aku sembah dan taati.\' Ini soal prioritas hidup.',
+        'Bukan cuma bilang \'Tuhan ada\', tapi juga \'Dia aja yang layak aku sembah dan taati.\' Ini soal prioritas hidup.',
   ),
   QuizQuestion(
     question: 'Apa konsekuensi mengucapkan "Muhammadur Rasulullah"?',
@@ -2569,7 +2569,7 @@ const _rukun2_2Quiz = <QuizQuestion>[
     ],
     correctIndex: 1,
     explanation:
-        'Kalau beneran percaya dia utusan Tuhan, maka logisnya: ikutin ajarannya. Kayak percaya sama mentor — pasti ikutin saran dia.',
+        'Kalau beneran percaya dia utusan Tuhan, maka logisnya: ikutin ajarannya. Kayak percaya sama mentor, pasti ikutin saran dia.',
   ),
   QuizQuestion(
     question: '"Laa ilaaha illallah" dalam kehidupan sehari-hari artinya...',
@@ -2598,14 +2598,14 @@ const _rukun2_2Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'Syahadat itu akhir dari perjalanan spiritual?',
     options: [
-      'Iya — begitu diucapkan, kewajiban utama seorang Muslim selesai',
-      'Engga — itu titik awal, perjalanannya justru baru aja dimulai',
+      'Iya, begitu diucapkan, kewajiban utama seorang Muslim selesai',
+      'Engga, itu titik awal, perjalanannya justru baru aja dimulai',
       'Iya, sisanya cuma pelengkap yang sifatnya gak terlalu penting',
       'Tergantung seberapa dalam pemahaman orang yang mengucapkannya',
     ],
     correctIndex: 1,
     explanation:
-        'Syahadat bukan finish line — itu starting line. Komitmen seumur hidup yang baru aja dimulai.',
+        'Syahadat bukan finish line, itu starting line. Komitmen seumur hidup yang baru aja dimulai.',
   ),
 ];
 
@@ -2613,7 +2613,7 @@ const _rukun2_3Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'Inti puasa Ramadan itu bukan cuma tahan lapar, tapi...',
     options: [
-      'Latihan ngendaliin diri — emosi, nafsu, dan keinginan',
+      'Latihan ngendaliin diri, emosi, nafsu, dan keinginan',
       'Membersihkan racun di dalam tubuh selama satu bulan penuh',
       'Menabung uang belanja makan buat persiapan hari Lebaran',
       'Membuktikan ketaatan kita ke keluarga dan tetangga sekitar',
@@ -2661,9 +2661,9 @@ const _rukun2_3Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'Puasa Ramadan itu hukuman atau pelatihan?',
     options: [
-      'Hukuman — penebus dosa-dosa yang dilakukan setahun penuh',
+      'Hukuman, penebus dosa-dosa yang dilakukan setahun penuh',
       'Dua-duanya, tergantung banyaknya dosa orang yang menjalani',
-      'Pelatihan — melatih disiplin, empati, dan ketergantungan pada Allah',
+      'Pelatihan, melatih disiplin, empati, dan ketergantungan pada Allah',
       'Ujian fisik tahunan buat mengukur kekuatan iman seseorang',
     ],
     correctIndex: 2,
@@ -2695,12 +2695,12 @@ const _rukun2_4Quiz = <QuizQuestion>[
     ],
     correctIndex: 1,
     explanation:
-        'Zakat = wajib dengan aturan ketat (2.5%, nisab, haul). Infaq = sunnah, berbagi harta. Sedekah = sunnah, lebih luas — bahkan senyum aja udah sedekah.',
+        'Zakat = wajib dengan aturan ketat (2.5%, nisab, haul). Infaq = sunnah, berbagi harta. Sedekah = sunnah, lebih luas, bahkan senyum aja udah sedekah.',
   ),
   QuizQuestion(
     question: 'Kenapa zakat bisa kurangi kesenjangan sosial?',
     options: [
-      'Yang punya lebih ngasih 2.5% ke yang butuh — kekayaan terdistribusi',
+      'Yang punya lebih ngasih 2.5% ke yang butuh, kekayaan terdistribusi',
       'Karena zakat memaksa orang kaya hidup sederhana seperti lainnya',
       'Karena semua hasil zakat dipakai buat membangun fasilitas umum',
       'Karena penerima zakat wajib memakai uangnya buat modal usaha',
@@ -2715,23 +2715,23 @@ const _rukun2_4Quiz = <QuizQuestion>[
       'Takut hartanya jadi gak berkah kalau gak segera dikeluarkan',
       'Mengharap pujian dan penghormatan dari masyarakat sekitar',
       'Menggugurkan kewajiban biar gak ditagih pengurus masjid',
-      'Cinta — percaya itu hak mereka, dan mau hartamu bersih dan berkah',
+      'Cinta, percaya itu hak mereka, dan mau hartamu bersih dan berkah',
     ],
     correctIndex: 3,
     explanation:
-        'Zakat motivasinya cinta, bukan paksaan. Kamu ngasih karena percaya itu hak mereka dan karena kamu sayang hartamu sendiri — mau yang bersih dan berkah.',
+        'Zakat motivasinya cinta, bukan paksaan. Kamu ngasih karena percaya itu hak mereka dan karena kamu sayang hartamu sendiri, mau yang bersih dan berkah.',
   ),
   QuizQuestion(
     question: 'Sedekah itu cuma soal uang?',
     options: [
-      'Engga — senyum, nolong orang, bahkan buang duri dari jalan pun sedekah',
+      'Engga, senyum, nolong orang, bahkan buang duri dari jalan pun sedekah',
       'Iya, harus berupa uang tunai biar jelas nilai dan manfaatnya',
       'Uang atau barang berharga, yang penting bisa dihitung nilainya',
       'Iya, tapi khusus buat keluarga boleh diganti bantuan tenaga',
     ],
     correctIndex: 0,
     explanation:
-        'Sedekah itu lebih luas dari uang. Senyum, nolong orang, ngasih ilmu, bahkan buang duri dari jalan — semua itu sedekah.',
+        'Sedekah itu lebih luas dari uang. Senyum, nolong orang, ngasih ilmu, bahkan buang duri dari jalan, semua itu sedekah.',
   ),
 ];
 
@@ -2754,11 +2754,11 @@ const _rukun2_5Quiz = <QuizQuestion>[
       'Karena warna putih paling tahan panas di cuaca gurun Arab',
       'Biar petugas gampang membedakan jamaah dari penduduk lokal',
       'Mengikuti tradisi pakaian bangsa Arab sejak sebelum masa Islam',
-      'Simbol kesetaraan — di depan Allah semua sama, gak ada beda harta',
+      'Simbol kesetaraan, di depan Allah semua sama, gak ada beda harta',
     ],
     correctIndex: 3,
     explanation:
-        'Ihram = baju putih tanpa merek. Presiden, buruh, pengusaha — semua sama. Yang membedakan di mata Allah bukan harta, tapi ketakwaan.',
+        'Ihram = baju putih tanpa merek. Presiden, buruh, pengusaha, semua sama. Yang membedakan di mata Allah bukan harta, tapi ketakwaan.',
   ),
   QuizQuestion(
     question: 'Apa makna tawaf (keliling Ka\'bah 7x)?',
@@ -2770,12 +2770,12 @@ const _rukun2_5Quiz = <QuizQuestion>[
     ],
     correctIndex: 2,
     explanation:
-        'Tawaf = simbol hidup berpusat pada Allah. Seperti planet yang mengorbit — hidupmu harus berputar di sekitar-Nya.',
+        'Tawaf = simbol hidup berpusat pada Allah. Seperti planet yang mengorbit, hidupmu harus berputar di sekitar-Nya.',
   ),
   QuizQuestion(
     question: 'Kalau belum mampu haji secara finansial, apa yang terjadi?',
     options: [
-      'Gak wajib — Allah gak membebankan di luar batas kemampuan',
+      'Gak wajib, Allah gak membebankan di luar batas kemampuan',
       'Tetap wajib berangkat dengan cara mencicil atau meminjam',
       'Berdosa kecil yang bisa dihapus dengan memperbanyak sedekah',
       'Kewajibannya pindah ke anak yang wajib menghajikan orang tuanya',
@@ -2790,11 +2790,11 @@ const _rukun2_5Quiz = <QuizQuestion>[
       'Mengusir gangguan jin yang berkumpul di lembah kota Mina',
       'Melambangkan perang melawan musuh-musuh Islam zaman dulu',
       'Membuang sial dan penyakit supaya gak terbawa pulang ke rumah',
-      'Simbol nolak godaan setan — dari yang kecil sampai yang besar',
+      'Simbol nolak godaan setan, dari yang kecil sampai yang besar',
     ],
     correctIndex: 3,
     explanation:
-        'Melempar jumrah = simbol nolak godaan setan. Dari jumrah kecil, sedang, sampai besar — makin lama makin tegas nolaknya.',
+        'Melempar jumrah = simbol nolak godaan setan. Dari jumrah kecil, sedang, sampai besar, makin lama makin tegas nolaknya.',
   ),
 ];
 
@@ -2822,13 +2822,13 @@ const _praktik3_1Quiz = <QuizQuestion>[
     question: 'Usap kepala dilakukan berapa kali?',
     options: [
       '3 kali, sama seperti basuhan anggota wudhu yang lainnya',
-      '1 kali aja — dari depan ke belakang, balik lagi ke depan',
+      '1 kali aja, dari depan ke belakang, balik lagi ke depan',
       '2 kali dengan air yang diganti di tiap-tiap usapannya',
       '7 kali sambil membaca niat wudhu di dalam hati',
     ],
     correctIndex: 1,
     explanation:
-        'Usap kepala cukup 1 kali — dari depan ke belakang, balik lagi ke depan. Berbeda dari basuhan lain yang 3 kali.',
+        'Usap kepala cukup 1 kali, dari depan ke belakang, balik lagi ke depan. Berbeda dari basuhan lain yang 3 kali.',
   ),
   QuizQuestion(
     question: 'Apa yang batalin wudhu?',
@@ -2847,7 +2847,7 @@ const _praktik3_1Quiz = <QuizQuestion>[
         'Kalau wudhu udah tapi belum batal, bisa dipake buat sholat berikutnya?',
     options: [
       'Engga, satu wudhu cuma berlaku buat satu kali sholat wajib',
-      'Bisa — selama belum batal, wudhunya tetap sah dipakai lagi',
+      'Bisa, selama belum batal, wudhunya tetap sah dipakai lagi',
       'Bisa, tapi khusus buat sholat sunnah aja, bukan yang wajib',
       'Engga, kecuali jarak antar sholatnya kurang dari satu jam',
     ],
@@ -2895,7 +2895,7 @@ const _praktik3_2Quiz = <QuizQuestion>[
       'Berdiri tegak dengan menghadap ke arah kiblat',
       'Membaca niat sholat di dalam hati dengan khusyuk',
       'Membaca Surat Al-Fatihah dari ayat yang pertama',
-      'Takbiratul ihram — "Allahu Akbar" sambil angkat tangan',
+      'Takbiratul ihram, "Allahu Akbar" sambil angkat tangan',
     ],
     correctIndex: 3,
     explanation:
@@ -2906,7 +2906,7 @@ const _praktik3_2Quiz = <QuizQuestion>[
     options: [
       'Sah, karena yang paling penting adalah niat di dalam hati',
       'Sah selama telatnya belum melewati waktu sholat berikutnya',
-      'Gak sah — masuk waktu adalah salah satu syarat sah sholat',
+      'Gak sah, masuk waktu adalah salah satu syarat sah sholat',
       'Sah kalau dikerjakan berjamaah bersama imam di masjid',
     ],
     correctIndex: 2,
@@ -2929,11 +2929,11 @@ const _praktik3_3Quiz = <QuizQuestion>[
       'Doa iftitah sebagai pembuka bacaan rakaat pertama',
       'Langsung ruku sambil membaca kalimat Allahu Akbar',
       'Dua kalimat syahadat sebelum gerakan berikutnya',
-      'Surah pendek — pemula disarankan baca Al-Ikhlas',
+      'Surah pendek, pemula disarankan baca Al-Ikhlas',
     ],
     correctIndex: 3,
     explanation:
-        'Setelah Al-Fatihah, baca surah pendek. Disarankan Al-Ikhlas untuk pemula — pendek dan gampang dihafal.',
+        'Setelah Al-Fatihah, baca surah pendek. Disarankan Al-Ikhlas untuk pemula, pendek dan gampang dihafal.',
   ),
   QuizQuestion(
     question: 'Posisi ruku yang benar itu...',
@@ -2965,7 +2965,7 @@ const _praktik3_3Quiz = <QuizQuestion>[
       'Berpindah dari rakaat genap menuju rakaat yang ganjil',
       'Memasuki bagian doa-doa tambahan sebelum berdzikir',
       'Sedang memberi hormat kepada imam dan para makmum',
-      'SELESAI — ini tanda resmi berakhirnya sholat',
+      'SELESAI, ini tanda resmi berakhirnya sholat',
     ],
     correctIndex: 3,
     explanation:
@@ -2980,7 +2980,7 @@ const _praktik3_4Quiz = <QuizQuestion>[
       'Cukup di rakaat pertama karena rakaat lain mengikutinya',
       'Di rakaat pertama dan terakhir, sebagai pembuka dan penutup',
       'Boleh dilewati kalau imam sudah membacanya dengan keras',
-      'Di setiap rakaat — wajib, tanpa Al-Fatihah rakaatnya gak sah',
+      'Di setiap rakaat, wajib, tanpa Al-Fatihah rakaatnya gak sah',
     ],
     correctIndex: 3,
     explanation:
@@ -3026,7 +3026,7 @@ const _praktik3_4Quiz = <QuizQuestion>[
     question: 'Modul ini (cheat-sheet) berguna buat apa?',
     options: [
       'Bahan wajib yang harus dihafal seluruhnya dalam satu hari',
-      'Referensi cepat — semua bacaan sholat ada di satu tempat',
+      'Referensi cepat, semua bacaan sholat ada di satu tempat',
       'Pengganti praktik sholat kalau lagi gak sempat mengerjakan',
       'Materi khusus buat yang mau jadi imam sholat berjamaah',
     ],
@@ -3072,7 +3072,7 @@ const _praktik3_5Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'Kenapa Subuh cuma 2 rakaat?',
     options: [
-      'Karena waktunya pendek — dari fajar sampai terbit matahari',
+      'Karena waktunya pendek, dari fajar sampai terbit matahari',
       'Karena Allah kasih keringanan buat orang yang baru bangun',
       'Karena dulu Nabi ﷺ mengqashar sholat Subuh saat perjalanan',
       'Karena rakaatnya digenapi oleh sholat sunnah qabliyah',
@@ -3094,19 +3094,19 @@ const _praktik3_6Quiz = <QuizQuestion>[
     ],
     correctIndex: 1,
     explanation:
-        'Ambil yang lebih sedikit, tambah sujud sahwi setelah salam. Lupa itu manusiawi — gak usah panik.',
+        'Ambil yang lebih sedikit, tambah sujud sahwi setelah salam. Lupa itu manusiawi, gak usah panik.',
   ),
   QuizQuestion(
     question: 'Gak hafal surah pendek selain Al-Fatihah, gimana?',
     options: [
       'Tunda dulu sholatnya sampai hafal minimal tiga surah pendek',
       'Baca terjemahan Indonesianya sebagai pengganti surah pendek',
-      'Gak masalah — Al-Fatihah aja udah cukup, sisanya nyusul',
+      'Gak masalah, Al-Fatihah aja udah cukup, sisanya nyusul',
       'Ulangi bacaan Al-Fatihah dua kali di setiap rakaatnya',
     ],
     correctIndex: 2,
     explanation:
-        'Al-Fatihah itu yang wajib. Surah pendek itu tambahan — boleh surah apa saja yang dihafal. Fokus hafalin Al-Fatihah dulu.',
+        'Al-Fatihah itu yang wajib. Surah pendek itu tambahan, boleh surah apa saja yang dihafal. Fokus hafalin Al-Fatihah dulu.',
   ),
   QuizQuestion(
     question: 'Sholat qashar artinya...',
@@ -3126,18 +3126,18 @@ const _praktik3_6Quiz = <QuizQuestion>[
       'Boleh, karena Allah memahami semua bahasa hamba-Nya',
       'Boleh khusus pemula, sampai dia hafal bacaan Arabnya',
       'Tergantung kebiasaan masjid dan imam di tiap daerah',
-      'Tidak — rukun harus Arab; doa tambahan bebas bahasanya',
+      'Tidak, rukun harus Arab; doa tambahan bebas bahasanya',
     ],
     correctIndex: 3,
     explanation:
         'Rukun = Arab (wajib, karena Al-Quran dalam bahasa Arab dan sholat distandarkan Nabi). Doa tambahan = bebas bahasa apa aja.',
   ),
   QuizQuestion(
-    question: 'Sholat belum perfect, tapi udah berusaha — sah gak?',
+    question: 'Sholat belum perfect, tapi udah berusaha, sah gak?',
     options: [
       'Belum sah sampai semua bacaan fasih dan gerakannya tepat',
       'Sah cuma kalau dikerjakan berjamaah di belakang imam',
-      'Sah — asal syarat sah terpenuhi dan rukunnya lengkap',
+      'Sah, asal syarat sah terpenuhi dan rukunnya lengkap',
       'Sahnya setengah, jadi pahalanya juga dapat setengahnya',
     ],
     correctIndex: 2,
@@ -3262,7 +3262,7 @@ const _quran1Article = <ArticleBlock>[
     'Saat ingin menilai sebuah pesan, mulai dari pertanyaan paling sederhana: pesan itu mengaku berasal dari siapa? Al-Quran menyatakan dirinya sebagai petunjuk dari Allah, bukan pendapat Nabi Muhammad ﷺ.',
   ),
   Highlight(
-    '“Kitab ini tidak ada keraguan padanya; petunjuk bagi orang bertakwa.” — QS. Al-Baqarah 2:2',
+    '“Kitab ini tidak ada keraguan padanya; petunjuk bagi orang bertakwa.”, QS. Al-Baqarah 2:2',
   ),
   Subheading('Bukan sekadar buku motivasi'),
   Paragraph(
@@ -3272,7 +3272,7 @@ const _quran1Article = <ArticleBlock>[
     'Al-Quran juga tidak meminta iman buta. Ia berulang kali mengajak kita berpikir, memperhatikan, dan merenung.',
   ),
   Highlight(
-    '“Maka apakah mereka tidak mentadabburi Al-Quran?” — QS. Muhammad 47:24',
+    '“Maka apakah mereka tidak mentadabburi Al-Quran?”, QS. Muhammad 47:24',
   ),
   Cta(
     'Mulailah dengan sikap jujur: baca, pahami, lalu nilai alasan untuk beriman.',
@@ -3288,14 +3288,14 @@ const _quran2Article = <ArticleBlock>[
     'Beliau tidak dikenal sebagai penyair atau penulis kitab. Ketika wahyu datang, beliau menyampaikannya meski menghadapi ejekan, tekanan, dan penolakan.',
   ),
   Highlight(
-    '“Engkau sebelumnya tidak pernah membaca suatu kitab dan tidak pula menulisnya dengan tangan kananmu.” — QS. Al-‘Ankabut 29:48',
+    '“Engkau sebelumnya tidak pernah membaca suatu kitab dan tidak pula menulisnya dengan tangan kananmu.”, QS. Al-‘Ankabut 29:48',
   ),
   Subheading('Akhlaknya menjadi bagian dari bukti'),
   Paragraph(
     'Kejujuran tidak otomatis membuktikan semua ucapan seseorang. Namun akhlak Nabi ﷺ membuat kesaksiannya pantas didengar dan diteliti, bukan langsung ditolak.',
   ),
   Highlight(
-    '“Sesungguhnya engkau benar-benar berbudi pekerti yang agung.” — QS. Al-Qalam 68:4',
+    '“Sesungguhnya engkau benar-benar berbudi pekerti yang agung.”, QS. Al-Qalam 68:4',
   ),
   Cta(
     'Kenali Nabi ﷺ melalui sirah yang tepercaya. Iman tumbuh lebih kuat ketika mengenal orang yang membawa risalahnya.',
@@ -3308,7 +3308,7 @@ const _quran3Article = <ArticleBlock>[
     'Al-Quran menyampaikan tantangan terbuka: bila ragu bahwa ia dari Allah, buatlah satu surah yang serupa. Tantangan ini bukan lomba membuat kalimat indah saja.',
   ),
   Highlight(
-    '“Datangkanlah satu surah yang semisal dengannya.” — QS. Al-Baqarah 2:23',
+    '“Datangkanlah satu surah yang semisal dengannya.”, QS. Al-Baqarah 2:23',
   ),
   Paragraph(
     'Bagi Muslim, keistimewaan Al-Quran terlihat pada susunan bahasanya, kedalaman maknanya, pengaruhnya, dan pesan yang tetap hidup saat dibaca lintas zaman.',
@@ -3318,7 +3318,7 @@ const _quran3Article = <ArticleBlock>[
     'Kita tidak perlu menerima pujian terhadap Al-Quran tanpa belajar. Dengarkan bacaannya, baca terjemahnya, dan lihat bagaimana satu ayat bisa berbicara kepada akal sekaligus hati.',
   ),
   Highlight(
-    '“Katakanlah: Jika manusia dan jin berkumpul untuk membuat yang serupa Al-Quran ini, mereka tidak akan mampu.” — QS. Al-Isra 17:88',
+    '“Katakanlah: Jika manusia dan jin berkumpul untuk membuat yang serupa Al-Quran ini, mereka tidak akan mampu.”, QS. Al-Isra 17:88',
   ),
   Cta(
     'Ambil satu surah pendek hari ini. Baca artinya, lalu tanyakan: pesan apa yang sedang dibawa ayat ini?',
@@ -3334,14 +3334,14 @@ const _quran4Article = <ArticleBlock>[
     'Setelah Nabi ﷺ wafat, mushaf dikumpulkan dan disalin agar bacaan umat tetap terjaga. Hafalan banyak orang dan tulisan saling menguatkan.',
   ),
   Highlight(
-    '“Kamilah yang menurunkan Al-Quran dan Kami pula yang menjaganya.” — QS. Al-Hijr 15:9',
+    '“Kamilah yang menurunkan Al-Quran dan Kami pula yang menjaganya.”, QS. Al-Hijr 15:9',
   ),
   Subheading('Terjaga bukan berarti tak perlu belajar'),
   Paragraph(
     'Janji penjagaan ini tidak menggantikan usaha manusia. Justru umat menjaga Al-Quran dengan menghafal, mengajarkan tajwid, menyalin mushaf, dan memeriksa bacaan dari guru ke guru.',
   ),
   Highlight(
-    '“Sesungguhnya atas tanggungan Kami pengumpulannya dan pembacaannya.” — QS. Al-Qiyamah 75:17',
+    '“Sesungguhnya atas tanggungan Kami pengumpulannya dan pembacaannya.”, QS. Al-Qiyamah 75:17',
   ),
   Cta(
     'Coba dengarkan satu surah dari qari tepercaya sambil membuka mushaf. Rasakan bagaimana bacaan dan tulisan bertemu dalam satu teks yang sama.',
@@ -3540,7 +3540,7 @@ const _quran5Article = <ArticleBlock>[
     'Meski turun bertahap, pesannya tetap satu: sembahlah Allah, berbuat baik, berlaku adil, dan ingat bahwa hidup akan dipertanggungjawabkan.',
   ),
   Highlight(
-    '“Sekiranya Al-Quran itu bukan dari sisi Allah, tentu mereka mendapati banyak pertentangan di dalamnya.” — QS. An-Nisa 4:82',
+    '“Sekiranya Al-Quran itu bukan dari sisi Allah, tentu mereka mendapati banyak pertentangan di dalamnya.”, QS. An-Nisa 4:82',
   ),
   Subheading('Konsisten bukan berarti semua ayat sama'),
   Paragraph(
@@ -3561,7 +3561,7 @@ const _quran6Article = <ArticleBlock>[
     'Tanyakan: apakah ayatnya dipahami sesuai konteks? Apakah angka atau data ilmiahnya benar? Apakah penjelasannya datang dari sumber yang tepercaya? Jika belum jelas, lebih aman mengatakan “saya perlu cek lagi”.',
   ),
   Highlight(
-    '“Kami akan memperlihatkan kepada mereka tanda-tanda Kami di segenap ufuk dan pada diri mereka sendiri.” — QS. Fussilat 41:53',
+    '“Kami akan memperlihatkan kepada mereka tanda-tanda Kami di segenap ufuk dan pada diri mereka sendiri.”, QS. Fussilat 41:53',
   ),
   Paragraph(
     'Alam dapat menambah rasa kagum kepada Allah. Namun fondasi iman tetap lebih kokoh bila dibangun dari pesan Al-Quran, akhlak Nabi ﷺ, dan pengalaman menjalankan petunjuknya.',
@@ -3578,7 +3578,7 @@ const _quran7Article = <ArticleBlock>[
     'Setelah melihat klaim Al-Quran, mengenal Nabi ﷺ, memperhatikan tantangannya, dan memahami penjagaannya, langkah berikutnya adalah jujur pada diri sendiri: apakah saya mau mengikuti petunjuk ini?',
   ),
   Highlight(
-    '“Maka apakah mereka tidak mentadabburi Al-Quran, ataukah hati mereka terkunci?” — QS. Muhammad 47:24',
+    '“Maka apakah mereka tidak mentadabburi Al-Quran, ataukah hati mereka terkunci?”, QS. Muhammad 47:24',
   ),
   Subheading('Beriman lalu bertumbuh'),
   Paragraph(
@@ -3848,7 +3848,7 @@ const _why1Article = <ArticleBlock>[
     'Iman yang dipilih tidak berarti membenci masa lalu. Justru kita menghargai warisan baik, lalu memeriksanya dengan jujur: apa yang aku yakini, dan mengapa aku meyakininya?',
   ),
   Highlight(
-    '“Janganlah kamu mengikuti sesuatu yang tidak kamu ketahui.” — QS. Al-Isra 17:36',
+    '“Janganlah kamu mengikuti sesuatu yang tidak kamu ketahui.”, QS. Al-Isra 17:36',
   ),
   Paragraph(
     'Bertanya bukan tanda durhaka. Pertanyaan yang jujur dapat menjadi pintu belajar, selama kita mau mencari jawaban dengan rendah hati.',
@@ -3864,7 +3864,7 @@ const _why2Article = <ArticleBlock>[
     'Hidup mudah terasa kosong bila hanya mengejar nilai, pekerjaan, uang, atau pengakuan. Semua itu bisa baik, tetapi tidak cukup menjadi tujuan akhir.',
   ),
   Highlight(
-    '“Aku tidak menciptakan jin dan manusia melainkan agar mereka beribadah kepada-Ku.” — QS. Adz-Dzariyat 51:56',
+    '“Aku tidak menciptakan jin dan manusia melainkan agar mereka beribadah kepada-Ku.”, QS. Adz-Dzariyat 51:56',
   ),
   Paragraph(
     'Ibadah bukan berarti hidup hanya di masjid. Saat niatnya benar, belajar, bekerja, menjaga keluarga, dan menolong orang dapat menjadi bagian dari penghambaan kepada Allah.',
@@ -3882,7 +3882,7 @@ const _why3Article = <ArticleBlock>[
   Paragraph(
     'Salat bukan absensi untuk membuktikan Allah tahu kita patuh. Allah tidak membutuhkan salat kita; kitalah yang membutuhkan pengingat dan arah di tengah hidup yang ramai.',
   ),
-  Highlight('“Dirikanlah salat untuk mengingat-Ku.” — QS. Taha 20:14'),
+  Highlight('“Dirikanlah salat untuk mengingat-Ku.”, QS. Taha 20:14'),
   Paragraph(
     'Lima waktu membuat kita berhenti sejenak: Subuh memulai hari, Zuhur mengoreksi arah, Asar mengingatkan waktu, Magrib menutup aktivitas, dan Isya menenangkan hati.',
   ),
@@ -3900,7 +3900,7 @@ const _why4Article = <ArticleBlock>[
     'Tilawah dan hafalan sangat mulia. Tetapi Al-Quran diturunkan sebagai petunjuk. Petunjuk baru menolong saat kita memahami arahnya dan mencoba menjalankannya.',
   ),
   Highlight(
-    '“Ini adalah kitab yang Kami turunkan penuh berkah agar mereka mentadabburi ayat-ayatnya.” — QS. Sad 38:29',
+    '“Ini adalah kitab yang Kami turunkan penuh berkah agar mereka mentadabburi ayat-ayatnya.”, QS. Sad 38:29',
   ),
   Paragraph(
     'Tadabbur tidak harus menunggu menjadi ahli tafsir. Mulailah dengan membaca terjemahan yang baik, melihat penjelasan tepercaya, lalu bertanya: apa yang ayat ini ubah dalam sikapku?',
@@ -3922,7 +3922,7 @@ const _why5Article = <ArticleBlock>[
     'Halal dan haram membimbing manusia agar tidak diperbudak oleh keinginan sesaat. Batas ini menjaga iman, jiwa, akal, keluarga, dan harta.',
   ),
   Highlight(
-    '“Allah menghendaki kemudahan bagimu dan tidak menghendaki kesukaran bagimu.” — QS. Al-Baqarah 2:185',
+    '“Allah menghendaki kemudahan bagimu dan tidak menghendaki kesukaran bagimu.”, QS. Al-Baqarah 2:185',
   ),
   Paragraph(
     'Tidak semua hikmah langsung terasa. Saat belum mengerti sebuah aturan, kita boleh belajar alasannya sambil tetap bersikap rendah hati di hadapan Allah.',
@@ -3938,7 +3938,7 @@ const _why6Article = <ArticleBlock>[
     'Kesulitan tidak selalu berarti Allah membenci kita. Dunia memang bukan tempat tanpa luka; ia tempat memilih, bertumbuh, dan kembali kepada Allah.',
   ),
   Highlight(
-    '“Kami pasti akan menguji kamu dengan sedikit ketakutan, kelaparan, kekurangan harta, jiwa, dan buah-buahan.” — QS. Al-Baqarah 2:155',
+    '“Kami pasti akan menguji kamu dengan sedikit ketakutan, kelaparan, kekurangan harta, jiwa, dan buah-buahan.”, QS. Al-Baqarah 2:155',
   ),
   Paragraph(
     'Kita tidak perlu pura-pura kuat. Sedih, lelah, dan menangis adalah manusiawi. Sabar bukan menolak rasa sakit, tetapi tetap mencari jalan yang baik saat sakit itu ada.',
@@ -3957,7 +3957,7 @@ const _why7Article = <ArticleBlock>[
     'Doa bukan tombol instan. Doa adalah ibadah dan hubungan dengan Allah: kita meminta, berusaha, dan percaya bahwa Allah mengetahui yang kita belum tahu.',
   ),
   Highlight(
-    '“Aku mengabulkan permohonan orang yang berdoa apabila dia berdoa kepada-Ku.” — QS. Al-Baqarah 2:186',
+    '“Aku mengabulkan permohonan orang yang berdoa apabila dia berdoa kepada-Ku.”, QS. Al-Baqarah 2:186',
   ),
   Paragraph(
     'Jawaban doa bisa datang sesuai yang diminta, ditunda pada waktu yang lebih baik, atau diganti dengan perlindungan dan kebaikan lain. Kita tidak selalu melihat bentuknya segera.',
@@ -3976,7 +3976,7 @@ const _why8Article = <ArticleBlock>[
     'Takdir bukan alasan untuk berhenti memilih. Kita tidak mengetahui masa depan, tetapi kita diberi akal, kesempatan, dan tanggung jawab atas pilihan yang ada di depan kita.',
   ),
   Highlight(
-    '“Sesungguhnya Allah tidak akan mengubah keadaan suatu kaum sampai mereka mengubah keadaan yang ada pada diri mereka sendiri.” — QS. Ar-Ra’d 13:11',
+    '“Sesungguhnya Allah tidak akan mengubah keadaan suatu kaum sampai mereka mengubah keadaan yang ada pada diri mereka sendiri.”, QS. Ar-Ra’d 13:11',
   ),
   Paragraph(
     'Tawakal bukan duduk diam. Tawakal adalah melakukan usaha yang benar, lalu menyerahkan hasil yang tidak bisa kita kendalikan kepada Allah.',
@@ -3995,7 +3995,7 @@ const _why9Article = <ArticleBlock>[
     'Mengulang kesalahan memang melelahkan. Namun rasa malu kepada Allah seharusnya membawa kita kembali, bukan membuat kita putus asa.',
   ),
   Highlight(
-    '“Janganlah kamu berputus asa dari rahmat Allah.” — QS. Az-Zumar 39:53',
+    '“Janganlah kamu berputus asa dari rahmat Allah.”, QS. Az-Zumar 39:53',
   ),
   Paragraph(
     'Tobat yang jujur berarti mengakui salah, menyesal, berhenti sebisa mungkin, dan berniat memperbaiki diri. Jika jatuh lagi, bangun lagi dan cari akar masalahnya.',
@@ -4014,7 +4014,7 @@ const _why10Article = <ArticleBlock>[
     'Iman yang dewasa bukan berarti tidak pernah ragu, tidak pernah salah, atau paling banyak bicara agama. Iman dewasa membuat kita lebih jujur, rendah hati, dan bertanggung jawab.',
   ),
   Highlight(
-    '“Sesungguhnya yang paling mulia di antara kamu di sisi Allah ialah yang paling bertakwa.” — QS. Al-Hujurat 49:13',
+    '“Sesungguhnya yang paling mulia di antara kamu di sisi Allah ialah yang paling bertakwa.”, QS. Al-Hujurat 49:13',
   ),
   Paragraph(
     'Orang beriman tetap belajar ketika belum tahu, meminta maaf ketika salah, dan berbuat baik ketika tidak ada yang melihat. Ia tidak memakai agama untuk merendahkan orang lain.',

@@ -228,7 +228,7 @@ class NotificationService {
       if (id != 'adzan' && id != _variant) continue;
       final channel = AndroidNotificationChannel(
         _variantChannelId(id),
-        id == 'adzan' ? _adzanChannelName : 'Adzan — $label',
+        id == 'adzan' ? _adzanChannelName : 'Adzan: $label',
         description: _adzanChannelDesc,
         importance: Importance.high,
         // Default = raw resource APK; varian = content URI file unduhan.
@@ -884,7 +884,7 @@ class NotificationService {
       switch (sound) {
         _NotifSound.silent => _silentChannelName,
         _NotifSound.normal => _channelName,
-        _NotifSound.adzan => 'Adzan${_variant == 'adzan' ? '' : ' — ${_variantLabel(_variant)}'}',
+        _NotifSound.adzan => 'Adzan${_variant == 'adzan' ? '' : ': ${_variantLabel(_variant)}'}',
       },
       channelDescription: switch (sound) {
         _NotifSound.silent => _silentChannelDesc,

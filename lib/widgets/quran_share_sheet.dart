@@ -633,7 +633,7 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
         // ponytail: sitasi sama dengan yang tercetak di kartu — satu sumber,
         // jadi caption WA/IG tidak bisa beda dari gambarnya.
         'text':
-            '${l10n.dlCiteSurah(widget.surah.nameLatin, widget.ayah.ayah)} — Muslim Leveling',
+            '${l10n.dlCiteSurah(widget.surah.nameLatin, widget.ayah.ayah)} | Muslim Leveling',
       });
     } catch (_) {
       if (mounted) {

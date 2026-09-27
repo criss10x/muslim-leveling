@@ -276,9 +276,9 @@ class AchievementService {
     ),
     AchievementDef(
       id: 'rank_mythic',
-      unlockHint: 'Naik level lewat XP dari ibadah harian — naik level 80 butuh waktu.',
+      unlockHint: 'Naik level lewat XP dari ibadah harian. Naik level 80 butuh waktu.',
       title: 'MYTHIC',
-      desc: 'Capai Level 80 — Muslim Mythic!',
+      desc: 'Capai Level 80, Muslim Mythic!',
       tier: AchievementTier.legendary,
       icon: AppIcons.emojiEvents,
     ),
@@ -287,7 +287,7 @@ class AchievementService {
     AchievementDef(
       id: 'subuh_solo_carry',
       title: 'SUBUH SOLO CARRY',
-      desc: 'Streak Subuh 7 hari beruntun — lane tersulit',
+      desc: 'Streak Subuh 7 hari beruntun, lane tersulit',
       tier: AchievementTier.gold,
       glyphText: '7',
     ),
@@ -336,7 +336,7 @@ class AchievementService {
       id: 'phoenix',
       unlockHint: 'Setelah streak putus, mulai lagi sampai tercatat 3 kali bangkit.',
       title: 'PHOENIX',
-      desc: 'Bangkit 3× setelah streak putus — gak pernah nyerah',
+      desc: 'Bangkit 3× setelah streak putus. Gak pernah nyerah',
       tier: AchievementTier.epic,
       icon: AppIcons.localFireDepartment,
     ),
@@ -392,7 +392,7 @@ class AchievementService {
     ),
     AchievementDef(
       id: 'hall_of_fame',
-      unlockHint: 'Buka semua achievement lainnya satu per satu — terakhir dari 87 medali biasa.',
+      unlockHint: 'Buka semua achievement lainnya satu per satu, sampai terakhir dari 87 medali biasa.',
       title: 'HALL OF FAME',
       desc: 'Buka semua achievement lainnya 👑',
       tier: AchievementTier.legendary,
