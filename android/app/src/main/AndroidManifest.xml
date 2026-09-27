@@ -16,6 +16,11 @@
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
+    <!-- Advertising ID (Android 13+ / API 33): tanpa ini Facebook SDK tidak
+         bisa membaca GAID — atribusi install Meta & optimasi iklan putus.
+         Diinjeksi tangan karena Facebook SDK versi ini tidak menyuntiknya
+         via manifest merge (diverifikasi dari merged manifest APK rilis). -->
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
     <application
         android:label="Muslim Leveling"
         android:name="${applicationName}"
