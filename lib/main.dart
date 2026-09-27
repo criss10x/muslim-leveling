@@ -12,6 +12,7 @@ import 'services/notification_service.dart';
 import 'services/cloud_sync.dart';
 import 'services/auth_service.dart';
 import 'services/game_service.dart';
+import 'services/meta_app_events_service.dart';
 import 'services/quran_bookmark.dart';
 import 'services/quran_settings.dart';
 
@@ -89,6 +90,14 @@ Future<void> _initAsync() async {
     await GameService.reconcileCosmeticLapse(isPro: true);
   } catch (e) {
     Sentry.captureException(e, withScope: (s) => s.setTag('init_step', 'game_service'));
+  }
+
+  // Meta App Events terakhir: kegagalannya murni pelaporan iklan, jangan
+  // menunda apa pun yang krusial, dan gagalnya ditelan di dalam (bukan di sini).
+  try {
+    await MetaAppEvents.init();
+  } catch (e) {
+    Sentry.captureException(e, withScope: (s) => s.setTag('init_step', 'meta_app_events'));
   }
 
   try {

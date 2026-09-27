@@ -12,3 +12,7 @@ GeneratedPluginRegistrant.java
 key.properties
 **/*.keystore
 **/*.jks
+
+# ponytail: kredensial Meta SDK (app id + client token). Nilai asli juga
+# tersimpan di GitHub Secrets FACEBOOK_APP_ID / FACEBOOK_CLIENT_TOKEN.
+facebook.properties

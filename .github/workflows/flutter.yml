@@ -52,6 +52,8 @@ jobs:
       KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
       KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
       KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      FACEBOOK_APP_ID: ${{ secrets.FACEBOOK_APP_ID }}
+      FACEBOOK_CLIENT_TOKEN: ${{ secrets.FACEBOOK_CLIENT_TOKEN }}
     steps:
       - uses: actions/checkout@v5
 
@@ -94,6 +96,18 @@ jobs:
           keyPassword=$KEY_PASSWORD
           PROPS
 
+      # Kredensial Meta App Events (facebook_app_events): gradle membaca env
+      # ini → resValue → manifest meta-data. Tanpa secret, nilai tetap
+      # '__FB_MISSING__' (build jalan, SDK tidak bisa init — terlihat, bukan
+      # diam-diam).
+      - name: Prepare Meta App Events credentials
+        if: env.FACEBOOK_APP_ID != ''
+        run: |
+          cat > android/facebook.properties <<PROPS
+          facebook.appId=$FACEBOOK_APP_ID
+          facebook.clientToken=$FACEBOOK_CLIENT_TOKEN
+          PROPS
+
       - name: Build release APK (arm64-v8a)
         run: flutter build apk --release --target-platform android-arm64
 
@@ -129,6 +143,8 @@ jobs:
       KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
       KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
       KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      FACEBOOK_APP_ID: ${{ secrets.FACEBOOK_APP_ID }}
+      FACEBOOK_CLIENT_TOKEN: ${{ secrets.FACEBOOK_CLIENT_TOKEN }}
     steps:
       - uses: actions/checkout@v5
 
@@ -165,6 +181,14 @@ jobs:
           storePassword=$KEYSTORE_PASSWORD
           keyAlias=$KEY_ALIAS
           keyPassword=$KEY_PASSWORD
+          PROPS
+
+      - name: Prepare Meta App Events credentials
+        if: env.FACEBOOK_APP_ID != ''
+        run: |
+          cat > android/facebook.properties <<PROPS
+          facebook.appId=$FACEBOOK_APP_ID
+          facebook.clientToken=$FACEBOOK_CLIENT_TOKEN
           PROPS
 
       - name: Build release AAB

@@ -21,6 +21,17 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
+
+        <!-- Meta App Events (facebook_app_events). Nilai resource diisi gradle
+             dari android/facebook.properties (lokal) atau GitHub Secrets (CI).
+             Kalau keduanya kosong nilainya '__FB_MISSING__' → SDK gagal init
+             secara kentara saat debug, bukan diam-diam tidak mengirim event. -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.facebook.sdk.ClientToken"
+            android:value="@string/facebook_client_token" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -19,6 +19,25 @@ val keystoreProperties = Properties().apply {
 
 val useReleaseKeystore = keystoreProperties.getProperty("storeFile")?.let { rootProject.file(it).exists() } == true
 
+// Meta App Events (facebook_app_events): app id + client token dari
+// android/facebook.properties (lokal, gitignored) atau env FACEBOOK_APP_ID /
+// FACEBOOK_CLIENT_TOKEN (CI, GitHub Secrets). Tanpa keduanya, strings.xml
+// tetap berisi '__FB_MISSING__' — SDK gagal init secara kentara, bukan diam-diam.
+val envFbAppId = System.getenv("FACEBOOK_APP_ID") ?: ""
+val envFbClientToken = System.getenv("FACEBOOK_CLIENT_TOKEN") ?: ""
+val facebookProperties = Properties().apply {
+    val f = rootProject.file("facebook.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
+}
+val fbAppId = facebookProperties.getProperty("facebook.appId")
+    ?.takeIf { it.isNotBlank() && it != "__FB_MISSING__" }
+    ?: envFbAppId.takeIf { it.isNotBlank() }
+    ?: "__FB_MISSING__"
+val fbClientToken = facebookProperties.getProperty("facebook.clientToken")
+    ?.takeIf { it.isNotBlank() && it != "__FB_MISSING__" }
+    ?: envFbClientToken.takeIf { it.isNotBlank() }
+    ?: "__FB_MISSING__"
+
 android {
     namespace = "id.muslimleveling.muslim_leveling"
     compileSdk = 36
@@ -36,6 +55,12 @@ android {
         targetSdk = 36
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        // Meta App Events (facebook_app_events). Nilai ini menimpa default
+        // strings.xml via placeholder; resValue dibuat juga agar resource
+        // tersedia walau manifest tak merujuknya langsung.
+        resValue("string", "facebook_app_id", fbAppId)
+        resValue("string", "facebook_client_token", fbClientToken)
     }
 
     signingConfigs {

@@ -10,6 +10,7 @@ import 'cosmetic_catalog.dart';
 import 'cosmetic_service.dart';
 import 'quran_data.dart';
 import 'achievement_service.dart';
+import 'meta_app_events_service.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/quest_texts.g.dart';
 
@@ -1489,6 +1490,13 @@ class GameService {
       level: newInfo.level,
     );
     await _save(newState);
+
+    // Meta App Events: naik level = AchieveLevel. Di sini (bukan di pemanggil)
+    // supaya semua sumber XP otomatis terlapor. Fail di dalam, tak pernah
+    // mengganggu game logic.
+    if (newInfo.level > oldInfo.level) {
+      MetaAppEvents.achievedLevel(newInfo.level);
+    }
     return (newState, newInfo.level - oldInfo.level);
   }
 

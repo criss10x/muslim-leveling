@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'game_service.dart';
 import 'learning_content.dart';
 import 'cloud_sync.dart';
+import 'meta_app_events_service.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/ach_texts.g.dart';
 import '../theme/app_icons.dart';
@@ -797,6 +798,12 @@ class AchievementService {
       await _persist();
       if (!silent) {
         pendingAnnouncer.value = [...pendingAnnouncer.value, ...newly];
+      }
+      // Meta App Events: medali baru = UnlockedAchievement. silent=true tetap
+      // dilapor (backfill jangan hilang dari pengukuran); gagal jaring ditelan
+      // di dalam wrapper.
+      for (final d in newly) {
+        MetaAppEvents.unlockedAchievement(d.id);
       }
     }
     return newly;
