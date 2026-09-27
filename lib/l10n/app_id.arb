@@ -1620,6 +1620,7 @@
   "qs_meaning_114": "Manusia",
   "qsRevelationMeccan": "Makkiyah",
   "qsRevelationMedinan": "Madaniyah",
+  "qtRecentReading": "Bacaan sebelumnya",
   "qtContinueReadingDetail": "Lanjutkan membaca {surah} ayat {ayah}",
   "@qtContinueReadingDetail": {
     "placeholders": {

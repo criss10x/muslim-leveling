@@ -3184,6 +3184,9 @@ class AppL10nEn extends AppL10n {
   String get qsRevelationMedinan => 'Medinan';
 
   @override
+  String get qtRecentReading => 'Earlier reading';
+
+  @override
   String qtContinueReadingDetail(String surah, int ayah) {
     return 'Continue reading $surah ayah $ayah';
   }

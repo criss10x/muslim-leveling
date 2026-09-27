@@ -259,6 +259,24 @@ class _QuranTabState extends State<QuranTab> {
                         ),
                       ),
                     ],
+                  // Posisi lama (ke-2 dst): baris ramping gaya list item, bukan
+                  // kartu. Hanya muncul saat ada ≥2 riwayat — nol biaya tempat
+                  // untuk user yang baru punya satu posisi baca.
+                  for (final entry in quranProgress.previousEntries)
+                    if (_surahOf(entry.surah) case final surah?)
+                      _RecentReadingRow(
+                        surah: surah,
+                        ayah: entry.ayah,
+                        isFirst: entry == quranProgress.previousEntries.first,
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => QuranReader(
+                              surah: surah,
+                              initialAyah: entry.ayah,
+                            ),
+                          ),
+                        ),
+                      ),
                 ],
               ),
             ),
@@ -479,6 +497,79 @@ class _ResumeReadingCard extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Baris ramping "bacaan sebelumnya": satu posisi lama di bawah kartu utama.
+/// Gaya list item (seperti _SurahRow), bukan kartu, supaya tetap jelas
+/// sekunder di bawah kartu "Lanjutkan membaca" tanpa menambah bobot visual.
+class _RecentReadingRow extends StatelessWidget {
+  final QuranSurah surah;
+  final int ayah;
+  final bool isFirst;
+  final VoidCallback onTap;
+
+  const _RecentReadingRow({
+    required this.surah,
+    required this.ayah,
+    required this.isFirst,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
+    return Padding(
+      padding: EdgeInsets.only(top: isFirst ? AppSpacing.xs : 0),
+      child: Semantics(
+        button: true,
+        label: l10n.qtContinueReadingDetail(surah.nameLatin, ayah),
+        child: Material(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.sm,
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.history,
+                    size: 18,
+                    color: AppColors.onSurfaceVariant,
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  Expanded(
+                    child: Text(
+                      // Label "Bacaan sebelumnya" hanya di baris pertama; baris
+                      // kedua cukup nama + ayat supaya tidak mengulang label.
+                      isFirst
+                          ? '${l10n.qtRecentReading} · '
+                              '${l10n.qtSurahAyah(surah.nameLatin, ayah)}'
+                          : l10n.qtSurahAyah(surah.nameLatin, ayah),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppText.bodyMd().copyWith(
+                        color: AppColors.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    Icons.chevron_right,
+                    size: 20,
+                    color: AppColors.onSurfaceVariant,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

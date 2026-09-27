@@ -5734,6 +5734,12 @@ abstract class AppL10n {
   /// **'Madaniyah'**
   String get qsRevelationMedinan;
 
+  /// No description provided for @qtRecentReading.
+  ///
+  /// In id, this message translates to:
+  /// **'Bacaan sebelumnya'**
+  String get qtRecentReading;
+
   /// No description provided for @qtContinueReadingDetail.
   ///
   /// In id, this message translates to:
