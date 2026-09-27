@@ -49,6 +49,13 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    buildFeatures {
+        // AGP 9 menonaktifkan resValue secara default; kita pakai resValue
+        // untuk meng-inject kredensial Meta App Events (facebook_app_events)
+        // dari facebook.properties / GitHub Secrets ke strings resource.
+        resValues = true
+    }
+
     defaultConfig {
         applicationId = "id.muslimleveling.muslim_leveling"
         minSdk = flutter.minSdkVersion
