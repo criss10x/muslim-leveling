@@ -1839,11 +1839,14 @@ class _ProfilTabState extends State<ProfilTab> {
     int total(bool Function(PrayerLog) match) => logs.where(match).length;
 
     final wajib = total((l) => GameService.wajibList.contains(l.prayer));
+    final sunnah = total((l) => !GameService.wajibList.contains(l.prayer));
     final quranAyatTotal = state.lifeTotals['quran_ayat'] ?? 0;
-    final quranStreak = state.tilawahStreak.current;
     final tilawahDailyAvg = state.quranXp.readAyatTotal > 0
         ? '${state.quranXp.readAyatTotal.toInt()}'
         : '0';
+    final activeDays = logs.map((l) => l.date).toSet().length;
+    final questDone = state.lifeTotals['quest_done'] ?? 0;
+    final zikirTotal = state.lifeTotals['zikir'] ?? 0;
     final sejak = _mulaiSejak(logs, Localizations.localeOf(context));
     final kosong = wajib == 0;
 
@@ -1877,20 +1880,35 @@ class _ProfilTabState extends State<ProfilTab> {
                     ),
                     divider(),
                     _statRow(
-                      label: AppL10n.of(context).profilStatsVerses,
-                      value: _angka(quranAyatTotal),
+                      label: AppL10n.of(context).profilStatsSunnah,
+                      value: _angka(sunnah),
                     ),
                     divider(),
                     _statRow(
-                      label: AppL10n.of(context).profilStatsQuranStreak,
-                      value: '$quranStreak',
-                      denom: ' ${AppL10n.of(context).profilUnitDays}',
+                      label: AppL10n.of(context).profilStatsVerses,
+                      value: _angka(quranAyatTotal),
                     ),
                     divider(),
                     _statRow(
                       label: AppL10n.of(context).profilStatsDailyAvg,
                       value: tilawahDailyAvg,
                       denom: ' ${AppL10n.of(context).profilUnitVerses}',
+                    ),
+                    divider(),
+                    _statRow(
+                      label: AppL10n.of(context).profilStatsActiveDays,
+                      value: _angka(activeDays),
+                      denom: ' ${AppL10n.of(context).profilUnitDays}',
+                    ),
+                    divider(),
+                    _statRow(
+                      label: AppL10n.of(context).profilStatsQuestDone,
+                      value: _angka(questDone),
+                    ),
+                    divider(),
+                    _statRow(
+                      label: AppL10n.of(context).profilStatsZikir,
+                      value: _angka(zikirTotal),
                       last: sejak == null,
                     ),
                     if (sejak != null) _statsFooter(sejak),

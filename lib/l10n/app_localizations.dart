@@ -2764,6 +2764,30 @@ abstract class AppL10n {
   /// **'Sholat wajib'**
   String get profilStatsWajib;
 
+  /// No description provided for @profilStatsSunnah.
+  ///
+  /// In id, this message translates to:
+  /// **'Sholat sunnah'**
+  String get profilStatsSunnah;
+
+  /// No description provided for @profilStatsActiveDays.
+  ///
+  /// In id, this message translates to:
+  /// **'Hari aktif'**
+  String get profilStatsActiveDays;
+
+  /// No description provided for @profilStatsQuestDone.
+  ///
+  /// In id, this message translates to:
+  /// **'Quest selesai'**
+  String get profilStatsQuestDone;
+
+  /// No description provided for @profilStatsZikir.
+  ///
+  /// In id, this message translates to:
+  /// **'Total Dzikir & Tasbih'**
+  String get profilStatsZikir;
+
   /// No description provided for @profilStreakBest.
   ///
   /// In id, this message translates to:
@@ -6051,6 +6075,12 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Sumber'**
   String get doaSectionSource;
+
+  /// No description provided for @doaCount.
+  ///
+  /// In id, this message translates to:
+  /// **'{count} doa'**
+  String doaCount(Object count);
 
   /// No description provided for @hdRandom.
   ///

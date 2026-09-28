@@ -1,14 +1,10 @@
 // Golden permanen 3 layar Doa (grup, list, detail).
 //
-// ponytail: Font dimuat via GoogleFonts.pendingFonts() di setUpAll supaya
-// terdaftar SEBELUM frame pertama. Tanpa ini, paint pertama pakai fallback
-// + garis kuning 2px (artefak flutter_tester, bukan UI — bukti: lib/ nol
-// TextDecoration, warna (255,255,0) bukan token desain).
-//
-// CATATAN: golden doa_groups.png sudah dibersihkan manual dari sisa artefak
-// kuning yang tidak bisa dihilangkan oleh loading font. Test ini akan FAIL
-// saat dibanding ulang karena flutter_tester tetap menggambar garis kuning.
-// Untuk regen: jalankan --update-goldens lalu bersihkan kuning dengan PIL.
+// ponytail: decoration: TextDecoration.none di AppText methods menghapus
+// garis kuning DefaultTextStyle yang muncul di SEMUA teks (device + tester).
+// Root cause: DefaultTextStyle dari Material/Theme membawa decoration:
+// TextDecoration.underline yang di-merge ke semua Text widget. Fix: override
+// decoration di level TextStyle.
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -95,13 +91,11 @@ void main() {
         find.byType(MaterialApp), matchesGoldenFile('goldens/$goldenName'));
   }
 
-  // doa_groups golden: SKIP karena flutter_tester menggambar garis kuning
-  // fallback-font yang tidak bisa dihilangkan dari kode. Golden di repo sudah
-  // dibersihkan manual (bersih, tanpa kuning). Regen: --update-goldens lalu
-  // bersihkan kuning dengan PIL. doa_list + doa_detail tetap aktif (bersih).
+  // doa_groups golden — decoration: TextDecoration.none di AppText menghapus
+  // garis kuning DefaultTextStyle. Test aktif penuh.
   testWidgets('doa_groups', (tester) async {
     await pump(tester, const DoaScreen(), 'doa_groups.png');
-  }, skip: true);
+  });
 
   testWidgets('doa_list', (tester) async {
     await pump(

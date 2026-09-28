@@ -1464,6 +1464,18 @@ class AppL10nId extends AppL10n {
   String get profilStatsWajib => 'Sholat wajib';
 
   @override
+  String get profilStatsSunnah => 'Sholat sunnah';
+
+  @override
+  String get profilStatsActiveDays => 'Hari aktif';
+
+  @override
+  String get profilStatsQuestDone => 'Quest selesai';
+
+  @override
+  String get profilStatsZikir => 'Total Dzikir & Tasbih';
+
+  @override
   String profilStreakBest(int count) {
     return 'best $count';
   }
@@ -3353,6 +3365,11 @@ class AppL10nId extends AppL10n {
 
   @override
   String get doaSectionSource => 'Sumber';
+
+  @override
+  String doaCount(Object count) {
+    return '$count doa';
+  }
 
   @override
   String get hdRandom => 'Acak';

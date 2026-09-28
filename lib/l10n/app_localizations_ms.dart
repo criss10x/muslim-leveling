@@ -1468,7 +1468,19 @@ class AppL10nMs extends AppL10n {
   String get profilStatsVerses => 'Ayat Al-Qur\'an Dibaca';
 
   @override
-  String get profilStatsWajib => 'Solat fardu';
+  String get profilStatsWajib => 'Solat wajib';
+
+  @override
+  String get profilStatsSunnah => 'Solat sunnah';
+
+  @override
+  String get profilStatsActiveDays => 'Hari aktif';
+
+  @override
+  String get profilStatsQuestDone => 'Quest selesai';
+
+  @override
+  String get profilStatsZikir => 'Jumlah Zikir & Tasbih';
 
   @override
   String profilStreakBest(int count) {
@@ -3366,6 +3378,11 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get doaSectionSource => 'Sumber';
+
+  @override
+  String doaCount(Object count) {
+    return '$count doa';
+  }
 
   @override
   String get hdRandom => 'Rawak';

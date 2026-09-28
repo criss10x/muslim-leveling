@@ -1485,6 +1485,18 @@ class AppL10nTr extends AppL10n {
   String get profilStatsWajib => 'Farz namazlar';
 
   @override
+  String get profilStatsSunnah => 'Nafile namazlar';
+
+  @override
+  String get profilStatsActiveDays => 'Aktif günler';
+
+  @override
+  String get profilStatsQuestDone => 'Tamamlanan görevler';
+
+  @override
+  String get profilStatsZikir => 'Toplam Zikir & Tesbih';
+
+  @override
   String profilStreakBest(int count) {
     return 'en iyi $count';
   }
@@ -3383,6 +3395,11 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get doaSectionSource => 'Kaynak';
+
+  @override
+  String doaCount(Object count) {
+    return '$count dua';
+  }
 
   @override
   String get hdRandom => 'Rastgele';

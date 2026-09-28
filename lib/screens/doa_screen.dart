@@ -8,15 +8,88 @@ import '../l10n/app_localizations.dart';
 
 /// Doa — level 1: daftar grup doa (dari API equran.id).
 ///
-/// Layout: setiap grup = baris FlatCard. Squint test menuntut hierarki:
-/// nama grup (bodyLg, tinta penuh) → jumlah doa (labelCaps mono, readout
-/// HUD) → chevron. Ikon disatukan dalam chip wash seperti quick action
-/// Home supaya bahasa visualnya identik; isinya satu glyph doa karena
-/// tidak ada data tematik per grup di API.
+/// Layout: setiap grup = baris FlatCard. Hierarki: ikon tematik (identitas
+/// kategori) → nama grup (bodyLg w500, tinta penuh) → count pill badge
+/// (sinyal) → chevron (navigasi). Ikon dipetakan dari keyword nama grup
+/// supaya tiap kategori punya identitas visual berbeda.
 class DoaScreen extends StatefulWidget {
   const DoaScreen({super.key});
   @override
   State<DoaScreen> createState() => _DoaScreenState();
+}
+
+/// Mapping keyword grup → ikon Phosphor tematik.
+IconData _grupIcon(String grup) {
+  final g = grup.toLowerCase();
+  if (g.contains('tidur') || g.contains('malam') || g.contains('bangun')) {
+    return AppIcons.bedtime;
+  }
+  if (g.contains('kamar mandi') || g.contains('wudhu') || g.contains('air')) {
+    return AppIcons.waterDrop;
+  }
+  if (g.contains('pakaian') || g.contains('baju') || g.contains('hias')) {
+    return AppIcons.personOutline;
+  }
+  if (g.contains('perlindungan') || g.contains('lindung') || g.contains('aman')) {
+    return AppIcons.shieldOutlined;
+  }
+  if (g.contains('alam') || g.contains('cuaca') || g.contains('hujan') ||
+      g.contains('angin') || g.contains('fenomena')) {
+    return AppIcons.wbCloudy;
+  }
+  if (g.contains('petir') || g.contains('gempa') || g.contains('badai') ||
+      g.contains('petir') || g.contains('kilat')) {
+    return AppIcons.bolt;
+  }
+  if (g.contains('nikah') || g.contains('pernikahan') || g.contains('cinta') ||
+      g.contains('suami') || g.contains('istri')) {
+    return AppIcons.favorite;
+  }
+  if (g.contains('sakit') || g.contains('obat') || g.contains('sehat')) {
+    return AppIcons.localFireDepartment;
+  }
+  if (g.contains('wafat') || g.contains('meninggal') || g.contains('kematian') ||
+      g.contains('azab')) {
+    return AppIcons.hourglassSimple;
+  }
+  if (g.contains('jenazah') || g.contains('kubur') || g.contains('makam')) {
+    return AppIcons.mosqueOutlined;
+  }
+  if (g.contains('makan') || g.contains('minum')) {
+    return AppIcons.star;
+  }
+  if (g.contains('masjid') || g.contains('sholat') || g.contains('salat') ||
+      g.contains('adzan') || g.contains('azan')) {
+    return AppIcons.mosque;
+  }
+  if (g.contains('quran') || g.contains('baca') || g.contains('tilawah') ||
+      g.contains('surat') || g.contains('ayat')) {
+    return AppIcons.menuBookOutlined;
+  }
+  if (g.contains('dzikir') || g.contains('zikir') || g.contains('tasbih')) {
+    return AppIcons.selfImprovement;
+  }
+  if (g.contains('pagi') || g.contains('subuh') || g.contains('petang')) {
+    return AppIcons.wbSunny;
+  }
+  if (g.contains('perjalanan') || g.contains('jalan') || g.contains('safar') ||
+      g.contains('bepergian')) {
+    return AppIcons.explore;
+  }
+  if (g.contains('rumah') || g.contains('keluarga') || g.contains('anak') ||
+      g.contains('bayi') || g.contains('ibu')) {
+    return AppIcons.homeOutlined;
+  }
+  if (g.contains('ilmu') || g.contains('belajar') || g.contains('orang tua')) {
+    return AppIcons.school;
+  }
+  if (g.contains('rezeki') || g.contains('harta') || g.contains('utang')) {
+    return AppIcons.cardGiftcard;
+  }
+  if (g.contains('haji') || g.contains('umrah') || g.contains('ziarah')) {
+    return AppIcons.mosqueOutlined;
+  }
+  return AppIcons.volunteerActivism;
 }
 
 class _DoaScreenState extends State<DoaScreen> {
@@ -68,38 +141,51 @@ class _DoaScreenState extends State<DoaScreen> {
               child: FlatCard(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.md,
-                  vertical: AppSpacing.md,
+                  vertical: 14,
                 ),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Chip ikon wash: bahasa visual quick action Home
-                    // (kedalaman dari tangga kecerahan, bukan bayangan).
+                    // Chip ikon tematik — identitas kategori.
                     Container(
-                      padding: const EdgeInsets.all(6),
+                      width: 44,
+                      height: 44,
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.18),
+                        color: AppColors.primary.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(AppRadius.lg),
                       ),
-                      child: Icon(AppIcons.volunteerActivism,
-                          size: 20, color: AppColors.primary),
+                      child: Icon(_grupIcon(grup),
+                          size: 22, color: AppColors.primary),
                     ),
                     const SizedBox(width: AppSpacing.md),
+                    // Nama grup — bodyLg w500 untuk hierarki lebih tegas.
                     Expanded(
                       child: Text(grup,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: AppText.bodyLg()
-                              .copyWith(color: AppColors.onBackground)),
+                          style: AppText.bodyLg().copyWith(
+                            color: AppColors.onBackground,
+                            fontWeight: FontWeight.w500,
+                          )),
                     ),
                     const SizedBox(width: AppSpacing.sm),
-                    // Readout HUD: jumlah doa mono kapital — angka sebagai
-                    // sinyal, bukan dekorasi.
-                    Text('$count',
-                        style: AppText.labelCapsSm()
-                            .copyWith(color: AppColors.onSurfaceVariant)),
-                    const SizedBox(width: AppSpacing.base),
-                    Icon(AppIcons.arrowForwardIos,
-                        size: 14, color: AppColors.outlineVariant),
+                    // Count pill badge — sinyal visual, bukan angka telanjang.
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(AppRadius.xl),
+                      ),
+                      child: Text('$count',
+                          style: AppText.labelCapsSm()
+                              .copyWith(color: AppColors.primary)),
+                    ),
+                    const SizedBox(width: AppSpacing.sm),
+                    Icon(AppIcons.chevronRight,
+                        size: 16,
+                        color: AppColors.onSurfaceVariant
+                            .withValues(alpha: 0.5)),
                   ],
                 ),
               ),
@@ -130,7 +216,7 @@ class DoaListScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            _appBar(context, grup, '${items.length} doa'),
+            _appBar(context, grup, AppL10n.of(context).doaCount('${items.length}')),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
               child: Align(

@@ -1479,10 +1479,14 @@ class GameService {
         .toList();
     final newXp = _cache.xp + q.xpReward;
     final newInfo = getLevelInfo(newXp);
+    // Counter lifetime quest selesai (statistik profil).
+    final lifeTotals = Map<String, int>.from(_cache.lifeTotals);
+    lifeTotals['quest_done'] = (lifeTotals['quest_done'] ?? 0) + 1;
     final newState = _cache.copyWith(
       xp: newXp,
       level: newInfo.level,
       quests: quests,
+      lifeTotals: lifeTotals,
     );
     await _save(newState);
     await refreshBadges(); // level-up may unlock mythic_reached

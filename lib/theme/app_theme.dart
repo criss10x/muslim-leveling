@@ -340,37 +340,48 @@ class AppShadow {
 }
 
 class AppText {
+  // decoration: TextDecoration.none di semua style — override DefaultTextStyle
+  // apapun sumbernya (bug: underline kuning muncul di semua teks di device).
   static TextStyle displayHero(double size) => GoogleFonts.sora(
         fontSize: size, fontWeight: FontWeight.w800,
         height: size == 40 ? 48 / 40 : 38 / 32,
         letterSpacing: size == 40 ? -0.5 : 0,
+        decoration: TextDecoration.none,
       );
   static TextStyle headlineLg() => GoogleFonts.sora(
         fontSize: 32, fontWeight: FontWeight.w700, height: 40 / 32,
+        decoration: TextDecoration.none,
       );
   static TextStyle headlineMd() => GoogleFonts.sora(
         fontSize: 24, fontWeight: FontWeight.w700, height: 32 / 24,
+        decoration: TextDecoration.none,
       );
   static TextStyle titleLg() => GoogleFonts.plusJakartaSans(
         fontSize: 20, fontWeight: FontWeight.w600, height: 28 / 20,
+        decoration: TextDecoration.none,
       );
   static TextStyle bodyLg() => GoogleFonts.plusJakartaSans(
         fontSize: 16, fontWeight: FontWeight.w400, height: 24 / 16,
+        decoration: TextDecoration.none,
       );
   static TextStyle bodyMd() => GoogleFonts.plusJakartaSans(
         fontSize: 14, fontWeight: FontWeight.w400, height: 20 / 14,
+        decoration: TextDecoration.none,
       );
   static TextStyle labelCaps() => GoogleFonts.jetBrainsMono(
         fontSize: 12, fontWeight: FontWeight.w700, height: 16 / 12, letterSpacing: 1.2,
+        decoration: TextDecoration.none,
       );
   /// Small caps label (nav, HUD cells). Prefer this over magic fontSize: 9/11.
   static TextStyle labelCapsSm() => GoogleFonts.jetBrainsMono(
         fontSize: 10, fontWeight: FontWeight.w700, height: 14 / 10, letterSpacing: 1.0,
+        decoration: TextDecoration.none,
       );
   /// Teks Arab (Quran/hadis) — Amiri Quran, satu sumber agar tidak campur
   /// font fallback bawaan di layar berbeda.
   static TextStyle arabic(double size, {double height = 2.0}) =>
-      GoogleFonts.amiriQuran(fontSize: size, height: height);
+      GoogleFonts.amiriQuran(fontSize: size, height: height,
+          decoration: TextDecoration.none);
 }
 
 class AppTheme {
