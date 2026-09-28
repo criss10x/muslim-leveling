@@ -66,6 +66,9 @@ class DoaApi {
     if (all == null) return const [];
     return all.where((d) => d.grup == grup).toList();
   }
+
+  /// Suntik data tanpa jaringan (khusus tes).
+  void seedForTest(List<DoaItem> items) => _cache = List.unmodifiable(items);
 }
 
 final doaApi = DoaApi();
