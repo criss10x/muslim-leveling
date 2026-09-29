@@ -832,6 +832,21 @@ class AppL10nTr extends AppL10n {
   String get homeQuickDoa => 'Dua';
 
   @override
+  String get homeQuickAsma => 'Esmaül Hüsna';
+
+  @override
+  String get asmaTitle => 'Esmaül Hüsna';
+
+  @override
+  String get asmaSubtitle => 'Allah\'ın 99 İsmi';
+
+  @override
+  String get asmaSearch => 'İsim ara...';
+
+  @override
+  String get asmaEmpty => 'Bulunamadı';
+
+  @override
   String get homeQuickDzikir => 'Zikir';
 
   @override
@@ -3399,6 +3414,63 @@ class AppL10nTr extends AppL10n {
   @override
   String doaCount(Object count) {
     return '$count dua';
+  }
+
+  @override
+  String get qadhaHeader => 'NAMAZ BORÇLARI';
+
+  @override
+  String qadhaMeta(String count) {
+    return '$count ödenmemiş';
+  }
+
+  @override
+  String get qadhaMetaZero => 'TEMİZ';
+
+  @override
+  String get qadhaAllClear => 'Namaz borçları: 0 🤍';
+
+  @override
+  String get qadhaSettle => 'Kıl';
+
+  @override
+  String get qadhaShareText => 'Elhamdülillah, namaz borçlarım kapandı. 🤍';
+
+  @override
+  String get qadhaToast => 'Elhamdülillah, bir borç kapandı.';
+
+  @override
+  String get tawbahTitle => 'Elhamdülillah, geri döndün.';
+
+  @override
+  String get tawbahBody =>
+      'Nereden başlasın? Az ama istikrarlı olan Allah katında daha sevimlidir.';
+
+  @override
+  String get tawbahOptQadha => '1 namaz kaza et';
+
+  @override
+  String get tawbahOptNext => 'Sıradaki namaz';
+
+  @override
+  String get tawbahOptZikir => 'Hafif zikir';
+
+  @override
+  String get tawbahOptLater => 'Sonra';
+
+  @override
+  String get freezeForgiveTitle => 'MAĞFİRET';
+
+  @override
+  String get freezeForgiveBody =>
+      'Allah Gafûr\'dur. Serin güvende, yoluna devam et.';
+
+  @override
+  String get welcomeShieldTitle => 'WELCOME-BACK SHIELD!';
+
+  @override
+  String welcomeShieldBody(String days) {
+    return '$days gün sonra geri döndün. Sana ücretsiz bir koruyucu. ❄️';
   }
 
   @override

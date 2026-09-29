@@ -1624,6 +1624,36 @@ abstract class AppL10n {
   /// **'Doa'**
   String get homeQuickDoa;
 
+  /// No description provided for @homeQuickAsma.
+  ///
+  /// In id, this message translates to:
+  /// **'Asmaul Husna'**
+  String get homeQuickAsma;
+
+  /// No description provided for @asmaTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Asmaul Husna'**
+  String get asmaTitle;
+
+  /// No description provided for @asmaSubtitle.
+  ///
+  /// In id, this message translates to:
+  /// **'99 Nama Allah'**
+  String get asmaSubtitle;
+
+  /// No description provided for @asmaSearch.
+  ///
+  /// In id, this message translates to:
+  /// **'Cari nama...'**
+  String get asmaSearch;
+
+  /// No description provided for @asmaEmpty.
+  ///
+  /// In id, this message translates to:
+  /// **'Tidak ditemukan'**
+  String get asmaEmpty;
+
   /// No description provided for @homeQuickDzikir.
   ///
   /// In id, this message translates to:
@@ -6081,6 +6111,108 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'{count} doa'**
   String doaCount(Object count);
+
+  /// No description provided for @qadhaHeader.
+  ///
+  /// In id, this message translates to:
+  /// **'UTANG SHOLAT'**
+  String get qadhaHeader;
+
+  /// No description provided for @qadhaMeta.
+  ///
+  /// In id, this message translates to:
+  /// **'{count} belum lunas'**
+  String qadhaMeta(String count);
+
+  /// No description provided for @qadhaMetaZero.
+  ///
+  /// In id, this message translates to:
+  /// **'LUNAS'**
+  String get qadhaMetaZero;
+
+  /// No description provided for @qadhaAllClear.
+  ///
+  /// In id, this message translates to:
+  /// **'Utang sholat: 0 🤍'**
+  String get qadhaAllClear;
+
+  /// No description provided for @qadhaSettle.
+  ///
+  /// In id, this message translates to:
+  /// **'Lunasi'**
+  String get qadhaSettle;
+
+  /// No description provided for @qadhaShareText.
+  ///
+  /// In id, this message translates to:
+  /// **'Alhamdulillah, utang sholatku sudah lunas. 🤍'**
+  String get qadhaShareText;
+
+  /// No description provided for @qadhaToast.
+  ///
+  /// In id, this message translates to:
+  /// **'Alhamdulillah, satu utang lunas.'**
+  String get qadhaToast;
+
+  /// No description provided for @tawbahTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Alhamdulillah, kamu kembali.'**
+  String get tawbahTitle;
+
+  /// No description provided for @tawbahBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Mulai dari mana? Sedikit tapi konsisten lebih dicintai Allah.'**
+  String get tawbahBody;
+
+  /// No description provided for @tawbahOptQadha.
+  ///
+  /// In id, this message translates to:
+  /// **'Qadha 1 sholat'**
+  String get tawbahOptQadha;
+
+  /// No description provided for @tawbahOptNext.
+  ///
+  /// In id, this message translates to:
+  /// **'Sholat berikutnya'**
+  String get tawbahOptNext;
+
+  /// No description provided for @tawbahOptZikir.
+  ///
+  /// In id, this message translates to:
+  /// **'Dzikir ringan'**
+  String get tawbahOptZikir;
+
+  /// No description provided for @tawbahOptLater.
+  ///
+  /// In id, this message translates to:
+  /// **'Nanti saja'**
+  String get tawbahOptLater;
+
+  /// No description provided for @freezeForgiveTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'PENGAMPUNAN'**
+  String get freezeForgiveTitle;
+
+  /// No description provided for @freezeForgiveBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Allah Maha Pengampun. Streak kamu aman, lanjutkan perjalananmu.'**
+  String get freezeForgiveBody;
+
+  /// No description provided for @welcomeShieldTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'WELCOME-BACK SHIELD!'**
+  String get welcomeShieldTitle;
+
+  /// No description provided for @welcomeShieldBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Kamu kembali setelah {days} hari. Ini pelindung gratis untukmu. ❄️'**
+  String welcomeShieldBody(String days);
 
   /// No description provided for @hdRandom.
   ///

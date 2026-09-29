@@ -824,6 +824,21 @@ class AppL10nMs extends AppL10n {
   String get homeQuickDoa => 'Doa';
 
   @override
+  String get homeQuickAsma => 'Asmaul Husna';
+
+  @override
+  String get asmaTitle => 'Asmaul Husna';
+
+  @override
+  String get asmaSubtitle => '99 Nama Allah';
+
+  @override
+  String get asmaSearch => 'Cari nama...';
+
+  @override
+  String get asmaEmpty => 'Tidak dijumpai';
+
+  @override
   String get homeQuickDzikir => 'Zikir';
 
   @override
@@ -3382,6 +3397,63 @@ class AppL10nMs extends AppL10n {
   @override
   String doaCount(Object count) {
     return '$count doa';
+  }
+
+  @override
+  String get qadhaHeader => 'HUTANG SOLAT';
+
+  @override
+  String qadhaMeta(String count) {
+    return '$count belum lunas';
+  }
+
+  @override
+  String get qadhaMetaZero => 'LUNAS';
+
+  @override
+  String get qadhaAllClear => 'Hutang solat: 0 🤍';
+
+  @override
+  String get qadhaSettle => 'Lunaskan';
+
+  @override
+  String get qadhaShareText => 'Alhamdulillah, hutang solatku sudah lunas. 🤍';
+
+  @override
+  String get qadhaToast => 'Alhamdulillah, satu hutang lunas.';
+
+  @override
+  String get tawbahTitle => 'Alhamdulillah, kamu kembali.';
+
+  @override
+  String get tawbahBody =>
+      'Mulakan dari mana? Sedikit tapi konsisten lebih dicintai Allah.';
+
+  @override
+  String get tawbahOptQadha => 'Qadha 1 solat';
+
+  @override
+  String get tawbahOptNext => 'Solat seterusnya';
+
+  @override
+  String get tawbahOptZikir => 'Zikir ringan';
+
+  @override
+  String get tawbahOptLater => 'Nanti';
+
+  @override
+  String get freezeForgiveTitle => 'PENGAMPUNAN';
+
+  @override
+  String get freezeForgiveBody =>
+      'Allah Maha Pengampun. Streak kamu selamat, teruskan perjalananmu.';
+
+  @override
+  String get welcomeShieldTitle => 'WELCOME-BACK SHIELD!';
+
+  @override
+  String welcomeShieldBody(String days) {
+    return 'Kamu kembali selepas $days hari. Ini pelindung percuma untukmu. ❄️';
   }
 
   @override

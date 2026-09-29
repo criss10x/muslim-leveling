@@ -23,6 +23,9 @@ Map<String, dynamic> pickRicherGame(
     'comebackCount',
     'ownedCosmetics',
     'lifeTotals',
+    'qadhaLog',
+    'freezeSavedDates',
+    'tawbahDismissedAt',
   ]) {
     final lv = local[key];
     final rv = remote[key];
@@ -45,7 +48,10 @@ Map<String, dynamic> pickRicherGame(
         ...rv,
         ...{for (final e in (lv as Map).entries) e.key: _maxNum(lv, rv, e.key)},
       };
-    } else if (key == 'ownedCosmetics' && lv is List) {
+    } else if ((key == 'ownedCosmetics' ||
+            key == 'qadhaLog' ||
+            key == 'freezeSavedDates') &&
+        lv is List) {
       merged[key] = {...rv as List, ...lv}.toList();
     } else {
       merged[key] = lv; // heroStreak/tilawahStreak: lokal lebih baru

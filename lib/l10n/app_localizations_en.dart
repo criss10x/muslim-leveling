@@ -818,7 +818,22 @@ class AppL10nEn extends AppL10n {
   }
 
   @override
-  String get homeQuickDoa => 'Duas';
+  String get homeQuickDoa => 'Dua';
+
+  @override
+  String get homeQuickAsma => 'Names of Allah';
+
+  @override
+  String get asmaTitle => 'Asmaul Husna';
+
+  @override
+  String get asmaSubtitle => '99 Names of Allah';
+
+  @override
+  String get asmaSearch => 'Search names...';
+
+  @override
+  String get asmaEmpty => 'Not found';
 
   @override
   String get homeQuickDzikir => 'Dhikr';
@@ -3375,6 +3390,63 @@ class AppL10nEn extends AppL10n {
   @override
   String doaCount(Object count) {
     return '$count prayers';
+  }
+
+  @override
+  String get qadhaHeader => 'PRAYER DEBTS';
+
+  @override
+  String qadhaMeta(String count) {
+    return '$count outstanding';
+  }
+
+  @override
+  String get qadhaMetaZero => 'CLEARED';
+
+  @override
+  String get qadhaAllClear => 'Prayer debts: 0 🤍';
+
+  @override
+  String get qadhaSettle => 'Settle';
+
+  @override
+  String get qadhaShareText => 'Alhamdulillah, my prayer debts are cleared. 🤍';
+
+  @override
+  String get qadhaToast => 'Alhamdulillah, one debt settled.';
+
+  @override
+  String get tawbahTitle => 'Alhamdulillah, you are back.';
+
+  @override
+  String get tawbahBody =>
+      'Where to begin? Small but consistent is more beloved to Allah.';
+
+  @override
+  String get tawbahOptQadha => 'Make up 1 prayer';
+
+  @override
+  String get tawbahOptNext => 'Next prayer';
+
+  @override
+  String get tawbahOptZikir => 'Light dhikr';
+
+  @override
+  String get tawbahOptLater => 'Later';
+
+  @override
+  String get freezeForgiveTitle => 'FORGIVENESS';
+
+  @override
+  String get freezeForgiveBody =>
+      'Allah is Al-Ghafur. Your streak is safe, continue your journey.';
+
+  @override
+  String get welcomeShieldTitle => 'WELCOME-BACK SHIELD!';
+
+  @override
+  String welcomeShieldBody(String days) {
+    return 'You came back after $days days. Here is a free protector for you. ❄️';
   }
 
   @override

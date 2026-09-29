@@ -14,6 +14,7 @@ import 'naik_level_screen.dart';
 import 'quest_claim_screen.dart';
 import 'dzikir_screen.dart';
 import 'hadis_screen.dart';
+import 'asma_screen.dart';
 import 'doa_screen.dart';
 import 'qibla_screen.dart';
 import 'daily_highlight_screen.dart';
@@ -138,6 +139,10 @@ class _HomeTabState extends State<HomeTab> {
       await GameService.load();
       await GameService.runDailyCheck();
       await GameService.ensureDailyQuests();
+      // 15: "Shield aktif kemarin" — momen relief. Banner sekali per hari.
+      if (mounted) _maybeShowShieldSaved();
+      // 3: Tawbah Flow — dialog kembali setelah gap 3+ hari (sekali per hari).
+      if (mounted) _maybeShowTawbah();
       // Independent I/O after state is settled.
       late SharedPreferences p;
       await Future.wait([
@@ -1462,6 +1467,12 @@ class _HomeTabState extends State<HomeTab> {
         daily: false,
       ),
       (
+        icon: AppIcons.sparkle,
+        label: AppL10n.of(context).homeQuickAsma,
+        onTap: () => _push(const AsmaScreen()),
+        daily: false,
+      ),
+      (
         icon: AppIcons.explore,
         label: AppL10n.of(context).homeQuickKiblat,
         onTap: _openQibla,
@@ -1787,6 +1798,88 @@ class _HomeTabState extends State<HomeTab> {
     _showChestReveal(reveal);
   }
 
+  /// 3: Tawbah Flow — dialog lembut setelah gap 3+ hari.
+  /// Trigger: runDailyCheck memberi welcome-back shield (gap>=3) + belum
+  /// dismiss hari ini. Pilihan: qadha 1 / sholat berikutnya / dzikir ringan.
+  Future<void> _maybeShowTawbah() async {
+    final today = DateTime.now().toIso8601String().substring(0, 10);
+    if (GameService.current.tawbahDismissedAt == today) return;
+    // Syarat gap: kemarin tidak ada log sama sekali + lusa/sebelumnya ada gap.
+    // Heuristik sederhana: lastCheckedDate lompat >=3 hari sudah ditangani
+    // runDailyCheck (welcome shield). Di sini cek: ada qadha baru ATAU
+    // shield baru dari welcome-back (freezeShields>0 + qadhaLog tidak kosong).
+    final hasQadha = GameService.current.qadhaLog.isNotEmpty;
+    final hasShield = GameService.current.freezeShields > 0;
+    if (!hasQadha && !hasShield) return;
+    // Jangan ganggu user yang hari ini sudah aktif (ada log hari ini).
+    final hasLogToday = GameService.current.prayerLog
+        .any((l) => l.date == today);
+    if (hasLogToday) return;
+    if (!mounted) return;
+    await GameService.dismissTawbah();
+    if (!mounted) return;
+    final l10n = AppL10n.of(context);
+    await showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.xl),
+        ),
+        title: Text(l10n.tawbahTitle,
+            style:
+                AppText.titleLg().copyWith(color: AppColors.onSurface)),
+        content: Text(l10n.tawbahBody,
+            style: AppText.bodyMd()
+                .copyWith(color: AppColors.onSurfaceVariant)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(l10n.tawbahOptLater),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              // TODO: navigasi ke tab dzikir (untuk sekarang: tutup dialog).
+            },
+            child: Text(l10n.tawbahOptZikir),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              // TODO: navigasi ke card qadha di Profil (untuk sekarang: tutup).
+            },
+            child: Text(l10n.tawbahOptQadha),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 15: banner "Shield aktif kemarin" sekali per hari (SharedPreferences).
+  /// Trigger: kemarin ada di freezeSavedDates.
+  Future<void> _maybeShowShieldSaved() async {
+    final yesterday = DateTime.now()
+        .subtract(const Duration(days: 1))
+        .toIso8601String()
+        .substring(0, 10);
+    if (!GameService.current.freezeSavedDates.contains(yesterday)) return;
+    final p = await SharedPreferences.getInstance();
+    final today = DateTime.now().toIso8601String().substring(0, 10);
+    if (p.getString('shield_banner_date') == today) return;
+    await p.setString('shield_banner_date', today);
+    if (!mounted) return;
+    final l10n = AppL10n.of(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('❄️ ${l10n.freezeForgiveBody}'),
+        duration: const Duration(seconds: 5),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
   void _showChestReveal(ChestRevealState reveal) {
     final accent = reveal.isCosmetic
         ? AppColors.secondaryFixed
@@ -1865,6 +1958,17 @@ class _HomeTabState extends State<HomeTab> {
                     style: AppText.bodyMd().copyWith(
                       color: AppColors.onSurfaceVariant,
                       fontSize: 12,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  // 15: freeze = pengampunan — metafora spiritual, bukan game mechanic.
+                  const SizedBox(height: AppSpacing.sm),
+                  Text(
+                    l10n.freezeForgiveBody,
+                    style: AppText.bodyMd().copyWith(
+                      color: accent,
+                      fontSize: 12,
+                      fontStyle: FontStyle.italic,
                     ),
                     textAlign: TextAlign.center,
                   ),
