@@ -35,6 +35,9 @@ void main() {
     for (final label in ['Hadis', 'Doa', 'Kiblat', 'Dzikir', 'Renungan']) {
       expect(find.text(label), findsOneWidget, reason: 'tombol $label hilang');
     }
+    await tester.scrollUntilVisible(find.text('Asmaul Husna'), 200);
+    expect(find.text('Asmaul Husna'), findsOneWidget,
+        reason: 'tile Asmaul Husna harus ada di Akses Cepat 2026-09-29');
     // 'Highlight' sengaja ditinggalkan: tabrakan 3 arti (kutipan artikel Belajar,
     // sorot hasil cari Quran, judul halaman tujuan 'Renungan Hari Ini').
     expect(find.text('Highlight'), findsNothing,
