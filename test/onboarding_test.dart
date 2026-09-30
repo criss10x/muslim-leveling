@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:muslim_leveling/screens/onboarding_screen.dart';
+import 'package:muslim_leveling/theme/app_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'helpers/app_wrap.dart';
 
@@ -51,6 +52,11 @@ void main() {
     await swipe();
     expect(find.text('Suara Adzan Kamu'), findsOneWidget);
     expect(find.text('Lanjut'), findsOneWidget);
+    // Default 'Adzan Klasik' harus TERLIHAT terpilih: tanpa penanda ini user
+    // tidak tahu suara apa yang sedang aktif. Pilihan suara tidak pernah
+    // kosong — varian default sudah bundled di APK.
+    expect(find.byIcon(AppIcons.radioButtonCheckedRounded), findsOneWidget,
+        reason: 'varian default harus tampil terpilih, bukan semua kosong');
 
     // Halaman 7: notifikasi
     await swipe();
