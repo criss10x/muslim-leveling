@@ -181,9 +181,15 @@ void main() {
 
       // Bentuk teksnya beda per bahasa — inilah yang dulu tidak mungkin,
       // karena countdown dirakit dari literal '${h}j ${m}m ... lagi'.
+      // Kalau semua sholat hari ini sudah lewat (malam hari), countdown-nya
+      // jdCountdownTomorrow ("besok"/"tomorrow") — tetap beda per bahasa.
       expect(idNext.countdown, isNot(enNext.countdown));
-      expect(idNext.countdown, contains('lagi'));
-      expect(enNext.countdown, contains('left'));
+      final idOk = idNext.countdown.contains('lagi') ||
+          idNext.countdown.contains('besok');
+      final enOk = enNext.countdown.contains('left') ||
+          enNext.countdown.contains('tomorrow');
+      expect(idOk, isTrue, reason: 'countdown id: ${idNext.countdown}');
+      expect(enOk, isTrue, reason: 'countdown en: ${enNext.countdown}');
     });
 
     test('nama & label sholat dari ARB di kedua locale', () async {
