@@ -97,10 +97,10 @@ void main() {
     expect(find.text('Pilih kota manual'), findsNothing,
         reason: 'jalur manual tidak relevan lagi setelah kota terisi');
 
-    // 4) Benar-benar maju ke halaman 6.
+    // 4) Benar-benar maju ke halaman berikutnya (suara adzan, 6/7).
     await tester.tap(find.text('Lanjut'));
     await _settle(tester, 900);
-    expect(find.text('Pengingat Adzan'), findsOneWidget);
+    expect(find.text('Suara Adzan Kamu'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 

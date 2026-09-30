@@ -56,7 +56,12 @@ void main() {
     expect(find.text('We Need Your Location'), findsOneWidget);
     expect(find.text('Allow Location'), findsOneWidget);
 
-    // Halaman 6: notifikasi
+    // Halaman 6: suara adzan
+    await tester.fling(find.byType(PageView), const Offset(-400, 0), 800);
+    await tester.pumpAndSettle();
+    expect(find.text('Your Adhan Sound'), findsOneWidget);
+
+    // Halaman 7: notifikasi
     await tester.fling(find.byType(PageView), const Offset(-400, 0), 800);
     await tester.pumpAndSettle();
     expect(find.text('Adhan Reminders'), findsOneWidget);

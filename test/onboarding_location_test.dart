@@ -92,7 +92,8 @@ void main() {
     for (var i = 0; i < 30; i++) {
       await tester.pump(const Duration(milliseconds: 50));
     }
-    expect(find.text('Pengingat Adzan'), findsOneWidget);
+    // Halaman berikutnya = suara adzan (6/7); izin notif ada di halaman 7.
+    expect(find.text('Suara Adzan Kamu'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }

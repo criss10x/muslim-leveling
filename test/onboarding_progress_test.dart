@@ -22,19 +22,19 @@ Future<void> _settle(WidgetTester t, int ms) async {
 void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
 
-  testWidgets('progres onboarding terlihat mata di keenam halaman',
+  testWidgets('progres onboarding terlihat mata di ketujuh halaman',
       (tester) async {
     SharedPreferences.setMockInitialValues({});
     await tester.pumpWidget(appWrap(const OnboardingScreen()));
     await _settle(tester, 900);
 
     final pv = tester.widget<PageView>(find.byType(PageView));
-    for (var p = 0; p < 6; p++) {
+    for (var p = 0; p < 7; p++) {
       pv.controller!.jumpToPage(p);
       await _settle(tester, 700);
       // 'n/6' harus ada sebagai teks di layar, bukan hanya di dalam Semantics:
       // dulu progres hanya untuk TalkBack, mata tidak dapat apa-apa.
-      expect(find.text('${p + 1}/6'), findsOneWidget,
+      expect(find.text('${p + 1}/7'), findsOneWidget,
           reason: 'halaman ${p + 1} tidak menampilkan progres visual');
     }
   });

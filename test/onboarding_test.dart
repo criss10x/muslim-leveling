@@ -47,7 +47,12 @@ void main() {
     expect(find.text('Izinkan Lokasi'), findsOneWidget);
     expect(find.text('PILIH KOTA MANUAL'), findsOneWidget);
 
-    // Halaman 6: notifikasi
+    // Halaman 6: suara adzan (sebelum izin notif — user memilih suaranya dulu)
+    await swipe();
+    expect(find.text('Suara Adzan Kamu'), findsOneWidget);
+    expect(find.text('Lanjut'), findsOneWidget);
+
+    // Halaman 7: notifikasi
     await swipe();
     expect(find.text('Pengingat Adzan'), findsOneWidget);
     expect(find.text('Izinkan Notifikasi'), findsOneWidget);

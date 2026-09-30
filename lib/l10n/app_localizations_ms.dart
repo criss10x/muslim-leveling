@@ -1086,6 +1086,19 @@ class AppL10nMs extends AppL10n {
   String get onbNicknameHint => 'Nama pejuang (pilihan, kosong: Pejuang)';
 
   @override
+  String get onbSoundTitle => 'Bunyi Azan Anda';
+
+  @override
+  String get onbSoundBody =>
+      'Pilih bunyi yang anda mahu apabila masuk waktu solat. Dengar dahulu sebelum memilih.';
+
+  @override
+  String get onbSoundNote => 'Boleh ditukar bila-bila masa di tab Jadual.';
+
+  @override
+  String get onbSoundContinue => 'Teruskan';
+
+  @override
   String get onbNotifAllow => 'Benarkan Notifikasi';
 
   @override

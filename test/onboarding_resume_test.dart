@@ -46,7 +46,7 @@ void main() {
     expect(find.text('Cara Main'), findsOneWidget,
         reason: 'kembali ke halaman 1 — 3 halaman yang sudah dilewati dibuang');
     // Progres di header ikut halaman yang dipulihkan, bukan halaman 1.
-    expect(find.text('4/6'), findsOneWidget);
+    expect(find.text('4/7'), findsOneWidget);
   });
 
   testWidgets('gender yang sudah dipilih ikut dipulihkan', (tester) async {
@@ -98,7 +98,7 @@ void main() {
     await tester.pumpWidget(appWrap(const OnboardingScreen()));
     await _settle(tester, 900);
 
-    tester.widget<PageView>(find.byType(PageView)).controller!.jumpToPage(5);
+    tester.widget<PageView>(find.byType(PageView)).controller!.jumpToPage(6);
     await _settle(tester, 700);
     await tester.tap(find.text('LEWATI, NANTI SAJA'));
     await _settle(tester, 600);

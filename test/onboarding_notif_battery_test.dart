@@ -94,9 +94,10 @@ void main() {
         AndroidFlutterLocalNotificationsPlugin();
   });
 
-  /// Maju ke halaman 6 tanpa menyentuh GPS: tombol lokasi tidak ditekan.
+  /// Maju ke halaman notif tanpa menyentuh GPS: tombol lokasi tidak ditekan.
+  /// 6 fling = 0→6 (7 halaman; suara adzan di 6, notif di 7).
   Future<void> toNotifPage(WidgetTester tester) async {
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 6; i++) {
       await tester.fling(find.byType(PageView), const Offset(-400, 0), 800);
       await tester.pumpAndSettle();
     }

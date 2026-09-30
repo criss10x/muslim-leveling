@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../theme/app_theme.dart';
-import '../../widgets/common.dart';
+import '../widgets/adzan_sound_picker.dart';
+import '../widgets/common.dart';
 import '../../widgets/city_picker.dart';
 import '../../services/prayer_service.dart';
 import '../../services/game_service.dart';
@@ -29,9 +30,6 @@ class _JadwalTabState extends State<JadwalTab> {
   // karena prefs async; dipakai sinkron di _schedule().
   Map<String, String> _perPrayerSounds = {};
   String _globalSound = 'adzan';
-  String _adzanVariant = 'adzan';
-  // Varian yang sedang diunduh (null = tidak ada).
-  String? _downloadingVariant;
   /// true = jadwal dari Aladhan (luar negeri). Dipakai hanya untuk memilih
   /// teks footnote; pengambilan data ditentukan PrayerService.
   bool _abroad = false;
@@ -62,12 +60,10 @@ class _JadwalTabState extends State<JadwalTab> {
     // bottom sheet di tab ini — selalu refresh supaya icon sinkron.
     final sounds = await NotificationService.getPerPrayerSounds();
     final global = await NotificationService.getSoundMode();
-    final variant = await NotificationService.getAdzanVariant();
     if (mounted) {
       setState(() {
         _perPrayerSounds = sounds;
         _globalSound = global;
-        _adzanVariant = variant;
       });
     }
     final loc = await PrayerService.loadLocation();
@@ -212,7 +208,7 @@ class _JadwalTabState extends State<JadwalTab> {
               const SizedBox(height: AppSpacing.lg),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-                child: _adzanSoundCard(l10n),
+                child: const AdzanSoundPicker(),
               ),
               const SizedBox(height: AppSpacing.lg),
               Padding(
@@ -845,132 +841,6 @@ class _JadwalTabState extends State<JadwalTab> {
         ),
       ),
     );
-  }
-
-  /// Kartu pilihan suara adzan: radio per varian + tombol tes.
-  /// Varian selain default diunduh on-demand (~1-2MB) lalu dipakai
-  /// sebagai suara channel notifikasi.
-  Widget _adzanSoundCard(AppL10n l10n) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        HudHeader(l10n.jdAdzanSoundTitle),
-        Container(
-          padding: const EdgeInsets.all(AppSpacing.md),
-          decoration: BoxDecoration(
-            color: AppColors.surfaceContainerLow,
-            borderRadius: BorderRadius.circular(AppRadius.xxl),
-            border: Border.all(
-              color: AppColors.outlineVariant.withValues(alpha: 0.3),
-            ),
-          ),
-          child: Column(
-            children: [
-              for (final (id, _, label) in NotificationService.adzanVariants)
-                _adzanVariantRow(id, label),
-              const SizedBox(height: AppSpacing.xs),
-              SizedBox(
-                width: double.infinity,
-                child: TextButton.icon(
-                  onPressed: _downloadingVariant == null
-                      ? () => NotificationService.sendTestAdzanSound(l10n)
-                      : null,
-                  icon: const Icon(AppIcons.playCircleOutline, size: 18),
-                  label: Text(l10n.jdTesSuara),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _adzanVariantRow(String id, String label) {
-    final selected = id == _adzanVariant;
-    final downloading = _downloadingVariant == id;
-    return InkWell(
-      onTap: downloading ? null : () => _pickAdzanVariant(id),
-      borderRadius: BorderRadius.circular(AppRadius.md),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.xs,
-          vertical: AppSpacing.sm,
-        ),
-        child: Row(
-          children: [
-            Icon(
-              selected
-                  ? AppIcons.radioButtonCheckedRounded
-                  : AppIcons.radioButtonOffRounded,
-              size: 20,
-              color: selected
-                  ? AppColors.primary
-                  : AppColors.onSurfaceVariant,
-            ),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Text(
-                label,
-                style: AppText.bodyMd().copyWith(
-                  color: selected
-                      ? AppColors.onSurface
-                      : AppColors.onSurfaceVariant,
-                ),
-              ),
-            ),
-            // Status download: default selalu siap (bundled di APK).
-            if (downloading)
-              SizedBox.square(
-                dimension: 16,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: AppColors.primary,
-                ),
-              )
-            else if (id != 'adzan')
-              FutureBuilder<bool>(
-                future: NotificationService.isVariantDownloaded(id),
-                builder: (context, snap) => Icon(
-                  snap.data == true
-                      ? AppIcons.checkCircleRounded
-                      : AppIcons.downloadRounded,
-                  size: 18,
-                  color: selected
-                      ? AppColors.primary
-                      : AppColors.onSurfaceVariant,
-                ),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Future<void> _pickAdzanVariant(String id) async {
-    if (id == _adzanVariant) return;
-    final wasDownloaded = await NotificationService.isVariantDownloaded(id);
-    if (!wasDownloaded && mounted) {
-      setState(() => _downloadingVariant = id);
-    }
-    try {
-      await NotificationService.setAdzanVariant(id);
-      if (mounted) setState(() => _adzanVariant = id);
-    } catch (_) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppL10n.of(context).jdAdzanDownloadFailed,
-              style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
-            ),
-            backgroundColor: AppColors.surfaceContainerLowest,
-          ),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _downloadingVariant = null);
-    }
   }
 
   Widget _infoCard() {

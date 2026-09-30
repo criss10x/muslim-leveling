@@ -1097,6 +1097,20 @@ class AppL10nTr extends AppL10n {
       'Savaşçı adı (isteğe bağlı, boş bırakılırsa: Savaşçı)';
 
   @override
+  String get onbSoundTitle => 'Ezan Sesiniz';
+
+  @override
+  String get onbSoundBody =>
+      'Namaz vakti geldiğinde duymak istediğiniz sesi seçin. Seçmeden önce dinleyin.';
+
+  @override
+  String get onbSoundNote =>
+      'Bunu istediğiniz zaman Takvim sekmesinden değiştirebilirsiniz.';
+
+  @override
+  String get onbSoundContinue => 'Devam';
+
+  @override
   String get onbNotifAllow => 'Bildirimlere İzin Ver';
 
   @override

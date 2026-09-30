@@ -21,9 +21,10 @@ void main() {
   }
 
   Future<void> finish(WidgetTester tester) async {
-    // 2 halaman sisa setelah gender: lokasi, notif → tombol "Lewati, nanti
-    // saja" di halaman notif menutup onboarding tanpa menyentuh permission.
-    for (var i = 0; i < 3; i++) {
+    // 4 halaman sisa setelah gender: cara main, lokasi, suara adzan, notif →
+    // tombol "Lewati, nanti saja" di halaman notif menutup onboarding tanpa
+    // menyentuh permission.
+    for (var i = 0; i < 4; i++) {
       await tester.fling(find.byType(PageView), const Offset(-400, 0), 800);
       await tester.pumpAndSettle();
     }

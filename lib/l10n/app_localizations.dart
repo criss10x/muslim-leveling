@@ -2092,6 +2092,30 @@ abstract class AppL10n {
   /// **'Nama pejuang (opsional, kosong: Pejuang)'**
   String get onbNicknameHint;
 
+  /// No description provided for @onbSoundTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Suara Adzan Kamu'**
+  String get onbSoundTitle;
+
+  /// No description provided for @onbSoundBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Pilih suara yang kamu mau saat masuk waktu sholat. Dengarkan dulu sebelum memilih.'**
+  String get onbSoundBody;
+
+  /// No description provided for @onbSoundNote.
+  ///
+  /// In id, this message translates to:
+  /// **'Bisa diganti kapan saja di tab Jadwal.'**
+  String get onbSoundNote;
+
+  /// No description provided for @onbSoundContinue.
+  ///
+  /// In id, this message translates to:
+  /// **'Lanjut'**
+  String get onbSoundContinue;
+
   /// No description provided for @onbNotifAllow.
   ///
   /// In id, this message translates to:

@@ -23,6 +23,7 @@ const _titles = {
     'Kamu Ikhwan atau Akhwat?',
     'Cara Main',
     'Butuh Lokasimu',
+    'Suara Adzan Kamu',
     'Pengingat Adzan',
   ],
   'en': [
@@ -31,12 +32,13 @@ const _titles = {
     'Are you Ikhwan or Akhwat?',
     'How to Play',
     'We Need Your Location',
+    'Your Adhan Sound',
     'Adhan Reminders',
   ],
 };
 
 void main() {
-  testWidgets('golden 6 halaman onboarding (id + en)', (tester) async {
+  testWidgets('golden 7 halaman onboarding (id + en)', (tester) async {
     GoogleFonts.config.allowRuntimeFetching = false;
     tester.view.physicalSize = const Size(1080, 2280);
     tester.view.devicePixelRatio = 3.0;
@@ -55,7 +57,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 600));
 
       final ctrl = tester.widget<PageView>(find.byType(PageView)).controller!;
-      for (var page = 0; page < 6; page++) {
+      for (var page = 0; page < 7; page++) {
         ctrl.jumpToPage(page);
         await tester.pumpAndSettle();
 

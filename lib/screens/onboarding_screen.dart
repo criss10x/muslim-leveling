@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
+import '../../widgets/adzan_sound_picker.dart';
 import '../../widgets/city_picker.dart';
 import '../../widgets/gender_picker.dart';
 import '../../widgets/locale_picker.dart';
@@ -17,8 +18,8 @@ import '../../services/prayer_service.dart';
 import 'dashboard_shell.dart';
 import '../theme/app_icons.dart';
 
-/// Onboarding 6 halaman: bahasa → nama → Ikhwan/Akhwat → cara main →
-/// lokasi → pengingat.
+/// Onboarding 7 halaman: bahasa → nama → Ikhwan/Akhwat → cara main →
+/// lokasi → suara adzan → pengingat.
 ///
 /// Urutan bahasa di depan bukan gaya-gayaan: halaman 2-6 langsung terbaca
 /// dalam bahasa yang dipilih, karena pilihan di-apply saat kartu ditekan
@@ -34,11 +35,16 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen>
     with SingleTickerProviderStateMixin {
-  static const _total = 6;
+  static const _total = 7;
 
   /// Halaman lokasi (0-based). Dipakai restore untuk tahu apakah kota perlu
   /// dibaca dari prefs.
   static const _lokasiPage = 4;
+
+  /// Halaman suara adzan (0-based). Dipakai halaman notif untuk tahu apakah
+  /// user sudah melewatinya — pilihan suara tidak bisa dikonfirmasi dari
+  /// prefs belakangan, karena defaultnya sudah terisi.
+  static const _suaraPage = 5;
 
   final _pageCtrl = PageController();
   late final AnimationController _entry = AnimationController(
@@ -333,6 +339,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                     _pageGender(),
                     _pageCaraMain(),
                     _pageLokasi(),
+                    _pageSuara(),
                     _pageNotif(),
                   ],
                 ),
@@ -659,11 +666,57 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     );
   }
 
+  /// Halaman suara adzan (6/7) — sengaja sebelum halaman izin notifikasi.
+  ///
+  /// Urutan ini yang bikin halaman izin masuk akal: user memilih suaranya
+  /// DULU, lalu diminta izin OS untuk memutar suara itu. Dibalik (izin dulu)
+  /// permintaannya jadi abstrak — "izinkan notifikasi" tanpa tahu notifnya
+  /// bunyi apa.
+  ///
+  /// Halaman ini tidak bisa buntu: pilihan suara tidak butuh izin OS apa pun,
+  /// dan varian default sudah bundled di APK. Varian lain diunduh saat dipilih,
+  /// dengan status unduh per baris.
+  Widget _pageSuara() {
+    final l10n = AppL10n.of(context);
+    return _PageBody(
+      entry: _entry,
+      semanticsLabel: l10n.onbStepOf('${_suaraPage + 1}', '$_total'),
+      child: Column(
+        children: [
+          const Spacer(),
+          const _Mascot(icon: AppIcons.volumeUpRounded),
+          const SizedBox(height: AppSpacing.md),
+          _Title(l10n.onbSoundTitle),
+          const SizedBox(height: AppSpacing.sm),
+          _Body(l10n.onbSoundBody),
+          const SizedBox(height: AppSpacing.md),
+          // showTitle: false — halaman ini sudah punya judul sendiri.
+          const AdzanSoundPicker(showTitle: false),
+          const SizedBox(height: AppSpacing.sm),
+          Text(
+            l10n.onbSoundNote,
+            textAlign: TextAlign.center,
+            style: AppText.bodyMd().copyWith(
+              color: AppColors.onSurfaceVariant,
+            ),
+          ),
+          const Spacer(),
+          HeroButton(
+            label: l10n.onbSoundContinue,
+            trailingIcon: AppIcons.arrowForward,
+            onPressed: _busy ? null : _next,
+          ),
+          const SizedBox(height: AppSpacing.lg),
+        ],
+      ),
+    );
+  }
+
   Widget _pageNotif() {
     final l10n = AppL10n.of(context);
     return _PageBody(
       entry: _entry,
-      semanticsLabel: l10n.onbStepOf('6', '$_total'),
+      semanticsLabel: l10n.onbStepOf('7', '$_total'),
       child: Column(
         children: [
           const Spacer(),
