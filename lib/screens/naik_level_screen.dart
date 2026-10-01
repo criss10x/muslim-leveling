@@ -321,7 +321,9 @@ class _CrescentBadge extends StatelessWidget {
                   ),
                 ],
         ),
-        child: CustomPaint(painter: _CrescentPainter()),
+        child: CustomPaint(
+          painter: _CrescentPainter(AppColors.onSecondaryContainer),
+        ),
       ),
     );
   }
@@ -330,9 +332,15 @@ class _CrescentBadge extends StatelessWidget {
 /// Crescent = lingkaran besar dikurangi lingkaran offset (Path.combine),
 /// plus bintang 4-sudut kecil di bukaan sabit.
 class _CrescentPainter extends CustomPainter {
+  /// Ink ditangkap saat konstruksi. Kalau dibaca dari `AppColors` langsung di
+  /// `paint()`, painter ini tidak tahu temanya berubah — apalagi
+  /// `shouldRepaint => false` bikin hasil tema lama menempel selamanya.
+  final Color ink;
+
+  const _CrescentPainter(this.ink);
+
   @override
   void paint(Canvas canvas, Size size) {
-    final ink = AppColors.onSecondaryContainer;
     final c = Offset(size.width / 2, size.height / 2);
     final r = size.width * 0.30;
 
@@ -357,5 +365,5 @@ class _CrescentPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _CrescentPainter old) => false;
+  bool shouldRepaint(covariant _CrescentPainter old) => old.ink != ink;
 }

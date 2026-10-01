@@ -862,7 +862,12 @@ class _HomeTabState extends State<HomeTab> {
                 width: 130,
                 height: 130,
                 child: CustomPaint(
-                  painter: _RingsPainter(wProgress, sProgress, sqProgress),
+                  painter: _RingsPainter(
+                    wProgress,
+                    sProgress,
+                    sqProgress,
+                    AppColors.surfaceContainerHighest,
+                  ),
                 ),
               ),
               const SizedBox(width: AppSpacing.lg),
@@ -2047,7 +2052,13 @@ class _HomeTabState extends State<HomeTab> {
 
 class _RingsPainter extends CustomPainter {
   final double wajib, sunnah, sideQuest;
-  _RingsPainter(this.wajib, this.sunnah, this.sideQuest);
+
+  /// Warna latar ring ditangkap saat konstruksi: ia berubah antar preset
+  /// (0xFF2A312E di dark, 0xFFD1D5DB di light), jadi kalau dibaca langsung di
+  /// `paint()` perubahannya tidak pernah terdeteksi.
+  final Color trackColor;
+
+  _RingsPainter(this.wajib, this.sunnah, this.sideQuest, this.trackColor);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -2062,7 +2073,7 @@ class _RingsPainter extends CustomPainter {
 
     for (var i = 0; i < radii.length; i++) {
       final paintBg = Paint()
-        ..color = AppColors.surfaceContainerHighest
+        ..color = trackColor
         ..style = PaintingStyle.stroke
         ..strokeWidth = 8
         ..strokeCap = StrokeCap.round;
@@ -2090,7 +2101,8 @@ class _RingsPainter extends CustomPainter {
   bool shouldRepaint(covariant _RingsPainter old) =>
       old.wajib != wajib ||
       old.sunnah != sunnah ||
-      old.sideQuest != sideQuest;
+      old.sideQuest != sideQuest ||
+      old.trackColor != trackColor;
 }
 
 class _RankMedallion extends StatelessWidget {

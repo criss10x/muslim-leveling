@@ -217,7 +217,8 @@ class _MedalPainter extends CustomPainter {
   bool shouldRepaint(covariant _MedalPainter old) =>
       old.primary != primary ||
       old.secondary != secondary ||
-      old.unlocked != unlocked;
+      old.unlocked != unlocked ||
+      old.legendary != legendary;
 }
 
 /// Announcer global — dengerin AchievementService.pendingAnnouncer dan

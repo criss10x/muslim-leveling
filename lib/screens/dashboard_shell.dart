@@ -53,8 +53,15 @@ class _DashboardShellState extends State<DashboardShell> {
   @override
   Widget build(BuildContext context) {
     // ListenableBuilder: theme toggle rebuilds shell + non-const tabs.
-    // JANGAN pakai const pada tab children — Flutter skip updateChild
-    // kalau widget instance identical, jadi AppColors getter gak ke-baca ulang.
+    //
+    // PENTING — tab children TIDAK boleh `const`. Kalau instance-nya identical,
+    // Flutter melewati updateChild sepenuhnya: widget subtree dilewati, jadi
+    // `AppColors` getter tidak pernah dibaca ulang dan tab itu mempertahankan
+    // warna tema lama setelah user ganti tema. Bug 2026-10-01: hanya `HomeTab`
+    // yang masih `const`, jadi ganti tema dark→light saat berada di tab lain
+    // lalu kembali ke Home menyisakan panel/ring/pill gelap (dan sebaliknya).
+    // Overlay announcer di bawah juga sengaja non-const karena alasan sama:
+    // keduanya merender warna tema saat popup muncul.
     return ListenableBuilder(
       listenable: themeNotifier,
       builder: (context, _) {
@@ -78,7 +85,7 @@ class _DashboardShellState extends State<DashboardShell> {
                 IndexedStack(
                   index: _tab,
                   children: [
-                    const HomeTab(),
+                    HomeTab(),
                     JadwalTab(),
                     QuranTab(),
                     BelajarTab(),
