@@ -1079,8 +1079,13 @@ class _ProfilTabState extends State<ProfilTab> {
               const SizedBox(height: AppSpacing.md),
               _prayerStreaks(),
               const SizedBox(height: AppSpacing.md),
-              _qadhaCard(),
-              const SizedBox(height: AppSpacing.md),
+              // Qadha card (utang sholat) disembunyikan 2026-10-01 — permintaan
+              // Kris ("sepertinya tidak perlu dulu"). Fungsi _qadhaCard dan
+              // helpernya dibiarkan utuh di bawah; cukup kembalikan 2 baris ini
+              // untuk menampilkan lagi. Konl: tidak usah menampilkan saat
+              // utang lunas, jadi tanpa kartu ini tidak ada jejaknya di layar.
+              // _qadhaCard(),
+              // const SizedBox(height: AppSpacing.md),
               _stats(),
               const SizedBox(height: AppSpacing.md),
               _rankSystem(),
@@ -1837,6 +1842,11 @@ class _ProfilTabState extends State<ProfilTab> {
 
   /// Qadha card — utang sholat yang terlewat, lunas lewat tombol per-item.
   /// Utang 0 + pernah punya utang → momen "utang sholat: 0 🤍" + share.
+  ///
+  /// SEMENTARA tidak dipanggil dari build() (kartu disembunyikan, lihat
+  /// komentar di children ListView). analyze warning di-silence supaya
+  /// mengembalikan kartu cukup dengan meng-uncomment pemanggilnya.
+  // ignore: unused_element
   Widget _qadhaCard() {
     final state = GameService.current;
     final qadha = state.qadhaLog;
