@@ -141,8 +141,11 @@ class _HomeTabState extends State<HomeTab> {
       await GameService.ensureDailyQuests();
       // 15: "Shield aktif kemarin" — momen relief. Banner sekali per hari.
       if (mounted) _maybeShowShieldSaved();
-      // 3: Tawbah Flow — dialog kembali setelah gap 3+ hari (sekali per hari).
-      if (mounted) _maybeShowTawbah();
+      // 3: Tawbah Flow (dialog kembali setelah gap 3+ hari) disembunyikan
+      // 2026-10-01 — permintaan Kris. Backend tetap jalan utuh: runDailyCheck
+      // tetap menilai hari bolong, shield tetap dikonsumsi/oberkan, utang
+      // tetap dicatat. Cukup uncomment baris di bawah untuk menampilkan lagi.
+      // if (mounted) _maybeShowTawbah();
       // Independent I/O after state is settled.
       late SharedPreferences p;
       await Future.wait([
@@ -1806,6 +1809,11 @@ class _HomeTabState extends State<HomeTab> {
   /// 3: Tawbah Flow — dialog lembut setelah gap 3+ hari.
   /// Trigger: runDailyCheck memberi welcome-back shield (gap>=3) + belum
   /// dismiss hari ini. Pilihan: qadha 1 / sholat berikutnya / dzikir ringan.
+  ///
+  /// SEMENTARA tidak dipanggil dari _load() (dialog disembunyikan, lihat
+  /// komentar di sana). Tombolnya masih dead-end (TODO navigasi), jadi kalau
+  /// dihidupkan lagi opsi Qadha/Zikir perlu dinaikkan dulu.
+  // ignore: unused_element
   Future<void> _maybeShowTawbah() async {
     final today = DateTime.now().toIso8601String().substring(0, 10);
     if (GameService.current.tawbahDismissedAt == today) return;
