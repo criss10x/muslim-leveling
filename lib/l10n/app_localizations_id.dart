@@ -827,6 +827,17 @@ class AppL10nId extends AppL10n {
   String get asmaTitle => 'Asmaul Husna';
 
   @override
+  String get asmaShareTitle => 'Bagikan Asmaul Husna';
+
+  @override
+  String get asmaContentMeaning => 'Arti';
+
+  @override
+  String asmaPill(Object name, Object number) {
+    return '$name · nama ke-$number';
+  }
+
+  @override
   String get asmaSubtitle => '99 Nama Allah';
 
   @override

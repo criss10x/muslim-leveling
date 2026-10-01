@@ -838,6 +838,17 @@ class AppL10nTr extends AppL10n {
   String get asmaTitle => 'Esmaül Hüsna';
 
   @override
+  String get asmaShareTitle => 'Esmaül Hüsna\'yı Paylaş';
+
+  @override
+  String get asmaContentMeaning => 'Anlam';
+
+  @override
+  String asmaPill(Object name, Object number) {
+    return '$name · $number. isim';
+  }
+
+  @override
   String get asmaSubtitle => 'Allah\'ın 99 İsmi';
 
   @override

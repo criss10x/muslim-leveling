@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
+import '../../widgets/share_card_kit.dart';
 import '../../services/asma_data.dart';
 import '../../services/asma_meanings.dart';
 import '../../l10n/app_localizations.dart';
@@ -249,132 +250,128 @@ class AsmaSharePreviewCard extends StatelessWidget {
   final AsmaItem item;
   final String meaning;
   final double aspect;
+  final ShareBgPreset? preset;
+  final bool showArabic;
+  final bool showMeaning;
 
   const AsmaSharePreviewCard({
     super.key,
     required this.item,
     required this.meaning,
     this.aspect = 9 / 16,
+    this.preset,
+    this.showArabic = true,
+    this.showMeaning = true,
   });
 
   @override
   Widget build(BuildContext context) {
     // Skala proporsional mengikuti tinggi kartu (pola quran_share_sheet).
-    final cardSize = Size(340, 340 / aspect);
+    final p = preset ?? shareBgPresets[kShareDefaultPreset];
+    final cardSize = Size(kShareCardWidth, kShareCardWidth / aspect);
     final s = (cardSize.height / 604).clamp(0.55, 1.0);
     final q = (cardSize.height / 604).clamp(0.85, 1.15);
-    const fg = Colors.white;
-    final sub = Colors.white.withValues(alpha: 0.75);
-    const accent = Color(0xFFD4AF37); // gold
+    final fg = p.fg;
+    final sub = p.sub;
+    final accent = AppColors.secondaryFixedDim; // gold, kartu selalu gelap
     return Container(
       width: cardSize.width,
       height: cardSize.height,
-      decoration: BoxDecoration(
+      decoration: p.decoration.copyWith(
         borderRadius: BorderRadius.circular(20),
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xFF0B3D2E), Color(0xFF06231A)],
-        ),
       ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 22 * s,
-          vertical: 24 * s,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // ── Header ──
-            Center(
-              child: Column(
-                children: [
-                  Text('ASMAUL HUSNA',
-                      style: TextStyle(
-                          fontSize: 11 * q,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 2,
-                          color: fg)),
-                  SizedBox(height: 1 * s),
-                  Text('#${item.number} / 99',
-                      style: TextStyle(
-                          fontSize: 9 * q,
-                          color: sub.withValues(alpha: 0.7))),
-                ],
-              ),
+      child: Stack(
+        children: [
+          ShareScrim(preset: p),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 22 * s,
+              vertical: 24 * s,
             ),
-            SizedBox(height: 10 * s),
-            Divider(color: fg.withValues(alpha: 0.25), height: 1),
-            SizedBox(height: 10 * s),
-            // ── Konten tengah: Arab + translit + arti ──
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(item.arab,
-                      textAlign: TextAlign.center,
-                      textDirection: TextDirection.rtl,
-                      style: GoogleFonts.amiriQuran(
-                          fontSize: 44 * q, height: 1.6, color: accent)),
-                  Text(item.translit,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 20 * q,
-                          fontWeight: FontWeight.w700,
-                          color: fg)),
-                  Text(meaning,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 14 * q, height: 1.55, color: sub)),
-                ],
-              ),
-            ),
-            // ── Footer ──
-            Center(
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: 14 * s, vertical: 6 * s),
-                decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.25),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(item.translit,
-                    style: TextStyle(
-                        fontSize: 11 * q,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.5,
-                        color: fg)),
-              ),
-            ),
-            SizedBox(height: 14 * s),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Flexible(
+                // ── Header ──
+                Center(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('Muslim Leveling',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                      Text('ASMAUL HUSNA',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontSize: 12 * q,
+                              fontSize: 11 * q,
                               fontWeight: FontWeight.w800,
+                              letterSpacing: 2,
                               color: fg)),
-                      Text('Level Up Iman',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                      SizedBox(height: 1 * s),
+                      Text('#${item.number} / 99',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontSize: 8 * q,
+                              fontSize: 9 * q,
                               color: sub.withValues(alpha: 0.7))),
                     ],
                   ),
                 ),
+                SizedBox(height: 10 * s),
+                Divider(color: fg.withValues(alpha: 0.25), height: 1),
+                SizedBox(height: 10 * s),
+                // ── Konten tengah: Arab + translit + arti ──
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      if (showArabic)
+                        Text(item.arab,
+                            textAlign: TextAlign.center,
+                            textDirection: TextDirection.rtl,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.amiriQuran(
+                                fontSize: 44 * q, height: 1.6, color: accent)),
+                      Text(item.translit,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 20 * q,
+                              fontWeight: FontWeight.w700,
+                              color: fg)),
+                      if (showMeaning)
+                        Text(meaning,
+                            textAlign: TextAlign.center,
+                            maxLines: 5,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                fontSize: 14 * q, height: 1.55, color: sub)),
+                    ],
+                  ),
+                ),
+                // ── Pill sitasi: nomor + nama, bukan pengulangan translit.
+                // (Dulu pill ini mencetak translit lagi — informasi yang sama
+                // dua kali dalam satu kartu; di kartu ayat pill-nya sitasi.)
+                Center(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 14 * s, vertical: 6 * s),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.25),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                        AppL10n.of(context)
+                            .asmaPill(item.translit, item.number),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 11 * q,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.5,
+                            color: fg)),
+                  ),
+                ),
+                SizedBox(height: 14 * s),
+                // ── Footer: badge Google Play + branding (kit) ──
+                ShareCardFooter(s: s, q: q, fg: fg, sub: sub),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -402,6 +399,12 @@ class _AsmaShareScreenState extends State<_AsmaShareScreen> {
   final _repaintKey = GlobalKey();
   bool _sharing = false;
   double _aspect = 9 / 16;
+  bool _showArabic = true;
+  bool _showMeaning = true;
+
+  /// Preset background + memori per-mode — kit yang sama dengan share ayat,
+  /// jadi 17 preset dan perilakunya identik di kedua kartu.
+  final _memory = SharePresetMemory();
 
   Future<void> _share() async {
     final l10n = AppL10n.of(context);
@@ -427,8 +430,10 @@ class _AsmaShareScreenState extends State<_AsmaShareScreen> {
       const channel = MethodChannel('muslim_leveling/share');
       await channel.invokeMethod('shareFile', {
         'filePath': file.path,
+        // Caption = sitasi yang sama dengan pill di kartu (satu sumber, jadi
+        // caption tidak bisa beda dari gambarnya — pola share ayat).
         'text':
-            'Asmaul Husna #${widget.item.number}: ${widget.item.translit} | Muslim Leveling',
+            '${l10n.asmaPill(widget.item.translit, widget.item.number)} | Muslim Leveling',
       });
     } catch (_) {
       if (mounted) {
@@ -444,11 +449,12 @@ class _AsmaShareScreenState extends State<_AsmaShareScreen> {
     final l10n = AppL10n.of(context);
     final locale = Localizations.localeOf(context).languageCode;
     final meaning = asmaMeaning(locale, widget.item.number);
+    final preset = _memory.preset;
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.surfaceContainerLow,
-        title: Text(l10n.qsTitle, style: AppText.titleLg()),
+        title: Text(l10n.asmaShareTitle, style: AppText.titleLg()),
       ),
       body: SafeArea(
         top: false,
@@ -460,44 +466,77 @@ class _AsmaShareScreenState extends State<_AsmaShareScreen> {
                   fit: BoxFit.contain,
                   child: RepaintBoundary(
                     key: _repaintKey,
-                    child: AsmaSharePreviewCard(
-                        item: widget.item,
-                        meaning: meaning,
-                        aspect: _aspect),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: AsmaSharePreviewCard(
+                          item: widget.item,
+                          meaning: meaning,
+                          aspect: _aspect,
+                          preset: preset,
+                          showArabic: _showArabic,
+                          showMeaning: _showMeaning),
+                    ),
                   ),
                 ),
               ),
             ),
-            // ── Pilihan rasio ──
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.md, vertical: AppSpacing.sm),
-              child: SegmentedButton<double>(
-                segments: const [
-                  ButtonSegment(value: 9 / 16, label: Text('9:16')),
-                  ButtonSegment(value: 3 / 4, label: Text('3:4')),
-                  ButtonSegment(value: 1.0, label: Text('1:1')),
+            // ── Kontrol bersama: mode background, 17 preset, konten, rasio
+            // (kit yang sama dengan share ayat Quran).
+            SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ShareCardControls(
+                    memory: _memory,
+                    onChanged: () => setState(() {}),
+                    contentChips: [
+                      ShareContentChipSpec(
+                        label: l10n.qsContentArabic,
+                        icon: Icons.translate,
+                        selected: _showArabic,
+                        onTap: () {
+                          if (_showArabic && !_showMeaning) return;
+                          setState(() => _showArabic = !_showArabic);
+                        },
+                      ),
+                      ShareContentChipSpec(
+                        label: l10n.asmaContentMeaning,
+                        icon: Icons.menu_book,
+                        selected: _showMeaning,
+                        onTap: () {
+                          if (!_showArabic && _showMeaning) return;
+                          setState(() => _showMeaning = !_showMeaning);
+                        },
+                      ),
+                    ],
+                    aspect: _aspect,
+                    onAspectChanged: (a) => setState(() => _aspect = a),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 52,
+                      child: FilledButton.icon(
+                        onPressed: _sharing ? null : _share,
+                        icon: _sharing
+                            ? const SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              )
+                            : const Icon(Icons.share),
+                        label: Text(
+                          _sharing ? l10n.qsPreparing : l10n.qsShare,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
-                selected: {_aspect},
-                onSelectionChanged: (s) =>
-                    setState(() => _aspect = s.first),
-              ),
-            ),
-            // ── Tombol share ──
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.md, 0, AppSpacing.md, AppSpacing.lg),
-              child: SizedBox(
-                width: double.infinity,
-                child: FilledButton.icon(
-                  icon: _sharing
-                      ? const SizedBox(
-                          width: 18, height: 18,
-                          child: CircularProgressIndicator(strokeWidth: 2))
-                      : const Icon(Icons.share, size: 18),
-                  label: Text(l10n.qsShare),
-                  onPressed: _sharing ? null : _share,
-                ),
               ),
             ),
           ],

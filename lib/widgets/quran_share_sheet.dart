@@ -11,326 +11,14 @@ import '../l10n/app_localizations.dart';
 import '../l10n/quran_texts.g.dart';
 import '../services/quran_data.dart';
 import '../theme/app_theme.dart';
-
-// ── Background preset ─────────────────────────────────────────────
-
-enum _QShareBgKind { solid, gradient, esthetic }
-
-/// ponytail: label TIDAK disimpan di sini. 17 preset cuma punya 3 nilai
-/// label (solid/gradasi/estetik) — menyimpannya 17x berarti 17 tempat untuk
-/// lupa diterjemahkan. Labelnya diturunkan dari [kind] lewat `_modeLabel`.
-class _BgPreset {
-  final IconData icon;
-  final _QShareBgKind kind;
-  final BoxDecoration decoration;
-  final Color fg;
-  final Color sub;
-
-  /// Opasitas dasar scrim gelap untuk preset estetik: foto terang butuh
-  /// nilai tinggi agar teks putih terbaca, foto gelap boleh rendah.
-  /// 0 = tanpa scrim.
-  final double scrim;
-  const _BgPreset(
-    this.icon,
-    this.kind,
-    this.decoration,
-    this.fg,
-    this.sub, {
-    this.scrim = 0,
-  });
-}
-
-// fg = teks utama, sub = teks sekunder -> putih di background gelap.
-const _kFg = Colors.white;
-const _kSub = Color(0xFFE7EAE8);
-
-final List<_BgPreset> _bgPresets = [
-  // Solid
-  _BgPreset(
-    Icons.circle,
-    _QShareBgKind.solid,
-    const BoxDecoration(
-      gradient: RadialGradient(
-        center: Alignment(-0.35, -0.45),
-        radius: 1.4,
-        colors: [Color(0xFF1D6A45), Color(0xFF0B3D2E)],
-      ),
-    ),
-    _kFg,
-    _kSub,
-  ),
-  _BgPreset(
-    Icons.circle,
-    _QShareBgKind.solid,
-    const BoxDecoration(
-      gradient: RadialGradient(
-        center: Alignment(-0.35, -0.45),
-        radius: 1.4,
-        colors: [Color(0xFF244B73), Color(0xFF101E2B)],
-      ),
-    ),
-    _kFg,
-    _kSub,
-  ),
-  _BgPreset(
-    Icons.circle,
-    _QShareBgKind.solid,
-    const BoxDecoration(
-      gradient: RadialGradient(
-        center: Alignment(-0.35, -0.45),
-        radius: 1.4,
-        colors: [Color(0xFF5A3570), Color(0xFF2B1B33)],
-      ),
-    ),
-    _kFg,
-    _kSub,
-  ),
-  _BgPreset(
-    Icons.circle,
-    _QShareBgKind.solid,
-    const BoxDecoration(
-      gradient: RadialGradient(
-        center: Alignment(-0.35, -0.45),
-        radius: 1.4,
-        colors: [Color(0xFF6B4A1E), Color(0xFF3B2A10)],
-      ),
-    ),
-    _kFg,
-    _kSub,
-  ),
-  // Gradient
-  _BgPreset(
-    Icons.gradient,
-    _QShareBgKind.gradient,
-    const BoxDecoration(
-      gradient: LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        stops: [0.0, 0.5, 1.0],
-        colors: [Color(0xFF022C22), Color(0xFF0F766E), Color(0xFF34D399)],
-      ),
-    ),
-    _kFg,
-    _kSub,
-  ),
-  _BgPreset(
-    Icons.gradient,
-    _QShareBgKind.gradient,
-    const BoxDecoration(
-      gradient: LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        stops: [0.0, 0.5, 1.0],
-        colors: [Color(0xFFF9CE34), Color(0xFFEE2A7B), Color(0xFF6228D7)],
-      ),
-    ),
-    _kFg,
-    _kSub,
-  ),
-  _BgPreset(
-    Icons.gradient,
-    _QShareBgKind.gradient,
-    const BoxDecoration(
-      gradient: LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [Color(0xFF00E5FF), Color(0xFF1200FF)],
-      ),
-    ),
-    _kFg,
-    _kSub,
-  ),
-  _BgPreset(
-    Icons.gradient,
-    _QShareBgKind.gradient,
-    const BoxDecoration(
-      gradient: LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [Color(0xFFBB73E0), Color(0xFFFF8DDB)],
-      ),
-    ),
-    _kFg,
-    _kSub,
-  ),
-  // Estetik
-  _BgPreset(
-    Icons.image,
-    _QShareBgKind.esthetic,
-    const BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage('assets/images/mosque_bg.jpg'),
-        fit: BoxFit.cover,
-      ),
-    ),
-    _kFg,
-    _kSub,
-    scrim: 0.78,
-  ),
-  _BgPreset(
-    Icons.image,
-    _QShareBgKind.esthetic,
-    const BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage('assets/images/quran_bg_masjid_interior.jpg'),
-        fit: BoxFit.cover,
-      ),
-    ),
-    _kFg,
-    _kSub,
-    scrim: 0.62,
-  ),
-  _BgPreset(
-    Icons.image,
-    _QShareBgKind.esthetic,
-    const BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage('assets/images/quran_bg_taman_laut.jpg'),
-        fit: BoxFit.cover,
-      ),
-    ),
-    _kFg,
-    _kSub,
-    scrim: 0.68,
-  ),
-  _BgPreset(
-    Icons.image,
-    _QShareBgKind.esthetic,
-    const BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage('assets/images/quran_bg_malam_ufuk.jpg'),
-        fit: BoxFit.cover,
-      ),
-    ),
-    _kFg,
-    _kSub,
-    scrim: 0.30,
-  ),
-  _BgPreset(
-    Icons.image,
-    _QShareBgKind.esthetic,
-    const BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage('assets/images/quran_bg_masjid_pantai.jpg'),
-        fit: BoxFit.cover,
-      ),
-    ),
-    _kFg,
-    _kSub,
-    scrim: 0.55,
-  ),
-  _BgPreset(
-    Icons.image,
-    _QShareBgKind.esthetic,
-    const BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage('assets/images/quran_bg_fuji.jpg'),
-        fit: BoxFit.cover,
-      ),
-    ),
-    _kFg,
-    _kSub,
-    scrim: 0.65,
-  ),
-  _BgPreset(
-    Icons.image,
-    _QShareBgKind.esthetic,
-    const BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage('assets/images/quran_bg_karpet_balkon.jpg'),
-        fit: BoxFit.cover,
-      ),
-    ),
-    _kFg,
-    _kSub,
-    scrim: 0.55,
-  ),
-  _BgPreset(
-    Icons.image,
-    _QShareBgKind.esthetic,
-    const BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage('assets/images/quran_bg_taj_mahal.jpg'),
-        fit: BoxFit.cover,
-      ),
-    ),
-    _kFg,
-    _kSub,
-    scrim: 0.62,
-  ),
-  _BgPreset(
-    Icons.image,
-    _QShareBgKind.esthetic,
-    const BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage('assets/images/quran_bg_fractal.jpg'),
-        fit: BoxFit.cover,
-      ),
-    ),
-    _kFg,
-    _kSub,
-    scrim: 0.25,
-  ),
-];
-
-// ── Google Play badge (inline, tanpa aset) ────────────────────────
-
-class _GooglePlayBadge extends StatelessWidget {
-  final double compact;
-  const _GooglePlayBadge({this.compact = 1});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 10 * compact,
-        vertical: 6 * compact,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.circular(6 * compact),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.play_arrow, color: Colors.white, size: 18 * compact),
-          const SizedBox(width: 5),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'GET IT ON',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 6 * compact,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.8,
-                ),
-              ),
-              Text(
-                'Google Play',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12 * compact,
-                  fontWeight: FontWeight.w800,
-                  height: 1.1,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
+import 'share_card_kit.dart';
 
 // ── Kartu 9:16 yang di-capture ────────────────────────────────────
 
 class _QShareCard extends StatelessWidget {
   final QuranSurah surah;
   final QuranAyah ayah;
-  final _BgPreset preset;
+  final ShareBgPreset preset;
   final Color fg;
   final Color sub;
   final bool showArabic;
@@ -367,28 +55,8 @@ class _QShareCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // Scrim gelap untuk latar estetik agar teks terbaca. Kekuatan
-          // per-preset: foto terang butuh tinggi, foto gelap cukup rendah.
-          if (preset.kind == _QShareBgKind.esthetic && preset.scrim > 0)
-            Positioned.fill(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.black.withValues(
-                        alpha: (preset.scrim - 0.28).clamp(0.10, 0.95),
-                      ),
-                      Colors.black.withValues(
-                        alpha: preset.scrim.clamp(0.10, 0.95),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+          // Scrim gelap untuk latar estetik — komponen bersama (kit).
+          ShareScrim(preset: preset),
           Padding(
             padding: EdgeInsets.symmetric(
               horizontal: 22 * s,
@@ -496,41 +164,8 @@ class _QShareCard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 14 * s),
-                // ── Footer: GP badge + nama apps ──
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _GooglePlayBadge(compact: 0.85 * s),
-                    SizedBox(width: 10 * s),
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Muslim Leveling',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 12 * q,
-                              fontWeight: FontWeight.w800,
-                              color: fg,
-                            ),
-                          ),
-                          Text(
-                            'Level Up Iman',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 8 * q,
-                              color: sub.withValues(alpha: 0.7),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                // ── Footer: GP badge + nama apps (kit) ──
+                ShareCardFooter(s: s, q: q, fg: fg, sub: sub),
               ],
             ),
           ),
@@ -541,9 +176,6 @@ class _QShareCard extends StatelessWidget {
 }
 
 // ── Entry point ───────────────────────────────────────────────────
-
-/// Default preset kartu share (gradient jade), dipakai QSharePreviewCard.
-const int _kShareDefaultPreset = 4;
 
 /// Kartu share yang bisa dipakai di luar file ini (preview, tes).
 /// [aspect] = tinggi/lebar: 9/16, 3/4, atau 1.0.
@@ -561,7 +193,7 @@ class QSharePreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final preset = _bgPresets[_kShareDefaultPreset];
+    final preset = shareBgPresets[kShareDefaultPreset];
     return _QShareCard(
       surah: surah,
       ayah: ayah,
@@ -597,44 +229,18 @@ class _QuranShareScreen extends StatefulWidget {
 
 class _QuranShareScreenState extends State<_QuranShareScreen> {
   final _repaintKey = GlobalKey();
-  int _presetIdx = _kDefaultPreset; // gradient jade
   bool _sharing = false;
   bool _showArabic = true;
   bool _showTranslation = true;
   double _aspect = 9 / 16; // tinggi : lebar kartu share
 
-  static const int _kDefaultPreset = 4;
+  /// Preset + memori per-mode tinggal di kit (kit juga memakai default
+  /// preset yang sama untuk Asmaul Husna).
+  final _memory = SharePresetMemory();
 
-  // Lebar kartu tetap; tinggi mengikuti rasio terpilih.
-  static const double _cardWidth = 340;
-  Size get _cardSize => Size(_cardWidth, _cardWidth / _aspect);
+  Size get _cardSize => Size(kShareCardWidth, kShareCardWidth / _aspect);
 
-  // ponytail: ingat pilihan per-mode biar ganti mode tidak reset pilihan.
-  final Map<_QShareBgKind, int> _lastPerKind = {
-    _QShareBgKind.gradient: _kDefaultPreset,
-  };
-
-  _BgPreset get _preset => _bgPresets[_presetIdx];
-
-  /// Label mode dari l10n, bukan dari tabel preset — lihat catatan di
-  /// [_BgPreset] soal kenapa field label dihapus.
-  String _modeLabel(_QShareBgKind kind) => switch (kind) {
-    _QShareBgKind.solid => AppL10n.of(context).qsModeSolid,
-    _QShareBgKind.gradient => AppL10n.of(context).qsModeGradient,
-    _QShareBgKind.esthetic => AppL10n.of(context).qsModeEsthetic,
-  };
-
-  List<_BgPreset> _presetsFor(_QShareBgKind kind) =>
-      _bgPresets.where((p) => p.kind == kind).toList();
-
-  void _selectMode(_QShareBgKind kind) {
-    if (kind == _preset.kind) return;
-    setState(() {
-      _lastPerKind[_preset.kind] = _presetIdx;
-      _presetIdx =
-          _lastPerKind[kind] ?? _bgPresets.indexWhere((p) => p.kind == kind);
-    });
-  }
+  ShareBgPreset get _preset => _memory.preset;
 
   Future<void> _share() async {
     final l10n = AppL10n.of(context);
@@ -680,8 +286,6 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppL10n.of(context);
-    final kind = _preset.kind;
-    final presets = _presetsFor(kind);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -721,91 +325,21 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  // ── Mode background ──
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _modeChip(
-                        _QShareBgKind.solid,
-                        l10n.qsModeSolid,
-                        Icons.circle,
-                      ),
-                      _modeChip(
-                        _QShareBgKind.gradient,
-                        l10n.qsModeGradient,
-                        Icons.gradient,
-                      ),
-                      _modeChip(
-                        _QShareBgKind.esthetic,
-                        l10n.qsModeEsthetic,
-                        Icons.image,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  // ── Pilihan warna/gambar dalam mode terpilih ──
-                  Wrap(
-                    alignment: WrapAlignment.center,
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      for (var k = 0; k < presets.length; k++) ...[
-                        Semantics(
-                          button: true,
-                          label: presets.length == 1
-                              ? _modeLabel(presets[k].kind)
-                              : '${_modeLabel(presets[k].kind)} ${k + 1}',
-                          selected:
-                              _bgPresets.indexOf(presets[k]) == _presetIdx,
-                          child: InkWell(
-                            onTap: () => setState(
-                              () => _presetIdx = _bgPresets.indexOf(presets[k]),
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                            child: SizedBox(
-                              width: 48,
-                              height: 48,
-                              child: Center(
-                                child: AnimatedContainer(
-                                  duration: const Duration(milliseconds: 200),
-                                  width: 40,
-                                  height: 40,
-                                  decoration: presets[k].decoration.copyWith(
-                                    border:
-                                        _bgPresets.indexOf(presets[k]) ==
-                                            _presetIdx
-                                        ? Border.all(
-                                            color: AppColors.primary,
-                                            width: 2.5,
-                                          )
-                                        : null,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  // ── Pilihan konten: Arab / Terjemahan ──
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _contentChip(
+                  ShareCardControls(
+                    memory: _memory,
+                    onChanged: () => setState(() {}),
+                    contentChips: [
+                      ShareContentChipSpec(
                         label: l10n.qsContentArabic,
                         icon: Icons.translate,
                         selected: _showArabic,
                         onTap: () {
-                          // Jangan izinkan keduanya mati — ini yang terakhir aktif.
+                          // Jangan izinkan keduanya mati — ini yang terakhir.
                           if (_showArabic && !_showTranslation) return;
                           setState(() => _showArabic = !_showArabic);
                         },
                       ),
-                      const SizedBox(width: 8),
-                      _contentChip(
+                      ShareContentChipSpec(
                         label: l10n.qsContentTranslation,
                         icon: Icons.menu_book,
                         selected: _showTranslation,
@@ -815,21 +349,8 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
                         },
                       ),
                     ],
-                  ),
-                  const SizedBox(height: 16),
-                  // ── Pilihan rasio: 9:16 / 3:4 / 1:1 ──
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for (final (aspect, label) in const [
-                        (9 / 16, '9:16'),
-                        (3 / 4, '3:4'),
-                        (1.0, '1:1'),
-                      ]) ...[
-                        _ratioChip(label, aspect),
-                        const SizedBox(width: 8),
-                      ],
-                    ],
+                    aspect: _aspect,
+                    onAspectChanged: (a) => setState(() => _aspect = a),
                   ),
                   const SizedBox(height: 16),
                   // ── Tombol share ──
@@ -858,109 +379,6 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  /// ponytail: chip toggle konten — selalu izinkan minimal 1 aktif.
-  Widget _contentChip({
-    required String label,
-    required IconData icon,
-    required bool selected,
-    required VoidCallback onTap,
-  }) {
-    final Color fg = selected ? Colors.white : Colors.white70;
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(AppRadius.pill),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: selected
-              ? AppColors.primary.withValues(alpha: 0.9)
-              : Colors.white.withValues(alpha: 0.08),
-          borderRadius: BorderRadius.circular(AppRadius.pill),
-          border: selected
-              ? null
-              : Border.all(color: Colors.white.withValues(alpha: 0.25)),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 15, color: fg),
-            const SizedBox(width: 6),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-                color: fg,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// Chip pilihan rasio kartu. Preview update live; gambar yang dibagikan
-  /// mengikuti rasio ini karena diambil dari RepaintBoundary yang sama.
-  Widget _ratioChip(String label, double aspect) {
-    final selected = _aspect == aspect;
-    return InkWell(
-      onTap: () => setState(() => _aspect = aspect),
-      borderRadius: BorderRadius.circular(AppRadius.pill),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-        decoration: BoxDecoration(
-          color: selected
-              ? AppColors.primary.withValues(alpha: 0.16)
-              : AppColors.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(AppRadius.pill),
-          border: selected
-              ? Border.all(color: AppColors.primary, width: 1.2)
-              : null,
-        ),
-        child: Text(
-          label,
-          style: AppText.bodyMd().copyWith(
-            fontWeight: FontWeight.w700,
-            color: selected ? AppColors.primary : AppColors.onSurfaceVariant,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _modeChip(_QShareBgKind kind, String label, IconData icon) {
-    final selected = _preset.kind == kind;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: InkWell(
-        onTap: () => _selectMode(kind),
-        borderRadius: BorderRadius.circular(AppRadius.pill),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-          decoration: BoxDecoration(
-            color: selected
-                ? AppColors.primary.withValues(alpha: 0.16)
-                : AppColors.surfaceContainerLow,
-            borderRadius: BorderRadius.circular(AppRadius.pill),
-            border: selected
-                ? Border.all(color: AppColors.primary, width: 1.2)
-                : null,
-          ),
-          child: Row(
-            children: [
-              Icon(icon, size: 16, color: AppColors.primary),
-              const SizedBox(width: 6),
-              Text(
-                label,
-                style: AppText.bodyMd().copyWith(fontWeight: FontWeight.w600),
-              ),
-            ],
-          ),
         ),
       ),
     );

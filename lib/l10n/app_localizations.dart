@@ -1636,6 +1636,24 @@ abstract class AppL10n {
   /// **'Asmaul Husna'**
   String get asmaTitle;
 
+  /// No description provided for @asmaShareTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Bagikan Asmaul Husna'**
+  String get asmaShareTitle;
+
+  /// No description provided for @asmaContentMeaning.
+  ///
+  /// In id, this message translates to:
+  /// **'Arti'**
+  String get asmaContentMeaning;
+
+  /// No description provided for @asmaPill.
+  ///
+  /// In id, this message translates to:
+  /// **'{name} · nama ke-{number}'**
+  String asmaPill(Object name, Object number);
+
   /// No description provided for @asmaSubtitle.
   ///
   /// In id, this message translates to:

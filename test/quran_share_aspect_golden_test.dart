@@ -2,14 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:muslim_leveling/services/quran_data.dart';
 import 'package:muslim_leveling/widgets/quran_share_sheet.dart';
 import 'helpers/app_wrap.dart';
+import 'helpers/golden_fonts.dart';
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
-  GoogleFonts.config.allowRuntimeFetching = false;
+  setUpAll(loadGoldenFonts);
 
   const surah = QuranSurah(
     number: 2,
@@ -64,6 +63,7 @@ void main() {
         isTrue,
         reason: 'golden $name harus tersimpan',
       );
+
     });
   }
 }
