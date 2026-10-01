@@ -2383,11 +2383,17 @@ class _BonusQuestState extends State<_BonusQuest> {
       {bool done = false, bool locked = false}) {
     final l10n = AppL10n.of(context);
     // Sama dengan _xpPill quest wajib: DONE + centang saat sudah di-claim.
-    final muted = AppColors.onSurfaceVariant;
-    final fg = locked ? muted.withValues(alpha: 0.7) : (done ? muted : onColor);
+    // Latar = pill airy (tint aksen), bukan aksen pekat. Accent yang masuk
+    // sini bisa token INK (secondaryFixed = coklat tua di light theme) —
+    // dipakai solid, pillnya jadi satu-satunya kotak gelap di kartu terang.
+    final fill = color.withValues(alpha: 0.14);
+    final accent = pillInk(color, fill);
+    final fg = locked
+        ? AppColors.onSurfaceVariant.withValues(alpha: 0.7)
+        : (done ? AppColors.onSurfaceVariant : accent);
     final bg = locked || done
         ? AppColors.surfaceContainerHigh.withValues(alpha: 0.6)
-        : color;
+        : fill;
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.sm,
@@ -2411,5 +2417,22 @@ class _BonusQuestState extends State<_BonusQuest> {
         ],
       ),
     );
+  }
+
+  /// Warna teks di atas pill ber-tint [fill]: aksen apa adanya kalau cukup
+  /// kontras, kalau tidak digelapkan sampai aman dibaca.
+  static Color pillInk(Color accent, Color fill) {
+    if (_contrast(accent, fill) >= 4.5) return accent;
+    final darker = Color.lerp(accent, const Color(0xFF000000), 0.35)!;
+    return _contrast(darker, fill) >= 4.5 ? darker : AppColors.onSurface;
+  }
+
+  static double _contrast(Color a, Color b) {
+    double lin(double c) =>
+        c <= 0.03928 ? c / 12.92 : math.pow((c + 0.055) / 1.055, 2.4).toDouble();
+    double lum(Color c) =>
+        0.2126 * lin(c.r) + 0.7152 * lin(c.g) + 0.0722 * lin(c.b);
+    final la = lum(a), lb = lum(b);
+    return (math.max(la, lb) + 0.05) / (math.min(la, lb) + 0.05);
   }
 }
