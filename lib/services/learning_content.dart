@@ -2057,36 +2057,36 @@ const _akidah1_2Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'Menurut artikel, konsep Tauhid di agama-agama besar itu...',
     options: [
-      'Udah ada sejak awal sejarah, tapi berubah seiring waktu',
-      'Baru dikenal manusia setelah Islam datang di abad ke-7 Masehi',
-      'Berkembang perlahan dari kepercayaan banyak dewa jadi satu Tuhan',
-      'Hanya diajarkan oleh Nabi Muhammad ﷺ kepada bangsa Arab saja',
+      'Baru lahir pas Islam datang di abad ke-7 Masehi',
+      'Perlahan tumbuh dari dewa-dewa jadi satu Tuhan',
+      'Udah ada sejak awal, lalu berubah seiring waktu',
+      'Dijabrkan Nabi Muhammad ﷺ khusus ke bangsa Arab saja',
     ],
-    correctIndex: 0,
+    correctIndex: 2,
     explanation:
         'Di awal sejarahnya, Nabi Ibrahim, Musa, dan Isa semuanya ngajarin Tauhid. Islam datang sebagai penyempurnaan dan pengembalian ke ajaran asli.',
   ),
   QuizQuestion(
     question: 'Apa arti "As-Samad" dalam Surat Al-Ikhlas?',
     options: [
-      'Yang Maha Esa dan tidak ada sesuatu pun yang menyerupai-Nya',
-      'Yang Maha Kuasa atas segala sesuatu di langit dan di bumi',
-      'Tempat bergantung segala sesuatu, sedangkan Dia gak butuh apa pun',
-      'Yang Maha Pengasih kepada seluruh makhluk ciptaan-Nya',
+      'Tempat bergantung segala sesuatu, Dia tak butuh apa pun',
+      'Yang Maha Kuasa di langit juga di seluruh bumi ini',
+      'Yang Maha Esa, tak ada sesuatu pun menyerupai-Nya',
+      'Yang Maha Pengasih seluruh makhluk ciptaan-Nya',
     ],
-    correctIndex: 2,
+    correctIndex: 0,
     explanation:
         'As-Samad artinya tempat bergantung. Allah gak butuh siapa-siapa, tapi semua yang ada butuh Dia.',
   ),
   QuizQuestion(
     question: '"Lam yalid wa lam yuulad" artinya...',
     options: [
-      'Dia yang menciptakan seluruh manusia dari generasi ke generasi',
-      'Dia tidak beranak dan tidak pula diperanakkan',
-      'Dia tempat meminta pertolongan bagi seluruh makhluk-Nya',
-      'Dia tidak serupa dengan apa pun yang ada di alam semesta',
+      'Dia tidak beranak dan tidak diperanakkan',
+      'Dia yang menciptakan manusia dari generasi ke generasi',
+      'Dia tempat meminta pertolongan bagi makhluk-Nya',
+      'Dia tak serupa dengan apa pun di alam semesta ini',
     ],
-    correctIndex: 1,
+    correctIndex: 0,
     explanation:
         'Allah gak lahir dari siapa pun dan gak melahirkan siapa pun. Dia ada tanpa sebab, karena Dia SEBAB dari segalanya.',
   ),
@@ -2098,24 +2098,24 @@ const _akidah1_3Quiz = <QuizQuestion>[
     question:
         'Kenapa fakta bahwa Nabi Muhammad ﷺ itu ummi (gak bisa baca-tulis) jadi penting?',
     options: [
+      'Karena mustahil orang gak bisa baca-tulis ngarang teks serumit Al-Quran',
       'Karena itu menunjukkan pendidikan gak penting buat jadi orang besar',
       'Karena orang ummi di zaman itu lebih dihormati masyarakat Arab',
       'Karena itu membuktikan dia menghafal isi kitab-kitab terdahulu',
-      'Karena mustahil orang gak bisa baca-tulis ngarang teks serumit Al-Quran',
     ],
-    correctIndex: 3,
+    correctIndex: 0,
     explanation:
         'Secara logika, orang yang gak pernah belajar sastra atau sains gak mungkin menghasilkan teks 30 juz dengan bahasa Arab paling tinggi tingkatnya. Ini jadi argumen kuat kalau Al-Quran bukan karangan manusia.',
   ),
   QuizQuestion(
     question: 'Apa itu i\'jaz Al-Quran?',
     options: [
-      'Keajaiban bahasa Al-Quran yang gak bisa ditandingi siapa pun',
       'Ilmu tentang cara membaca Al-Quran dengan tajwid yang benar',
       'Urutan penyusunan surah-surah Al-Quran di dalam mushaf',
       'Metode penghafalan Al-Quran yang diajarkan para sahabat',
+      'Keajaiban bahasa Al-Quran yang gak bisa ditandingi siapa pun',
     ],
-    correctIndex: 0,
+    correctIndex: 3,
     explanation:
         'I\'jaz artinya membuat takjub. Bahasa Al-Quran itu unik, bukan puisi, bukan prosa, bukan pidato. Para penyair terbaik Arab pun gagal menandinginya.',
   ),
@@ -2124,11 +2124,11 @@ const _akidah1_3Quiz = <QuizQuestion>[
         'Al-Quran diwahyukan selama berapa tahun, dan kenapa itu mengagumkan?',
     options: [
       '40 tahun, sesuai umur Nabi ﷺ ketika pertama menerima wahyu',
-      '10 tahun, dan selesai sebelum Nabi ﷺ hijrah ke kota Madinah',
       '23 tahun di berbagai kondisi, tapi tetap konsisten tanpa kontradiksi',
+      '10 tahun, dan selesai sebelum Nabi ﷺ hijrah ke kota Madinah',
       '63 tahun, diwahyukan sepanjang hidup Nabi ﷺ sampai beliau wafat',
     ],
-    correctIndex: 2,
+    correctIndex: 1,
     explanation:
         '23 tahun di kondisi sangat berbeda (minoritas tertindas → pemimpin negara), tapi isinya konsisten tanpa kontradiksi internal. Cobain nulis jurnal 23 tahun tanpa pernah kontradiksi diri, susah banget.',
   ),
@@ -2137,11 +2137,11 @@ const _akidah1_3Quiz = <QuizQuestion>[
         'Apa yang bikin Al-Quran beda dari kitab suci lain soal preservasi?',
     options: [
       'Ditulis langsung oleh Nabi ﷺ sendiri supaya tidak ada kesalahan',
-      'Dijaga lewat tulisan DAN hafalan jutaan orang selama 1.400 tahun',
       'Disimpan dalam satu mushaf induk yang dijaga ketat di Makkah',
+      'Dijaga lewat tulisan DAN hafalan jutaan orang selama 1.400 tahun',
       'Diterjemahkan ke semua bahasa sejak zaman para sahabat Nabi',
     ],
-    correctIndex: 1,
+    correctIndex: 2,
     explanation:
         'Al-Quran dijaga dua cara: ditulis dan dihafal. Jutaan hafiz hafal 30 juz dari luar. Kalau semua mushaf hilang pun, Al-Quran bisa ditulis ulang 100% identik.',
   ),
@@ -2149,12 +2149,12 @@ const _akidah1_3Quiz = <QuizQuestion>[
     question:
         'Sikap yang tepat setelah baca modul ini menurut artikel adalah...',
     options: [
+      'Renungkan pelan-pelan, tanya-tanya, dan cari tahu sendiri',
       'Langsung meyakini seluruh isinya tanpa perlu bertanya-tanya lagi',
       'Menganggap semua argumennya benar karena ditulis di app Islami',
-      'Renungkan pelan-pelan, tanya-tanya, dan cari tahu sendiri',
       'Menunggu bukti ilmiah baru sebelum mau memikirkannya lebih jauh',
     ],
-    correctIndex: 2,
+    correctIndex: 0,
     explanation:
         'Artikel bilang: kamu gak harus langsung percaya. Justru bagus kalau mau renungkan pelan-pelan, tanya-tanya, dan cari tahu sendiri. Kebenaran itu layak ditelusuri.',
   ),
@@ -2297,11 +2297,11 @@ const _akidah1_6Quiz = <QuizQuestion>[
         'Apa yang menarik dari pasangan kata "ad-dunya" dan "al-akhirah" di Al-Quran?',
     options: [
       'Dua-duanya disebut dalam surah yang sama secara berurutan',
-      'Sama-sama disebut 115 kali, jumlah yang identik',
       'Dua-duanya cuma disebut di surah-surah Makkiyah aja',
+      'Sama-sama disebut 115 kali, jumlah yang identik',
       'Jumlah penyebutan keduanya sama dengan jumlah hari dalam setahun',
     ],
-    correctIndex: 1,
+    correctIndex: 2,
     explanation:
         '"Ad-dunya" (dunia) dan "al-akhirah" (akhirat) masing-masing disebut 115 kali. Ini cuma satu dari puluhan pasangan kata yang jumlahnya sama persis di Al-Quran.',
   ),
@@ -2310,11 +2310,11 @@ const _akidah1_6Quiz = <QuizQuestion>[
         'Berapa kali kata "yawm" (hari) dalam bentuk tunggal disebut di Al-Quran?',
     options: [
       '360 kali, mendekati jumlah hari dalam setahun',
-      '365 kali, tepat sama dengan jumlah hari dalam setahun',
       '354 kali, sesuai tahun Hijriyah (kalender bulan)',
-      '7 kali, jumlah hari dalam seminggu',
+      '7 kali saja, sepadan jumlah hari seminggu',
+      '365 kali, persis hari setahun',
     ],
-    correctIndex: 1,
+    correctIndex: 3,
     explanation:
         'Kata "yawm" (hari) dalam bentuk tunggal disebut 365 kali, persis jumlah hari dalam setahun. Sementara bentuk jamaknya (ayyam) disebut 30 kali, jumlah hari dalam sebulan.',
   ),
@@ -2322,12 +2322,12 @@ const _akidah1_6Quiz = <QuizQuestion>[
     question:
         'Proporsi penyebutan laut dan darat di Al-Quran (32:13) ternyata setara dengan...',
     options: [
-      'Jumlah lautan dan samudra di permukaan bumi',
       'Proporsi air dan daratan di bumi: ±71% air, ±29% darat',
+      'Jumlah lautan dan samudra di permukaan bumi',
       'Perbandingan panjang garis pantai dengan luas daratan',
       'Jumlah negara yang punya pantai dibanding yang tidak',
     ],
-    correctIndex: 1,
+    correctIndex: 0,
     explanation:
         'Laut disebut 32x, darat 13x. Total 45. 32/45 = 71,1% dan 13/45 = 28,9%. Ini cocok dengan proporsi air (71%) dan daratan (29%) di bumi, yang baru diketahui setelah satelit modern.',
   ),
@@ -2335,10 +2335,10 @@ const _akidah1_6Quiz = <QuizQuestion>[
     question:
         'Menurut artikel, bagaimana sikap yang tepat terhadap temuan pola angka di Al-Quran?',
     options: [
-      'Harus langsung percaya karena ini bukti paling kuat dari semua bukti',
-      'Anggap saja kebetulan karena manusia memang suka mencari pola',
-      'Pikirkan sendiri, dua-duanya valid, tapi makin banyak pola makin kecil kemungkinan kebetulan',
-      'Komentari bahwa hitungan ini hanya ditemukan ilmuwan modern jadi gak valid',
+      'Perlu langsung dipercaya karena ini bukti paling kuat dari semua',
+      'Cukup dianggap kebetulan karena manusia memang senang cari pola',
+      'Bisa dipikirkan sendiri; makin banyak pola, makin jarang kebetulan',
+      'Hitungannya baru ditemukan ilmuwan modern jadi tak valid lagi',
     ],
     correctIndex: 2,
     explanation:
@@ -2347,12 +2347,12 @@ const _akidah1_6Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'Temuan pola angka dalam Al-Quran ini ditemukan dengan cara apa?',
     options: [
-      'Disebutkan langsung oleh Nabi Muhammad ﷺ dalam Hadits',
-      'Ditulis dalam kitab tafsir klasik sejak zaman sahabat',
-      'Ditemukan pakai penelitian komputer modern yang menganalisis kata',
-      'Diketahui dari prasasti kuno di sekitar kota Makkah',
+      'Disebutkan langsung oleh Nabi Muhammad dalam satu Hadits',
+      'Lewat analisis komputer modern atas frekuensi kata',
+      'Ditulis sudah sejak zaman para sahabat di kitab tafsir',
+      'Digali dari prasasti kuno di sekitar kota Makkah',
     ],
-    correctIndex: 2,
+    correctIndex: 1,
     explanation:
         'Pola-pola ini baru ditemukan setelah penelitian komputer modern yang menganalisis frekuensi kata di seluruh Al-Quran. Ini yang bikin makin menarik, teknologi modern makin ngebuktiin kedalaman Al-Quran.',
   ),
@@ -2363,8 +2363,8 @@ const _akidah1_7Quiz = <QuizQuestion>[
   QuizQuestion(
     question:
         'Angka berapa yang punya tempat istimewa dalam Al-Quran dan disebut dalam QS. Al-Muddassir: 30?',
-    options: ['7', '19', '99', '313'],
-    correctIndex: 1,
+    options: ['19', '7', '99', '313'],
+    correctIndex: 0,
     explanation:
         'QS. Al-Muddassir: 30, "Di atasnya ada 19 (malaikat penjaga)." Angka 19 muncul dalam banyak pola di Al-Quran: Basmalah 19 huruf, 114 surah (19×6), dll.',
   ),
@@ -2391,11 +2391,11 @@ const _akidah1_7Quiz = <QuizQuestion>[
     question: 'Berapa kali kata "shalawat" (sholat) disebut dalam Al-Quran?',
     options: [
       '17 kali, jumlah rakaat sholat wajib sehari',
-      '5 kali, jumlah sholat wajib sehari semalam',
       '3 kali, jumlah sholat yang dijamak saat safar',
       '12 kali, jumlah rakaat sholat sunnah rawatib',
+      '5 kali, jumlah sholat wajib sehari semalam',
     ],
-    correctIndex: 1,
+    correctIndex: 3,
     explanation:
         'Kata "shalawat" (sholat) disebut 5 kali dalam Al-Quran, sama dengan jumlah sholat wajib sehari semalam.',
   ),
@@ -2433,11 +2433,11 @@ const _akidah1_8Quiz = <QuizQuestion>[
         'Apa yang sains modern temukan tentang gunung yang sesuai dengan deskripsi Al-Quran?',
     options: [
       'Gunung terbentuk dari aktivitas gunung berapi di dasar laut',
-      'Gunung tertinggi di dunia ada di bawah laut, bukan di daratan',
       'Gunung punya "akar" yang menjulur dalam ke bumi seperti pasak',
+      'Gunung tertinggi di dunia ada di bawah laut, bukan di daratan',
       'Gunung selalu bergerak beberapa cm setiap tahunnya',
     ],
-    correctIndex: 2,
+    correctIndex: 1,
     explanation:
         'QS. An-Naba\' : 6-7 bilang gunung sebagai pasak (autad). Geologi modern mengkonfirmasi gunung punya akar yang menjulur jauh ke dalam bumi, berfungsi seperti pasak yang menstabilkan lempeng tektonik.',
   ),
@@ -2445,12 +2445,12 @@ const _akidah1_8Quiz = <QuizQuestion>[
     question:
         'Kenapa Al-Quran nyebut "jari-jemari" secara spesifik dalam QS. Al-Qiyamah: 4?',
     options: [
-      'Karena jari adalah anggota tubuh yang paling sering digunakan',
       'Karena sidik jari setiap manusia unik, bahkan kembar identik pun beda',
+      'Karena jari adalah anggota tubuh yang paling sering digunakan',
       'Karena jumlah ruas jari (14) sama dengan jumlah sujud dalam sholat',
       'Karena jari adalah simbol kekuatan dan ketangkasan manusia',
     ],
-    correctIndex: 1,
+    correctIndex: 0,
     explanation:
         'Kenapa Al-Quran spesifik nyebut jari? Karena sidik jari tiap manusia UNIK, fakta yang baru ditemukan sains abad ke-19. Al-Quran udah ngasih tahu 12 abad sebelumnya.',
   ),
@@ -2472,11 +2472,11 @@ const _akidah1_8Quiz = <QuizQuestion>[
         'Menurut modul ini, yang membedakan Al-Quran dari kitab lain adalah...',
     options: [
       'Al-Quran adalah satu-satunya kitab suci yang bisa dibaca dalam terjemahan',
-      'Al-Quran punya 8+ bukti yang saling menguatkan dari berbagai sisi',
       'Al-Quran adalah kitab paling tebal di antara semua kitab suci',
       'Al-Quran adalah satu-satunya kitab yang diturunkan di malam hari',
+      'Al-Quran punya 8+ bukti yang saling menguatkan dari berbagai sisi',
     ],
-    correctIndex: 1,
+    correctIndex: 3,
     explanation:
         'Delapan bukti dari sisi berbeda, bahasa, sejarah, sains, angka, preservasi, nubuatan, dampak manusia, semuanya mengarah ke kesimpulan yang sama. Masing-masing mungkin bisa dijawab, tapi bersama-sama jadi sangat kuat.',
   ),
@@ -2677,11 +2677,11 @@ const _rukun2_4Quiz = <QuizQuestion>[
     question: 'Apa arti kata "zakat"?',
     options: [
       'Pemberian sukarela',
-      'Kewajiban harta',
       'Bersih dan tumbuh',
+      'Kewajiban harta',
       'Berbagi rezeki',
     ],
-    correctIndex: 2,
+    correctIndex: 1,
     explanation:
         'Zakat artinya \'bersih\' dan \'tumbuh.\' Konsepnya: bersihin hartamu dari hak orang lain, dan hartamu jadi lebih berkah.',
   ),
@@ -2689,47 +2689,47 @@ const _rukun2_4Quiz = <QuizQuestion>[
     question: 'Apa beda zakat, infaq, dan sedekah?',
     options: [
       'Zakat buat masjid, infaq buat fakir miskin, sedekah bebas ke siapa aja',
-      'Zakat wajib dengan aturan (2.5%, nisab, haul); infaq dan sedekah sunnah',
       'Zakat pakai uang, infaq pakai barang, sedekah pakai tenaga atau jasa',
+      'Zakat wajib dengan aturan (2.5%, nisab, haul); infaq dan sedekah sunnah',
       'Ketiganya sama-sama wajib, bedanya cuma di waktu pembayarannya',
     ],
-    correctIndex: 1,
+    correctIndex: 2,
     explanation:
         'Zakat = wajib dengan aturan ketat (2.5%, nisab, haul). Infaq = sunnah, berbagi harta. Sedekah = sunnah, lebih luas, bahkan senyum aja udah sedekah.',
   ),
   QuizQuestion(
     question: 'Kenapa zakat bisa kurangi kesenjangan sosial?',
     options: [
-      'Yang punya lebih ngasih 2.5% ke yang butuh, kekayaan terdistribusi',
       'Karena zakat memaksa orang kaya hidup sederhana seperti lainnya',
       'Karena semua hasil zakat dipakai buat membangun fasilitas umum',
       'Karena penerima zakat wajib memakai uangnya buat modal usaha',
+      'Yang punya lebih ngasih 2.5% ke yang butuh, kekayaan terdistribusi',
     ],
-    correctIndex: 0,
+    correctIndex: 3,
     explanation:
         'Zakat = sistem distribusi kekayaan dari Allah. Yang mampu → ngasih 2.5% → yang butuh terbantu. Kalau semua patuh, kesenjangan berkurang signifikan.',
   ),
   QuizQuestion(
     question: 'Motivasi zakat yang benar itu apa?',
     options: [
+      'Cinta, percaya itu hak mereka, dan mau hartamu bersih dan berkah',
       'Takut hartanya jadi gak berkah kalau gak segera dikeluarkan',
       'Mengharap pujian dan penghormatan dari masyarakat sekitar',
       'Menggugurkan kewajiban biar gak ditagih pengurus masjid',
-      'Cinta, percaya itu hak mereka, dan mau hartamu bersih dan berkah',
     ],
-    correctIndex: 3,
+    correctIndex: 0,
     explanation:
         'Zakat motivasinya cinta, bukan paksaan. Kamu ngasih karena percaya itu hak mereka dan karena kamu sayang hartamu sendiri, mau yang bersih dan berkah.',
   ),
   QuizQuestion(
     question: 'Sedekah itu cuma soal uang?',
     options: [
-      'Engga, senyum, nolong orang, bahkan buang duri dari jalan pun sedekah',
       'Iya, harus berupa uang tunai biar jelas nilai dan manfaatnya',
       'Uang atau barang berharga, yang penting bisa dihitung nilainya',
       'Iya, tapi khusus buat keluarga boleh diganti bantuan tenaga',
+      'Engga, senyum, nolong orang, bahkan buang duri dari jalan pun sedekah',
     ],
-    correctIndex: 0,
+    correctIndex: 3,
     explanation:
         'Sedekah itu lebih luas dari uang. Senyum, nolong orang, ngasih ilmu, bahkan buang duri dari jalan, semua itu sedekah.',
   ),
@@ -3364,35 +3364,35 @@ const _quran1Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'Sikap yang diajarkan artikel saat menilai Al-Quran adalah...',
     options: [
-      'Membaca, memahami, lalu menilai dengan jujur',
-      'Menerima tanpa pernah bertanya',
-      'Hanya mencari bagian yang viral',
-      'Menolak sebelum membaca',
+      'Menerima langsung seluruh isi tanpa tanya dulu',
+      'Cari saja bagian yang viral di media sosial',
+      'Menolak isi pesan sebelum sempat membacanya',
+      'Baca, pahami, lalu nilai dengan jujur',
     ],
-    correctIndex: 0,
+    correctIndex: 3,
     explanation: 'Al-Quran mengajak manusia menggunakan akal dan tadabbur.',
   ),
   QuizQuestion(
     question: 'Mengapa Al-Quran disebut bukan sekadar buku motivasi?',
     options: [
-      'Karena hanya berisi cerita masa lalu',
-      'Karena mengajak mengenal Allah dan menata hidup',
-      'Karena tidak boleh diterjemahkan',
-      'Karena hanya dibaca saat Ramadan',
+      'Karena mengajak mengenal Allah dan tata aturan hidup',
+      'Karena isinya cuma cerita masa lalu sebagian saja',
+      'Karena harus dibaca dengan bahasa aslinya saja',
+      'Karena waktunya dibaca memang di bulan Ramadan',
     ],
-    correctIndex: 1,
+    correctIndex: 0,
     explanation:
         'Isi Al-Quran mencakup iman, ibadah, akhlak, dan tanggung jawab hidup.',
   ),
   QuizQuestion(
     question: 'Apa makna tadabbur Al-Quran?',
     options: [
-      'Menghafal tanpa memahami',
-      'Membaca sangat cepat',
-      'Mencari kesalahan orang lain',
       'Merenungkan dan memahami pesannya',
+      'Menghafal seluruh isi tanpa memahami arti',
+      'Membaca secepat bisa di waktu senggang',
+      'Mencari kesalahan bacaan orang lain',
     ],
-    correctIndex: 3,
+    correctIndex: 0,
     explanation:
         'Tadabbur berarti memperhatikan makna dan dampak ayat bagi diri.',
   ),
@@ -3400,11 +3400,11 @@ const _quran1Quiz = <QuizQuestion>[
     question: 'Pertanyaan awal yang sehat saat menilai suatu pesan adalah...',
     options: [
       'Siapa yang paling banyak membagikannya?',
-      'Apakah pesannya menyenangkan?',
       'Pesan ini mengaku berasal dari siapa?',
+      'Apakah pesannya menyenangkan?',
       'Apakah kalimatnya pendek?',
     ],
-    correctIndex: 2,
+    correctIndex: 1,
     explanation:
         'Klaim asal sebuah pesan adalah titik awal untuk memeriksanya.',
   ),
@@ -3471,22 +3471,22 @@ const _quran3Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'Tantangan Al-Quran bagi orang yang ragu adalah...',
     options: [
-      'Menulis buku sejarah',
-      'Membuat satu surah yang semisal',
-      'Belajar bahasa Arab satu tahun',
-      'Menghafal semua nama nabi',
+      'Menulis buku sejarah sepanjang hidupmu',
+      'Belajar bahasa Arab sampai fasih bicara',
+      'Membuat satu surah semisal dengannya',
+      'Menghafal semua nabi beserta nasabnya',
     ],
-    correctIndex: 1,
+    correctIndex: 2,
     explanation:
         'QS. Al-Baqarah 2:23 menyampaikan tantangan untuk mendatangkan satu surah yang semisal.',
   ),
   QuizQuestion(
-    question: 'Tantangan ini bukan hanya tentang...',
+    question: 'Tantangan ini bukan hanya tentang rupa bahasanya, tapi juga...',
     options: [
-      'Kalimat yang terdengar indah',
-      'Membaca terjemahan',
-      'Menghafal surah pendek',
-      'Belajar dari guru',
+      'Makna dan pengaruhnya pada jiwa pembaca',
+      'Membaca terjemahan dengan tafsir singkat',
+      'Menghafal sejumlah surah pendek pilihan',
+      'Belajar tajwid dari guru yang terpercaya',
     ],
     correctIndex: 0,
     explanation:
@@ -3496,36 +3496,36 @@ const _quran3Quiz = <QuizQuestion>[
     question:
         'Cara paling baik merespons klaim keistimewaan Al-Quran adalah...',
     options: [
-      'Meneruskan klaim tanpa membaca',
-      'Menutup diri dari pertanyaan',
-      'Mendengar bacaan dan mempelajari artinya',
-      'Hanya mencari debat di internet',
+      'Meneruskan klaim tanpa sempat membacanya',
+      'Mendengar bacaannya lalu mempelajari arti',
+      'Menutup diri dari semua pertanyaan orang',
+      'Hanya mencari debat tentang agama di internet',
     ],
-    correctIndex: 2,
+    correctIndex: 1,
     explanation:
         'Pengalaman membaca dan memahami ayat adalah langkah yang lebih jujur.',
   ),
   QuizQuestion(
     question: 'QS. Al-Isra 17:88 berbicara tentang...',
     options: [
-      'Aturan jual beli',
-      'Kisah perjalanan',
-      'Waktu salat',
-      'Manusia dan jin yang tidak mampu membuat yang serupa Al-Quran',
+      'Keteguhan manusia dan jin tidak sanggup buat yang serupa',
+      'Kewajiban menunaikan zakat dari hasil perdagangan',
+      'Perjalanan isra yang digelapkan malam itu dari Makkah',
+      'Aturan salat ketika dalam keadaan bepergian jauh',
     ],
-    correctIndex: 3,
+    correctIndex: 0,
     explanation:
         'Ayat ini menyampaikan tantangan Al-Quran dalam bentuk yang sangat tegas.',
   ),
   QuizQuestion(
     question: 'Latihan praktis setelah artikel ini adalah...',
     options: [
-      'Membaca satu surah pendek beserta artinya',
-      'Mencari ayat yang paling sulit saja',
-      'Tidak perlu membuka Al-Quran',
-      'Menghafal tanpa tahu makna',
+      'Memilih ayat yang paling susah lalu catat dangkalnya',
+      'Menghafal surah pendek tanpa tahu maknanya sama sekali',
+      'Tidak perlu membuka Al-Quran jika waktu memang terbatas',
+      'Membaca satu surah pendek kutahu per karater maknanya',
     ],
-    correctIndex: 0,
+    correctIndex: 3,
     explanation:
         'Satu surah pendek yang dipahami lebih berguna daripada banyak bacaan tanpa perhatian.',
   ),
@@ -3689,10 +3689,10 @@ const _quran5Quiz = <QuizQuestion>[
     options: [
       'Semua ayat memiliki tujuan baik',
       'Pesannya selalu mengajak kepada Allah',
-      'Semua ayat harus membahas topik yang sama',
       'Ada benang merah dalam petunjuknya',
+      'Semua ayat harus membahas topik yang sama',
     ],
-    correctIndex: 2,
+    correctIndex: 3,
     explanation:
         'Topik ayat beragam, tetapi arah petunjuknya saling terhubung.',
   ),
@@ -3740,36 +3740,36 @@ const _quran6Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'Menurut artikel, fondasi iman yang lebih kokoh dibangun dari...',
     options: [
-      'Konten viral setiap hari',
-      'Satu angka yang terasa ajaib',
-      'Prediksi masa depan',
-      'Pesan Al-Quran, akhlak Nabi ﷺ, dan pengamalan',
+      'Pesan Al-Quran, akhlak Nabi, dan pengamalan',
+      'Konten viral yang nongol setiap hari itu',
+      'Satu angka yang bener-bener terasa ajaib',
+      'Prediksi masa depan yang makin menakjubkan',
     ],
-    correctIndex: 3,
+    correctIndex: 0,
     explanation:
         'Hal-hal ini lebih mendasar daripada klaim populer yang kadang belum terverifikasi.',
   ),
   QuizQuestion(
     question: 'QS. Fussilat 41:53 berbicara tentang...',
     options: [
-      'Aturan dagang',
-      'Tanda-tanda Allah di ufuk dan diri manusia',
-      'Jumlah rakaat salat',
-      'Kisah satu kerajaan',
+      'Aturan dagang di kota-kota sekitar kalian',
+      'Rincian jumlah rakaat untuk salat fardhu',
+      'Tanda kebesaran Allah di ufuk dan diri manusia',
+      'Kisah satu kerajaan besar di zaman dulu',
     ],
-    correctIndex: 1,
+    correctIndex: 2,
     explanation:
         'Ayat ini mengajak manusia memperhatikan tanda-tanda Allah pada alam dan diri.',
   ),
   QuizQuestion(
     question: 'Kagum pada penemuan tentang alam sebaiknya...',
     options: [
-      'Membuat kita teliti sekaligus bersyukur',
       'Menggantikan Al-Quran sepenuhnya',
       'Membuat kita berhenti belajar',
       'Menjadi alasan merendahkan orang lain',
+      'Membuat kita teliti sekaligus bersyukur',
     ],
-    correctIndex: 0,
+    correctIndex: 3,
     explanation:
         'Kagum boleh, tetapi ketelitian dan kerendahan hati tetap penting.',
   ),
@@ -3792,10 +3792,10 @@ const _quran7Quiz = <QuizQuestion>[
     question:
         'Setelah mengenal alasan-alasan tentang Al-Quran, langkah berikutnya adalah...',
     options: [
-      'Menunggu menjadi sempurna',
-      'Menilai orang lain lebih dulu',
-      'Jujur: apakah saya mau mengikuti petunjuk ini?',
-      'Berhenti membaca Al-Quran',
+      'Menunggu diri jadi sempurna dulu di sini',
+      'Menilai orang lain lebih dulu sekarang',
+      'Jujur: mau ikuti petunjuk ini apa enggak?',
+      'Berhenti baca Al-Quran selama-lamanya',
     ],
     correctIndex: 2,
     explanation:
@@ -3805,12 +3805,12 @@ const _quran7Quiz = <QuizQuestion>[
     question:
         'Menurut artikel, seseorang tidak perlu menunggu sempurna untuk...',
     options: [
+      'Membaca satu ayat yang benar-benar pendek itu',
+      'Memperbaiki salat yang selama ini ketinggalan',
+      'Berdoa terus dengan jujur hingga terkabulkan',
       'Mulai mendekat kepada Allah',
-      'Membaca satu ayat',
-      'Memperbaiki satu salat',
-      'Berdoa dengan jujur',
     ],
-    correctIndex: 0,
+    correctIndex: 3,
     explanation: 'Iman tumbuh dari langkah kecil yang dijaga dengan konsisten.',
   ),
   QuizQuestion(
@@ -3828,12 +3828,12 @@ const _quran7Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'Contoh langkah kecil yang baik hari ini adalah...',
     options: [
-      'Menunda sampai tahu semuanya',
-      'Mencari perdebatan paling ramai',
-      'Membaca satu halaman Al-Quran atau memperbaiki satu salat',
-      'Hanya menyimpan aplikasi tanpa membukanya',
+      'Membaca satu halaman atau perbaiki salat',
+      'Menunda sampai tahu semuanya nanti',
+      'Mencari perdebatan yang paling ramai itu',
+      'Simpan aplikasi terus tanpa membukanya',
     ],
-    correctIndex: 2,
+    correctIndex: 0,
     explanation:
         'Langkah sederhana yang dilakukan nyata lebih berarti untuk menumbuhkan iman.',
   ),
@@ -4031,58 +4031,58 @@ const _why1Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'Menjadi Muslim karena keluarga berarti...',
     options: [
-      'Iman pasti tidak sah',
-      'Tidak boleh lagi bertanya',
-      'Bisa menjadi awal untuk belajar lebih sadar',
-      'Tidak perlu memeriksa keyakinan',
+      'Iman itu sebenarnya belum pasti sah di sisi agama',
+      'Cukup mewarisi saja tanpa perlu tanya lagi nanti',
+      'Kamu jadi gak perlu memeriksa keyakinanmu sendiri',
+      'Awal yang baik untuk memilih iman lebih sadar',
     ],
-    correctIndex: 2,
+    correctIndex: 3,
     explanation:
         'Warisan keluarga dapat menjadi awal yang baik; iman juga perlu dipahami dan dipilih dengan sadar.',
   ),
   QuizQuestion(
     question: 'Sikap sehat terhadap pertanyaan tentang Islam adalah...',
     options: [
+      'Menyimpan saja karena ragunya pasti itu salah',
+      'Mengolok-olok orang yang macam-macam bertanya',
       'Mencari jawaban dengan jujur dan rendah hati',
-      'Menyimpannya karena pasti salah',
-      'Mengolok orang yang bertanya',
-      'Hanya mencari jawaban yang disukai',
+      'Suka-suka mengambil jawaban yang paling enak',
     ],
-    correctIndex: 0,
+    correctIndex: 2,
     explanation: 'Pertanyaan jujur dapat menjadi pintu belajar yang baik.',
   ),
   QuizQuestion(
     question: 'QS. Al-Isra 17:36 mengingatkan agar kita...',
     options: [
-      'Mengikuti semua kebiasaan',
-      'Tidak mengikuti sesuatu tanpa pengetahuan',
-      'Berhenti belajar agama',
-      'Menolak nasihat keluarga',
+      'Gak mengikuti apa pun tanpa dasar ilmu dulu',
+      'Kegiatan belajar agama masih bisa berhenti di sini',
+      'Selalu mengikuti kebiasaan keluarga di rumah',
+      'Menolak setiap nasihat yang datang dari keluarga',
     ],
-    correctIndex: 1,
+    correctIndex: 0,
     explanation:
         'Ayat ini mendorong sikap berilmu, bukan mengikuti tanpa dasar.',
   ),
   QuizQuestion(
     question: 'Langkah awal yang disarankan artikel adalah...',
     options: [
-      'Memenangkan debat',
-      'Menghafal semua jawaban',
-      'Menilai iman orang lain',
-      'Menulis satu pertanyaan yang disimpan',
+      'Memenangkan setiap debat yang muncul',
+      'Menyimpan satu pertanyaan yang jujur',
+      'Menghafal semua jawaban yang tersedia',
+      'Menilai kualitas iman orang lain sekitar',
     ],
-    correctIndex: 3,
+    correctIndex: 1,
     explanation: 'Satu pertanyaan yang jujur adalah awal belajar yang nyata.',
   ),
   QuizQuestion(
     question: 'Iman yang dipilih secara sadar berarti...',
     options: [
-      'Membenci didikan masa lalu',
+      'Membenci seluruh didikan masa kecilmu dulu',
+      'Menolak semua tradisi yang diwariskan keluarga',
+      'Berhenti mencari guru dan mengandalkan diri',
       'Menghargai warisan baik sambil memahaminya',
-      'Menolak semua tradisi',
-      'Tidak perlu guru',
     ],
-    correctIndex: 1,
+    correctIndex: 3,
     explanation:
         'Belajar secara sadar tidak mengharuskan kita meremehkan keluarga atau tradisi baik.',
   ),
@@ -4104,46 +4104,46 @@ const _why2Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'Contoh kegiatan duniawi yang dapat bernilai ibadah adalah...',
     options: [
+      'Mencari pujian sebanyak mungkin dari orang',
+      'Menyakiti pesaing supaya dia tak melangkah',
       'Belajar dengan niat yang baik',
-      'Mencari pujian',
-      'Menyakiti pesaing',
-      'Mengabaikan keluarga',
+      'Mengabaikan keluarga demi cita-citanya',
     ],
-    correctIndex: 0,
+    correctIndex: 2,
     explanation:
         'Belajar, bekerja, dan menolong dapat bernilai ibadah bila niat dan caranya benar.',
   ),
   QuizQuestion(
     question: 'Tujuan hidup membantu kita bertanya...',
     options: [
-      'Apa yang membuatku terkenal?',
-      'Apa yang paling mudah?',
       'Apa yang bernilai di hadapan Allah?',
-      'Apa yang orang lain harapkan?',
+      'Apa yang bikin saya paling terkenal?',
+      'Apa yang paling mudah untuk dikerjakan?',
+      'Apa yang paling diharapkan orang lain?',
     ],
-    correctIndex: 2,
+    correctIndex: 0,
     explanation: 'Arah hidup Islam tidak berhenti pada pengakuan manusia.',
   ),
   QuizQuestion(
     question: 'Ibadah dalam Islam hanya berarti...',
     options: [
-      'Salat di masjid',
-      'Membaca buku agama',
-      'Berdiam diri',
-      'Tidak hanya ritual; aktivitas baik juga bisa bernilai ibadah',
+      'Tidak hanya ritual; aktifitas baik pun bernilai',
+      'Salat di masjid pada waktu yang tepat',
+      'Membaca setiap jenis buku agama saja',
+      'Berdiam diri tanpa bicara hal lain',
     ],
-    correctIndex: 3,
+    correctIndex: 0,
     explanation: 'Ruang ibadah luas ketika niat dan caranya benar.',
   ),
   QuizQuestion(
     question: 'Latihan praktis setelah artikel ini adalah...',
     options: [
       'Membandingkan tujuan hidup orang lain',
-      'Meluruskan niat satu kegiatan rutin',
-      'Menunda semua pekerjaan',
+      'Menunda semua pekerjaan penting',
       'Mencari aktivitas paling sulit',
+      'Meluruskan niat satu kegiatan rutin',
     ],
-    correctIndex: 1,
+    correctIndex: 3,
     explanation:
         'Niat yang baik menghubungkan kegiatan sehari-hari dengan tujuan hidup.',
   ),
@@ -4153,36 +4153,36 @@ const _why3Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'Allah memerintahkan salat terutama agar kita...',
     options: [
-      'Terlihat lebih baik',
       'Mengingat-Nya',
+      'Terlihat lebih baik',
       'Tidak perlu bekerja',
       'Menilai orang lain',
     ],
-    correctIndex: 1,
+    correctIndex: 0,
     explanation:
         'QS. Taha 20:14 menyebut salat sebagai jalan untuk mengingat Allah.',
   ),
   QuizQuestion(
     question: 'Salat lima waktu dapat dipahami sebagai...',
     options: [
-      'Jeda untuk kembali sadar dan mengarahkan diri',
-      'Hukuman harian',
-      'Beban tanpa makna',
-      'Kompetisi ibadah',
+      'Hukuman harian yang harus ditepati setiap saat',
+      'Jeda untuk sadar dan mengarah diri kembali',
+      'Ajakan kompetisi kebaikan antar sesama umat',
+      'Semitu beban yang nyaris tanpa makna pembacaan',
     ],
-    correctIndex: 0,
+    correctIndex: 1,
     explanation:
         'Salat memberi ruang berhenti dari kesibukan dan kembali mengingat Allah.',
   ),
   QuizQuestion(
     question: 'Saat salat terasa hambar, sikap yang lebih baik adalah...',
     options: [
-      'Langsung meninggalkannya',
-      'Menyalahkan orang lain',
-      'Mencari pemahaman dan memperbaiki kehadiran hati',
-      'Menganggapnya tidak penting',
+      'Langsung meninggalkan salat itu setiap ini',
+      'Mencari pemahaman dan menghadirkan hati',
+      'Menyalahkan orang sekitar di setiap sholat',
+      'Menganggap salat ini memang tak penting lagi',
     ],
-    correctIndex: 2,
+    correctIndex: 1,
     explanation:
         'Rasa hambar dapat menjadi ajakan untuk memperbaiki kualitas salat perlahan.',
   ),
@@ -4190,24 +4190,24 @@ const _why3Quiz = <QuizQuestion>[
     question:
         'Latihan paling sederhana untuk menambah pemahaman salat adalah...',
     options: [
-      'Mengganti semua bacaan',
-      'Membaca sangat cepat',
-      'Tidak perlu tahu arti',
+      'Mengganti semua bacaan yang sudah hafal dulu',
+      'Membaca secepat mungkin setiap memulai rakaat',
       'Memahami satu kalimat, misalnya Al-Fatihah',
+      'Tidak perlu mengerti apa arti bacaan salatnya',
     ],
-    correctIndex: 3,
+    correctIndex: 2,
     explanation:
         'Memahami sedikit demi sedikit lebih realistis dan membangun hadirnya hati.',
   ),
   QuizQuestion(
     question: 'Mengapa Allah tidak membutuhkan salat kita?',
     options: [
-      'Karena Allah tidak mengetahui kita',
-      'Karena manfaat salat kembali kepada manusia',
-      'Karena salat hanya tradisi',
-      'Karena manusia tidak punya pilihan',
+      'Karena Allah sama sekali tidak mengetahui kita',
+      'Karena salat itu cuma warisan tradisi keluarga',
+      'Karena manusia memang tidak punya pilihan hidup',
+      'Karena manfaat salat kembali ke manusia',
     ],
-    correctIndex: 1,
+    correctIndex: 3,
     explanation:
         'Kita yang membutuhkan pengingat, arah, dan hubungan dengan Allah.',
   ),
@@ -4217,59 +4217,59 @@ const _why4Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'Selain dibaca, Al-Quran diturunkan untuk...',
     options: [
-      'Dijadikan hiasan saja',
-      'Dipahami dan menjadi petunjuk',
-      'Disimpan tanpa dibuka',
-      'Dibaca hanya saat lomba',
+      'Dijadikan hiasan indah di rak Mushaf rumah',
+      'Disimpan bagus tanpa sampai dibuka lagi',
+      'Dipahami menjadi petunjuk dalam hidup',
+      'Dibaca khusus saat lomba membaca saja',
     ],
-    correctIndex: 1,
+    correctIndex: 2,
     explanation:
         'Al-Quran adalah petunjuk yang perlu dibaca, dipahami, dan diamalkan.',
   ),
   QuizQuestion(
     question: 'Tadabbur Al-Quran berarti...',
     options: [
-      'Merenungkan makna dan dampak ayat',
-      'Menghafal tanpa arti',
-      'Membaca paling cepat',
-      'Memilih ayat yang mudah saja',
+      'Menghafal surah demi surah tanpa arti',
+      'Memilih membaca ayat yang mudah saja',
+      'Merenungkan makna dan dampaknya',
+      'Membaca seluruh mushaf paling cepat',
     ],
-    correctIndex: 0,
+    correctIndex: 2,
     explanation:
         'Tadabbur mengajak kita memperhatikan pesan ayat bagi kehidupan.',
   ),
   QuizQuestion(
     question: 'Untuk mulai memahami Al-Quran, seseorang...',
     options: [
-      'Harus menunggu jadi ahli tafsir',
-      'Tidak boleh membaca terjemahan',
-      'Bisa membaca terjemahan dan penjelasan tepercaya',
-      'Cukup menghafal judul surah',
+      'Harus menanti sampai jadi ahli tafsir dulu',
+      'Bisa baca terjemahan dan penjelasan tepercaya',
+      'Tidak boleh membaca terjemahan bahasa apapun',
+      'Cukup menghafal judul setiap surah saja',
     ],
-    correctIndex: 2,
+    correctIndex: 1,
     explanation:
         'Belajar dasar dengan sumber tepercaya adalah langkah awal yang baik.',
   ),
   QuizQuestion(
     question: 'QS. Sad 38:29 menyebut Al-Quran diturunkan agar...',
     options: [
-      'Menjadi koleksi pribadi',
-      'Tidak ada yang bertanya',
-      'Hanya didengar tanpa dipahami',
-      'Ayat-ayatnya ditadabburi',
+      'Ayat-ayatnya ditadabburi dan dipikirkan',
+      'Menjadi koleksi pribadi di rak bacaanmu',
+      'Tidak ada yang berani bertanya lebih jauh',
+      'Didengar saja tan sampai dipahami artinya',
     ],
-    correctIndex: 3,
+    correctIndex: 0,
     explanation: 'Ayat tersebut menekankan perenungan terhadap Al-Quran.',
   ),
   QuizQuestion(
     question: 'Langkah sesudah tilawah yang dianjurkan adalah...',
     options: [
-      'Menutup mushaf secepatnya',
-      'Memilih satu ayat dan membaca terjemahannya',
-      'Menilai bacaan orang lain',
-      'Menghindari pertanyaan',
+      'Menutup mushaf begitu selesai baca tadarus',
+      'Menilai bagus tidak bacaan orang yang lain',
+      'Menghindar setiap pertanyaan yang membingungkan',
+      'Memilih satu ayat lalu baca terjemahannya',
     ],
-    correctIndex: 1,
+    correctIndex: 3,
     explanation:
         'Satu ayat yang dipahami dapat lebih membekas dalam sikap sehari-hari.',
   ),
@@ -4279,24 +4279,24 @@ const _why5Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'Perumpamaan yang tepat untuk halal dan haram adalah...',
     options: [
-      'Penghalang tanpa tujuan',
-      'Pagar yang dapat melindungi dari jurang',
-      'Aturan agar hidup lebih rumit',
-      'Cara merendahkan manusia',
+      'Penghalang berjalan tanpa tujuan yang diberi batas',
+      'Aturan yang bikin hidup tambah rumit satu tingkat',
+      'Cara paling murah untuk merendahkan hukum wanita',
+      'Pagar yang jaga agar tak jatuh ke jurang',
     ],
-    correctIndex: 1,
+    correctIndex: 3,
     explanation:
         'Batas dapat berfungsi sebagai perlindungan, seperti pagar di tempat berbahaya.',
   ),
   QuizQuestion(
     question: 'Batas dalam Islam membantu menjaga...',
     options: [
-      'Keinginan sesaat saja',
-      'Pujian manusia',
-      'Iman, jiwa, akal, keluarga, dan harta',
-      'Persaingan antarorang',
+      'Iman, jiwa, akal, keluarga dan harta',
+      'Pujian sesama manusia di sekitarnya',
+      'Keinginan sesaat yang datang terus',
+      'Tinggi rendahnya persaingan antarorang',
     ],
-    correctIndex: 2,
+    correctIndex: 0,
     explanation:
         'Aturan halal-haram mengarahkan manusia kepada kemaslahatan yang lebih luas.',
   ),
@@ -4304,36 +4304,36 @@ const _why5Quiz = <QuizQuestion>[
     question:
         'Saat belum memahami hikmah sebuah aturan, sikap yang baik adalah...',
     options: [
-      'Mengejek aturannya',
-      'Menganggap semua orang salah',
-      'Menyebarkan informasi tanpa cek',
+      'Mengejek aturan yang belum kita tentang',
       'Belajar alasannya dengan rendah hati',
+      'Menganggap semua orang ternyata salah',
+      'Sebar informasi tanpa cek dulu dulu ya',
     ],
-    correctIndex: 3,
+    correctIndex: 1,
     explanation:
         'Belajar dan rendah hati membantu kita memahami aturan dengan lebih matang.',
   ),
   QuizQuestion(
     question: 'QS. Al-Baqarah 2:185 menyebut Allah menghendaki...',
     options: [
-      'Kemudahan bagi manusia',
-      'Kesulitan bagi manusia',
-      'Manusia tidak punya pilihan',
-      'Aturan tanpa hikmah',
+      'Suatu aturan yang tanpa hikmah sama sekali',
+      'Hadang manusia supaya terasa lebih sulit',
+      'Kemudahan bagi semua manusia',
+      'Mengambil hak pilihan dari setiap manusia',
     ],
-    correctIndex: 0,
+    correctIndex: 2,
     explanation:
         'Ayat ini mengingatkan bahwa Allah menghendaki kemudahan, bukan kesukaran.',
   ),
   QuizQuestion(
     question: 'Langkah praktis ketika suatu aturan terasa berat adalah...',
     options: [
-      'Langsung menyerah',
-      'Menghakimi yang mampu',
-      'Mencari hikmah dan cara bertahap menjalaninya',
-      'Menyembunyikan pertanyaan',
+      'Langsung menyerah dan tinggalkan semua itu',
+      'Mencari hikmahnya dan jalani bertahap',
+      'Menghakimi yang sudah mampu menjalankannya',
+      'Menyimpan pertanyaan supaya tak ketahuan',
     ],
-    correctIndex: 2,
+    correctIndex: 1,
     explanation:
         'Pendekatan bertahap membantu perubahan menjadi lebih nyata dan bertahan.',
   ),
@@ -4343,59 +4343,59 @@ const _why6Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'Kesulitan hidup selalu berarti...',
     options: [
-      'Allah membenci kita',
-      'Kita manusia yang gagal',
-      'Tidak selalu berarti Allah membenci kita',
-      'Tidak boleh meminta bantuan',
+      'Pertanda Allah sedang membenci kita',
+      'Bagian dunia dan ruang untuk kembali',
+      'Bukti kita memang manusia yang gagal',
+      'Sinyal untuk gak boleh minta bantuan',
     ],
-    correctIndex: 2,
+    correctIndex: 1,
     explanation:
         'Kesulitan adalah bagian dari dunia dan bisa menjadi ruang untuk bertumbuh serta kembali kepada Allah.',
   ),
   QuizQuestion(
     question: 'Sabar yang sehat bukan...',
     options: [
-      'Mengakui rasa sakit sambil mencari jalan baik',
-      'Menolak semua emosi dan pura-pura kuat',
-      'Tetap berusaha dalam keadaan sulit',
-      'Meminta pertolongan saat perlu',
+      'Menolak semua emosi dan pura-pura kuat saja',
+      'Mengakui rasa sakit sambil cari jalan baik',
+      'Tetap berusaha dalam keadaan yang sulit',
+      'Meminta pertolongan saat memang perlu',
     ],
-    correctIndex: 1,
+    correctIndex: 0,
     explanation: 'Sabar bukan meniadakan rasa sedih atau lelah.',
   ),
   QuizQuestion(
     question: 'QS. Al-Baqarah 2:155 menyebut bahwa manusia akan...',
     options: [
-      'Selalu bebas dari masalah',
-      'Tidak pernah takut',
-      'Mendapat semua yang diinginkan',
-      'Diuji dengan berbagai bentuk kekurangan',
+      'Selalu hidup bebas dari semua masalah',
+      'Tak pernah merasakan rasa takut sama sekali',
+      'Diuji dengan berbagai macam kekurangan',
+      'Mendapat semua yang selalu diinginkannya',
     ],
-    correctIndex: 3,
+    correctIndex: 2,
     explanation:
         'Ayat ini mengingatkan bahwa ujian adalah bagian dari kehidupan.',
   ),
   QuizQuestion(
     question: 'Sikap terhadap orang yang sedang diuji adalah...',
     options: [
-      'Tidak menghakimi seolah tahu semua dosanya',
-      'Menganggap ia pasti kurang iman',
-      'Membandingkan luka kita dengannya',
-      'Menjauhinya',
+      'Anggap saja dia pasti kekurngan iman sedikit',
+      'Menjauhinya supaya kita nyaman dan aman',
+      'Dengarkan tanpa menghakimi dosanya',
+      'Bandingkan luka kita dengan luka dia',
     ],
-    correctIndex: 0,
+    correctIndex: 2,
     explanation:
         'Kita tidak mengetahui seluruh kisah dan beban hidup seseorang.',
   ),
   QuizQuestion(
     question: 'Saat kondisi sedang berat, langkah yang dianjurkan adalah...',
     options: [
-      'Menutup diri total',
-      'Mencari satu bantuan nyata dan berdoa',
-      'Menyalahkan diri tanpa henti',
-      'Menolak semua dukungan',
+      'Menutup diri total dari semua orang',
+      'Menyalahkan diri sendiri tanpa henti',
+      'Menolak setiap dukungan yang ditawarkan',
+      'Cari satu bantuan nyata, sambil berdoa',
     ],
-    correctIndex: 1,
+    correctIndex: 3,
     explanation: 'Doa dan tindakan nyata dapat berjalan bersama.',
   ),
 ];
@@ -4417,9 +4417,9 @@ const _why7Quiz = <QuizQuestion>[
     question: 'Jika berdoa ingin lulus, tindakan yang tepat adalah...',
     options: [
       'Tetap belajar dan menyiapkan diri',
-      'Tidak perlu belajar lagi',
-      'Hanya menunggu hasil',
-      'Menyalahkan orang lain',
+      'Tidak perlu belajar lagi setelah berdoa',
+      'Menyalahkan orang yang temannya sudah lulus',
+      'Cukup menunggu hasil di rumah saja',
     ],
     correctIndex: 0,
     explanation: 'Doa dan ikhtiar berjalan bersama.',
@@ -4438,10 +4438,10 @@ const _why7Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'QS. Al-Baqarah 2:186 menyampaikan bahwa Allah...',
     options: [
-      'Jauh dari hamba yang berdoa',
-      'Tidak mendengar permintaan',
-      'Hanya menerima doa orang sempurna',
-      'Mengabulkan permohonan orang yang berdoa',
+      'Merasa jauh dari hamba yang berdoa itu',
+      'Hanya menerima doa orang yang sempurna',
+      'Akan menolak setiap permintaan yang masuk',
+      'Mendengar dan dekat pada yang berdoa',
     ],
     correctIndex: 3,
     explanation:
@@ -4450,12 +4450,12 @@ const _why7Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'Latihan setelah artikel ini adalah...',
     options: [
-      'Mengubah doa menjadi lebih jujur dan spesifik',
-      'Berhenti menyebut harapan',
-      'Hanya meminta tanpa berusaha',
-      'Membandingkan doa dengan orang lain',
+      'Berhenti menyebut harapan yang ditunggu',
+      'Membandingkan doamu dengan doa orang lain',
+      'Jadikan doamu lebih jujur dan spesifik',
+      'Hanya meminta tanpa ada usaha sama sekali',
     ],
-    correctIndex: 0,
+    correctIndex: 2,
     explanation:
         'Doa yang jujur membantu kita mengenali kebutuhan dan langkah nyata.',
   ),
@@ -4465,58 +4465,58 @@ const _why8Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'Takdir bukan alasan untuk...',
     options: [
-      'Berhenti memilih dan berusaha',
-      'Berdoa kepada Allah',
-      'Belajar dari kegagalan',
-      'Membuat rencana baik',
+      'Sungguh-sungguh berdoa kepada Allah Tuhan',
+      'Belajar dari setiap kegagalan yang terjadi',
+      'Membuat rencana yang baik untuk esok hari',
+      'Berhenti memilih lalu berhenti berusaha',
     ],
-    correctIndex: 0,
+    correctIndex: 3,
     explanation:
         'Kita tidak mengetahui masa depan, tetapi bertanggung jawab atas pilihan hari ini.',
   ),
   QuizQuestion(
     question: 'Tawakal berarti...',
     options: [
-      'Diam tanpa usaha',
-      'Berusaha dengan benar lalu menyerahkan hasil kepada Allah',
-      'Memastikan semua hasil sesuai keinginan',
-      'Menyalahkan takdir',
+      'Diam menanti usaha datang dari langit',
+      'Pastikan semua hasil tepat keinginanmu',
+      'Ikhlas terima hasil setelah ikhtiar',
+      'Menyalahkan takdir atas kegagalan hidup',
     ],
-    correctIndex: 1,
+    correctIndex: 2,
     explanation: 'Tawakal menyatukan ikhtiar dan penyerahan diri kepada Allah.',
   ),
   QuizQuestion(
     question:
         'QS. Ar-Ra’d 13:11 mengajarkan bahwa Allah tidak mengubah keadaan suatu kaum sampai...',
     options: [
-      'Mereka menunggu tanpa bergerak',
-      'Semua orang setuju',
-      'Mereka berhenti berusaha',
-      'Mereka mengubah keadaan diri mereka',
+      'Kaum itu mengubah keadaan diri mereka sendiri',
+      'Semua anggota setuju dengan satu rencana',
+      'Mereka benar-benar berhenti berusaha lagi',
+      'Mereka hanya menunggu tanpa bergerak',
     ],
-    correctIndex: 3,
+    correctIndex: 0,
     explanation: 'Ayat ini mendorong perubahan dari diri sendiri.',
   ),
   QuizQuestion(
     question:
         'Saat hasil usaha tidak sesuai harapan, sikap yang tepat adalah...',
     options: [
-      'Menganggap seluruh usaha sia-sia',
-      'Tidak boleh merasa sedih',
-      'Belajar dari proses dan tetap mengambil langkah baik',
-      'Menyalahkan semua orang',
+      'Tetap belajar dari proses dan langkah baik',
+      'Anggap seluruh usahanya sia-sia sekali',
+      'Tidak diperkenankan merasa sedih sama sekali',
+      'Menyalahkan semua orang di sekitarmu',
     ],
-    correctIndex: 2,
+    correctIndex: 0,
     explanation:
         'Hasil bukan satu-satunya nilai; proses baik juga membentuk diri.',
   ),
   QuizQuestion(
     question: 'Contoh langkah pertama yang baik adalah...',
     options: [
-      'Menunggu sampai yakin seratus persen',
-      'Membuat satu langkah kecil yang jelas minggu ini',
-      'Mengabaikan semua masalah',
-      'Meminta orang lain mengerjakan semuanya',
+      'Menunggu sampai yakin seratus persen dulu',
+      'Buat satu langkah kecil yang jelas',
+      'Mengabaikan sekaligus semua masalah kita',
+      'Meminta orang lain kerja semuanya nanti',
     ],
     correctIndex: 1,
     explanation:
@@ -4528,47 +4528,47 @@ const _why9Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'Saat mengulang kesalahan, rasa malu kepada Allah seharusnya...',
     options: [
-      'Membuat kita putus asa',
+      'Bikin kita jadi putus asa pada rahmat-Nya',
+      'Menyebabkan kita putus sama semua orang',
+      'Bikin kita berhenti berdoa ke Allah sekalian',
       'Membawa kita kembali dan memperbaiki diri',
-      'Membuat kita menyalahkan orang lain',
-      'Membuat kita berhenti berdoa',
     ],
-    correctIndex: 1,
+    correctIndex: 3,
     explanation: 'Rasa bersalah yang sehat mendorong tobat, bukan putus asa.',
   ),
   QuizQuestion(
     question: 'QS. Az-Zumar 39:53 melarang kita...',
     options: [
-      'Belajar dari kesalahan',
-      'Meminta maaf',
+      'Belajar dari setiap kesalahan yang ada',
       'Berputus asa dari rahmat Allah',
-      'Mencari lingkungan baik',
+      'Meminta maaf atas kesalahan yang lalu',
+      'Mencari lingkungan yang baik dan suportif',
     ],
-    correctIndex: 2,
+    correctIndex: 1,
     explanation:
         'Rahmat Allah adalah alasan untuk terus kembali dan memperbaiki diri.',
   ),
   QuizQuestion(
     question: 'Tobat yang jujur mencakup...',
     options: [
-      'Menutupi semua kesalahan tanpa berubah',
-      'Menyalahkan keadaan',
-      'Mengulangi kesalahan dengan sengaja',
-      'Menyesal, berhenti sebisa mungkin, dan berniat memperbaiki',
+      'Rasa menyesal, kerja berhentinya, dan niat baik',
+      'Menutup semua kesalahan tanpa mau berubah',
+      'Menyalahkan keadaan atas semua yang terjadi',
+      'Sengaja mengulangi kesalahan yang sama',
     ],
-    correctIndex: 3,
+    correctIndex: 0,
     explanation: 'Tobat adalah arah kembali yang diwujudkan melalui perubahan.',
   ),
   QuizQuestion(
     question:
         'Jika sering terjatuh pada kesalahan yang sama, langkah tambahan yang baik adalah...',
     options: [
-      'Mencari pemicu dan lingkungan pendukung',
-      'Menganggap tobat tidak berguna',
-      'Menyembunyikan semua masalah sendirian',
-      'Tidak perlu membuat batas',
+      'Anggap saja tobat sama sekali tidak berguna',
+      'Sembunyikan semua masalah sendirian saja',
+      'Periksa pemicu dan lingkungan pendukung',
+      'Tidak perlu membuat batas apa pun nanti',
     ],
-    correctIndex: 0,
+    correctIndex: 2,
     explanation:
         'Mengenali pemicu membantu kita membuat perubahan yang lebih nyata.',
   ),
@@ -4576,12 +4576,12 @@ const _why9Quiz = <QuizQuestion>[
     question:
         'Meminta bantuan orang tepercaya ketika berusaha berubah berarti...',
     options: [
-      'Tanda iman lemah',
-      'Tanda putus asa',
-      'Langkah yang dapat membantu perubahan',
-      'Tidak perlu tobat',
+      'Langkah yang membantu proses perubahan',
+      'Sebuah tanda betapa lemahnya iman kita',
+      'Bukti kita sudah putus asa dari rahmat Allah',
+      'Sinyal bahwa tobat tak lagi kita perlukan',
     ],
-    correctIndex: 2,
+    correctIndex: 0,
     explanation:
         'Dukungan dan batas yang sehat dapat membantu proses perubahan.',
   ),
@@ -4591,10 +4591,10 @@ const _why10Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'Iman yang dewasa bukan berarti...',
     options: [
-      'Selalu ingin belajar',
-      'Tidak pernah salah atau ragu',
-      'Lebih rendah hati',
-      'Bertanggung jawab',
+      'Selalu ingin belajar hal-hal baru, terus',
+      'Berhenti pernah salah atau tersesat lagi',
+      'Justru tampak lebih rendah hati dalam hal',
+      'Jadi lebih siap bertanggung jawab penuh',
     ],
     correctIndex: 1,
     explanation:
@@ -4628,24 +4628,24 @@ const _why10Quiz = <QuizQuestion>[
   QuizQuestion(
     question: 'Iman yang dewasa tampak saat seseorang...',
     options: [
-      'Baik hanya ketika dilihat',
-      'Selalu memenangkan perdebatan',
-      'Tidak pernah meminta bantuan',
-      'Berbuat baik meski tidak ada yang melihat',
+      'Baik hanya ketika sedang dilihat orang',
+      'Berbuat baik meski tak ada yang lihat',
+      'Selalu menang setiap perdebatan agama',
+      'Malu meminta bantuan saat sedang sulit',
     ],
-    correctIndex: 3,
+    correctIndex: 1,
     explanation:
         'Keikhlasan terlihat ketika kebaikan tidak bergantung pada pengakuan manusia.',
   ),
   QuizQuestion(
     question: 'Kebiasaan kecil untuk menumbuhkan iman dewasa adalah...',
     options: [
-      'Menjaga janji dan bersikap lebih lembut',
-      'Menunggu menjadi sempurna',
-      'Mencari kesalahan orang lain',
-      'Hanya bicara tentang agama',
+      'Menunggu diri jadi sempurna dengan sendirinya',
+      'Mencari-cari kesalahan orang lain sekitarnya',
+      'Bicara agama hanya saat sedang ke situ aja',
+      'Jaga janji dan tingkahkan sikap yang lembut',
     ],
-    correctIndex: 0,
+    correctIndex: 3,
     explanation:
         'Iman bertumbuh melalui akhlak dan kebiasaan kecil yang konsisten.',
   ),
