@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
@@ -17,6 +19,13 @@ class BelajarQuizScreen extends StatefulWidget {
 class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
   LearningModule? _module;
   late final List<QuizQuestion> _questions;
+
+  /// Per soal: urutan TAMPILAN opsinya (indeks ke array asli). Shuffle sekali
+  /// di initState. ponytail (fix 2026-10-02): dulu posisi kunci selalu tetap
+  /// per soal (mis. quiz 1.4 = A,B,C,D,A) sehingga retake bisa ditebak dari
+  /// hafalan posisi. Kini urutan opsi diacak setiap kali quiz dibuka.
+  late final List<List<int>> _optionOrder;
+
   int _current = 0;
   int? _selected;
   bool _answered = false;
@@ -27,14 +36,22 @@ class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
     super.initState();
     _module = LearningContent.getModule(widget.moduleId);
     _questions = LearningContent.getQuiz(widget.moduleId);
+    final rng = math.Random();
+    _optionOrder = [
+      for (final q in _questions)
+        [for (var i = 0; i < q.options.length; i++) i]..shuffle(rng),
+    ];
   }
 
-  void _answer(int idx) {
+  void _answer(int displayIdx) {
     if (_answered || _questions.isEmpty) return;
     setState(() {
-      _selected = idx;
+      _selected = displayIdx;
       _answered = true;
-      _correct.add(idx == _questions[_current].correctIndex);
+      // Peta indeks tampak ke indeks asli, lalu bandingkan dengan
+      // correctIndex asli di data.
+      final realIdx = _optionOrder[_current][displayIdx];
+      _correct.add(realIdx == _questions[_current].correctIndex);
     });
   }
 
@@ -132,7 +149,13 @@ class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
                         style: AppText.headlineMd().copyWith(
                             fontSize: 20, height: 1.4, color: AppColors.primary)),
                     const SizedBox(height: AppSpacing.lg),
-                    ...List.generate(q.options.length, (i) => _optionCard(q, i)),
+                    ...List.generate(
+                        q.options.length,
+                        (i) => _optionCard(
+                              q,
+                              _optionOrder[_current][i],
+                              displayIndex: i,
+                            )),
                     if (_answered) ...[
                       const SizedBox(height: AppSpacing.lg),
                       _explanationCard(q),
@@ -192,9 +215,12 @@ class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
     );
   }
 
-  Widget _optionCard(QuizQuestion q, int i) {
-    final isCorrect = i == q.correctIndex;
-    final isSelected = i == _selected;
+  /// [realIndex] = indeks opsi di array asli; [displayIndex] = posisi baris
+  /// di layar (untuk label A/B/C/D). Setelah shuffle, keduanya bisa berbeda.
+  Widget _optionCard(QuizQuestion q, int realIndex,
+      {required int displayIndex}) {
+    final isCorrect = realIndex == q.correctIndex;
+    final isSelected = _selected == displayIndex;
     final showCorrect = _answered && isCorrect;
     final showWrong = _answered && isSelected && !isCorrect;
 
@@ -219,10 +245,11 @@ class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
     }
 
     final letters = ['A', 'B', 'C', 'D', 'E'];
+    final letter = letters[displayIndex];
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.sm),
       child: InkWell(
-        onTap: _answered ? null : () => _answer(i),
+        onTap: _answered ? null : () => _answer(displayIndex),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.all(AppSpacing.md),
@@ -245,13 +272,13 @@ class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
                 child: Center(
                   child: icon != null
                       ? Icon(icon, color: Colors.white, size: 16)
-                      : Text(letters[i],
+                      : Text(letter,
                           style: AppText.labelCaps().copyWith(color: textColor, fontSize: 12)),
                 ),
               ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
-                child: Text(q.options[i],
+                child: Text(q.options[realIndex],
                     style: AppText.bodyMd().copyWith(color: textColor, height: 1.4)),
               ),
             ],
