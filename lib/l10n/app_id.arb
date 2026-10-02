@@ -1064,7 +1064,9 @@
       }
     }
   },
-  "dzResetTitle": "Reset counter?",
+    "qiblaSkinTitle": "Skin kompas",
+  "qiblaSkinSubtitle": "Pilih tampilan dial kompas kiblat. Pilihan ini tersimpan terus, kapan pun kembali ke halaman ini.",
+"dzResetTitle": "Reset counter?",
   "dzResetBody": "Counter \"{item}\" akan di-nolkan dari 0.\\nTotal dzikir hari ini TETAP dihitung.",
   "@dzResetBody": {
     "placeholders": {

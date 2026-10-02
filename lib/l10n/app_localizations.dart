@@ -4198,6 +4198,18 @@ abstract class AppL10n {
   /// **'Selisih {degrees}° dari kiblat'**
   String qiblaOffset(String degrees);
 
+  /// No description provided for @qiblaSkinTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Skin kompas'**
+  String get qiblaSkinTitle;
+
+  /// No description provided for @qiblaSkinSubtitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Pilih tampilan dial kompas kiblat. Pilihan ini tersimpan terus, kapan pun kembali ke halaman ini.'**
+  String get qiblaSkinSubtitle;
+
   /// No description provided for @dzResetTitle.
   ///
   /// In id, this message translates to:

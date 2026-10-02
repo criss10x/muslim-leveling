@@ -2315,6 +2315,13 @@ class AppL10nId extends AppL10n {
   }
 
   @override
+  String get qiblaSkinTitle => 'Skin kompas';
+
+  @override
+  String get qiblaSkinSubtitle =>
+      'Pilih tampilan dial kompas kiblat. Pilihan ini tersimpan terus, kapan pun kembali ke halaman ini.';
+
+  @override
   String get dzResetTitle => 'Reset counter?';
 
   @override

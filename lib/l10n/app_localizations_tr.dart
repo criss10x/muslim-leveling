@@ -2340,6 +2340,13 @@ class AppL10nTr extends AppL10n {
   }
 
   @override
+  String get qiblaSkinTitle => 'Pusula stili';
+
+  @override
+  String get qiblaSkinSubtitle =>
+      'Kıble pusulası kadran görünümünü seçin. Bu tercih kalıcıdır ve bu sayfaya her dönüşünüzde görünür.';
+
+  @override
   String get dzResetTitle => 'Sayaç sıfırlansın mı?';
 
   @override

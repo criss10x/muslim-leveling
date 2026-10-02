@@ -5,9 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/qibla_skin_service.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../theme/app_icons.dart';
+
+part 'qibla_skin_painter.dart';
+part 'qibla_skin_picker.dart';
 
 /// Koordinat Ka'bah (Masjidil Haram, Makkah)
 const _kaabaLat = 21.4225;
@@ -160,6 +164,9 @@ class _QiblaScreenState extends State<QiblaScreen>
   @override
   void initState() {
     super.initState();
+    // Skin kompas: preferensi tersimpan → dimuat sekali per buka layar
+    // (listenable di-refresh saat picker ditutup; setState cukup).
+    qiblaSkinNotifier.load();
     final coords = _findCityCoords(widget.cityName) ?? [-6.2088, 106.8456];
     _qiblaBearing = _calculateQiblaBearing(coords[0], coords[1]);
     _distance = _haversineDistance(coords[0], coords[1], _kaabaLat, _kaabaLon);
@@ -366,6 +373,33 @@ class _QiblaScreenState extends State<QiblaScreen>
             ),
           ),
           const SizedBox(width: AppSpacing.md),
+          // Tombol skin picker (drawer kanan bila dipencet) — 5 pilihan dial.
+          PressableScale(
+            onTap: () => showQiblaSkinPicker(context),
+            child: Container(
+              height: 40,
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceContainerHigh,
+                borderRadius: BorderRadius.circular(AppRadius.pill),
+                border: Border.all(
+                    color: AppColors.outlineVariant.withValues(alpha: 0.3)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('🎨', style: TextStyle(fontSize: 16)),
+                  const SizedBox(width: 4),
+                  Text(
+                    qiblaSkinNotifier.skin.label,
+                    style: AppText.labelCapsSm()
+                        .copyWith(color: AppColors.onSurfaceVariant),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: AppSpacing.md),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -392,29 +426,56 @@ class _QiblaScreenState extends State<QiblaScreen>
   }
 
   Widget _compass(AppL10n l10n, bool aligned) {
-    // Dial selalu mint (identitas app + logo). Jarum cyan saat mencari,
-    // mengunci ke mint saat sejajar — pasangan mint/cyan = gradient logo.
-    final compassColor = AppColors.primary;
-    // Light: primaryFixed is bright fill-only (fails as ink). Use deep primary.
-    final arrowColor = aligned
-        ? (isLightTheme ? AppColors.primary : AppColors.primaryFixed)
-        : AppColors.tertiary;
+    // Skin dial dari preferensi pengguna (5 pilihan, appllama critique v9).
+    // Satu painter per skin; state aligned tetap menyala glow dial.
+    final spec = qiblaSkinNotifier.spec;
+    final skin = qiblaSkinNotifier.skin;
+    final CustomPainter painter = switch (skin) {
+      QiblaSkin.nurDial => _NurDialPainter(
+          azimuth: _displayAzimuth,
+          qiblaBearing: _qiblaBearing,
+          isAligned: aligned,
+          glow: aligned ? 0.45 + 0.55 * _pulse.value : 0.0,
+          spec: spec,
+        ),
+      QiblaSkin.shamseh => _ShamsehPainter(
+          azimuth: _displayAzimuth,
+          qiblaBearing: _qiblaBearing,
+          isAligned: aligned,
+          glow: aligned ? 0.45 + 0.55 * _pulse.value : 0.0,
+          spec: spec,
+        ),
+      QiblaSkin.antique => _AntiquePainter(
+          azimuth: _displayAzimuth,
+          qiblaBearing: _qiblaBearing,
+          isAligned: aligned,
+          glow: aligned ? 0.45 + 0.55 * _pulse.value : 0.0,
+          spec: spec,
+        ),
+      QiblaSkin.instrument => _InstrumentPainter(
+          azimuth: _displayAzimuth,
+          qiblaBearing: _qiblaBearing,
+          isAligned: aligned,
+          glow: aligned ? 0.45 + 0.55 * _pulse.value : 0.0,
+          spec: spec,
+        ),
+      QiblaSkin.midnight => _MidnightPainter(
+          azimuth: _displayAzimuth,
+          qiblaBearing: _qiblaBearing,
+          isAligned: aligned,
+          glow: aligned ? 0.45 + 0.55 * _pulse.value : 0.0,
+          spec: spec,
+        ),
+    };
 
     return AnimatedBuilder(
       animation: _pulse,
-      builder: (_, __) => SizedBox(
-        width: 300,
-        height: 300,
-        child: CustomPaint(
-          painter: _CompassPainter(
-            azimuth: _displayAzimuth,
-            qiblaBearing: _qiblaBearing,
-            isAligned: aligned,
-            // 0..1 — menguatkan glow ring saat sejajar (pulse bernapas).
-            glow: aligned ? 0.45 + 0.55 * _pulse.value : 0.0,
-            compassColor: compassColor,
-            arrowColor: arrowColor,
-          ),
+      builder: (_, __) => ListenableBuilder(
+        listenable: qiblaSkinNotifier,
+        builder: (_, __) => SizedBox(
+          width: 300,
+          height: 300,
+          child: CustomPaint(painter: painter),
         ),
       ),
     );
@@ -606,220 +667,3 @@ class _QiblaScreenState extends State<QiblaScreen>
   }
 }
 
-/// Custom painter kompas — dial neon bergaya tema app.
-class _CompassPainter extends CustomPainter {
-  final double azimuth;
-  final double qiblaBearing;
-  final bool isAligned;
-  final double glow; // 0..1, ekstra glow saat sejajar (pulse)
-  final Color compassColor;
-  final Color arrowColor;
-
-  _CompassPainter({
-    required this.azimuth,
-    required this.qiblaBearing,
-    required this.isAligned,
-    required this.glow,
-    required this.compassColor,
-    required this.arrowColor,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final centerX = size.width / 2;
-    final centerY = size.height / 2;
-    final center = Offset(centerX, centerY);
-    // Dial sengaja disusutkan: badge Ka'bah menempel di bezel, jadi cincin
-    // luar butuh ruang bernapas yang sebelumnya tidak ada.
-    final radius = math.min(centerX, centerY) - 30;
-    final bezel = radius + 14;
-
-    // ─── Background dial ───
-    final bgPaint = Paint()
-      ..shader = RadialGradient(
-        colors: [
-          AppColors.surfaceContainerHigh,
-          AppColors.background,
-        ],
-      ).createShader(Rect.fromCircle(center: center, radius: bezel));
-    canvas.drawCircle(center, bezel, bgPaint);
-
-    // ─── Neon ring + glow (menguat saat sejajar) ───
-    final glowPaint = Paint()
-      ..color = compassColor.withValues(alpha: 0.20 + 0.5 * glow)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 4 + 4 * glow
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 12);
-    canvas.drawCircle(center, bezel, glowPaint);
-
-    final borderPaint = Paint()
-      ..color = compassColor.withValues(alpha: isAligned ? 0.85 : 0.45)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
-    canvas.drawCircle(center, bezel, borderPaint);
-
-    // ─── Dial berputar: ticks + huruf mata angin ───
-    canvas.save();
-    canvas.translate(centerX, centerY);
-    canvas.rotate(-azimuth * math.pi / 180);
-
-    for (var i = 0; i < 360; i += 15) {
-      final isMain = i % 90 == 0;
-      final isMid = i % 45 == 0;
-      final angle = (i - 90) * math.pi / 180;
-      final len = isMain ? 16.0 : (isMid ? 12.0 : 7.0);
-      final startX = math.cos(angle) * radius;
-      final startY = math.sin(angle) * radius;
-      final endX = math.cos(angle) * (radius - len);
-      final endY = math.sin(angle) * (radius - len);
-
-      final tickPaint = Paint()
-        ..strokeCap = StrokeCap.round
-        ..color = isMain
-            ? compassColor.withValues(alpha: 0.9)
-            : AppColors.onSurfaceVariant.withValues(alpha: isMid ? 0.55 : 0.3)
-        ..strokeWidth = isMain ? 3 : 1.5;
-      canvas.drawLine(Offset(startX, startY), Offset(endX, endY), tickPaint);
-    }
-
-    // Huruf mata angin — N menonjol dengan glow.
-    final cardinals = [
-      ('N', 0, compassColor, true),
-      ('E', 90, AppColors.onSurfaceVariant, false),
-      ('S', 180, AppColors.onSurfaceVariant, false),
-      ('W', 270, AppColors.onSurfaceVariant, false),
-    ];
-
-    for (final (label, angle, color, emphasize) in cardinals) {
-      final radAngle = (angle - 90) * math.pi / 180;
-      final textX = math.cos(radAngle) * (radius - 30);
-      final textY = math.sin(radAngle) * (radius - 30);
-
-      final tp = TextPainter(
-        text: TextSpan(
-          text: label,
-          style: TextStyle(
-            color: color,
-            fontSize: emphasize ? 18 : 15,
-            fontWeight: FontWeight.bold,
-            shadows: emphasize
-                ? [Shadow(color: color.withValues(alpha: 0.8), blurRadius: 10)]
-                : null,
-          ),
-        ),
-        textDirection: TextDirection.ltr,
-        textAlign: TextAlign.center,
-      )..layout();
-      tp.paint(canvas, Offset(textX - tp.width / 2, textY - tp.height / 2));
-    }
-    canvas.restore();
-
-    // ─── Inner ring halus ───
-    final innerPaint = Paint()
-      ..color = AppColors.outlineVariant.withValues(alpha: 0.25)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1;
-    canvas.drawCircle(center, radius - 46, innerPaint);
-
-    // ─── Jarum kiblat ───
-    // Ujung berhenti sebelum cincin huruf mata angin; kepala dan batang
-    // dijahit di satu titik (headBase) supaya tidak ada celah/tumpukan.
-    final relativeAngle = qiblaBearing - azimuth;
-    canvas.save();
-    canvas.translate(centerX, centerY);
-    canvas.rotate(relativeAngle * math.pi / 180);
-
-    final tipY = -(radius - 52);
-    const headLen = 22.0;
-    final headBase = tipY + headLen;
-
-    // Glow di belakang jarum
-    final needleGlow = Paint()
-      ..color = arrowColor.withValues(alpha: 0.35 + 0.35 * glow)
-      ..strokeWidth = 10
-      ..strokeCap = StrokeCap.round
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
-    canvas.drawLine(const Offset(0, 16), Offset(0, tipY + 8), needleGlow);
-
-    // Batang: gradient dari ekor transparan ke pangkal kepala
-    final needlePaint = Paint()
-      ..shader = LinearGradient(
-        begin: Alignment.bottomCenter,
-        end: Alignment.topCenter,
-        colors: [arrowColor.withValues(alpha: 0.22), arrowColor],
-      ).createShader(Rect.fromLTRB(-3, tipY, 3, 16))
-      ..strokeWidth = 5
-      ..strokeCap = StrokeCap.round;
-    // Berhenti 4px DI DALAM kepala (−y = atas) supaya sambungannya tak berjahit.
-    canvas.drawLine(Offset(0, 16), Offset(0, headBase - 4), needlePaint);
-
-    // Kepala panah — duduk tepat di ujung batang
-    final headPath = Path()
-      ..moveTo(0, tipY)
-      ..lineTo(-10, headBase)
-      ..lineTo(10, headBase)
-      ..close();
-    canvas.drawPath(headPath, Paint()..color = arrowColor);
-
-    // Ekor kecil
-    canvas.drawCircle(
-        const Offset(0, 16), 5, Paint()..color = arrowColor.withValues(alpha: 0.5));
-    canvas.restore();
-
-    // ─── Pusat: dot glassy ───
-    canvas.drawCircle(
-        center, 26, Paint()..color = compassColor.withValues(alpha: 0.12));
-    canvas.drawCircle(
-      center,
-      16,
-      Paint()
-        ..color = compassColor.withValues(alpha: 0.6)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2,
-    );
-    canvas.drawCircle(center, 4, Paint()..color = compassColor);
-
-    // ─── Badge Ka'bah di bezel ───
-    // Ka'bah adalah arah geografis tetap, jadi tempatnya sebagai penanda
-    // target di cincin luar — bukan menempel di batang jarum (dulu ia
-    // digambar di radius-80, persis menimpa kepala panah).
-    final markRad = (relativeAngle - 90) * math.pi / 180;
-    final mx = centerX + math.cos(markRad) * bezel;
-    final my = centerY + math.sin(markRad) * bezel;
-    final mark = Offset(mx, my);
-
-    canvas.drawCircle(
-      mark,
-      18,
-      Paint()
-        ..color = arrowColor.withValues(alpha: 0.18 + 0.3 * glow)
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8),
-    );
-    canvas.drawCircle(
-        mark, 13, Paint()..color = AppColors.surfaceContainerHigh);
-    canvas.drawCircle(
-      mark,
-      13,
-      Paint()
-        ..color = arrowColor.withValues(alpha: isAligned ? 0.95 : 0.6)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.5,
-    );
-
-    final kaabaTp = TextPainter(
-      text: const TextSpan(text: '🕋', style: TextStyle(fontSize: 15)),
-      textDirection: TextDirection.ltr,
-    )..layout();
-    kaabaTp.paint(
-        canvas, Offset(mx - kaabaTp.width / 2, my - kaabaTp.height / 2));
-  }
-
-  @override
-  bool shouldRepaint(covariant _CompassPainter oldDelegate) {
-    return oldDelegate.azimuth != azimuth ||
-        oldDelegate.isAligned != isAligned ||
-        oldDelegate.glow != glow ||
-        oldDelegate.arrowColor != arrowColor ||
-        oldDelegate.compassColor != compassColor;
-  }
-}

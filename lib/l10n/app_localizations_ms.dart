@@ -2326,6 +2326,13 @@ class AppL10nMs extends AppL10n {
   }
 
   @override
+  String get qiblaSkinTitle => 'Kulit kompas';
+
+  @override
+  String get qiblaSkinSubtitle =>
+      'Pilih paparan dial kompas kiblat. Pilihan ini disimpan terus, bila-bila masa kembali ke halaman ini.';
+
+  @override
   String get dzResetTitle => 'Set semula kaunter?';
 
   @override

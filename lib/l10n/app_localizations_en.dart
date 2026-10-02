@@ -2315,6 +2315,13 @@ class AppL10nEn extends AppL10n {
   }
 
   @override
+  String get qiblaSkinTitle => 'Compass skin';
+
+  @override
+  String get qiblaSkinSubtitle =>
+      'Choose the qibla compass dial style. This preference persists and shows every time you return to this page.';
+
+  @override
   String get dzResetTitle => 'Reset counter?';
 
   @override
