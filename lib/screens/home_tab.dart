@@ -228,7 +228,23 @@ class _HomeTabState extends State<HomeTab> {
     }
     if (type == 'sunnah' &&
         !GameService.isSunnahOnTime(prayer, _state.timings)) {
-      _toast('⏰ ${GameService.sunnahHint(prayer, AppL10n.of(context))}');
+      // Catch-up (2026-10-02): sunnah telat bisa di-claim dari baris EXPANDED —
+      // reward XP lebih kecil (10 bukan 15) karena on-time tetap lebih baik.
+      // Collapsed list TETAP menyembunyikan yang telat; ini jalur dari expanded.
+      var ok = false;
+      try {
+        final res = await GameService.logPrayerAsync(prayer, type,
+            catchUp: true);
+        if (res != null) {
+          ok = true;
+          if (!mounted) return;
+          setState(() => _state = res.$1);
+          showXpToast(context, res.$2);
+        }
+      } catch (_) {}
+      if (!ok && mounted) {
+        _toast('⏰ ${GameService.sunnahHint(prayer, AppL10n.of(context))}');
+      }
       return;
     }
     var bonusXp = 0;
@@ -2316,8 +2332,14 @@ class _BonusQuestState extends State<_BonusQuest> {
                     completed: GameService.isPrayerCheckedToday(it.$1),
                     active: !GameService.isPrayerCheckedToday(it.$1) &&
                         GameService.isSunnahOnTime(it.$1, t),
-                    locked: !GameService.isPrayerCheckedToday(it.$1) &&
-                        !GameService.isSunnahOnTime(it.$1, t),
+                    // ponytail: catch-up = telat tapi belum di-claim hari ini.
+                    // Bukan locked (bisa dipencet), bukan on-time aktif —
+                    // barisnya redup DAN pill-nya "+10 XP" bukan "+15 XP"
+                    // supaya user tahu hadiahnya lebih kecil dari on-time.
+                    catchUp: !GameService.isPrayerCheckedToday(it.$1) &&
+                        !GameService.isSunnahOnTime(it.$1, t) &&
+                        _expanded,
+                    locked: false,
                     onTap: () => widget.onToggle(it.$1),
                   ),
                 ),
@@ -2336,10 +2358,14 @@ class _BonusQuestState extends State<_BonusQuest> {
     bool locked = false,
     bool completed = false,
     bool active = false,
+    bool catchUp = false,
     VoidCallback? onTap,
     int xp = 15,
   }) {
-    final dimmed = locked && !completed;
+    // Catch-up: baris sedikit redup; pill XP-nya jadi +10 (bukan +15) supaya
+    // user tahu hadiah telat lebih kecil — tapi row-nya tetap bisa dipencet.
+    final xpShown = catchUp ? GameService.sunnahCatchUpXp : xp;
+    final dimmed = (locked && !completed) || catchUp;
     final iconColor = completed
         ? color
         : (locked
@@ -2390,7 +2416,7 @@ class _BonusQuestState extends State<_BonusQuest> {
                   ],
                 ),
               ),
-              _xpPillSmall(xp, color, AppColors.onSecondary,
+              _xpPillSmall(xpShown, color, AppColors.onSecondary,
                   done: completed, locked: locked),
             ],
           ),

@@ -58,12 +58,17 @@ class PrayerLog {
   /// Bonus XP dipilih saat claim (0 = tidak ada, 15 = tepat waktu, 30 = berjamaah).
   /// Dipersist supaya unlogPrayer bisa mengembalikan jumlah yang persis.
   final int bonusXp;
+  /// True saat log sunnah di-claim TELAT (lewat jendela waktu) dengan XP
+  /// lebih kecil (sunnahCatchUpXp) — unlogPrayer harus balikin jumlaht yang
+  /// persis, jadi ia perlu tahu log ini catch-up, bukan on-time.
+  final bool catchUp;
   PrayerLog({
     required this.date,
     required this.prayer,
     required this.time,
     required this.type,
     this.bonusXp = 0,
+    this.catchUp = false,
   });
   factory PrayerLog.fromMap(Map<String, dynamic> m) => PrayerLog(
     date: m['date'],
@@ -71,6 +76,7 @@ class PrayerLog {
     time: m['time'],
     type: m['type'],
     bonusXp: m['bonusXp'] ?? 0,
+    catchUp: m['catchUp'] ?? false,
   );
   Map<String, dynamic> toMap() => {
     'date': date,
@@ -78,6 +84,7 @@ class PrayerLog {
     'time': time,
     'type': type,
     'bonusXp': bonusXp,
+    'catchUp': catchUp,
   };
 }
 
@@ -857,6 +864,11 @@ class GameService {
   static const timelyBonusXp = 15; // tepat waktu (≤30 menit)
   static const jamaahBonusXp = 30; // berjamaah
 
+  /// XP sunnung claim TELAT (lewat jendela waktu) — lebih kecil dari on-time
+  /// (15) supaya hadiah on-time selalu lebih baik; unlogPrayer baca flag
+  /// `catchUp` di PrayerLog supaya xpLost sesuai.
+  static const sunnahCatchUpXp = 10;
+
   // ponytail: test-only flag to bypass time-window for deterministic unit tests.
   static bool _testSkipTimeWindow = false;
   static void setTestSkipTimeWindow(bool skip) => _testSkipTimeWindow = skip;
@@ -1295,6 +1307,7 @@ class GameService {
     String prayer,
     String type, {
     int bonusXp = 0,
+    bool catchUp = false,
   }) {
     final today = todayStr();
     final yest = yesterdayStr();
@@ -1304,7 +1317,13 @@ class GameService {
       return null;
     }
 
-    if (type == 'sunnah' && !isSunnahOnTime(prayer, state.timings)) return null;
+    // ponytail: catch-up membolehkan sunnah telat klaim (XP lebih kecil) —
+    // pintu terpisah dari on-time; default (catchUp=false) tetap menolak telat.
+    if (type == 'sunnah' &&
+        !catchUp &&
+        !isSunnahOnTime(prayer, state.timings)) {
+      return null;
+    }
 
     if (type == 'wajib' &&
         !_testSkipTimeWindow &&
@@ -1318,6 +1337,7 @@ class GameService {
       time: now,
       type: type,
       bonusXp: bonusXp,
+      catchUp: catchUp,
     );
     final updatedLogs = [...state.prayerLog, newLog];
 
@@ -1327,7 +1347,9 @@ class GameService {
       'ashar' => 20,
       'maghrib' => 25,
       'isya' => 25,
-      _ => 15,
+      // sunnah: on-time 15, catch-up lebih kecil (critique konsep hadiah
+      // on-time selalu kembali lebih baik daripada telat).
+      _ => catchUp ? sunnahCatchUpXp : 15,
     };
 
     final isHeroCompletor =
@@ -1440,8 +1462,9 @@ class GameService {
     String prayer,
     String type, {
     int bonusXp = 0,
+    bool catchUp = false,
   }) async {
-    final res = logPrayer(_cache, prayer, type, bonusXp: bonusXp);
+    final res = logPrayer(_cache, prayer, type, bonusXp: bonusXp, catchUp: catchUp);
     if (res == null) return null;
     await _save(res.$1);
     await refreshBadges(); // check badge unlock
@@ -1461,7 +1484,9 @@ class GameService {
       'ashar' => 20,
       'maghrib' => 25,
       'isya' => 25,
-      _ => 15,
+      // Symmetric dgn logPrayer: sunnah catch-up yang di-unlog balikin
+      // jumlaht yang sama (10, bukan 15).
+      _ => logItem.catchUp ? sunnahCatchUpXp : 15,
     };
 
     // Apakah sebelum unlog ini 5/5 sudah lengkap? Kalau iya, prayer ini yang
