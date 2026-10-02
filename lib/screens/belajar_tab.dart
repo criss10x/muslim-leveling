@@ -273,7 +273,9 @@ class _BelajarTabState extends State<BelajarTab> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(mod.title,
+                    Text(
+                        LearningContent.titleFor(mod.id,
+                            lang: Localizations.localeOf(context).languageCode),
                         style: AppText.bodyLg().copyWith(
                             color: completed
                                 ? AppColors.onSurfaceVariant

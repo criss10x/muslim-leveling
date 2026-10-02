@@ -16,14 +16,27 @@ class BelajarArticleScreen extends StatefulWidget {
 
 class _BelajarArticleScreenState extends State<BelajarArticleScreen> {
   LearningModule? _module;
-  late final List<ArticleBlock> _blocks;
+  List<ArticleBlock> _blocks = const [];
+  String? _blocksLang;
   double _scrollProgress = 0;
 
   @override
   void initState() {
     super.initState();
     _module = LearningContent.getModule(widget.moduleId);
-    _blocks = LearningContent.getArticle(widget.moduleId);
+  }
+
+  // Konten artikel dibaca per locale, bukan di initState: initState tidak punya
+  // context, dan user bisa ganti bahasa lalu kembali ke screen ini (didChange-
+  // Dependencies terpanggil lagi) — blok di-reload hanya kalau locale beda.
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final lang = Localizations.localeOf(context).languageCode;
+    if (_blocksLang != lang) {
+      _blocks = LearningContent.getArticle(widget.moduleId, lang: lang);
+      _blocksLang = lang;
+    }
   }
 
   @override
@@ -101,7 +114,8 @@ class _BelajarArticleScreenState extends State<BelajarArticleScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('${module.icon}  ${module.title}',
+                Text(
+                  '${module.icon}  ${LearningContent.titleFor(module.id, lang: Localizations.localeOf(context).languageCode)}',
                     style: AppText.titleLg().copyWith(
                         fontSize: 16, color: AppColors.primary),
                     maxLines: 1, overflow: TextOverflow.ellipsis),

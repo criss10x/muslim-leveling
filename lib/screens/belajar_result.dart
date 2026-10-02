@@ -372,11 +372,21 @@ class _BelajarResultScreenState extends State<BelajarResultScreen>
     if (!mounted) return;
     if (levelsGained > 0) {
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => NaikLevelScreen(xpGained: module.xpReward, levelsGained: levelsGained, source: module.title),
+        builder: (_) => NaikLevelScreen(
+          xpGained: module.xpReward,
+          levelsGained: levelsGained,
+          source: LearningContent.titleFor(
+              module.id, lang: Localizations.localeOf(context).languageCode),
+        ),
       ));
     } else {
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => DapetExpScreen(xpGained: module.xpReward, moduleTitle: module.title, score: widget.score),
+        builder: (_) => DapetExpScreen(
+          xpGained: module.xpReward,
+          moduleTitle: LearningContent.titleFor(
+              module.id, lang: Localizations.localeOf(context).languageCode),
+          score: widget.score,
+        ),
       ));
     }
   }

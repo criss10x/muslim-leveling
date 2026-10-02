@@ -6,9 +6,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'cloud_sync.dart';
 import '../l10n/app_localizations.dart';
 
+part 'learning_content_multi.dart';
+
 // Auto-generated from V3 BelajarScreen.kt — do not edit manually.
 // 19 modules, +3 modul akidah tambahan (keajaiban angka & bukti lain).
 // Topik Al-Quran (1.3, 1.6–1.8) dipisah dari Akidah ke kategori sendiri (alquran).
+//
+// Konten kurikulum tersedia 4 bahasa: id (sumber), en, ms, tr. Data bahasa
+// lain ada di part `learning_content_multi.dart` (map const per module id);
+// getArticle/getQuiz/titleFor memilih berdasar parameter `lang` dan fallback
+// ke id kalau bahasa/modul tidak tersedia — jadi bahasa baru bisa ditambah
+// bertahap tanpa mematikan modul.
 
 // ─── Data classes ───
 
@@ -458,7 +466,11 @@ class LearningContent {
     return false;
   }
 
-  static List<ArticleBlock> getArticle(String moduleId) {
+  static List<ArticleBlock> getArticle(String moduleId, {String lang = 'id'}) {
+    // Bahasa non-ID: cek map multi-bahasa dulu; kosong → fallback sumber id
+    // supaya modul tetap tampil walau terjemahannya belum lengkap.
+    final translated = _articlesFor(lang)[moduleId];
+    if (translated != null) return translated;
     switch (moduleId) {
       case 'akidah_1.1':
         return _akidah1_1Article;
@@ -529,7 +541,9 @@ class LearningContent {
     }
   }
 
-  static List<QuizQuestion> getQuiz(String moduleId) {
+  static List<QuizQuestion> getQuiz(String moduleId, {String lang = 'id'}) {
+    final translated = _quizzesFor(lang)[moduleId];
+    if (translated != null) return translated;
     switch (moduleId) {
       case 'akidah_1.1':
         return _akidah1_1Quiz;
@@ -599,6 +613,39 @@ class LearningContent {
         return const [];
     }
   }
+
+  /// Judul module ikut bahasa. `lang` = kode bahasa (id/en/ms/tr).
+  static String titleFor(String moduleId, {String lang = 'id'}) =>
+      _titlesFor(lang)[moduleId] ??
+      getAllModulesOrdered().where((m) => m.id == moduleId).firstOrNull?.title ??
+      moduleId;
+
+  /// true kalau [lang] punya terjemahan lengkap untuk semua modul.
+  /// Dipakai UI untuk menampilkan banner "materi dalam bahasa lain" saat fallback.
+  static bool isFullyTranslated(String lang) =>
+      lang == 'id' || (_articlesFor(lang).length >= getAllModulesOrdered().length && _quizzesFor(lang).length >= getAllModulesOrdered().length);
+
+  // ─── Akses map multi-bahasa (part learning_content_multi.dart) ───
+  static Map<String, List<ArticleBlock>> _articlesFor(String lang) => switch (lang) {
+        'en' => _articlesEn,
+        'ms' => _articlesMs,
+        'tr' => _articlesTr,
+        _ => const {},
+      };
+
+  static Map<String, List<QuizQuestion>> _quizzesFor(String lang) => switch (lang) {
+        'en' => _quizzesEn,
+        'ms' => _quizzesMs,
+        'tr' => _quizzesTr,
+        _ => const {},
+      };
+
+  static Map<String, String> _titlesFor(String lang) => switch (lang) {
+        'en' => _titlesEn,
+        'ms' => _titlesMs,
+        'tr' => _titlesTr,
+        _ => const {},
+      };
 }
 
 // ─── Article content ───

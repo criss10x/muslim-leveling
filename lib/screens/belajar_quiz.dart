@@ -18,13 +18,16 @@ class BelajarQuizScreen extends StatefulWidget {
 
 class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
   LearningModule? _module;
-  late final List<QuizQuestion> _questions;
+  List<QuizQuestion> _questions = const [];
 
   /// Per soal: urutan TAMPILAN opsinya (indeks ke array asli). Shuffle sekali
-  /// di initState. ponytail (fix 2026-10-02): dulu posisi kunci selalu tetap
+  /// per load. ponytail (fix 2026-10-02): dulu posisi kunci selalu tetap
   /// per soal (mis. quiz 1.4 = A,B,C,D,A) sehingga retake bisa ditebak dari
   /// hafalan posisi. Kini urutan opsi diacak setiap kali quiz dibuka.
-  late final List<List<int>> _optionOrder;
+  /// (fix multi-bahasa 2026-10-02): soal juga di-reload saat locale berubah —
+  /// quiz bahasa lain = soal terjemahan, shuffle tetap per-load.
+  List<List<int>> _optionOrder = const [];
+  String? _quizLang;
 
   int _current = 0;
   int? _selected;
@@ -35,7 +38,20 @@ class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
   void initState() {
     super.initState();
     _module = LearningContent.getModule(widget.moduleId);
-    _questions = LearningContent.getQuiz(widget.moduleId);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final lang = Localizations.localeOf(context).languageCode;
+    if (_quizLang != lang) {
+      _loadFor(lang);
+    }
+  }
+
+  void _loadFor(String lang) {
+    _quizLang = lang;
+    _questions = LearningContent.getQuiz(widget.moduleId, lang: lang);
     final rng = math.Random();
     _optionOrder = [
       for (final q in _questions)
@@ -181,7 +197,9 @@ class _BelajarQuizScreenState extends State<BelajarQuizScreen> {
             onPressed: () => Navigator.pop(context),
           ),
           Expanded(
-            child: Text(module.title,
+            child: Text(
+                LearningContent.titleFor(module.id,
+                    lang: Localizations.localeOf(context).languageCode),
                 style: AppText.titleLg().copyWith(
                     fontSize: 15, color: AppColors.primary),
                 maxLines: 1, overflow: TextOverflow.ellipsis),
