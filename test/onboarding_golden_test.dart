@@ -1,4 +1,4 @@
-// Golden 6 halaman onboarding (bukti visual + regresi).
+// Golden 7 halaman onboarding (bukti visual + regresi).
 //
 // Pindah halaman lewat PageView.controller, bukan tap tombol: label tombol
 // halaman 5 = "Izinkan Lokasi"/"Allow Location" dan menekannya memicu
@@ -23,7 +23,7 @@ const _titles = {
     'Kamu Ikhwan atau Akhwat?',
     'Cara Main',
     'Butuh Lokasimu',
-    'Suara Adzan Kamu',
+    'Notifikasi Adzan',
     'Pengingat Adzan',
   ],
   'en': [
@@ -32,7 +32,7 @@ const _titles = {
     'Are you Ikhwan or Akhwat?',
     'How to Play',
     'We Need Your Location',
-    'Your Adhan Sound',
+    'Adhan Notifications',
     'Adhan Reminders',
   ],
 };

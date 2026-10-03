@@ -636,7 +636,7 @@ class _JadwalTabState extends State<JadwalTab> {
     return GestureDetector(
       // ponytail: seluruh row = buka setting suara sholat ini (picker sama
       // dengan icon kanan). Tap target lebih besar, icon tetap visual cue.
-      onTap: isMarker ? null : () => _showSoundPicker(prayerId, sound),
+      onTap: isMarker ? null : () => _openSoundPicker(prayerId, sound),
       behavior: HitTestBehavior.opaque,
       child: Container(
       padding: const EdgeInsets.symmetric(
@@ -708,15 +708,6 @@ class _JadwalTabState extends State<JadwalTab> {
   // ponytail: imsak & terbit — penanda waktu, selalu senyap, tanpa picker.
   static const _markerIds = {'imsak', 'terbit'};
 
-  // Ikon mode suara di kanan tiap baris sholat. Tap = buka picker.
-  // Label tidak disimpan: hanya ikonnya yang dirender (dulu label literal
-  // Indonesia menganggur di sini, terbaca sebagai utang l10n padahal mati).
-  static const _soundIcons = {
-    'senyap': AppIcons.volumeOffRounded,
-    'suara': AppIcons.notificationsRounded,
-    'adzan': AppIcons.volumeUpRounded,
-  };
-
   Widget _soundIcon(String sound, String prayerId) {
     // Marker (imsak/terbit) selalu senyap: tampilkan ikon volume-off statis,
     // bukan kontrol yang bisa di-tap.
@@ -727,120 +718,35 @@ class _JadwalTabState extends State<JadwalTab> {
         color: AppColors.onSurfaceVariant.withValues(alpha: 0.5),
       );
     }
-    final iconData = _soundIcons[sound] ??
+    final iconData = AdzanSoundPicker.soundIcons[sound] ??
         AppIcons.notificationsNoneRounded;
     return GestureDetector(
-      onTap: () => _showSoundPicker(prayerId, sound),
+      onTap: () => _openSoundPicker(prayerId, sound),
       child: Icon(iconData, size: 20, color: AppColors.onSurfaceVariant),
     );
   }
 
-  void _showSoundPicker(String prayerId, String current) {
-    // true = sholat ini punya override eksplisit; false = ikut global.
-    final isOverride = _perPrayerSounds.containsKey(prayerId);
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: AppColors.surfaceContainerHigh,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.lg)),
-      ),
-      builder: (ctx) => SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.lg,
-            vertical: AppSpacing.md,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                AppL10n.of(context).jdNotifFor(prayerId),
-                style: AppText.titleLg().copyWith(
-                  color: AppColors.onSurface,
-                ),
-              ),
-              const SizedBox(height: AppSpacing.md),
-              _soundOption(prayerId, isOverride && current == 'senyap', 'senyap',
-                  AppIcons.volumeOffRounded, AppL10n.of(context).jdSoundSilent),
-              _soundOption(prayerId, isOverride && current == 'suara', 'suara',
-                  AppIcons.notificationsRounded, AppL10n.of(context).jdSoundNormal),
-              _soundOption(prayerId, isOverride && current == 'adzan', 'adzan',
-                  AppIcons.volumeUpRounded, AppL10n.of(context).jdSoundAdzan),
-              _soundOption(
-                prayerId,
-                !isOverride,
-                _globalSound,
-                AppIcons.notificationsNoneRounded,
-                AppL10n.of(context).jdSoundGlobalOption,
-              ),
-            ],
-          ),
-        ),
-      ),
+  /// Buka modal "Notifikasi {sholat}". Implementasinya di widget bersama:
+  /// bottom sheet, aturan override, dan tampilan opsinya satu sumber dengan
+  /// onboarding. Di sini cuma menyediakan nilai global + memuat ulang state
+  /// setelah user memilih, karena baris jadwal menampilkan ikonnya.
+  Future<void> _openSoundPicker(String prayerId, String current) async {
+    await AdzanSoundPicker.showOptions(
+      context,
+      prayerId: prayerId,
+      current: current,
+      isOverride: _perPrayerSounds.containsKey(prayerId),
+      globalOption: _globalSound,
     );
-  }
-
-  Widget _soundOption(String prayerId, bool selected, String value,
-      IconData icon, String label) {
-    return InkWell(
-      onTap: () async {
-        Navigator.pop(context);
-        // value == _globalSound → hapus override agar kembali ikut global.
-        if (value == _globalSound) {
-          await NotificationService.clearPerPrayerSound(prayerId);
-        } else {
-          await NotificationService.setPerPrayerSound(prayerId, value);
-        }
-        final sounds = await NotificationService.getPerPrayerSounds();
-        final global = await NotificationService.getSoundMode();
-        if (mounted) {
-          setState(() {
-            _perPrayerSounds = sounds;
-            _globalSound = global;
-          });
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.sm,
-        ),
-        margin: const EdgeInsets.only(bottom: AppSpacing.xs),
-        decoration: BoxDecoration(
-          color: selected
-              ? AppColors.primary.withValues(alpha: 0.12)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(AppRadius.md),
-          border: Border.all(
-            color: selected
-                ? AppColors.primary.withValues(alpha: 0.4)
-                : AppColors.outlineVariant.withValues(alpha: 0.3),
-          ),
-        ),
-        child: Row(
-          children: [
-            Icon(icon,
-                size: 20,
-                color: selected
-                    ? AppColors.primary
-                    : AppColors.onSurfaceVariant),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Text(
-                label,
-                style: AppText.bodyMd().copyWith(
-                  color: selected ? AppColors.primary : AppColors.onSurface,
-                ),
-              ),
-            ),
-            if (selected)
-              Icon(AppIcons.checkCircleRounded,
-                  size: 18, color: AppColors.primary),
-          ],
-        ),
-      ),
-    );
+    if (!mounted) return;
+    final sounds = await NotificationService.getPerPrayerSounds();
+    final global = await NotificationService.getSoundMode();
+    if (mounted) {
+      setState(() {
+        _perPrayerSounds = sounds;
+        _globalSound = global;
+      });
+    }
   }
 
   Widget _infoCard() {

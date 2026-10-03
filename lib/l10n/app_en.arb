@@ -253,14 +253,14 @@
   "homeQuickHariPenting": "Key Dates",
   "homeQuickActionsMeta": "REFLECTION {done}/{total}",
   "homeQuickDoa": "Dua",
-    "homeQuickAsma": "Names of Allah",
-    "asmaTitle": "Asmaul Husna",
-    "asmaShareTitle": "Share Asmaul Husna",
+  "homeQuickAsma": "Names of Allah",
+  "asmaTitle": "Asmaul Husna",
+  "asmaShareTitle": "Share Asmaul Husna",
   "asmaContentMeaning": "Meaning",
   "asmaPill": "{name} · name #{number}",
   "asmaSubtitle": "99 Names of Allah",
-    "asmaSearch": "Search names...",
-    "asmaEmpty": "Not found",
+  "asmaSearch": "Search names...",
+  "asmaEmpty": "Not found",
   "homeQuickDzikir": "Dhikr",
   "homeQuickHadis": "Hadith",
   "homeQuickKiblat": "Qibla",
@@ -334,8 +334,8 @@
   "onbNameBody": "This name shows on Home and your medal cards. You can leave it blank.",
   "onbNameTitle": "What's your warrior name?",
   "onbNicknameHint": "Warrior name (optional, blank: Pejuang)",
-  "onbSoundTitle": "Your Adhan Sound",
-  "onbSoundBody": "Pick the sound you want when prayer time arrives. Listen before you choose.",
+  "onbSoundTitle": "Adhan Notifications",
+  "onbSoundBody": "Set each prayer yourself: silent, standard sound, or the full Adhan.",
   "onbSoundNote": "You can change this anytime in the Schedule tab.",
   "onbSoundContinue": "Continue",
   "onbNotifAllow": "Allow Notifications",
@@ -682,9 +682,9 @@
   "qiblaNorthDegrees": "{degrees}° from North",
   "qiblaTurnInstruction": "Rotate your device {degrees}° clockwise from north to face the qibla.",
   "qiblaOffset": "{degrees}° off from the qibla",
-    "qiblaSkinTitle": "Compass skin",
+  "qiblaSkinTitle": "Compass skin",
   "qiblaSkinSubtitle": "Choose the qibla compass dial style. This preference persists and shows every time you return to this page.",
-"dzResetTitle": "Reset counter?",
+  "dzResetTitle": "Reset counter?",
   "dzResetBody": "The \"{item}\" counter will be reset to 0.\\nToday's dzikir total still counts.",
   "dzResetCancel": "CANCEL",
   "dzResetConfirm": "RESET",
@@ -1012,7 +1012,13 @@
   "doaCount": "{count} prayers",
   "qadhaHeader": "PRAYER DEBTS",
   "qadhaMeta": "{count} outstanding",
-  "@qadhaMeta": {"placeholders": {"count": {"type": "String"}}},
+  "@qadhaMeta": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "qadhaMetaZero": "CLEARED",
   "qadhaAllClear": "Prayer debts: 0 🤍",
   "qadhaSettle": "Settle",
@@ -1028,7 +1034,13 @@
   "freezeForgiveBody": "Allah is Al-Ghafur. Your streak is safe, continue your journey.",
   "welcomeShieldTitle": "WELCOME-BACK SHIELD!",
   "welcomeShieldBody": "You came back after {days} days. Here is a free protector for you. ❄️",
-  "@welcomeShieldBody": {"placeholders": {"days": {"type": "String"}}},
+  "@welcomeShieldBody": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
   "hdRandom": "Random",
   "hdCapsTranslation": "TRANSLATION",
   "hdCapsHikmah": "WISDOM",

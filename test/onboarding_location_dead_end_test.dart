@@ -100,7 +100,7 @@ void main() {
     // 4) Benar-benar maju ke halaman berikutnya (suara adzan, 6/7).
     await tester.tap(find.text('Lanjut'));
     await _settle(tester, 900);
-    expect(find.text('Suara Adzan Kamu'), findsOneWidget);
+    expect(find.text('Notifikasi Adzan'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 

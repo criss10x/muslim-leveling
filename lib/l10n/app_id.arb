@@ -630,8 +630,8 @@
   "onbNameBody": "Nama ini muncul di Beranda dan kartu medali. Boleh dikosongkan.",
   "onbNameTitle": "Siapa nama pejuangmu?",
   "onbNicknameHint": "Nama pejuang (opsional, kosong: Pejuang)",
-  "onbSoundTitle": "Suara Adzan Kamu",
-  "onbSoundBody": "Pilih suara yang kamu mau saat masuk waktu sholat. Dengarkan dulu sebelum memilih.",
+  "onbSoundTitle": "Notifikasi Adzan",
+  "onbSoundBody": "Atur sendiri tiap sholat: senyap, suara biasa, atau adzan penuh.",
   "onbSoundNote": "Bisa diganti kapan saja di tab Jadwal.",
   "onbSoundContinue": "Lanjut",
   "onbNotifAllow": "Izinkan Notifikasi",
@@ -1064,9 +1064,9 @@
       }
     }
   },
-    "qiblaSkinTitle": "Skin kompas",
+  "qiblaSkinTitle": "Skin kompas",
   "qiblaSkinSubtitle": "Pilih tampilan dial kompas kiblat. Pilihan ini tersimpan terus, kapan pun kembali ke halaman ini.",
-"dzResetTitle": "Reset counter?",
+  "dzResetTitle": "Reset counter?",
   "dzResetBody": "Counter \"{item}\" akan di-nolkan dari 0.\\nTotal dzikir hari ini TETAP dihitung.",
   "@dzResetBody": {
     "placeholders": {
@@ -1772,7 +1772,13 @@
   "doaCount": "{count} doa",
   "qadhaHeader": "UTANG SHOLAT",
   "qadhaMeta": "{count} belum lunas",
-  "@qadhaMeta": {"placeholders": {"count": {"type": "String"}}},
+  "@qadhaMeta": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "qadhaMetaZero": "LUNAS",
   "qadhaAllClear": "Utang sholat: 0 🤍",
   "qadhaSettle": "Lunasi",
@@ -1788,7 +1794,13 @@
   "freezeForgiveBody": "Allah Maha Pengampun. Streak kamu aman, lanjutkan perjalananmu.",
   "welcomeShieldTitle": "WELCOME-BACK SHIELD!",
   "welcomeShieldBody": "Kamu kembali setelah {days} hari. Ini pelindung gratis untukmu. ❄️",
-  "@welcomeShieldBody": {"placeholders": {"days": {"type": "String"}}},
+  "@welcomeShieldBody": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
   "hdRandom": "Acak",
   "hdCapsTranslation": "TERJEMAHAN",
   "hdCapsHikmah": "HIKMAH",

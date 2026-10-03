@@ -93,7 +93,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 50));
     }
     // Halaman berikutnya = suara adzan (6/7); izin notif ada di halaman 7.
-    expect(find.text('Suara Adzan Kamu'), findsOneWidget);
+    expect(find.text('Notifikasi Adzan'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }

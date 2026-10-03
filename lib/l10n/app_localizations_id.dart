@@ -1092,11 +1092,11 @@ class AppL10nId extends AppL10n {
   String get onbNicknameHint => 'Nama pejuang (opsional, kosong: Pejuang)';
 
   @override
-  String get onbSoundTitle => 'Suara Adzan Kamu';
+  String get onbSoundTitle => 'Notifikasi Adzan';
 
   @override
   String get onbSoundBody =>
-      'Pilih suara yang kamu mau saat masuk waktu sholat. Dengarkan dulu sebelum memilih.';
+      'Atur sendiri tiap sholat: senyap, suara biasa, atau adzan penuh.';
 
   @override
   String get onbSoundNote => 'Bisa diganti kapan saja di tab Jadwal.';

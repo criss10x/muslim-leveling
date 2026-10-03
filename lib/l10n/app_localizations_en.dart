@@ -1093,11 +1093,11 @@ class AppL10nEn extends AppL10n {
   String get onbNicknameHint => 'Warrior name (optional, blank: Pejuang)';
 
   @override
-  String get onbSoundTitle => 'Your Adhan Sound';
+  String get onbSoundTitle => 'Adhan Notifications';
 
   @override
   String get onbSoundBody =>
-      'Pick the sound you want when prayer time arrives. Listen before you choose.';
+      'Set each prayer yourself: silent, standard sound, or the full Adhan.';
 
   @override
   String get onbSoundNote => 'You can change this anytime in the Schedule tab.';

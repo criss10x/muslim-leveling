@@ -12,12 +12,169 @@ import 'common.dart';
 /// dalam JadwalTab, jadi onboarding hanya bisa menawarkannya dengan menyalin
 /// seluruh alur unduh/tes — dan salinan itu pasti menyimpang dari aslinya.
 /// Varian selain default (~1-2 MB) diunduh on-demand ke cache.
+///
+/// Modal "Notifikasi {sholat}" (senyap/suara/adzan) juga tinggal di sini:
+/// tab Jadwal dan onboarding memakai [showOptions] yang sama, jadi aturan
+/// penyimpanan override tidak bisa berbeda di antara keduanya.
 class AdzanSoundPicker extends StatefulWidget {
   /// Judul "SUARA ADZAN" disembunyikan di onboarding: halaman itu sudah punya
   /// judul sendiri, jadi header kedua hanya mengulang hal yang sama.
   final bool showTitle;
 
   const AdzanSoundPicker({super.key, this.showTitle = true});
+
+  /// Ikon mode suara di kanan tiap baris sholat.
+  static const soundIcons = {
+    'senyap': AppIcons.volumeOffRounded,
+    'suara': AppIcons.notificationsRounded,
+    'adzan': AppIcons.volumeUpRounded,
+  };
+
+  /// Label sholat untuk id internal ('subuh' → 'Subuh'/'Fajr').
+  static String prayerLabel(AppL10n l10n, String id) => switch (id) {
+    'subuh' => l10n.prayerSubuh,
+    'dzuhur' => l10n.prayerDzuhur,
+    'ashar' => l10n.prayerAshar,
+    'maghrib' => l10n.prayerMaghrib,
+    'isya' => l10n.prayerIsya,
+    _ => id,
+  };
+
+  /// Modal "Notifikasi {sholat}": Senyap / Suara / Adzan, opsional ditambah
+  /// baris "Ikut pengaturan global" yang menghapus override.
+  ///
+  /// [globalOption] berisi nilai mode global saat baris itu mau ditampilkan;
+  /// null = sembunyikan. Tab Jadwal mengirim nilai global (opsinya 3 + 1,
+  /// seperti sebelumnya). Onboarding mengirim null: nilai globalnya baru
+  /// diatur di tab Profil, halaman yang belum pernah dilihat user, jadi
+  /// "ikuti global" belum bermakna di sana. Menyembunyikannya lewat parameter
+  /// lebih jujur daripada menyalin callback-nya dengan aturan berbeda.
+  static Future<void> showOptions(
+    BuildContext context, {
+    required String prayerId,
+    required String current,
+    required bool isOverride,
+    String? globalOption,
+  }) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: AppColors.surfaceContainerHigh,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.lg)),
+      ),
+      builder: (ctx) {
+        final l10n = AppL10n.of(ctx);
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.lg,
+              vertical: AppSpacing.md,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.jdNotifFor(AdzanSoundPicker.prayerLabel(l10n, prayerId)),
+                  style: AppText.titleLg().copyWith(color: AppColors.onSurface),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                for (final (value, icon, label) in [
+                  ('senyap', AppIcons.volumeOffRounded, l10n.jdSoundSilent),
+                  ('suara', AppIcons.notificationsRounded, l10n.jdSoundNormal),
+                  ('adzan', AppIcons.volumeUpRounded, l10n.jdSoundAdzan),
+                ])
+                  _soundOption(
+                    ctx,
+                    prayerId: prayerId,
+                    // Override tidak pernah menyimpan mode global, jadi
+                    // pilihannya cuma bisa cocok kalau override memang ada.
+                    selected: isOverride && current == value,
+                    value: value,
+                    globalOption: globalOption,
+                    icon: icon,
+                    label: label,
+                  ),
+                if (globalOption != null)
+                  _soundOption(
+                    ctx,
+                    prayerId: prayerId,
+                    selected: !isOverride,
+                    value: globalOption,
+                    globalOption: globalOption,
+                    icon: AppIcons.notificationsNoneRounded,
+                    label: l10n.jdSoundGlobalOption,
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  static Widget _soundOption(
+    BuildContext ctx, {
+    required String prayerId,
+    required bool selected,
+    required String value,
+    required String? globalOption,
+    required IconData icon,
+    required String label,
+  }) {
+    return InkWell(
+      onTap: () async {
+        Navigator.pop(ctx);
+        if (value == globalOption) {
+          await NotificationService.clearPerPrayerSound(prayerId);
+        } else {
+          await NotificationService.setPerPrayerSound(prayerId, value);
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.sm,
+        ),
+        margin: const EdgeInsets.only(bottom: AppSpacing.xs),
+        decoration: BoxDecoration(
+          color: selected
+              ? AppColors.primary.withValues(alpha: 0.12)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(AppRadius.md),
+          border: Border.all(
+            color: selected
+                ? AppColors.primary.withValues(alpha: 0.4)
+                : AppColors.outlineVariant.withValues(alpha: 0.3),
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              size: 20,
+              color: selected ? AppColors.primary : AppColors.onSurfaceVariant,
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Text(
+                label,
+                style: AppText.bodyMd().copyWith(
+                  color: selected ? AppColors.primary : AppColors.onSurface,
+                ),
+              ),
+            ),
+            if (selected)
+              Icon(
+                AppIcons.checkCircleRounded,
+                size: 18,
+                color: AppColors.primary,
+              ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   State<AdzanSoundPicker> createState() => _AdzanSoundPickerState();

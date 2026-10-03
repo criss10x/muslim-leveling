@@ -2113,13 +2113,13 @@ abstract class AppL10n {
   /// No description provided for @onbSoundTitle.
   ///
   /// In id, this message translates to:
-  /// **'Suara Adzan Kamu'**
+  /// **'Notifikasi Adzan'**
   String get onbSoundTitle;
 
   /// No description provided for @onbSoundBody.
   ///
   /// In id, this message translates to:
-  /// **'Pilih suara yang kamu mau saat masuk waktu sholat. Dengarkan dulu sebelum memilih.'**
+  /// **'Atur sendiri tiap sholat: senyap, suara biasa, atau adzan penuh.'**
   String get onbSoundBody;
 
   /// No description provided for @onbSoundNote.

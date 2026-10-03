@@ -46,6 +46,12 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   /// prefs belakangan, karena defaultnya sudah terisi.
   static const _suaraPage = 5;
 
+  /// Mode notif per sholat yang dipilih di halaman ini. Dipegang di memori:
+  /// tulisannya sudah dilakukan modal (NotificationService), ini hanya untuk
+  /// merender centang + ikon tanpa membaca prefs berkali-kali.
+  Map<String, String> _onbSounds = {};
+  String _onbGlobalSound = 'adzan';
+
   final _pageCtrl = PageController();
   late final AnimationController _entry = AnimationController(
     vsync: this,
@@ -676,6 +682,12 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   /// Halaman ini tidak bisa buntu: pilihan suara tidak butuh izin OS apa pun,
   /// dan varian default sudah bundled di APK. Varian lain diunduh saat dipilih,
   /// dengan status unduh per baris.
+  /// Halaman suara: mode notif per sholat, sama seperti tab Jadwal.
+  ///
+  /// 5 sholat wajib, tanpa imsak/terbit: keduanya penanda waktu yang selalu
+  /// senyap dan di Jadwal pun tidak bisa diubah, jadi baris mati di onboarding
+  /// cuma menambah bingung. Tanpa baris "Ikut pengaturan global": nilai
+  /// globalnya diatur di tab Profil yang belum pernah dilihat user di sini.
   Widget _pageSuara() {
     final l10n = AppL10n.of(context);
     return _PageBody(
@@ -690,8 +702,11 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           const SizedBox(height: AppSpacing.sm),
           _Body(l10n.onbSoundBody),
           const SizedBox(height: AppSpacing.md),
-          // showTitle: false — halaman ini sudah punya judul sendiri.
-          const AdzanSoundPicker(showTitle: false),
+          for (final id in GameService.wajibList)
+            Padding(
+              padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+              child: _onbSoundRow(id),
+            ),
           const SizedBox(height: AppSpacing.sm),
           Text(
             l10n.onbSoundNote,
@@ -710,6 +725,68 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         ],
       ),
     );
+  }
+
+  /// Satu baris sholat: nama + ikon mode notifnya. Seluruh baris bisa di-tap,
+  /// ikon di kanan cuma penanda — sama seperti baris jadwal di tab Jadwal.
+  /// Key per sholat: tes perlu mengunci ikon MILIK BARIS INI, dan maskot di
+  /// atas halaman kebetulan memakai ikon volume yang sama.
+  Widget _onbSoundRow(String id) {
+    final l10n = AppL10n.of(context);
+    final sound = _onbSounds[id] ?? _onbGlobalSound;
+    return InkWell(
+      key: Key('onb-sound-$id'),
+      onTap: () => _openOnbSoundPicker(id, sound),
+      borderRadius: BorderRadius.circular(AppRadius.xxl),
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.sm,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(AppRadius.xxl),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                AdzanSoundPicker.prayerLabel(l10n, id),
+                style: AppText.titleLg().copyWith(
+                  fontSize: 16,
+                  color: AppColors.onSurface,
+                ),
+              ),
+            ),
+            Icon(
+              AdzanSoundPicker.soundIcons[sound] ??
+                  AppIcons.notificationsNoneRounded,
+              size: 20,
+              color: AppColors.onSurfaceVariant,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _openOnbSoundPicker(String id, String current) async {
+    await AdzanSoundPicker.showOptions(
+      context,
+      prayerId: id,
+      current: current,
+      isOverride: _onbSounds.containsKey(id),
+      // null = tanpa baris "Ikut pengaturan global" (lihat doc widget).
+    );
+    if (!mounted) return;
+    final sounds = await NotificationService.getPerPrayerSounds();
+    final global = await NotificationService.getSoundMode();
+    if (mounted) {
+      setState(() {
+        _onbSounds = sounds;
+        _onbGlobalSound = global;
+      });
+    }
   }
 
   Widget _pageNotif() {

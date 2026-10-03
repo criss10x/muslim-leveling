@@ -48,15 +48,32 @@ void main() {
     expect(find.text('Izinkan Lokasi'), findsOneWidget);
     expect(find.text('PILIH KOTA MANUAL'), findsOneWidget);
 
-    // Halaman 6: suara adzan (sebelum izin notif — user memilih suaranya dulu)
+    // Halaman 6: notifikasi per sholat (sebelum izin notif — user mengatur
+    // mode suaranya dulu, sama seperti picker di tab Jadwal)
     await swipe();
-    expect(find.text('Suara Adzan Kamu'), findsOneWidget);
+    expect(find.text('Notifikasi Adzan'), findsOneWidget);
     expect(find.text('Lanjut'), findsOneWidget);
-    // Default 'Adzan Klasik' harus TERLIHAT terpilih: tanpa penanda ini user
-    // tidak tahu suara apa yang sedang aktif. Pilihan suara tidak pernah
-    // kosong — varian default sudah bundled di APK.
-    expect(find.byIcon(AppIcons.radioButtonCheckedRounded), findsOneWidget,
-        reason: 'varian default harus tampil terpilih, bukan semua kosong');
+    // 5 sholat wajib, dan HANYA itu: imsak/terbit penanda waktu yang selalu
+    // senyap, jadi barisnya tidak pernah bisa diubah di sini.
+    for (final prayer in ['Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya']) {
+      expect(find.text(prayer), findsOneWidget,
+          reason: 'baris notifikasi $prayer harus ada');
+    }
+    expect(find.text('Imsak'), findsNothing);
+    expect(find.text('Terbit'), findsNothing);
+    // Default global = adzan, jadi ikon tiap baris harus ikon adzan.
+    // Dicek lewat key barisnya: maskot di atas halaman memakai ikon volume
+    // yang sama, jadi find.byIcon() mentah menghitung satu terlalu banyak.
+    for (final id in ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya']) {
+      expect(
+        find.descendant(
+          of: find.byKey(Key('onb-sound-$id')),
+          matching: find.byIcon(AppIcons.volumeUpRounded),
+        ),
+        findsOneWidget,
+        reason: 'baris $id harus mengikuti mode global (adzan)',
+      );
+    }
 
     // Halaman 7: notifikasi
     await swipe();

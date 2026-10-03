@@ -334,8 +334,8 @@
   "onbNameBody": "Bu isim Ana Sayfa'da ve madalya kartlarında görünecektir. Boş bırakabilirsiniz.",
   "onbNameTitle": "Savaşçı adınız nedir?",
   "onbNicknameHint": "Savaşçı adı (isteğe bağlı, boş bırakılırsa: Savaşçı)",
-  "onbSoundTitle": "Ezan Sesiniz",
-  "onbSoundBody": "Namaz vakti geldiğinde duymak istediğiniz sesi seçin. Seçmeden önce dinleyin.",
+  "onbSoundTitle": "Ezan Bildirimleri",
+  "onbSoundBody": "Her namazı kendin ayarla: sessiz, normal ses veya tam ezan.",
   "onbSoundNote": "Bunu istediğiniz zaman Takvim sekmesinden değiştirebilirsiniz.",
   "onbSoundContinue": "Devam",
   "onbNotifAllow": "Bildirimlere İzin Ver",
@@ -682,9 +682,9 @@
   "qiblaNorthDegrees": "Kuzeyden {degrees}°",
   "qiblaTurnInstruction": "Kıbleye yönelmek için cihazı kuzeyden saat yönünde {degrees}° döndürün.",
   "qiblaOffset": "Kıbleden {degrees}° sapma",
-    "qiblaSkinTitle": "Pusula stili",
+  "qiblaSkinTitle": "Pusula stili",
   "qiblaSkinSubtitle": "Kıble pusulası kadran görünümünü seçin. Bu tercih kalıcıdır ve bu sayfaya her dönüşünüzde görünür.",
-"dzResetTitle": "Sayaç sıfırlansın mı?",
+  "dzResetTitle": "Sayaç sıfırlansın mı?",
   "dzResetBody": "\"{item}\" sayacı sıfırlanacaktır.\\nBugünkü toplam zikir sayısı YİNE DE hesaplanacaktır.",
   "dzResetCancel": "İPTAL",
   "dzResetConfirm": "SIFIRLA",
@@ -1012,7 +1012,13 @@
   "doaCount": "{count} dua",
   "qadhaHeader": "NAMAZ BORÇLARI",
   "qadhaMeta": "{count} ödenmemiş",
-  "@qadhaMeta": {"placeholders": {"count": {"type": "String"}}},
+  "@qadhaMeta": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "qadhaMetaZero": "TEMİZ",
   "qadhaAllClear": "Namaz borçları: 0 🤍",
   "qadhaSettle": "Kıl",
@@ -1028,7 +1034,13 @@
   "freezeForgiveBody": "Allah Gafûr'dur. Serin güvende, yoluna devam et.",
   "welcomeShieldTitle": "WELCOME-BACK SHIELD!",
   "welcomeShieldBody": "{days} gün sonra geri döndün. Sana ücretsiz bir koruyucu. ❄️",
-  "@welcomeShieldBody": {"placeholders": {"days": {"type": "String"}}},
+  "@welcomeShieldBody": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
   "hdRandom": "Rastgele",
   "hdCapsTranslation": "ÇEVİRİ",
   "hdCapsHikmah": "HİKMET",

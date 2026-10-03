@@ -334,8 +334,8 @@
   "onbNameBody": "Nama ini akan dipaparkan di Laman Utama dan kad pingat. Boleh dikosongkan.",
   "onbNameTitle": "Apakah nama pejuang anda?",
   "onbNicknameHint": "Nama pejuang (pilihan, kosong: Pejuang)",
-  "onbSoundTitle": "Bunyi Azan Anda",
-  "onbSoundBody": "Pilih bunyi yang anda mahu apabila masuk waktu solat. Dengar dahulu sebelum memilih.",
+  "onbSoundTitle": "Notifikasi Azan",
+  "onbSoundBody": "Tetapkan sendiri setiap solat: senyap, bunyi biasa, atau azan penuh.",
   "onbSoundNote": "Boleh ditukar bila-bila masa di tab Jadual.",
   "onbSoundContinue": "Teruskan",
   "onbNotifAllow": "Benarkan Notifikasi",
@@ -455,10 +455,10 @@
   "profilStatsSince": "Sejak {date}",
   "profilStatsVerses": "Ayat Al-Qur'an Dibaca",
   "profilStatsWajib": "Solat wajib",
-    "profilStatsSunnah": "Solat sunnah",
-    "profilStatsActiveDays": "Hari aktif",
-    "profilStatsQuestDone": "Quest selesai",
-    "profilStatsZikir": "Jumlah Zikir & Tasbih",
+  "profilStatsSunnah": "Solat sunnah",
+  "profilStatsActiveDays": "Hari aktif",
+  "profilStatsQuestDone": "Quest selesai",
+  "profilStatsZikir": "Jumlah Zikir & Tasbih",
   "profilStreakBest": "terbaik {count}",
   "profilStreakFreeze": "beku",
   "profilStreakPerPrayer": "STREAK SETIAP SOLAT",
@@ -682,9 +682,9 @@
   "qiblaNorthDegrees": "{degrees}° dari Utara",
   "qiblaTurnInstruction": "Putar peranti {degrees}° mengikut arah jam dari utara untuk menghadap kiblat.",
   "qiblaOffset": "Sisihan {degrees}° dari kiblat",
-    "qiblaSkinTitle": "Kulit kompas",
+  "qiblaSkinTitle": "Kulit kompas",
   "qiblaSkinSubtitle": "Pilih paparan dial kompas kiblat. Pilihan ini disimpan terus, bila-bila masa kembali ke halaman ini.",
-"dzResetTitle": "Set semula kaunter?",
+  "dzResetTitle": "Set semula kaunter?",
   "dzResetBody": "Kaunter \"{item}\" akan ditetapkan semula ke 0.\\nJumlah zikir hari ini TETAP dikira.",
   "dzResetCancel": "BATAL",
   "dzResetConfirm": "SET SEMULA",
@@ -1012,7 +1012,13 @@
   "doaCount": "{count} doa",
   "qadhaHeader": "HUTANG SOLAT",
   "qadhaMeta": "{count} belum lunas",
-  "@qadhaMeta": {"placeholders": {"count": {"type": "String"}}},
+  "@qadhaMeta": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "qadhaMetaZero": "LUNAS",
   "qadhaAllClear": "Hutang solat: 0 🤍",
   "qadhaSettle": "Lunaskan",
@@ -1028,7 +1034,13 @@
   "freezeForgiveBody": "Allah Maha Pengampun. Streak kamu selamat, teruskan perjalananmu.",
   "welcomeShieldTitle": "WELCOME-BACK SHIELD!",
   "welcomeShieldBody": "Kamu kembali selepas {days} hari. Ini pelindung percuma untukmu. ❄️",
-  "@welcomeShieldBody": {"placeholders": {"days": {"type": "String"}}},
+  "@welcomeShieldBody": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
   "hdRandom": "Rawak",
   "hdCapsTranslation": "TERJEMAHAN",
   "hdCapsHikmah": "HIKMAH",
