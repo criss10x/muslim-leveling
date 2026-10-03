@@ -1889,13 +1889,15 @@ class _HomeTabState extends State<HomeTab> {
   /// 15: banner "Shield aktif kemarin" sekali per hari (SharedPreferences).
   /// Trigger: kemarin ada di freezeSavedDates.
   Future<void> _maybeShowShieldSaved() async {
-    final yesterday = DateTime.now()
-        .subtract(const Duration(days: 1))
-        .toIso8601String()
-        .substring(0, 10);
+    // Pakai kunci tanggal produksi (yang jam < 3 dianggap hari kemarin),
+    // kalau tidak: (a) banner tidak muncul di jendela 00:00-02:59, dan
+    // (b) penanda "sekali per hari" false → banner muncul dua kali.
+    final yesterday = GameService.dailyDateKey(
+      DateTime.now().subtract(const Duration(days: 1)),
+    );
     if (!GameService.current.freezeSavedDates.contains(yesterday)) return;
     final p = await SharedPreferences.getInstance();
-    final today = DateTime.now().toIso8601String().substring(0, 10);
+    final today = GameService.dailyDateKey(DateTime.now());
     if (p.getString('shield_banner_date') == today) return;
     await p.setString('shield_banner_date', today);
     if (!mounted) return;

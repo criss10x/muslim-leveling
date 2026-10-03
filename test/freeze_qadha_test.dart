@@ -13,10 +13,12 @@ void main() {
     SharedPreferences.setMockInitialValues({});
   });
 
-  String daysAgo(int n) {
-    final d = DateTime.now().subtract(Duration(days: n));
-    return d.toIso8601String().substring(0, 10);
-  }
+  /// Selisih hari mengikuti semantik produksi, BUKAN kalender mentah.
+  /// `GameService.dailyDateKey` memundurkan tanggal saat jam < 3 (reset harian
+  /// jam 03.00), jadi `toIso8601String().substring(0,10)` bikin selisih satu
+  /// hari lebih besar dan test ini flaky di jendela 00:00-02:59.
+  String daysAgo(int n) =>
+      GameService.dailyDateKey(DateTime.now().subtract(Duration(days: n)));
 
   // ── A3: streak 0 tidak buang freezeAvailable ──
   test('A3: missed day dengan current==0 tidak consume freeze', () async {
