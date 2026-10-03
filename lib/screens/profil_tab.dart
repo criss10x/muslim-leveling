@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -1079,13 +1078,6 @@ class _ProfilTabState extends State<ProfilTab> {
               const SizedBox(height: AppSpacing.md),
               _prayerStreaks(),
               const SizedBox(height: AppSpacing.md),
-              // Qadha card (utang sholat) disembunyikan 2026-10-01 — permintaan
-              // Kris ("sepertinya tidak perlu dulu"). Fungsi _qadhaCard dan
-              // helpernya dibiarkan utuh di bawah; cukup kembalikan 2 baris ini
-              // untuk menampilkan lagi. Konl: tidak usah menampilkan saat
-              // utang lunas, jadi tanpa kartu ini tidak ada jejaknya di layar.
-              // _qadhaCard(),
-              // const SizedBox(height: AppSpacing.md),
               _stats(),
               const SizedBox(height: AppSpacing.md),
               _rankSystem(),
@@ -1840,132 +1832,7 @@ class _ProfilTabState extends State<ProfilTab> {
     return DateFormat.yMMMMd(locale.toString()).format(d);
   }
 
-  /// Qadha card — utang sholat yang terlewat, lunas lewat tombol per-item.
-  /// Utang 0 + pernah punya utang → momen "utang sholat: 0 🤍" + share.
-  ///
-  /// SEMENTARA tidak dipanggil dari build() (kartu disembunyikan, lihat
-  /// komentar di children ListView). analyze warning di-silence supaya
-  /// mengembalikan kartu cukup dengan meng-uncomment pemanggilnya.
-  // ignore: unused_element
-  Widget _qadhaCard() {
-    final state = GameService.current;
-    final qadha = state.qadhaLog;
-    final everHad = qadha.isNotEmpty ||
-        (state.lifeTotals['qadha_done'] ?? 0) > 0;
-    if (!everHad) return const SizedBox.shrink();
-
-    final lunas = qadha.isEmpty;
-    final l10n = AppL10n.of(context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        HudHeader(
-          l10n.qadhaHeader,
-          meta: lunas ? l10n.qadhaMetaZero : l10n.qadhaMeta(qadha.length.toString()),
-        ),
-        FlatCard(
-          key: const Key('qadha-card'),
-          child: lunas
-              ? Row(
-                  children: [
-                    Expanded(
-                      child: Text(l10n.qadhaAllClear,
-                          style: AppText.bodyLg()
-                              .copyWith(color: AppColors.onBackground)),
-                    ),
-                    IconButton(
-                      key: const Key('qadha-share'),
-                      icon: Icon(AppIcons.share,
-                          size: 20, color: AppColors.onSurfaceVariant),
-                      onPressed: () => _shareQadhaClear(context),
-                    ),
-                  ],
-                )
-              : Column(
-                  children: [
-                    for (var i = 0; i < qadha.length; i++) ...[
-                      if (i > 0)
-                        Divider(
-                          height: 1,
-                          thickness: 1,
-                          color: AppColors.outlineVariant
-                              .withValues(alpha: 0.35),
-                        ),
-                      _qadhaRow(qadha[i]),
-                    ],
-                  ],
-                ),
-        ),
-      ],
-    );
-  }
-
-  Widget _qadhaRow(QadhaLog q) {
-    final l10n = AppL10n.of(context);
-    final label = switch (q.prayer) {
-      'subuh' => l10n.prayerSubuh,
-      'dzuhur' => l10n.prayerDzuhur,
-      'ashar' => l10n.prayerAshar,
-      'maghrib' => l10n.prayerMaghrib,
-      'isya' => l10n.prayerIsya,
-      _ => q.prayer,
-    };
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(label,
-                    style: AppText.bodyLg()
-                        .copyWith(color: AppColors.onBackground)),
-                Text(q.date,
-                    style: AppText.labelCapsSm()
-                        .copyWith(color: AppColors.onSurfaceVariant)),
-              ],
-            ),
-          ),
-          TextButton(
-            key: Key('qadha-lunas-${q.prayer}-${q.date}'),
-            onPressed: () async {
-              await GameService.logQadhaAsync(q.prayer);
-              if (mounted) {
-                setState(() {});
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(AppL10n.of(context).qadhaToast)),
-                );
-              }
-            },
-            child: Text(l10n.qadhaSettle,
-                style: AppText.bodyMd().copyWith(color: AppColors.primary)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _shareQadhaClear(BuildContext context) async {
-    final l10n = AppL10n.of(context);
-    final buf = StringBuffer()
-      ..writeln(l10n.qadhaShareText)
-      ..writeln()
-      ..write('Muslim Leveling');
-    try {
-      const channel = MethodChannel('muslim_leveling/share');
-      await channel.invokeMethod('shareText', {'text': buf.toString()});
-    } catch (_) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.qsErr)),
-        );
-      }
-    }
-  }
-
-  Widget _stats() {
+Widget _stats() {
     final logs = GameService.current.prayerLog;
     final state = GameService.current;
 

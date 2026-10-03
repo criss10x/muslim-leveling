@@ -88,17 +88,6 @@ class PrayerLog {
   };
 }
 
-/// QadhaLog — satu utang sholat wajib yang terlewat (auto-dibuat oleh
-/// runDailyCheck, lunas lewat logQadha). Entry dihapus dari list saat lunas.
-class QadhaLog {
-  final String date; // YYYY-MM-DD hari yang terlewat
-  final String prayer; // nama sholat (subuh/dzuhur/ashar/maghrib/isya)
-  QadhaLog({required this.date, required this.prayer});
-  factory QadhaLog.fromMap(Map<String, dynamic> m) =>
-      QadhaLog(date: m['date'], prayer: m['prayer']);
-  Map<String, dynamic> toMap() => {'date': date, 'prayer': prayer};
-}
-
 class StreakState {
   final int current, best;
   final String lastDate;
@@ -320,8 +309,6 @@ class GameState {
   final List<String> ownedCosmetics; // cosmetic ids owned (earned/free)
   final Map<String, String> equipped; // slot name -> cosmetic id
   final int freezeShields; // inventory freeze shield (dari daily chest), auto-pakai saat missed
-  final List<QadhaLog> qadhaLog; // utang sholat (missed wajib) — lunas via sholat qadha
-  final String tawbahDismissedAt; // YYYY-MM-DD terakhir user dismiss dialog tawbah ("" = never)
   final List<String> freezeSavedDates; // tanggal yang diselamatkan shield (riwayat proteksi)
   final String highlightSwipeDate; // YYYY-MM-DD ("" = never)
   final int highlightSwipeMask; // bit per page set = page claimed today
@@ -355,8 +342,6 @@ class GameState {
     this.ownedCosmetics = const [],
     this.equipped = const {},
     this.freezeShields = 0,
-    List<QadhaLog>? qadhaLog,
-    this.tawbahDismissedAt = '',
     List<String>? freezeSavedDates,
     this.highlightSwipeDate = '',
     this.highlightSwipeMask = 0,
@@ -374,7 +359,6 @@ class GameState {
        quranXp = quranXp ?? const QuranXpState(),
        hadisXp = hadisXp ?? const HadisXpState(),
        lifeTotals = lifeTotals ?? const {},
-       qadhaLog = qadhaLog ?? [],
        freezeSavedDates = freezeSavedDates ?? [];
 
   GameState copyWith({
@@ -398,8 +382,6 @@ class GameState {
     List<String>? ownedCosmetics,
     Map<String, String>? equipped,
     int? freezeShields,
-    List<QadhaLog>? qadhaLog,
-    String? tawbahDismissedAt,
     List<String>? freezeSavedDates,
     String? highlightSwipeDate,
     int? highlightSwipeMask,
@@ -428,8 +410,6 @@ class GameState {
     ownedCosmetics: ownedCosmetics ?? this.ownedCosmetics,
     equipped: equipped ?? this.equipped,
     freezeShields: freezeShields ?? this.freezeShields,
-    qadhaLog: qadhaLog ?? this.qadhaLog,
-    tawbahDismissedAt: tawbahDismissedAt ?? this.tawbahDismissedAt,
     freezeSavedDates: freezeSavedDates ?? this.freezeSavedDates,
     highlightSwipeDate: highlightSwipeDate ?? this.highlightSwipeDate,
     highlightSwipeMask: highlightSwipeMask ?? this.highlightSwipeMask,
@@ -448,11 +428,6 @@ class GameState {
     final questList =
         (m['quests'] as List?)
             ?.map((e) => Quest.fromMap(e as Map<String, dynamic>))
-            .toList() ??
-        [];
-    final qadhaList =
-        (m['qadhaLog'] as List?)
-            ?.map((e) => QadhaLog.fromMap(e as Map<String, dynamic>))
             .toList() ??
         [];
     final pstr = <String, StreakState>{};
@@ -491,8 +466,6 @@ class GameState {
       questDate: m['questDate'] ?? '',
       lastCheckedDate: m['lastCheckedDate'] ?? '',
       comebackCount: m['comebackCount'] ?? 0,
-      qadhaLog: qadhaList,
-      tawbahDismissedAt: m['tawbahDismissedAt'] ?? '',
       freezeSavedDates:
           (m['freezeSavedDates'] as List?)?.cast<String>() ?? [],
       zikirCounter: zikir,
@@ -539,8 +512,6 @@ class GameState {
     'ownedCosmetics': ownedCosmetics,
     'equipped': equipped,
     'freezeShields': freezeShields,
-    'qadhaLog': qadhaLog.map((e) => e.toMap()).toList(),
-    'tawbahDismissedAt': tawbahDismissedAt,
     'freezeSavedDates': freezeSavedDates,
     'highlightSwipeDate': highlightSwipeDate,
     'highlightSwipeMask': highlightSwipeMask,
@@ -694,9 +665,6 @@ class GameService {
     }
   }
   static bool get haidMode => _cache.haidMode;
-
-  /// Jumlah utang sholat qadha yang belum lunas.
-  static int get qadhaCount => _cache.qadhaLog.length;
 
   /// Freeze shield inventory (dari daily chest). Auto-pakai saat missed day:
   /// 1 shield = 1 hari aman (semua streak).
@@ -1421,43 +1389,6 @@ class GameService {
     ];
   }
 
-  /// Lunasi 1 utang sholat qadha: hapus entry tertua utk [prayer],
-  /// beri XP penuh sholat tsb (tanpa bonus waktu/jamaah, tanpa streak —
-  /// qadha bisa dikerjakan kapan saja). Return (state, xpGained, levelsGained)?
-  /// null jika tidak ada utang utk prayer tsb.
-  static Future<(GameState, int, int)?> logQadhaAsync(String prayer) async {
-    final idx =
-        _cache.qadhaLog.indexWhere((q) => q.prayer == prayer);
-    if (idx < 0) return null;
-    final qadha = List<QadhaLog>.from(_cache.qadhaLog)..removeAt(idx);
-    final xpGained = switch (prayer) {
-      'subuh' => 30,
-      'dzuhur' => 20,
-      'ashar' => 20,
-      'maghrib' => 25,
-      'isya' => 25,
-      _ => 15,
-    };
-    final oldInfo = getLevelInfo(_cache.xp);
-    final newInfo = getLevelInfo(_cache.xp + xpGained);
-    final lifeTotals = Map<String, int>.from(_cache.lifeTotals);
-    lifeTotals['qadha_done'] = (lifeTotals['qadha_done'] ?? 0) + 1;
-    final updated = _cache.copyWith(
-      xp: _cache.xp + xpGained,
-      level: newInfo.level,
-      qadhaLog: qadha,
-      lifeTotals: lifeTotals,
-    );
-    await _save(updated);
-    await refreshBadges();
-    return (current, xpGained, newInfo.level - oldInfo.level);
-  }
-
-  /// Set flag "sudah lihat dialog tawbah hari ini" (pilihan apa pun).
-  static Future<void> dismissTawbah() async {
-    await _save(_cache.copyWith(tawbahDismissedAt: todayStr()));
-  }
-
   static Future<(GameState, int, int)?> logPrayerAsync(
     String prayer,
     String type, {
@@ -2136,7 +2067,6 @@ class GameService {
 
     // Evaluate missed days: lastChecked+1 .. today-1 (exclusive of today)
     var shields = state.freezeShields;
-    var qadha = List<QadhaLog>.from(state.qadhaLog);
     final savedDates = List<String>.from(state.freezeSavedDates);
     // A1: gap = jumlah hari missed. Gap 3+ hari → nanti dapat welcome-back shield.
     final missedDays = todayDate.difference(lastChecked).inDays - 1;
@@ -2160,14 +2090,6 @@ class GameService {
       if (needsShield) {
         shields -= 1;
         savedDates.add(evalStr);
-      }
-
-      // Qadha: tiap wajib yang bolong masuk daftar utang (skip kalau sudah ada).
-      for (final p in wajibList) {
-        if (!_prayerLoggedForDate(state, evalStr, p) &&
-            !qadha.any((q) => q.date == evalStr && q.prayer == p)) {
-          qadha.add(QadhaLog(date: evalStr, prayer: p));
-        }
       }
 
       if (!needsShield) {
@@ -2223,7 +2145,6 @@ class GameService {
       tilawahStreak: tilawah,
       comebackCount: comeback,
       freezeShields: finalShields,
-      qadhaLog: qadha,
       freezeSavedDates: savedDates,
       lastCheckedDate: today,
     );

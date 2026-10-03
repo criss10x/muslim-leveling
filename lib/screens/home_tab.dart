@@ -141,11 +141,6 @@ class _HomeTabState extends State<HomeTab> {
       await GameService.ensureDailyQuests();
       // 15: "Shield aktif kemarin" — momen relief. Banner sekali per hari.
       if (mounted) _maybeShowShieldSaved();
-      // 3: Tawbah Flow (dialog kembali setelah gap 3+ hari) disembunyikan
-      // 2026-10-01 — permintaan Kris. Backend tetap jalan utuh: runDailyCheck
-      // tetap menilai hari bolong, shield tetap dikonsumsi/oberkan, utang
-      // tetap dicatat. Cukup uncomment baris di bawah untuk menampilkan lagi.
-      // if (mounted) _maybeShowTawbah();
       // Independent I/O after state is settled.
       late SharedPreferences p;
       await Future.wait([
@@ -1820,70 +1815,6 @@ class _HomeTabState extends State<HomeTab> {
     if (!mounted || reveal == null) return;
     setState(() {});
     _showChestReveal(reveal);
-  }
-
-  /// 3: Tawbah Flow — dialog lembut setelah gap 3+ hari.
-  /// Trigger: runDailyCheck memberi welcome-back shield (gap>=3) + belum
-  /// dismiss hari ini. Pilihan: qadha 1 / sholat berikutnya / dzikir ringan.
-  ///
-  /// SEMENTARA tidak dipanggil dari _load() (dialog disembunyikan, lihat
-  /// komentar di sana). Tombolnya masih dead-end (TODO navigasi), jadi kalau
-  /// dihidupkan lagi opsi Qadha/Zikir perlu dinaikkan dulu.
-  // ignore: unused_element
-  Future<void> _maybeShowTawbah() async {
-    final today = DateTime.now().toIso8601String().substring(0, 10);
-    if (GameService.current.tawbahDismissedAt == today) return;
-    // Syarat gap: kemarin tidak ada log sama sekali + lusa/sebelumnya ada gap.
-    // Heuristik sederhana: lastCheckedDate lompat >=3 hari sudah ditangani
-    // runDailyCheck (welcome shield). Di sini cek: ada qadha baru ATAU
-    // shield baru dari welcome-back (freezeShields>0 + qadhaLog tidak kosong).
-    final hasQadha = GameService.current.qadhaLog.isNotEmpty;
-    final hasShield = GameService.current.freezeShields > 0;
-    if (!hasQadha && !hasShield) return;
-    // Jangan ganggu user yang hari ini sudah aktif (ada log hari ini).
-    final hasLogToday = GameService.current.prayerLog
-        .any((l) => l.date == today);
-    if (hasLogToday) return;
-    if (!mounted) return;
-    await GameService.dismissTawbah();
-    if (!mounted) return;
-    final l10n = AppL10n.of(context);
-    await showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppRadius.xl),
-        ),
-        title: Text(l10n.tawbahTitle,
-            style:
-                AppText.titleLg().copyWith(color: AppColors.onSurface)),
-        content: Text(l10n.tawbahBody,
-            style: AppText.bodyMd()
-                .copyWith(color: AppColors.onSurfaceVariant)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(l10n.tawbahOptLater),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              // TODO: navigasi ke tab dzikir (untuk sekarang: tutup dialog).
-            },
-            child: Text(l10n.tawbahOptZikir),
-          ),
-          FilledButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              // TODO: navigasi ke card qadha di Profil (untuk sekarang: tutup).
-            },
-            child: Text(l10n.tawbahOptQadha),
-          ),
-        ],
-      ),
-    );
   }
 
   /// 15: banner "Shield aktif kemarin" sekali per hari (SharedPreferences).

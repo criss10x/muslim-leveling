@@ -78,7 +78,6 @@ void main() {
             'claimed': false,
           },
         ],
-        'qadhaLog': [],
       }),
     });
     GameService.resetForTest();
