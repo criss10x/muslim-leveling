@@ -682,8 +682,8 @@
   "qiblaNorthDegrees": "{degrees}° from North",
   "qiblaTurnInstruction": "Rotate your device {degrees}° clockwise from north to face the qibla.",
   "qiblaOffset": "{degrees}° off from the qibla",
-  "qiblaSkinTitle": "Compass skin",
-  "qiblaSkinSubtitle": "Choose the qibla compass dial style. This preference persists and shows every time you return to this page.",
+  "qiblaSkinTitle": "Compass style",
+  "qiblaSkinSubtitle": "Choose the qibla compass dial style. This preference persists whenever you return to this page.",
   "dzResetTitle": "Reset counter?",
   "dzResetBody": "The \"{item}\" counter will be reset to 0.\\nToday's dzikir total still counts.",
   "dzResetCancel": "CANCEL",
@@ -1068,5 +1068,6 @@
   "profilRankFromLevel": "Lv. {level}",
   "profilRankFooter": "Performing the five daily prayers grants XP. The more consistent you are, the faster you will level up, and the color changes accordingly.",
   "doaEmptyGroups": "No duas to show yet. Try reloading.",
-  "doaShareFailed": "Couldn't share the dua. Try again."
+  "doaShareFailed": "Couldn't share the dua. Try again.",
+  "qiblaSkinChange": "Change style"
 }

@@ -682,8 +682,8 @@
   "qiblaNorthDegrees": "{degrees}° dari Utara",
   "qiblaTurnInstruction": "Putar peranti {degrees}° mengikut arah jam dari utara untuk menghadap kiblat.",
   "qiblaOffset": "Sisihan {degrees}° dari kiblat",
-  "qiblaSkinTitle": "Kulit kompas",
-  "qiblaSkinSubtitle": "Pilih paparan dial kompas kiblat. Pilihan ini disimpan terus, bila-bila masa kembali ke halaman ini.",
+  "qiblaSkinTitle": "Gaya kompas",
+  "qiblaSkinSubtitle": "Pilih paparan dial kompas kiblat. Pilihan ini kekal, bila-bila awak kembali ke halaman ini.",
   "dzResetTitle": "Set semula kaunter?",
   "dzResetBody": "Kaunter \"{item}\" akan ditetapkan semula ke 0.\\nJumlah zikir hari ini TETAP dikira.",
   "dzResetCancel": "BATAL",
@@ -1068,5 +1068,6 @@
   "profilRankFromLevel": "Lv {level}",
   "profilRankFooter": "Solat lima waktu memberikan XP. Semakin konsisten, semakin cepat naik, dan warnanya juga akan berubah.",
   "doaEmptyGroups": "Belum ada doa untuk dipaparkan. Cuba muat semula.",
-  "doaShareFailed": "Gagal berkongsi doa. Cuba lagi."
+  "doaShareFailed": "Gagal berkongsi doa. Cuba lagi.",
+  "qiblaSkinChange": "Tukar gaya"
 }

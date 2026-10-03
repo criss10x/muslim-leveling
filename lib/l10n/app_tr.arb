@@ -683,7 +683,7 @@
   "qiblaTurnInstruction": "Kıbleye yönelmek için cihazı kuzeyden saat yönünde {degrees}° döndürün.",
   "qiblaOffset": "Kıbleden {degrees}° sapma",
   "qiblaSkinTitle": "Pusula stili",
-  "qiblaSkinSubtitle": "Kıble pusulası kadran görünümünü seçin. Bu tercih kalıcıdır ve bu sayfaya her dönüşünüzde görünür.",
+  "qiblaSkinSubtitle": "Kıble pusulası kadran görünümünü seçin. Bu tercih kalıcıdır, sayfaya döndüğünüzde korunur.",
   "dzResetTitle": "Sayaç sıfırlansın mı?",
   "dzResetBody": "\"{item}\" sayacı sıfırlanacaktır.\\nBugünkü toplam zikir sayısı YİNE DE hesaplanacaktır.",
   "dzResetCancel": "İPTAL",
@@ -1068,5 +1068,6 @@
   "profilRankFromLevel": "Lv {level}",
   "profilRankFooter": "Beş vakit namaz kılmak XP kazandırır. Ne kadar istikrarlı olursanız, o kadar hızlı yükselirsiniz ve renk de buna göre değişir.",
   "doaEmptyGroups": "Gösterilecek dua yok. Yeniden yüklemeyi dene.",
-  "doaShareFailed": "Dua paylaşılamadı. Tekrar dene."
+  "doaShareFailed": "Dua paylaşılamadı. Tekrar dene.",
+  "qiblaSkinChange": "Stili değiştir"
 }

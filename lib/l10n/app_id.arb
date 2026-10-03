@@ -1064,7 +1064,7 @@
       }
     }
   },
-  "qiblaSkinTitle": "Skin kompas",
+  "qiblaSkinTitle": "Tampilan kompas",
   "qiblaSkinSubtitle": "Pilih tampilan dial kompas kiblat. Pilihan ini tersimpan terus, kapan pun kembali ke halaman ini.",
   "dzResetTitle": "Reset counter?",
   "dzResetBody": "Counter \"{item}\" akan di-nolkan dari 0.\\nTotal dzikir hari ini TETAP dihitung.",
@@ -1842,5 +1842,6 @@
     }
   },
   "doaEmptyGroups": "Belum ada doa yang bisa ditampilkan. Coba muat ulang.",
-  "doaShareFailed": "Gagal membagikan doa. Coba lagi."
+  "doaShareFailed": "Gagal membagikan doa. Coba lagi.",
+  "qiblaSkinChange": "Ganti tampilan"
 }

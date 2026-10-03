@@ -1,9 +1,9 @@
 part of 'qibla_screen.dart';
 
 /// ── Skin picker — bottom sheet pilih 5 dial ──
-/// Pola identik ThemePresetPicker: ListenableBuilder + preview dial live
-/// (CustomPaint jalan nyata, azimut statis 292° NW) supaya user memilih dari
-/// preview hidup, bukan nama teks. Skin aktif ditandai cek.
+/// Preview dial hidup: painter asli dijalankan dengan azimut statis 292° (NW)
+/// supaya user memilih dari bentuk dial, bukan dari nama. Skin aktif ditandai
+/// cek + border primary.
 Future<void> showQiblaSkinPicker(BuildContext context) {
   return showModalBottomSheet<void>(
     context: context,
@@ -15,11 +15,20 @@ Future<void> showQiblaSkinPicker(BuildContext context) {
   );
 }
 
+/// Lebar tetap satu opsi preview.
+///
+/// Sengaja tetap, bukan `Expanded`: dengan `Row` + 5 `Expanded`, lebar tiap
+/// opsi tertekan jadi ~47dp di layar 320dp sementara tingginya tetap 92dp, jadi
+/// dial-nya dirender sebagai telur (rasio 1,95) dan tidak lagi terbaca sebagai
+/// dial. Lebar tetap + AspectRatio menjaga bentuknya lingkaran di lebar apa pun.
+const double _kSkinOptionWidth = 72;
+
 class QiblaSkinPicker extends StatelessWidget {
   const QiblaSkinPicker({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.md),
@@ -27,34 +36,31 @@ class QiblaSkinPicker extends StatelessWidget {
           listenable: qiblaSkinNotifier,
           builder: (context, _) => Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                AppL10n.of(context).qiblaSkinTitle,
+                l10n.qiblaSkinTitle,
                 style: AppText.titleLg().copyWith(color: AppColors.onSurface),
               ),
-              const SizedBox(height: AppSpacing.sm),
+              const SizedBox(height: AppSpacing.xs),
               Text(
-                AppL10n.of(context).qiblaSkinSubtitle,
+                l10n.qiblaSkinSubtitle,
                 style: AppText.bodyMd().copyWith(
                   color: AppColors.onSurfaceVariant,
                   fontSize: 12,
                 ),
               ),
               const SizedBox(height: AppSpacing.md),
-              SizedBox(
-                height: 116,
-                child: Row(
-                  children: [
-                    for (final skin in QiblaSkin.values) ...[
-                      Expanded(child: _SkinOption(skin: skin)),
-                      if (skin != QiblaSkin.values.last)
-                        const SizedBox(width: AppSpacing.xs),
-                    ],
-                  ],
-                ),
+              // Wrap: kelima opsi tetap tampil tanpa scroll di lebar berapa pun,
+              // dan tiap dial tetap bulat karena lebarnya tidak lagi dipegang
+              // Expanded.
+              Wrap(
+                spacing: AppSpacing.sm,
+                runSpacing: AppSpacing.sm,
+                children: [
+                  for (final skin in QiblaSkin.values) _SkinOption(skin: skin),
+                ],
               ),
-              const SizedBox(height: AppSpacing.sm),
             ],
           ),
         ),
@@ -63,7 +69,7 @@ class QiblaSkinPicker extends StatelessWidget {
   }
 }
 
-/// Satu opsi: circular preview dial + label.
+/// Satu opsi: preview dial bulat + nama lengkap.
 class _SkinOption extends StatelessWidget {
   const _SkinOption({required this.skin});
 
@@ -73,56 +79,86 @@ class _SkinOption extends StatelessWidget {
   Widget build(BuildContext context) {
     final spec = specFor(skin);
     final selected = qiblaSkinNotifier.skin == skin;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        PressableScale(
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: skin.label,
+      child: SizedBox(
+        width: _kSkinOptionWidth,
+        // PressableScale membungkus dial DAN labelnya. Dulu hanya lingkarannya
+        // yang bisa ditekan sementara nama skin di bawahnya display-only, jadi
+        // ketukan pada label (target paling wajar) tidak melakukan apa pun.
+        child: PressableScale(
           onTap: () async {
             await qiblaSkinNotifier.setSkin(skin);
             if (context.mounted) Navigator.pop(context);
           },
-          child: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: selected
-                    ? AppColors.primary
-                    : AppColors.outlineVariant.withValues(alpha: 0.4),
-                width: selected ? 2 : 1,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: selected
+                            ? AppColors.primary
+                            : AppColors.outlineVariant.withValues(alpha: 0.4),
+                        width: selected ? 2 : 1,
+                      ),
+                    ),
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: ClipOval(
+                        child: CustomPaint(
+                          painter: _SkinPreviewPainter(spec: spec),
+                        ),
+                      ),
+                    ),
+                  ),
+                  // Badge cek di sudut, bukan di tengah: centang di tengah
+                  // menutupi jarum dial yang justru jadi pembeda antar skin.
+                  if (selected)
+                    Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: AppColors.surfaceContainer,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          AppIcons.checkCircle,
+                          color: AppColors.primary,
+                          size: 16,
+                        ),
+                      ),
+                    ),
+                ],
               ),
-            ),
-            child: ClipOval(
-              child: SizedBox(
-                width: 92,
-                height: 92,
-                child: CustomPaint(
-                  painter: _SkinPreviewPainter(spec: spec),
-                  child: selected
-                      ? Center(
-                          child: Icon(
-                            AppIcons.checkCircle,
-                            color: AppColors.primary,
-                            size: 26,
-                          ),
-                        )
-                      : null,
+              const SizedBox(height: 6),
+              Text(
+                // Nama lengkap: dulu dipotong `split(' ').first` sehingga justru
+                // kata yang menjelaskan karakternya yang hilang ("Antique Brass"
+                // jadi "Antique", "Midnight Gold" jadi "Midnight").
+                skin.label,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: AppText.labelCapsSm().copyWith(
+                  color:
+                      selected ? AppColors.primary : AppColors.onSurfaceVariant,
+                  fontSize: 10,
+                  height: 1.25,
                 ),
               ),
-            ),
+            ],
           ),
         ),
-        const SizedBox(height: 6),
-        Text(
-          skin.label.split(' ').first,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: AppText.labelCapsSm().copyWith(
-            color: selected ? AppColors.primary : AppColors.onSurfaceVariant,
-            fontSize: 9,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ],
+      ),
     );
   }
 }
@@ -137,7 +173,7 @@ class _SkinPreviewPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
-    final radius = size.width / 2 - 4;
+    final radius = math.min(size.width, size.height) / 2 - 4;
 
     // muka dial
     final bg = Paint()

@@ -4201,7 +4201,7 @@ abstract class AppL10n {
   /// No description provided for @qiblaSkinTitle.
   ///
   /// In id, this message translates to:
-  /// **'Skin kompas'**
+  /// **'Tampilan kompas'**
   String get qiblaSkinTitle;
 
   /// No description provided for @qiblaSkinSubtitle.
@@ -6435,6 +6435,12 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Gagal membagikan doa. Coba lagi.'**
   String get doaShareFailed;
+
+  /// No description provided for @qiblaSkinChange.
+  ///
+  /// In id, this message translates to:
+  /// **'Ganti tampilan'**
+  String get qiblaSkinChange;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

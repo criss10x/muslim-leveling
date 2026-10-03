@@ -2344,7 +2344,7 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get qiblaSkinSubtitle =>
-      'Kıble pusulası kadran görünümünü seçin. Bu tercih kalıcıdır ve bu sayfaya her dönüşünüzde görünür.';
+      'Kıble pusulası kadran görünümünü seçin. Bu tercih kalıcıdır, sayfaya döndüğünüzde korunur.';
 
   @override
   String get dzResetTitle => 'Sayaç sıfırlansın mı?';
@@ -3594,4 +3594,7 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get doaShareFailed => 'Dua paylaşılamadı. Tekrar dene.';
+
+  @override
+  String get qiblaSkinChange => 'Stili değiştir';
 }

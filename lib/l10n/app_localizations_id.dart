@@ -2315,7 +2315,7 @@ class AppL10nId extends AppL10n {
   }
 
   @override
-  String get qiblaSkinTitle => 'Skin kompas';
+  String get qiblaSkinTitle => 'Tampilan kompas';
 
   @override
   String get qiblaSkinSubtitle =>
@@ -3564,4 +3564,7 @@ class AppL10nId extends AppL10n {
 
   @override
   String get doaShareFailed => 'Gagal membagikan doa. Coba lagi.';
+
+  @override
+  String get qiblaSkinChange => 'Ganti tampilan';
 }

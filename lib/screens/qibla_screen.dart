@@ -143,6 +143,10 @@ class _QiblaScreenState extends State<QiblaScreen>
   bool _sensorAvailable = true;
   bool _wasAligned = false;
 
+  /// Preferensi sistem "kurangi gerakan". Denyut glow saat sejajar dimatikan
+  /// kalau aktif (glow tetap menyala statis, jadi statusnya tidak hilang).
+  bool _reduceMotion = false;
+
   StreamSubscription<AccelerometerEvent>? _accelSub;
   StreamSubscription<MagnetometerEvent>? _magSub;
 
@@ -175,6 +179,16 @@ class _QiblaScreenState extends State<QiblaScreen>
       duration: const Duration(milliseconds: 1100),
     );
     _initSensors();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _reduceMotion = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    if (_reduceMotion && _pulse.isAnimating) {
+      _pulse.stop();
+      _pulse.value = 0;
+    }
   }
 
   void _initSensors() {
@@ -235,7 +249,9 @@ class _QiblaScreenState extends State<QiblaScreen>
     final aligned = _isAligned;
     if (aligned && !_wasAligned) {
       HapticFeedback.mediumImpact();
-      _pulse.repeat(reverse: true);
+      // Hormati "kurangi gerakan": glow tetap menyala statis (0.45) karena
+      // _pulse.value berhenti di 0, jadi status sejajar tidak hilang.
+      if (!_reduceMotion) _pulse.repeat(reverse: true);
     } else if (!aligned && _wasAligned) {
       _pulse.stop();
       _pulse.value = 0;
@@ -373,29 +389,45 @@ class _QiblaScreenState extends State<QiblaScreen>
             ),
           ),
           const SizedBox(width: AppSpacing.md),
-          // Tombol skin picker (drawer kanan bila dipencet) — 5 pilihan dial.
-          PressableScale(
-            onTap: () => showQiblaSkinPicker(context),
-            child: Container(
-              height: 40,
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceContainerHigh,
-                borderRadius: BorderRadius.circular(AppRadius.pill),
-                border: Border.all(
-                    color: AppColors.outlineVariant.withValues(alpha: 0.3)),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text('🎨', style: TextStyle(fontSize: 16)),
-                  const SizedBox(width: 4),
-                  Text(
-                    qiblaSkinNotifier.skin.label,
-                    style: AppText.labelCapsSm()
-                        .copyWith(color: AppColors.onSurfaceVariant),
-                  ),
-                ],
+          // Pintu masuk ganti skin. Dulu hanya emoji 🎨 + nama skin, sehingga
+          // terbaca sebagai badge status, bukan tombol: user harus menebak
+          // bahwa label itu bisa ditekan. Sekarang ada kata kerja + chevron.
+          Semantics(
+            button: true,
+            label: l10n.qiblaSkinChange,
+            child: PressableScale(
+              onTap: () => showQiblaSkinPicker(context),
+              child: Container(
+                height: 40,
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceContainerHigh,
+                  borderRadius: BorderRadius.circular(AppRadius.pill),
+                  border: Border.all(
+                      color: AppColors.primary.withValues(alpha: 0.35)),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Ikon app, bukan emoji: emoji render berbeda-beda per HP
+                    // dan tidak ikut warna tema.
+                    Icon(AppIcons.paletteOutlined,
+                        size: 15, color: AppColors.primary),
+                    const SizedBox(width: 6),
+                    Flexible(
+                      child: Text(
+                        l10n.qiblaSkinChange,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppText.labelCapsSm()
+                            .copyWith(color: AppColors.primary),
+                      ),
+                    ),
+                    const SizedBox(width: 2),
+                    Icon(AppIcons.chevronRight,
+                        size: 14, color: AppColors.primary),
+                  ],
+                ),
               ),
             ),
           ),
