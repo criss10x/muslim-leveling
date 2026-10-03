@@ -6423,6 +6423,18 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Sholat lima waktu memberi XP. Makin konsisten, makin cepat naik, dan warnanya ikut berubah.'**
   String get profilRankFooter;
+
+  /// No description provided for @doaEmptyGroups.
+  ///
+  /// In id, this message translates to:
+  /// **'Belum ada doa yang bisa ditampilkan. Coba muat ulang.'**
+  String get doaEmptyGroups;
+
+  /// No description provided for @doaShareFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal membagikan doa. Coba lagi.'**
+  String get doaShareFailed;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

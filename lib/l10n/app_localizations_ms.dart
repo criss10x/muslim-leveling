@@ -3570,4 +3570,11 @@ class AppL10nMs extends AppL10n {
   @override
   String get profilRankFooter =>
       'Solat lima waktu memberikan XP. Semakin konsisten, semakin cepat naik, dan warnanya juga akan berubah.';
+
+  @override
+  String get doaEmptyGroups =>
+      'Belum ada doa untuk dipaparkan. Cuba muat semula.';
+
+  @override
+  String get doaShareFailed => 'Gagal berkongsi doa. Cuba lagi.';
 }

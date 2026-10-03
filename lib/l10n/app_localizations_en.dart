@@ -3563,4 +3563,10 @@ class AppL10nEn extends AppL10n {
   @override
   String get profilRankFooter =>
       'Performing the five daily prayers grants XP. The more consistent you are, the faster you will level up, and the color changes accordingly.';
+
+  @override
+  String get doaEmptyGroups => 'No duas to show yet. Try reloading.';
+
+  @override
+  String get doaShareFailed => 'Couldn\'t share the dua. Try again.';
 }

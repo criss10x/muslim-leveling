@@ -3588,4 +3588,10 @@ class AppL10nTr extends AppL10n {
   @override
   String get profilRankFooter =>
       'Beş vakit namaz kılmak XP kazandırır. Ne kadar istikrarlı olursanız, o kadar hızlı yükselirsiniz ve renk de buna göre değişir.';
+
+  @override
+  String get doaEmptyGroups => 'Gösterilecek dua yok. Yeniden yüklemeyi dene.';
+
+  @override
+  String get doaShareFailed => 'Dua paylaşılamadı. Tekrar dene.';
 }

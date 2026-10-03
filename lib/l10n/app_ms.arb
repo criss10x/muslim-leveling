@@ -1066,5 +1066,7 @@
   "profilRankDivision": "Divisyen I–V",
   "profilRankNoDivision": "Tanpa divisyen",
   "profilRankFromLevel": "Lv {level}",
-  "profilRankFooter": "Solat lima waktu memberikan XP. Semakin konsisten, semakin cepat naik, dan warnanya juga akan berubah."
+  "profilRankFooter": "Solat lima waktu memberikan XP. Semakin konsisten, semakin cepat naik, dan warnanya juga akan berubah.",
+  "doaEmptyGroups": "Belum ada doa untuk dipaparkan. Cuba muat semula.",
+  "doaShareFailed": "Gagal berkongsi doa. Cuba lagi."
 }

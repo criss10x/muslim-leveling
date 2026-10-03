@@ -114,13 +114,54 @@ class _DoaScreenState extends State<DoaScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
     final groups = _groups;
-    if (_error != null && groups == null) {
-      return ErrorRetry(message: _error!, onRetry: _load);
+    // Total doa = meta header. Dihitung dari grup, bukan dari _cache, supaya
+    // angka di header dan jumlah kartu selalu berasal dari data yang sama.
+    final total = groups?.fold<int>(0, (sum, g) => sum + g.$2);
+
+    // Scaffold + header WAJIB di level 1: halaman ini di-push dari aksi cepat
+    // Home, dan tanpa keduanya tidak ada tombol kembali sama sekali (dulu
+    // ListView polos: tidak ada judul, tidak ada jalan pulang; status memuat
+    // dan error juga tanpa jalan keluar). Level 2 & 3 sudah punya sejak awal.
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: SafeArea(
+        child: Column(
+          children: [
+            _DoaHeader(
+              title: l10n.homeQuickDoa,
+              meta: total == null ? null : l10n.doaCount('$total'),
+            ),
+            Expanded(child: _content(l10n, groups)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Isi level 1: daftar grup, atau status memuat/error/kosong.
+  Widget _content(AppL10n l10n, List<(String, int)>? groups) {
+    final error = _error;
+    if (error != null && groups == null) {
+      return ErrorRetry(message: error, onRetry: _load);
     }
     if (groups == null) {
+      return Center(child: CircularProgressIndicator(color: AppColors.primary));
+    }
+    // Sumber bisa menjawab 200 dengan daftar kosong; itu bukan error, tapi
+    // juga bukan daftar. Tanpa cabang ini layar tampil benar-benar kosong.
+    if (groups.isEmpty) {
       return Center(
-          child: CircularProgressIndicator(color: AppColors.primary));
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          child: Text(
+            l10n.doaEmptyGroups,
+            textAlign: TextAlign.center,
+            style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
+          ),
+        ),
+      );
     }
     return RefreshIndicator(
       color: AppColors.primary,
@@ -197,6 +238,54 @@ class _DoaScreenState extends State<DoaScreen> {
   }
 }
 
+/// Header layar Doa, satu implementasi untuk ketiga level.
+///
+/// Dulu level 2 dan 3 masing-masing menulis baris header sendiri (judul +
+/// meta + tombol kembali) dan salinannya sudah menyimpang: level 1 malah
+/// tidak punya sama sekali. Satu widget = satu perilaku tombol kembali.
+class _DoaHeader extends StatelessWidget {
+  final String title;
+  final String? meta;
+
+  /// Tombol tambahan di kanan (mis. bagikan di level detail).
+  final Widget? trailing;
+
+  const _DoaHeader({required this.title, this.meta, this.trailing});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.sm, vertical: AppSpacing.sm),
+      child: Row(
+        children: [
+          IconButton(
+            icon: Icon(AppIcons.arrowBack, color: AppColors.onBackground),
+            onPressed: () => Navigator.pop(context),
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title,
+                    style: AppText.titleLg().copyWith(
+                        color: AppColors.onBackground, fontSize: 18),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis),
+                if (meta != null)
+                  Text(meta!,
+                      style: AppText.labelCapsSm()
+                          .copyWith(color: AppColors.onSurfaceVariant)),
+              ],
+            ),
+          ),
+          if (trailing != null) trailing!,
+        ],
+      ),
+    );
+  }
+}
+
 /// Doa — level 2: daftar doa dalam satu grup.
 ///
 /// Perubahan layout vs versi lama: (1) preview Arab 2 baris, bukan ellipsis
@@ -210,13 +299,14 @@ class DoaListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
     final items = doaApi.byGrup(grup);
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
-            _appBar(context, grup, AppL10n.of(context).doaCount('${items.length}')),
+            _DoaHeader(title: grup, meta: l10n.doaCount('${items.length}')),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
               child: Align(
@@ -229,7 +319,7 @@ class DoaListScreen extends StatelessWidget {
             ),
             Expanded(
               child: items.isEmpty
-                  ? Center(child: Text(AppL10n.of(context).doaEmpty))
+                  ? Center(child: Text(l10n.doaEmpty))
                   : ListView.builder(
                       padding: const EdgeInsets.fromLTRB(
                               AppSpacing.md, AppSpacing.sm, AppSpacing.md, 100),
@@ -300,34 +390,6 @@ class DoaListScreen extends StatelessWidget {
     );
   }
 
-  Widget _appBar(BuildContext context, String title, String meta) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.sm, vertical: AppSpacing.sm),
-      child: Row(
-        children: [
-          IconButton(
-            icon: Icon(AppIcons.arrowBack, color: AppColors.onBackground),
-            onPressed: () => Navigator.pop(context),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title,
-                    style: AppText.titleLg().copyWith(
-                        color: AppColors.onBackground, fontSize: 18),
-                    maxLines: 1, overflow: TextOverflow.ellipsis),
-                Text(meta,
-                    style: AppText.labelCapsSm()
-                        .copyWith(color: AppColors.onSurfaceVariant)),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 /// Doa — detail: arab + transliterasi + terjemah + sumber.
@@ -347,27 +409,12 @@ class DoaDetailScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.sm, vertical: AppSpacing.sm),
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: Icon(AppIcons.arrowBack, color: AppColors.onBackground),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                  Expanded(
-                    child: Text(doa.nama,
-                        style: AppText.titleLg().copyWith(
-                            color: AppColors.onBackground, fontSize: 18),
-                        maxLines: 1, overflow: TextOverflow.ellipsis),
-                  ),
-                  IconButton(
-                    icon: Icon(AppIcons.share,
-                        size: 20, color: AppColors.onSurfaceVariant),
-                    onPressed: () => _share(context),
-                  ),
-                ],
+            _DoaHeader(
+              title: doa.nama,
+              trailing: IconButton(
+                icon: Icon(AppIcons.share,
+                    size: 20, color: AppColors.onSurfaceVariant),
+                onPressed: () => _share(context),
               ),
             ),
             Expanded(
@@ -417,14 +464,14 @@ class DoaDetailScreen extends StatelessWidget {
       ..writeln()
       ..writeln(doa.tentang)
       ..writeln()
-      ..write('Muslim Leveling');
+      ..write(AppL10n.of(context).appTitle);
     try {
       const channel = MethodChannel('muslim_leveling/share');
       await channel.invokeMethod('shareText', {'text': buf.toString()});
     } catch (_) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppL10n.of(context).qsErr)),
+          SnackBar(content: Text(AppL10n.of(context).doaShareFailed)),
         );
       }
     }

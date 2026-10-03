@@ -1066,5 +1066,7 @@
   "profilRankDivision": "Divisions I–V",
   "profilRankNoDivision": "No division",
   "profilRankFromLevel": "Lv. {level}",
-  "profilRankFooter": "Performing the five daily prayers grants XP. The more consistent you are, the faster you will level up, and the color changes accordingly."
+  "profilRankFooter": "Performing the five daily prayers grants XP. The more consistent you are, the faster you will level up, and the color changes accordingly.",
+  "doaEmptyGroups": "No duas to show yet. Try reloading.",
+  "doaShareFailed": "Couldn't share the dua. Try again."
 }
