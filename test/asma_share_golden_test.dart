@@ -7,6 +7,7 @@ import 'package:muslim_leveling/widgets/share_card_kit.dart';
 
 import 'helpers/app_wrap.dart';
 import 'helpers/golden_fonts.dart';
+import 'helpers/share_assets.dart';
 
 /// Harness: buka layar share Asma lewat entry point publiknya, supaya tes ini
 /// tidak perlu menyentuh kelas private _AsmaShareScreen.
@@ -63,6 +64,16 @@ void main() {
 
       await tester.pumpWidget(card(aspect));
       await tester.pumpAndSettle();
+
+      // Badge Google Play harus BENAR-BENAR termuat sebelum dipotret.
+      await precacheShareBadge(tester, only: 'id');
+      await tester.pump(const Duration(milliseconds: 200));
+
+      // Badge harus sudah punya ukuran saat dipotret. Sebelum ini golden
+      // sempat lulus dengan badge KOSONG: `Image.asset` belum selesai memuat,
+      // ukurannya 0x0, dan tidak ada satu pun piksel hitam di area footer.
+      expect(tester.getSize(find.byType(GooglePlayBadge)).width,
+          greaterThan(20), reason: 'badge belum termuat saat dipotret');
 
       // Translit terlihat sekali (subtitle). Pill footer sekarang sitasi —
       // dulu pill mencetak translit yang sama dua kali dalam satu kartu.
@@ -152,6 +163,10 @@ void main() {
     expect(find.text('1:1'), findsOneWidget);
 
     // Badge Google Play ikut (footer kit) — kartu Asma dulu tidak punya.
-    expect(find.text('Google Play'), findsOneWidget);
+    // Sejak badge memakai aset RESMI, ia gambar, bukan teks: dulu asersi ini
+    // mencari find.text('Google Play').
+    // Kepatuhan badge (tinggi minimum + clear space) diperiksa di
+    // test/play_badge_test.dart; di sini cukup membuktikan kit-nya terpasang.
+    expect(find.byType(GooglePlayBadge), findsOneWidget);
   });
 }

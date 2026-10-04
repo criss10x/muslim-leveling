@@ -57,6 +57,7 @@ flutter:
     - assets/images/quran_bg_taj_mahal.jpg
     - assets/images/quran_bg_fractal.jpg
     - assets/images/logo_mark.png
+    - assets/images/gp_badge/
     - assets/google_fonts/
     - assets/quran/
     - assets/quran/en/surah/

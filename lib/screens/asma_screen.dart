@@ -372,7 +372,13 @@ class AsmaSharePreviewCard extends StatelessWidget {
                 ),
                 SizedBox(height: 14 * s),
                 // ── Footer: badge Google Play + branding (kit) ──
-                ShareCardFooter(s: s, q: q, fg: fg, sub: sub),
+                ShareCardFooter(
+                  s: s,
+                  q: q,
+                  fg: fg,
+                  sub: sub,
+                  badgeHeight: kPlayBadgeArtworkHeight,
+                ),
               ],
             ),
           ),

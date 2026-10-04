@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:muslim_leveling/services/quran_data.dart';
 import 'package:muslim_leveling/widgets/quran_share_sheet.dart';
+import 'package:muslim_leveling/widgets/share_card_kit.dart';
 import 'helpers/app_wrap.dart';
 import 'helpers/golden_fonts.dart';
+import 'helpers/share_assets.dart';
 
 void main() {
   setUpAll(loadGoldenFonts);
@@ -41,6 +43,18 @@ void main() {
 
       await tester.pumpWidget(card(aspect));
       await tester.pumpAndSettle();
+
+      // Badge Google Play harus BENAR-BENAR termuat sebelum dipotret. Tanpa
+      // ini golden-nya lulus dengan badge kosong (terbukti: tidak ada satu pun
+      // piksel hitam di area footer pada golden hasil CI).
+      await precacheShareBadge(tester, only: 'id');
+      await tester.pump(const Duration(milliseconds: 200));
+
+      // Badge harus sudah punya ukuran saat dipotret. Sebelum ini golden
+      // sempat lulus dengan badge KOSONG: `Image.asset` belum selesai memuat,
+      // ukurannya 0x0, dan tidak ada satu pun piksel hitam di area footer.
+      expect(tester.getSize(find.byType(GooglePlayBadge)).width,
+          greaterThan(20), reason: 'badge belum termuat saat dipotret');
 
       // Teks utama ada di layar.
       expect(find.textContaining('Allah'), findsWidgets);

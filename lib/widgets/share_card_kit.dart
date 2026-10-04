@@ -451,65 +451,116 @@ class SharePresetMemory {
       : shareBgPresets.where((p) => p.kind == kind).toList();
 }
 
-// ── Google Play badge (inline, tanpa aset) ────────────────────────
+// ── Google Play badge (aset RESMI) ────────────────────────────────
 
+/// Tinggi ARTWORK badge minimum menurut Google Play Badge Guidelines
+/// (28px digital). Versi lama di bawah angka ini: tingginya 15,7dp di kartu
+/// 1:1 dan 20,7dp di 3:4, jadi teksnya tidak lagi memenuhi ambang keterbacaan
+/// yang Google tetapkan.
+const double kPlayBadgeArtworkHeight = 28;
+
+/// Rasio tinggi ARTWORK terhadap tinggi BERKAS, per locale. Diukur langsung
+/// dari berkasnya, bukan ditebak, karena tiap berkas beda padding:
+///
+/// - en: transparan 41px di SEMUA sisi, artwork 564x168 (rasio 0,672)
+/// - id/tr: transparan 29px atas-bawah saja, artwork 646x192 (rasio 0,768)
+///
+/// Kotak transparan tidak terlihat, jadi yang wajib setinggi 28dp adalah
+/// artwork-nya. Memakai satu angka untuk semua berkas membuat badge en tampak
+/// lebih kecil dari yang dimaksud.
+const Map<String, double> _gpArtworkHeightRatio = {
+  'en': 168 / 250,
+  'id': 192 / 250,
+  'tr': 192 / 250,
+};
+
+/// Fallback untuk locale yang memakai berkas Indonesia.
+const double _gpArtworkHeightRatioDefault = 192 / 250;
+
+/// Rasio tinggi artwork berkas badge untuk [languageCode].
+double gpArtworkHeightRatio(String languageCode) =>
+    _gpArtworkHeightRatio[languageCode] ?? _gpArtworkHeightRatioDefault;
+
+/// Rasio KOTAK aset (646/250), sudah termasuk padding transparannya.
+///
+/// Kotaknya diberi ukuran pasti, bukan diserahkan pada gambar: `Image` baru
+/// punya ukuran setelah asetnya selesai di-decode, jadi tanpa ini badge-nya
+/// sempat berukuran 0x0 dan tata letak kartu bergeser saat gambar muncul.
+const double kPlayBadgeBoxRatio = 646 / 250;
+
+/// Clear space wajib: seperempat tinggi badge di semua sisi.
+const double kPlayBadgeClearSpace = kPlayBadgeArtworkHeight / 4;
+
+/// Badge "Dapatkan di Google Play" dari aset RESMI Google.
+///
+/// Dulu digambar sendiri (Icons.play_arrow + dua baris teks). Itu melanggar
+/// aturan badge Google: "jangan ubah warna, proporsi, spasi, atau aspek apa
+/// pun", dan bentuknya memang beda — rasio 5,4:1 sementara aset resmi 3,365:1,
+/// dengan logo play berwarna yang tidak mungkin ditiru Icons.
+///
+/// Asetnya dari domain Google (`play.google.com/intl/<locale>/badges/...`),
+/// satu berkas per bahasa dan TIDAK diubah: tidak diskalakan non-proporsional,
+/// tidak diwarnai ulang, tidak diberi efek.
 class GooglePlayBadge extends StatelessWidget {
-  final double compact;
-  const GooglePlayBadge({super.key, this.compact = 1});
+  /// Tinggi ARTWORK yang diinginkan. Default = ambang minimum Google.
+  final double height;
+
+  const GooglePlayBadge({super.key, this.height = kPlayBadgeArtworkHeight});
+
+  /// Aset resmi per locale. Melayu memakai berkas Indonesia: Google tidak
+  /// menerbitkan badge Melayu, dan berkasnya byte-identik dengan versi
+  /// Indonesia.
+  static String assetFor(String languageCode) => switch (languageCode) {
+    'en' => 'assets/images/gp_badge/en.png',
+    'tr' => 'assets/images/gp_badge/tr.png',
+    // id + ms (+ locale lain yang belum punya badge sendiri)
+    _ => 'assets/images/gp_badge/id.png',
+  };
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 10 * compact,
-        vertical: 6 * compact,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.circular(6 * compact),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.play_arrow, color: Colors.white, size: 18 * compact),
-          const SizedBox(width: 5),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'GET IT ON',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 6 * compact,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.8,
-                ),
-              ),
-              Text(
-                'Google Play',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12 * compact,
-                  fontWeight: FontWeight.w800,
-                  height: 1.1,
-                ),
-              ),
-            ],
-          ),
-        ],
+    // Badge ikut bahasa aplikasi, sama seperti teks kartunya.
+    final locale = Localizations.localeOf(context).languageCode;
+    final asset = assetFor(locale);
+    // Tinggi kotak DITURUNKAN dari tinggi artwork yang diinginkan, memakai
+    // padding berkas yang bersangkutan.
+    final boxHeight = height / gpArtworkHeightRatio(locale);
+    return SizedBox(
+      height: boxHeight,
+      width: boxHeight * kPlayBadgeBoxRatio,
+      child: Image.asset(
+        asset,
+        fit: BoxFit.contain,
+        // Tanpa ini Flutter memakai filter low-res dan tepi hurufnya bergerigi
+        // di hasil ekspor kartu.
+        filterQuality: FilterQuality.high,
+        alignment: Alignment.centerLeft,
+        // Badge tidak boleh gagal diam-diam: kalau asetnya hilang, kartunya
+        // tetap harus terender (dan jelas ada yang salah).
+        errorBuilder: (_, __, ___) => Icon(
+          Icons.android,
+          size: height,
+          color: Colors.white,
+        ),
       ),
     );
   }
 }
 
-/// Footer kartu: badge Google Play + nama app. Satu sumber supaya kedua kartu
-/// share memakai branding yang sama persis.
+/// Footer kartu: badge Google Play RESMI + nama app.
+///
+/// Dulu badge-nya bikinan sendiri dan di sebelahnya ditulis "Google Play" lagi.
+/// Sekarang badge resmi sudah memuat tulisan itu, jadi yang ditambahkan hanya
+/// identitas app-nya. Clear space badge dijaga seperempat tinggi badge (aturan
+/// Google) lewat [kPlayBadgeClearSpace].
 class ShareCardFooter extends StatelessWidget {
   final double s;
   final double q;
   final Color fg;
   final Color sub;
+
+  /// Tinggi artwork badge. Dinaikkan oleh pemanggil kalau ruangnya cukup.
+  final double badgeHeight;
 
   const ShareCardFooter({
     super.key,
@@ -517,43 +568,52 @@ class ShareCardFooter extends StatelessWidget {
     required this.q,
     required this.fg,
     required this.sub,
+    this.badgeHeight = kPlayBadgeArtworkHeight,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        GooglePlayBadge(compact: 0.85 * s),
-        SizedBox(width: 10 * s),
-        Flexible(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Muslim Leveling',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 12 * q,
-                  fontWeight: FontWeight.w800,
-                  color: fg,
+    return Padding(
+      // Clear space: seperempat tinggi badge di semua sisi, di atas dan
+      // sekeliling badge.
+      padding: EdgeInsets.only(
+        top: kPlayBadgeClearSpace,
+        bottom: kPlayBadgeClearSpace,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          GooglePlayBadge(height: badgeHeight),
+          SizedBox(width: 10 * s + kPlayBadgeClearSpace),
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Muslim Leveling',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 12 * q,
+                    fontWeight: FontWeight.w800,
+                    color: fg,
+                  ),
                 ),
-              ),
-              Text(
-                'Level Up Iman',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 8 * q,
-                  color: sub.withValues(alpha: 0.7),
+                Text(
+                  'Level Up Iman',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 8 * q,
+                    color: sub.withValues(alpha: 0.7),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -171,7 +171,16 @@ class _QShareCard extends StatelessWidget {
                 ),
                 SizedBox(height: 14 * s),
                 // ── Footer: GP badge + nama apps (kit) ──
-                ShareCardFooter(s: s, q: q, fg: fg, sub: sub),
+                ShareCardFooter(
+                  s: s,
+                  q: q,
+                  fg: fg,
+                  sub: sub,
+                  // Dibiarkan di ambang minimum Google (28dp artwork) di
+                  // SEMUA ukuran kartu: mengerdilkannya demi ruang akan
+                  // melanggar syarat yang jadi alasan badge ini diganti.
+                  badgeHeight: kPlayBadgeArtworkHeight,
+                ),
               ],
             ),
           ),
