@@ -3600,4 +3600,11 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get contentNoteTurkish => 'Türkçe Metin';
+
+  @override
+  String get doaSearchHint => 'Dua ara…';
+
+  @override
+  String get doaSearchEmpty =>
+      'Dua bulunamadı. Başka bir kelime deneyin, örn. uyku, borç veya yolculuk.';
 }

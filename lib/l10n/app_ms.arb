@@ -1070,5 +1070,7 @@
   "doaEmptyGroups": "Belum ada doa untuk dipaparkan. Cuba muat semula.",
   "doaShareFailed": "Gagal berkongsi doa. Cuba lagi.",
   "qiblaSkinChange": "Tukar gaya",
-  "contentNoteTurkish": "Teks dalam Bahasa Turki"
+  "contentNoteTurkish": "Teks dalam Bahasa Turki",
+  "doaSearchHint": "Cari doa…",
+  "doaSearchEmpty": "Tiada doa ditemui. Cuba kata lain, cth. tidur, hutang, atau perjalanan."
 }

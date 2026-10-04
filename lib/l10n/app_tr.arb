@@ -1070,5 +1070,7 @@
   "doaEmptyGroups": "Gösterilecek dua yok. Yeniden yüklemeyi dene.",
   "doaShareFailed": "Dua paylaşılamadı. Tekrar dene.",
   "qiblaSkinChange": "Stili değiştir",
-  "contentNoteTurkish": "Türkçe Metin"
+  "contentNoteTurkish": "Türkçe Metin",
+  "doaSearchHint": "Dua ara…",
+  "doaSearchEmpty": "Dua bulunamadı. Başka bir kelime deneyin, örn. uyku, borç veya yolculuk."
 }

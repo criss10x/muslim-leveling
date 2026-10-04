@@ -1070,5 +1070,7 @@
   "doaEmptyGroups": "No duas to show yet. Try reloading.",
   "doaShareFailed": "Couldn't share the dua. Try again.",
   "qiblaSkinChange": "Change style",
-  "contentNoteTurkish": "Text in Turkish"
+  "contentNoteTurkish": "Text in Turkish",
+  "doaSearchHint": "Search dua…",
+  "doaSearchEmpty": "No dua found. Try another word, e.g. sleep, debt, or travel."
 }

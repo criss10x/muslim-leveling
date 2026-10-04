@@ -3575,4 +3575,11 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get contentNoteTurkish => 'Text in Turkish';
+
+  @override
+  String get doaSearchHint => 'Search dua…';
+
+  @override
+  String get doaSearchEmpty =>
+      'No dua found. Try another word, e.g. sleep, debt, or travel.';
 }

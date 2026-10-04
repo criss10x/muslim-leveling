@@ -96,11 +96,40 @@ class _DoaScreenState extends State<DoaScreen> {
   List<(String, int)>? _groups;
   String? _error;
 
+  /// Pencarian lokal: kata kunci → daftar doa dari cache (tanpa request).
+  ///
+  /// Hasil ditampilkan LANGSUNG sebagai daftar doa (bukan menyaring nama grup)
+  /// supaya satu ketikan langsung sampai ke doa yang dicari, dan label grup
+  /// di tiap kartu menunjukkan asalnya. Menyaring grup akan menyembunyikan 227
+  /// doa di balik 44 nama kategori.
+  final _searchCtrl = TextEditingController();
+  List<DoaItem>? _results;
+
   @override
   void initState() {
     super.initState();
+    // Tanpa listener, suffixIcon (X) tidak muncul saat mengetik — kondisi
+    // text.isNotEmpty hanya dievaluasi di build.
+    _searchCtrl.addListener(() {
+      final q = _searchCtrl.text;
+      // Filter di memori: 227 baris, tak perlu debounce.
+      if (mounted) setState(() => _results = doaApi.search(q));
+    });
     _load();
   }
+
+  @override
+  void dispose() {
+    _searchCtrl.dispose();
+    super.dispose();
+  }
+
+  void _clearSearch() {
+    _searchCtrl.clear();
+    setState(() => _results = null);
+  }
+
+  bool get _searching => _searchCtrl.text.trim().isNotEmpty;
 
   Future<void> _load() async {
     setState(() => _error = null);
@@ -133,6 +162,7 @@ class _DoaScreenState extends State<DoaScreen> {
               title: l10n.homeQuickDoa,
               meta: total == null ? null : l10n.doaCount('$total'),
             ),
+            _searchField(l10n),
             Expanded(child: _content(l10n, groups)),
           ],
         ),
@@ -140,7 +170,107 @@ class _DoaScreenState extends State<DoaScreen> {
     );
   }
 
-  /// Isi level 1: daftar grup, atau status memuat/error/kosong.
+  /// Kotak pencarian level 1. Hasil muncul saat mengetik, tanpa request.
+  Widget _searchField(AppL10n l10n) {
+    // Sebelum katalog termuat, tak ada yang bisa dicari; menampilkan kotak yang
+    // selalu kosong hasilnya lebih membingungkan daripada tidak ada kotak.
+    if (_groups == null) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+          AppSpacing.md, 0, AppSpacing.md, AppSpacing.sm),
+      child: TextField(
+        controller: _searchCtrl,
+        textInputAction: TextInputAction.search,
+        style: AppText.bodyMd().copyWith(color: AppColors.onBackground),
+        decoration: InputDecoration(
+          hintText: l10n.doaSearchHint,
+          hintStyle:
+              AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
+          prefixIcon:
+              Icon(AppIcons.search, size: 18, color: AppColors.onSurfaceVariant),
+          suffixIcon: _searchCtrl.text.isEmpty
+              ? null
+              : IconButton(
+                  icon: Icon(AppIcons.close,
+                      size: 18, color: AppColors.onSurfaceVariant),
+                  onPressed: _clearSearch,
+                ),
+          filled: true,
+          fillColor: AppColors.surfaceContainerLow,
+          isDense: true,
+          contentPadding: const EdgeInsets.symmetric(vertical: 12),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppRadius.pill),
+            borderSide: BorderSide.none,
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Kartu hasil pencarian: nama doa + label grup (asalnya) + preview Arab.
+  ///
+  /// Bedanya dari kartu daftar grup: tanpa nomor urut (urutan baca tak bermakna
+  /// di hasil pencarian) tapi dengan nama grup, karena hasilnya melintasi
+  /// kategori. Tap langsung ke detail — user sudah tahu doa mana yang dicari,
+  /// memaksanya lewat level 2 hanya menambah satu langkah.
+  Widget _doaResultCard(DoaItem d) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+      child: PressableScale(
+        onTap: () => Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => DoaDetailScreen(doa: d),
+        )),
+        child: FlatCard(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(AppRadius.lg),
+                ),
+                child: Icon(_grupIcon(d.grup),
+                    size: 20, color: AppColors.primary),
+              ),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(d.nama,
+                        style: AppText.bodyLg()
+                            .copyWith(color: AppColors.onBackground)),
+                    const SizedBox(height: 2),
+                    Text(d.grup,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppText.labelCapsSm()
+                            .copyWith(color: AppColors.onSurfaceVariant)),
+                    const SizedBox(height: AppSpacing.base),
+                    Text(
+                      d.ar,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.right,
+                      textDirection: TextDirection.rtl,
+                      style: AppText.arabic(16, height: 1.9)
+                          .copyWith(color: AppColors.onSurfaceVariant),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Isi level 1: hasil pencarian, daftar grup, atau status memuat/error/kosong.
   Widget _content(AppL10n l10n, List<(String, int)>? groups) {
     final error = _error;
     if (error != null && groups == null) {
@@ -148,6 +278,32 @@ class _DoaScreenState extends State<DoaScreen> {
     }
     if (groups == null) {
       return Center(child: CircularProgressIndicator(color: AppColors.primary));
+    }
+    // Mode pencarian menggantikan daftar grup (bukan menumpuk di atasnya):
+    // satu tempat scroll, dan hasil langsung terlihat tanpa menggulir melewati
+    // 44 kategori.
+    if (_searching) {
+      final results = _results ?? const <DoaItem>[];
+      if (results.isEmpty) {
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            child: Text(
+              l10n.doaSearchEmpty,
+              textAlign: TextAlign.center,
+              style:
+                  AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
+            ),
+          ),
+        );
+      }
+      return ListView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.fromLTRB(
+            AppSpacing.md, 0, AppSpacing.md, 100),
+        itemCount: results.length,
+        itemBuilder: (_, i) => _doaResultCard(results[i]),
+      );
     }
     // Sumber bisa menjawab 200 dengan daftar kosong; itu bukan error, tapi
     // juga bukan daftar. Tanpa cabang ini layar tampil benar-benar kosong.

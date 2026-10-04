@@ -3570,4 +3570,11 @@ class AppL10nId extends AppL10n {
 
   @override
   String get contentNoteTurkish => 'Teks dalam Bahasa Turki';
+
+  @override
+  String get doaSearchHint => 'Cari doa…';
+
+  @override
+  String get doaSearchEmpty =>
+      'Tidak ada doa ditemukan. Coba kata lain, mis. tidur, hutang, atau perjalanan.';
 }
