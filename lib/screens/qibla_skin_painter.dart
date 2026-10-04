@@ -1,5 +1,19 @@
 part of 'qibla_screen.dart';
 
+/// Sudut layar sebuah label mawar kompas. [baseAngle] 0 = utara, 90 = timur.
+/// [azimuth] = arah yang sedang dihadapi perangkat (0 = utara).
+///
+/// Mawar kompas WAJIB ikut berputar saat perangkat diputar. Tanpa suku
+/// `- azimuth`, huruf N selalu menempel di atas layar, jadi utara menjadi
+/// bohong begitu HP tidak menghadap utara; jarum kiblat pun tampak menunjuk
+/// ke atas (terbaca "ke utara") dan angka derajatnya tidak bisa dipercaya.
+///
+/// Kasus uji: menghadap timur (azimuth 90) -> utara ada di KIRI layar (270),
+/// karena utara berada di sisi kiri badan saat kita menghadap timur.
+@visibleForTesting
+double roseScreenAngle(double baseAngle, double azimuth) =>
+    (baseAngle - azimuth + 720) % 360;
+
 /// ── 5 Painter skin kiblat — satu API, lima wajah ──
 /// Semua painter menerima azimuth + qiblaBearing + glow kristal + spec pattern
 /// warna via [QiblaSkinSpec]. Setiap painter menumpuk render dialnya sendiri
@@ -150,21 +164,6 @@ class _AntiquePainter extends BaseQiblaPainter {
     // Tick + kardinal serif
     _paintCardinals(canvas, center, radius, serif: true,
         labels: const ['N', 'E', 'S', 'W']);
-
-    // Jarum crimson UTARA — bukan indikator kiblat, hanya arah kompas alam.
-    // Critique impeccable: kiblat tunggal via panah origami, bukan via jarum.
-    final northPaint = Paint()
-      ..color = spec.needleTailNorth!.withValues(alpha: 0.8);
-    canvas.save();
-    canvas.translate(center.dx, center.dy);
-    final tip0 = -(radius - 70);
-    final pathN = Path()
-      ..moveTo(0, tip0)
-      ..lineTo(-6, tip0 + 24)
-      ..lineTo(6, tip0 + 24)
-      ..close();
-    canvas.drawPath(pathN, northPaint);
-    canvas.restore();
 
     // Panah kiblat origami IVORY + outline bronze — satu-satunya penunjuk.
     final relativeAngle = qiblaBearing - azimuth;
@@ -360,7 +359,8 @@ abstract class BaseQiblaPainter extends CustomPainter {
     for (var i = 0; i < 360; i += 15) {
       final isMain = i % 90 == 0;
       final isMid = i % 45 == 0;
-      final angle = (i - 90) * math.pi / 180;
+      // Angka derajat di dial harus ikut berputar bersama mawar kompas.
+      final angle = (roseScreenAngle(i.toDouble(), azimuth) - 90) * math.pi / 180;
       final len = isMain ? 14.0 : (isMid ? 10.0 : 6.0);
       final startX = math.cos(angle) * radius;
       final startY = math.sin(angle) * radius;
@@ -386,7 +386,11 @@ abstract class BaseQiblaPainter extends CustomPainter {
     for (final (label, angle, emph) in [
       ('N', 0, true), ('E', 90, false), ('S', 180, false), ('W', 270, false)
     ]) {
-      final radAngle = (angle - 90) * math.pi / 180;
+      // Huruf utara/timur/selatan/barat ikut berputar (lihat roseScreenAngle).
+      // Sebelumnya tetap di posisi layar, jadi "N" selalu di atas walau HP
+      // menghadap timur.
+      final radAngle =
+          (roseScreenAngle(angle.toDouble(), azimuth) - 90) * math.pi / 180;
       final textX = math.cos(radAngle) * (radius - 30);
       final textY = math.sin(radAngle) * (radius - 30);
       final tp = TextPainter(
@@ -470,11 +474,14 @@ abstract class BaseQiblaPainter extends CustomPainter {
 
     canvas.restore();
 
-    // northTail kalau ada (dial C: crimson utara digambar saat painter C)
+    // northTail kalau ada (dial B/C) — panah penanda UTARA sejati.
+    // Ikut berputar bersama mawar: sebelumnya selalu tergambar di atas layar,
+    // jadi menunjuk ke barat lautnya salah begitu HP tidak menghadap utara.
     if (northTail != null) {
-      final northPaint = Paint()..color = northTail;
       canvas.save();
       canvas.translate(center.dx, center.dy);
+      canvas.rotate(roseScreenAngle(0, azimuth) * math.pi / 180);
+      final northPaint = Paint()..color = northTail;
       final path = Path()
         ..moveTo(0, -(radius - 70))
         ..lineTo(-6, -(radius - 46))
