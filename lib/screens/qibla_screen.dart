@@ -132,6 +132,12 @@ class QiblaScreen extends StatefulWidget {
   State<QiblaScreen> createState() => _QiblaScreenState();
 }
 
+/// Ukuran tombol aksi di header (kembali + ganti gaya kompas).
+///
+/// 48dp = ambang target sentuh Android; sebelumnya 40dp, jadi keduanya di bawah
+/// ambang. Dipakai satu konstanta supaya kedua tombol mustahil menyimpang.
+const double _headerActionSize = 48;
+
 class _QiblaScreenState extends State<QiblaScreen>
     with SingleTickerProviderStateMixin {
   // ponytail: dibaca sekali per build; semua sub-builder pakai ini.
@@ -348,9 +354,14 @@ class _QiblaScreenState extends State<QiblaScreen>
                       delay: const Duration(milliseconds: 360),
                       child: _statChips(l10n),
                     ),
-                    const SizedBox(height: AppSpacing.sm),
+                    // Caption meta diberi jarak lebih besar dari jarak
+                    // antar-kartu: jarak yang seragam membuat caption terbaca
+                    // sebagai bagian kelompok data, bukan keterangan di bawahnya.
+                    const SizedBox(height: AppSpacing.md),
                     Text(
                       _l10n.qiblaCalibrationHint,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
                       style: AppText.bodyMd().copyWith(
                         color: AppColors.onSurfaceVariant,
@@ -376,8 +387,8 @@ class _QiblaScreenState extends State<QiblaScreen>
           PressableScale(
             onTap: () => Navigator.pop(context),
             child: Container(
-              width: 40,
-              height: 40,
+              width: _headerActionSize,
+              height: _headerActionSize,
               decoration: BoxDecoration(
                 color: AppColors.surfaceContainerHigh,
                 shape: BoxShape.circle,
@@ -388,50 +399,7 @@ class _QiblaScreenState extends State<QiblaScreen>
                   color: AppColors.onSurface, size: 20),
             ),
           ),
-          const SizedBox(width: AppSpacing.md),
-          // Pintu masuk ganti skin. Dulu hanya emoji 🎨 + nama skin, sehingga
-          // terbaca sebagai badge status, bukan tombol: user harus menebak
-          // bahwa label itu bisa ditekan. Sekarang ada kata kerja + chevron.
-          Semantics(
-            button: true,
-            label: l10n.qiblaSkinChange,
-            child: PressableScale(
-              onTap: () => showQiblaSkinPicker(context),
-              child: Container(
-                height: 40,
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceContainerHigh,
-                  borderRadius: BorderRadius.circular(AppRadius.pill),
-                  border: Border.all(
-                      color: AppColors.primary.withValues(alpha: 0.35)),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Ikon app, bukan emoji: emoji render berbeda-beda per HP
-                    // dan tidak ikut warna tema.
-                    Icon(AppIcons.paletteOutlined,
-                        size: 15, color: AppColors.primary),
-                    const SizedBox(width: 6),
-                    Flexible(
-                      child: Text(
-                        l10n.qiblaSkinChange,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppText.labelCapsSm()
-                            .copyWith(color: AppColors.primary),
-                      ),
-                    ),
-                    const SizedBox(width: 2),
-                    Icon(AppIcons.chevronRight,
-                        size: 14, color: AppColors.primary),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: AppSpacing.md),
+          const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -444,12 +412,49 @@ class _QiblaScreenState extends State<QiblaScreen>
                 Text(
                   l10n.qiblaCityDistance(
                     widget.cityName, _distance.toStringAsFixed(0)),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: AppText.bodyMd().copyWith(
                     color: AppColors.onSurfaceVariant,
                     fontSize: 11,
                   ),
                 ),
               ],
+            ),
+          ),
+          // Ganti gaya kompas = AKSI, jadi tempatnya trailing app bar, bukan
+          // diapit di antara tombol kembali dan judul. Sebelumnya pil berlabel
+          // selebar 161dp duduk di situ dan merebut ~45% lebar header: judul
+          // "Arah Kiblat" (butuh 140,6dp) terpaksa membungkus dua baris di
+          // 360dp dan terpotong di 320dp. Ikon saja membuatnya hemat ruang
+          // tanpa menambah tinggi.
+          //
+          // Label tetap dibawa Semantics + tooltip supaya aksi ini tidak jadi
+          // teka-teki ikon: pengguna yang belum tahu isi ikon palet tetap
+          // mendapat namanya saat menekan lama dan lewat TalkBack.
+          Semantics(
+            button: true,
+            label: l10n.qiblaSkinChange,
+            child: Tooltip(
+              message: l10n.qiblaSkinChange,
+              child: PressableScale(
+                onTap: () => showQiblaSkinPicker(context),
+                child: Container(
+                  // 48dp: ambang target sentuh Android. Sebelumnya 40.
+                  width: _headerActionSize,
+                  height: _headerActionSize,
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceContainerHigh,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                        color: AppColors.primary.withValues(alpha: 0.35)),
+                  ),
+                  // Ikon app, bukan emoji: emoji render berbeda-beda per HP dan
+                  // tidak ikut warna tema.
+                  child: Icon(AppIcons.paletteOutlined,
+                      size: 20, color: AppColors.primary),
+                ),
+              ),
             ),
           ),
         ],
@@ -504,10 +509,26 @@ class _QiblaScreenState extends State<QiblaScreen>
       animation: _pulse,
       builder: (_, __) => ListenableBuilder(
         listenable: qiblaSkinNotifier,
-        builder: (_, __) => SizedBox(
-          width: 300,
-          height: 300,
-          child: CustomPaint(painter: painter),
+        builder: (_, __) => LayoutBuilder(
+          // Kompas TIDAK BOLEH terpotong. Dulu `SizedBox(300x300)` tetap:
+          // di layar 360x640 ia dirender 300x210 dan di 320x568 hilang sama
+          // sekali (0x0), jadi dialnya terpangkas diam-diam.
+          //
+          // Dial digambar dengan koordinat pusat + jari-jari, jadi ia W AJIB
+          // persegi: kalau tingginya dipaksa lebih kecil, isinya meluber keluar
+          // kotak. Karena itu ukurannya diambil dari sisi terpendek ruang yang
+          // tersedia (mentok 300), bukan dari tingginya saja.
+          builder: (context, constraints) {
+            final side = math.min(
+              300.0,
+              math.min(constraints.maxWidth, constraints.maxHeight),
+            );
+            return SizedBox(
+              width: side,
+              height: side,
+              child: CustomPaint(painter: painter),
+            );
+          },
         ),
       ),
     );

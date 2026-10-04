@@ -12,6 +12,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:muslim_leveling/screens/qibla_screen.dart';
 import 'package:muslim_leveling/services/qibla_skin_service.dart';
+import 'package:muslim_leveling/theme/app_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'helpers/app_wrap.dart';
@@ -99,10 +100,29 @@ void main() {
       await tester.pump(const Duration(milliseconds: 200));
     }
 
-    // Label aksi (bukan sekadar nama skin) harus ada di header.
-    final entry = find.text('Ganti tampilan');
-    expect(entry, findsOneWidget,
-        reason: 'pintu masuk harus menyebut aksinya, bukan cuma nama skin');
+    // Pintu masuk sekarang IKON di trailing header (ikon saja), bukan pil
+    // berlabel: pil 161dp dulu merebut ~45% lebar header sampai judul "Arah
+    // Kiblat" terpotong. Yang harus tetap dijaga: aksinya tetap TERBACA, bukan
+    // jadi teka-teki ikon. Syarat itu pindah ke Semantics + tooltip.
+    final entry = find.byIcon(AppIcons.paletteOutlined);
+    expect(entry, findsOneWidget, reason: 'pintu masuk ganti skin harus ada');
+
+    final labels = tester
+        .widgetList<Semantics>(find.byType(Semantics))
+        .map((s) => s.properties.label)
+        .whereType<String>();
+    expect(labels.any((l) => l == 'Ganti tampilan'), isTrue,
+        reason: 'pintu masuk harus menyebut aksinya lewat label a11y, '
+            'bukan cuma ikon palet tanpa nama');
+
+    // Tooltip = jalur discoverability untuk pengguna yang belum tahu ikonnya.
+    expect(
+      tester
+          .widgetList<Tooltip>(find.byType(Tooltip))
+          .any((t) => t.message == 'Ganti tampilan'),
+      isTrue,
+      reason: 'tooltip dengan nama aksi harus ada',
+    );
 
     await tester.tap(entry);
     for (var i = 0; i < 6; i++) {
