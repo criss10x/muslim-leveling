@@ -6471,6 +6471,42 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Terjemahan Inggris: {source}'**
   String doaEnglishRef(String source);
+
+  /// No description provided for @qsModePhoto.
+  ///
+  /// In id, this message translates to:
+  /// **'Foto Saya'**
+  String get qsModePhoto;
+
+  /// No description provided for @qsPhotoChoose.
+  ///
+  /// In id, this message translates to:
+  /// **'Pilih foto'**
+  String get qsPhotoChoose;
+
+  /// No description provided for @qsPhotoChange.
+  ///
+  /// In id, this message translates to:
+  /// **'Ganti foto'**
+  String get qsPhotoChange;
+
+  /// No description provided for @qsPhotoChosen.
+  ///
+  /// In id, this message translates to:
+  /// **'Foto terpilih'**
+  String get qsPhotoChosen;
+
+  /// No description provided for @qsScrimLabel.
+  ///
+  /// In id, this message translates to:
+  /// **'Gelap'**
+  String get qsScrimLabel;
+
+  /// No description provided for @qsPhotoFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal mengambil foto. Coba lagi.'**
+  String get qsPhotoFailed;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
@@ -14,7 +16,17 @@ import '../theme/app_theme.dart';
 /// Isi kartu TIDAK di sini: setiap layar merakit kontennya sendiri
 /// (ayat = Arab + terjemahan, Asma = Arab + translit + arti).
 
-enum ShareBgKind { solid, gradient, esthetic }
+enum ShareBgKind {
+  solid,
+  gradient,
+
+  /// Foto bawaan app (9 preset di bawah).
+  esthetic,
+
+  /// Foto milik user sendiri. Tidak ada di [shareBgPresets]: isinya dibuat saat
+  /// dipakai dari file yang tersimpan, karena tiap user fotonya beda.
+  custom,
+}
 
 /// Satu preset background. Label TIDAK disimpan: 17 preset hanya punya 3 nilai
 /// label (solid/gradasi/estetik), jadi menyimpannya 17x berarti 17 tempat untuk
@@ -26,8 +38,13 @@ class ShareBgPreset {
   final Color fg;
   final Color sub;
 
-  /// Opasitas dasar scrim gelap untuk preset estetik: foto terang butuh nilai
+  /// Opasitas dasar scrim gelap untuk preset foto: foto terang butuh nilai
   /// tinggi agar teks putih terbaca, foto gelap boleh rendah. 0 = tanpa scrim.
+  ///
+  /// Nilai ini patokan AWAL saja. User boleh menaikkannya lewat pengatur
+  /// "Gelap" di kontrol: dulu angka ini dipatok per foto dan tidak bisa
+  /// disentuh, sehingga foto terang yang teksnya kurang kontras tidak bisa
+  /// ditolong user.
   final double scrim;
 
   const ShareBgPreset(
@@ -39,6 +56,39 @@ class ShareBgPreset {
     this.scrim = 0,
   });
 }
+
+/// Scrim awal untuk foto milik user. 0,45: cukup gelap agar teks putih lolos
+/// kontras di atas foto terang, tanpa membuat foto gelap jadi hitam.
+const double kCustomPhotoScrim = 0.45;
+
+/// Batas pengatur "Gelap". 0,95 = foto praktis hitam, sudah tidak ada gunanya
+/// digeser lebih jauh.
+const double kScrimMax = 0.95;
+
+/// Preset untuk foto user. Dibuat saat dipakai (bukan di [shareBgPresets])
+/// karena isinya file milik user, bukan aset app.
+ShareBgPreset customPhotoPreset(File file, {double scrim = kCustomPhotoScrim}) =>
+    ShareBgPreset(
+      Icons.photo,
+      ShareBgKind.custom,
+      BoxDecoration(
+        // fit cover: kartu share punya 3 rasio berbeda, dan foto user bisa
+        // rasio apa saja. cover memenuhi kartu tanpa distorsi; konsekuensinya
+        // sisi yang berlebih dipotong.
+        //
+        // FilterQuality.medium: foto dikecilkan ke 1440px tapi tetap turun
+        // resolusi saat digambar ke kartu, dan low (default) membuat hasil
+        // ekspor bergerigi di tepi kontras tinggi.
+        image: DecorationImage(
+          image: FileImage(file),
+          fit: BoxFit.cover,
+          filterQuality: FilterQuality.medium,
+        ),
+      ),
+      shareFg,
+      shareSub,
+      scrim: scrim,
+    );
 
 // fg = teks utama, sub = teks sekunder -> putih di background gelap.
 const shareFg = Colors.white;
@@ -279,12 +329,42 @@ const int kShareDefaultPreset = 4;
 /// Lebar kartu tetap; tinggi mengikuti rasio terpilih.
 const double kShareCardWidth = 340;
 
+/// Label kit dari l10n, dibungkus kelas kecil supaya kit tidak perlu tahu tipe
+/// `AppL10n` dan tetap bisa dirender tes tanpa MaterialApp.
+class ShareCardKitL10n {
+  final String photoLabel;
+  final String choosePhoto;
+  final String changePhoto;
+  final String photoChosen;
+  final String scrimLabel;
+
+  const ShareCardKitL10n({
+    required this.photoLabel,
+    required this.choosePhoto,
+    required this.changePhoto,
+    required this.photoChosen,
+    required this.scrimLabel,
+  });
+
+  static ShareCardKitL10n of(BuildContext context) {
+    final l = AppL10n.of(context);
+    return ShareCardKitL10n(
+      photoLabel: l.qsModePhoto,
+      choosePhoto: l.qsPhotoChoose,
+      changePhoto: l.qsPhotoChange,
+      photoChosen: l.qsPhotoChosen,
+      scrimLabel: l.qsScrimLabel,
+    );
+  }
+}
+
 /// Label mode dari l10n — satu tempat, jadi tidak bisa drift dari ARB.
 String shareModeLabel(BuildContext context, ShareBgKind kind) =>
     switch (kind) {
       ShareBgKind.solid => AppL10n.of(context).qsModeSolid,
       ShareBgKind.gradient => AppL10n.of(context).qsModeGradient,
       ShareBgKind.esthetic => AppL10n.of(context).qsModeEsthetic,
+      ShareBgKind.custom => AppL10n.of(context).qsModePhoto,
     };
 
 /// Ingat preset terakhir per mode, supaya ganti mode tidak mereset pilihan
@@ -294,19 +374,81 @@ class SharePresetMemory {
   final Map<ShareBgKind, int> _last = {ShareBgKind.gradient: kShareDefaultPreset};
   int _index = kShareDefaultPreset;
 
-  int get index => _index;
-  ShareBgPreset get preset => shareBgPresets[_index];
+  /// Mode foto-user sedang terpilih. Disimpan terpisah dari [_index] karena
+  /// preset foto user TIDAK ada di [shareBgPresets] (fotonya milik user).
+  bool _custom = false;
 
-  void selectPreset(ShareBgPreset p) => _index = shareBgPresets.indexOf(p);
+  /// Foto yang sudah dipilih user, null kalau belum pernah.
+  File? customPhoto;
+
+  /// Kegelapan yang dipilih user lewat pengatur "Gelap". null = ikut patokan
+  /// preset. Disimpan sebagai nilai PENUH, bukan selisih dari patokan, supaya
+  /// user bisa MURNI meredupkannya juga: 9 foto bawaan punya patokan keras
+  /// (0,25 sampai 0,78) yang dipilih sepihak oleh app, dan sebagian foto
+  /// terang butuh lebih gelap sementara yang gelap justru butuh lebih terang.
+  double? scrimOverride;
+
+  int get index => _index;
+  bool get isCustom => _custom;
+
+  ShareBgPreset? get _customPreset =>
+      customPhoto == null ? null : customPhotoPreset(customPhoto!);
+
+  /// Preset yang sedang dipakai.
+  ///
+  /// Mode foto user TANPA foto jatuh ke preset default: memilih mode hanya
+  /// memindahkan pilihan, dan kartu harus tetap tergambar sebelum user sempat
+  /// memilih fotonya. Versi pertama memakai `_customPreset!` di sini dan
+  /// melempar `Null check operator used on a null value` begitu user menekan
+  /// chip "Foto Saya" lebih dulu.
+  ShareBgPreset get preset => _custom
+      ? (_customPreset ?? shareBgPresets[kShareDefaultPreset])
+      : shareBgPresets[_index];
+
+  /// Mode yang sedang dipilih. Beda dari `preset.kind` justru saat mode foto
+  /// user belum ada fotonya: pilihan tetap "foto saya" (agar pemilih foto dan
+  /// pengatur gelap muncul), sementara kartu memakai preset default.
+  ShareBgKind get kind =>
+      _custom ? ShareBgKind.custom : shareBgPresets[_index].kind;
+
+  /// Kegelapan yang BENAR-BENAR dipakai kartu. Pengatur "Gelap" menampilkan
+  /// angka ini supaya angka di slider sama dengan yang terlihat di kartu.
+  double get effectiveScrim => (scrimOverride ?? preset.scrim).clamp(0.0, 0.95);
+
+  void setEffectiveScrim(double v) => scrimOverride = v.clamp(0.0, 0.95);
+
+  void selectPreset(ShareBgPreset p) {
+    _custom = false;
+    // Patokan gelap itu milik preset, jadi pilihan user dibuang saat pindah
+    // preset. Membawanya ikut akan membuat foto berikutnya terbuka dengan
+    // kegelapan milik foto sebelumnya.
+    scrimOverride = null;
+    _index = shareBgPresets.indexOf(p);
+  }
+
+  void selectCustomPhoto(File f) {
+    customPhoto = f;
+    _custom = true;
+    scrimOverride = null;
+  }
 
   void selectKind(ShareBgKind kind) {
-    if (kind == preset.kind) return;
-    _last[preset.kind] = _index;
+    if (kind == this.kind) return;
+    // Mode foto-user tidak punya nomor preset, jadi tidak ada yang diingat.
+    if (!isCustom) _last[preset.kind] = _index;
+    if (kind == ShareBgKind.custom) {
+      _custom = true;
+      scrimOverride = null;
+      return;
+    }
+    _custom = false;
+    scrimOverride = null;
     _index = _last[kind] ?? shareBgPresets.indexWhere((p) => p.kind == kind);
   }
 
-  List<ShareBgPreset> presetsFor(ShareBgKind kind) =>
-      shareBgPresets.where((p) => p.kind == kind).toList();
+  List<ShareBgPreset> presetsFor(ShareBgKind kind) => kind == ShareBgKind.custom
+      ? [if (_customPreset != null) _customPreset!]
+      : shareBgPresets.where((p) => p.kind == kind).toList();
 }
 
 // ── Google Play badge (inline, tanpa aset) ────────────────────────
@@ -419,13 +561,16 @@ class ShareCardFooter extends StatelessWidget {
 /// Scrim gelap untuk preset estetik: foto terang butuh scrim kuat agar teks
 /// putih terbaca, foto gelap cukup lemah.
 class ShareScrim extends StatelessWidget {
-  final ShareBgPreset preset;
+  /// Kegelapan efektif 0..0,95. Diambil dari [SharePresetMemory.effectiveScrim]
+  /// supaya pengatur "Gelap" ikut terbaca; preset solid/gradasi bernilai 0
+  /// sehingga tidak tergambar sama sekali.
+  final double scrim;
 
-  const ShareScrim({super.key, required this.preset});
+  const ShareScrim({super.key, required this.scrim});
 
   @override
   Widget build(BuildContext context) {
-    if (preset.kind != ShareBgKind.esthetic || preset.scrim <= 0) {
+    if (scrim <= 0) {
       return const SizedBox.shrink();
     }
     return Positioned.fill(
@@ -437,11 +582,9 @@ class ShareScrim extends StatelessWidget {
             end: Alignment.bottomCenter,
             colors: [
               Colors.black.withValues(
-                alpha: (preset.scrim - 0.28).clamp(0.10, 0.95),
+                alpha: (scrim - 0.28).clamp(0.10, 0.95),
               ),
-              Colors.black.withValues(
-                alpha: preset.scrim.clamp(0.10, 0.95),
-              ),
+              Colors.black.withValues(alpha: scrim.clamp(0.10, 0.95)),
             ],
           ),
         ),
@@ -474,6 +617,9 @@ class ShareCardControls extends StatelessWidget {
   final double aspect;
   final ValueChanged<double> onAspectChanged;
 
+  /// Buka pemilih foto user (kamera/galeri) dan pasang hasilnya ke [memory].
+  final Future<void> Function() onPickPhoto;
+
   const ShareCardControls({
     super.key,
     required this.memory,
@@ -481,27 +627,43 @@ class ShareCardControls extends StatelessWidget {
     required this.contentChips,
     required this.aspect,
     required this.onAspectChanged,
+    required this.onPickPhoto,
   });
 
   @override
   Widget build(BuildContext context) {
-    final kind = memory.preset.kind;
+    // memory.kind, BUKAN preset.kind: saat mode foto user belum ada fotonya,
+    // preset jatuh ke default (kind-nya gradasi) padahal pilihan user adalah
+    // "foto saya" — memakai preset.kind membuat pemilih foto tidak muncul.
+    final kind = memory.kind;
     final presets = memory.presetsFor(kind);
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           // ── Mode background ──
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          //
+          // Wrap, bukan Row: sejak mode "Foto Saya" ditambahkan ada 4 chip, dan
+          // labelnya memanjang di beberapa bahasa (Inggris "Esthetic"/"My
+          // Photo", Turki "Fotoğrafım"). Row melaporkan "RenderFlex overflowed"
+          // di layar 420dp dan lebih parah lagi di HP 360dp; Wrap memindahkan
+          // chip yang tidak muat ke baris berikutnya.
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 8,
+            runSpacing: 4,
             children: [
               _modeChip(context, ShareBgKind.solid, Icons.circle),
               _modeChip(context, ShareBgKind.gradient, Icons.gradient),
               _modeChip(context, ShareBgKind.esthetic, Icons.image),
+              _modeChip(context, ShareBgKind.custom, Icons.photo),
             ],
           ),
           const SizedBox(height: 12),
           // ── Pilihan warna/gambar dalam mode terpilih ──
+          if (kind == ShareBgKind.custom)
+            _customPicker(context)
+          else
           Wrap(
             alignment: WrapAlignment.center,
             spacing: 8,
@@ -513,7 +675,8 @@ class ShareCardControls extends StatelessWidget {
                   label: presets.length == 1
                       ? shareModeLabel(context, presets[k].kind)
                       : '${shareModeLabel(context, presets[k].kind)} ${k + 1}',
-                  selected: shareBgPresets.indexOf(presets[k]) == memory.index,
+                  selected: !memory.isCustom &&
+                      shareBgPresets.indexOf(presets[k]) == memory.index,
                   child: InkWell(
                     onTap: () {
                       memory.selectPreset(presets[k]);
@@ -530,7 +693,9 @@ class ShareCardControls extends StatelessWidget {
                           height: 40,
                           decoration: presets[k].decoration.copyWith(
                             border:
-                                shareBgPresets.indexOf(presets[k]) == memory.index
+                                !memory.isCustom &&
+                                    shareBgPresets.indexOf(presets[k]) ==
+                                        memory.index
                                 ? Border.all(color: AppColors.primary, width: 2.5)
                                 : null,
                             borderRadius: BorderRadius.circular(12),
@@ -543,6 +708,59 @@ class ShareCardControls extends StatelessWidget {
               ],
             ],
           ),
+          // ── Pengatur gelap: hanya untuk background FOTO ──
+          //
+          // Warna solid dan gradasi sengaja tidak ikut: keduanya sudah jadi
+          // warna bersih (gradasi jade = identitas app), dan menaikkan
+          // kegelapan di sana sama saja mematikannya. Ini juga keputusan yang
+          // diminta user.
+          // Mode foto user TANPA foto belum punya gambar, dan kartunya jatuh ke
+          // preset default (gradasi). Menampilkan pengatur gelap di situ berarti
+          // menawarkan pengatur untuk warna bersih — persis yang dihindari.
+          if (kind == ShareBgKind.esthetic ||
+              (kind == ShareBgKind.custom && memory.customPhoto != null)) ...[
+            const SizedBox(height: 8),
+            // Satu baris saja: label di kiri, slider, persen di kanan. Versi
+            // pertama memakai ikon + label di baris terpisah di bawah, dan itu
+            // memakan ~20dp tinggi yang tidak ada gunanya di layar sempit.
+            Row(
+              children: [
+                SizedBox(
+                  width: 54,
+                  child: Text(
+                    ShareCardKitL10n.of(context).scrimLabel,
+                    style: AppText.bodyMd().copyWith(
+                      fontSize: 12,
+                      color: AppColors.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Slider(
+                    value: memory.effectiveScrim,
+                    max: kScrimMax,
+                    // Label a11y: tanpa ini TalkBack hanya bilang "slider".
+                    label: '${(memory.effectiveScrim * 100).round()}%',
+                    onChanged: (v) {
+                      memory.setEffectiveScrim(v);
+                      onChanged();
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: 38,
+                  child: Text(
+                    '${(memory.effectiveScrim * 100).round()}%',
+                    textAlign: TextAlign.end,
+                    style: AppText.bodyMd().copyWith(
+                      fontSize: 12,
+                      color: AppColors.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
           const SizedBox(height: 16),
           // ── Pilihan konten ──
           Row(
@@ -571,6 +789,55 @@ class ShareCardControls extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  /// Isi mode "foto saya": swatch foto yang sedang dipakai + tombol pilih/ganti.
+  ///
+  /// Tombolnya selalu tampil, bukan hanya saat belum ada foto: mengganti foto
+  /// adalah hal yang wajar dilakukan berkali-kali sampai dapat yang pas.
+  Widget _customPicker(BuildContext context) {
+    final l10n = ShareCardKitL10n.of(context);
+    final has = memory.customPhoto != null;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        if (memory.isCustom && has) ...[
+          Semantics(
+            selected: true,
+            label: l10n.photoChosen,
+            child: Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                border: Border.all(color: AppColors.primary, width: 2.5),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: Image.file(
+                memory.customPhoto!,
+                fit: BoxFit.cover,
+                // errorBuilder: file bisa sudah tidak ada (dibersihkan sistem).
+                // Tanpa ini kartu share melempar dan sheet-nya mati.
+                errorBuilder: (_, __, ___) => Icon(
+                  Icons.broken_image_outlined,
+                  color: AppColors.onSurfaceVariant,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+        ],
+        FilledButton.tonalIcon(
+          onPressed: () async {
+            await onPickPhoto();
+            onChanged();
+          },
+          icon: Icon(has ? Icons.swap_horiz : Icons.add_photo_alternate_outlined,
+              size: 18),
+          label: Text(has ? l10n.changePhoto : l10n.choosePhoto),
+        ),
+      ],
     );
   }
 
@@ -637,17 +904,15 @@ class ShareCardControls extends StatelessWidget {
   }
 
   Widget _modeChip(BuildContext context, ShareBgKind kind, IconData icon) {
-    final selected = memory.preset.kind == kind;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: InkWell(
-        onTap: () {
-          memory.selectKind(kind);
-          onChanged();
-        },
-        borderRadius: BorderRadius.circular(AppRadius.pill),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+    final selected = memory.kind == kind;
+    return InkWell(
+      onTap: () {
+        memory.selectKind(kind);
+        onChanged();
+      },
+      borderRadius: BorderRadius.circular(AppRadius.pill),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
             color: selected
                 ? AppColors.primary.withValues(alpha: 0.16)
@@ -661,12 +926,11 @@ class ShareCardControls extends StatelessWidget {
             children: [
               Icon(icon, size: 16, color: AppColors.primary),
               const SizedBox(width: 6),
-              Text(
-                shareModeLabel(context, kind),
-                style: AppText.bodyMd().copyWith(fontWeight: FontWeight.w600),
-              ),
-            ],
-          ),
+            Text(
+              shareModeLabel(context, kind),
+              style: AppText.bodyMd().copyWith(fontWeight: FontWeight.w600),
+            ),
+          ],
         ),
       ),
     );

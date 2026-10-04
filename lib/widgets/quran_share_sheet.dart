@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/quran_texts.g.dart';
 import '../services/quran_data.dart';
+import '../services/share_photo_service.dart';
 import '../theme/app_theme.dart';
 import 'share_card_kit.dart';
 
@@ -25,6 +26,10 @@ class _QShareCard extends StatelessWidget {
   final bool showTranslation;
   final Size cardSize;
 
+  /// Kegelapan efektif dari pengatur "Gelap". null = pakai patokan preset apa
+  /// adanya (dipakai preview statis & golden test).
+  final double? scrim;
+
   const _QShareCard({
     required this.surah,
     required this.ayah,
@@ -34,6 +39,7 @@ class _QShareCard extends StatelessWidget {
     this.showArabic = true,
     this.showTranslation = true,
     this.cardSize = const Size(340, 604),
+    this.scrim,
   });
 
   @override
@@ -56,7 +62,7 @@ class _QShareCard extends StatelessWidget {
       child: Stack(
         children: [
           // Scrim gelap untuk latar estetik — komponen bersama (kit).
-          ShareScrim(preset: preset),
+          ShareScrim(scrim: scrim ?? preset.scrim),
           Padding(
             padding: EdgeInsets.symmetric(
               horizontal: 22 * s,
@@ -238,6 +244,32 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
   /// preset yang sama untuk Asmaul Husna).
   final _memory = SharePresetMemory();
 
+  @override
+  void initState() {
+    super.initState();
+    // Foto user yang sudah pernah dipilih dipakai lagi saat sheet dibuka.
+    // Tanpa ini, foto tersimpan hanya terlihat kalau user memilihnya ulang.
+    SharePhotoService.current().then((f) {
+      if (f != null && mounted) setState(() => _memory.selectCustomPhoto(f));
+    });
+  }
+
+  /// Ambil foto user, pasang ke kartu, dan beri tahu kalau gagal.
+  Future<void> _pickPhoto() async {
+    final l10n = AppL10n.of(context);
+    try {
+      final f = await pickSharePhoto(context);
+      if (f == null) return; // dibatalkan user
+      setState(() => _memory.selectCustomPhoto(f));
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.qsPhotoFailed)));
+      }
+    }
+  }
+
   Size get _cardSize => Size(kShareCardWidth, kShareCardWidth / _aspect);
 
   ShareBgPreset get _preset => _memory.preset;
@@ -315,6 +347,7 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
                         showArabic: _showArabic,
                         showTranslation: _showTranslation,
                         cardSize: _cardSize,
+                        scrim: _memory.effectiveScrim,
                       ),
                     ),
                   ),
@@ -351,6 +384,7 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
                     ],
                     aspect: _aspect,
                     onAspectChanged: (a) => setState(() => _aspect = a),
+                    onPickPhoto: _pickPhoto,
                   ),
                   const SizedBox(height: 16),
                   // ── Tombol share ──

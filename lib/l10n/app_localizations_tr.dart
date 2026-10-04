@@ -3615,4 +3615,22 @@ class AppL10nTr extends AppL10n {
   String doaEnglishRef(String source) {
     return 'İngilizce çeviri: $source';
   }
+
+  @override
+  String get qsModePhoto => 'Fotoğrafım';
+
+  @override
+  String get qsPhotoChoose => 'Fotoğraf seç';
+
+  @override
+  String get qsPhotoChange => 'Fotoğrafı değiştir';
+
+  @override
+  String get qsPhotoChosen => 'Seçili fotoğraf';
+
+  @override
+  String get qsScrimLabel => 'Koyuluk';
+
+  @override
+  String get qsPhotoFailed => 'Fotoğraf alınamadı. Tekrar deneyin.';
 }

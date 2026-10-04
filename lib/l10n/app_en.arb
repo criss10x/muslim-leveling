@@ -1081,5 +1081,11 @@
         "type": "String"
       }
     }
-  }
+  },
+  "qsModePhoto": "My Photo",
+  "qsPhotoChoose": "Choose photo",
+  "qsPhotoChange": "Change photo",
+  "qsPhotoChosen": "Chosen photo",
+  "qsScrimLabel": "Darkness",
+  "qsPhotoFailed": "Could not get the photo. Try again."
 }

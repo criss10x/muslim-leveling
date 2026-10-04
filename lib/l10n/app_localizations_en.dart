@@ -3590,4 +3590,22 @@ class AppL10nEn extends AppL10n {
   String doaEnglishRef(String source) {
     return 'English translation: $source';
   }
+
+  @override
+  String get qsModePhoto => 'My Photo';
+
+  @override
+  String get qsPhotoChoose => 'Choose photo';
+
+  @override
+  String get qsPhotoChange => 'Change photo';
+
+  @override
+  String get qsPhotoChosen => 'Chosen photo';
+
+  @override
+  String get qsScrimLabel => 'Darkness';
+
+  @override
+  String get qsPhotoFailed => 'Could not get the photo. Try again.';
 }

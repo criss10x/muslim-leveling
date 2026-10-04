@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
+import '../../services/share_photo_service.dart';
 import '../../widgets/share_card_kit.dart';
 import '../../services/asma_data.dart';
 import '../../services/asma_meanings.dart';
@@ -254,6 +255,9 @@ class AsmaSharePreviewCard extends StatelessWidget {
   final bool showArabic;
   final bool showMeaning;
 
+  /// Kegelapan efektif dari pengatur "Gelap". null = patokan preset apa adanya.
+  final double? scrim;
+
   const AsmaSharePreviewCard({
     super.key,
     required this.item,
@@ -262,6 +266,7 @@ class AsmaSharePreviewCard extends StatelessWidget {
     this.preset,
     this.showArabic = true,
     this.showMeaning = true,
+    this.scrim,
   });
 
   @override
@@ -282,7 +287,7 @@ class AsmaSharePreviewCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          ShareScrim(preset: p),
+          ShareScrim(scrim: scrim ?? p.scrim),
           Padding(
             padding: EdgeInsets.symmetric(
               horizontal: 22 * s,
@@ -406,6 +411,31 @@ class _AsmaShareScreenState extends State<_AsmaShareScreen> {
   /// jadi 17 preset dan perilakunya identik di kedua kartu.
   final _memory = SharePresetMemory();
 
+  @override
+  void initState() {
+    super.initState();
+    // Foto user yang sudah pernah dipilih dipakai lagi saat sheet dibuka.
+    SharePhotoService.current().then((f) {
+      if (f != null && mounted) setState(() => _memory.selectCustomPhoto(f));
+    });
+  }
+
+  /// Ambil foto user, pasang ke kartu, dan beri tahu kalau gagal.
+  Future<void> _pickPhoto() async {
+    final l10n = AppL10n.of(context);
+    try {
+      final f = await pickSharePhoto(context);
+      if (f == null) return; // dibatalkan user
+      setState(() => _memory.selectCustomPhoto(f));
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.qsPhotoFailed)));
+      }
+    }
+  }
+
   Future<void> _share() async {
     final l10n = AppL10n.of(context);
     setState(() => _sharing = true);
@@ -511,6 +541,7 @@ class _AsmaShareScreenState extends State<_AsmaShareScreen> {
                     ],
                     aspect: _aspect,
                     onAspectChanged: (a) => setState(() => _aspect = a),
+                    onPickPhoto: _pickPhoto,
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),

@@ -1081,5 +1081,11 @@
         "type": "String"
       }
     }
-  }
+  },
+  "qsModePhoto": "Fotoğrafım",
+  "qsPhotoChoose": "Fotoğraf seç",
+  "qsPhotoChange": "Fotoğrafı değiştir",
+  "qsPhotoChosen": "Seçili fotoğraf",
+  "qsScrimLabel": "Koyuluk",
+  "qsPhotoFailed": "Fotoğraf alınamadı. Tekrar deneyin."
 }

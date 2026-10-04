@@ -121,10 +121,18 @@ void main() {
     // Kalau kit dilepas dari layar ini, angka ini yang menangkapnya.
     expect(shareBgPresets.length, 17);
 
-    // Chip mode background ada (Solid/Gradasi/Estetik).
+    // Chip mode background ada (Solid/Gradasi/Estetik + Foto Saya).
     expect(find.text('Solid'), findsOneWidget);
     expect(find.text('Gradasi'), findsOneWidget);
     expect(find.text('Estetik'), findsOneWidget);
+    // Mode keempat: background dari foto user.
+    expect(find.text('Foto Saya'), findsOneWidget);
+
+    // Chip mode WAJIB muat: sejak 4 chip, barisnya pernah overflow 51px di
+    // layar 420dp (lebih parah di HP 360dp). Kalau seseorang mengembalikannya
+    // jadi Row, tes ini yang menangkapnya.
+    expect(tester.takeException(), isNull,
+        reason: 'chip mode tidak boleh overflow di layar 420dp');
 
     // Ganti ke Estetik → 9 swatch foto muncul.
     await tester.tap(find.text('Estetik'));
