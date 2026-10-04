@@ -6459,6 +6459,18 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Tidak ada doa ditemukan. Coba kata lain, mis. tidur, hutang, atau perjalanan.'**
   String get doaSearchEmpty;
+
+  /// No description provided for @doaSectionEnglish.
+  ///
+  /// In id, this message translates to:
+  /// **'Terjemahan Inggris'**
+  String get doaSectionEnglish;
+
+  /// No description provided for @doaEnglishRef.
+  ///
+  /// In id, this message translates to:
+  /// **'Terjemahan Inggris: {source}'**
+  String doaEnglishRef(String source);
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

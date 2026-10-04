@@ -3582,4 +3582,12 @@ class AppL10nEn extends AppL10n {
   @override
   String get doaSearchEmpty =>
       'No dua found. Try another word, e.g. sleep, debt, or travel.';
+
+  @override
+  String get doaSectionEnglish => 'English translation';
+
+  @override
+  String doaEnglishRef(String source) {
+    return 'English translation: $source';
+  }
 }

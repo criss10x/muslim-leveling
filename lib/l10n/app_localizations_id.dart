@@ -3577,4 +3577,12 @@ class AppL10nId extends AppL10n {
   @override
   String get doaSearchEmpty =>
       'Tidak ada doa ditemukan. Coba kata lain, mis. tidur, hutang, atau perjalanan.';
+
+  @override
+  String get doaSectionEnglish => 'Terjemahan Inggris';
+
+  @override
+  String doaEnglishRef(String source) {
+    return 'Terjemahan Inggris: $source';
+  }
 }

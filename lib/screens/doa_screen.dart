@@ -597,6 +597,28 @@ class DoaDetailScreen extends StatelessWidget {
                           color: AppColors.onSurfaceVariant)),
                   const SizedBox(height: AppSpacing.lg),
                   _section(AppL10n.of(context).doaSectionMeaning, doa.idn),
+                  // Terjemahan Inggris — HANYA untuk 41 dari 227 doa yang punya
+                  // versi Inggris (sumber Inggris koleksi terpisah, bukan
+                  // terjemahan katalog ini). Karena itu posisinya tambahan:
+                  // arti Indonesia tetap yang utama dan selalu ada.
+                  if (doa.en != null) ...[
+                    const SizedBox(height: AppSpacing.lg),
+                    _section(
+                      AppL10n.of(context).doaSectionEnglish,
+                      doa.en!.translation,
+                      style: AppText.bodyMd()
+                          .copyWith(color: AppColors.onSurfaceVariant),
+                    ),
+                    if (doa.en!.source.isNotEmpty) ...[
+                      const SizedBox(height: AppSpacing.base),
+                      Text(
+                        AppL10n.of(context).doaEnglishRef(doa.en!.source),
+                        style: AppText.labelCapsSm().copyWith(
+                            color: AppColors.onSurfaceVariant
+                                .withValues(alpha: 0.8)),
+                      ),
+                    ],
+                  ],
                   if (doa.tentang.isNotEmpty) ...[
                     const SizedBox(height: AppSpacing.lg),
                     _section(AppL10n.of(context).doaSectionSource, doa.tentang),
@@ -613,10 +635,18 @@ class DoaDetailScreen extends StatelessWidget {
   /// Share teks doa lewat channel ShareUtil (method shareText): Arab +
   /// terjemahan + sumber + watermark, tanpa perlu file gambar.
   Future<void> _share(BuildContext context) async {
+    final en = doa.en;
     final buf = StringBuffer()
       ..writeln(doa.ar)
       ..writeln()
-      ..writeln('"${doa.idn}"')
+      ..writeln('"${doa.idn}"');
+    // Yang dibagikan ikut apa yang terlihat di layar.
+    if (en != null) {
+      buf
+        ..writeln()
+        ..writeln('"${en.translation}"');
+    }
+    buf
       ..writeln()
       ..writeln(doa.tentang)
       ..writeln()

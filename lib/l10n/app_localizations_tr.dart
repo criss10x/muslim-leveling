@@ -3607,4 +3607,12 @@ class AppL10nTr extends AppL10n {
   @override
   String get doaSearchEmpty =>
       'Dua bulunamadı. Başka bir kelime deneyin, örn. uyku, borç veya yolculuk.';
+
+  @override
+  String get doaSectionEnglish => 'İngilizce çeviri';
+
+  @override
+  String doaEnglishRef(String source) {
+    return 'İngilizce çeviri: $source';
+  }
 }

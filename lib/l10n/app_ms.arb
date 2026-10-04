@@ -1072,5 +1072,14 @@
   "qiblaSkinChange": "Tukar gaya",
   "contentNoteTurkish": "Teks dalam Bahasa Turki",
   "doaSearchHint": "Cari doa…",
-  "doaSearchEmpty": "Tiada doa ditemui. Cuba kata lain, cth. tidur, hutang, atau perjalanan."
+  "doaSearchEmpty": "Tiada doa ditemui. Cuba kata lain, cth. tidur, hutang, atau perjalanan.",
+  "doaSectionEnglish": "Terjemahan Inggeris",
+  "doaEnglishRef": "Terjemahan Inggeris: {source}",
+  "@doaEnglishRef": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  }
 }

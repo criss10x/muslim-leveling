@@ -3590,4 +3590,12 @@ class AppL10nMs extends AppL10n {
   @override
   String get doaSearchEmpty =>
       'Tiada doa ditemui. Cuba kata lain, cth. tidur, hutang, atau perjalanan.';
+
+  @override
+  String get doaSectionEnglish => 'Terjemahan Inggeris';
+
+  @override
+  String doaEnglishRef(String source) {
+    return 'Terjemahan Inggeris: $source';
+  }
 }

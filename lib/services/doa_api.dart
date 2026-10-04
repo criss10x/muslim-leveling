@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'doa_en_map.dart';
+
 /// API Doa & Dzikir equran.id — https://equran.id/apidev/doa
 /// GET /api/doa → {status, total, data:[{id, grup, nama, ar, tr, idn, tentang, tag}]}
 const _base = 'https://equran.id/api';
@@ -14,6 +16,13 @@ class DoaItem {
   /// artinya, tapi tag-nya ada.
   final List<String> tag;
 
+  /// Terjemahan INGGRIS, kalau sumber Inggris memuat doa yang sama.
+  ///
+  /// Hanya 41 dari 227 doa punya versi Inggris (lihat doa_en_map.dart): sumber
+  /// Inggris adalah koleksi terpisah, bukan terjemahan katalog equran.id.
+  /// Karena itu null itu NORMAL, bukan data hilang.
+  final DoaEnEntry? en;
+
   const DoaItem({
     required this.id,
     required this.grup,
@@ -23,6 +32,7 @@ class DoaItem {
     required this.idn,
     required this.tentang,
     this.tag = const [],
+    this.en,
   });
 
   factory DoaItem.fromJson(Map<String, dynamic> j) => DoaItem(
@@ -34,6 +44,9 @@ class DoaItem {
         idn: j['idn'] as String? ?? '',
         tentang: j['tentang'] as String? ?? '',
         tag: ((j['tag'] as List?) ?? const []).map((t) => '$t').toList(),
+        // Dipetakan lewat ARAB, bukan nomor id: kalau equran.id menomori ulang
+        // katalognya, pasangannya tetap benar.
+        en: doaEnByArabic[normalizeArabic(j['ar'] as String? ?? '')],
       );
 }
 
@@ -133,8 +146,13 @@ class DoaApi {
         keys.any((x) => d.nama.toLowerCase().contains(x)) ||
         keys.any((x) => d.grup.toLowerCase().contains(x)) ||
         d.tag.any((t) => keys.any((x) => t.contains(x)));
+    // Termasuk teks Inggris: 41 doa punya terjemahan Inggris, dan tanpa ini kata
+    // seperti "sleep"/"knowledge" tidak menemukannya lewat pencarian.
     bool inMeaning(DoaItem d) =>
-        keys.any((x) => d.idn.toLowerCase().contains(x));
+        keys.any((x) => d.idn.toLowerCase().contains(x)) ||
+        (d.en != null &&
+            (d.en!.translation.toLowerCase().contains(k) ||
+                d.en!.title.toLowerCase().contains(k)));
 
     final primary = <DoaItem>[], secondary = <DoaItem>[];
     for (final d in all) {

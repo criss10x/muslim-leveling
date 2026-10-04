@@ -1846,5 +1846,14 @@
   "qiblaSkinChange": "Ganti tampilan",
   "contentNoteTurkish": "Teks dalam Bahasa Turki",
   "doaSearchHint": "Cari doa…",
-  "doaSearchEmpty": "Tidak ada doa ditemukan. Coba kata lain, mis. tidur, hutang, atau perjalanan."
+  "doaSearchEmpty": "Tidak ada doa ditemukan. Coba kata lain, mis. tidur, hutang, atau perjalanan.",
+  "doaSectionEnglish": "Terjemahan Inggris",
+  "doaEnglishRef": "Terjemahan Inggris: {source}",
+  "@doaEnglishRef": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  }
 }
