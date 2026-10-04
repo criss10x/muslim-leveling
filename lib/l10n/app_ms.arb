@@ -1087,5 +1087,8 @@
   "qsPhotoChange": "Tukar foto",
   "qsPhotoChosen": "Foto dipilih",
   "qsScrimLabel": "Kegelapan",
-  "qsPhotoFailed": "Gagal mengambil foto. Cuba lagi."
+  "qsPhotoFailed": "Gagal mengambil foto. Cuba lagi.",
+  "qsTabBackground": "Latar",
+  "qsTabContent": "Isi",
+  "qsTabSize": "Saiz"
 }

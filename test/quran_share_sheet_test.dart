@@ -99,10 +99,23 @@ void main() {
 
     expect(find.text('Share Verse'), findsOneWidget);
     expect(find.text('Share'), findsOneWidget);
-    expect(find.text('Arabic'), findsOneWidget);
-    expect(find.text('Translation'), findsOneWidget);
+
+    // Panel kontrol dibagi 3 tab, jadi chip konten & mode tidak lagi tampil
+    // bersamaan. Verifikasi label English-nya per tab.
+    expect(find.text('Background'), findsOneWidget);
+    expect(find.text('Content'), findsOneWidget);
+    expect(find.text('Size'), findsOneWidget);
+
+    // Tab Latar (default): label mode background versi Inggris.
     expect(find.text('Gradient'), findsOneWidget);
     expect(find.text('Esthetic'), findsOneWidget);
+    expect(find.text('My Photo'), findsOneWidget);
+
+    // Tab Isi: chip konten.
+    await tester.tap(find.text('Content'));
+    await tester.pumpAndSettle();
+    expect(find.text('Arabic'), findsOneWidget);
+    expect(find.text('Translation'), findsOneWidget);
 
     // Sisa hardcode Indonesia harus nol.
     for (final s in [
@@ -111,6 +124,9 @@ void main() {
       'Gradasi',
       'Estetik',
       'Terjemahan',
+      'Latar',
+      'Isi',
+      'Ukuran',
     ]) {
       expect(find.text(s), findsNothing, reason: 'masih hardcode: $s');
     }

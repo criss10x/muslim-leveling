@@ -3608,4 +3608,13 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get qsPhotoFailed => 'Could not get the photo. Try again.';
+
+  @override
+  String get qsTabBackground => 'Background';
+
+  @override
+  String get qsTabContent => 'Content';
+
+  @override
+  String get qsTabSize => 'Size';
 }

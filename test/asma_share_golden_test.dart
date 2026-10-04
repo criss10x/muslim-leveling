@@ -153,11 +153,26 @@ void main() {
       9,
     );
 
-    // Toggle konten ada: Arab + Arti.
+    // Panel kontrol dibagi 3 tab: Latar / Isi / Ukuran. Tab yang tidak dibuka
+    // tidak dirender — inilah yang membuat preview dapat ruang lebih besar
+    // (di 360x640: kontrol 356dp -> 280dp, preview 72x128 -> 133x236).
+    // Karena itu chip konten & rasio baru ada SETELAH tabnya dibuka.
+    expect(find.text('Latar'), findsOneWidget);
+    expect(find.text('Isi'), findsOneWidget);
+    expect(find.text('Ukuran'), findsOneWidget);
+    // Tab Latar terbuka secara default: chip konten belum tampil.
+    expect(find.text('Arab'), findsNothing,
+        reason: 'tab Isi belum dibuka, chip konten tidak boleh dirender');
+
+    // Buka tab Isi → toggle konten ada: Arab + Arti.
+    await tester.tap(find.text('Isi'));
+    await tester.pumpAndSettle();
     expect(find.text('Arab'), findsOneWidget);
     expect(find.text('Arti'), findsOneWidget);
 
-    // Rasio 3 pilihan.
+    // Buka tab Ukuran → 3 pilihan rasio.
+    await tester.tap(find.text('Ukuran'));
+    await tester.pumpAndSettle();
     expect(find.text('9:16'), findsOneWidget);
     expect(find.text('3:4'), findsOneWidget);
     expect(find.text('1:1'), findsOneWidget);

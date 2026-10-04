@@ -3633,4 +3633,13 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get qsPhotoFailed => 'Fotoğraf alınamadı. Tekrar deneyin.';
+
+  @override
+  String get qsTabBackground => 'Arka plan';
+
+  @override
+  String get qsTabContent => 'İçerik';
+
+  @override
+  String get qsTabSize => 'Boyut';
 }

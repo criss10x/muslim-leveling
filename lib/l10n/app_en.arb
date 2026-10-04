@@ -1087,5 +1087,8 @@
   "qsPhotoChange": "Change photo",
   "qsPhotoChosen": "Chosen photo",
   "qsScrimLabel": "Darkness",
-  "qsPhotoFailed": "Could not get the photo. Try again."
+  "qsPhotoFailed": "Could not get the photo. Try again.",
+  "qsTabBackground": "Background",
+  "qsTabContent": "Content",
+  "qsTabSize": "Size"
 }

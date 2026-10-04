@@ -3616,4 +3616,13 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get qsPhotoFailed => 'Gagal mengambil foto. Cuba lagi.';
+
+  @override
+  String get qsTabBackground => 'Latar';
+
+  @override
+  String get qsTabContent => 'Isi';
+
+  @override
+  String get qsTabSize => 'Saiz';
 }

@@ -363,11 +363,12 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  ShareCardControls(
+            // Padding kiri-kanan/atas sudah disediakan kit (ShareCardControls),
+            // jadi di sini tidak diulang: dulu keduanya memakai
+            // EdgeInsets.all(16) dan itu memakan 32dp lebar tanpa alasan.
+            Column(
+              children: [
+                ShareCardControls(
                     memory: _memory,
                     onChanged: () => setState(() {}),
                     contentChips: [
@@ -418,8 +419,7 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
                       ),
                     ),
                   ),
-                ],
-              ),
+              ],
             ),
           ],
         ),

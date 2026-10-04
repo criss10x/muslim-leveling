@@ -6507,6 +6507,24 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Gagal mengambil foto. Coba lagi.'**
   String get qsPhotoFailed;
+
+  /// No description provided for @qsTabBackground.
+  ///
+  /// In id, this message translates to:
+  /// **'Latar'**
+  String get qsTabBackground;
+
+  /// No description provided for @qsTabContent.
+  ///
+  /// In id, this message translates to:
+  /// **'Isi'**
+  String get qsTabContent;
+
+  /// No description provided for @qsTabSize.
+  ///
+  /// In id, this message translates to:
+  /// **'Ukuran'**
+  String get qsTabSize;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

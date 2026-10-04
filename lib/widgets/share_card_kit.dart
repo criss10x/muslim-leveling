@@ -337,6 +337,9 @@ class ShareCardKitL10n {
   final String changePhoto;
   final String photoChosen;
   final String scrimLabel;
+  final String tabBackground;
+  final String tabContent;
+  final String tabSize;
 
   const ShareCardKitL10n({
     required this.photoLabel,
@@ -344,6 +347,9 @@ class ShareCardKitL10n {
     required this.changePhoto,
     required this.photoChosen,
     required this.scrimLabel,
+    required this.tabBackground,
+    required this.tabContent,
+    required this.tabSize,
   });
 
   static ShareCardKitL10n of(BuildContext context) {
@@ -354,6 +360,9 @@ class ShareCardKitL10n {
       changePhoto: l.qsPhotoChange,
       photoChosen: l.qsPhotoChosen,
       scrimLabel: l.qsScrimLabel,
+      tabBackground: l.qsTabBackground,
+      tabContent: l.qsTabContent,
+      tabSize: l.qsTabSize,
     );
   }
 }
@@ -670,7 +679,10 @@ class ShareContentChipSpec {
 /// Seluruh kontrol di bawah preview kartu: chip mode background, grid swatch,
 /// chip toggle konten, chip rasio. Dipakai sama persis oleh share ayat Quran
 /// dan share Asmaul Husna — yang berbeda hanya isi chip kontennya.
-class ShareCardControls extends StatelessWidget {
+/// Tab pada panel kontrol share.
+enum _ShareTab { background, content, size }
+
+class ShareCardControls extends StatefulWidget {
   final SharePresetMemory memory;
   final VoidCallback onChanged;
   final List<ShareContentChipSpec> contentChips;
@@ -691,6 +703,20 @@ class ShareCardControls extends StatelessWidget {
   });
 
   @override
+  State<ShareCardControls> createState() => _ShareCardControlsState();
+}
+
+class _ShareCardControlsState extends State<ShareCardControls> {
+  _ShareTab _tab = _ShareTab.background;
+
+  SharePresetMemory get memory => widget.memory;
+  VoidCallback get onChanged => widget.onChanged;
+  List<ShareContentChipSpec> get contentChips => widget.contentChips;
+  double get aspect => widget.aspect;
+  ValueChanged<double> get onAspectChanged => widget.onAspectChanged;
+  Future<void> Function() get onPickPhoto => widget.onPickPhoto;
+
+  @override
   Widget build(BuildContext context) {
     // memory.kind, BUKAN preset.kind: saat mode foto user belum ada fotonya,
     // preset jatuh ke default (kind-nya gradasi) padahal pilihan user adalah
@@ -698,156 +724,273 @@ class ShareCardControls extends StatelessWidget {
     final kind = memory.kind;
     final presets = memory.presetsFor(kind);
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: Column(
+        // Tab selalu terlihat; isinya berganti. Sebelumnya keenam kelompok
+        // kontrol tampil bertumpuk (~356dp) sehingga preview hanya dapat 20%
+        // tinggi layar di 360x640. Sekarang yang menetap hanya satu baris tab
+        // plus isi tab aktif.
         children: [
-          // ── Mode background ──
-          //
-          // Wrap, bukan Row: sejak mode "Foto Saya" ditambahkan ada 4 chip, dan
-          // labelnya memanjang di beberapa bahasa (Inggris "Esthetic"/"My
-          // Photo", Turki "Fotoğrafım"). Row melaporkan "RenderFlex overflowed"
-          // di layar 420dp dan lebih parah lagi di HP 360dp; Wrap memindahkan
-          // chip yang tidak muat ke baris berikutnya.
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 8,
-            runSpacing: 4,
-            children: [
-              _modeChip(context, ShareBgKind.solid, Icons.circle),
-              _modeChip(context, ShareBgKind.gradient, Icons.gradient),
-              _modeChip(context, ShareBgKind.esthetic, Icons.image),
-              _modeChip(context, ShareBgKind.custom, Icons.photo),
-            ],
-          ),
+          _tabBar(context),
           const SizedBox(height: 12),
-          // ── Pilihan warna/gambar dalam mode terpilih ──
-          if (kind == ShareBgKind.custom)
-            _customPicker(context)
-          else
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (var k = 0; k < presets.length; k++) ...[
-                Semantics(
-                  button: true,
-                  label: presets.length == 1
-                      ? shareModeLabel(context, presets[k].kind)
-                      : '${shareModeLabel(context, presets[k].kind)} ${k + 1}',
-                  selected: !memory.isCustom &&
-                      shareBgPresets.indexOf(presets[k]) == memory.index,
-                  child: InkWell(
-                    onTap: () {
-                      memory.selectPreset(presets[k]);
-                      onChanged();
-                    },
-                    borderRadius: BorderRadius.circular(12),
-                    child: SizedBox(
-                      width: 48,
-                      height: 48,
-                      child: Center(
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          width: 40,
-                          height: 40,
-                          decoration: presets[k].decoration.copyWith(
-                            border:
-                                !memory.isCustom &&
-                                    shareBgPresets.indexOf(presets[k]) ==
-                                        memory.index
-                                ? Border.all(color: AppColors.primary, width: 2.5)
-                                : null,
+          AnimatedSize(
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeOut,
+            alignment: Alignment.topCenter,
+            child: switch (_tab) {
+              _ShareTab.background => _backgroundTab(context, kind, presets),
+              _ShareTab.content => _contentTab(),
+              _ShareTab.size => _sizeTab(),
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Isi tab Latar: mode background + swatch/pemilih foto + pengatur gelap.
+  Widget _backgroundTab(
+    BuildContext context,
+    ShareBgKind kind,
+    List<ShareBgPreset> presets,
+  ) {
+    final showScrim = kind == ShareBgKind.esthetic ||
+        (kind == ShareBgKind.custom && memory.customPhoto != null);
+    return Column(
+      children: [
+        // ── Mode background ──
+        //
+        // Wrap, bukan Row: sejak mode "Foto Saya" ditambahkan ada 4 chip, dan
+        // labelnya memanjang di beberapa bahasa (Inggris "Esthetic"/"My
+        // Photo", Turki "Fotoğrafım"). Row melaporkan "RenderFlex overflowed"
+        // di layar 420dp dan lebih parah lagi di HP 360dp; Wrap memindahkan
+        // chip yang tidak muat ke baris berikutnya.
+        Wrap(
+          alignment: WrapAlignment.center,
+          spacing: 8,
+          runSpacing: 4,
+          children: [
+            _modeChip(context, ShareBgKind.solid, Icons.circle),
+            _modeChip(context, ShareBgKind.gradient, Icons.gradient),
+            _modeChip(context, ShareBgKind.esthetic, Icons.image),
+            _modeChip(context, ShareBgKind.custom, Icons.photo),
+          ],
+        ),
+        const SizedBox(height: 10),
+        // ── Pilihan warna/gambar dalam mode terpilih ──
+        //
+        // Tingginya dibatasi dan bisa digeser: 9 preset foto bawaan butuh 3
+        // baris di 360dp, dan tanpa batas ini tinggi tab ikut melonjak,
+        // persis masalah yang sedang diperbaiki.
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxHeight: 132),
+          child: SingleChildScrollView(
+            child: kind == ShareBgKind.custom
+                ? _customPicker(context)
+                : Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      for (var k = 0; k < presets.length; k++) ...[
+                        Semantics(
+                          button: true,
+                          label: presets.length == 1
+                              ? shareModeLabel(context, presets[k].kind)
+                              : '${shareModeLabel(context, presets[k].kind)} '
+                                  '${k + 1}',
+                          selected: !memory.isCustom &&
+                              shareBgPresets.indexOf(presets[k]) ==
+                                  memory.index,
+                          child: InkWell(
+                            onTap: () {
+                              memory.selectPreset(presets[k]);
+                              onChanged();
+                            },
                             borderRadius: BorderRadius.circular(12),
+                            child: SizedBox(
+                              width: 48,
+                              height: 48,
+                              child: Center(
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 200),
+                                  width: 40,
+                                  height: 40,
+                                  decoration: presets[k].decoration.copyWith(
+                                    border:
+                                        !memory.isCustom &&
+                                            shareBgPresets.indexOf(presets[k]) ==
+                                                memory.index
+                                        ? Border.all(
+                                            color: AppColors.primary,
+                                            width: 2.5,
+                                          )
+                                        : null,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
+                      ],
+                    ],
                   ),
-                ),
-              ],
-            ],
           ),
-          // ── Pengatur gelap: hanya untuk background FOTO ──
-          //
-          // Warna solid dan gradasi sengaja tidak ikut: keduanya sudah jadi
-          // warna bersih (gradasi jade = identitas app), dan menaikkan
-          // kegelapan di sana sama saja mematikannya. Ini juga keputusan yang
-          // diminta user.
-          // Mode foto user TANPA foto belum punya gambar, dan kartunya jatuh ke
-          // preset default (gradasi). Menampilkan pengatur gelap di situ berarti
-          // menawarkan pengatur untuk warna bersih — persis yang dihindari.
-          if (kind == ShareBgKind.esthetic ||
-              (kind == ShareBgKind.custom && memory.customPhoto != null)) ...[
-            const SizedBox(height: 8),
-            // Satu baris saja: label di kiri, slider, persen di kanan. Versi
-            // pertama memakai ikon + label di baris terpisah di bawah, dan itu
-            // memakan ~20dp tinggi yang tidak ada gunanya di layar sempit.
-            Row(
-              children: [
-                SizedBox(
-                  width: 54,
-                  child: Text(
-                    ShareCardKitL10n.of(context).scrimLabel,
-                    style: AppText.bodyMd().copyWith(
-                      fontSize: 12,
-                      color: AppColors.onSurfaceVariant,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Slider(
-                    value: memory.effectiveScrim,
-                    max: kScrimMax,
-                    // Label a11y: tanpa ini TalkBack hanya bilang "slider".
-                    label: '${(memory.effectiveScrim * 100).round()}%',
-                    onChanged: (v) {
-                      memory.setEffectiveScrim(v);
-                      onChanged();
-                    },
-                  ),
-                ),
-                SizedBox(
-                  width: 38,
-                  child: Text(
-                    '${(memory.effectiveScrim * 100).round()}%',
-                    textAlign: TextAlign.end,
-                    style: AppText.bodyMd().copyWith(
-                      fontSize: 12,
-                      color: AppColors.onSurfaceVariant,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-          const SizedBox(height: 16),
-          // ── Pilihan konten ──
+        ),
+        // ── Pengatur gelap: hanya untuk background FOTO ──
+        //
+        // Warna solid dan gradasi sengaja tidak ikut: keduanya sudah jadi
+        // warna bersih (gradasi jade = identitas app), dan menaikkan
+        // kegelapan di sana sama saja mematikannya. Ini juga keputusan user.
+        // Mode foto user TANPA foto belum punya gambar, dan kartunya jatuh ke
+        // preset default (gradasi), jadi pengaturnya belum ada gunanya.
+        if (showScrim) ...[
+          const SizedBox(height: 6),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              for (var i = 0; i < contentChips.length; i++) ...[
-                if (i > 0) const SizedBox(width: 8),
-                _contentChip(contentChips[i]),
-              ],
-            ],
-          ),
-          const SizedBox(height: 16),
-          // ── Pilihan rasio: 9:16 / 3:4 / 1:1 ──
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              for (final (a, label) in const [
-                (9 / 16, '9:16'),
-                (3 / 4, '3:4'),
-                (1.0, '1:1'),
-              ]) ...[
-                _ratioChip(label, a),
-                const SizedBox(width: 8),
-              ],
+              SizedBox(
+                width: 54,
+                child: Text(
+                  ShareCardKitL10n.of(context).scrimLabel,
+                  style: AppText.bodyMd().copyWith(
+                    fontSize: 12,
+                    color: AppColors.onSurfaceVariant,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Slider(
+                  value: memory.effectiveScrim,
+                  max: kScrimMax,
+                  // Label a11y: tanpa ini TalkBack hanya bilang "slider".
+                  label: '${(memory.effectiveScrim * 100).round()}%',
+                  onChanged: (v) {
+                    memory.setEffectiveScrim(v);
+                    onChanged();
+                  },
+                ),
+              ),
+              SizedBox(
+                width: 38,
+                child: Text(
+                  '${(memory.effectiveScrim * 100).round()}%',
+                  textAlign: TextAlign.end,
+                  style: AppText.bodyMd().copyWith(
+                    fontSize: 12,
+                    color: AppColors.onSurfaceVariant,
+                  ),
+                ),
+              ),
             ],
           ),
         ],
+      ],
+    );
+  }
+
+  /// Isi tab Isi: chip Arab / Terjemahan (atau Arti pada kartu Asma).
+  Widget _contentTab() {
+    // Wrap, bukan Row: dua chip ini (Arab 53dp + Terjemahan 133dp) melebihi
+    // ruang 296dp di layar 360dp dan melaporkan "RenderFlex overflowed by 3,5
+    // pixels" sejak sebelum tab ini ada. Labelnya lebih panjang lagi di Turki.
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 8,
+      runSpacing: 8,
+      children: contentChips.map(_contentChip).toList(),
+    );
+  }
+
+  /// Isi tab Ukuran: rasio kartu 9:16 / 3:4 / 1:1.
+  Widget _sizeTab() {
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 8,
+      runSpacing: 8,
+      children: [
+        for (final (a, label) in const [
+          (9 / 16, '9:16'),
+          (3 / 4, '3:4'),
+          (1.0, '1:1'),
+        ])
+          _ratioChip(label, a),
+      ],
+    );
+  }
+
+  /// Satu baris tab. Ikon + label; label bisa menyusut di layar sempit.
+  Widget _tabBar(BuildContext context) {
+    final l10n = ShareCardKitL10n.of(context);
+    return Row(
+      children: [
+        for (final tab in _ShareTab.values)
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 3),
+              child: _tabButton(
+                tab,
+                switch (tab) {
+                  _ShareTab.background => l10n.tabBackground,
+                  _ShareTab.content => l10n.tabContent,
+                  _ShareTab.size => l10n.tabSize,
+                },
+                switch (tab) {
+                  _ShareTab.background => Icons.palette_outlined,
+                  _ShareTab.content => Icons.text_fields,
+                  _ShareTab.size => Icons.aspect_ratio,
+                },
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _tabButton(_ShareTab tab, String label, IconData icon) {
+    final selected = _tab == tab;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      child: InkWell(
+        onTap: () => setState(() => _tab = tab),
+        borderRadius: BorderRadius.circular(AppRadius.pill),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          decoration: BoxDecoration(
+            color: selected
+                ? AppColors.primary.withValues(alpha: 0.16)
+                : AppColors.surfaceContainerLow,
+            borderRadius: BorderRadius.circular(AppRadius.pill),
+            border: selected
+                ? Border.all(color: AppColors.primary, width: 1.2)
+                : null,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon,
+                  size: 15,
+                  color: selected ? AppColors.primary : AppColors.onSurfaceVariant),
+              const SizedBox(width: 5),
+              Flexible(
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppText.bodyMd().copyWith(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: selected
+                        ? AppColors.primary
+                        : AppColors.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

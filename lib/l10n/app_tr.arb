@@ -1087,5 +1087,8 @@
   "qsPhotoChange": "Fotoğrafı değiştir",
   "qsPhotoChosen": "Seçili fotoğraf",
   "qsScrimLabel": "Koyuluk",
-  "qsPhotoFailed": "Fotoğraf alınamadı. Tekrar deneyin."
+  "qsPhotoFailed": "Fotoğraf alınamadı. Tekrar deneyin.",
+  "qsTabBackground": "Arka plan",
+  "qsTabContent": "İçerik",
+  "qsTabSize": "Boyut"
 }

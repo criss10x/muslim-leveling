@@ -1861,5 +1861,8 @@
   "qsPhotoChange": "Ganti foto",
   "qsPhotoChosen": "Foto terpilih",
   "qsScrimLabel": "Gelap",
-  "qsPhotoFailed": "Gagal mengambil foto. Coba lagi."
+  "qsPhotoFailed": "Gagal mengambil foto. Coba lagi.",
+  "qsTabBackground": "Latar",
+  "qsTabContent": "Isi",
+  "qsTabSize": "Ukuran"
 }
