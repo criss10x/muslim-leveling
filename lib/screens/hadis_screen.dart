@@ -19,11 +19,21 @@ class _HadisScreenState extends State<HadisScreen> {
   // ponytail: pesan error disimpan sebagai kunci, bukan teks — locale bisa
   // berganti saat pesan sedang tampil (lihat _errorText).
   AppL10n get _l10n => AppL10n.of(context);
+
+  /// Bahasa terjemahan hadis yang diminta layar ini.
+  ///
+  /// Ditetapkan di `didChangeDependencies` (tempat pertama Locale bisa dibaca
+  /// dengan aman), lalu dipakai semua pemanggilan async (Muat Lagi / Cari /
+  /// Acak) supaya bahasanya sama dengan yang sedang tampil.
+  HadisLang _lang = HadisLang.id;
+  HadisLang _langOf(BuildContext context) =>
+      HadisLang.of(Localizations.localeOf(context).languageCode);
   final _searchCtrl = TextEditingController();
   final List<HadisItem> _items = [];
   int _page = 1;
   bool _loading = false;
   bool _hasMore = true;
+  bool _didInit = false;
   bool _isSearch = false;
   int _searchTotal = 0;
   String? _error;
@@ -42,7 +52,33 @@ class _HadisScreenState extends State<HadisScreen> {
     _searchCtrl.addListener(() {
       if (mounted) setState(() {});
     });
-    _load();
+  }
+
+  /// Bahasa & pemuatan awal ditentukan DI SINI, bukan initState.
+  ///
+  /// Locale baru terbaca setelah `didChangeDependencies`; memanggil `_load()`
+  /// dari initState memakai `_lang` default (id) sehingga user en/tr melihat
+  /// halaman pertama berbahasa Indonesia sampai menekan "Muat Lagi".
+  /// Juga jadi tempat yang benar untuk bereaksi saat bahasa diganti dari Profil.
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final lang = _langOf(context);
+    final changed = lang != _lang;
+    _lang = lang;
+    if (!_didInit) {
+      _didInit = true;
+      _load();
+    } else if (changed && !_loading) {
+      // Bahasa berganti saat layar terbuka: tampilkan ulang dalam bahasa baru.
+      setState(() {
+        _items.clear();
+        _isSearch = false;
+        _page = _startPage;
+        _hasMore = true;
+      });
+      _load();
+    }
   }
 
   @override
@@ -57,7 +93,7 @@ class _HadisScreenState extends State<HadisScreen> {
       _error = null;
     });
     try {
-      final items = await hadisApi.explore(_startPage);
+      final items = await hadisApi.explore(_startPage, _lang);
       if (!mounted) return;
       setState(() {
         _items
@@ -96,7 +132,7 @@ class _HadisScreenState extends State<HadisScreen> {
       // Wrap: setelah halaman terakhir, lanjut dari halaman 1 — mulai
       // di-seed per tanggal, jadi urutan penuh katalog tetap satu putaran.
       final next = _page % hadisTotalPages + 1;
-      final items = await hadisApi.explore(next);
+      final items = await hadisApi.explore(next, _lang);
       if (!mounted) return;
       setState(() {
         _items.addAll(items);
@@ -130,7 +166,7 @@ class _HadisScreenState extends State<HadisScreen> {
       _error = null;
     });
     try {
-      final (items, total) = await hadisApi.search(q);
+      final (items, total) = await hadisApi.search(q, _lang);
       if (!mounted) return;
       setState(() {
         _items
@@ -154,7 +190,7 @@ class _HadisScreenState extends State<HadisScreen> {
     if (_loading) return;
     setState(() => _loading = true);
     try {
-      final item = await hadisApi.random();
+      final item = await hadisApi.random(_lang);
       if (!mounted) return;
       setState(() => _loading = false);
       Navigator.of(
@@ -258,15 +294,17 @@ class _HadisScreenState extends State<HadisScreen> {
                   ),
                 ),
               ),
-            // Sumber hadis (myquran v3) hanya Indonesia — beri tahu user
-            // kalau bahasa aktif bukan Indonesia.
+            // Terjemahan hadis tersedia untuk id/en/tr; Melayu & locale lain
+            // memakai Inggris. Banner hanya muncul kalau terjemahan bahasa
+            // aktif tidak ada (mis. Melayu) — bukan lagi selalu saat != id.
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: ContentLangNote(
                   locale: Localizations.localeOf(context),
-                  contentIsEnglish: false,
+                  contentIsEnglish: _lang == HadisLang.en,
+                  contentLang: _lang.code,
                 ),
               ),
             ),
@@ -449,7 +487,8 @@ class _HadisScreenState extends State<HadisScreen> {
   }
 
   Widget _gradeChip(String grade) {
-    final sahih = grade.toLowerCase().contains('sahih');
+    // Terjemahan grade ikut bahasa: id "Sahih", en "Authentic", tr "Sahih Hadis".
+    final sahih = isSahihGrade(grade);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
@@ -501,7 +540,7 @@ class _HadisDetailScreenState extends State<HadisDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final item = widget.item;
-    final sahih = item.grade.toLowerCase().contains('sahih');
+    final sahih = item.isSahih;
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(

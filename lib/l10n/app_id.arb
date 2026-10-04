@@ -1843,5 +1843,6 @@
   },
   "doaEmptyGroups": "Belum ada doa yang bisa ditampilkan. Coba muat ulang.",
   "doaShareFailed": "Gagal membagikan doa. Coba lagi.",
-  "qiblaSkinChange": "Ganti tampilan"
+  "qiblaSkinChange": "Ganti tampilan",
+  "contentNoteTurkish": "Teks dalam Bahasa Turki"
 }

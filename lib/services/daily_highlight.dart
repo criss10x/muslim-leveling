@@ -79,7 +79,15 @@ class DailyHighlightService {
 
   /// [english] dipilih pemanggil (yang punya `BuildContext`), karena service
   /// ini tak bisa tahu locale apa yang sedang dirender.
-  Future<DailyHighlight> forToday(String todayStr, {bool english = false}) async {
+  ///
+  /// [hadisLang] bahasa terjemahan hadis; kalau null, diturunkan dari [english]
+  /// (id→id, en→en) supaya pemanggil lama tetap benar. Service ini tidak bisa
+  /// membaca locale sendiri, jadi pemanggil yang menentukan.
+  Future<DailyHighlight> forToday(
+    String todayStr, {
+    bool english = false,
+    HadisLang? hadisLang,
+  }) async {
     if (_mem != null && _memDate == todayStr && _memEnglish == english) {
       return _mem!;
     }
@@ -111,9 +119,11 @@ class DailyHighlightService {
     try {
       // ponytail: id hadis di API itu SPARSE (1..2260 → 404 semua), jadi id
       // terhitung dari tanggal selalu gagal. Ambil by posisi dari halaman
-      // explore — service yang sama dipakai layar Hadis.
+      // explore — service yang sama dipakai layar Hadis. Kartu ini hanya satu,
+      // jadi memakai bahasa user tidak menambah request berarti.
       final items = await hadisApi.explore(
         highlightIndex(todayStr, hadisTotalPages) + 1,
+        hadisLang ?? (english ? HadisLang.en : HadisLang.id),
       );
       if (items.isNotEmpty) {
         final pick = items[highlightIndex(todayStr, items.length)];

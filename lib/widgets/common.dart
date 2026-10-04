@@ -868,19 +868,26 @@ class ContentLangNote extends StatelessWidget {
   final Locale locale;
 
   /// true = konten yang ditampilkan berbahasa Inggris; false = Indonesia.
+  ///
+  /// Dipertahankan untuk pemanggil yang hanya punya 2 bahasa konten.
   final bool contentIsEnglish;
+
+  /// Kode bahasa konten yang BENAR-BENAR dimuat ('id', 'en', 'tr', ...).
+  ///
+  /// Dipakai kalau konten punya lebih dari 2 bahasa: membandingkan `!= 'id'`
+  /// akan salah melabeli konten Turki sebagai Indonesia.
+  final String? contentLang;
 
   const ContentLangNote({
     super.key,
     required this.locale,
     required this.contentIsEnglish,
+    this.contentLang,
   });
 
   @override
   Widget build(BuildContext context) {
-    // ponytail: 2 bahasa konten saja (id + en). Kalau nanti ada tafsir Turki,
-    // bandingkan dengan bahasa konten yang benar-benar dimuat, bukan `!= 'id'`.
-    final contentCode = contentIsEnglish ? 'en' : 'id';
+    final contentCode = contentLang ?? (contentIsEnglish ? 'en' : 'id');
     if (locale.languageCode == contentCode) return const SizedBox.shrink();
     final l10n = AppL10n.of(context);
     return Container(
@@ -906,9 +913,11 @@ class ContentLangNote extends StatelessWidget {
           ),
           const SizedBox(width: 6),
           Text(
-            contentIsEnglish
-                ? l10n.contentNoteInEnglish
-                : l10n.contentNoteIndonesian,
+            switch (contentCode) {
+              'id' => l10n.contentNoteIndonesian,
+              'tr' => l10n.contentNoteTurkish,
+              _ => l10n.contentNoteInEnglish,
+            },
             style: AppText.labelCapsSm().copyWith(
               color: AppColors.onSurfaceVariant,
             ),

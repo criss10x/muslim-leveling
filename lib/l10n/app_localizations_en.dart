@@ -3572,4 +3572,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get qiblaSkinChange => 'Change style';
+
+  @override
+  String get contentNoteTurkish => 'Text in Turkish';
 }

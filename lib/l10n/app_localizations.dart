@@ -6441,6 +6441,12 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Ganti tampilan'**
   String get qiblaSkinChange;
+
+  /// No description provided for @contentNoteTurkish.
+  ///
+  /// In id, this message translates to:
+  /// **'Teks dalam Bahasa Turki'**
+  String get contentNoteTurkish;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

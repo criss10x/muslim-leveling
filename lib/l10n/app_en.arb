@@ -1069,5 +1069,6 @@
   "profilRankFooter": "Performing the five daily prayers grants XP. The more consistent you are, the faster you will level up, and the color changes accordingly.",
   "doaEmptyGroups": "No duas to show yet. Try reloading.",
   "doaShareFailed": "Couldn't share the dua. Try again.",
-  "qiblaSkinChange": "Change style"
+  "qiblaSkinChange": "Change style",
+  "contentNoteTurkish": "Text in Turkish"
 }

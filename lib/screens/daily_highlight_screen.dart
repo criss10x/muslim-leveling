@@ -8,6 +8,7 @@ import '../../widgets/quran_share_sheet.dart';
 import '../../widgets/quran_tafsir_sheet.dart';
 import '../../services/game_service.dart';
 import '../../services/daily_highlight.dart';
+import '../../services/hadis_api.dart';
 import '../../services/ulama_quotes.dart';
 import '../../services/quran_data.dart';
 import '../../services/quran_api.dart';
@@ -97,6 +98,7 @@ class _DailyHighlightScreenState extends State<DailyHighlightScreen> {
       final h = await dailyHighlightService.forToday(
         GameService.todayStr(),
         english: quranUseEnglish(Localizations.localeOf(context)),
+        hadisLang: HadisLang.of(Localizations.localeOf(context).languageCode),
       );
       if (!mounted) return;
       setState(() {

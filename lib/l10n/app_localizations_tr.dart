@@ -3597,4 +3597,7 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get qiblaSkinChange => 'Stili değiştir';
+
+  @override
+  String get contentNoteTurkish => 'Türkçe Metin';
 }
