@@ -125,6 +125,35 @@ class _QuranTabState extends State<QuranTab> {
     }
   }
 
+  /// Isi kotak cari dengan [v] lalu jalankan pencariannya. Dipakai tombol
+  /// bantuan di dalam kotak cari dan tombol di jendela bantuan.
+  void _applyExample(String v) {
+    _searchController.text = v;
+    _searchController.selection = TextSelection.collapsed(offset: v.length);
+    _onQueryChanged(v);
+  }
+
+  /// Jendela "Cara mencari".
+  ///
+  /// Dulu panduannya kartu setinggi ~198dp yang duduk di aliran daftar. Di HP
+  /// itu terasa terlalu tinggi (keluhan user: "terlalu tinggi") dan ia menekan
+  /// daftar surat ke bawah. Sekarang hanya tombol ikon di kotak cari; tiga cara
+  /// mencari baru dijelaskan setelah user MEMINTA, lewat jendela ini.
+  Future<void> _showSearchHelp() async {
+    final onExample = _applyExample;
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      builder: (ctx) => _SearchHelpSheet(
+        onExample: (v) {
+          Navigator.of(ctx).pop();
+          onExample(v);
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_loading) {
@@ -308,6 +337,34 @@ class _QuranTabState extends State<QuranTab> {
                     Icons.search,
                     color: AppColors.onSurfaceVariant,
                   ),
+                  // Tombol bantuan: menggantikan kartu panduan setinggi ~198dp
+                  // yang dulu menekan daftar surat. Ikonnya kecil (18dp) supaya
+                  // terbaca sebagai tombol di dalam field, tapi kotak tapnya
+                  // tetap 48dp (ambang sentuh Android).
+                  suffixIcon: Semantics(
+                    button: true,
+                    label: AppL10n.of(context).qtSearchHelpTitle,
+                    child: Tooltip(
+                      message: AppL10n.of(context).qtSearchHelpTitle,
+                      child: InkWell(
+                        onTap: _showSearchHelp,
+                        customBorder: const CircleBorder(),
+                        // Tidak const: warna diambil dari AppColors yang
+                        // mengikuti tema aktif.
+                        child: SizedBox(
+                          width: 48,
+                          height: 48,
+                          child: Center(
+                            child: Icon(
+                              Icons.help_outline,
+                              size: 18,
+                              color: AppColors.onSurfaceVariant,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                   filled: true,
                   fillColor: AppColors.surfaceContainerLow,
                   border: OutlineInputBorder(
@@ -318,30 +375,6 @@ class _QuranTabState extends State<QuranTab> {
               ),
             ),
           ),
-          // Kartu "cara mencari": tiga jalan masuk yang benar-benar dikenali
-          // parser, ditampilkan selama kotak cari masih kosong. Contohnya bisa
-          // ditap langsung supaya user tidak perlu mengetik manual.
-          //
-          // Hanya saat kosong: begitu user mengetik, ruangnya dipakai hasil.
-          if (ref == null && _query.trim().isEmpty)
-            SliverPadding(
-              padding: const EdgeInsets.only(
-                left: AppSpacing.md,
-                right: AppSpacing.md,
-                top: AppSpacing.sm,
-              ),
-              sliver: SliverToBoxAdapter(
-                child: _SearchHelp(
-                  onExample: (v) {
-                    _searchController.text = v;
-                    _searchController.selection = TextSelection.collapsed(
-                      offset: v.length,
-                    );
-                    _onQueryChanged(v);
-                  },
-                ),
-              ),
-            ),
           if (ref != null)
             SliverPadding(
               padding: const EdgeInsets.only(
@@ -765,15 +798,14 @@ class _RevelationChip extends StatelessWidget {
 /// iya — extent tetap akan menjepit field. Garis bawah hanya muncul ketika ada
 /// konten yang lewat di belakangnya, supaya header tidak terlihat mengambang
 /// saat daftar masih di puncak.
-/// Panduan tiga cara mencari, ditaruh di bawah kotak cari.
-///
-/// Tiap contoh di sini WAJIB benar-benar dikenali pencarian; contoh yang tidak
+/// Isi jendela "Cara mencari": tiga jalan masuk yang benar-benar dikenali
+/// parser. Tiap contoh WAJIB menghasilkan sesuatu; contoh yang tidak
 /// menghasilkan apa-apa lebih buruk daripada tidak ada panduan sama sekali.
 /// Kebenarannya dijaga test `quran_search_help_test.dart`, bukan komentar ini.
-class _SearchHelp extends StatelessWidget {
+class _SearchHelpSheet extends StatelessWidget {
   final ValueChanged<String> onExample;
 
-  const _SearchHelp({required this.onExample});
+  const _SearchHelpSheet({required this.onExample});
 
   @override
   Widget build(BuildContext context) {
@@ -792,6 +824,10 @@ class _SearchHelp extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
       child: Column(
+        // MainAxisSize.min WAJIB: dengan isScrollControlled true, jendela
+        // memberi tinggi maksimum, dan Column default (max) ikut melar sampai
+        // hampir satu layar penuh. Terukur 494dp dari 568dp sebelum ini.
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
