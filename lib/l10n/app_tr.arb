@@ -1095,5 +1095,10 @@
   "qtSearchHelpRef": "o ayeti açar",
   "qtSearchHelpMeaning": "çeviride ara",
   "qtSearchHelpSurah": "adı veya anlamı",
-  "qtSearchHelpNumber": "sure:ayet numarası, aynı şey"
+  "qtSearchHelpNumber": "sure:ayet numarası, aynı şey",
+  "hsTitle": "Hadis Paylaş",
+  "hsContentHikmah": "Hikmet",
+  "hsErr": "Hadis paylaşılamadı. Tekrar dene.",
+  "hsShareAppName": "Muslim Leveling",
+  "hsTooltip": "Bu hadisi paylaş"
 }

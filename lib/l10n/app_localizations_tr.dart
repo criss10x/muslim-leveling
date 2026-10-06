@@ -3657,4 +3657,19 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get qtSearchHelpNumber => 'sure:ayet numarası, aynı şey';
+
+  @override
+  String get hsTitle => 'Hadis Paylaş';
+
+  @override
+  String get hsContentHikmah => 'Hikmet';
+
+  @override
+  String get hsErr => 'Hadis paylaşılamadı. Tekrar dene.';
+
+  @override
+  String get hsShareAppName => 'Muslim Leveling';
+
+  @override
+  String get hsTooltip => 'Bu hadisi paylaş';
 }

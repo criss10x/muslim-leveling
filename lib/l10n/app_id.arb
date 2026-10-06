@@ -1869,5 +1869,10 @@
   "qtSearchHelpRef": "langsung ke ayat itu",
   "qtSearchHelpMeaning": "cari di terjemahan",
   "qtSearchHelpSurah": "nama atau arti surat",
-  "qtSearchHelpNumber": "nomor surat:nomor ayat, sama saja"
+  "qtSearchHelpNumber": "nomor surat:nomor ayat, sama saja",
+  "hsTitle": "Bagikan Hadis",
+  "hsContentHikmah": "Hikmah",
+  "hsErr": "Gagal membagikan hadis. Coba lagi.",
+  "hsShareAppName": "Muslim Leveling",
+  "hsTooltip": "Bagikan hadis ini"
 }

@@ -1095,5 +1095,10 @@
   "qtSearchHelpRef": "terus ke ayat itu",
   "qtSearchHelpMeaning": "cari dalam terjemahan",
   "qtSearchHelpSurah": "nama atau maksud surah",
-  "qtSearchHelpNumber": "nombor surah:nombor ayat, sama juga"
+  "qtSearchHelpNumber": "nombor surah:nombor ayat, sama juga",
+  "hsTitle": "Kongsi Hadis",
+  "hsContentHikmah": "Hikmah",
+  "hsErr": "Gagal berkongsi hadis. Cuba lagi.",
+  "hsShareAppName": "Muslim Leveling",
+  "hsTooltip": "Kongsi hadis ini"
 }

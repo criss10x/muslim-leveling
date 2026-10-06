@@ -1095,5 +1095,10 @@
   "qtSearchHelpRef": "opens that ayah",
   "qtSearchHelpMeaning": "search the translation",
   "qtSearchHelpSurah": "surah name or meaning",
-  "qtSearchHelpNumber": "surah number:ayah number, same thing"
+  "qtSearchHelpNumber": "surah number:ayah number, same thing",
+  "hsTitle": "Share Hadith",
+  "hsContentHikmah": "Lesson",
+  "hsErr": "Failed to share the hadith. Try again.",
+  "hsShareAppName": "Muslim Leveling",
+  "hsTooltip": "Share this hadith"
 }

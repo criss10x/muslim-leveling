@@ -3632,4 +3632,19 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get qtSearchHelpNumber => 'surah number:ayah number, same thing';
+
+  @override
+  String get hsTitle => 'Share Hadith';
+
+  @override
+  String get hsContentHikmah => 'Lesson';
+
+  @override
+  String get hsErr => 'Failed to share the hadith. Try again.';
+
+  @override
+  String get hsShareAppName => 'Muslim Leveling';
+
+  @override
+  String get hsTooltip => 'Share this hadith';
 }

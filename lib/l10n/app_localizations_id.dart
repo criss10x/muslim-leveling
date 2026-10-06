@@ -3627,4 +3627,19 @@ class AppL10nId extends AppL10n {
 
   @override
   String get qtSearchHelpNumber => 'nomor surat:nomor ayat, sama saja';
+
+  @override
+  String get hsTitle => 'Bagikan Hadis';
+
+  @override
+  String get hsContentHikmah => 'Hikmah';
+
+  @override
+  String get hsErr => 'Gagal membagikan hadis. Coba lagi.';
+
+  @override
+  String get hsShareAppName => 'Muslim Leveling';
+
+  @override
+  String get hsTooltip => 'Bagikan hadis ini';
 }

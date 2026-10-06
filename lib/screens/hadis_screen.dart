@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../services/hadis_api.dart';
+import '../../widgets/hadis_share_sheet.dart';
 import '../../services/game_service.dart';
 import '../../services/daily_highlight.dart';
 import '../../l10n/app_localizations.dart';
@@ -573,6 +574,31 @@ class _HadisDetailScreenState extends State<HadisDetailScreen> {
                     ),
                   ),
                   if (item.grade.isNotEmpty) _gradeChip(item.grade, sahih),
+                  // Tombol share: ikon 48dp (ambang sentuh Android), sejajar
+                  // dengan pintu share di tab lain.
+                  Semantics(
+                    button: true,
+                    label: _l10n.hsTooltip,
+                    child: Tooltip(
+                      message: _l10n.hsTooltip,
+                      child: InkWell(
+                        onTap: () =>
+                            showHadisShareSheet(context, item: item),
+                        customBorder: const CircleBorder(),
+                        child: SizedBox(
+                          width: 48,
+                          height: 48,
+                          child: Center(
+                            child: Icon(
+                              Icons.share_outlined,
+                              size: 20,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

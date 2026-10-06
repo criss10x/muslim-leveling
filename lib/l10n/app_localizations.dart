@@ -6555,6 +6555,36 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'nomor surat:nomor ayat, sama saja'**
   String get qtSearchHelpNumber;
+
+  /// No description provided for @hsTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Bagikan Hadis'**
+  String get hsTitle;
+
+  /// No description provided for @hsContentHikmah.
+  ///
+  /// In id, this message translates to:
+  /// **'Hikmah'**
+  String get hsContentHikmah;
+
+  /// No description provided for @hsErr.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal membagikan hadis. Coba lagi.'**
+  String get hsErr;
+
+  /// No description provided for @hsShareAppName.
+  ///
+  /// In id, this message translates to:
+  /// **'Muslim Leveling'**
+  String get hsShareAppName;
+
+  /// No description provided for @hsTooltip.
+  ///
+  /// In id, this message translates to:
+  /// **'Bagikan hadis ini'**
+  String get hsTooltip;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {
