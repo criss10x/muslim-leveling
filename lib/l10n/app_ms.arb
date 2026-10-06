@@ -1094,5 +1094,6 @@
   "qtSearchHelpTitle": "Cara cari",
   "qtSearchHelpRef": "terus ke ayat itu",
   "qtSearchHelpMeaning": "cari dalam terjemahan",
-  "qtSearchHelpSurah": "nama atau maksud surah"
+  "qtSearchHelpSurah": "nama atau maksud surah",
+  "qtSearchHelpNumber": "nombor surah:nombor ayat, sama juga"
 }

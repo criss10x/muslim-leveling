@@ -857,6 +857,14 @@ class _SearchHelpSheet extends StatelessWidget {
             onTap: onExample,
           ),
           _HelpRow(
+            // Bentuk nomor, untuk yang lebih hafal nomor surat daripada
+            // namanya. Parser menerima titik juga ("2.286").
+            example: '2:286',
+            label: l10n.qtSearchHelpNumber,
+            icon: Icons.tag,
+            onTap: onExample,
+          ),
+          _HelpRow(
             // Kata yang lazim dicari; "kesabaran" ada di 92 ayat terjemahan.
             example: 'kesabaran',
             label: l10n.qtSearchHelpMeaning,

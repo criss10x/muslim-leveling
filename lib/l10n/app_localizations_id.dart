@@ -3624,4 +3624,7 @@ class AppL10nId extends AppL10n {
 
   @override
   String get qtSearchHelpSurah => 'nama atau arti surat';
+
+  @override
+  String get qtSearchHelpNumber => 'nomor surat:nomor ayat, sama saja';
 }

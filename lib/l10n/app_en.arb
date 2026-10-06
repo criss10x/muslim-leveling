@@ -1094,5 +1094,6 @@
   "qtSearchHelpTitle": "How to search",
   "qtSearchHelpRef": "opens that ayah",
   "qtSearchHelpMeaning": "search the translation",
-  "qtSearchHelpSurah": "surah name or meaning"
+  "qtSearchHelpSurah": "surah name or meaning",
+  "qtSearchHelpNumber": "surah number:ayah number, same thing"
 }

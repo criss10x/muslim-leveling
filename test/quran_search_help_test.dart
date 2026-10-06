@@ -21,6 +21,31 @@ void main() {
       expect(ref.ayah, 286);
     });
 
+    test('acuan nomor: "2:286" menghasilkan Al-Baqarah 286', () async {
+      final all = await quranData.surahs();
+      final ref = QuranData.parseAyahRef(all, '2:286');
+      expect(ref, isNotNull,
+          reason: 'contoh panduan "2:286" tidak menghasilkan apa-apa');
+      expect(ref!.surah.nameLatin, 'Al-Baqarah');
+      expect(ref.ayah, 286);
+    });
+
+    test('acuan nomor dengan titik "2.286" juga bekerja', () async {
+      final all = await quranData.surahs();
+      final ref = QuranData.parseAyahRef(all, '2.286');
+      expect(ref, isNotNull);
+      expect(ref!.surah.nameLatin, 'Al-Baqarah');
+      expect(ref.ayah, 286);
+    });
+
+    test('acuan nomor di luar jumlah ayat ditolak, bukan menebak', () async {
+      final all = await quranData.surahs();
+      // Al-Baqarah hanya 286 ayat.
+      expect(QuranData.parseAyahRef(all, '2:999'), isNull);
+      // Surat 115 tidak ada.
+      expect(QuranData.parseAyahRef(all, '115:1'), isNull);
+    });
+
     test('kata terjemahan: "kesabaran" ketemu di ayat', () async {
       final res = await quranData.searchVerses('kesabaran', english: false);
       expect(res.hits, isNotEmpty,

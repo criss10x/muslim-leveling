@@ -1094,5 +1094,6 @@
   "qtSearchHelpTitle": "Nasıl aranır",
   "qtSearchHelpRef": "o ayeti açar",
   "qtSearchHelpMeaning": "çeviride ara",
-  "qtSearchHelpSurah": "adı veya anlamı"
+  "qtSearchHelpSurah": "adı veya anlamı",
+  "qtSearchHelpNumber": "sure:ayet numarası, aynı şey"
 }

@@ -6549,6 +6549,12 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'nama atau arti surat'**
   String get qtSearchHelpSurah;
+
+  /// No description provided for @qtSearchHelpNumber.
+  ///
+  /// In id, this message translates to:
+  /// **'nomor surat:nomor ayat, sama saja'**
+  String get qtSearchHelpNumber;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

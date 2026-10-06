@@ -3654,4 +3654,7 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get qtSearchHelpSurah => 'adı veya anlamı';
+
+  @override
+  String get qtSearchHelpNumber => 'sure:ayet numarası, aynı şey';
 }

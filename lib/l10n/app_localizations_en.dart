@@ -3629,4 +3629,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get qtSearchHelpSurah => 'surah name or meaning';
+
+  @override
+  String get qtSearchHelpNumber => 'surah number:ayah number, same thing';
 }

@@ -1868,5 +1868,6 @@
   "qtSearchHelpTitle": "Cara mencari",
   "qtSearchHelpRef": "langsung ke ayat itu",
   "qtSearchHelpMeaning": "cari di terjemahan",
-  "qtSearchHelpSurah": "nama atau arti surat"
+  "qtSearchHelpSurah": "nama atau arti surat",
+  "qtSearchHelpNumber": "nomor surat:nomor ayat, sama saja"
 }

@@ -3637,4 +3637,7 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get qtSearchHelpSurah => 'nama atau maksud surah';
+
+  @override
+  String get qtSearchHelpNumber => 'nombor surah:nombor ayat, sama juga';
 }

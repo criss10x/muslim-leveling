@@ -42,7 +42,7 @@ void main() {
     expect(find.text('Al-Fatihah'), findsOneWidget);
   });
 
-  testWidgets('tombol bantuan membuka jendela berisi tiga cara',
+  testWidgets('tombol bantuan membuka jendela berisi empat cara',
       (tester) async {
     await openTab(tester);
     await openHelp(tester);
@@ -50,6 +50,7 @@ void main() {
     // Judul + ketiga cara, memakai contoh yang benar-benar bekerja.
     expect(find.text('Cara mencari'), findsOneWidget);
     expect(find.text('Al-Baqarah 286'), findsOneWidget);
+    expect(find.text('2:286'), findsOneWidget);
     expect(find.text('kesabaran'), findsOneWidget);
     expect(find.text('sapi'), findsOneWidget);
   });
@@ -80,6 +81,18 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Ayat 286 dari 286'), findsOneWidget);
+  });
+
+  testWidgets('pilih contoh nomor "2:286" membuka kartu ayat', (tester) async {
+    await openTab(tester);
+    await openHelp(tester);
+
+    await tester.tap(find.text('2:286'));
+    await tester.pump(const Duration(milliseconds: 600)); // debounce
+    await tester.pumpAndSettle();
+
+    expect(find.text('Ayat 286 dari 286'), findsOneWidget,
+        reason: 'contoh nomor surat:ayat harus menghasilkan ayat yang sama');
   });
 
   testWidgets('tombol bantuan punya label a11y', (tester) async {
