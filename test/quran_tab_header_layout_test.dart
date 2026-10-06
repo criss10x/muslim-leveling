@@ -177,7 +177,21 @@ void main() {
     // Header pinned: setelah menggulir, field menempel di atas viewport.
     await tester.drag(find.byType(CustomScrollView), const Offset(0, -300));
     await tester.pumpAndSettle();
-    expect(tester.getRect(find.byType(TextField)).top, lessThanOrEqualTo(12.5));
+
+    // Setelah helper "mis. ..." dibuang, field mengisi penuh kotaknya: 52dp
+    // (dulu 72dp karena helper ikut dirender, padahal slot header tetap 84dp →
+    // field terjepit dan tumpah ke daftar). Tinggi 52dp adalah invarian yang
+    // dijaga di sini: kalau helper dikembalikan, angkanya naik dan tes gagal.
+    final fieldRect = tester.getRect(find.byType(TextField));
+    expect(fieldRect.height, closeTo(52.0, 1.0),
+        reason: 'tinggi field berubah: ${fieldRect.height.toStringAsFixed(1)}dp '
+            '(helper dikembalikan?)');
+    // Field dipusatkan di dalam header, jadi tepinya harus di dalam layar
+    // (bukan menjulur keluar header ke atas) dan tetap dekat puncak viewport.
+    expect(fieldRect.top, greaterThanOrEqualTo(0.0));
+    expect(fieldRect.top, lessThanOrEqualTo(20.0),
+        reason: 'field tidak lagi di dalam header: '
+            '${fieldRect.top.toStringAsFixed(1)}px');
     expect(find.text('Al-Quran'), findsNothing);
     expect(drainExceptions(tester), 0);
   });

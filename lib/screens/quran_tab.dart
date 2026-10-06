@@ -174,7 +174,9 @@ class _QuranTabState extends State<QuranTab> {
     final ref = _ayahRef;
     // Saat acuan ayat aktif, daftar surat disembunyikan supaya kartu ayatnya
     // yang jadi jawaban tunggal — bukan tenggelam di bawah 114 baris surat.
-    final list = ref != null ? const <QuranSurah>[] : quranData.search(_all, _query);
+    final list = ref != null
+        ? const <QuranSurah>[]
+        : quranData.search(_all, _query);
     // Aksen disembunyikan saat teks sistem membesar: di 1,5× judul butuh 180px
     // sementara slotnya hanya 133,8px (320dp) — dekorasi tidak lagi kebagian
     // ruang. Judul membawa informasi, kaligrafi tidak.
@@ -242,8 +244,9 @@ class _QuranTabState extends State<QuranTab> {
                                 textDirection: TextDirection.rtl,
                                 maxLines: 1,
                                 style: AppText.headlineMd().copyWith(
-                                  color:
-                                      AppColors.goldInk.withValues(alpha: 0.75),
+                                  color: AppColors.goldInk.withValues(
+                                    alpha: 0.75,
+                                  ),
                                 ),
                               ),
                             ),
@@ -272,22 +275,21 @@ class _QuranTabState extends State<QuranTab> {
                       color: AppColors.onSurfaceVariant,
                     ),
                   ),
-                  if (_lastSurah case final surah?)
-                    ...[
-                      const SizedBox(height: AppSpacing.md),
-                      _ResumeReadingCard(
-                        surah: surah,
-                        ayah: quranProgress.ayah!,
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => QuranReader(
-                              surah: surah,
-                              initialAyah: quranProgress.ayah,
-                            ),
+                  if (_lastSurah case final surah?) ...[
+                    const SizedBox(height: AppSpacing.md),
+                    _ResumeReadingCard(
+                      surah: surah,
+                      ayah: quranProgress.ayah!,
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => QuranReader(
+                            surah: surah,
+                            initialAyah: quranProgress.ayah,
                           ),
                         ),
                       ),
-                    ],
+                    ),
+                  ],
                   // Posisi lama (ke-2 dst): baris ramping gaya list item, bukan
                   // kartu. Hanya muncul saat ada ≥2 riwayat — nol biaya tempat
                   // untuk user yang baru punya satu posisi baca.
@@ -319,20 +321,14 @@ class _QuranTabState extends State<QuranTab> {
                 onChanged: _onQueryChanged,
                 style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
                 decoration: InputDecoration(
-                  // Hint pendek supaya tak pernah terpotong; contoh format
-                  // pindah ke helperText (lihat catatan di _SearchHeader).
+                  // Hint pendek supaya tak pernah terpotong.
                   hintText: AppL10n.of(context).qtSearchHint,
                   hintStyle: AppText.bodyMd().copyWith(
                     color: AppColors.onSurfaceVariant,
                   ),
-                  helperText: AppL10n.of(
-                    context,
-                  ).qtSearchHelper(QuranData.exampleAyahRef),
-                  // ponytail: helper 1 baris. Di ≥2,0× pada 320dp contohnya
-                  // ter-ellipsis; naikkan helperMaxLines + extentFor kalau perlu.
-                  helperStyle: AppText.bodyMd().copyWith(
-                    color: AppColors.onSurfaceVariant,
-                  ),
+                  // Tanpa helperText: contoh pencarian sudah ada di tombol
+                  // bantuan di dalam field ini, dan dulu barisnya cuma
+                  // mengulang hal yang sama sambil memakan tinggi header.
                   prefixIcon: Icon(
                     Icons.search,
                     color: AppColors.onSurfaceVariant,
@@ -392,56 +388,57 @@ class _QuranTabState extends State<QuranTab> {
                     child: Center(child: CircularProgressIndicator()),
                   )
                 : _verseHits.isEmpty
-                    ? SliverFillRemaining(
-                        hasScrollBody: false,
-                        child: Center(
-                          child: Text(
-                            AppL10n.of(context).qtSearchEmpty(QuranData.exampleAyahRef),
-                            style: AppText.bodyMd().copyWith(
-                              color: AppColors.onSurfaceVariant,
+                ? SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(
+                      child: Text(
+                        AppL10n.of(
+                          context,
+                        ).qtSearchEmpty(QuranData.exampleAyahRef),
+                        style: AppText.bodyMd().copyWith(
+                          color: AppColors.onSurfaceVariant,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  )
+                : SliverPadding(
+                    padding: const EdgeInsets.only(
+                      left: AppSpacing.md,
+                      right: AppSpacing.md,
+                      top: AppSpacing.xs,
+                      bottom: AppSpacing.xxl * 2,
+                    ),
+                    sliver: SliverMainAxisGroup(
+                      slivers: [
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 4, bottom: 8),
+                            child: Text(
+                              _truncated
+                                  ? AppL10n.of(
+                                      context,
+                                    ).qtVerseHitsTruncated(_verseHits.length)
+                                  : AppL10n.of(
+                                      context,
+                                    ).qtVerseHits(_verseHits.length),
+                              style: AppText.labelCaps().copyWith(
+                                color: AppColors.onSurfaceVariant,
+                              ),
                             ),
-                            textAlign: TextAlign.center,
                           ),
                         ),
-                      )
-                    : SliverPadding(
-                        padding: const EdgeInsets.only(
-                          left: AppSpacing.md,
-                          right: AppSpacing.md,
-                          top: AppSpacing.xs,
-                          bottom: AppSpacing.xxl * 2,
+                        SliverList.builder(
+                          itemCount: _verseHits.length,
+                          itemBuilder: (_, i) => _VerseHitRow(
+                            hit: _verseHits[i],
+                            query: _query.trim(),
+                            surah: _surahOf(_verseHits[i].surahNumber),
+                          ),
                         ),
-                        sliver: SliverMainAxisGroup(
-                          slivers: [
-                            SliverToBoxAdapter(
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 4,
-                                  bottom: 8,
-                                ),
-                                child: Text(
-                                  _truncated
-                                      ? AppL10n.of(context)
-                                          .qtVerseHitsTruncated(_verseHits.length)
-                                      : AppL10n.of(context)
-                                          .qtVerseHits(_verseHits.length),
-                                  style: AppText.labelCaps().copyWith(
-                                    color: AppColors.onSurfaceVariant,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SliverList.builder(
-                              itemCount: _verseHits.length,
-                              itemBuilder: (_, i) => _VerseHitRow(
-                                hit: _verseHits[i],
-                                query: _query.trim(),
-                                surah: _surahOf(_verseHits[i].surahNumber),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
+                      ],
+                    ),
+                  )
           else if (list.isEmpty)
             SliverFillRemaining(
               hasScrollBody: false,
@@ -507,8 +504,7 @@ class _ResumeReadingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      label: AppL10n.of(context)
-          .qtContinueReadingDetail(surah.nameLatin, ayah),
+      label: AppL10n.of(context).qtContinueReadingDetail(surah.nameLatin, ayah),
       child: Material(
         color: AppColors.primary.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(AppRadius.xxl),
@@ -526,10 +522,7 @@ class _ResumeReadingCard extends StatelessWidget {
                     color: AppColors.primary,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
-                    Icons.play_arrow,
-                    color: AppColors.onPrimary,
-                  ),
+                  child: Icon(Icons.play_arrow, color: AppColors.onPrimary),
                 ),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
@@ -611,7 +604,7 @@ class _RecentReadingRow extends StatelessWidget {
                       // kedua cukup nama + ayat supaya tidak mengulang label.
                       isFirst
                           ? '${l10n.qtRecentReading} · '
-                              '${l10n.qtSurahAyah(surah.nameLatin, ayah)}'
+                                '${l10n.qtSurahAyah(surah.nameLatin, ayah)}'
                           : l10n.qtSurahAyah(surah.nameLatin, ayah),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -701,7 +694,9 @@ class _SurahRow extends StatelessWidget {
                                 children: [
                                   _RevelationChip(
                                     label: surahRevelation(
-                                        AppL10n.of(context), surah.revelation),
+                                      AppL10n.of(context),
+                                      surah.revelation,
+                                    ),
                                   ),
                                   const SizedBox(width: AppSpacing.sm),
                                   Icon(
@@ -810,75 +805,81 @@ class _SearchHelpSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppL10n.of(context);
-    return Container(
-      // padding & jarak sengaja rapat: terukur 324dp di 320x568 (57% tinggi
-      // layar) saat masih longgar, dan itu menekan daftar surat ke bawah.
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.md,
-        AppSpacing.sm + 2,
-        AppSpacing.md,
-        AppSpacing.sm,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-      ),
-      child: Column(
-        // MainAxisSize.min WAJIB: dengan isScrollControlled true, jendela
-        // memberi tinggi maksimum, dan Column default (max) ikut melar sampai
-        // hampir satu layar penuh. Terukur 494dp dari 568dp sebelum ini.
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(
-                Icons.lightbulb_outline,
-                size: 16,
-                color: AppColors.onSurfaceVariant,
-              ),
-              const SizedBox(width: AppSpacing.xs),
-              Text(
-                l10n.qtSearchHelpTitle,
-                style: AppText.bodyMd().copyWith(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.4,
+    // SafeArea WAJIB: dengan tombol navigasi Android (bukan gesture), baris
+    // terakhir jendela tertutup nav bar — keluhan user. Semua bottom sheet lain
+    // di app ini juga membungkus dirinya dengan SafeArea.
+    return SafeArea(
+      top: false,
+      child: Container(
+        // padding & jarak sengaja rapat: terukur 324dp di 320x568 (57% tinggi
+        // layar) saat masih longgar, dan itu menekan daftar surat ke bawah.
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.md,
+          AppSpacing.sm + 2,
+          AppSpacing.md,
+          AppSpacing.sm,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+        ),
+        child: Column(
+          // MainAxisSize.min WAJIB: dengan isScrollControlled true, jendela
+          // memberi tinggi maksimum, dan Column default (max) ikut melar sampai
+          // hampir satu layar penuh. Terukur 494dp dari 568dp sebelum ini.
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.lightbulb_outline,
+                  size: 16,
                   color: AppColors.onSurfaceVariant,
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          _HelpRow(
-            example: QuranData.exampleAyahRef,
-            label: l10n.qtSearchHelpRef,
-            icon: Icons.my_location,
-            onTap: onExample,
-          ),
-          _HelpRow(
-            // Bentuk nomor, untuk yang lebih hafal nomor surat daripada
-            // namanya. Parser menerima titik juga ("2.286").
-            example: '2:286',
-            label: l10n.qtSearchHelpNumber,
-            icon: Icons.tag,
-            onTap: onExample,
-          ),
-          _HelpRow(
-            // Kata yang lazim dicari; "kesabaran" ada di 92 ayat terjemahan.
-            example: 'kesabaran',
-            label: l10n.qtSearchHelpMeaning,
-            icon: Icons.translate,
-            onTap: onExample,
-          ),
-          _HelpRow(
-            // Arti surat juga cocok: "sapi" menemukan Al-Baqarah.
-            example: 'sapi',
-            label: l10n.qtSearchHelpSurah,
-            icon: Icons.menu_book_outlined,
-            onTap: onExample,
-          ),
-        ],
+                const SizedBox(width: AppSpacing.xs),
+                Text(
+                  l10n.qtSearchHelpTitle,
+                  style: AppText.bodyMd().copyWith(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.4,
+                    color: AppColors.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            _HelpRow(
+              example: QuranData.exampleAyahRef,
+              label: l10n.qtSearchHelpRef,
+              icon: Icons.my_location,
+              onTap: onExample,
+            ),
+            _HelpRow(
+              // Bentuk nomor, untuk yang lebih hafal nomor surat daripada
+              // namanya. Parser menerima titik juga ("2.286").
+              example: '2:286',
+              label: l10n.qtSearchHelpNumber,
+              icon: Icons.tag,
+              onTap: onExample,
+            ),
+            _HelpRow(
+              // Kata yang lazim dicari; "kesabaran" ada di 92 ayat terjemahan.
+              example: 'kesabaran',
+              label: l10n.qtSearchHelpMeaning,
+              icon: Icons.translate,
+              onTap: onExample,
+            ),
+            _HelpRow(
+              // Arti surat juga cocok: "sapi" menemukan Al-Baqarah.
+              example: 'sapi',
+              label: l10n.qtSearchHelpSurah,
+              icon: Icons.menu_book_outlined,
+              onTap: onExample,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -965,6 +966,11 @@ class _SearchHeader extends SliverPersistentHeaderDelegate {
   /// Tinggi yang dibutuhkan header pada skala teks aktif: padding vertikal
   /// Container + contentPadding bawaan OutlineInputBorder (20 atas, 20 bawah)
   /// + tinggi satu baris bodyMd yang ikut diskalakan.
+  ///
+  /// Helper "mis. Al-Baqarah 286" sudah DIBUANG dari field (contohnya ada di
+  /// tombol bantuan, jadi barisnya cuma mengulang), sehingga tingginya kembali
+  /// ke satu baris. Kalau helper ditambahkan lagi, tambahkan barisnya di sini
+  /// atau field-nya terjepit.
   static double extentFor(BuildContext context) {
     const containerPadding = AppSpacing.sm * 2;
     const contentPadding = 40.0;
@@ -1114,7 +1120,9 @@ class _AyahRefCardState extends State<_AyahRefCard> {
                           ),
                           const SizedBox(height: AppSpacing.xs),
                           Text(
-                            AppL10n.of(context).qtAyahOf(r.ayah, r.surah.ayahCount),
+                            AppL10n.of(
+                              context,
+                            ).qtAyahOf(r.ayah, r.surah.ayahCount),
                             style: AppText.labelCaps().copyWith(
                               color: AppColors.primary,
                             ),
@@ -1199,13 +1207,15 @@ class _VerseHitRow extends StatelessWidget {
       }
       if (idx > 0) spans.add(TextSpan(text: rest.substring(0, idx)));
       final match = rest.substring(idx, idx + q.length);
-      spans.add(TextSpan(
-        text: match,
-        style: TextStyle(
-          color: AppColors.primary,
-          fontWeight: FontWeight.w700,
+      spans.add(
+        TextSpan(
+          text: match,
+          style: TextStyle(
+            color: AppColors.primary,
+            fontWeight: FontWeight.w700,
+          ),
         ),
-      ));
+      );
       rest = rest.substring(idx + q.length);
       if (rest.isEmpty) break;
     }
@@ -1231,10 +1241,8 @@ class _VerseHitRow extends StatelessWidget {
             if (surah == null) return;
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (_) => QuranReader(
-                  surah: surah!,
-                  initialAyah: hit.ayahNumber,
-                ),
+                builder: (_) =>
+                    QuranReader(surah: surah!, initialAyah: hit.ayahNumber),
               ),
             );
           },
@@ -1268,10 +1276,10 @@ class _VerseHitRow extends StatelessWidget {
                       Text(
                         // Nama surat belum termuat → sebut nomornya saja.
                         surah == null
-                            ? AppL10n.of(context)
-                                .qbSurahName(hit.surahNumber)
-                            : AppL10n.of(context)
-                                .qtSurahAyah(surah!.nameLatin, hit.ayahNumber),
+                            ? AppL10n.of(context).qbSurahName(hit.surahNumber)
+                            : AppL10n.of(
+                                context,
+                              ).qtSurahAyah(surah!.nameLatin, hit.ayahNumber),
                         style: AppText.bodyMd().copyWith(
                           color: AppColors.onSurfaceVariant,
                           fontSize: 13,
