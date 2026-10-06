@@ -3625,4 +3625,16 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get qsTabSize => 'Saiz';
+
+  @override
+  String get qtSearchHelpTitle => 'Cara cari';
+
+  @override
+  String get qtSearchHelpRef => 'terus ke ayat itu';
+
+  @override
+  String get qtSearchHelpMeaning => 'cari dalam terjemahan';
+
+  @override
+  String get qtSearchHelpSurah => 'nama atau maksud surah';
 }

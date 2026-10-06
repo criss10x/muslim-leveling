@@ -6525,6 +6525,30 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Ukuran'**
   String get qsTabSize;
+
+  /// No description provided for @qtSearchHelpTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Cara mencari'**
+  String get qtSearchHelpTitle;
+
+  /// No description provided for @qtSearchHelpRef.
+  ///
+  /// In id, this message translates to:
+  /// **'langsung ke ayat itu'**
+  String get qtSearchHelpRef;
+
+  /// No description provided for @qtSearchHelpMeaning.
+  ///
+  /// In id, this message translates to:
+  /// **'cari di terjemahan'**
+  String get qtSearchHelpMeaning;
+
+  /// No description provided for @qtSearchHelpSurah.
+  ///
+  /// In id, this message translates to:
+  /// **'nama atau arti surat'**
+  String get qtSearchHelpSurah;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

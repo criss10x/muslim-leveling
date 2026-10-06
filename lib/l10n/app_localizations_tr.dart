@@ -3642,4 +3642,16 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get qsTabSize => 'Boyut';
+
+  @override
+  String get qtSearchHelpTitle => 'Nasıl aranır';
+
+  @override
+  String get qtSearchHelpRef => 'o ayeti açar';
+
+  @override
+  String get qtSearchHelpMeaning => 'çeviride ara';
+
+  @override
+  String get qtSearchHelpSurah => 'adı veya anlamı';
 }

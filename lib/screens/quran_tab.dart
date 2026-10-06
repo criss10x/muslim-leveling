@@ -318,6 +318,30 @@ class _QuranTabState extends State<QuranTab> {
               ),
             ),
           ),
+          // Kartu "cara mencari": tiga jalan masuk yang benar-benar dikenali
+          // parser, ditampilkan selama kotak cari masih kosong. Contohnya bisa
+          // ditap langsung supaya user tidak perlu mengetik manual.
+          //
+          // Hanya saat kosong: begitu user mengetik, ruangnya dipakai hasil.
+          if (ref == null && _query.trim().isEmpty)
+            SliverPadding(
+              padding: const EdgeInsets.only(
+                left: AppSpacing.md,
+                right: AppSpacing.md,
+                top: AppSpacing.sm,
+              ),
+              sliver: SliverToBoxAdapter(
+                child: _SearchHelp(
+                  onExample: (v) {
+                    _searchController.text = v;
+                    _searchController.selection = TextSelection.collapsed(
+                      offset: v.length,
+                    );
+                    _onQueryChanged(v);
+                  },
+                ),
+              ),
+            ),
           if (ref != null)
             SliverPadding(
               padding: const EdgeInsets.only(
@@ -741,6 +765,153 @@ class _RevelationChip extends StatelessWidget {
 /// iya — extent tetap akan menjepit field. Garis bawah hanya muncul ketika ada
 /// konten yang lewat di belakangnya, supaya header tidak terlihat mengambang
 /// saat daftar masih di puncak.
+/// Panduan tiga cara mencari, ditaruh di bawah kotak cari.
+///
+/// Tiap contoh di sini WAJIB benar-benar dikenali pencarian; contoh yang tidak
+/// menghasilkan apa-apa lebih buruk daripada tidak ada panduan sama sekali.
+/// Kebenarannya dijaga test `quran_search_help_test.dart`, bukan komentar ini.
+class _SearchHelp extends StatelessWidget {
+  final ValueChanged<String> onExample;
+
+  const _SearchHelp({required this.onExample});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
+    return Container(
+      // padding & jarak sengaja rapat: terukur 324dp di 320x568 (57% tinggi
+      // layar) saat masih longgar, dan itu menekan daftar surat ke bawah.
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.md,
+        AppSpacing.sm + 2,
+        AppSpacing.md,
+        AppSpacing.sm,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.lightbulb_outline,
+                size: 16,
+                color: AppColors.onSurfaceVariant,
+              ),
+              const SizedBox(width: AppSpacing.xs),
+              Text(
+                l10n.qtSearchHelpTitle,
+                style: AppText.bodyMd().copyWith(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.4,
+                  color: AppColors.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          _HelpRow(
+            example: QuranData.exampleAyahRef,
+            label: l10n.qtSearchHelpRef,
+            icon: Icons.my_location,
+            onTap: onExample,
+          ),
+          _HelpRow(
+            // Kata yang lazim dicari; "kesabaran" ada di 92 ayat terjemahan.
+            example: 'kesabaran',
+            label: l10n.qtSearchHelpMeaning,
+            icon: Icons.translate,
+            onTap: onExample,
+          ),
+          _HelpRow(
+            // Arti surat juga cocok: "sapi" menemukan Al-Baqarah.
+            example: 'sapi',
+            label: l10n.qtSearchHelpSurah,
+            icon: Icons.menu_book_outlined,
+            onTap: onExample,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Satu baris panduan: chip contoh (bisa ditap) + keterangan singkat.
+class _HelpRow extends StatelessWidget {
+  final String example;
+  final String label;
+  final IconData icon;
+  final ValueChanged<String> onTap;
+
+  const _HelpRow({
+    required this.example,
+    required this.label,
+    required this.icon,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: label,
+      child: InkWell(
+        onTap: () => onTap(example),
+        borderRadius: BorderRadius.circular(AppRadius.sm),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          child: Row(
+            children: [
+              Icon(icon, size: 15, color: AppColors.primary),
+              const SizedBox(width: AppSpacing.sm),
+              // Chip contoh: dibatasi ruangnya supaya contoh panjang (Turki)
+              // tidak mendorong keterangan keluar layar 320dp.
+              Flexible(
+                flex: 4,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 3,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
+                  ),
+                  child: Text(
+                    example,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppText.bodyMd().copyWith(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(
+                flex: 6,
+                child: Text(
+                  label,
+                  style: AppText.bodyMd().copyWith(
+                    fontSize: 12,
+                    color: AppColors.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _SearchHeader extends SliverPersistentHeaderDelegate {
   final Widget child;
   final double extent;

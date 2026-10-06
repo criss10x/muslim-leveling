@@ -1864,5 +1864,9 @@
   "qsPhotoFailed": "Gagal mengambil foto. Coba lagi.",
   "qsTabBackground": "Latar",
   "qsTabContent": "Isi",
-  "qsTabSize": "Ukuran"
+  "qsTabSize": "Ukuran",
+  "qtSearchHelpTitle": "Cara mencari",
+  "qtSearchHelpRef": "langsung ke ayat itu",
+  "qtSearchHelpMeaning": "cari di terjemahan",
+  "qtSearchHelpSurah": "nama atau arti surat"
 }

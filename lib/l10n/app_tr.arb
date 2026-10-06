@@ -1090,5 +1090,9 @@
   "qsPhotoFailed": "Fotoğraf alınamadı. Tekrar deneyin.",
   "qsTabBackground": "Arka plan",
   "qsTabContent": "İçerik",
-  "qsTabSize": "Boyut"
+  "qsTabSize": "Boyut",
+  "qtSearchHelpTitle": "Nasıl aranır",
+  "qtSearchHelpRef": "o ayeti açar",
+  "qtSearchHelpMeaning": "çeviride ara",
+  "qtSearchHelpSurah": "adı veya anlamı"
 }

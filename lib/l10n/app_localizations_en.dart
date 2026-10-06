@@ -3617,4 +3617,16 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get qsTabSize => 'Size';
+
+  @override
+  String get qtSearchHelpTitle => 'How to search';
+
+  @override
+  String get qtSearchHelpRef => 'opens that ayah';
+
+  @override
+  String get qtSearchHelpMeaning => 'search the translation';
+
+  @override
+  String get qtSearchHelpSurah => 'surah name or meaning';
 }

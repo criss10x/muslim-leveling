@@ -1090,5 +1090,9 @@
   "qsPhotoFailed": "Could not get the photo. Try again.",
   "qsTabBackground": "Background",
   "qsTabContent": "Content",
-  "qsTabSize": "Size"
+  "qsTabSize": "Size",
+  "qtSearchHelpTitle": "How to search",
+  "qtSearchHelpRef": "opens that ayah",
+  "qtSearchHelpMeaning": "search the translation",
+  "qtSearchHelpSurah": "surah name or meaning"
 }
