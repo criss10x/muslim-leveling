@@ -30,7 +30,9 @@ void main() {
   testWidgets('Home render Indonesia saat locale id', (t) async {
     await pumpHome(t, const Locale('id'));
 
-    expect(find.text('RITUAL HARI INI'), findsOneWidget);
+    expect(find.text('IBADAH HARI INI'), findsOneWidget);
+    expect(find.text('RITUAL HARI INI'), findsNothing,
+        reason: 'istilah "ritual" sudah diganti "ibadah" atas permintaan user');
     await t.scrollUntilVisible(find.text('AKSES CEPAT'), 200);
     expect(find.text('AKSES CEPAT'), findsOneWidget);
   });
@@ -38,7 +40,8 @@ void main() {
   testWidgets('Home render English saat locale en', (t) async {
     await pumpHome(t, const Locale('en'));
 
-    expect(find.text("TODAY'S RITUALS"), findsOneWidget);
+    expect(find.text("TODAY'S WORSHIP"), findsOneWidget);
+    expect(find.text("TODAY'S RITUALS"), findsNothing);
     await t.scrollUntilVisible(find.text('QUICK ACCESS'), 200);
     expect(find.text('QUICK ACCESS'), findsOneWidget);
     expect(find.text('Reflection'), findsWidgets);

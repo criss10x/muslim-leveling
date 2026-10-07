@@ -887,7 +887,7 @@ class AppL10nId extends AppL10n {
   String get homeRingWajib => 'WAJIB';
 
   @override
-  String get homeRitualToday => 'RITUAL HARI INI';
+  String get homeRitualToday => 'IBADAH HARI INI';
 
   @override
   String get homeSideDone => 'Selesai hari ini ✓';

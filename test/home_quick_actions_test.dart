@@ -11,7 +11,7 @@ import 'package:muslim_leveling/theme/app_icons.dart';
 import 'helpers/app_wrap.dart';
 
 /// ponytail: penjaga struktur tab Home — 6 pintasan (5 lama + Hari Penting)
-/// harus ada di bawah ring "RITUAL HARI INI", dan section lama yang dipindah
+/// harus ada di bawah ring "IBADAH HARI INI", dan section lama yang dipindah
 /// tidak boleh muncul lagi (kalau muncul = pemindahan belum bersih / ada sisa
 /// render ganda).
 void main() {

@@ -888,7 +888,7 @@ class AppL10nEn extends AppL10n {
   String get homeRingWajib => 'OBLIGATORY';
 
   @override
-  String get homeRitualToday => 'TODAY\'S RITUALS';
+  String get homeRitualToday => 'TODAY\'S WORSHIP';
 
   @override
   String get homeSideDone => 'Done today ✓';

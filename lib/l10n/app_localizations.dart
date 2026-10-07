@@ -1747,7 +1747,7 @@ abstract class AppL10n {
   /// No description provided for @homeRitualToday.
   ///
   /// In id, this message translates to:
-  /// **'RITUAL HARI INI'**
+  /// **'IBADAH HARI INI'**
   String get homeRitualToday;
 
   /// No description provided for @homeSideDone.
