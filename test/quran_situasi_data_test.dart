@@ -24,7 +24,13 @@ void main() {
 
     expect(list, isNotEmpty, reason: 'data situasi kosong');
     for (final s in list) {
-      expect(s.ayahs.length, 3, reason: 'situasi "${s.id}" harus 3 ayat');
+      // Minimal 3: user bisa menekan "ayat lain". Kurang dari itu, tombolnya
+      // cepat terasa tidak berguna.
+      expect(
+        s.ayahs.length,
+        greaterThanOrEqualTo(3),
+        reason: 'situasi "${s.id}" cuma punya ${s.ayahs.length} ayat (min 3)',
+      );
       for (final r in s.ayahs) {
         final surah = byNumber[r.surah];
         expect(surah, isNotNull, reason: '${s.id}: surah ${r.surah} tidak ada');
@@ -86,5 +92,66 @@ void main() {
       expect(s.id, matches(RegExp(r'^[a-z0-9-]+$')),
           reason: '${s.id}: id harus lowercase-kebab (dipakai sebagai kunci ARB)');
     }
+  });
+
+  group('pemilihan ayat acak (shuffle-bag)', () {
+    test('semua ayat tampil sekali sebelum ada yang terulang', () async {
+      final list = await quranSituasi.all();
+      for (final s in list) {
+        quranSituasi.resetForTest();
+        await quranSituasi.all();
+        final n = s.ayahs.length;
+        final seen = <String>[];
+        for (var i = 0; i < n; i++) {
+          final a = quranSituasi.nextAyat(s.id, seed: 7)!;
+          seen.add('${a.surah}:${a.ayah}');
+        }
+        // Inilah janji ke user: "klik lagi -> ayat lain", bukan ayat yang sama.
+        expect(seen.toSet().length, n,
+            reason: '${s.id}: ada ayat terulang dalam satu putaran: $seen');
+      }
+    });
+
+    test('putaran berikutnya tetap mengeluarkan ayat yang sah', () async {
+      final s = (await quranSituasi.all()).first;
+      quranSituasi.resetForTest();
+      await quranSituasi.all();
+      quranSituasi.nextAyat(s.id, seed: 3);
+      final valid = s.ayahs.map((r) => '${r.surah}:${r.ayah}').toSet();
+      for (var i = 0; i < 4; i++) {
+        final a = quranSituasi.nextAyat(s.id);
+        expect(valid, contains('${a!.surah}:${a.ayah}'));
+      }
+    });
+
+    test('ayat pertama pun tidak boleh langsung terulang', () async {
+      final s = (await quranSituasi.all()).first;
+      // Beberapa seed berbeda: yang penting tidak ada pasangan berurutan sama.
+      for (final seed in [1, 2, 5, 11, 42]) {
+        quranSituasi.resetForTest();
+        await quranSituasi.all();
+        final a = quranSituasi.nextAyat(s.id, seed: seed)!;
+        final b = quranSituasi.nextAyat(s.id);
+        expect('${a.surah}:${a.ayah}', isNot('${b!.surah}:${b.ayah}'),
+            reason: 'seed $seed: ayat pertama terulang di klik kedua');
+      }
+    });
+
+    test('currentAyat mengikuti ayat yang tampil', () async {
+      final s = (await quranSituasi.all()).first;
+      quranSituasi.resetForTest();
+      await quranSituasi.all();
+      expect(quranSituasi.currentAyat(s.id), isNull, reason: 'belum dipanggil');
+      final a = quranSituasi.nextAyat(s.id, seed: 9)!;
+      final cur = quranSituasi.currentAyat(s.id)!;
+      expect('${cur.surah}:${cur.ayah}', '${a.surah}:${a.ayah}');
+    });
+
+    test('situasi tidak dikenal mengembalikan null, bukan melempar', () async {
+      quranSituasi.resetForTest();
+      await quranSituasi.all();
+      expect(quranSituasi.nextAyat('situasi-hantu'), isNull);
+      expect(quranSituasi.currentAyat('situasi-hantu'), isNull);
+    });
   });
 }

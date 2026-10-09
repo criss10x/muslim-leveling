@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math' show Random;
 
 import 'package:flutter/services.dart' show rootBundle;
 
@@ -40,8 +41,9 @@ class SituationGroup {
 
 /// Satu situasi hidup + ayat yang dikurasi untuknya.
 ///
-/// [ayahs] panjangnya 3 (dijaga guard, bukan asumsi). Urutannya bermakna:
-/// pertama = paling sering dijadikan pegangan untuk situasi ini.
+/// [ayahs] minimal 3 (dijaga guard, bukan asumsi) supaya user yang menekan
+/// "ayat lain" tidak cepat kehabisan pilihan. Urutan di file = urutan cadangan;
+/// yang tampil dipilih [QuranSituasi.nextAyat].
 class Situation {
   final String id;
   final String group;
@@ -65,6 +67,53 @@ class Situation {
 class QuranSituasi {
   List<SituationGroup>? _groups;
   List<Situation>? _situations;
+
+  /// Kantung acak per situasi: isinya indeks ayat yang BELUM ditampilkan.
+  ///
+  /// ponytail: bukan `Random().nextInt(n)` langsung, karena acak murni dengan 5
+  /// ayat punya peluang 20% memunculkan ayat yang sama dua kali berturut-turut —
+  /// user menekan "ayat lain" lalu melihat ayat yang sama dan menyangka tombolnya
+  /// rusak. Dengan kantung, satu putaran menampilkan SEMUA ayat sekali tanpa
+  /// pengulangan, lalu dikocok ulang. Peluang itu nol, bukan cuma kecil.
+  final Map<String, List<int>> _bag = {};
+  final Map<String, int> _cursor = {};
+  Random? _rnd;
+
+  /// Ambil ayat berikutnya untuk [id]: acak, tapi tidak pernah mengulang ayat
+  /// yang sama sampai semua ayat situasi itu sudah tampil sekali.
+  ///
+  /// [seed] hanya untuk tes — produksi memakai acak sungguhan.
+  ({int surah, int ayah})? nextAyat(String id, {int? seed}) {
+    final sit = _byIdSync(id);
+    if (sit == null || sit.ayahs.isEmpty) return null;
+    if (seed != null) _rnd = Random(seed);
+    _rnd ??= Random();
+
+    var bag = _bag[id];
+    if (bag == null || bag.isEmpty) {
+      bag = List<int>.generate(sit.ayahs.length, (i) => i)..shuffle(_rnd!);
+      _bag[id] = bag;
+    }
+    final idx = bag.removeLast();
+    _cursor[id] = idx;
+    return sit.ayahs[idx];
+  }
+
+  /// Ayat yang sedang tampil (untuk dipakai tombol "buka di Quran"),
+  /// atau null kalau [nextAyat] belum pernah dipanggil untuk [id].
+  ({int surah, int ayah})? currentAyat(String id) {
+    final sit = _byIdSync(id);
+    final i = _cursor[id];
+    if (sit == null || i == null) return null;
+    return sit.ayahs[i];
+  }
+
+  Situation? _byIdSync(String id) {
+    for (final s in _situations ?? const <Situation>[]) {
+      if (s.id == id) return s;
+    }
+    return null;
+  }
 
   /// Urutan tampil di layar = urutan di JSON, jadi menaruh situasi paling sering
   /// dibuka di awal file itu berpengaruh langsung ke UX.
@@ -93,10 +142,8 @@ class QuranSituasi {
   }
 
   Future<Situation?> byId(String id) async {
-    for (final s in await all()) {
-      if (s.id == id) return s;
-    }
-    return null;
+    await _ensure();
+    return _byIdSync(id);
   }
 
   /// ponytail: reset antar widget-test. Singleton yang menyimpan cache lintas
@@ -104,6 +151,9 @@ class QuranSituasi {
   void resetForTest() {
     _groups = null;
     _situations = null;
+    _bag.clear();
+    _cursor.clear();
+    _rnd = null;
   }
 }
 
