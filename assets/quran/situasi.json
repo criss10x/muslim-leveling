@@ -15,22 +15,110 @@
       "id": "sedih",
       "group": "kacau",
       "ayahs": [
-        { "surah": 3, "ayah": 139 },
-        { "surah": 9, "ayah": 40 },
-        { "surah": 93, "ayah": 3 },
         { "surah": 94, "ayah": 5 },
-        { "surah": 13, "ayah": 28 }
+        { "surah": 93, "ayah": 3 },
+        { "surah": 3, "ayah": 139 },
+        { "surah": 13, "ayah": 28 },
+        { "surah": 10, "ayah": 58 }
       ]
     },
     {
-      "id": "hutang",
+      "id": "cemas",
+      "group": "kacau",
+      "ayahs": [
+        { "surah": 10, "ayah": 62 },
+        { "surah": 13, "ayah": 28 },
+        { "surah": 64, "ayah": 13 },
+        { "surah": 94, "ayah": 5 },
+        { "surah": 9, "ayah": 51 }
+      ]
+    },
+    {
+      "id": "marah",
+      "group": "kacau",
+      "ayahs": [
+        { "surah": 7, "ayah": 199 },
+        { "surah": 42, "ayah": 43 },
+        { "surah": 42, "ayah": 37 },
+        { "surah": 3, "ayah": 134 },
+        { "surah": 41, "ayah": 34 }
+      ]
+    },
+    {
+      "id": "kesepian",
+      "group": "kacau",
+      "ayahs": [
+        { "surah": 93, "ayah": 3 },
+        { "surah": 20, "ayah": 46 },
+        { "surah": 2, "ayah": 152 },
+        { "surah": 50, "ayah": 16 },
+        { "surah": 2, "ayah": 186 }
+      ]
+    },
+    {
+      "id": "insecure",
+      "group": "kacau",
+      "ayahs": [
+        { "surah": 95, "ayah": 4 },
+        { "surah": 3, "ayah": 139 },
+        { "surah": 76, "ayah": 2 },
+        { "surah": 17, "ayah": 70 },
+        { "surah": 49, "ayah": 13 }
+      ]
+    },
+    {
+      "id": "iri",
+      "group": "kacau",
+      "ayahs": [
+        { "surah": 113, "ayah": 5 },
+        { "surah": 93, "ayah": 5 },
+        { "surah": 20, "ayah": 131 },
+        { "surah": 28, "ayah": 80 },
+        { "surah": 4, "ayah": 32 }
+      ]
+    },
+    {
+      "id": "putus-asa",
+      "group": "kacau",
+      "ayahs": [
+        { "surah": 94, "ayah": 5 },
+        { "surah": 40, "ayah": 60 },
+        { "surah": 12, "ayah": 87 },
+        { "surah": 39, "ayah": 53 },
+        { "surah": 2, "ayah": 186 }
+      ]
+    },
+    {
+      "id": "burnout",
+      "group": "kacau",
+      "ayahs": [
+        { "surah": 94, "ayah": 5 },
+        { "surah": 92, "ayah": 7 },
+        { "surah": 93, "ayah": 7 },
+        { "surah": 2, "ayah": 153 },
+        { "surah": 28, "ayah": 73 }
+      ]
+    },
+    {
+      "id": "fomo",
+      "group": "kacau",
+      "ayahs": [
+        { "surah": 87, "ayah": 17 },
+        { "surah": 63, "ayah": 9 },
+        { "surah": 6, "ayah": 32 },
+        { "surah": 18, "ayah": 46 },
+        { "surah": 42, "ayah": 36 }
+      ]
+    },
+    {
+      "id": "rezeki-sempit",
       "group": "ujian",
       "ayahs": [
-        { "surah": 65, "ayah": 2 },
-        { "surah": 65, "ayah": 3 },
-        { "surah": 2, "ayah": 286 },
-        { "surah": 3, "ayah": 173 },
-        { "surah": 14, "ayah": 7 }
+        { "surah": 94, "ayah": 6 },
+        { "surah": 29, "ayah": 59 },
+        { "surah": 51, "ayah": 58 },
+        { "surah": 2, "ayah": 152 },
+        { "surah": 65, "ayah": 3 }
       ]
     }
   ]
