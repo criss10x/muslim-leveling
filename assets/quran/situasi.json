@@ -8,6 +8,34 @@
     {
       "id": "ujian",
       "umbrella": "dikuatkan"
+    },
+    {
+      "id": "hubungan",
+      "umbrella": "shifa"
+    },
+    {
+      "id": "iman",
+      "umbrella": "huda"
+    },
+    {
+      "id": "keputusan",
+      "umbrella": "huda"
+    },
+    {
+      "id": "ampunan",
+      "umbrella": "shifa"
+    },
+    {
+      "id": "motivasi",
+      "umbrella": "dikuatkan"
+    },
+    {
+      "id": "syukur",
+      "umbrella": "diingatkan"
+    },
+    {
+      "id": "dunia",
+      "umbrella": "diingatkan"
     }
   ],
   "situations": [
@@ -184,7 +212,425 @@
         { "surah": 30, "ayah": 21 },
         { "surah": 66, "ayah": 6 },
         { "surah": 4, "ayah": 35 },
-        { "surah": 65, "ayah": 7 }
+        { "surah": 78, "ayah": 8 }
+      ]
+    },
+    {
+      "id": "konflik-ortu",
+      "group": "hubungan",
+      "ayahs": [
+        { "surah": 17, "ayah": 24 },
+        { "surah": 29, "ayah": 8 },
+        { "surah": 19, "ayah": 14 },
+        { "surah": 14, "ayah": 41 },
+        { "surah": 31, "ayah": 15 }
+      ]
+    },
+    {
+      "id": "pasangan",
+      "group": "hubungan",
+      "ayahs": [
+        { "surah": 30, "ayah": 21 },
+        { "surah": 65, "ayah": 7 },
+        { "surah": 60, "ayah": 7 },
+        { "surah": 19, "ayah": 96 },
+        { "surah": 4, "ayah": 35 }
+      ]
+    },
+    {
+      "id": "putus-cinta",
+      "group": "hubungan",
+      "ayahs": [
+        { "surah": 93, "ayah": 3 },
+        { "surah": 94, "ayah": 5 },
+        { "surah": 2, "ayah": 216 },
+        { "surah": 65, "ayah": 3 },
+        { "surah": 60, "ayah": 7 }
+      ]
+    },
+    {
+      "id": "teman-toxic",
+      "group": "hubungan",
+      "ayahs": [
+        { "surah": 23, "ayah": 96 },
+        { "surah": 41, "ayah": 34 },
+        { "surah": 49, "ayah": 10 },
+        { "surah": 4, "ayah": 148 },
+        { "surah": 43, "ayah": 89 }
+      ]
+    },
+    {
+      "id": "parenting",
+      "group": "hubungan",
+      "ayahs": [
+        { "surah": 25, "ayah": 74 },
+        { "surah": 17, "ayah": 24 },
+        { "surah": 20, "ayah": 132 },
+        { "surah": 31, "ayah": 17 },
+        { "surah": 4, "ayah": 9 }
+      ]
+    },
+    {
+      "id": "dikucilkan",
+      "group": "hubungan",
+      "ayahs": [
+        { "surah": 93, "ayah": 3 },
+        { "surah": 20, "ayah": 46 },
+        { "surah": 2, "ayah": 152 },
+        { "surah": 50, "ayah": 16 },
+        { "surah": 90, "ayah": 17 }
+      ]
+    },
+    {
+      "id": "memaafkan",
+      "group": "hubungan",
+      "ayahs": [
+        { "surah": 42, "ayah": 43 },
+        { "surah": 7, "ayah": 199 },
+        { "surah": 15, "ayah": 85 },
+        { "surah": 42, "ayah": 40 },
+        { "surah": 64, "ayah": 14 }
+      ]
+    },
+    {
+      "id": "futur",
+      "group": "iman",
+      "ayahs": [
+        { "surah": 93, "ayah": 3 },
+        { "surah": 39, "ayah": 53 },
+        { "surah": 2, "ayah": 186 },
+        { "surah": 3, "ayah": 31 },
+        { "surah": 50, "ayah": 16 }
+      ]
+    },
+    {
+      "id": "jauh-dari-allah",
+      "group": "iman",
+      "ayahs": [
+        { "surah": 50, "ayah": 16 },
+        { "surah": 2, "ayah": 186 },
+        { "surah": 20, "ayah": 46 },
+        { "surah": 39, "ayah": 53 },
+        { "surah": 2, "ayah": 152 }
+      ]
+    },
+    {
+      "id": "tujuan-hidup",
+      "group": "iman",
+      "ayahs": [
+        { "surah": 51, "ayah": 56 },
+        { "surah": 87, "ayah": 17 },
+        { "surah": 6, "ayah": 162 },
+        { "surah": 23, "ayah": 115 },
+        { "surah": 2, "ayah": 148 }
+      ]
+    },
+    {
+      "id": "munafik",
+      "group": "iman",
+      "ayahs": [
+        { "surah": 39, "ayah": 53 },
+        { "surah": 4, "ayah": 110 },
+        { "surah": 3, "ayah": 135 },
+        { "surah": 25, "ayah": 70 },
+        { "surah": 11, "ayah": 114 }
+      ]
+    },
+    {
+      "id": "was-was",
+      "group": "iman",
+      "ayahs": [
+        { "surah": 40, "ayah": 60 },
+        { "surah": 20, "ayah": 82 },
+        { "surah": 3, "ayah": 135 },
+        { "surah": 42, "ayah": 25 },
+        { "surah": 15, "ayah": 49 }
+      ]
+    },
+    {
+      "id": "baru-hijrah",
+      "group": "iman",
+      "ayahs": [
+        { "surah": 93, "ayah": 7 },
+        { "surah": 29, "ayah": 69 },
+        { "surah": 8, "ayah": 63 },
+        { "surah": 15, "ayah": 49 },
+        { "surah": 94, "ayah": 5 }
+      ]
+    },
+    {
+      "id": "pilih-jodoh",
+      "group": "keputusan",
+      "ayahs": [
+        { "surah": 28, "ayah": 68 },
+        { "surah": 36, "ayah": 82 },
+        { "surah": 4, "ayah": 35 },
+        { "surah": 9, "ayah": 51 },
+        { "surah": 65, "ayah": 3 }
+      ]
+    },
+    {
+      "id": "pilih-karier",
+      "group": "keputusan",
+      "ayahs": [
+        { "surah": 53, "ayah": 39 },
+        { "surah": 36, "ayah": 82 },
+        { "surah": 42, "ayah": 38 },
+        { "surah": 2, "ayah": 216 },
+        { "surah": 9, "ayah": 51 }
+      ]
+    },
+    {
+      "id": "merantau",
+      "group": "keputusan",
+      "ayahs": [
+        { "surah": 9, "ayah": 129 },
+        { "surah": 65, "ayah": 3 },
+        { "surah": 9, "ayah": 51 },
+        { "surah": 36, "ayah": 82 },
+        { "surah": 2, "ayah": 216 }
+      ]
+    },
+    {
+      "id": "kuliah-bisnis",
+      "group": "keputusan",
+      "ayahs": [
+        { "surah": 53, "ayah": 39 },
+        { "surah": 20, "ayah": 25 },
+        { "surah": 20, "ayah": 26 },
+        { "surah": 9, "ayah": 105 },
+        { "surah": 42, "ayah": 38 }
+      ]
+    },
+    {
+      "id": "istikharah",
+      "group": "keputusan",
+      "ayahs": [
+        { "surah": 28, "ayah": 68 },
+        { "surah": 65, "ayah": 3 },
+        { "surah": 8, "ayah": 61 },
+        { "surah": 36, "ayah": 82 },
+        { "surah": 9, "ayah": 51 }
+      ]
+    },
+    {
+      "id": "quarter-life",
+      "group": "keputusan",
+      "ayahs": [
+        { "surah": 23, "ayah": 115 },
+        { "surah": 6, "ayah": 162 },
+        { "surah": 20, "ayah": 25 },
+        { "surah": 51, "ayah": 56 },
+        { "surah": 29, "ayah": 69 }
+      ]
+    },
+    {
+      "id": "setelah-maksiat",
+      "group": "ampunan",
+      "ayahs": [
+        { "surah": 39, "ayah": 53 },
+        { "surah": 4, "ayah": 110 },
+        { "surah": 15, "ayah": 49 },
+        { "surah": 42, "ayah": 25 },
+        { "surah": 3, "ayah": 135 }
+      ]
+    },
+    {
+      "id": "merasa-kotor",
+      "group": "ampunan",
+      "ayahs": [
+        { "surah": 39, "ayah": 53 },
+        { "surah": 25, "ayah": 70 },
+        { "surah": 15, "ayah": 49 },
+        { "surah": 20, "ayah": 82 },
+        { "surah": 4, "ayah": 110 }
+      ]
+    },
+    {
+      "id": "mulai-taubat",
+      "group": "ampunan",
+      "ayahs": [
+        { "surah": 20, "ayah": 82 },
+        { "surah": 25, "ayah": 70 },
+        { "surah": 42, "ayah": 25 },
+        { "surah": 4, "ayah": 110 },
+        { "surah": 3, "ayah": 135 }
+      ]
+    },
+    {
+      "id": "takut-azab",
+      "group": "ampunan",
+      "ayahs": [
+        { "surah": 15, "ayah": 49 },
+        { "surah": 39, "ayah": 53 },
+        { "surah": 42, "ayah": 25 },
+        { "surah": 4, "ayah": 110 },
+        { "surah": 7, "ayah": 23 }
+      ]
+    },
+    {
+      "id": "berani-bicara",
+      "group": "motivasi",
+      "ayahs": [
+        { "surah": 20, "ayah": 25 },
+        { "surah": 9, "ayah": 119 },
+        { "surah": 53, "ayah": 39 },
+        { "surah": 3, "ayah": 139 },
+        { "surah": 91, "ayah": 9 }
+      ]
+    },
+    {
+      "id": "istiqomah",
+      "group": "motivasi",
+      "ayahs": [
+        { "surah": 46, "ayah": 13 },
+        { "surah": 30, "ayah": 60 },
+        { "surah": 3, "ayah": 200 },
+        { "surah": 2, "ayah": 153 },
+        { "surah": 20, "ayah": 82 }
+      ]
+    },
+    {
+      "id": "lawan-malas",
+      "group": "motivasi",
+      "ayahs": [
+        { "surah": 53, "ayah": 39 },
+        { "surah": 9, "ayah": 105 },
+        { "surah": 29, "ayah": 69 },
+        { "surah": 9, "ayah": 119 },
+        { "surah": 94, "ayah": 5 }
+      ]
+    },
+    {
+      "id": "jadi-pemimpin",
+      "group": "motivasi",
+      "ayahs": [
+        { "surah": 4, "ayah": 58 },
+        { "surah": 61, "ayah": 4 },
+        { "surah": 9, "ayah": 119 },
+        { "surah": 2, "ayah": 124 },
+        { "surah": 3, "ayah": 200 }
+      ]
+    },
+    {
+      "id": "versi-lebih-baik",
+      "group": "motivasi",
+      "ayahs": [
+        { "surah": 91, "ayah": 9 },
+        { "surah": 29, "ayah": 69 },
+        { "surah": 9, "ayah": 105 },
+        { "surah": 53, "ayah": 39 },
+        { "surah": 25, "ayah": 70 }
+      ]
+    },
+    {
+      "id": "dapat-rezeki",
+      "group": "syukur",
+      "ayahs": [
+        { "surah": 14, "ayah": 7 },
+        { "surah": 2, "ayah": 152 },
+        { "surah": 51, "ayah": 56 },
+        { "surah": 16, "ayah": 90 },
+        { "surah": 2, "ayah": 172 }
+      ]
+    },
+    {
+      "id": "sembuh-lulus",
+      "group": "syukur",
+      "ayahs": [
+        { "surah": 89, "ayah": 28 },
+        { "surah": 26, "ayah": 80 },
+        { "surah": 51, "ayah": 56 },
+        { "surah": 14, "ayah": 7 },
+        { "surah": 2, "ayah": 152 }
+      ]
+    },
+    {
+      "id": "dapat-jodoh",
+      "group": "syukur",
+      "ayahs": [
+        { "surah": 30, "ayah": 21 },
+        { "surah": 19, "ayah": 96 },
+        { "surah": 25, "ayah": 74 },
+        { "surah": 51, "ayah": 56 },
+        { "surah": 2, "ayah": 152 }
+      ]
+    },
+    {
+      "id": "hati-tenang",
+      "group": "syukur",
+      "ayahs": [
+        { "surah": 13, "ayah": 28 },
+        { "surah": 89, "ayah": 27 },
+        { "surah": 2, "ayah": 152 },
+        { "surah": 10, "ayah": 57 },
+        { "surah": 2, "ayah": 186 }
+      ]
+    },
+    {
+      "id": "lihat-alam",
+      "group": "syukur",
+      "ayahs": [
+        { "surah": 51, "ayah": 20 },
+        { "surah": 51, "ayah": 21 },
+        { "surah": 3, "ayah": 190 },
+        { "surah": 88, "ayah": 17 },
+        { "surah": 88, "ayah": 18 }
+      ]
+    },
+    {
+      "id": "pagi-malam",
+      "group": "syukur",
+      "ayahs": [
+        { "surah": 30, "ayah": 17 },
+        { "surah": 30, "ayah": 18 },
+        { "surah": 2, "ayah": 152 },
+        { "surah": 13, "ayah": 28 },
+        { "surah": 3, "ayah": 190 }
+      ]
+    },
+    {
+      "id": "ketidakadilan",
+      "group": "dunia",
+      "ayahs": [
+        { "surah": 42, "ayah": 41 },
+        { "surah": 42, "ayah": 42 },
+        { "surah": 2, "ayah": 153 },
+        { "surah": 4, "ayah": 148 },
+        { "surah": 85, "ayah": 8 }
+      ]
+    },
+    {
+      "id": "berlomba-dunia",
+      "group": "dunia",
+      "ayahs": [
+        { "surah": 28, "ayah": 60 },
+        { "surah": 87, "ayah": 17 },
+        { "surah": 2, "ayah": 148 },
+        { "surah": 2, "ayah": 152 },
+        { "surah": 16, "ayah": 107 }
+      ]
+    },
+    {
+      "id": "doomscrolling",
+      "group": "dunia",
+      "ayahs": [
+        { "surah": 87, "ayah": 17 },
+        { "surah": 16, "ayah": 107 },
+        { "surah": 20, "ayah": 131 },
+        { "surah": 6, "ayah": 32 },
+        { "surah": 63, "ayah": 9 }
+      ]
+    },
+    {
+      "id": "dunia-makin-rusak",
+      "group": "dunia",
+      "ayahs": [
+        { "surah": 30, "ayah": 41 },
+        { "surah": 9, "ayah": 51 },
+        { "surah": 2, "ayah": 153 },
+        { "surah": 42, "ayah": 42 },
+        { "surah": 30, "ayah": 60 }
       ]
     }
   ]
