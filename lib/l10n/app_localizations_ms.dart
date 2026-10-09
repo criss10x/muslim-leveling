@@ -3655,4 +3655,208 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get hsTooltip => 'Kongsi hadis ini';
+
+  @override
+  String get situasiTitle => 'Ayat rekomendasi, apa yang anda rasa?';
+
+  @override
+  String get situasiOtherAyah => 'Ayat lain';
+
+  @override
+  String get situasiOpenInQuran => 'Buka di Quran';
+
+  @override
+  String get situasiGroupKacau => 'Hati kacau';
+
+  @override
+  String get situasiGroupUjian => 'Dihadapkan ujian hidup';
+
+  @override
+  String get situasiGroupHubungan => 'Hubungan dengan manusia';
+
+  @override
+  String get situasiGroupIman => 'Iman naik turun';
+
+  @override
+  String get situasiGroupKeputusan => 'Perlu buat keputusan';
+
+  @override
+  String get situasiGroupAmpunan => 'Selepas berbuat salah';
+
+  @override
+  String get situasiGroupMotivasi => 'Perlu tenaga';
+
+  @override
+  String get situasiGroupSyukur => 'Sedang bahagia';
+
+  @override
+  String get situasiGroupDunia => 'Lihat dunia luar';
+
+  @override
+  String get situasiSitSedih => 'Sedih, kecewa, patah hati';
+
+  @override
+  String get situasiSitCemas => 'Cemas, berfikir berlebihan, takut masa depan';
+
+  @override
+  String get situasiSitMarah => 'Marah dan sukar memaafkan';
+
+  @override
+  String get situasiSitKesepian => 'Kesunyian, rasa tiada yang faham';
+
+  @override
+  String get situasiSitInsecure => 'Insecure, rasa rendah diri, tak berharga';
+
+  @override
+  String get situasiSitIri => 'Cemburu melihat orang lain lebih berjaya';
+
+  @override
+  String get situasiSitPutusAsa => 'Putus asa, doa terasa tak dimakbulkan';
+
+  @override
+  String get situasiSitBurnout => 'Burnout, letih sampai kosong';
+
+  @override
+  String get situasiSitFomo => 'FOMO kerana media sosial';
+
+  @override
+  String get situasiSitRezekiSempit => 'Banyak hutang, rezeki seret';
+
+  @override
+  String get situasiSitSakit => 'Sakit, diri sendiri atau keluarga';
+
+  @override
+  String get situasiSitKehilangan => 'Kehilangan orang yang disayangi';
+
+  @override
+  String get situasiSitGagal => 'Gagal ujian, temuduga, atau bisnes';
+
+  @override
+  String get situasiSitDizalimi => 'Dizalimi, difitnah, dibuli';
+
+  @override
+  String get situasiSitKeluargaBesar =>
+      'Masalah keluarga besar yang tak selesai';
+
+  @override
+  String get situasiSitRumahTangga => 'Rumah tangga di hujung';
+
+  @override
+  String get situasiSitKonflikOrtu => 'Konflik dengan ibu bapa';
+
+  @override
+  String get situasiSitPasangan => 'Masalah dengan pasangan';
+
+  @override
+  String get situasiSitPutusCinta => 'Selepas putus, sukar melupakan';
+
+  @override
+  String get situasiSitTemanToxic => 'Dikhianati kawan';
+
+  @override
+  String get situasiSitParenting => 'Bingung mendidik anak';
+
+  @override
+  String get situasiSitDikucilkan => 'Rasa tersisih di persekitaran';
+
+  @override
+  String get situasiSitMemaafkan => 'Sukar memaafkan orang lain';
+
+  @override
+  String get situasiSitFutur => 'Iman futur, malas beribadah';
+
+  @override
+  String get situasiSitJauhDariAllah => 'Rasa jauh dari Allah';
+
+  @override
+  String get situasiSitTujuanHidup => 'Bingung tujuan hidup';
+
+  @override
+  String get situasiSitMunafik => 'Beribadah tapi masih maksiat';
+
+  @override
+  String get situasiSitWasWas => 'Was-was, takut ibadah tak diterima';
+
+  @override
+  String get situasiSitBaruHijrah => 'Baru berhijrah, perlu pegangan';
+
+  @override
+  String get situasiSitPilihJodoh => 'Bingung memilih jodoh';
+
+  @override
+  String get situasiSitPilihKarier => 'Mahu berhenti atau kekal';
+
+  @override
+  String get situasiSitMerantau => 'Mahu merantau ke bandar baharu';
+
+  @override
+  String get situasiSitKuliahBisnis => 'Bingung sambung belajar atau bisnes';
+
+  @override
+  String get situasiSitIstikharah => 'Perlu kemantapan hati';
+
+  @override
+  String get situasiSitQuarterLife => 'Quarter life crisis';
+
+  @override
+  String get situasiSitSetelahMaksiat => 'Selepas maksiat, rasa bersalah';
+
+  @override
+  String get situasiSitMerasaKotor => 'Rasa kotor, tak layak dicintai Allah';
+
+  @override
+  String get situasiSitMulaiTaubat => 'Mahu bertaubat, bingung mula di mana';
+
+  @override
+  String get situasiSitTakutAzab =>
+      'Takut azab, takut mati dalam keadaan buruk';
+
+  @override
+  String get situasiSitBeraniBicara => 'Perlu keberanian untuk bersuara';
+
+  @override
+  String get situasiSitIstiqomah => 'Perlu istiqamah, tak berbolong';
+
+  @override
+  String get situasiSitLawanMalas => 'Perlu produktif, lawan malas';
+
+  @override
+  String get situasiSitJadiPemimpin => 'Perlu menjadi pemimpin';
+
+  @override
+  String get situasiSitVersiLebihBaik => 'Mahu jadi versi diri lebih baik';
+
+  @override
+  String get situasiSitDapatRezeki => 'Dapat rezeki, gajian';
+
+  @override
+  String get situasiSitSembuhLulus => 'Sembuh dari sakit, lulus ujian';
+
+  @override
+  String get situasiSitDapatJodoh => 'Dapat jodoh, berkahwin, punya anak';
+
+  @override
+  String get situasiSitHatiTenang => 'Selepas ibadah, hati tenang';
+
+  @override
+  String get situasiSitLihatAlam => 'Lihat pemandangan indah, hujan, musafir';
+
+  @override
+  String get situasiSitPagiMalam => 'Pagi hari, malam sebelum tidur';
+
+  @override
+  String get situasiSitKetidakadilan => 'Lihat ketidakadilan, berita bencana';
+
+  @override
+  String get situasiSitBerlombaDunia => 'Lihat orang berlumba-lumba dunia';
+
+  @override
+  String get situasiSitDoomscrolling => 'Doomscrolling berita negatif';
+
+  @override
+  String get situasiSitDuniaMakinRusak =>
+      'Rasa dunia makin rosak, mahu menyerah';
+
+  @override
+  String get homeQuickRekomendasi => 'Rekomendasi';
 }

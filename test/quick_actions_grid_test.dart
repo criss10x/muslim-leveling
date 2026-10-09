@@ -49,8 +49,11 @@ void main() {
         .map((b) => b.size)
         .toList();
 
-    expect(boxes.length, 7,
-        reason: 'harus 7 tile (5 pintasan + Hari Penting + Asmaul Husna 2026-09-29)');
+    // Bertambah jadi 8 karena tile "Rekomendasi" (Ayat Rekomendasi). Angka ini
+    // SENGAJA eksak: kalau tile hilang tanpa sengaja, tes ini yang menangkap.
+    expect(boxes.length, 8,
+        reason: 'harus 8 tile (5 pintasan + Asmaul Husna + Hari Penting + '
+            'Rekomendasi)');
 
     final widths = boxes.map((s) => s.width).toSet();
     final heights = boxes.map((s) => s.height).toSet();

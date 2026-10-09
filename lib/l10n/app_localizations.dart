@@ -6585,6 +6585,408 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Bagikan hadis ini'**
   String get hsTooltip;
+
+  /// No description provided for @situasiTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Ayat rekomendasi, kamu lagi ngerasain apa?'**
+  String get situasiTitle;
+
+  /// No description provided for @situasiOtherAyah.
+  ///
+  /// In id, this message translates to:
+  /// **'Ayat lain'**
+  String get situasiOtherAyah;
+
+  /// No description provided for @situasiOpenInQuran.
+  ///
+  /// In id, this message translates to:
+  /// **'Buka di Quran'**
+  String get situasiOpenInQuran;
+
+  /// No description provided for @situasiGroupKacau.
+  ///
+  /// In id, this message translates to:
+  /// **'Hati lagi kacau'**
+  String get situasiGroupKacau;
+
+  /// No description provided for @situasiGroupUjian.
+  ///
+  /// In id, this message translates to:
+  /// **'Kena ujian hidup'**
+  String get situasiGroupUjian;
+
+  /// No description provided for @situasiGroupHubungan.
+  ///
+  /// In id, this message translates to:
+  /// **'Hubungan sama manusia'**
+  String get situasiGroupHubungan;
+
+  /// No description provided for @situasiGroupIman.
+  ///
+  /// In id, this message translates to:
+  /// **'Iman naik turun'**
+  String get situasiGroupIman;
+
+  /// No description provided for @situasiGroupKeputusan.
+  ///
+  /// In id, this message translates to:
+  /// **'Harus ambil keputusan'**
+  String get situasiGroupKeputusan;
+
+  /// No description provided for @situasiGroupAmpunan.
+  ///
+  /// In id, this message translates to:
+  /// **'Habis berbuat salah'**
+  String get situasiGroupAmpunan;
+
+  /// No description provided for @situasiGroupMotivasi.
+  ///
+  /// In id, this message translates to:
+  /// **'Butuh tenaga'**
+  String get situasiGroupMotivasi;
+
+  /// No description provided for @situasiGroupSyukur.
+  ///
+  /// In id, this message translates to:
+  /// **'Lagi bahagia'**
+  String get situasiGroupSyukur;
+
+  /// No description provided for @situasiGroupDunia.
+  ///
+  /// In id, this message translates to:
+  /// **'Lihat dunia luar'**
+  String get situasiGroupDunia;
+
+  /// No description provided for @situasiSitSedih.
+  ///
+  /// In id, this message translates to:
+  /// **'Sedih, kecewa, patah hati'**
+  String get situasiSitSedih;
+
+  /// No description provided for @situasiSitCemas.
+  ///
+  /// In id, this message translates to:
+  /// **'Cemas, overthinking, takut masa depan'**
+  String get situasiSitCemas;
+
+  /// No description provided for @situasiSitMarah.
+  ///
+  /// In id, this message translates to:
+  /// **'Marah dan susah memaafkan'**
+  String get situasiSitMarah;
+
+  /// No description provided for @situasiSitKesepian.
+  ///
+  /// In id, this message translates to:
+  /// **'Kesepian, merasa tak ada yang paham'**
+  String get situasiSitKesepian;
+
+  /// No description provided for @situasiSitInsecure.
+  ///
+  /// In id, this message translates to:
+  /// **'Insecure, minder, merasa tak berharga'**
+  String get situasiSitInsecure;
+
+  /// No description provided for @situasiSitIri.
+  ///
+  /// In id, this message translates to:
+  /// **'Iri lihat orang lain lebih sukses'**
+  String get situasiSitIri;
+
+  /// No description provided for @situasiSitPutusAsa.
+  ///
+  /// In id, this message translates to:
+  /// **'Putus asa, doa terasa tak dikabulkan'**
+  String get situasiSitPutusAsa;
+
+  /// No description provided for @situasiSitBurnout.
+  ///
+  /// In id, this message translates to:
+  /// **'Burnout, capek sampai hampa'**
+  String get situasiSitBurnout;
+
+  /// No description provided for @situasiSitFomo.
+  ///
+  /// In id, this message translates to:
+  /// **'FOMO gara-gara media sosial'**
+  String get situasiSitFomo;
+
+  /// No description provided for @situasiSitRezekiSempit.
+  ///
+  /// In id, this message translates to:
+  /// **'Banyak hutang, rezeki seret'**
+  String get situasiSitRezekiSempit;
+
+  /// No description provided for @situasiSitSakit.
+  ///
+  /// In id, this message translates to:
+  /// **'Sakit, diri sendiri atau keluarga'**
+  String get situasiSitSakit;
+
+  /// No description provided for @situasiSitKehilangan.
+  ///
+  /// In id, this message translates to:
+  /// **'Kehilangan orang yang disayang'**
+  String get situasiSitKehilangan;
+
+  /// No description provided for @situasiSitGagal.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal ujian, interview, atau bisnis'**
+  String get situasiSitGagal;
+
+  /// No description provided for @situasiSitDizalimi.
+  ///
+  /// In id, this message translates to:
+  /// **'Dizalimi, difitnah, dibully'**
+  String get situasiSitDizalimi;
+
+  /// No description provided for @situasiSitKeluargaBesar.
+  ///
+  /// In id, this message translates to:
+  /// **'Masalah keluarga besar yang tak selesai'**
+  String get situasiSitKeluargaBesar;
+
+  /// No description provided for @situasiSitRumahTangga.
+  ///
+  /// In id, this message translates to:
+  /// **'Rumah tangga di ujung'**
+  String get situasiSitRumahTangga;
+
+  /// No description provided for @situasiSitKonflikOrtu.
+  ///
+  /// In id, this message translates to:
+  /// **'Konflik sama orang tua'**
+  String get situasiSitKonflikOrtu;
+
+  /// No description provided for @situasiSitPasangan.
+  ///
+  /// In id, this message translates to:
+  /// **'Masalah sama pasangan'**
+  String get situasiSitPasangan;
+
+  /// No description provided for @situasiSitPutusCinta.
+  ///
+  /// In id, this message translates to:
+  /// **'Habis putus, susah move on'**
+  String get situasiSitPutusCinta;
+
+  /// No description provided for @situasiSitTemanToxic.
+  ///
+  /// In id, this message translates to:
+  /// **'Dikhianati teman'**
+  String get situasiSitTemanToxic;
+
+  /// No description provided for @situasiSitParenting.
+  ///
+  /// In id, this message translates to:
+  /// **'Bingung didik anak'**
+  String get situasiSitParenting;
+
+  /// No description provided for @situasiSitDikucilkan.
+  ///
+  /// In id, this message translates to:
+  /// **'Merasa dikucilkan di lingkungan'**
+  String get situasiSitDikucilkan;
+
+  /// No description provided for @situasiSitMemaafkan.
+  ///
+  /// In id, this message translates to:
+  /// **'Susah memaafkan orang lain'**
+  String get situasiSitMemaafkan;
+
+  /// No description provided for @situasiSitFutur.
+  ///
+  /// In id, this message translates to:
+  /// **'Iman lagi futur, malas ibadah'**
+  String get situasiSitFutur;
+
+  /// No description provided for @situasiSitJauhDariAllah.
+  ///
+  /// In id, this message translates to:
+  /// **'Merasa jauh dari Allah'**
+  String get situasiSitJauhDariAllah;
+
+  /// No description provided for @situasiSitTujuanHidup.
+  ///
+  /// In id, this message translates to:
+  /// **'Bingung tujuan hidup'**
+  String get situasiSitTujuanHidup;
+
+  /// No description provided for @situasiSitMunafik.
+  ///
+  /// In id, this message translates to:
+  /// **'Ibadah tapi masih maksiat'**
+  String get situasiSitMunafik;
+
+  /// No description provided for @situasiSitWasWas.
+  ///
+  /// In id, this message translates to:
+  /// **'Was-was, takut ibadah tak diterima'**
+  String get situasiSitWasWas;
+
+  /// No description provided for @situasiSitBaruHijrah.
+  ///
+  /// In id, this message translates to:
+  /// **'Baru hijrah, butuh pegangan'**
+  String get situasiSitBaruHijrah;
+
+  /// No description provided for @situasiSitPilihJodoh.
+  ///
+  /// In id, this message translates to:
+  /// **'Bingung pilih jodoh'**
+  String get situasiSitPilihJodoh;
+
+  /// No description provided for @situasiSitPilihKarier.
+  ///
+  /// In id, this message translates to:
+  /// **'Mau resign atau stay'**
+  String get situasiSitPilihKarier;
+
+  /// No description provided for @situasiSitMerantau.
+  ///
+  /// In id, this message translates to:
+  /// **'Mau merantau ke kota baru'**
+  String get situasiSitMerantau;
+
+  /// No description provided for @situasiSitKuliahBisnis.
+  ///
+  /// In id, this message translates to:
+  /// **'Bingung lanjut kuliah atau bisnis'**
+  String get situasiSitKuliahBisnis;
+
+  /// No description provided for @situasiSitIstikharah.
+  ///
+  /// In id, this message translates to:
+  /// **'Butuh kemantapan hati'**
+  String get situasiSitIstikharah;
+
+  /// No description provided for @situasiSitQuarterLife.
+  ///
+  /// In id, this message translates to:
+  /// **'Quarter life crisis'**
+  String get situasiSitQuarterLife;
+
+  /// No description provided for @situasiSitSetelahMaksiat.
+  ///
+  /// In id, this message translates to:
+  /// **'Habis maksiat, merasa bersalah'**
+  String get situasiSitSetelahMaksiat;
+
+  /// No description provided for @situasiSitMerasaKotor.
+  ///
+  /// In id, this message translates to:
+  /// **'Merasa kotor, tak pantas dicintai Allah'**
+  String get situasiSitMerasaKotor;
+
+  /// No description provided for @situasiSitMulaiTaubat.
+  ///
+  /// In id, this message translates to:
+  /// **'Mau taubat, bingung mulai dari mana'**
+  String get situasiSitMulaiTaubat;
+
+  /// No description provided for @situasiSitTakutAzab.
+  ///
+  /// In id, this message translates to:
+  /// **'Takut azab, takut mati dalam keadaan buruk'**
+  String get situasiSitTakutAzab;
+
+  /// No description provided for @situasiSitBeraniBicara.
+  ///
+  /// In id, this message translates to:
+  /// **'Butuh keberanian buat ngomong'**
+  String get situasiSitBeraniBicara;
+
+  /// No description provided for @situasiSitIstiqomah.
+  ///
+  /// In id, this message translates to:
+  /// **'Butuh istiqomah, biar tak bolong'**
+  String get situasiSitIstiqomah;
+
+  /// No description provided for @situasiSitLawanMalas.
+  ///
+  /// In id, this message translates to:
+  /// **'Butuh produktif, lawan malas'**
+  String get situasiSitLawanMalas;
+
+  /// No description provided for @situasiSitJadiPemimpin.
+  ///
+  /// In id, this message translates to:
+  /// **'Butuh jadi pemimpin'**
+  String get situasiSitJadiPemimpin;
+
+  /// No description provided for @situasiSitVersiLebihBaik.
+  ///
+  /// In id, this message translates to:
+  /// **'Mau jadi versi diri yang lebih baik'**
+  String get situasiSitVersiLebihBaik;
+
+  /// No description provided for @situasiSitDapatRezeki.
+  ///
+  /// In id, this message translates to:
+  /// **'Dapat rezeki, gajian'**
+  String get situasiSitDapatRezeki;
+
+  /// No description provided for @situasiSitSembuhLulus.
+  ///
+  /// In id, this message translates to:
+  /// **'Sembuh dari sakit, lulus ujian'**
+  String get situasiSitSembuhLulus;
+
+  /// No description provided for @situasiSitDapatJodoh.
+  ///
+  /// In id, this message translates to:
+  /// **'Dapat jodoh, nikah, punya anak'**
+  String get situasiSitDapatJodoh;
+
+  /// No description provided for @situasiSitHatiTenang.
+  ///
+  /// In id, this message translates to:
+  /// **'Habis ibadah, hati tenang'**
+  String get situasiSitHatiTenang;
+
+  /// No description provided for @situasiSitLihatAlam.
+  ///
+  /// In id, this message translates to:
+  /// **'Lihat pemandangan indah, hujan, safar'**
+  String get situasiSitLihatAlam;
+
+  /// No description provided for @situasiSitPagiMalam.
+  ///
+  /// In id, this message translates to:
+  /// **'Pagi hari, malam sebelum tidur'**
+  String get situasiSitPagiMalam;
+
+  /// No description provided for @situasiSitKetidakadilan.
+  ///
+  /// In id, this message translates to:
+  /// **'Lihat ketidakadilan, berita bencana'**
+  String get situasiSitKetidakadilan;
+
+  /// No description provided for @situasiSitBerlombaDunia.
+  ///
+  /// In id, this message translates to:
+  /// **'Lihat orang berlomba-lomba dunia'**
+  String get situasiSitBerlombaDunia;
+
+  /// No description provided for @situasiSitDoomscrolling.
+  ///
+  /// In id, this message translates to:
+  /// **'Doomscrolling berita negatif'**
+  String get situasiSitDoomscrolling;
+
+  /// No description provided for @situasiSitDuniaMakinRusak.
+  ///
+  /// In id, this message translates to:
+  /// **'Merasa dunia makin rusak, mau nyerah'**
+  String get situasiSitDuniaMakinRusak;
+
+  /// No description provided for @homeQuickRekomendasi.
+  ///
+  /// In id, this message translates to:
+  /// **'Rekomendasi'**
+  String get homeQuickRekomendasi;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

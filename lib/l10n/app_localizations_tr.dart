@@ -3672,4 +3672,207 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get hsTooltip => 'Bu hadisi paylaş';
+
+  @override
+  String get situasiTitle => 'Önerilen ayetler, ne hissediyorsun?';
+
+  @override
+  String get situasiOtherAyah => 'Başka ayet';
+
+  @override
+  String get situasiOpenInQuran => 'Kur’an’da aç';
+
+  @override
+  String get situasiGroupKacau => 'Kalp huzursuz';
+
+  @override
+  String get situasiGroupUjian => 'Hayat imtihanı';
+
+  @override
+  String get situasiGroupHubungan => 'İnsanlarla ilişkiler';
+
+  @override
+  String get situasiGroupIman => 'İman iniş çıkışta';
+
+  @override
+  String get situasiGroupKeputusan => 'Büyük karar';
+
+  @override
+  String get situasiGroupAmpunan => 'Yanlış sonrası';
+
+  @override
+  String get situasiGroupMotivasi => 'Güç arıyor';
+
+  @override
+  String get situasiGroupSyukur => 'Şükür hâli';
+
+  @override
+  String get situasiGroupDunia => 'Dış dünya';
+
+  @override
+  String get situasiSitSedih => 'Üzgün, hayal kırıklığı, kalbi kırık';
+
+  @override
+  String get situasiSitCemas => 'Kaygılı, aşırı düşünen, gelecekten korkan';
+
+  @override
+  String get situasiSitMarah => 'Öfkeli ve affetmekte zorlanan';
+
+  @override
+  String get situasiSitKesepian => 'Yalnız, kimse anlamıyor';
+
+  @override
+  String get situasiSitInsecure => 'Kendine güvensiz, değersiz hisseden';
+
+  @override
+  String get situasiSitIri => 'Başkalarının başarısını kıskanan';
+
+  @override
+  String get situasiSitPutusAsa => 'Umutsuz, duası kabul olmuyor gibi';
+
+  @override
+  String get situasiSitBurnout => 'Tükenmiş, yorgun ve boş';
+
+  @override
+  String get situasiSitFomo => 'Sosyal medya yüzünden FOMO';
+
+  @override
+  String get situasiSitRezekiSempit => 'Borç içinde, rızık darda';
+
+  @override
+  String get situasiSitSakit => 'Hasta, kendisi ya da ailesi';
+
+  @override
+  String get situasiSitKehilangan => 'Sevdiğini kaybetmiş';
+
+  @override
+  String get situasiSitGagal => 'Sınavda, mülakatta ya da işte başarısız';
+
+  @override
+  String get situasiSitDizalimi => 'Zulme uğramış, iftiraya maruz, dışlanmış';
+
+  @override
+  String get situasiSitKeluargaBesar => 'Bitmeyen geniş aile sorunları';
+
+  @override
+  String get situasiSitRumahTangga => 'Evliliği bitme noktasında';
+
+  @override
+  String get situasiSitKonflikOrtu => 'Anne babayla çatışma';
+
+  @override
+  String get situasiSitPasangan => 'Eşle sorunlar';
+
+  @override
+  String get situasiSitPutusCinta => 'Ayrılık sonrası, unutamıyor';
+
+  @override
+  String get situasiSitTemanToxic => 'Arkadaş ihaneti';
+
+  @override
+  String get situasiSitParenting => 'Çocuk yetiştirmede çaresiz';
+
+  @override
+  String get situasiSitDikucilkan => 'Çevresinde dışlanmış';
+
+  @override
+  String get situasiSitMemaafkan => 'Affetmekte zorlanıyor';
+
+  @override
+  String get situasiSitFutur => 'İman zayıf, ibadete isteksiz';
+
+  @override
+  String get situasiSitJauhDariAllah => 'Allah’tan uzak hissediyor';
+
+  @override
+  String get situasiSitTujuanHidup => 'Hayatın amacını bilmiyor';
+
+  @override
+  String get situasiSitMunafik => 'İbadet ediyor ama hâlâ günah işliyor';
+
+  @override
+  String get situasiSitWasWas => 'Vesvese, ibadeti kabul olmayacak korkusu';
+
+  @override
+  String get situasiSitBaruHijrah =>
+      'Yeni hidayete ermiş, tutunacak dal arıyor';
+
+  @override
+  String get situasiSitPilihJodoh => 'Eş seçiminde kararsız';
+
+  @override
+  String get situasiSitPilihKarier => 'İstifa mı, devam mı';
+
+  @override
+  String get situasiSitMerantau => 'Yeni şehre taşınmak';
+
+  @override
+  String get situasiSitKuliahBisnis => 'Okul mu, iş mi';
+
+  @override
+  String get situasiSitIstikharah => 'Kalp huzuru arıyor';
+
+  @override
+  String get situasiSitQuarterLife => 'Çeyrek yaş krizi';
+
+  @override
+  String get situasiSitSetelahMaksiat => 'Günah sonrası ağır vicdan';
+
+  @override
+  String get situasiSitMerasaKotor => 'Kirlenmiş, Allah sevgisine layık değil';
+
+  @override
+  String get situasiSitMulaiTaubat => 'Tövbe etmek istiyor, nereden başlayacak';
+
+  @override
+  String get situasiSitTakutAzab => 'Azaptan, kötü halde ölmekten korkuyor';
+
+  @override
+  String get situasiSitBeraniBicara => 'Konuşmak için cesaret';
+
+  @override
+  String get situasiSitIstiqomah => 'İbadette süreklilik';
+
+  @override
+  String get situasiSitLawanMalas => 'Tembelliği yenmek';
+
+  @override
+  String get situasiSitJadiPemimpin => 'Lider olmak';
+
+  @override
+  String get situasiSitVersiLebihBaik => 'Daha iyi bir ben';
+
+  @override
+  String get situasiSitDapatRezeki => 'Rızık geldi, maaş günü';
+
+  @override
+  String get situasiSitSembuhLulus => 'İyileşti, sınavı geçti';
+
+  @override
+  String get situasiSitDapatJodoh => 'Eş, nikâh, çocuk';
+
+  @override
+  String get situasiSitHatiTenang => 'İbadet sonrası huzur';
+
+  @override
+  String get situasiSitLihatAlam => 'Manzara, yağmur, yolculuk';
+
+  @override
+  String get situasiSitPagiMalam => 'Sabah, gece yatmadan önce';
+
+  @override
+  String get situasiSitKetidakadilan => 'Haksızlık, felaket haberleri';
+
+  @override
+  String get situasiSitBerlombaDunia => 'Dünya yarışına dalanları görüyor';
+
+  @override
+  String get situasiSitDoomscrolling => 'Olumsuz haberleri kaydırıp duruyor';
+
+  @override
+  String get situasiSitDuniaMakinRusak =>
+      'Dünya kötüye gidiyor, pes etmek üzere';
+
+  @override
+  String get homeQuickRekomendasi => 'Öneri';
 }

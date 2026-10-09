@@ -19,6 +19,7 @@ import 'doa_screen.dart';
 import 'qibla_screen.dart';
 import 'daily_highlight_screen.dart';
 import 'hari_penting_screen.dart';
+import 'ayat_situasi_screen.dart';
 import '../theme/app_icons.dart';
 import '../l10n/app_localizations.dart';
 
@@ -1513,6 +1514,24 @@ class _HomeTabState extends State<HomeTab> {
         icon: AppIcons.calendarMonth,
         label: AppL10n.of(context).homeQuickHariPenting,
         onTap: () => _push(const HariPentingScreen()),
+        daily: false,
+      ),
+      // Ayat Rekomendasi. Label sengaja "Rekomendasi" saja, bukan "Ayat
+      // Rekomendasi". Terukur dgn font bundel (JetBrainsMono-Bold 10sp, ls 1.0)
+      // di ruang label 77,3px @360dp / 94,7px @412dp:
+      //   "Asmaul Husna" / "Hari Penting" 132px (58% @360) — sudah ada
+      //   "Rekomendasi"                   121px (64%) — lebih ringan dari itu
+      //   "Ayat Rekomendasi"              176px (44%) — paling kecil di halaman
+      // Jadi label pendek membuat tile ini TIDAK menjadi yang paling menyusut;
+      // memakai nama penuh akan menjadikannya yang terkecil, di sebelah tile
+      // yang teksnya 10sp utuh. Judul HALAMAN tetap "Ayat rekomendasi, kamu lagi
+      // ngerasain apa?" (l10n.situasiTitle), jadi penamaan pilihan user utuh di
+      // tempat yang paling penting.
+      // Ikon: menuBook (bukan autoStories — sudah dipakai tile Hadis).
+      (
+        icon: AppIcons.menuBook,
+        label: AppL10n.of(context).homeQuickRekomendasi,
+        onTap: () => _push(const AyatSituasiScreen()),
         daily: false,
       ),
     ];
