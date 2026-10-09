@@ -86,6 +86,41 @@ void main() {
     }
   });
 
+  // Yang benar-benar merusak pengalaman user: DUA AYAT DALAM SATU SITUASI
+  // punya kalimat pembuka sama. User menekan "ayat lain", lalu membaca kalimat
+  // yang sama lagi dan mengira aplikasinya mengulang. Itu cakupan tes ini:
+  // antar-situasi.
+  //
+  // Kenapa BUKAN lintas seluruh daftar: pembuka berulang itu gaya bahasa
+  // Al-Quran, bukan bug. Ar-Rum 20-25 semuanya dibuka "Dan di antara
+  // tanda-tanda kekuasaan-Nya ialah", dan 3:185 & 21:35 sama-sama dibuka
+  // "Tiap-tiap yang berjiwa akan merasakan mati" padahal keduanya jawaban
+  // terbaik untuk situasi yang berbeda. Memaksa unik lintas daftar berarti
+  // membuang ayat yang paling tepat hanya demi angka - rugi yang nyata.
+  test('dalam satu situasi tidak ada dua ayat dengan pembuka sama', () async {
+    final list = await quranSituasi.all();
+    final problems = <String>[];
+    for (final s in list) {
+      final seen = <String, String>{};
+      for (final r in s.ayahs) {
+        final ayahs = await quranData.ayahs(r.surah);
+        final text =
+            ayahs[r.ayah - 1].translation.replaceAll(RegExp(r'\s+'), ' ');
+        // 6 kata pertama sudah cukup menangkap kasus nyata.
+        final head = text.split(' ').take(6).join(' ').toLowerCase();
+        final ref = '${r.surah}:${r.ayah}';
+        final prev = seen[head];
+        if (prev != null) {
+          problems.add('${s.id}: $ref dan $prev');
+        }
+        seen[head] = ref;
+      }
+    }
+    expect(problems, isEmpty,
+        reason: 'satu situasi menampilkan ayat dgn pembuka sama: '
+            '${problems.join("; ")}');
+  });
+
   test('semua situasi bisa dicari lewat id (dasar filter pencarian)', () async {
     final list = await quranSituasi.all();
     for (final s in list) {
