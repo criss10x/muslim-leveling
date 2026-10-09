@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "groups": [
+    {
+      "id": "kacau",
+      "umbrella": "shifa"
+    },
+    {
+      "id": "ujian",
+      "umbrella": "dikuatkan"
+    }
+  ],
+  "situations": [
+    {
+      "id": "sedih",
+      "group": "kacau",
+      "ayahs": [
+        {
+          "surah": 3,
+          "ayah": 139
+        },
+        {
+          "surah": 9,
+          "ayah": 40
+        },
+        {
+          "surah": 93,
+          "ayah": 3
+        }
+      ]
+    },
+    {
+      "id": "hutang",
+      "group": "ujian",
+      "ayahs": [
+        {
+          "surah": 65,
+          "ayah": 2
+        },
+        {
+          "surah": 65,
+          "ayah": 3
+        },
+        {
+          "surah": 2,
+          "ayah": 286
+        }
+      ]
+    }
+  ]
+}
