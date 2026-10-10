@@ -200,6 +200,38 @@ void main() {
           reason: 'yang dibuka bukan ayat yang sedang tampil');
     });
 
+    testWidgets('ayat terpusat di layar, bukan menempel atas', (tester) async {
+      // Terukur sebelum perbaikan @412x915: konten berhenti di 330px padahal
+      // tombol mulai di 871px -> ruang mati 541px di bawah ayat, terbaca
+      // seperti layar yang belum selesai memuat. Sesudah Center: selisih
+      // jarak-atas dan jarak-bawah 8px di kedua tinggi layar.
+      for (final h in [640.0, 915.0]) {
+        tester.view.physicalSize = Size(412, h);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.reset);
+        await _pumpSituasi(tester, 'sedih');
+
+        final texts = tester.widgetList<Text>(find.byType(Text)).toList();
+        final refT = texts.firstWhere((t) => (t.data ?? '').startsWith('QS.'));
+        // Terjemahan: teks panjang bukan Arab (ayatnya AC AK, jadi dicari
+        // berdasarkan bentuk, bukan ayat tertentu).
+        final trT = texts.firstWhere((t) =>
+            (t.data ?? '').length > 40 &&
+            !RegExp(r'[\u0600-\u06FF]').hasMatch(t.data ?? ''));
+        final btnT =
+            texts.firstWhere((t) => (t.data ?? '') == 'Buka di Quran');
+
+        final appBarBottom = tester.getRect(find.byType(AppBar)).bottom;
+        final gapAtas = tester.getRect(find.byWidget(refT)).top - appBarBottom;
+        final gapBawah =
+            tester.getRect(find.byWidget(btnT)).top -
+                tester.getRect(find.byWidget(trT)).bottom;
+
+        expect((gapAtas - gapBawah).abs(), lessThan(40),
+            reason: 'h=$h: ayat tidak terpusat (atas=$gapAtas bawah=$gapBawah)');
+      }
+    });
+
     testWidgets('situasi tidak dikenal tidak crash, hanya kosong',
         (tester) async {
       await _pumpSituasi(tester, 'situasi-hantu');

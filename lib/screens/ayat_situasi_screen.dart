@@ -283,8 +283,14 @@ class _AyatSituasiScreenState extends State<AyatSituasiScreen> {
                 child: Center(child: CircularProgressIndicator()),
               )
             else
+              // Terpusat, bukan menempel atas: terukur, konten ayat cuma setinggi
+              // 68..330px sementara ruang sampai tombol 871px di layar 915 →
+              // sebelumnya ada ruang mati 541px di bawah ayat, terbaca seperti
+              // layar yang belum selesai memuat. Center + SingleChildScrollView:
+              // ayat pendek terpusat, ayat panjang tetap bisa digulir.
               Expanded(
-                child: SingleChildScrollView(
+                child: Center(
+                  child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -313,6 +319,7 @@ class _AyatSituasiScreenState extends State<AyatSituasiScreen> {
                         ),
                       ),
                     ],
+                  ),
                   ),
                 ),
               ),
