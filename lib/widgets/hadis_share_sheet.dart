@@ -12,6 +12,7 @@ import '../services/hadis_api.dart';
 import '../services/share_photo_service.dart';
 import '../theme/app_theme.dart';
 import 'share_card_kit.dart';
+import 'share_reward.dart';
 
 // ── Kartu share hadis (9:16 yang di-capture) ──────────────────────
 //
@@ -301,6 +302,8 @@ class _HadisShareScreenState extends State<_HadisShareScreen> {
         'text': '${l10n.hdDetailTitle('${widget.item.id}')} | '
             '${l10n.hsShareAppName}',
       });
+      // Reward hanya setelah share benar-benar terkirim (bukan saat gagal).
+      if (mounted) await ShareReward.onShared(context);
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(

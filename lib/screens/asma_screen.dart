@@ -11,6 +11,7 @@ import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../services/share_photo_service.dart';
 import '../../widgets/share_card_kit.dart';
+import '../../widgets/share_reward.dart';
 import '../../services/asma_data.dart';
 import '../../services/asma_meanings.dart';
 import '../../l10n/app_localizations.dart';
@@ -471,6 +472,8 @@ class _AsmaShareScreenState extends State<_AsmaShareScreen> {
         'text':
             '${l10n.asmaPill(widget.item.translit, widget.item.number)} | Muslim Leveling',
       });
+      // Reward hanya setelah share benar-benar terkirim (bukan saat gagal).
+      if (mounted) await ShareReward.onShared(context);
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context)

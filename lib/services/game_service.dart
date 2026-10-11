@@ -312,6 +312,8 @@ class GameState {
   final List<String> freezeSavedDates; // tanggal yang diselamatkan shield (riwayat proteksi)
   final String highlightSwipeDate; // YYYY-MM-DD ("" = never)
   final int highlightSwipeMask; // bit per page set = page claimed today
+  final String shareXpDate; // YYYY-MM-DD ("") = belum pernah share hari ini
+  final int shareXpCount; // jumlah share yang SUDAH dapat XP hari ini (cap 3)
   /// Profil yang ikut di-sync: nickname + kota adzan.
   /// ponytail: avatar_path tidak di-sync (file lokal, path tidak berguna lintas device).
   final String nickname; // "" = default 'Muslim Warrior'
@@ -345,6 +347,8 @@ class GameState {
     List<String>? freezeSavedDates,
     this.highlightSwipeDate = '',
     this.highlightSwipeMask = 0,
+    this.shareXpDate = '',
+    this.shareXpCount = 0,
     this.nickname = '',
     this.cityId = '',
     this.cityName = '',
@@ -385,6 +389,8 @@ class GameState {
     List<String>? freezeSavedDates,
     String? highlightSwipeDate,
     int? highlightSwipeMask,
+    String? shareXpDate,
+    int? shareXpCount,
     String? nickname,
     String? cityId,
     String? cityName,
@@ -413,6 +419,8 @@ class GameState {
     freezeSavedDates: freezeSavedDates ?? this.freezeSavedDates,
     highlightSwipeDate: highlightSwipeDate ?? this.highlightSwipeDate,
     highlightSwipeMask: highlightSwipeMask ?? this.highlightSwipeMask,
+    shareXpDate: shareXpDate ?? this.shareXpDate,
+    shareXpCount: shareXpCount ?? this.shareXpCount,
     nickname: nickname ?? this.nickname,
     cityId: cityId ?? this.cityId,
     cityName: cityName ?? this.cityName,
@@ -483,6 +491,8 @@ class GameState {
       freezeShields: m['freezeShields'] ?? 0,
       highlightSwipeDate: m['highlightSwipeDate'] ?? '',
       highlightSwipeMask: m['highlightSwipeMask'] ?? 0,
+      shareXpDate: m['shareXpDate'] ?? '',
+      shareXpCount: m['shareXpCount'] ?? 0,
       nickname: m['nickname'] ?? '',
       cityId: m['cityId'] ?? '',
       cityName: m['cityName'] ?? '',
@@ -515,6 +525,8 @@ class GameState {
     'freezeSavedDates': freezeSavedDates,
     'highlightSwipeDate': highlightSwipeDate,
     'highlightSwipeMask': highlightSwipeMask,
+    'shareXpDate': shareXpDate,
+    'shareXpCount': shareXpCount,
     'nickname': nickname,
     'cityId': cityId,
     'cityName': cityName,
@@ -1919,6 +1931,38 @@ class GameService {
   static int get highlightSwipeClaimedToday {
     final today = todayStr();
     return _cache.highlightSwipeDate == today ? _cache.highlightSwipeMask : 0;
+  }
+
+  // ─── XP share kartu (ayat, hadis, asma, doa) ───
+  //
+  // ponytail: satu-satunya jalur XP share. Dipasang DI DALAM tiap jalur share
+  // (bukan di UI), supaya tombol baru tidak bisa diam-diam lupa memberi XP.
+  // Anti-farm: cap [shareDailyCap] per hari, pola sama dengan
+  // quranReadAyahDailyCap / hadisReadDailyCap. Wajib ber-argumen supaya test
+  // bisa menyuntik waktu (deterministik, tanpa jam palsu).
+  static const shareXpPerCard = 10;
+  static const shareDailyCap = 3; // 30 XP/hari
+
+  /// Jumlah share yang sudah dapat XP hari ini (0..shareDailyCap).
+  static int get shareXpCountToday {
+    final today = todayStr();
+    return _cache.shareXpDate == today ? _cache.shareXpCount : 0;
+  }
+
+  /// Beri XP untuk satu share. Return 0 kalau cap harian sudah habis.
+  /// Share-nya sendiri TIDAK boleh gagal atau diblokir karena cap.
+  static Future<int> awardShareXp([DateTime? now]) async {
+    final today = dailyDateKey(now ?? DateTime.now());
+    final used = _cache.shareXpDate == today ? _cache.shareXpCount : 0;
+    if (used >= shareDailyCap) return 0;
+    final newXp = _cache.xp + shareXpPerCard;
+    await _save(_cache.copyWith(
+      xp: newXp,
+      level: getLevelInfo(newXp).level,
+      shareXpDate: today,
+      shareXpCount: used + 1,
+    ));
+    return shareXpPerCard;
   }
 
   static Future<bool> claimHighlightSwipeXp(int page) async {

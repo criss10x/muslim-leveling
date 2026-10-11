@@ -10,7 +10,7 @@ import '../theme/app_icons.dart';
 OverlayEntry? _active;
 AnimationController? _ctrl;
 
-void showXpToast(BuildContext context, int xp) {
+void showXpToast(BuildContext context, int xp, {double? bottomOffset}) {
   HapticFeedback.mediumImpact();
 
   final overlay = Overlay.of(context, rootOverlay: true);
@@ -34,7 +34,16 @@ void showXpToast(BuildContext context, int xp) {
             Positioned(
               left: 0,
               right: 0,
-              bottom: (mq.viewPadding.bottom + 76) * t + mq.viewPadding.bottom,
+              // ponytail: viewPadding HANYA lewat Positioned.bottom supaya pill
+              // duduk 76 dp di atas bilah nav (bukan 76+2x inset). Animasi
+              // slide-up tetap: pada t=1 kembali ke jarak diam.
+              //
+              // [bottomOffset] untuk layar share: di sana tombol Bagikan
+              // setinggi 52 dp duduk persis di atas bilah nav (sudah termasuk
+              // inset), jadi pill perlu +64 dp supaya tidak menutupi tombol
+              // yang baru saja ditekan. Default tetap 76 dp seperti semula.
+              bottom: mq.viewPadding.bottom +
+                  ((bottomOffset ?? 76) * t),
               child: IgnorePointer(
                 child: Opacity(
                   opacity: ctrl.value < 0.2 ? ctrl.value / 0.2 : 1.0,

@@ -13,6 +13,7 @@ import '../services/quran_data.dart';
 import '../services/share_photo_service.dart';
 import '../theme/app_theme.dart';
 import 'share_card_kit.dart';
+import 'share_reward.dart';
 
 // ── Kartu 9:16 yang di-capture ────────────────────────────────────
 
@@ -314,6 +315,8 @@ class _QuranShareScreenState extends State<_QuranShareScreen> {
         'text':
             '${l10n.dlCiteSurah(widget.surah.nameLatin, widget.ayah.ayah)} | Muslim Leveling',
       });
+      // Reward hanya setelah share benar-benar terkirim (bukan saat gagal).
+      if (mounted) await ShareReward.onShared(context);
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
+import '../../widgets/share_reward.dart';
 import '../../services/doa_api.dart';
 import '../theme/app_icons.dart';
 import '../l10n/app_localizations.dart';
@@ -654,6 +655,8 @@ class DoaDetailScreen extends StatelessWidget {
     try {
       const channel = MethodChannel('muslim_leveling/share');
       await channel.invokeMethod('shareText', {'text': buf.toString()});
+      // Reward hanya setelah share benar-benar terkirim (bukan saat gagal).
+      if (context.mounted) await ShareReward.onShared(context);
     } catch (_) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
