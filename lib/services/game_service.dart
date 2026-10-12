@@ -2134,6 +2134,13 @@ class GameService {
       if (needsShield) {
         shields -= 1;
         savedDates.add(evalStr);
+        // Seluruh hari itu dilindungi: majukan tanggal semua streak yang masih
+        // hidup, sama seperti kalau hari itu benar-benar dikerjakan.
+        hero = _markDateSaved(hero, evalStr);
+        tilawah = _markDateSaved(tilawah, evalStr);
+        for (final p in tracker.keys) {
+          tracker[p] = _markDateSaved(tracker[p]!, evalStr);
+        }
       }
 
       if (!needsShield) {
@@ -2223,6 +2230,23 @@ class GameService {
       return s.copyWith(current: recovered, lastDate: evalDate);
     }
     return s;
+  }
+
+  /// HARI YANG DILINDUNGI SHIELD: streak-nya dilanjutkan, jadi tanggalnya
+  /// harus tetap dianggap "hari terakhir streak" untuk evaluasi hari
+  /// berikutnya.
+  ///
+  /// Tanpa ini, hari yang diselamatkan tidak pernah melewati `_updStreak`
+  /// sehingga `lastDate` tertinggal di belakang. Log berikutnya lalu melihat
+  /// "kemarin" != lastDate dan mereset streak ke 1, padahal rantainya tidak
+  /// pernah putus. Gejala di layar: sudah sholat kemarin, angka di tab Profil
+  /// tetap 1.
+  ///
+  /// Aturannya sama dengan evaluasi hari biasa: hanya maju kalau tanggalnya
+  /// lebih baru, supaya `lastDate` tidak pernah mundur.
+  static StreakState _markDateSaved(StreakState s, String savedDate) {
+    if (s.lastDate.compareTo(savedDate) >= 0) return s;
+    return s.copyWith(lastDate: savedDate);
   }
 
   static int _countRecovery(StreakState before, StreakState after) {

@@ -118,15 +118,24 @@ void main() {
     expect(legacy.shareXpCount, 0);
     expect(legacy.shareXpDate, '');
 
-    final today = GameService.dailyDateKey(DateTime(2026, 10, 11, 10, 0));
+    // PENTING: di sini tanggal disuntik, jadi ukur nilai TERSIMPAN
+    // (shareXpDate/shareXpCount), bukan shareXpCountToday yang membaca jam
+    // nyata. Mencampur keduanya bikin tes ini lolos/gagal tergantung tanggal
+    // berapa suite dijalankan.
+    const key11 = '2026-10-11';
+    expect(GameService.dailyDateKey(DateTime(2026, 10, 11, 10, 0)), key11);
+
     await GameService.load();
     // hari berganti -> kuota penuh, bukan sisa dari save lama
-    await GameService.awardShareXp(DateTime(2026, 10, 11, 10, 0));
-    expect(GameService.shareXpCountToday, 1);
+    expect(await GameService.awardShareXp(DateTime(2026, 10, 11, 10, 0)), 10);
+    expect(GameService.current.shareXpDate, key11);
+    expect(GameService.current.shareXpCount, 1);
     expect(await GameService.awardShareXp(DateTime(2026, 10, 11, 11, 0)), 10);
     await GameService.awardShareXp(DateTime(2026, 10, 11, 12, 0));
-    expect(GameService.shareXpCountToday, 3);
-    expect(GameService.current.shareXpDate, today);
+    expect(GameService.current.shareXpCount, 3);
+    // cap tetap berlaku pada hari yang sama
+    expect(await GameService.awardShareXp(DateTime(2026, 10, 11, 13, 0)), 0);
+    expect(GameService.current.shareXpCount, 3);
   });
 
   testWidgets('notif +10 XP muncul DI ATAS bottom sheet share', (tester) async {
