@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../services/hadis_api.dart';
+import '../../services/hadis_bookmark.dart';
 import '../../widgets/hadis_share_sheet.dart';
 import '../../services/game_service.dart';
 import '../../services/daily_highlight.dart';
 import '../../l10n/app_localizations.dart';
 import '../theme/app_icons.dart';
+import 'hadis_bookmarks_screen.dart';
 
 /// Hadis — explore list (5/page) + search + hadis acak. API myquran v3.
 class HadisScreen extends StatefulWidget {
@@ -276,6 +278,8 @@ class _HadisScreenState extends State<HadisScreen> {
                   ),
                   const SizedBox(width: AppSpacing.sm),
                   _randomButton(),
+                  const SizedBox(width: AppSpacing.sm),
+                  _savedButton(),
                 ],
               ),
             ),
@@ -326,6 +330,39 @@ class _HadisScreenState extends State<HadisScreen> {
         ),
         backgroundColor: AppColors.surfaceContainerLowest,
         duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  /// Snapshot yang disimpan: teks lengkap apa adanya, jadi kartu tersimpan
+  /// bisa dibuka tanpa request jaringan.
+  static HadisBookmark _snapshot(HadisItem it) => HadisBookmark(
+        id: it.id,
+        arabic: it.ar,
+        translation: it.idn,
+        grade: it.grade,
+        takhrij: it.takhrij,
+        hikmah: it.hikmah,
+        addedAt: DateTime.now(),
+      );
+
+  /// Pintu ke daftar hadis tersimpan — sejajar dengan tombol Acak.
+  Widget _savedButton() {
+    return PressableScale(
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => const HadisBookmarksScreen()),
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(11),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(AppRadius.pill),
+        ),
+        child: Icon(
+          Icons.bookmark_border,
+          size: 20,
+          color: AppColors.onSurfaceVariant,
+        ),
       ),
     );
   }
@@ -396,7 +433,9 @@ class _HadisScreenState extends State<HadisScreen> {
     return RefreshIndicator(
       color: AppColors.primary,
       onRefresh: _load,
-      child: ListView.builder(
+      child: ListenableBuilder(
+        listenable: hadisBookmarks,
+        builder: (context, _) => ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.fromLTRB(
           AppSpacing.md,
@@ -456,6 +495,25 @@ class _HadisScreenState extends State<HadisScreen> {
                             fontSize: 10,
                           ),
                         ),
+                        const SizedBox(width: AppSpacing.xs),
+                        IconButton(
+                          onPressed: () =>
+                              hadisBookmarks.toggle(_snapshot(item)),
+                          icon: Icon(
+                            hadisBookmarks.isBookmarked(item.id)
+                                ? Icons.bookmark
+                                : Icons.bookmark_border,
+                          ),
+                          color: hadisBookmarks.isBookmarked(item.id)
+                              ? AppColors.secondaryFixed
+                              : AppColors.onSurfaceVariant.withValues(
+                                  alpha: 0.6,
+                                ),
+                          tooltip: hadisBookmarks.isBookmarked(item.id)
+                              ? _l10n.hbDelete
+                              : _l10n.hbTooltip,
+                          visualDensity: VisualDensity.compact,
+                        ),
                       ],
                     ),
                     const SizedBox(height: AppSpacing.sm),
@@ -483,6 +541,7 @@ class _HadisScreenState extends State<HadisScreen> {
             ),
           );
         },
+        ),
       ),
     );
   }
@@ -522,6 +581,16 @@ class HadisDetailScreen extends StatefulWidget {
 class _HadisDetailScreenState extends State<HadisDetailScreen> {
   AppL10n get _l10n => AppL10n.of(context);
   Timer? _xpTimer;
+
+  static HadisBookmark _snapshot(HadisItem it) => HadisBookmark(
+        id: it.id,
+        arabic: it.ar,
+        translation: it.idn,
+        grade: it.grade,
+        takhrij: it.takhrij,
+        hikmah: it.hikmah,
+        addedAt: DateTime.now(),
+      );
 
   @override
   void initState() {
@@ -574,6 +643,27 @@ class _HadisDetailScreenState extends State<HadisDetailScreen> {
                     ),
                   ),
                   if (item.grade.isNotEmpty) _gradeChip(item.grade, sahih),
+                  // Digambar dari store, bukan dari snapshot build: tanpa ini
+                  // ikon tidak berubah setelah ditekan (layar ini tidak
+                  // membangun ulang saat bookmark berubah).
+                  ListenableBuilder(
+                    listenable: hadisBookmarks,
+                    builder: (context, _) {
+                      final saved = hadisBookmarks.isBookmarked(item.id);
+                      return IconButton(
+                        onPressed: () => hadisBookmarks.toggle(_snapshot(item)),
+                        icon: Icon(
+                          saved ? Icons.bookmark : Icons.bookmark_border,
+                        ),
+                        color: saved
+                            ? AppColors.secondaryFixed
+                            : AppColors.onSurfaceVariant.withValues(
+                                alpha: 0.6,
+                              ),
+                        tooltip: saved ? _l10n.hbDelete : _l10n.hbTooltip,
+                      );
+                    },
+                  ),
                   // Tombol share: ikon 48dp (ambang sentuh Android), sejajar
                   // dengan pintu share di tab lain.
                   Semantics(

@@ -117,7 +117,13 @@ class CloudSync {
   /// Bookmark ayat & pengaturan notifikasi — ikut backup supaya ganti HP
   /// tidak menghapusnya. Lokal tetap sumber kebenaran; cloud cuma cermin.
   static Future<bool> saveBookmarks(List<Map<String, dynamic>> items) =>
-      _upsert({'bookmarks': items});
+      _upsert({'bookmarks': items}); // bookmark AYAT (lama)
+
+  /// Bookmark HADIS — field sendiri. Jangan digabung ke 'bookmarks': itu milik
+  /// bookmark ayat, dan tiap penyimpanan menulis SELURUH array, jadi
+  /// menggabungkan keduanya berarti menyimpan hadis akan menimpa ayat.
+  static Future<bool> saveHadisBookmarks(List<Map<String, dynamic>> items) =>
+      _upsert({'hadisBookmarks': items});
 
   static Future<bool> saveNotifPrefs(Map<String, dynamic> data) =>
       _upsert({'notif': data});

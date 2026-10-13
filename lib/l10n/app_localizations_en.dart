@@ -3850,4 +3850,20 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get homeQuickRekomendasi => 'Recommended';
+
+  @override
+  String get hbTooltip => 'Save hadith';
+
+  @override
+  String get hbTitle => 'Saved Hadith';
+
+  @override
+  String get hbNoBookmark => 'No saved hadith yet';
+
+  @override
+  String get hbEmptyHint =>
+      'Tap the bookmark icon on a hadith you want to save.';
+
+  @override
+  String get hbDelete => 'Remove from saved';
 }

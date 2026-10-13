@@ -14,6 +14,7 @@ import 'services/auth_service.dart';
 import 'services/game_service.dart';
 import 'services/meta_app_events_service.dart';
 import 'services/quran_bookmark.dart';
+import 'services/hadis_bookmark.dart';
 import 'services/quran_settings.dart';
 
 // ponytail: Sentry wrap runApp, init setelah — apapun error di init, UI tetap muncul
@@ -65,6 +66,7 @@ Future<void> _initAsync() async {
           // lokal-only (bookmark, pengaturan notif) — tanpa read tambahan.
           // Lokal yang sudah ada menang; ini hanya mengisi kekosongan.
           await quranBookmarks.restoreFromRemote(remote);
+          await hadisBookmarks.restoreFromRemote(remote);
           await NotificationService.restoreFromRemote(remote);
         } catch (e) {
           Sentry.captureException(e,

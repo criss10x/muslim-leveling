@@ -3846,4 +3846,19 @@ class AppL10nId extends AppL10n {
 
   @override
   String get homeQuickRekomendasi => 'Rekomendasi';
+
+  @override
+  String get hbTooltip => 'Simpan hadis';
+
+  @override
+  String get hbTitle => 'Hadis Tersimpan';
+
+  @override
+  String get hbNoBookmark => 'Belum ada hadis tersimpan';
+
+  @override
+  String get hbEmptyHint => 'Tap ikon bookmark di hadis yang mau disimpan.';
+
+  @override
+  String get hbDelete => 'Hapus dari tersimpan';
 }

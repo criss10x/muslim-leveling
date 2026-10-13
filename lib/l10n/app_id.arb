@@ -1941,5 +1941,10 @@
   "situasiSitBerlombaDunia": "Lihat orang berlomba-lomba dunia",
   "situasiSitDoomscrolling": "Doomscrolling berita negatif",
   "situasiSitDuniaMakinRusak": "Merasa dunia makin rusak, mau nyerah",
-  "homeQuickRekomendasi": "Rekomendasi"
+  "homeQuickRekomendasi": "Rekomendasi",
+  "hbTooltip": "Simpan hadis",
+  "hbTitle": "Hadis Tersimpan",
+  "hbNoBookmark": "Belum ada hadis tersimpan",
+  "hbEmptyHint": "Tap ikon bookmark di hadis yang mau disimpan.",
+  "hbDelete": "Hapus dari tersimpan"
 }

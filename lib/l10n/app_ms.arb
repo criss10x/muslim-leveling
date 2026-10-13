@@ -1167,5 +1167,10 @@
   "situasiSitBerlombaDunia": "Lihat orang berlumba-lumba dunia",
   "situasiSitDoomscrolling": "Doomscrolling berita negatif",
   "situasiSitDuniaMakinRusak": "Rasa dunia makin rosak, mahu menyerah",
-  "homeQuickRekomendasi": "Rekomendasi"
+  "homeQuickRekomendasi": "Rekomendasi",
+  "hbTooltip": "Simpan hadis",
+  "hbTitle": "Hadis Disimpan",
+  "hbNoBookmark": "Belum ada hadis disimpan",
+  "hbEmptyHint": "Tekan ikon penanda pada hadis yang mahu disimpan.",
+  "hbDelete": "Buang dari simpanan"
 }

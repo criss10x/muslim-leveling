@@ -1167,5 +1167,10 @@
   "situasiSitBerlombaDunia": "Seeing others chase the world",
   "situasiSitDoomscrolling": "Doomscrolling bad news",
   "situasiSitDuniaMakinRusak": "The world feels broken, ready to give up",
-  "homeQuickRekomendasi": "Recommended"
+  "homeQuickRekomendasi": "Recommended",
+  "hbTooltip": "Save hadith",
+  "hbTitle": "Saved Hadith",
+  "hbNoBookmark": "No saved hadith yet",
+  "hbEmptyHint": "Tap the bookmark icon on a hadith you want to save.",
+  "hbDelete": "Remove from saved"
 }

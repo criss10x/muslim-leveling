@@ -6987,6 +6987,36 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Rekomendasi'**
   String get homeQuickRekomendasi;
+
+  /// No description provided for @hbTooltip.
+  ///
+  /// In id, this message translates to:
+  /// **'Simpan hadis'**
+  String get hbTooltip;
+
+  /// No description provided for @hbTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Hadis Tersimpan'**
+  String get hbTitle;
+
+  /// No description provided for @hbNoBookmark.
+  ///
+  /// In id, this message translates to:
+  /// **'Belum ada hadis tersimpan'**
+  String get hbNoBookmark;
+
+  /// No description provided for @hbEmptyHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Tap ikon bookmark di hadis yang mau disimpan.'**
+  String get hbEmptyHint;
+
+  /// No description provided for @hbDelete.
+  ///
+  /// In id, this message translates to:
+  /// **'Hapus dari tersimpan'**
+  String get hbDelete;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

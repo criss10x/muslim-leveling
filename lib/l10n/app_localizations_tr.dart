@@ -3875,4 +3875,20 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get homeQuickRekomendasi => 'Öneri';
+
+  @override
+  String get hbTooltip => 'Hadisi kaydet';
+
+  @override
+  String get hbTitle => 'Kaydedilen Hadisler';
+
+  @override
+  String get hbNoBookmark => 'Henüz kaydedilmiş hadis yok';
+
+  @override
+  String get hbEmptyHint =>
+      'Kaydetmek istediğin hadisin yer imi simgesine dokun.';
+
+  @override
+  String get hbDelete => 'Kaydedilenlerden çıkar';
 }

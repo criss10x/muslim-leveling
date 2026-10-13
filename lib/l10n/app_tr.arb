@@ -1167,5 +1167,10 @@
   "situasiSitBerlombaDunia": "Dünya yarışına dalanları görüyor",
   "situasiSitDoomscrolling": "Olumsuz haberleri kaydırıp duruyor",
   "situasiSitDuniaMakinRusak": "Dünya kötüye gidiyor, pes etmek üzere",
-  "homeQuickRekomendasi": "Öneri"
+  "homeQuickRekomendasi": "Öneri",
+  "hbTooltip": "Hadisi kaydet",
+  "hbTitle": "Kaydedilen Hadisler",
+  "hbNoBookmark": "Henüz kaydedilmiş hadis yok",
+  "hbEmptyHint": "Kaydetmek istediğin hadisin yer imi simgesine dokun.",
+  "hbDelete": "Kaydedilenlerden çıkar"
 }
