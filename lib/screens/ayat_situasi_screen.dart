@@ -19,6 +19,42 @@ String situationLabel(AppL10n l10n, String id) => _describe(l10n, id) ?? '';
 /// Deskripsi satu baris di bawah judul situasi (dipakai layar ayat).
 String situationDesc(AppL10n l10n, String id) => _describe(l10n, id) ?? '';
 
+/// Label tingkat 1 — alasan besar orang membuka Quran.
+///
+/// Ditulis sebagai kalimat yang dirasakan user ("Sedih dan kacau"), bukan
+/// istilah ("Syifa"): tingkat ini yang pertama dibaca orang yang sedang tidak
+/// bisa menjelaskan masalahnya sendiri.
+String umbrellaLabel(AppL10n l10n, String id) => switch (id) {
+  'shifa' => l10n.situasiAlasanShifa,
+  'dikuatkan' => l10n.situasiAlasanDikuatkan,
+  'huda' => l10n.situasiAlasanHuda,
+  'diingatkan' => l10n.situasiAlasanDiingatkan,
+  _ => '',
+};
+
+/// Kalimat bantu di bawah label alasan.
+String umbrellaHint(AppL10n l10n, String id) => switch (id) {
+  'shifa' => l10n.situasiAlasanShifaHint,
+  'dikuatkan' => l10n.situasiAlasanDikuatkanHint,
+  'huda' => l10n.situasiAlasanHudaHint,
+  'diingatkan' => l10n.situasiAlasanDiingatkanHint,
+  _ => '',
+};
+
+/// Ikon tiap alasan, dari set ikon app (bukan emoji: emoji tidak punya sistem
+/// ikon dan ukurannya ikut font sehingga tidak sejajar dengan teks).
+IconData umbrellaIcon(String id) => switch (id) {
+  'shifa' => AppIcons.favorite,
+  'dikuatkan' => AppIcons.bolt,
+  'huda' => AppIcons.explore,
+  'diingatkan' => AppIcons.wbSunny,
+  _ => AppIcons.circleOutlined,
+};
+
+/// Urutan tingkat 1 = urutan tampil. Bukan urutan abjad: alurnya mengikuti
+/// gerak hati, dari yang paling berat ke yang paling lega.
+const kUmbrellas = ['shifa', 'dikuatkan', 'huda', 'diingatkan'];
+
 String groupLabel(AppL10n l10n, String id) => switch (id) {
   'kacau' => l10n.situasiGroupKacau,
   'ujian' => l10n.situasiGroupUjian,
@@ -29,6 +65,32 @@ String groupLabel(AppL10n l10n, String id) => switch (id) {
   'motivasi' => l10n.situasiGroupMotivasi,
   'syukur' => l10n.situasiGroupSyukur,
   'dunia' => l10n.situasiGroupDunia,
+  _ => '',
+};
+
+/// Label sub-tahap di dalam satu grup.
+///
+/// Tahap dipakai supaya grup besar tidak jadi daftar yang harus dibaca satu per
+/// satu (mis. "Kena ujian hidup" 7 pilihan -> menimpa sekarang / sudah
+/// berlarut). Id-nya dikunci tes supaya tidak ada tahap tanpa label.
+String stageLabel(AppL10n l10n, String id) => switch (id) {
+  'rasa' => l10n.situasiStageRasa,
+  'beban-pikiran' => l10n.situasiStageBebanPikiran,
+  'kebiasaan' => l10n.situasiStageKebiasaan,
+  'menimpa' => l10n.situasiStageMenimpa,
+  'berlarut' => l10n.situasiStageBerlarut,
+  'terdekat' => l10n.situasiStageTerdekat,
+  'kecewa' => l10n.situasiStageKecewa,
+  'jarak' => l10n.situasiStageJarak,
+  'arah' => l10n.situasiStageArah,
+  'pilihan-besar' => l10n.situasiStagePilihanBesar,
+  'cari-yakin' => l10n.situasiStageCariYakin,
+  'salah' => l10n.situasiStageSalah,
+  'kembali' => l10n.situasiStageKembali,
+  'mulai' => l10n.situasiStageMulai,
+  'bertahan' => l10n.situasiStageBertahan,
+  'rezeki-baik' => l10n.situasiStageRezekiBaik,
+  'tenang' => l10n.situasiStageTenang,
   _ => '',
 };
 
@@ -90,19 +152,37 @@ String? _describe(AppL10n l10n, String id) => switch (id) {
   _ => null,
 };
 
-/// Halaman "Ayat rekomendasi" — dua mode dalam satu route:
+/// Halaman "Ayat rekomendasi" — SATU route untuk empat tingkat:
 ///
-/// - [situationId] null  -> daftar 54 situasi, dikelompokkan 9 grup.
-/// - [situationId] diisi -> SATU ayat untuk situasi itu + tombol "ayat lain" dan
-///   "buka di Quran".
+/// 1. tanpa parameter     -> 4 alasan besar ("Kamu lagi ngerasain apa?")
+/// 2. [umbrella] diisi    -> grup di bawah alasan itu (maksimal 3)
+/// 3. [groupId] diisi     -> situasi grup itu, dibelah sub-tahap
+/// 4. [situationId] diisi -> SATU ayat + "ayat lain" + "buka di Quran"
 ///
-/// ponytail: satu widget untuk dua mode (bukan dua layar) karena layar ayat
-/// hanya butuh satu parameter dan tidak punya state sendiri di luar pilihan
-/// ayat; memisahkannya berarti menambah route + plumbing tanpa manfaat.
+/// ponytail: tetap satu widget (bukan empat layar) karena tiap tingkat hanya
+/// menambah satu parameter dan tidak punya state sendiri di luar pilihan ayat;
+/// memisahkannya berarti empat route + plumbing tanpa manfaat.
+///
+/// Kenapa bertingkat: sebelumnya 54 situasi tampil sekaligus dalam satu daftar
+/// bergulir, dan itu terbaca seperti daftar yang harus dibaca habis sebelum
+/// boleh memilih. Orang yang butuh ayat tidak selalu tahu nama masalahnya; yang
+/// dia tahu cuma rasanya.
 class AyatSituasiScreen extends StatefulWidget {
+  /// Dipilih di tingkat 1.
+  final String? umbrella;
+
+  /// Dipilih di tingkat 2.
+  final String? groupId;
+
+  /// Dipilih di tingkat 3.
   final String? situationId;
 
-  const AyatSituasiScreen({super.key, this.situationId});
+  const AyatSituasiScreen({
+    super.key,
+    this.umbrella,
+    this.groupId,
+    this.situationId,
+  });
 
   @override
   State<AyatSituasiScreen> createState() => _AyatSituasiScreenState();
@@ -175,6 +255,10 @@ class _AyatSituasiScreenState extends State<AyatSituasiScreen> {
     );
   }
 
+  void _push(Widget screen) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => screen));
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppL10n.of(context);
@@ -187,77 +271,184 @@ class _AyatSituasiScreenState extends State<AyatSituasiScreen> {
           icon: Icon(AppIcons.arrowBack, color: AppColors.onSurface),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(
-          widget.situationId == null ? l10n.situasiTitle : _situationTitle(l10n),
-          style: AppText.titleLg().copyWith(color: AppColors.onSurface),
-          maxLines: 2,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              _title(l10n),
+              style: AppText.titleLg().copyWith(color: AppColors.onSurface),
+              maxLines: 2,
+            ),
+            // Jejak tingkat di atas: tanpa ini, user yang sudah dua tingkat di
+            // dalam tidak tahu alasan mana yang tadi dia pilih.
+            if (widget.umbrella != null && widget.situationId == null)
+              Text(
+                umbrellaLabel(l10n, widget.umbrella!),
+                style: AppText.labelCapsSm().copyWith(color: AppColors.primary),
+                maxLines: 1,
+              ),
+          ],
         ),
       ),
       body: _loading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : widget.situationId == null
-              ? _list(l10n)
-              : _ayatMode(l10n),
+          ? const Center(child: CircularProgressIndicator())
+          : _body(l10n),
     );
   }
 
-  String _situationTitle(AppL10n l10n) =>
-      situationLabel(l10n, widget.situationId!) ;
+  String _title(AppL10n l10n) {
+    if (widget.situationId != null) {
+      return situationLabel(l10n, widget.situationId!);
+    }
+    if (widget.groupId != null) return groupLabel(l10n, widget.groupId!);
+    if (widget.umbrella != null) return umbrellaLabel(l10n, widget.umbrella!);
+    return l10n.situasiTitle;
+  }
 
-  // ── mode daftar ──
+  Widget _body(AppL10n l10n) {
+    if (widget.situationId != null) return _ayatMode(l10n);
+    if (widget.groupId != null) return _situationList(l10n);
+    if (widget.umbrella != null) return _groupList(l10n);
+    return _reasonList(l10n);
+  }
 
-  Widget _list(AppL10n l10n) {
-    // ponytail: dikelompokkan per grup supaya 54 baris tidak jadi dinding teks;
-    // satu ListView (bukan nested scroll) — header grup jadi baris biasa.
-    final children = <Widget>[];
-    for (final g in _groups) {
-      final items = _situations.where((s) => s.group == g.id).toList();
-      if (items.isEmpty) continue;
-      children.add(HudHeader(groupLabel(l10n, g.id)));
-      for (final s in items) {
-        children.add(
-          Padding(
-            padding: const EdgeInsets.only(bottom: AppSpacing.xs),
-            child: FlatCard(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.md,
-                vertical: AppSpacing.sm,
-              ),
-              child: PressableScale(
-                pressedScale: 0.98,
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => AyatSituasiScreen(situationId: s.id),
-                  ),
-                ),
+  // ── tingkat 1: 4 alasan ──
+
+  Widget _reasonList(AppL10n l10n) {
+    return ListView(
+      padding: EdgeInsets.fromLTRB(
+        AppSpacing.md,
+        AppSpacing.xs,
+        AppSpacing.md,
+        AppSpacing.md + MediaQuery.viewPaddingOf(context).bottom,
+      ),
+      children: [
+        for (final u in kUmbrellas) ...[
+          FlatCard(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.md,
+              vertical: AppSpacing.sm,
+            ),
+            child: PressableScale(
+              pressedScale: 0.98,
+              onTap: () => _push(AyatSituasiScreen(umbrella: u)),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(minHeight: 48),
                 child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        situationLabel(l10n, s.id),
-                        style: AppText.bodyMd().copyWith(
-                          color: AppColors.onSurface,
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(AppRadius.pill),
+                    ),
+                    child: Icon(
+                      umbrellaIcon(u),
+                      size: 20,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          umbrellaLabel(l10n, u),
+                          style: AppText.bodyLg().copyWith(
+                            color: AppColors.onSurface,
+                          ),
                         ),
-                      ),
+                        const SizedBox(height: 2),
+                        Text(
+                          umbrellaHint(l10n, u),
+                          style: AppText.bodyMd().copyWith(
+                            fontSize: 12,
+                            color: AppColors.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
                     ),
-                    Icon(
-                      AppIcons.chevronRight,
-                      size: 18,
-                      color: AppColors.onSurfaceVariant,
-                    ),
-                  ],
+                  ),
+                  Icon(
+                    AppIcons.chevronRight,
+                    size: 18,
+                    color: AppColors.onSurfaceVariant,
+                  ),
+                ],
                 ),
               ),
             ),
           ),
-        );
-      }
-      children.add(const SizedBox(height: AppSpacing.md));
-    }
+          const SizedBox(height: AppSpacing.xs),
+        ],
+      ],
+    );
+  }
+
+  // ── tingkat 2: grup di bawah satu alasan ──
+
+  Widget _groupList(AppL10n l10n) {
+    final groups = _groups
+        .where((g) => g.umbrella == widget.umbrella)
+        .toList(growable: false);
     return ListView(
-      // SafeArea: konten paling bawah tidak boleh tertutup nav bar 3 tombol.
+      padding: EdgeInsets.fromLTRB(
+        AppSpacing.md,
+        AppSpacing.xs,
+        AppSpacing.md,
+        AppSpacing.md + MediaQuery.viewPaddingOf(context).bottom,
+      ),
+      children: [
+        _prompt(l10n.situasiPickGroup),
+        for (final g in groups) ...[
+          _row(
+            label: groupLabel(l10n, g.id),
+            trailing: _count(
+              _situations.where((s) => s.group == g.id).length,
+              l10n,
+            ),
+            onTap: () => _push(
+              AyatSituasiScreen(umbrella: widget.umbrella, groupId: g.id),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.xs),
+        ],
+      ],
+    );
+  }
+
+  // ── tingkat 3: situasi, dibelah sub-tahap ──
+
+  Widget _situationList(AppL10n l10n) {
+    final group = _groups.where((g) => g.id == widget.groupId).firstOrNull;
+    final items = _situations
+        .where((s) => s.group == widget.groupId)
+        .toList(growable: false);
+    final children = <Widget>[_prompt(l10n.situasiPickStage)];
+
+    if (group != null && group.hasStages) {
+      for (final stage in group.stages) {
+        final inStage = items
+            .where((s) => s.stage == stage)
+            .toList(growable: false);
+        if (inStage.isEmpty) continue;
+        children.add(HudHeader(stageLabel(l10n, stage)));
+        for (final s in inStage) {
+          children.add(_situationRow(l10n, s));
+        }
+      }
+    } else {
+      // Grup datar: membelahnya tidak menolong karena situasinya memang sedikit.
+      for (final s in items) {
+        children.add(_situationRow(l10n, s));
+      }
+    }
+
+    return ListView(
       padding: EdgeInsets.fromLTRB(
         AppSpacing.md,
         AppSpacing.xs,
@@ -268,7 +459,75 @@ class _AyatSituasiScreenState extends State<AyatSituasiScreen> {
     );
   }
 
-  // ── mode ayat ──
+  Widget _situationRow(AppL10n l10n, Situation s) => Padding(
+    padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+    child: _row(
+      label: situationLabel(l10n, s.id),
+      onTap: () => _push(
+        AyatSituasiScreen(
+          umbrella: widget.umbrella,
+          groupId: widget.groupId,
+          situationId: s.id,
+        ),
+      ),
+    ),
+  );
+
+  /// Kalimat bantu di bawah judul ("Yang mana lebih dekat?").
+  Widget _prompt(String text) => Padding(
+    padding: const EdgeInsets.only(left: AppSpacing.xs, bottom: AppSpacing.sm),
+    child: Text(
+      text,
+      style: AppText.bodyMd().copyWith(color: AppColors.onSurfaceVariant),
+    ),
+  );
+
+  /// Baris pilihan: kartu datar + label + chevron. Satu bentuk untuk tingkat 2
+  /// dan 3 supaya berpindah tingkat tidak terasa seperti pindah aplikasi.
+  Widget _row({
+    required String label,
+    required VoidCallback onTap,
+    Widget? trailing,
+  }) => FlatCard(
+    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+    child: PressableScale(
+      pressedScale: 0.98,
+      onTap: onTap,
+      // Tinggi minimum 48dp: ambang sentuh Android. Terukur, baris ini cuma
+      // 44dp dengan padding vertikal biasa — bisa ditekan, tapi di bawah
+      // ambang yang nyaman untuk jari.
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 48),
+        child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              label,
+              style: AppText.bodyMd().copyWith(color: AppColors.onSurface),
+            ),
+          ),
+          if (trailing != null) ...[
+            trailing,
+            const SizedBox(width: AppSpacing.xs),
+          ],
+          Icon(
+            AppIcons.chevronRight,
+            size: 18,
+            color: AppColors.onSurfaceVariant,
+          ),
+        ],
+        ),
+      ),
+    ),
+  );
+
+  /// Jumlah pilihan di grup: menyiapkan user sebelum masuk, bukan setelah.
+  Widget _count(int n, AppL10n l10n) => Text(
+    l10n.situasiChooseCount('$n'),
+    style: AppText.labelCapsSm().copyWith(color: AppColors.onSurfaceVariant),
+  );
+
+  // ── tingkat 4: satu ayat ──
 
   Widget _ayatMode(AppL10n l10n) {
     final ayah = _ayah;
@@ -291,35 +550,35 @@ class _AyatSituasiScreenState extends State<AyatSituasiScreen> {
               Expanded(
                 child: Center(
                   child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const SizedBox(height: AppSpacing.sm),
-                      Text(
-                        'QS. ${_surah?.nameLatin ?? ''} ${_refSurah ?? ''}:${_refAyah ?? ''}',
-                        style: AppText.labelCapsSm().copyWith(
-                          color: AppColors.primary,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const SizedBox(height: AppSpacing.sm),
+                        Text(
+                          'QS. ${_surah?.nameLatin ?? ''} ${_refSurah ?? ''}:${_refAyah ?? ''}',
+                          style: AppText.labelCapsSm().copyWith(
+                            color: AppColors.primary,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: AppSpacing.md),
-                      Text(
-                        ayah.arabic,
-                        textAlign: TextAlign.right,
-                        textDirection: TextDirection.rtl,
-                        style: AppText.arabic(28).copyWith(
-                          color: AppColors.onSurface,
+                        const SizedBox(height: AppSpacing.md),
+                        Text(
+                          ayah.arabic,
+                          textAlign: TextAlign.right,
+                          textDirection: TextDirection.rtl,
+                          style: AppText.arabic(28).copyWith(
+                            color: AppColors.onSurface,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: AppSpacing.md),
-                      Text(
-                        ayah.translation,
-                        style: AppText.bodyLg().copyWith(
-                          color: AppColors.onSurfaceVariant,
-                          height: 1.6,
+                        const SizedBox(height: AppSpacing.md),
+                        Text(
+                          ayah.translation,
+                          style: AppText.bodyLg().copyWith(
+                            color: AppColors.onSurfaceVariant,
+                            height: 1.6,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
                   ),
                 ),
               ),

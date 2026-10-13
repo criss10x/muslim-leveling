@@ -18,6 +18,7 @@ import 'package:muslim_leveling/screens/quran_reader.dart';
 import 'package:muslim_leveling/services/quran_data.dart';
 import 'package:muslim_leveling/services/quran_situasi.dart';
 import 'package:muslim_leveling/l10n/app_localizations.dart';
+import 'package:muslim_leveling/widgets/common.dart';
 
 import 'helpers/app_wrap.dart';
 
@@ -49,6 +50,23 @@ Future<void> _warm(WidgetTester tester, String? id) async {
 Future<void> _pumpDaftar(WidgetTester tester) async {
   await _warm(tester, null);
   await tester.pumpWidget(appWrap(const AyatSituasiScreen()));
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 100));
+}
+
+/// Pump ulang layar tingkat 1 dengan pohon yang benar-benar baru.
+///
+/// `pumpWidget` dengan widget bertipe sama TIDAK me-reset Navigator: `home`
+/// diganti, tapi rute yang sudah di-push tetap hidup di atasnya, sehingga tes
+/// berikutnya menekan elemen yang tidak ada di layar teratas (jebakan ini
+/// terbukti: 3 tes gagal "found 0 widgets"). KeyedSubtree dengan key baru
+/// memaksa MaterialApp-nya dibangun ulang. Terukur: pickGroup 1 -> 0.
+Future<void> _pumpDaftarFresh(WidgetTester tester) async {
+  await _warm(tester, null);
+  await tester.pumpWidget(KeyedSubtree(
+    key: UniqueKey(),
+    child: appWrap(const AyatSituasiScreen()),
+  ));
   await tester.pump();
   await tester.pump(const Duration(milliseconds: 100));
 }
@@ -88,57 +106,201 @@ void main() {
       }
     });
 
-    testWidgets('semua 9 grup bisa dijangkau dengan menggulir', (tester) async {
+    testWidgets('semua 9 grup tetap terjangkau, tapi lewat alasannya masing-masing',
+        (tester) async {
+      // Sebelumnya 9 grup ada di SATU layar. Sekarang tiap grup berada di bawah
+      // alasannya. Yang dijaga: tidak ada grup yang jadi yatim (tidak muncul di
+      // alasan mana pun) dan tidak ada yang muncul dua kali.
       await _pumpDaftar(tester);
-      final ctx = tester.element(find.byType(AyatSituasiScreen));
-      final l10n = AppL10n.of(ctx);
+      final l10n = AppL10n.of(tester.element(find.byType(AyatSituasiScreen)));
       final groups = await quranSituasi.groups();
       expect(groups.length, 9);
 
-      // ponytail: ListView mem-virtualisasi anaknya, jadi menghitung yang
-      // terender SEKARANG selalu gagal walau daftarnya benar. Yang diuji
-      // perilakunya: semua grup benar-benar bisa dicapai user dengan menggulir.
-      final found = <String>{};
-      for (var i = 0; i < 40; i++) {
+      final reached = <String, String>{}; // grup -> alasan yang menampilkannya
+      for (final u in kUmbrellas) {
+        await _pumpDaftarFresh(tester);
+        await tester.tap(find.text(umbrellaLabel(l10n, u)));
+        await tester.pumpAndSettle();
         for (final g in groups) {
           if (find.text(groupLabel(l10n, g.id)).evaluate().isNotEmpty) {
-            found.add(g.id);
+            expect(reached.containsKey(g.id), isFalse,
+                reason: 'grup "${g.id}" muncul di ${reached[g.id]} dan $u');
+            reached[g.id] = u;
           }
         }
-        if (found.length == groups.length) break;
-        await tester.drag(find.byType(ListView), const Offset(0, -500));
-        await tester.pump();
       }
-      expect(found.length, groups.length,
-          reason: 'grup tidak terjangkau: ${groups.map((g) => g.id).toSet().difference(found)}');
+      final missing = groups.map((g) => g.id).toSet()
+          .difference(reached.keys.toSet());
+      expect(missing, isEmpty, reason: 'grup tidak terjangkau: $missing');
     });
 
-    testWidgets('semua 54 situasi bisa dijangkau dengan menggulir',
+    testWidgets('tingkat 1: 4 alasan tampil, bukan 54 situasi', (tester) async {
+      // Inti keluhan user: sebelumnya 54 situasi tampil sekaligus ("semua orang
+      // jadi bingung"). Sekarang yang tampil di tingkat pertama cuma 4 alasan.
+      await _pumpDaftar(tester);
+      final l10n = AppL10n.of(tester.element(find.byType(AyatSituasiScreen)));
+      for (final u in kUmbrellas) {
+        expect(find.text(umbrellaLabel(l10n, u)), findsOneWidget,
+            reason: 'alasan "$u" tidak tampil di tingkat 1');
+        expect(find.text(umbrellaHint(l10n, u)), findsOneWidget,
+            reason: 'kalimat bantu "$u" tidak tampil');
+      }
+      // Tidak ada satu pun label situasi di tingkat 1.
+      for (final s in await quranSituasi.all()) {
+        expect(find.text(situationLabel(l10n, s.id)), findsNothing,
+            reason: '${s.id} bocor ke tingkat 1');
+      }
+    });
+
+    testWidgets('tingkat 1: setiap alasan bisa ditekan dan membuka tingkat 2',
         (tester) async {
       await _pumpDaftar(tester);
-      final ctx = tester.element(find.byType(AyatSituasiScreen));
-      final l10n = AppL10n.of(ctx);
-      final all = await quranSituasi.all();
-      final found = <String>{};
-      for (var i = 0; i < 120; i++) {
-        for (final s in all) {
-          if (find.text(situationLabel(l10n, s.id)).evaluate().isNotEmpty) {
-            found.add(s.id);
-          }
-        }
-        if (found.length == all.length) break;
-        await tester.drag(find.byType(ListView), const Offset(0, -500));
-        await tester.pump();
+      final l10n = AppL10n.of(tester.element(find.byType(AyatSituasiScreen)));
+      for (final u in kUmbrellas) {
+        await _pumpDaftarFresh(tester);
+        await tester.tap(find.text(umbrellaLabel(l10n, u)));
+        await tester.pumpAndSettle();
+        // Judul jadi nama alasan itu + pertanyaan tingkat 2 terlihat.
+        expect(find.text(l10n.situasiPickGroup), findsOneWidget,
+            reason: 'tingkat 2 tidak terbuka untuk "$u"');
       }
-      expect(found.length, all.length,
-          reason: 'situasi tidak terjangkau: ${all.map((s) => s.id).toSet().difference(found)}');
+    });
+
+    testWidgets('tingkat 2 hanya menampilkan grup milik alasan itu',
+        (tester) async {
+      await _pumpDaftar(tester);
+      final l10n = AppL10n.of(tester.element(find.byType(AyatSituasiScreen)));
+      // shifa = kacau + hubungan + ampunan; tIDAK berisi iman.
+      await tester.tap(find.text(umbrellaLabel(l10n, 'shifa')));
+      await tester.pumpAndSettle();
+
+      for (final g in await quranSituasi.groups()) {
+        final shouldShow = g.umbrella == 'shifa';
+        expect(
+          find.text(groupLabel(l10n, g.id)).evaluate().isNotEmpty,
+          shouldShow,
+          reason: 'grup "${g.id}" (umbrella ${g.umbrella}) '
+              '${shouldShow ? "tidak" : "justru"} tampil di bawah shifa',
+        );
+      }
+      // Alasan yang dipilih jadi jejak di app bar (konteks tidak hilang).
+      expect(find.text(umbrellaLabel(l10n, 'shifa')), findsWidgets);
+    });
+
+    testWidgets('tingkat 3: grup besar terbelah sub-tahap, bukan daftar polos',
+        (tester) async {
+      await _pumpDaftar(tester);
+      final l10n = AppL10n.of(tester.element(find.byType(AyatSituasiScreen)));
+      // jalur: dikuatkan -> ujian (7 situasi, 2 tahap)
+      await tester.tap(find.text(umbrellaLabel(l10n, 'dikuatkan')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(groupLabel(l10n, 'ujian')));
+      await tester.pumpAndSettle();
+
+      final group = (await quranSituasi.groups())
+          .firstWhere((g) => g.id == 'ujian');
+      expect(group.stages.length, greaterThanOrEqualTo(2));
+      for (final st in group.stages) {
+        expect(find.text(stageLabel(l10n, st)), findsOneWidget,
+            reason: 'penanda tahap "$st" tidak tampil');
+      }
+      // Semua situasi grup itu tetap bisa dijangkau (tidak ada yang hilang).
+      for (final s in (await quranSituasi.all())
+          .where((s) => s.group == 'ujian')) {
+        expect(find.text(situationLabel(l10n, s.id)).evaluate().isNotEmpty,
+            isTrue, reason: '${s.id} hilang dari tingkat 3');
+      }
+    });
+
+    testWidgets('tingkat 3: grup kecil dibiarkan datar (tanpa penanda tahap)',
+        (tester) async {
+      await _pumpDaftar(tester);
+      final l10n = AppL10n.of(tester.element(find.byType(AyatSituasiScreen)));
+      // diingatkan -> dunia (4 situasi, sengaja tanpa tahap)
+      await tester.tap(find.text(umbrellaLabel(l10n, 'diingatkan')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(groupLabel(l10n, 'dunia')));
+      await tester.pumpAndSettle();
+
+      for (final s in (await quranSituasi.all())
+          .where((s) => s.group == 'dunia')) {
+        expect(find.text(situationLabel(l10n, s.id)).evaluate().isNotEmpty,
+            isTrue, reason: '${s.id} tidak tampil di grup datar');
+      }
+      // Tidak boleh ada penanda tahap di grup datar.
+      final group = (await quranSituasi.groups())
+          .firstWhere((g) => g.id == 'dunia');
+      expect(group.stages, isEmpty, reason: 'dunia seharusnya datar');
+    });
+
+    testWidgets('sasaran sentuh tiap baris minimal 48dp (Android)',
+        (tester) async {
+      // Craft floor: baris pilihan harus bisa ditekan jari, bukan cuma terlihat.
+      // Diukur, bukan diasumsikan.
+      //
+      // Catatan KN: versi pertama tes ini HANYA mengukur baris tingkat 1,
+      // padahal baris tingkat 2/3 dirender `_row` yang berbeda -> memendekkan
+      // `_row` di bawah 48dp tetap HIJAU (lubang). Sekarang ketiga tingkat diukur.
+      tester.view.physicalSize = const Size(412, 915);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      Future<void> checkRows(String where) async {
+        final cards = find.byType(FlatCard);
+        expect(cards.evaluate(), isNotEmpty, reason: '$where: tidak ada baris');
+        for (var i = 0; i < cards.evaluate().length; i++) {
+          final h = tester.getRect(cards.at(i)).height;
+          expect(h, greaterThanOrEqualTo(48),
+              reason: '$where: baris ke-$i cuma ${h}dp, di bawah 48dp');
+        }
+      }
+
+      // tingkat 1
+      await _pumpDaftarFresh(tester);
+      final l10n = AppL10n.of(tester.element(find.byType(AyatSituasiScreen)));
+      await checkRows('tingkat 1');
+
+      // tingkat 2
+      await tester.tap(find.text(umbrellaLabel(l10n, 'shifa')));
+      await tester.pumpAndSettle();
+      await checkRows('tingkat 2');
+
+      // tingkat 3 (grup bertahap: ada penanda tahap + baris situasi)
+      await tester.tap(find.text(groupLabel(l10n, 'kacau')));
+      await tester.pumpAndSettle();
+      await checkRows('tingkat 3');
+    });
+
+    testWidgets('3 kali tekan dari tingkat 1 sampai ayat (bukan 4 layar)',
+        (tester) async {
+      // Janji UX: 4 alasan -> grup -> situasi, jadi 3 tekan untuk sampai ayat.
+      // Jalur tersulit: grup bertahap (ujian punya 2 tahap -> 2 layar tingkat 3).
+      await _pumpDaftar(tester);
+      final l10n = AppL10n.of(tester.element(find.byType(AyatSituasiScreen)));
+
+      await tester.tap(find.text(umbrellaLabel(l10n, 'dikuatkan')));   // 1
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(groupLabel(l10n, 'ujian')));          // 2
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(situationLabel(l10n, 'sakit')));      // 3
+      await tester.pumpAndSettle();
+
+      // Sampai di layar ayat: kedua tombolnya ada.
+      expect(find.text(l10n.situasiOtherAyah), findsOneWidget,
+          reason: 'belum sampai layar ayat setelah 3 tekan');
+      expect(find.text(l10n.situasiOpenInQuran), findsOneWidget);
     });
 
     testWidgets('tap situasi membuka layar ayat untuk situasi itu',
         (tester) async {
       await _pumpDaftar(tester);
-      final ctx = tester.element(find.byType(AyatSituasiScreen));
-      final label = situationLabel(AppL10n.of(ctx), 'sedih');
+      final l10n = AppL10n.of(tester.element(find.byType(AyatSituasiScreen)));
+      // sedih ada di bawah shifa -> kacau
+      await tester.tap(find.text(umbrellaLabel(l10n, 'shifa')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(groupLabel(l10n, 'kacau')));
+      await tester.pumpAndSettle();
+      final label = situationLabel(l10n, 'sedih');
       await tester.tap(find.text(label));
       await tester.pumpAndSettle();
       expect(find.byType(QuranReader), findsNothing);

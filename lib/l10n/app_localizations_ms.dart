@@ -3874,4 +3874,96 @@ class AppL10nMs extends AppL10n {
 
   @override
   String get hbDelete => 'Buang dari simpanan';
+
+  @override
+  String get situasiAlasanTitle => 'Awak rasa apa sekarang?';
+
+  @override
+  String get situasiChangeAlasan => 'Tukar sebab';
+
+  @override
+  String get situasiAlasanShifa => 'Sedih dan kacau';
+
+  @override
+  String get situasiAlasanShifaHint => 'Hati berat, perlukan ketenangan';
+
+  @override
+  String get situasiAlasanDikuatkan => 'Perlukan tenaga';
+
+  @override
+  String get situasiAlasanDikuatkanHint => 'Supaya terus mampu';
+
+  @override
+  String get situasiAlasanHuda => 'Keliru arah';
+
+  @override
+  String get situasiAlasanHudaHint => 'Cari petunjuk dan keyakinan';
+
+  @override
+  String get situasiAlasanDiingatkan => 'Mahu bersyukur';
+
+  @override
+  String get situasiAlasanDiingatkanHint => 'Nampak kebaikan hari ini';
+
+  @override
+  String get situasiPickGroup => 'Yang mana lebih dekat?';
+
+  @override
+  String get situasiPickStage => 'Yang mana paling sesuai?';
+
+  @override
+  String get situasiStageRasa => 'Perasaan terus';
+
+  @override
+  String get situasiStageBebanPikiran => 'Fikiran yang menekan';
+
+  @override
+  String get situasiStageKebiasaan => 'Kebiasaan periksa diri';
+
+  @override
+  String get situasiStageMenimpa => 'Sedang menimpa';
+
+  @override
+  String get situasiStageBerlarut => 'Sudah berlarutan';
+
+  @override
+  String get situasiStageTerdekat => 'Orang terdekat';
+
+  @override
+  String get situasiStageKecewa => 'Kerana kecewa';
+
+  @override
+  String get situasiStageJarak => 'Jarak dengan ibadah';
+
+  @override
+  String get situasiStageArah => 'Perlukan arah';
+
+  @override
+  String get situasiStagePilihanBesar => 'Pilihan besar';
+
+  @override
+  String get situasiStageCariYakin => 'Cari keyakinan';
+
+  @override
+  String get situasiStageSalah => 'Kerana kesalahan';
+
+  @override
+  String get situasiStageKembali => 'Jalan kembali';
+
+  @override
+  String get situasiStageMulai => 'Untuk mula';
+
+  @override
+  String get situasiStageBertahan => 'Untuk bertahan';
+
+  @override
+  String get situasiStageRezekiBaik => 'Kebaikan yang datang';
+
+  @override
+  String get situasiStageTenang => 'Hati yang tenang';
+
+  @override
+  String situasiChooseCount(Object count) {
+    return '$count pilihan';
+  }
 }

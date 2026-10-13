@@ -33,10 +33,29 @@ class SituationGroup {
   /// `shifa` (disembuhkan) · `huda` (diberi arah) · `dikuatkan` · `diingatkan`.
   final String umbrella;
 
-  const SituationGroup({required this.id, required this.umbrella});
+  /// Sub-tahap di dalam grup ini, urut seperti di JSON.
+  ///
+  /// Kosong = grup sengaja DIBIARKAN datar (mis. `dunia` cuma punya 4 situasi).
+  /// Memaksa satu tahap berisi 1 situasi itu menambah lapisan, bukan mengurangi
+  /// pilihan — kebalikan dari alasan tahap ini ada.
+  final List<String> stages;
 
-  factory SituationGroup.fromJson(Map<String, dynamic> j) =>
-      SituationGroup(id: j['id'] as String, umbrella: j['umbrella'] as String);
+  const SituationGroup({
+    required this.id,
+    required this.umbrella,
+    this.stages = const [],
+  });
+
+  /// True hanya kalau membelahnya memang menolong (lebih dari satu tahap).
+  bool get hasStages => stages.length > 1;
+
+  factory SituationGroup.fromJson(Map<String, dynamic> j) => SituationGroup(
+    id: j['id'] as String,
+    umbrella: j['umbrella'] as String,
+    stages: ((j['stages'] as List?) ?? const [])
+        .map((e) => e as String)
+        .toList(growable: false),
+  );
 }
 
 /// Satu situasi hidup + ayat yang dikurasi untuknya.
@@ -49,15 +68,20 @@ class Situation {
   final String group;
   final List<({int surah, int ayah})> ayahs;
 
+  /// Sub-tahap di dalam [group]; null kalau grupnya sengaja datar.
+  final String? stage;
+
   const Situation({
     required this.id,
     required this.group,
     required this.ayahs,
+    this.stage,
   });
 
   factory Situation.fromJson(Map<String, dynamic> j) => Situation(
     id: j['id'] as String,
     group: j['group'] as String,
+    stage: j['stage'] as String?,
     ayahs: (j['ayahs'] as List)
         .map((e) => (surah: e['surah'] as int, ayah: e['ayah'] as int))
         .toList(growable: false),
@@ -144,6 +168,22 @@ class QuranSituasi {
   Future<Situation?> byId(String id) async {
     await _ensure();
     return _byIdSync(id);
+  }
+
+  /// Grup yang bernaung di bawah satu alasan besar ([umbrella]).
+  Future<List<SituationGroup>> groupsOf(String umbrella) async {
+    await _ensure();
+    return _groups!
+        .where((g) => g.umbrella == umbrella)
+        .toList(growable: false);
+  }
+
+  /// Situasi di dalam satu grup, urut seperti file (dan seperti `stages`).
+  Future<List<Situation>> inGroup(String groupId) async {
+    await _ensure();
+    return _situations!
+        .where((s) => s.group == groupId)
+        .toList(growable: false);
   }
 
   /// ponytail: reset antar widget-test. Singleton yang menyimpan cache lintas

@@ -3891,4 +3891,97 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get hbDelete => 'Kaydedilenlerden çıkar';
+
+  @override
+  String get situasiAlasanTitle => 'Kendini nasıl hissediyorsun?';
+
+  @override
+  String get situasiChangeAlasan => 'Gerekçeyi değiştir';
+
+  @override
+  String get situasiAlasanShifa => 'Üzgün ve dağınık';
+
+  @override
+  String get situasiAlasanShifaHint =>
+      'Kalbin ağır, sakinleşmeye ihtiyacın var';
+
+  @override
+  String get situasiAlasanDikuatkan => 'Güç gerekiyor';
+
+  @override
+  String get situasiAlasanDikuatkanHint => 'Devam edebilmek için';
+
+  @override
+  String get situasiAlasanHuda => 'Yönümü kaybettim';
+
+  @override
+  String get situasiAlasanHudaHint => 'Rehberlik ve kararlılık arıyorum';
+
+  @override
+  String get situasiAlasanDiingatkan => 'Şükretmek istiyorum';
+
+  @override
+  String get situasiAlasanDiingatkanHint => 'Günün iyiliğini fark etmek';
+
+  @override
+  String get situasiPickGroup => 'Hangisi daha yakın?';
+
+  @override
+  String get situasiPickStage => 'Hangisi daha uygun?';
+
+  @override
+  String get situasiStageRasa => 'Doğrudan duygular';
+
+  @override
+  String get situasiStageBebanPikiran => 'Zihni bastıran şey';
+
+  @override
+  String get situasiStageKebiasaan => 'Kendini yoklama';
+
+  @override
+  String get situasiStageMenimpa => 'Şu an yaşanan';
+
+  @override
+  String get situasiStageBerlarut => 'Uzayıp giden';
+
+  @override
+  String get situasiStageTerdekat => 'En yakın kişiler';
+
+  @override
+  String get situasiStageKecewa => 'Hayal kırıklığından';
+
+  @override
+  String get situasiStageJarak => 'İbadetten uzaklık';
+
+  @override
+  String get situasiStageArah => 'Yön gerekiyor';
+
+  @override
+  String get situasiStagePilihanBesar => 'Büyük seçimler';
+
+  @override
+  String get situasiStageCariYakin => 'Kesinlik arayışı';
+
+  @override
+  String get situasiStageSalah => 'Bir hatadan dolayı';
+
+  @override
+  String get situasiStageKembali => 'Geri dönüş yolu';
+
+  @override
+  String get situasiStageMulai => 'Başlamak için';
+
+  @override
+  String get situasiStageBertahan => 'Dayanmak için';
+
+  @override
+  String get situasiStageRezekiBaik => 'Gelen iyilikler';
+
+  @override
+  String get situasiStageTenang => 'Huzurlu bir kalp';
+
+  @override
+  String situasiChooseCount(Object count) {
+    return '$count seçenek';
+  }
 }

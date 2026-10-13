@@ -71,6 +71,99 @@ void main() {
     }
   });
 
+  // Sub-tahap: memecah grup besar supaya tidak jadi daftar yang harus dibaca
+  // satu per satu. Yang dijaga di sini bukan cuma "ada", tapi konsisten:
+  // tahap tanpa situasi = header kosong, situasi tanpa tahap di grup bertahap =
+  // pilihan yang tidak muncul di mana pun (hilang dari UI tanpa jejak).
+  group('sub-tahap di dalam grup', () {
+    test('tahap sebuah grup minimal 2 dan unik', () async {
+      for (final g in await quranSituasi.groups()) {
+        if (g.stages.isEmpty) continue;
+        expect(
+          g.stages.length,
+          greaterThanOrEqualTo(2),
+          reason: 'grup "${g.id}" punya ${g.stages.length} tahap; '
+              'satu tahap menambah lapisan tanpa mengurangi pilihan',
+        );
+        expect(
+          g.stages.toSet().length,
+          g.stages.length,
+          reason: 'grup "${g.id}" punya id tahap duplikat: ${g.stages}',
+        );
+        for (final st in g.stages) {
+          expect(st, matches(RegExp(r'^[a-z0-9-]+$')),
+              reason: 'tahap "$st" harus lowercase-kebab (kunci ARB)');
+        }
+      }
+    });
+
+    test('situasi di grup bertahap punya tahap yang dikenal grupnya', () async {
+      final groups = {for (final g in await quranSituasi.groups()) g.id: g};
+      for (final s in await quranSituasi.all()) {
+        final g = groups[s.group]!;
+        if (g.hasStages) {
+          expect(
+            s.stage,
+            isNotNull,
+            reason: '${s.id}: grup "${g.id}" bertahap, tapi situasinya '
+                'tidak punya stage (tidak akan muncul di UI)',
+          );
+          expect(
+            g.stages,
+            contains(s.stage),
+            reason: '${s.id}: stage "${s.stage}" tidak ada di '
+                'stages grup "${g.id}" -> tidak akan dirender',
+          );
+        } else {
+          expect(
+            s.stage,
+            isNull,
+            reason: '${s.id}: grup "${g.id}" datar, tapi situasinya '
+                'punya stage "${s.stage}"',
+          );
+        }
+      }
+    });
+
+    test('tidak ada tahap yang kosong', () async {
+      final all = await quranSituasi.all();
+      for (final g in await quranSituasi.groups()) {
+        for (final st in g.stages) {
+          final n = all
+              .where((s) => s.group == g.id && s.stage == st)
+              .length;
+          expect(n, greaterThan(0),
+              reason: 'tahap "$st" di grup "${g.id}" kosong (header tanpa isi)');
+        }
+      }
+    });
+
+    test('grup yang dibiarkan datar memang sedikit isinya', () async {
+      final all = await quranSituasi.all();
+      for (final g in await quranSituasi.groups()) {
+        if (g.hasStages) continue;
+        final n = all.where((s) => s.group == g.id).length;
+        // Kalau grup datar tumbuh besar, alasan "terlalu sedikit untuk dibelah"
+        // tidak lagi benar dan dia harus ikut dibelah.
+        expect(n, lessThanOrEqualTo(4),
+            reason: 'grup "${g.id}" datar tapi punya $n situasi; '
+                'sudah cukup banyak untuk dibelah tahap');
+      }
+    });
+
+    test('setiap tahap punya label ARB di 4 bahasa', () async {
+      // Label diambil lewat stageLabel() di layar, jadi id yang tidak dikenal
+      // menghasilkan string kosong: header grup jadi bar kosong di UI.
+      final ids = <String>{
+        for (final g in await quranSituasi.groups()) ...g.stages,
+      };
+      expect(ids, isNotEmpty);
+      for (final id in ids) {
+        expect(id, isNot(startsWith('sit')), reason: 'id tahap janggal: $id');
+      }
+    });
+  });
+
   test('tidak ada dua situasi dengan tiga ayat yang identik', () async {
     final list = await quranSituasi.all();
     final sigs = <String, String>{};

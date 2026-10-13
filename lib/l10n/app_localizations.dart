@@ -7017,6 +7017,186 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Hapus dari tersimpan'**
   String get hbDelete;
+
+  /// No description provided for @situasiAlasanTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Kamu lagi ngerasain apa?'**
+  String get situasiAlasanTitle;
+
+  /// No description provided for @situasiChangeAlasan.
+  ///
+  /// In id, this message translates to:
+  /// **'Ganti alasan'**
+  String get situasiChangeAlasan;
+
+  /// No description provided for @situasiAlasanShifa.
+  ///
+  /// In id, this message translates to:
+  /// **'Sedih dan kacau'**
+  String get situasiAlasanShifa;
+
+  /// No description provided for @situasiAlasanShifaHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Hati berat, butuh ditenangkan'**
+  String get situasiAlasanShifaHint;
+
+  /// No description provided for @situasiAlasanDikuatkan.
+  ///
+  /// In id, this message translates to:
+  /// **'Butuh tenaga'**
+  String get situasiAlasanDikuatkan;
+
+  /// No description provided for @situasiAlasanDikuatkanHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Biar kuat menjalani'**
+  String get situasiAlasanDikuatkanHint;
+
+  /// No description provided for @situasiAlasanHuda.
+  ///
+  /// In id, this message translates to:
+  /// **'Bingung arah'**
+  String get situasiAlasanHuda;
+
+  /// No description provided for @situasiAlasanHudaHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Cari petunjuk dan kemantapan'**
+  String get situasiAlasanHudaHint;
+
+  /// No description provided for @situasiAlasanDiingatkan.
+  ///
+  /// In id, this message translates to:
+  /// **'Ingin bersyukur'**
+  String get situasiAlasanDiingatkan;
+
+  /// No description provided for @situasiAlasanDiingatkanHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Merasakan kebaikan hari ini'**
+  String get situasiAlasanDiingatkanHint;
+
+  /// No description provided for @situasiPickGroup.
+  ///
+  /// In id, this message translates to:
+  /// **'Yang mana lebih dekat?'**
+  String get situasiPickGroup;
+
+  /// No description provided for @situasiPickStage.
+  ///
+  /// In id, this message translates to:
+  /// **'Yang mana paling pas?'**
+  String get situasiPickStage;
+
+  /// No description provided for @situasiStageRasa.
+  ///
+  /// In id, this message translates to:
+  /// **'Perasaan langsung'**
+  String get situasiStageRasa;
+
+  /// No description provided for @situasiStageBebanPikiran.
+  ///
+  /// In id, this message translates to:
+  /// **'Pikiran yang menekan'**
+  String get situasiStageBebanPikiran;
+
+  /// No description provided for @situasiStageKebiasaan.
+  ///
+  /// In id, this message translates to:
+  /// **'Kebiasaan pantau diri'**
+  String get situasiStageKebiasaan;
+
+  /// No description provided for @situasiStageMenimpa.
+  ///
+  /// In id, this message translates to:
+  /// **'Yang sedang menimpa'**
+  String get situasiStageMenimpa;
+
+  /// No description provided for @situasiStageBerlarut.
+  ///
+  /// In id, this message translates to:
+  /// **'Sudah berlarut-larut'**
+  String get situasiStageBerlarut;
+
+  /// No description provided for @situasiStageTerdekat.
+  ///
+  /// In id, this message translates to:
+  /// **'Orang terdekat'**
+  String get situasiStageTerdekat;
+
+  /// No description provided for @situasiStageKecewa.
+  ///
+  /// In id, this message translates to:
+  /// **'Karena kecewa'**
+  String get situasiStageKecewa;
+
+  /// No description provided for @situasiStageJarak.
+  ///
+  /// In id, this message translates to:
+  /// **'Jarak sama ibadah'**
+  String get situasiStageJarak;
+
+  /// No description provided for @situasiStageArah.
+  ///
+  /// In id, this message translates to:
+  /// **'Butuh arah'**
+  String get situasiStageArah;
+
+  /// No description provided for @situasiStagePilihanBesar.
+  ///
+  /// In id, this message translates to:
+  /// **'Pilihan besar'**
+  String get situasiStagePilihanBesar;
+
+  /// No description provided for @situasiStageCariYakin.
+  ///
+  /// In id, this message translates to:
+  /// **'Cari kemantapan'**
+  String get situasiStageCariYakin;
+
+  /// No description provided for @situasiStageSalah.
+  ///
+  /// In id, this message translates to:
+  /// **'Karena salah'**
+  String get situasiStageSalah;
+
+  /// No description provided for @situasiStageKembali.
+  ///
+  /// In id, this message translates to:
+  /// **'Jalan kembali'**
+  String get situasiStageKembali;
+
+  /// No description provided for @situasiStageMulai.
+  ///
+  /// In id, this message translates to:
+  /// **'Buat memulai'**
+  String get situasiStageMulai;
+
+  /// No description provided for @situasiStageBertahan.
+  ///
+  /// In id, this message translates to:
+  /// **'Buat bertahan'**
+  String get situasiStageBertahan;
+
+  /// No description provided for @situasiStageRezekiBaik.
+  ///
+  /// In id, this message translates to:
+  /// **'Kebaikan yang datang'**
+  String get situasiStageRezekiBaik;
+
+  /// No description provided for @situasiStageTenang.
+  ///
+  /// In id, this message translates to:
+  /// **'Hati yang tenang'**
+  String get situasiStageTenang;
+
+  /// No description provided for @situasiChooseCount.
+  ///
+  /// In id, this message translates to:
+  /// **'{count} pilihan'**
+  String situasiChooseCount(Object count);
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {
