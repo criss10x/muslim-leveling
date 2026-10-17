@@ -3876,12 +3876,6 @@ class AppL10nMs extends AppL10n {
   String get hbDelete => 'Buang dari simpanan';
 
   @override
-  String get situasiAlasanTitle => 'Awak rasa apa sekarang?';
-
-  @override
-  String get situasiChangeAlasan => 'Tukar sebab';
-
-  @override
   String get situasiAlasanShifa => 'Sedih dan kacau';
 
   @override

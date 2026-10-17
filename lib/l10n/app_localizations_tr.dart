@@ -3893,12 +3893,6 @@ class AppL10nTr extends AppL10n {
   String get hbDelete => 'Kaydedilenlerden çıkar';
 
   @override
-  String get situasiAlasanTitle => 'Kendini nasıl hissediyorsun?';
-
-  @override
-  String get situasiChangeAlasan => 'Gerekçeyi değiştir';
-
-  @override
   String get situasiAlasanShifa => 'Üzgün ve dağınık';
 
   @override

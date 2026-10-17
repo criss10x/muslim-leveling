@@ -3863,12 +3863,6 @@ class AppL10nId extends AppL10n {
   String get hbDelete => 'Hapus dari tersimpan';
 
   @override
-  String get situasiAlasanTitle => 'Kamu lagi ngerasain apa?';
-
-  @override
-  String get situasiChangeAlasan => 'Ganti alasan';
-
-  @override
   String get situasiAlasanShifa => 'Sedih dan kacau';
 
   @override

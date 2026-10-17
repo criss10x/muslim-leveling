@@ -170,22 +170,6 @@ class QuranSituasi {
     return _byIdSync(id);
   }
 
-  /// Grup yang bernaung di bawah satu alasan besar ([umbrella]).
-  Future<List<SituationGroup>> groupsOf(String umbrella) async {
-    await _ensure();
-    return _groups!
-        .where((g) => g.umbrella == umbrella)
-        .toList(growable: false);
-  }
-
-  /// Situasi di dalam satu grup, urut seperti file (dan seperti `stages`).
-  Future<List<Situation>> inGroup(String groupId) async {
-    await _ensure();
-    return _situations!
-        .where((s) => s.group == groupId)
-        .toList(growable: false);
-  }
-
   /// ponytail: reset antar widget-test. Singleton yang menyimpan cache lintas
   /// test = sumber flake (pola yang sama sudah dipakai DailyHighlightService).
   void resetForTest() {

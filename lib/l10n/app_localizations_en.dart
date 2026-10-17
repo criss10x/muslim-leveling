@@ -3868,12 +3868,6 @@ class AppL10nEn extends AppL10n {
   String get hbDelete => 'Remove from saved';
 
   @override
-  String get situasiAlasanTitle => 'How are you feeling?';
-
-  @override
-  String get situasiChangeAlasan => 'Change reason';
-
-  @override
   String get situasiAlasanShifa => 'Heartsick and all over the place';
 
   @override

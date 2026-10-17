@@ -7018,18 +7018,6 @@ abstract class AppL10n {
   /// **'Hapus dari tersimpan'**
   String get hbDelete;
 
-  /// No description provided for @situasiAlasanTitle.
-  ///
-  /// In id, this message translates to:
-  /// **'Kamu lagi ngerasain apa?'**
-  String get situasiAlasanTitle;
-
-  /// No description provided for @situasiChangeAlasan.
-  ///
-  /// In id, this message translates to:
-  /// **'Ganti alasan'**
-  String get situasiChangeAlasan;
-
   /// No description provided for @situasiAlasanShifa.
   ///
   /// In id, this message translates to:
