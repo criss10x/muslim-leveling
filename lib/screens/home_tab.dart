@@ -1,11 +1,14 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../../widgets/tier_avatar.dart';
 import '../../services/game_service.dart';
+import '../../services/widget_link.dart';
 import '../../services/prayer_service.dart';
 import '../../services/notification_service.dart';
 import '../../services/achievement_service.dart';
@@ -104,6 +107,16 @@ class _HomeTabState extends State<HomeTab> {
   String _claimingQuestId = '';
   String _error = '';
 
+  /// Kunci daftar quest: dipakai untuk menggulir ke sana saat app dibuka dari
+  /// tap widget (deep link `...://quests`).
+  final GlobalKey _questSectionKey = GlobalKey();
+
+  /// Jangkar cadangan: section prayer-quests selalu lebih dekat ke atas, jadi
+  /// ia sudah ter-render saat section daftar quest belum. Dipakai kalau
+  /// daftar quest belum terpasang.
+  final GlobalKey _questAnchorKey = GlobalKey();
+  final ScrollController _scrollCtl = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -114,12 +127,53 @@ class _HomeTabState extends State<HomeTab> {
     // Kota diganti dari tab jadwal/profil → refetch timing kota baru
     // (sekalian reschedule notif adzan di _fetchTimingsSilently).
     PrayerService.locationVersion.addListener(_onLocationChanged);
+    // Widget home screen: tap = minta gulir ke daftar quest. Bukan claim.
+    WidgetLink.requestCount.addListener(_onWidgetRequest);
+    // Sinyal mungkin sudah tiba sebelum layar ini hidup (app dibuka dari
+    // widget). Nilai kounter tidak hilang, jadi cukup periksa sekali di sini.
+    WidgetsBinding.instance.addPostFrameCallback((_) => _onWidgetRequest());
+  }
+
+  /// Gulir ke daftar quest kalau widget memintanya, lalu habiskan sinyalnya.
+  ///
+  /// Dua fase, karena satu fase tidak cukup: `ListView` membuang anak yang
+  /// belum pernah terlihat, jadi key section quest belum punya context persis
+  /// saat diminta. Fase 1 melompat ke dasar supaya seluruh daftar dibangun;
+  /// fase 2 melompat tepat ke section quest. Keduanya `jumpTo`, bukan animasi:
+  /// tap widget adalah navigasi ("buka di quest"), bukan pertunjukan gulir.
+  void _onWidgetRequest() {
+    if (WidgetLink.pending == 0) return;
+    unawaited(_scrollToQuests());
+  }
+
+  Future<void> _scrollToQuests() async {
+    if (!mounted || !_scrollCtl.hasClients) return;
+    WidgetLink.consume();
+
+    // Selalu lompat ke dasar dulu: section quest ada di bawah dan ListView
+    // belum membangunnya, jadi context-nya null kalau tidak dipaksa.
+    _scrollCtl.jumpTo(_scrollCtl.position.maxScrollExtent);
+    await WidgetsBinding.instance.endOfFrame;
+    if (!mounted) return;
+
+    final ctx = _questSectionKey.currentContext;
+    final ro = ctx?.findRenderObject();
+    if (ro == null) return; // sudah di dasar; daftar quest terlihat
+    final viewport = RenderAbstractViewport.maybeOf(ro);
+    if (viewport == null) return;
+    final target = viewport
+        .getOffsetToReveal(ro, 0.1)
+        .offset
+        .clamp(0.0, _scrollCtl.position.maxScrollExtent);
+    _scrollCtl.jumpTo(target);
   }
 
   @override
   void dispose() {
     GameService.stateVersion.removeListener(_onStateChanged);
     PrayerService.locationVersion.removeListener(_onLocationChanged);
+    WidgetLink.requestCount.removeListener(_onWidgetRequest);
+    _scrollCtl.dispose();
     super.dispose();
   }
 
@@ -459,6 +513,7 @@ class _HomeTabState extends State<HomeTab> {
           color: AppColors.primary,
           onRefresh: () => _load(showLoading: true),
           child: ListView(
+            controller: _scrollCtl,
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.only(top: AppSpacing.lg, bottom: 100),
             children: [
@@ -470,11 +525,12 @@ class _HomeTabState extends State<HomeTab> {
               const SizedBox(height: AppSpacing.lg),
               _section(4, _quickActions()),
               const SizedBox(height: AppSpacing.lg),
-              _section(5, _prayerQuests()),
+              KeyedSubtree(key: _questAnchorKey, child: _section(5, _prayerQuests())),
               const SizedBox(height: AppSpacing.lg),
               _section(6, _dailyChest()),
               const SizedBox(height: AppSpacing.lg),
-              if (_state.quests.isNotEmpty) _section(7, _questList()),
+              if (_state.quests.isNotEmpty)
+                KeyedSubtree(key: _questSectionKey, child: _section(7, _questList())),
               if (_state.quests.isNotEmpty)
                 const SizedBox(height: AppSpacing.lg),
               _section(8, _BonusQuest(state: _state, onToggle: (id) => _togglePrayer(id, 'sunnah'))),

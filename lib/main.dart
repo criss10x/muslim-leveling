@@ -11,6 +11,7 @@ import 'l10n/app_localizations.dart';
 import 'screens/splash_screen.dart';
 import 'services/notification_service.dart';
 import 'services/widget_sync.dart';
+import 'services/widget_link.dart';
 import 'services/cloud_sync.dart';
 import 'services/auth_service.dart';
 import 'services/game_service.dart';
@@ -146,10 +147,12 @@ class MuslimLevelingApp extends StatefulWidget {
   State<MuslimLevelingApp> createState() => MuslimLevelingAppState();
 }
 
-class MuslimLevelingAppState extends State<MuslimLevelingApp> {
+class MuslimLevelingAppState extends State<MuslimLevelingApp>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     themeNotifier.load();
     localeNotifier.load();
     // Ganti bahasa → jadwalkan ulang teks notif adzan. Teks notif sudah
@@ -158,6 +161,34 @@ class MuslimLevelingAppState extends State<MuslimLevelingApp> {
     // ponytail: dipasang dari sini, bukan di LocaleNotifier, supaya
     // locale_service.dart tidak mengimpor notification_service.dart (melingkar).
     LocaleNotifier.onLocaleChanged = NotificationService.rescheduleForLocale;
+    _consumeWidgetLink();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed) return;
+    _consumeWidgetLink();
+    // Snapshot widget ikut disegarkan: app dibuka lagi berarti ada kesempatan
+    // mengambil jadwal yang tadi gagal, dan jam sholat bisa sudah lewat.
+    unawaited(
+      WidgetSync.ensureWeek(
+        fetch: GameService.loadWidgetWeek,
+        today: GameService.todayStr(),
+      ),
+    );
+    unawaited(GameService.refreshWidget());
+  }
+
+  /// Tap widget menulis penanda di prefs (lihat [MainActivity]); di sini
+  /// penanda itu diubah menjadi sinyal untuk layar Home.
+  Future<void> _consumeWidgetLink() async {
+    if (await WidgetLink.takePending()) WidgetLink.requestQuests();
   }
 
   @override
