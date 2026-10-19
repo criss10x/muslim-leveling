@@ -146,6 +146,40 @@ class PrayerService {
     return _loadAnyCache(cityId);
   }
 
+  /// Kunci tanggal untuk snapshot widget. Sama bentuknya dengan [_dateKey],
+  /// diekspos supaya pemanggil di luar service tidak menyalin formatnya.
+  static String dateKey(DateTime d) => _dateKey(d);
+
+  /// Tujuh tanggal mulai [from] (inklusif), sebagai kunci `yyyy-MM-dd`.
+  ///
+  /// Dipakai widget: jadwal harus tersedia beberapa hari ke depan, karena
+  /// [fetchSchedule] hanya menyimpan cache untuk SATU tanggal dan menimpanya
+  /// setiap kali dipanggil.
+  static List<String> weekDates(DateTime from, {int days = 7}) => [
+    for (var i = 0; i < days; i++)
+      _dateKey(DateTime(from.year, from.month, from.day + i)),
+  ];
+
+  /// Jadwal [days] hari ke depan, dipetakan per kunci tanggal.
+  ///
+  /// Hari yang gagal diambil dilewati, bukan diisi nilai palsu: widget lebih
+  /// baik minta buka app daripada menampilkan jam sholat yang salah.
+  static Future<Map<String, Map<String, String>>> fetchWeek({
+    required String cityId,
+    String? cityName,
+    DateTime? from,
+    int days = 7,
+  }) async {
+    final start = from ?? DateTime.now();
+    final out = <String, Map<String, String>>{};
+    for (var i = 0; i < days; i++) {
+      final d = DateTime(start.year, start.month, start.day + i);
+      final t = await fetchSchedule(cityId: cityId, date: d, cityName: cityName);
+      if (t != null) out[_dateKey(d)] = t;
+    }
+    return out;
+  }
+
   /// Fetch full month jadwal from Equran. Returns list of raw entries or null.
   static Future<List<Map<String, dynamic>>?> fetchMonthlySchedule({
     required String cityName,
