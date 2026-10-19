@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_description">Jam, jadwal sholat, dan quest hari ini</string>
+    <string name="widget_no_data">Buka app untuk mengaktifkan</string>
+    <string name="widget_open_once">Buka app sekali untuk mengaktifkan widget</string>
+    <string name="widget_stale">Buka app untuk memperbarui jadwal</string>
+    <string name="widget_next">Berikutnya %1$s %2$s</string>
+    <string name="widget_all_done">Semua quest hari ini selesai</string>
+</resources>

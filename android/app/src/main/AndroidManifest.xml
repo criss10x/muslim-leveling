@@ -67,7 +67,30 @@
                     android:scheme="id.muslimleveling.muslim_leveling"
                     android:host="login-callback"/>
             </intent-filter>
+            <!-- Tap widget home screen: buka app langsung ke daftar quest.
+                 Hanya penanda niat, bukan aksi claim — claim tetap di UI. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:scheme="id.muslimleveling.muslim_leveling"
+                    android:host="quests"/>
+            </intent-filter>
         </activity>
+        <!-- Widget home screen: jam, jadwal sholat, dua quest teratas.
+             export=false: hanya sistem (launcher) yang boleh membangunkan. -->
+        <receiver
+            android:name=".QuestWidgetProvider"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="id.muslimleveling.muslim_leveling.WIDGET_REFRESH"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/quest_widget_info"/>
+        </receiver>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
