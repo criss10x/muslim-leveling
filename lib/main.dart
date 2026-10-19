@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +10,7 @@ import 'services/locale_service.dart';
 import 'l10n/app_localizations.dart';
 import 'screens/splash_screen.dart';
 import 'services/notification_service.dart';
+import 'services/widget_sync.dart';
 import 'services/cloud_sync.dart';
 import 'services/auth_service.dart';
 import 'services/game_service.dart';
@@ -92,6 +94,21 @@ Future<void> _initAsync() async {
     await GameService.reconcileCosmeticLapse(isPro: true);
   } catch (e) {
     Sentry.captureException(e, withScope: (s) => s.setTag('init_step', 'game_service'));
+  }
+
+  // Widget home screen: snapshot pertama harus ada sebelum user memasang widget,
+  // dan jadwal 7 hari cukup diambil sekali sehari (WidgetSync menjaga itu).
+  // Keduanya fire-and-forget — app tidak boleh menunggu jaringan hanya untuk widget.
+  try {
+    unawaited(GameService.refreshWidget());
+    unawaited(
+      WidgetSync.ensureWeek(
+        fetch: GameService.loadWidgetWeek,
+        today: GameService.todayStr(),
+      ),
+    );
+  } catch (e) {
+    Sentry.captureException(e, withScope: (s) => s.setTag('init_step', 'widget'));
   }
 
   // Meta App Events terakhir: kegagalannya murni pelaporan iklan, jangan

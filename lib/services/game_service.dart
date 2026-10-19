@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
@@ -11,6 +12,9 @@ import 'cosmetic_service.dart';
 import 'quran_data.dart';
 import 'achievement_service.dart';
 import 'meta_app_events_service.dart';
+import 'widget_snapshot.dart';
+import 'locale_service.dart';
+import 'prayer_service.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/quest_texts.g.dart';
 
@@ -624,6 +628,59 @@ class GameService {
     CloudSync.saveGame(
       s.toMap(),
     ); // fire-and-forget, local is source of truth
+    // Widget home screen: cermin siap-tampil dari state ini. Fire-and-forget,
+    // dan tidak pernah melempar — kegagalan widget tidak boleh membatalkan simpan.
+    unawaited(refreshWidget());
+  }
+
+  /// Jadwal 7 hari untuk widget, dipetakan ke daftar sholat siap-tampil.
+  /// Diisi [WidgetSync] sekali sehari saat startup; null berarti widget hanya
+  /// mengenal jadwal hari ini.
+  static Map<String, List<Map<String, String>>>? _widgetWeek;
+
+  /// Tulis snapshot widget dari state saat ini, plus minta provider menggambar
+  /// ulang lewat MethodChannel `ml/widget`.
+  ///
+  /// Dipanggil dari [_save], setelah load, dan saat jadwal 7 hari diperbarui.
+  /// Tidak pernah melempar.
+  static Future<void> refreshWidget() async {
+    try {
+      final l10n = lookupAppL10n(localeNotifier.effectiveLocale);
+      await WidgetSnapshot.pushRaw(
+        WidgetSnapshot.build(
+          timings: _cache.timings,
+          quests: _cache.quests,
+          l10n: l10n,
+          now: DateTime.now(),
+          week: _widgetWeek,
+        ),
+      );
+    } catch (_) {
+      // Widget fitur tambahan; kegagalannya tidak boleh terlihat user.
+    }
+  }
+
+  /// Ambil jadwal 7 hari untuk widget dari lokasi tersimpan.
+  /// Mengembalikan jumlah hari yang didapat (0 = gagal semua).
+  static Future<int> loadWidgetWeek() async {
+    try {
+      final loc = await PrayerService.loadLocation();
+      if (loc == null) return 0;
+      final week = await PrayerService.fetchWeek(
+        cityId: loc.id,
+        cityName: loc.name,
+      );
+      if (week.isEmpty) return 0;
+      final l10n = lookupAppL10n(localeNotifier.effectiveLocale);
+      _widgetWeek = {
+        for (final e in week.entries)
+          e.key: WidgetSnapshot.prayersOf(Timings.fromMap(e.value), l10n),
+      };
+      await refreshWidget();
+      return week.length;
+    } catch (_) {
+      return 0;
+    }
   }
 
   // ─── Cosmetics ───
