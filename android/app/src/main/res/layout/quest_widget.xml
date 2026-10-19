@@ -40,7 +40,10 @@
             android:textSize="12sp" />
     </LinearLayout>
 
-    <View
+    <!-- Garis pemisah: WAJIB FrameLayout, bukan <View>. RemoteViews hanya
+         mengizinkan kelas view dari daftar resmi Android; <View> membuat
+         launcher gagal inflate ("Can't load widget") tanpa error build. -->
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="6dp"
