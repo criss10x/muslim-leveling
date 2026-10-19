@@ -47,15 +47,12 @@ class QuestWidgetProvider : AppWidgetProvider() {
     companion object {
         const val ACTION_REFRESH = "id.muslimleveling.muslim_leveling.WIDGET_REFRESH"
 
-        /** SharedPreferences Flutter menyimpan di `<packageName>_preferences`. */
-        private const val PREFS_SUFFIX = "_preferences"
-
         /**
          * Nama kunci lengkap dengan prefix `flutter.` — SharedPreferences
          * menambahkan prefix itu pada semua kunci yang ditulis dari Dart.
          * Salah satu huruf saja di sini membuat widget selalu kosong.
          */
-        private const val SNAPSHOT_KEY = "flutter.widget_snapshot_v1"
+        private val SNAPSHOT_KEY: String = WidgetPrefs.flutterKey("widget_snapshot_v1")
 
         private const val DEEP_LINK = "id.muslimleveling.muslim_leveling://quests"
 
@@ -69,11 +66,7 @@ class QuestWidgetProvider : AppWidgetProvider() {
             scheduleNextBoundary(context)
         }
 
-        private fun prefs(context: Context) =
-            context.getSharedPreferences(
-                context.packageName + PREFS_SUFFIX,
-                Context.MODE_PRIVATE,
-            )
+        private fun prefs(context: Context) = WidgetPrefs.of(context)
 
         private fun todayKey(): String =
             SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())

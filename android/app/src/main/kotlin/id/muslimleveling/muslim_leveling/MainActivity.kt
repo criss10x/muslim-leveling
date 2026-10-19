@@ -10,7 +10,7 @@ class MainActivity : FlutterActivity() {
     /** Penanda bahwa app dibuka dari tap widget, untuk dibaca Flutter. */
     private fun markIfQuestLink(source: Intent?) {
         if (source?.data?.host == "quests") {
-            getSharedPreferences(packageName + "_preferences", MODE_PRIVATE)
+            WidgetPrefs.of(this)
                 .edit()
                 .putBoolean(QUEST_LINK_KEY, true)
                 .apply()
@@ -50,10 +50,7 @@ class MainActivity : FlutterActivity() {
     companion object {
         private const val WIDGET_CHANNEL = "ml/widget"
 
-        /**
-         * Ditulis dengan prefix `flutter.` karena dibaca dari Dart lewat
-         * SharedPreferences, yang selalu memakai prefix itu.
-         */
-        const val QUEST_LINK_KEY = "flutter.widget_open_quests"
+        /** Ditulis dengan prefix `flutter.` karena dibaca dari Dart. */
+        val QUEST_LINK_KEY: String = WidgetPrefs.flutterKey("widget_open_quests")
     }
 }
