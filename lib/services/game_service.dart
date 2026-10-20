@@ -636,7 +636,7 @@ class GameService {
   /// Jadwal 7 hari untuk widget, dipetakan ke daftar sholat siap-tampil.
   /// Diisi [WidgetSync] sekali sehari saat startup; null berarti widget hanya
   /// mengenal jadwal hari ini.
-  static Map<String, List<Map<String, String>>>? _widgetWeek;
+  static Map<String, List<Map<String, dynamic>>>? _widgetWeek;
 
   /// Tulis snapshot widget dari state saat ini, plus minta provider menggambar
   /// ulang lewat MethodChannel `ml/widget`.
@@ -649,9 +649,9 @@ class GameService {
       await WidgetSnapshot.pushRaw(
         WidgetSnapshot.build(
           timings: _cache.timings,
-          quests: _cache.quests,
           l10n: l10n,
           now: DateTime.now(),
+          prayerLog: _cache.prayerLog,
           week: _widgetWeek,
         ),
       );
@@ -672,9 +672,17 @@ class GameService {
       );
       if (week.isEmpty) return 0;
       final l10n = lookupAppL10n(localeNotifier.effectiveLocale);
+      // Hanya hari ini yang punya status done; hari lain belum dikerjakan
+      // (dan memang tidak pernah ditampilkan sebagai riwayat di widget).
+      final done = WidgetSnapshot.doneToday(_cache.prayerLog, DateTime.now());
+      final todayKey = WidgetSnapshot.dateKey(DateTime.now());
       _widgetWeek = {
         for (final e in week.entries)
-          e.key: WidgetSnapshot.prayersOf(Timings.fromMap(e.value), l10n),
+          e.key: WidgetSnapshot.prayersOf(
+            Timings.fromMap(e.value),
+            l10n,
+            e.key == todayKey ? done : const {},
+          ),
       };
       await refreshWidget();
       return week.length;

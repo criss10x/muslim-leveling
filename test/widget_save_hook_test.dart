@@ -24,7 +24,11 @@ void main() {
 
     final raw = p.getString(WidgetSnapshot.prefKey);
     expect(raw, isNotNull, reason: 'save() harus menulis snapshot widget');
-    expect(raw, contains('"prayers"'));
+    // Bentuk snapshot v2: hari ini berisi lima sholat wajib, bukan quest.
+    expect(raw, contains('"days"'));
+    expect(raw, contains('"subuh"'));
+    expect(raw, contains('"total":5'));
+    expect(raw, isNot(contains('"quests"')));
   });
 
   test('snapshot memuat tanggal hari ini, bukan tanggal tetap', () async {

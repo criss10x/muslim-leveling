@@ -7,6 +7,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.widget.RemoteViews
@@ -18,12 +19,16 @@ import java.util.Date
 import java.util.Locale
 
 /**
- * Widget home screen: jam, sholat sekarang + berikutnya, dua quest teratas.
+ * Widget home screen: HUD sholat wajib hari ini.
  *
  * PENTING: kelas ini TIDAK menghitung XP dan TIDAK menulis `game_state_v1`.
- * Semua teks sudah diterjemahkan Flutter dan datang lewat snapshot
- * `widget_snapshot_v1` (prefix `flutter.` ditambahkan SharedPreferences).
- * Satu-satunya penulis state permainan tetap `GameService._save()`.
+ * Semua teks dan status sudah diputuskan Flutter dan datang lewat snapshot
+ * `widget_snapshot_v1`. Satu-satunya penulis state permainan tetap
+ * `GameService._save()`.
+ *
+ * Warna diambil dari DESIGN.md (Night Watch): jade = sudah dikerjakan, sian =
+ * waktu yang sedang berjalan, emas = hadiah, redup = belum. Tidak ada warna
+ * keempat; di sini emas tidak dipakai karena widget tidak pernah memberi hadiah.
  */
 class QuestWidgetProvider : AppWidgetProvider() {
 
@@ -47,14 +52,25 @@ class QuestWidgetProvider : AppWidgetProvider() {
     companion object {
         const val ACTION_REFRESH = "id.muslimleveling.muslim_leveling.WIDGET_REFRESH"
 
-        /**
-         * Nama kunci lengkap dengan prefix `flutter.` — SharedPreferences
-         * menambahkan prefix itu pada semua kunci yang ditulis dari Dart.
-         * Salah satu huruf saja di sini membuat widget selalu kosong.
-         */
         private val SNAPSHOT_KEY: String = WidgetPrefs.flutterKey("widget_snapshot_v1")
 
         private const val DEEP_LINK = "id.muslimleveling.muslim_leveling://quests"
+
+        /** Lima sel sholat, urut waktu; id resource-nya mengikuti urutan ini. */
+        private val CELLS = listOf(
+            Cell("subuh", R.id.name_subuh, R.id.time_subuh, R.id.bar_subuh),
+            Cell("dzuhur", R.id.name_dzuhur, R.id.time_dzuhur, R.id.bar_dzuhur),
+            Cell("ashar", R.id.name_ashar, R.id.time_ashar, R.id.bar_ashar),
+            Cell("maghrib", R.id.name_maghrib, R.id.time_maghrib, R.id.bar_maghrib),
+            Cell("isya", R.id.name_isya, R.id.time_isya, R.id.bar_isya),
+        )
+
+        // Tiga sinyal, tidak lebih. Lihat DESIGN.md "The Tiga Sinyal Rule".
+        private const val JADE = "#34D399"      // sudah dikerjakan
+        private const val TIME_NOW = "#00E1EF"  // waktu yang sedang berjalan
+        private const val INK = "#DCEDE5"       // teks utama
+        private const val MUTED = "#85948C"     // label redup
+        private const val TRACK = "#4E5F57"     // rel kosong: 2.65:1 ke kartu (terbaca),\n                                                 // jade 3.53:1 di atasnya (status tetap jelas)
 
         fun updateAll(context: Context) {
             val manager = AppWidgetManager.getInstance(context)
@@ -74,11 +90,6 @@ class QuestWidgetProvider : AppWidgetProvider() {
         private fun nowHhmm(): String =
             SimpleDateFormat("HH:mm", Locale.US).format(Date())
 
-        /**
-         * Teks fallback. Hanya dipakai saat snapshot belum ada (app belum pernah
-         * dibuka). Tidak ada angka karangan: lebih baik kosong daripada sholat
-         * yang salah.
-         */
         private fun buildViews(context: Context): RemoteViews {
             val views = RemoteViews(context.packageName, R.layout.quest_widget)
 
@@ -96,33 +107,13 @@ class QuestWidgetProvider : AppWidgetProvider() {
 
             val snap = prefs(context).getString(SNAPSHOT_KEY, null)
                 ?.let { runCatching { JSONObject(it) }.getOrNull() }
-            if (snap == null) {
-                views.setTextViewText(R.id.prayer_now, context.getString(R.string.widget_no_data))
-                views.setTextViewText(R.id.prayer_next, "")
-                views.setTextViewText(R.id.quest_now, context.getString(R.string.widget_open_once))
-                views.setTextViewText(R.id.quest_status, "")
-                views.setTextViewText(R.id.quest_next, "")
-                return views
-            }
+            if (snap == null) return emptyState(context, views)
 
-            renderPrayers(context, views, snap)
-            renderQuests(context, views, snap)
-            return views
-        }
-
-        private fun renderPrayers(context: Context, views: RemoteViews, snap: JSONObject) {
-            val days = snap.optJSONObject("days")
-            val list = days?.optJSONArray(todayKey())
-
-            // Snapshot bukan untuk hari ini: jangan tampilkan jam kemarin.
-            // Jadwal sholat yang salah lebih buruk daripada ajakan membuka app.
+            val list = snap.optJSONObject("days")?.optJSONArray(todayKey())
             if (list == null || list.length() == 0) {
-                views.setTextViewText(
-                    R.id.prayer_now,
-                    context.getString(R.string.widget_stale),
-                )
-                views.setTextViewText(R.id.prayer_next, "")
-                return
+                // Snapshot bukan untuk hari ini: jangan tampilkan jam kemarin.
+                // Jadwal yang salah lebih buruk daripada ajakan membuka app.
+                return staleState(context, views)
             }
 
             val items = (0 until list.length()).mapNotNull { i ->
@@ -131,70 +122,100 @@ class QuestWidgetProvider : AppWidgetProvider() {
                     key = o.optString("key"),
                     label = o.optString("label"),
                     time = o.optString("time"),
+                    done = o.optBoolean("done"),
                 )
             }
-            if (items.isEmpty()) {
-                views.setTextViewText(
-                    R.id.prayer_now,
-                    context.getString(R.string.widget_stale),
-                )
-                views.setTextViewText(R.id.prayer_next, "")
-                return
-            }
+            if (items.isEmpty()) return staleState(context, views)
 
-            val current = currentPrayer(items, nowHhmm())
-            val next = nextPrayer(items, nowHhmm())
-
-            views.setTextViewText(
-                R.id.prayer_now,
-                if (current == null) "—" else "${current.label} ${current.time}",
-            )
-            views.setTextViewText(
-                R.id.prayer_next,
-                if (next == null) "" else context.getString(R.string.widget_next, next.label, next.time),
-            )
+            renderPrayers(context, views, items)
+            return views
         }
 
-        private fun renderQuests(context: Context, views: RemoteViews, snap: JSONObject) {
-            val quests = snap.optJSONArray("quests")
-            if (quests == null || quests.length() == 0) {
-                views.setTextViewText(
-                    R.id.quest_now,
-                    context.getString(R.string.widget_all_done),
-                )
-                views.setTextViewText(R.id.quest_status, "")
-                views.setTextViewText(R.id.quest_next, "")
-                return
-            }
+        private fun renderPrayers(
+            context: Context,
+            views: RemoteViews,
+            items: List<Prayer>,
+        ) {
+            val now = nowHhmm()
+            val current = currentPrayer(items, now)
+            val next = nextPrayer(items, now)
 
-            val first = quests.optJSONObject(0)
-            if (first == null) {
-                views.setTextViewText(R.id.quest_now, "")
-                views.setTextViewText(R.id.quest_status, "")
+            views.setTextViewText(
+                R.id.label_now,
+                context.getString(R.string.widget_label).uppercase(Locale.US),
+            )
+
+            if (current == null) {
+                views.setTextViewText(R.id.now_name, context.getString(R.string.widget_stale))
+                views.setTextViewText(R.id.now_time, "")
+                views.setTextColor(R.id.now_name, MUTED)
             } else {
-                views.setTextViewText(R.id.quest_now, questLine(first))
-                views.setTextViewText(R.id.quest_status, questStatus(first))
+                views.setTextViewText(R.id.now_name, current.label)
+                views.setTextViewText(R.id.now_time, current.time)
+                views.setTextColor(R.id.now_name, TIME_NOW)
             }
 
-            val second = if (quests.length() > 1) quests.optJSONObject(1) else null
             views.setTextViewText(
-                R.id.quest_next,
-                if (second == null) "" else questLine(second),
+                R.id.next,
+                when {
+                    next != null -> context.getString(
+                        R.string.widget_next,
+                        next.label,
+                        next.time,
+                    )
+                    // Lewat Isya: berikutnya Subuh besok. Kalau semua sudah
+                    // dikerjakan, itu kabar yang lebih layak ditampilkan.
+                    items.all { it.done } -> context.getString(R.string.widget_all_done)
+                    else -> context.getString(
+                        R.string.widget_after,
+                        items.first().label,
+                        items.first().time,
+                    )
+                },
             )
+
+            // Lima sel: nama, jam, dan bilah status. Bilah adalah satu-satunya
+            // pembawa status; warna teks jam tidak ikut berubah supaya kelima
+            // kolom tetap bisa dibandingkan dengan tenang.
+            CELLS.forEachIndexed { i, cell ->
+                val p = items.getOrNull(i)
+                views.setTextViewText(cell.nameId, p?.label?.uppercase(Locale.US).orEmpty())
+                views.setTextViewText(cell.timeId, p?.time.orEmpty())
+                val barColor = when {
+                    p == null -> TRACK
+                    current != null && p.key == current.key -> TIME_NOW
+                    p.done -> JADE
+                    else -> TRACK
+                }
+                views.setInt(cell.barId, "setBackgroundColor", Color.parseColor(barColor))
+                views.setTextColor(
+                    cell.timeId,
+                    if (p?.done == true) JADE else INK,
+                )
+            }
         }
 
-        private fun questLine(q: JSONObject): String {
-            val desc = q.optString("desc")
-            val target = q.optInt("target", 1)
-            val progress = q.optInt("progress", 0)
-            return if (target > 1) "$desc  $progress/$target" else desc
+        private fun emptyState(context: Context, views: RemoteViews): RemoteViews {
+            views.setTextViewText(R.id.label_now, "")
+            views.setTextViewText(R.id.now_name, context.getString(R.string.widget_no_data))
+            views.setTextViewText(R.id.now_time, "")
+            views.setTextColor(R.id.now_name, MUTED)
+            views.setTextViewText(R.id.next, "")
+            CELLS.forEach { cell ->
+                views.setTextViewText(cell.nameId, "")
+                views.setTextViewText(cell.timeId, "")
+                views.setInt(cell.barId, "setBackgroundColor", Color.parseColor(TRACK))
+            }
+            return views
         }
 
-        /** Hanya label hadiah: widget tidak bisa dan tidak boleh claim. */
-        private fun questStatus(q: JSONObject): String {
-            val completed = q.optBoolean("completed")
-            val claimed = q.optBoolean("claimed")
-            return if (completed && !claimed) "+${q.optInt("xp")} XP" else ""
+        private fun staleState(context: Context, views: RemoteViews): RemoteViews {
+            views.setTextViewText(R.id.label_now, "")
+            views.setTextViewText(R.id.now_name, context.getString(R.string.widget_stale))
+            views.setTextViewText(R.id.now_time, "")
+            views.setTextColor(R.id.now_name, MUTED)
+            views.setTextViewText(R.id.next, "")
+            return views
         }
 
         /**
@@ -274,4 +295,13 @@ internal data class Prayer(
     val key: String,
     val label: String,
     val time: String,
+    val done: Boolean,
+)
+
+/** Tiga id resource milik satu sel sholat. */
+private data class Cell(
+    val key: String,
+    val nameId: Int,
+    val timeId: Int,
+    val barId: Int,
 )

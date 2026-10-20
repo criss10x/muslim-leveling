@@ -1,22 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Widget home screen: HUD sholat wajib hari ini.
+
+  Bahasa visual mengikuti DESIGN.md (Night Watch): kanvas hitam pekat, kartu
+  #121816, jade = yang sudah dikerjakan, sian = waktu yang sedang berjalan,
+  emas = hadiah. Tanpa bayangan, tanpa gradien dekoratif, tanpa garis tepi:
+  kedalaman dibawa nada permukaan dan rambut 1px.
+
+  HANYA view yang diizinkan RemoteViews. RemoteViews tidak bisa meng-inflate
+  kelas lain, dan kegagalannya terjadi di proses launcher tanpa error build.
+  Karena itu tidak ada <View>, tidak ada <include>, tidak ada kelas custom.
+  Aksen status memakai FrameLayout sebagai bilah.
+
+  Semua teks dikosongkan: isinya dari snapshot Flutter (4 bahasa).
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/widget_bg"
     android:orientation="vertical"
-    android:padding="12dp"
-    android:background="@drawable/widget_bg">
+    android:paddingStart="16dp"
+    android:paddingTop="12dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="12dp">
 
-    <TextClock
-        android:id="@+id/clock"
-        android:layout_width="wrap_content"
+    <!-- Baris atas: label mono kapital + jam. TextClock bergerak sendiri,
+         jadi jam tidak memaksa update widget tiap menit. -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:format12Hour="hh:mm"
-        android:format24Hour="HH:mm"
-        android:textColor="#FFFFFF"
-        android:textSize="28sp"
-        android:textStyle="bold" />
+        android:orientation="horizontal">
 
+        <TextView
+            android:id="@+id/label_now"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:letterSpacing="0.12"
+            android:maxLines="1"
+            android:textColor="#BACAC1"
+            android:textSize="10sp" />
+
+        <TextClock
+            android:id="@+id/clock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:format12Hour="HH:mm"
+            android:format24Hour="HH:mm"
+            android:textColor="#DCEDE5"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <!-- Sholat yang sedang berjalan: sian = waktu berjalan. -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,62 +61,220 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/prayer_now"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="#F97316"
-            android:textSize="13sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/prayer_next"
+            android:id="@+id/now_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#B3FFFFFF"
-            android:textSize="12sp" />
-    </LinearLayout>
-
-    <!-- Garis pemisah: WAJIB FrameLayout, bukan <View>. RemoteViews hanya
-         mengizinkan kelas view dari daftar resmi Android; <View> membuat
-         launcher gagal inflate ("Can't load widget") tanpa error build. -->
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp"
-        android:background="#33FFFFFF" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/quest_now"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="#FFFFFF"
-            android:textSize="12sp" />
+            android:textColor="#00E1EF"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
+        <!-- Jam sholat menyatu dengan namanya: "Ashar 15:20" satu fakta.
+             Readout selalu lebih kecil dari isi yang dijelaskannya. -->
         <TextView
-            android:id="@+id/quest_status"
+            android:id="@+id/now_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#F97316"
-            android:textSize="12sp"
-            android:textStyle="bold" />
+            android:layout_marginStart="8dp"
+            android:maxLines="1"
+            android:textColor="#00E1EF"
+            android:textSize="13sp" />
     </LinearLayout>
 
+    <!-- Sholat berikutnya: redup, bukan penanda kedua. -->
     <TextView
-        android:id="@+id/quest_next"
+        android:id="@+id/next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="#80FFFFFF"
+        android:textColor="#BACAC1"
         android:textSize="11sp" />
+
+    <!-- Rambut 1px: pemisah bagian. -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="#3C4A43" />
+
+    <!-- Baris lima sholat wajib, urut waktu. Tiap sel: nama, jam, dan bilah
+         status di bawah (jade = sudah, samar = belum, sian = sedang berjalan). -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name_subuh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:letterSpacing="0.06"
+                android:maxLines="1"
+                android:textColor="#85948C"
+                android:textSize="9sp" />
+
+            <TextView
+                android:id="@+id/time_subuh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:maxLines="1"
+                android:textColor="#DCEDE5"
+                android:textSize="13sp" />
+
+            <FrameLayout
+                android:id="@+id/bar_subuh"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginTop="4dp"
+                android:background="#4E5F57" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name_dzuhur"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:letterSpacing="0.06"
+                android:maxLines="1"
+                android:textColor="#85948C"
+                android:textSize="9sp" />
+
+            <TextView
+                android:id="@+id/time_dzuhur"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:maxLines="1"
+                android:textColor="#DCEDE5"
+                android:textSize="13sp" />
+
+            <FrameLayout
+                android:id="@+id/bar_dzuhur"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginTop="4dp"
+                android:background="#4E5F57" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name_ashar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:letterSpacing="0.06"
+                android:maxLines="1"
+                android:textColor="#85948C"
+                android:textSize="9sp" />
+
+            <TextView
+                android:id="@+id/time_ashar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:maxLines="1"
+                android:textColor="#DCEDE5"
+                android:textSize="13sp" />
+
+            <FrameLayout
+                android:id="@+id/bar_ashar"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginTop="4dp"
+                android:background="#4E5F57" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name_maghrib"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:letterSpacing="0.06"
+                android:maxLines="1"
+                android:textColor="#85948C"
+                android:textSize="9sp" />
+
+            <TextView
+                android:id="@+id/time_maghrib"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:maxLines="1"
+                android:textColor="#DCEDE5"
+                android:textSize="13sp" />
+
+            <FrameLayout
+                android:id="@+id/bar_maghrib"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginTop="4dp"
+                android:background="#4E5F57" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name_isya"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:letterSpacing="0.06"
+                android:maxLines="1"
+                android:textColor="#85948C"
+                android:textSize="9sp" />
+
+            <TextView
+                android:id="@+id/time_isya"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:maxLines="1"
+                android:textColor="#DCEDE5"
+                android:textSize="13sp" />
+
+            <FrameLayout
+                android:id="@+id/bar_isya"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginTop="4dp"
+                android:background="#4E5F57" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

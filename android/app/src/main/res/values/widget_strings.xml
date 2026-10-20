@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="widget_description">Jam, jadwal sholat, dan quest hari ini</string>
-    <string name="widget_no_data">Buka app untuk mengaktifkan</string>
-    <string name="widget_open_once">Buka app sekali untuk mengaktifkan widget</string>
-    <string name="widget_stale">Buka app untuk memperbarui jadwal</string>
+    <string name="widget_description">Sholat wajib hari ini: jam, yang sedang berjalan, dan yang sudah dikerjakan</string>
+    <!-- Label HUD di dalam widget. Harus pendek: 4 sel hanya menyisakan ~28
+         karakter pada widget 4x2, jadi deskripsi panjang di atas tidak dipakai
+         di sini (ia untuk pemilih widget di launcher). -->
+    <string name="widget_label">Sholat wajib</string>
     <string name="widget_next">Berikutnya %1$s %2$s</string>
-    <string name="widget_all_done">Semua quest hari ini selesai</string>
+    <string name="widget_after">Selesai. Besok %1$s %2$s</string>
+    <string name="widget_no_data">Buka aplikasi sekali untuk mengaktifkan</string>
+    <string name="widget_stale">Buka aplikasi untuk memperbarui jadwal</string>
+    <string name="widget_all_done">Lima sholat hari ini lengkap</string>
 </resources>
