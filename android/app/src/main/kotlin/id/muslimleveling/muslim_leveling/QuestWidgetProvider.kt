@@ -148,11 +148,11 @@ class QuestWidgetProvider : AppWidgetProvider() {
             if (current == null) {
                 views.setTextViewText(R.id.now_name, context.getString(R.string.widget_stale))
                 views.setTextViewText(R.id.now_time, "")
-                views.setTextColor(R.id.now_name, MUTED)
+                views.setTextColor(R.id.now_name, Color.parseColor(MUTED))
             } else {
                 views.setTextViewText(R.id.now_name, current.label)
                 views.setTextViewText(R.id.now_time, current.time)
-                views.setTextColor(R.id.now_name, TIME_NOW)
+                views.setTextColor(R.id.now_name, Color.parseColor(TIME_NOW))
             }
 
             views.setTextViewText(
@@ -190,7 +190,7 @@ class QuestWidgetProvider : AppWidgetProvider() {
                 views.setInt(cell.barId, "setBackgroundColor", Color.parseColor(barColor))
                 views.setTextColor(
                     cell.timeId,
-                    if (p?.done == true) JADE else INK,
+                    Color.parseColor(if (p?.done == true) JADE else INK),
                 )
             }
         }
@@ -199,7 +199,7 @@ class QuestWidgetProvider : AppWidgetProvider() {
             views.setTextViewText(R.id.label_now, "")
             views.setTextViewText(R.id.now_name, context.getString(R.string.widget_no_data))
             views.setTextViewText(R.id.now_time, "")
-            views.setTextColor(R.id.now_name, MUTED)
+            views.setTextColor(R.id.now_name, Color.parseColor(MUTED))
             views.setTextViewText(R.id.next, "")
             CELLS.forEach { cell ->
                 views.setTextViewText(cell.nameId, "")
@@ -213,7 +213,7 @@ class QuestWidgetProvider : AppWidgetProvider() {
             views.setTextViewText(R.id.label_now, "")
             views.setTextViewText(R.id.now_name, context.getString(R.string.widget_stale))
             views.setTextViewText(R.id.now_time, "")
-            views.setTextColor(R.id.now_name, MUTED)
+            views.setTextColor(R.id.now_name, Color.parseColor(MUTED))
             views.setTextViewText(R.id.next, "")
             return views
         }
