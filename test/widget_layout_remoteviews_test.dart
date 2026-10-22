@@ -91,9 +91,13 @@ void main() {
     // pada id tak dikenal = no-op, widget tampak kosong).
     //
     // `clock` dikecualikan dengan sadar: TextClock menggambar waktunya sendiri
-    // di sisi Android, jadi Kotlin tidak pernah menyentuhnya. Kalau nanti ada
-    // id lain yang muncul di sini, itu tanda ada view yang lupa diisi.
-    const diisiOlehSistem = {'clock'};
+    // di sisi Android, jadi Kotlin tidak pernah menyentuhnya.
+    //
+    // `logo` juga: gambarnya statis dari android:src dan tidak pernah berubah
+    // mengikuti data, jadi tidak ada yang perlu diisi Kotlin. Kalau nanti logo
+    // harus berubah (misalnya ikut tema), pemakaian R.id.logo wajib ditambahkan
+    // di provider dan id ini dikeluarkan dari daftar.
+    const diisiOlehSistem = {'clock', 'logo'};
     expect(
       ids.difference(used).difference(diisiOlehSistem),
       isEmpty,

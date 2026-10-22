@@ -2,15 +2,17 @@
 <!--
   Widget home screen: HUD sholat wajib hari ini.
 
-  Bahasa visual mengikuti DESIGN.md (Night Watch): kanvas hitam pekat, kartu
-  #121816, jade = yang sudah dikerjakan, sian = waktu yang sedang berjalan,
-  emas = hadiah. Tanpa bayangan, tanpa gradien dekoratif, tanpa garis tepi:
-  kedalaman dibawa nada permukaan dan rambut 1px.
+  Bahasa visual mengikuti DESIGN.md (Night Watch):
+    - kartu #121816 di kanvas, radius 16, tanpa bayangan, tanpa garis tepi
+    - tiga sinyal saja: jade #34D399 = sudah dikerjakan, sian #00E1EF = waktu
+      yang sedang berjalan, redup = belum. Emas tidak dipakai: widget tidak
+      pernah memberi hadiah.
+    - tipografi app yang sebenarnya: Sora untuk angka dan nama sholat,
+      JetBrains Mono kapital untuk label HUD (The Readout Rule).
 
-  HANYA view yang diizinkan RemoteViews. RemoteViews tidak bisa meng-inflate
-  kelas lain, dan kegagalannya terjadi di proses launcher tanpa error build.
-  Karena itu tidak ada <View>, tidak ada <include>, tidak ada kelas custom.
-  Aksen status memakai FrameLayout sebagai bilah.
+  HANYA view yang diizinkan RemoteViews. Tidak ada <View>, tidak ada <include>,
+  tidak ada kelas custom: semuanya gagal di proses launcher tanpa error build.
+  Aksen memakai FrameLayout berisi background.
 
   Semua teks dikosongkan: isinya dari snapshot Flutter (4 bahasa).
 -->
@@ -25,39 +27,59 @@
     android:paddingEnd="16dp"
     android:paddingBottom="12dp">
 
-    <!-- Baris atas: label mono kapital + jam. TextClock bergerak sendiri,
-         jadi jam tidak memaksa update widget tiap menit. -->
+    <!-- Kepala: logo (tanda pemilik, sengaja netral) + label HUD + jam. -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:contentDescription="@null"
+            android:src="@drawable/widget_logo" />
 
         <TextView
             android:id="@+id/label_now"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
             android:layout_weight="1"
-            android:letterSpacing="0.12"
+            android:fontFamily="@font/jetbrains_mono_bold"
+            android:letterSpacing="0.14"
             android:maxLines="1"
-            android:textColor="#BACAC1"
-            android:textSize="10sp" />
+            android:textColor="#85948C"
+            android:textSize="9sp" />
+
+        <TextView
+            android:id="@+id/clock_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:fontFamily="@font/jetbrains_mono_bold"
+            android:letterSpacing="0.10"
+            android:textColor="#85948C"
+            android:textSize="9sp" />
 
         <TextClock
             android:id="@+id/clock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
+            android:fontFamily="@font/jetbrains_mono_bold"
             android:format12Hour="HH:mm"
             android:format24Hour="HH:mm"
-            android:textColor="#DCEDE5"
-            android:textSize="17sp" />
+            android:textColor="#85948C"
+            android:textSize="10sp" />
     </LinearLayout>
 
-    <!-- Sholat yang sedang berjalan: sian = waktu berjalan. -->
+    <!-- Sholat yang sedang berjalan: nama + jam sebagai satu unit. -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="4dp"
+        android:baselineAligned="true"
         android:orientation="horizontal">
 
         <TextView
@@ -65,43 +87,45 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
+            android:fontFamily="@font/sora_bold"
             android:maxLines="1"
             android:textColor="#00E1EF"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textSize="25sp" />
 
-        <!-- Jam sholat menyatu dengan namanya: "Ashar 15:20" satu fakta.
-             Readout selalu lebih kecil dari isi yang dijelaskannya. -->
         <TextView
             android:id="@+id/now_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="7dp"
+            android:fontFamily="@font/sora_bold"
+            android:gravity="bottom"
             android:maxLines="1"
             android:textColor="#00E1EF"
-            android:textSize="13sp" />
+            android:textSize="15sp" />
     </LinearLayout>
 
-    <!-- Sholat berikutnya: redup, bukan penanda kedua. -->
+    <!-- Sholat berikutnya: redup, satu baris. -->
     <TextView
         android:id="@+id/next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:ellipsize="end"
+        android:fontFamily="@font/jakarta_regular"
         android:maxLines="1"
-        android:textColor="#BACAC1"
+        android:textColor="#85948C"
         android:textSize="11sp" />
 
-    <!-- Rambut 1px: pemisah bagian. -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginBottom="9dp"
         android:background="#3C4A43" />
 
-    <!-- Baris lima sholat wajib, urut waktu. Tiap sel: nama, jam, dan bilah
-         status di bawah (jade = sudah, samar = belum, sian = sedang berjalan). -->
+    <!-- Lima sholat wajib, urut waktu. Tiap sel: nama (mono kapital), jam
+         (Sora), lalu bilah status 3dp. Bilah adalah satu-satunya pembawa status
+         di baris ini, jadi kelima kolom tetap tenang dibandingkan. -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -111,7 +135,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="6dp"
+            android:layout_marginEnd="7dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -120,19 +144,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
+                android:fontFamily="@font/jetbrains_mono_bold"
                 android:letterSpacing="0.06"
                 android:maxLines="1"
                 android:textColor="#85948C"
-                android:textSize="9sp" />
+                android:textSize="8sp" />
 
             <TextView
                 android:id="@+id/time_subuh"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
+                android:fontFamily="@font/sora_bold"
                 android:maxLines="1"
                 android:textColor="#DCEDE5"
-                android:textSize="13sp" />
+                android:textSize="12sp" />
 
             <FrameLayout
                 android:id="@+id/bar_subuh"
@@ -145,7 +171,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="6dp"
+            android:layout_marginEnd="7dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -154,19 +180,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
+                android:fontFamily="@font/jetbrains_mono_bold"
                 android:letterSpacing="0.06"
                 android:maxLines="1"
                 android:textColor="#85948C"
-                android:textSize="9sp" />
+                android:textSize="8sp" />
 
             <TextView
                 android:id="@+id/time_dzuhur"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
+                android:fontFamily="@font/sora_bold"
                 android:maxLines="1"
                 android:textColor="#DCEDE5"
-                android:textSize="13sp" />
+                android:textSize="12sp" />
 
             <FrameLayout
                 android:id="@+id/bar_dzuhur"
@@ -179,7 +207,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="6dp"
+            android:layout_marginEnd="7dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -188,19 +216,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
+                android:fontFamily="@font/jetbrains_mono_bold"
                 android:letterSpacing="0.06"
                 android:maxLines="1"
                 android:textColor="#85948C"
-                android:textSize="9sp" />
+                android:textSize="8sp" />
 
             <TextView
                 android:id="@+id/time_ashar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
+                android:fontFamily="@font/sora_bold"
                 android:maxLines="1"
                 android:textColor="#DCEDE5"
-                android:textSize="13sp" />
+                android:textSize="12sp" />
 
             <FrameLayout
                 android:id="@+id/bar_ashar"
@@ -213,7 +243,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="6dp"
+            android:layout_marginEnd="7dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -222,19 +252,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
+                android:fontFamily="@font/jetbrains_mono_bold"
                 android:letterSpacing="0.06"
                 android:maxLines="1"
                 android:textColor="#85948C"
-                android:textSize="9sp" />
+                android:textSize="8sp" />
 
             <TextView
                 android:id="@+id/time_maghrib"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
+                android:fontFamily="@font/sora_bold"
                 android:maxLines="1"
                 android:textColor="#DCEDE5"
-                android:textSize="13sp" />
+                android:textSize="12sp" />
 
             <FrameLayout
                 android:id="@+id/bar_maghrib"
@@ -255,19 +287,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
+                android:fontFamily="@font/jetbrains_mono_bold"
                 android:letterSpacing="0.06"
                 android:maxLines="1"
                 android:textColor="#85948C"
-                android:textSize="9sp" />
+                android:textSize="8sp" />
 
             <TextView
                 android:id="@+id/time_isya"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
+                android:fontFamily="@font/sora_bold"
                 android:maxLines="1"
                 android:textColor="#DCEDE5"
-                android:textSize="13sp" />
+                android:textSize="12sp" />
 
             <FrameLayout
                 android:id="@+id/bar_isya"

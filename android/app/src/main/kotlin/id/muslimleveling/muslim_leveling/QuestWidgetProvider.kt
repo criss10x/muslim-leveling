@@ -105,6 +105,14 @@ class QuestWidgetProvider : AppWidgetProvider() {
             )
             views.setOnClickPendingIntent(R.id.widget_root, openApp)
 
+            // Jam perangkat tanpa label terbaca sebagai jadwal. Beri nama
+            // perannya, dan isi di ketiga state supaya header tidak berubah
+            // bentuk saat data kosong atau basi.
+            views.setTextViewText(
+                R.id.clock_label,
+                context.getString(R.string.widget_now),
+            )
+
             val snap = prefs(context).getString(SNAPSHOT_KEY, null)
                 ?.let { runCatching { JSONObject(it) }.getOrNull() }
             if (snap == null) return emptyState(context, views)
@@ -174,9 +182,9 @@ class QuestWidgetProvider : AppWidgetProvider() {
                 },
             )
 
-            // Lima sel: nama, jam, dan bilah status. Bilah adalah satu-satunya
-            // pembawa status; warna teks jam tidak ikut berubah supaya kelima
-            // kolom tetap bisa dibandingkan dengan tenang.
+            // Lima sel: nama, jam, dan bilah status. Bilah tetap pembawa status
+            // utama; jam ikut diwarnai supaya sholat yang sedang berjalan
+            // terhubung ke hero di atasnya (satu makna, satu warna).
             CELLS.forEachIndexed { i, cell ->
                 val p = items.getOrNull(i)
                 views.setTextViewText(cell.nameId, p?.label?.uppercase(Locale.US).orEmpty())
@@ -188,9 +196,28 @@ class QuestWidgetProvider : AppWidgetProvider() {
                     else -> TRACK
                 }
                 views.setInt(cell.barId, "setBackgroundColor", Color.parseColor(barColor))
+                // Label kolom aktif ikut menyala. Tanpa ini kolom aktif terlihat
+                // setengah aktif: jam dan bilah sian, namanya masih redup.
+                views.setTextColor(
+                    cell.nameId,
+                    Color.parseColor(
+                        if (p != null && current != null && p.key == current.key) {
+                            TIME_NOW
+                        } else {
+                            MUTED
+                        },
+                    ),
+                )
                 views.setTextColor(
                     cell.timeId,
-                    Color.parseColor(if (p?.done == true) JADE else INK),
+                    Color.parseColor(
+                        when {
+                            p == null -> MUTED
+                            p.done -> JADE
+                            current != null && p.key == current.key -> TIME_NOW
+                            else -> INK
+                        },
+                    ),
                 )
             }
         }

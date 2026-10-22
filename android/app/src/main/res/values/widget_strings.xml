@@ -5,6 +5,9 @@
          karakter pada widget 4x2, jadi deskripsi panjang di atas tidak dipakai
          di sini (ia untuk pemilih widget di launcher). -->
     <string name="widget_label">Sholat wajib</string>
+    <!-- Jam perangkat tanpa label ambigu (jam berapa? jadwal apa?). Beri nama
+         peran, sependek mungkin: 9 karakter, mono, redup. -->
+    <string name="widget_now">Jam</string>
     <string name="widget_next">Berikutnya %1$s %2$s</string>
     <string name="widget_after">Selesai. Besok %1$s %2$s</string>
     <string name="widget_no_data">Buka aplikasi sekali untuk mengaktifkan</string>

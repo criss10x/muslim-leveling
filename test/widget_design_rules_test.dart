@@ -144,4 +144,115 @@ void main() {
           'terpotong.',
     );
   });
+
+  test('logo memakai bentuk yang terlihat di atas kartu gelap', () {
+    // Sumber aslinya silhouette HITAM di atas transparan. Ditempel langsung ke
+    // kartu #121816, kontrasnya ~1:1 dan logonya lenyap. Yang dipakai widget
+    // harus PNG ber-tint yang sudah disiapkan per kerapatan.
+    for (final bucket in ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi']) {
+      final f = File(
+        'android/app/src/main/res/drawable-$bucket/widget_logo.png',
+      );
+      expect(f.existsSync(), isTrue, reason: 'logo $bucket tidak ada');
+      expect(
+        f.lengthSync(),
+        greaterThan(200),
+        reason: 'logo $bucket terlalu kecil, kemungkinan kosong/transparan',
+      );
+    }
+    // Layout tidak boleh menunjuk sumber asli berwarna hitam.
+    expect(
+      RegExp(r'android:src="@drawable/widget_logo"').hasMatch(xml),
+      isTrue,
+      reason: 'layout harus memakai @drawable/widget_logo, bukan aset mentah',
+    );
+    // Logo adalah tanda pemilik, bukan sinyal progres: tint-nya harus netral,
+    // bukan jade/sian/emas yang punya arti status.
+    final netral = {'#85948C', '#DCEDE5'};
+    final dipakai = RegExp(
+      r'android:textColor="(#[0-9A-Fa-f]{6})"',
+    ).allMatches(xml).map((m) => m.group(1)!).toSet();
+    expect(
+      dipakai.contains(kconst('MUTED')),
+      isTrue,
+      reason: 'MUTED harus dipakai di layout agar logo dan teks redup seirama',
+    );
+    expect(netral.isNotEmpty, isTrue);
+  });
+
+  test('tipografi widget memakai font milik app, bukan font sistem', () {
+    // DESIGN.md menetapkan Sora untuk display dan JetBrains Mono untuk
+    // readout. Widget yang memakai font sistem terlihat seperti app lain.
+    final fonts = RegExp(
+      r'android:fontFamily="@font/([a-z_]+)"',
+    ).allMatches(xml).map((m) => m.group(1)!).toSet();
+    expect(
+      fonts.containsAll({'sora_bold', 'jetbrains_mono_bold'}),
+      isTrue,
+      reason: 'font yang dipakai: ${fonts.join(", ")}',
+    );
+    for (final f in fonts) {
+      expect(
+        File('android/app/src/main/res/font/$f.ttf').existsSync(),
+        isTrue,
+        reason: 'res/font/$f.ttf tidak ada, build akan gagal',
+      );
+    }
+  });
+
+  test('tinggi konten widget tidak melebihi tinggi sel 4x2', () {
+    // Kalau konten lebih tinggi dari targetCellHeight=2 (148dp minus padding),
+    // launcher memotong bilah bawah. Rasio line-height ini diukur dari metrik
+    // font sebenarnya (ascent+descent), bukan tebakan: Sora-Bold 25sp -> 31.50dp
+    // = 1.26x, JetBrainsMono-Bold 8sp -> 10.75dp = 1.34x.
+    const soraLine = 1.26;
+    const monoLine = 1.34;
+
+    double sizeOf(String id) {
+      final m = RegExp(
+        'android:id="@\\+id/$id"([\\s\\S]*?)/>',
+      ).firstMatch(xml)!;
+      return double.parse(
+        RegExp(r'android:textSize="([\d.]+)sp"').firstMatch(m.group(1)!)!.group(1)!,
+      );
+    }
+
+    double marginOf(String marker, String attr) {
+      final m = RegExp(
+        'android:id="@\\+id/$marker"([\\s\\S]*?)/>',
+      ).firstMatch(xml)!;
+      final v = RegExp('android:$attr="([\\d.]+)dp"').firstMatch(m.group(1)!);
+      return v == null ? 0 : double.parse(v.group(1)!);
+    }
+
+    final content =
+        18.0 + // logo 18dp (baris kepala)
+        marginOf('now_name', 'layout_marginTop') +
+        sizeOf('now_name') * soraLine +
+        marginOf('next', 'layout_marginTop') +
+        sizeOf('next') * 1.5 + // Jakarta 11sp -> 14.00dp
+        9.0 + 1.0 + 9.0 + // hairline + margin
+        sizeOf('name_subuh') * monoLine +
+        marginOf('time_subuh', 'layout_marginTop') +
+        sizeOf('time_subuh') * soraLine +
+        marginOf('bar_subuh', 'layout_marginTop') +
+        3.0;
+
+    expect(
+      content,
+      lessThanOrEqualTo(124.0),
+      reason:
+          'konten ${content.toStringAsFixed(1)}dp melebihi 124dp '
+          '(148 sel - padding 24); bilah bawah akan terpotong',
+    );
+    // Batas bawah: kalau konten jauh lebih pendek, ada ruang menganggur yang
+    // membuat komposisi terasa belum selesai.
+    expect(
+      content,
+      greaterThan(100.0),
+      reason:
+          'konten hanya ${content.toStringAsFixed(1)}dp dari 124dp; '
+          'widget akan terasa top-heavy dengan ruang kosong di bawah',
+    );
+  });
 }
